@@ -12,7 +12,7 @@ namespace MusicPlayerOnline.Api.Authorization;
 public interface IJwtUtils
 {
     public string GenerateJwtToken(UserEntity user);
-    public string? ValidateJwtToken(string? token);
+    public int? ValidateJwtToken(string? token);
     public RefreshTokenEntity GenerateRefreshToken(string ipAddress);
 }
 
@@ -33,7 +33,7 @@ public class JwtUtils : IJwtUtils
         var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("name", user.Username) }),
+            Subject = new ClaimsIdentity(new[] { new Claim("Id", user.Id.ToString()) }),
             Expires = DateTime.Now.AddMinutes(15),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
@@ -41,7 +41,7 @@ public class JwtUtils : IJwtUtils
         return tokenHandler.WriteToken(token);
     }
 
-    public string? ValidateJwtToken(string? token)
+    public int? ValidateJwtToken(string? token)
     {
         if (token == null)
             return null;
@@ -61,10 +61,10 @@ public class JwtUtils : IJwtUtils
             }, out SecurityToken validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
-            var userName = jwtToken.Claims.First(x => x.Type == "name").Value;
+            var id = jwtToken.Claims.First(x => x.Type == "Id").Value;
 
             // return user id from JWT token if validation successful
-            return userName;
+            return Convert.ToInt32(id);
         }
         catch
         {

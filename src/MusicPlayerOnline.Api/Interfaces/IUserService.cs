@@ -6,7 +6,9 @@ namespace MusicPlayerOnline.Api.Interfaces
 {
     public interface IUserService
     {
+        public Task<JsonResultDto> Register(User dto, string ipAddress);
         public Task<UserDto> Login(User dto, string ipAddress);
-        public Task<UserEntity?> GetOneAsync(string userName);
+
+        public Task<UserEntity?> GetOneEnableAsync(int id);
     }
 }
