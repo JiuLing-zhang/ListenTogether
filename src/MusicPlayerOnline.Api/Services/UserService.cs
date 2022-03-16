@@ -25,10 +25,15 @@ namespace MusicPlayerOnline.Api.Services
         public async Task<UserDto> Login(User dto, string ipAddress)
         {
             var user = await GetOneAsync(dto.Username);
-
             if (user == null)
             {
-                throw new AppException("Username or password is incorrect");
+                throw new AppException("用户名或密码不正确");
+            }
+
+            string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{dto.Password}{user.Salt}");
+            if (password != user.Password)
+            {
+                throw new AppException("用户名或密码不正确");
             }
 
             // authentication successful so generate jwt and refresh tokens
@@ -58,7 +63,7 @@ namespace MusicPlayerOnline.Api.Services
             // remove old inactive refresh tokens from user based on TTL in app settings
             user.RefreshTokens.RemoveAll(x =>
                 !x.IsActive &&
-                x.Created.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow);
+                x.CreateTime.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow);
         }
 
         public async Task<UserEntity?> GetOneAsync(string userName)

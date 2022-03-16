@@ -8,13 +8,14 @@ namespace MusicPlayerOnline.Api.Entities
     public class UserEntity
     {
         [Key]
+        public int Id { get; set; }
         public string Username { get; set; } = null!;
         public string Nickname { get; set; } = null!;
         public string Avatar { get; set; } = null!;
+        public string Salt { get; set; } = null!;
         public string Password { get; set; } = null!;
         public bool IsEnable { get; set; }
-
-
+        
         [JsonIgnore]
         public List<RefreshTokenEntity> RefreshTokens { get; set; } = null!;
     }

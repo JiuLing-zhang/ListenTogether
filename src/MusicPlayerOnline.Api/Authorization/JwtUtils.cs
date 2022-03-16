@@ -34,7 +34,7 @@ public class JwtUtils : IJwtUtils
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("name", user.Username) }),
-            Expires = DateTime.UtcNow.AddMinutes(15),
+            Expires = DateTime.Now.AddMinutes(15),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -79,9 +79,9 @@ public class JwtUtils : IJwtUtils
         {
             Token = GetUniqueToken(),
             // token is valid for 7 days
-            Expires = DateTime.UtcNow.AddDays(7),
-            Created = DateTime.UtcNow,
-            CreatedByIp = ipAddress
+            ExpireTime = DateTime.Now.AddDays(7),
+            CreateTime = DateTime.Now,
+            CreateIp = ipAddress
         };
 
         return refreshToken;
