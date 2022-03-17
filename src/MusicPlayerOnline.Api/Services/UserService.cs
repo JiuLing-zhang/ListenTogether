@@ -11,7 +11,7 @@ using MusicPlayerOnline.Model.Response;
 
 namespace MusicPlayerOnline.Api.Services
 {
-    public class UserService : IUserService
+    internal class UserService : IUserService
     {
         private readonly DataContext _context;
         private readonly IJwtUtils _jwtUtils;
