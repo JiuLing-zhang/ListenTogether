@@ -6,7 +6,7 @@ namespace MusicPlayerOnline.Model.Enums
     public enum PlatformEnum
     {
         [Description("网易")]
-        Netease = 1,
+        NetEase = 1,
         [Description("酷狗")]
         KuGou = 2,
         [Description("咪咕")]

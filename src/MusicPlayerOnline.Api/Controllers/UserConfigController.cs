@@ -2,12 +2,11 @@
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.Request;
-using MusicPlayerOnline.Model.Response;
+using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.ApiResponse;
 
 namespace MusicPlayerOnline.Api.Controllers
 {
-    //TODO 重命名文件
     [Route("api/user-config")]
     [ApiController]
     [Authorize]

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.Request;
+using MusicPlayerOnline.Model.ApiRequest;
 
 namespace MusicPlayerOnline.Api.Controllers
 {

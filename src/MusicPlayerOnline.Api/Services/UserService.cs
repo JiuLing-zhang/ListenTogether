@@ -6,8 +6,8 @@ using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.ErrorHandler;
 using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Api.Models;
-using MusicPlayerOnline.Model.Request;
-using MusicPlayerOnline.Model.Response;
+using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.ApiResponse;
 
 namespace MusicPlayerOnline.Api.Services
 {

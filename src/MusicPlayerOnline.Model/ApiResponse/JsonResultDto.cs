@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Model.Response
+﻿namespace MusicPlayerOnline.Model.ApiResponse
 {
     public class JsonResultDto
     {

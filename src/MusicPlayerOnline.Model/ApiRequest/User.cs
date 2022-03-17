@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MusicPlayerOnline.Model.Request
+namespace MusicPlayerOnline.Model.ApiRequest
 {
     public class User
     {

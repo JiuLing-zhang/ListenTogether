@@ -1,6 +1,6 @@
 ﻿using MusicPlayerOnline.Model.Enums;
 
-namespace MusicPlayerOnline.Model.Request
+namespace MusicPlayerOnline.Model.ApiRequest
 {
     public class GeneralSetting
     {

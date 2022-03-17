@@ -4,9 +4,9 @@ using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.ErrorHandler;
 using MusicPlayerOnline.Api.Interfaces;
+using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.ApiResponse;
 using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Model.Request;
-using MusicPlayerOnline.Model.Response;
 
 namespace MusicPlayerOnline.Api.Services
 {
@@ -77,7 +77,7 @@ namespace MusicPlayerOnline.Api.Services
                 }),
                 SearchSettingJson = JsonSerializer.Serialize(new SearchSetting()
                 {
-                    EnablePlatform = PlatformEnum.Netease | PlatformEnum.KuGou | PlatformEnum.MiGu,
+                    EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu,
                     IsHideShortMusic = true,
                     IsCloseSearchPageWhenPlayFailed = false
                 }),

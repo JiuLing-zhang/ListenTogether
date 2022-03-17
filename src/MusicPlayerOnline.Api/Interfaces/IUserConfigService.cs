@@ -1,5 +1,5 @@
-﻿using MusicPlayerOnline.Model.Request;
-using MusicPlayerOnline.Model.Response;
+﻿using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.ApiResponse;
 
 namespace MusicPlayerOnline.Api.Interfaces
 {
