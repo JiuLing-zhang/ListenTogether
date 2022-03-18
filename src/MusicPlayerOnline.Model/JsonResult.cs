@@ -1,7 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-//TODO 将文件移动到根目录，重命名
-namespace MusicPlayerOnline.Model.ApiResponse
+﻿namespace MusicPlayerOnline.Model
 {
     public class Result
     {

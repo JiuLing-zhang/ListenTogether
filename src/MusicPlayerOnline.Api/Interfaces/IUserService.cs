@@ -1,4 +1,5 @@
 ﻿using MusicPlayerOnline.Api.Entities;
+using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.ApiRequest;
 using MusicPlayerOnline.Model.ApiResponse;
 

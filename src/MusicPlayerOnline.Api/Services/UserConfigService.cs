@@ -4,6 +4,7 @@ using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.ErrorHandler;
 using MusicPlayerOnline.Api.Interfaces;
+using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.ApiRequest;
 using MusicPlayerOnline.Model.ApiResponse;
 using MusicPlayerOnline.Model.Enums;
