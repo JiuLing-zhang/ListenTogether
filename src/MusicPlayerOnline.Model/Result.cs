@@ -12,7 +12,7 @@
         }
     }
 
-    public class Result<T> where T : class, new()
+    public class Result<T>
     {
         public int Code { get; set; }
         public string Message { get; set; }
