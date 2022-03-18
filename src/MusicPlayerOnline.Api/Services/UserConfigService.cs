@@ -18,12 +18,12 @@ namespace MusicPlayerOnline.Api.Services
             _context = context;
         }
 
-        public async Task<UserSettingDto> ReadAllConfigAsync(int userBaseId)
+        public async Task<UserSettingDto> ReadAllConfigAsync(int userId)
         {
-            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userBaseId);
+            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
             {
-                userConfig = await InitUserConfig(userBaseId);
+                userConfig = await InitUserConfig(userId);
             }
 
             var result = new UserSettingDto();
@@ -59,9 +59,9 @@ namespace MusicPlayerOnline.Api.Services
         /// <summary>
         /// 初始化用户配置
         /// </summary>
-        private async Task<UserConfigEntity> InitUserConfig(int userBaseId)
+        private async Task<UserConfigEntity> InitUserConfig(int userId)
         {
-            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userBaseId);
+            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig != null)
             {
                 return userConfig;
@@ -69,7 +69,7 @@ namespace MusicPlayerOnline.Api.Services
 
             userConfig = new UserConfigEntity()
             {
-                UserBaseId = userBaseId,
+                UserBaseId = userId,
                 GeneralSettingJson = JsonSerializer.Serialize(new GeneralSetting()
                 {
                     IsAutoCheckUpdate = true,
@@ -97,44 +97,56 @@ namespace MusicPlayerOnline.Api.Services
             return userConfig;
         }
 
-        public async Task<bool> WriteGeneralConfigAsync(int userBaseId, GeneralSetting generalSetting)
+        public async Task<Result> WriteGeneralConfigAsync(int userId, GeneralSetting generalSetting)
         {
-            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userBaseId);
+            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
             {
-                return false;
+                return new Result(1, "原始配置不存在");
             }
 
             userConfig.GeneralSettingJson = JsonSerializer.Serialize(generalSetting);
             var count = await _context.SaveChangesAsync();
-            return count != 0;
+            if (count == 0)
+            {
+                return new Result(2, "保存失败");
+            }
+
+            return new Result(0, "保存成功");
         }
 
-        public async Task<bool> WriteSearchConfigAsync(int userBaseId, SearchSetting searchSetting)
+        public async Task<Result> WriteSearchConfigAsync(int userId, SearchSetting searchSetting)
         {
-            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userBaseId);
+            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
             {
-                return false;
+                return new Result(1, "原始配置不存在");
             }
 
             userConfig.SearchSettingJson = JsonSerializer.Serialize(searchSetting);
             var count = await _context.SaveChangesAsync();
-            return count != 0;
+            if (count == 0)
+            {
+                return new Result(2, "保存失败");
+            }
+            return new Result(0, "保存成功");
         }
 
-        public async Task<bool> WritePlayConfigAsync(int userBaseId, PlaySetting playSetting)
+        public async Task<Result> WritePlayConfigAsync(int userId, PlaySetting playSetting)
         {
-            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userBaseId);
+            var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
             {
-                return false;
+                return new Result(1, "原始配置不存在");
             }
 
             userConfig.PlaySettingJson = JsonSerializer.Serialize(playSetting);
             var count = await _context.SaveChangesAsync();
-            return count != 0;
+            if (count == 0)
+            {
+                return new Result(2, "保存失败");
+            }
+            return new Result(0, "保存成功");
         }
-
     }
 }

@@ -5,9 +5,9 @@ namespace MusicPlayerOnline.Api.Interfaces
 {
     public interface IUserConfigService
     {
-        Task<UserSettingDto> ReadAllConfigAsync(int userBaseId);
-        Task<bool> WriteGeneralConfigAsync(int userBaseId, GeneralSetting generalSetting);
-        Task<bool> WriteSearchConfigAsync(int userBaseId, SearchSetting searchSetting);
-        Task<bool> WritePlayConfigAsync(int userBaseId, PlaySetting playSetting);
+        Task<UserSettingDto> ReadAllConfigAsync(int userId);
+        Task<Result> WriteGeneralConfigAsync(int userId, GeneralSetting generalSetting);
+        Task<Result> WriteSearchConfigAsync(int userId, SearchSetting searchSetting);
+        Task<Result> WritePlayConfigAsync(int userId, PlaySetting playSetting);
     }
 }

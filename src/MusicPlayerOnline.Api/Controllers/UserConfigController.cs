@@ -3,7 +3,6 @@ using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Model.ApiRequest;
-using MusicPlayerOnline.Model.ApiResponse;
 
 namespace MusicPlayerOnline.Api.Controllers
 {
@@ -30,8 +29,7 @@ namespace MusicPlayerOnline.Api.Controllers
         public async Task<IActionResult> WriteGeneralConfig(GeneralSetting model)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
-            var result = await _userConfigService.WriteGeneralConfigAsync(user.Id, model);
-            var response = result ? new JsonResultDto(0, "设置成功") : new JsonResultDto(1, "设置失败");
+            var response = await _userConfigService.WriteGeneralConfigAsync(user.Id, model);
             return Ok(response);
         }
 
@@ -39,8 +37,7 @@ namespace MusicPlayerOnline.Api.Controllers
         public async Task<IActionResult> WritePlayConfig(PlaySetting model)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
-            var result = await _userConfigService.WritePlayConfigAsync(user.Id, model);
-            var response = result ? new JsonResultDto(0, "设置成功") : new JsonResultDto(1, "设置失败");
+            var response = await _userConfigService.WritePlayConfigAsync(user.Id, model);
             return Ok(response);
         }
 
@@ -48,8 +45,7 @@ namespace MusicPlayerOnline.Api.Controllers
         public async Task<IActionResult> WriteSearchConfig(SearchSetting model)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
-            var result = await _userConfigService.WriteSearchConfigAsync(user.Id, model);
-            var response = result ? new JsonResultDto(0, "设置成功") : new JsonResultDto(1, "设置失败");
+            var response = await _userConfigService.WriteSearchConfigAsync(user.Id, model);
             return Ok(response);
         }
     }

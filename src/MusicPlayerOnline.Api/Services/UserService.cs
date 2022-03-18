@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.ErrorHandler;
 using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Api.Models;
 using MusicPlayerOnline.Model.ApiRequest;
@@ -23,12 +22,12 @@ namespace MusicPlayerOnline.Api.Services
             _appSettings = appSettings.Value;
         }
 
-        public async Task<JsonResultDto> Register(User dto, string ipAddress)
+        public async Task<Result> Register(User dto, string ipAddress)
         {
             var isUserExist = await _context.Users.AnyAsync(x => x.Username == dto.Username);
             if (isUserExist)
             {
-                return new JsonResultDto(1, "用户名已存在");
+                return new Result(1, "用户名已存在");
             }
 
             string salt = JiuLing.CommonLibs.GuidUtils.GetFormatN();
@@ -49,23 +48,23 @@ namespace MusicPlayerOnline.Api.Services
             var count = await _context.SaveChangesAsync();
             if (count == 0)
             {
-                return new JsonResultDto(2, "注册失败");
+                return new Result(2, "注册失败");
             }
-            return new JsonResultDto(0, "注册成功，请等待管理员审核");
+            return new Result(0, "注册成功，请等待管理员审核");
         }
 
-        public async Task<UserDto> Login(User dto, string ipAddress)
+        public async Task<Result<UserDto>> Login(User dto, string ipAddress)
         {
             var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == dto.Username && x.IsEnable);
             if (user == null)
             {
-                throw new AppException("用户名或密码不正确");
+                return new Result<UserDto>(1, "用户名或密码不正确", null);
             }
 
             string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{dto.Password}{user.Salt}");
             if (password != user.Password)
             {
-                throw new AppException("用户名或密码不正确");
+                return new Result<UserDto>(1, "用户名或密码不正确", null);
             }
 
             // authentication successful so generate jwt and refresh tokens
@@ -80,14 +79,15 @@ namespace MusicPlayerOnline.Api.Services
             _context.Update(user);
             await _context.SaveChangesAsync();
 
-            return new UserDto()
+            return new Result<UserDto>(0, "", new UserDto()
             {
                 UserName = user.Username,
                 Nickname = user.Nickname,
                 Avatar = user.Avatar,
                 JwtToken = jwtToken,
                 RefreshToken = refreshToken.Token
-            };
+            });
+
         }
         private void RemoveOldRefreshTokens(UserEntity user)
         {
