@@ -19,12 +19,12 @@ namespace MusicPlayerOnline.Api.Services
             _context = context;
         }
 
-        public async Task<UserSettingDto> ReadAllConfigAsync(int userId)
+        public async Task<UserSettingDto> ReadAllSettingAsync(int userId)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
             {
-                userConfig = await InitUserConfig(userId);
+                userConfig = await InitializationUserSetting(userId);
             }
 
             var result = new UserSettingDto();
@@ -60,7 +60,7 @@ namespace MusicPlayerOnline.Api.Services
         /// <summary>
         /// 初始化用户配置
         /// </summary>
-        private async Task<UserConfigEntity> InitUserConfig(int userId)
+        private async Task<UserConfigEntity> InitializationUserSetting(int userId)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig != null)
@@ -98,7 +98,7 @@ namespace MusicPlayerOnline.Api.Services
             return userConfig;
         }
 
-        public async Task<Result> WriteGeneralConfigAsync(int userId, GeneralSetting generalSetting)
+        public async Task<Result> WriteGeneralSettingAsync(int userId, GeneralSetting generalSetting)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
@@ -116,7 +116,7 @@ namespace MusicPlayerOnline.Api.Services
             return new Result(0, "保存成功");
         }
 
-        public async Task<Result> WriteSearchConfigAsync(int userId, SearchSetting searchSetting)
+        public async Task<Result> WriteSearchSettingAsync(int userId, SearchSetting searchSetting)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
@@ -133,7 +133,7 @@ namespace MusicPlayerOnline.Api.Services
             return new Result(0, "保存成功");
         }
 
-        public async Task<Result> WritePlayConfigAsync(int userId, PlaySetting playSetting)
+        public async Task<Result> WritePlaySettingAsync(int userId, PlaySetting playSetting)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)

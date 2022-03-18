@@ -21,7 +21,7 @@ namespace MusicPlayerOnline.Api.Controllers
         public async Task<IActionResult> Get()
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
-            var response = await _userConfigService.ReadAllConfigAsync(user.Id);
+            var response = await _userConfigService.ReadAllSettingAsync(user.Id);
             return Ok(response);
         }
 
@@ -29,7 +29,7 @@ namespace MusicPlayerOnline.Api.Controllers
         public async Task<IActionResult> WriteGeneralConfig(GeneralSetting model)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
-            var response = await _userConfigService.WriteGeneralConfigAsync(user.Id, model);
+            var response = await _userConfigService.WriteGeneralSettingAsync(user.Id, model);
             return Ok(response);
         }
 
@@ -37,7 +37,7 @@ namespace MusicPlayerOnline.Api.Controllers
         public async Task<IActionResult> WritePlayConfig(PlaySetting model)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
-            var response = await _userConfigService.WritePlayConfigAsync(user.Id, model);
+            var response = await _userConfigService.WritePlaySettingAsync(user.Id, model);
             return Ok(response);
         }
 
@@ -45,7 +45,7 @@ namespace MusicPlayerOnline.Api.Controllers
         public async Task<IActionResult> WriteSearchConfig(SearchSetting model)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
-            var response = await _userConfigService.WriteSearchConfigAsync(user.Id, model);
+            var response = await _userConfigService.WriteSearchSettingAsync(user.Id, model);
             return Ok(response);
         }
     }

@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicPlayerOnline.Api", "src\MusicPlayerOnline.Api\MusicPlayerOnline.Api.csproj", "{3E09039E-98C0-4428-98E5-B0A592A4E8E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicPlayerOnline.Model", "src\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj", "{6EBC68D3-1BFE-4501-9306-4D6135BD944F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicPlayerOnline.Model", "src\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj", "{6EBC68D3-1BFE-4501-9306-4D6135BD944F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicPlayerOnline.Service", "src\MusicPlayerOnline.Service\MusicPlayerOnline.Service.csproj", "{49B22394-19DF-485D-A61B-8D6DF8B66172}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6EBC68D3-1BFE-4501-9306-4D6135BD944F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EBC68D3-1BFE-4501-9306-4D6135BD944F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EBC68D3-1BFE-4501-9306-4D6135BD944F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49B22394-19DF-485D-A61B-8D6DF8B66172}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49B22394-19DF-485D-A61B-8D6DF8B66172}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49B22394-19DF-485D-A61B-8D6DF8B66172}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49B22394-19DF-485D-A61B-8D6DF8B66172}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
