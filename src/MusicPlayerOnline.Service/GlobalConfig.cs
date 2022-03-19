@@ -1,4 +1,6 @@
-﻿namespace MusicPlayerOnline.Service
+﻿using MusicPlayerOnline.Repository;
+
+namespace MusicPlayerOnline.Service
 {
     public class GlobalConfig
     {
@@ -11,6 +13,11 @@
         public static void SetWebApi(string baseUrl)
         {
             ApiSetting = new ApiSettings(baseUrl);
+        }
+
+        public static void SetDbConnection(string dbPath)
+        {
+            DatabaseProvide.SetConnection(dbPath);
         }
 
         public static void SetCurrentUser(string userName, string nickname, string avatar, string token, string refreshToken)
