@@ -1,8 +1,7 @@
-﻿using MusicPlayerOnline.Model.ApiResponse;
-using System.Threading.Tasks;
-using MusicPlayerOnline.Model.ApiRequest;
+﻿using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.ApiResponse;
 
-namespace MusicPlayerOnline.Service
+namespace MusicPlayerOnline.Service.Interfaces
 {
     public interface IConfigService
     {
