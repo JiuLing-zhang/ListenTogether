@@ -17,7 +17,7 @@ namespace MusicPlayerOnline.Api.DbContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PlaylistEntity>().HasKey(x => new { x.UserBaseId, x.MusicId });
+
         }
     }
 }

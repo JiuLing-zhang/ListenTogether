@@ -60,9 +60,9 @@ namespace MusicPlayerOnline.Api.Services
             return playlists;
         }
 
-        public async Task<Result> RemoveAsync(int userId, string musicId)
+        public async Task<Result> RemoveAsync(int userId, int id)
         {
-            var playlist = await _context.Playlists.SingleOrDefaultAsync(x => x.MusicId == musicId && x.UserBaseId == userId);
+            var playlist = await _context.Playlists.SingleOrDefaultAsync(x => x.Id == id);
             if (playlist == null)
             {
                 return new Result(0, "删除成功");

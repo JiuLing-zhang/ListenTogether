@@ -8,7 +8,7 @@ namespace MusicPlayerOnline.Api.Interfaces
     {
         Task<Result> AddOrUpdateAsync(int userId, Playlist playlist);
         Task<List<PlaylistDto>> GetAllAsync(int userId);
-        Task<Result> RemoveAsync(int userId, string musicId);
+        Task<Result> RemoveAsync(int userId, int id);
         Task<Result> RemoveAllAsync(int userId);
     }
 }

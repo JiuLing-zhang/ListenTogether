@@ -35,10 +35,10 @@ namespace MusicPlayerOnline.Api.Controllers
         }
 
         [HttpPost("delete")]
-        public async Task<IActionResult> Remove(string musicId)
+        public async Task<IActionResult> Remove(int id)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
-            var response = await _playlistService.RemoveAsync(user.Id, musicId);
+            var response = await _playlistService.RemoveAsync(user.Id, id);
             return Ok(response);
         }
 
