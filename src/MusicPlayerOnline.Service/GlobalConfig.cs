@@ -12,5 +12,10 @@
         {
             ApiSetting = new ApiSettings(baseUrl);
         }
+
+        public static void SetCurrentUser(string userName, string nickname, string avatar, string token, string refreshToken)
+        {
+            CurrentUser = new UserInfo(userName, nickname, avatar, token, refreshToken);
+        }
     }
 }

@@ -85,7 +85,7 @@ namespace MusicPlayerOnline.Api.Services
                 UserName = user.Username,
                 Nickname = user.Nickname,
                 Avatar = user.Avatar,
-                JwtToken = jwtToken,
+                Token = jwtToken,
                 RefreshToken = refreshToken.Token
             });
 
