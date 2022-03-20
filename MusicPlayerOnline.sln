@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicPlayerOnline.Model", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicPlayerOnline.Service", "src\MusicPlayerOnline.Service\MusicPlayerOnline.Service.csproj", "{49B22394-19DF-485D-A61B-8D6DF8B66172}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicPlayerOnline.Repository", "src\MusicPlayerOnline.Repository\MusicPlayerOnline.Repository.csproj", "{4281F506-8D1D-4634-919F-3376D81EBBB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicPlayerOnline.Repository", "src\MusicPlayerOnline.Repository\MusicPlayerOnline.Repository.csproj", "{4281F506-8D1D-4634-919F-3376D81EBBB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicPlayerOnline.Maui", "src\MusicPlayerOnline.Maui\MusicPlayerOnline.Maui.csproj", "{293348B0-4DBE-4E96-A677-EEBE2F4082C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,12 @@ Global
 		{4281F506-8D1D-4634-919F-3376D81EBBB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4281F506-8D1D-4634-919F-3376D81EBBB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4281F506-8D1D-4634-919F-3376D81EBBB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293348B0-4DBE-4E96-A677-EEBE2F4082C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{293348B0-4DBE-4E96-A677-EEBE2F4082C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{293348B0-4DBE-4E96-A677-EEBE2F4082C5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{293348B0-4DBE-4E96-A677-EEBE2F4082C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{293348B0-4DBE-4E96-A677-EEBE2F4082C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{293348B0-4DBE-4E96-A677-EEBE2F4082C5}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

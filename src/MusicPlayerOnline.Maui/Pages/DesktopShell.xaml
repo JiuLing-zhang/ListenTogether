@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:MusicPlayerOnline.Maui.Pages"
+       xmlns:root="clr-namespace:MusicPlayerOnline.Maui"
+       xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
+       x:DataType="viewmodels:ShellViewModel"
+       
+       x:Class="MusicPlayerOnline.Maui.Pages.DesktopShell">
+
+    
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="red">
+            <Image Source="{AppThemeBinding Dark=logo_color_horizontal_darkmode.png,Light=logo_header_horizontal.png}"
+                   SemanticProperties.Description=".NET Podcast application logo"
+                   HeightRequest="142"
+                   VerticalOptions="Center"
+                   WidthRequest="230"
+                   HorizontalOptions="Center" />
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <ShellContent Title="{Binding Playlist.Title}"
+                  Icon="{AppThemeBinding Light=playlist.png, Dark=playlist.png}"
+                  ContentTemplate="{DataTemplate pages:PlaylistPage}"/>
+
+    <ShellContent Title="{Binding MyFavorite.Title}"
+                  Icon="{AppThemeBinding Light=my_favorite.png, Dark=my_favorite.png}"
+                  ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
+
+    <ShellContent Title="{Binding Playing.Title}"
+                  Icon="{AppThemeBinding Light=playing.png, Dark=playing.png}"
+                  ContentTemplate="{DataTemplate pages:PlayingPage}" />
+
+    <ShellContent Title="{Binding Settings.Title}"
+                  Icon="{AppThemeBinding Light=settings.png, Dark=settings.png}" 
+                  ContentTemplate="{DataTemplate pages:SettingsPage}" />
+
+</Shell>

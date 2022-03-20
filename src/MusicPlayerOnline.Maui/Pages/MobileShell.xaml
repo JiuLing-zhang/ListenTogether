@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:MusicPlayerOnline.Maui.Pages"
+       xmlns:root="clr-namespace:MusicPlayerOnline.Maui"
+       xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
+       x:DataType="viewmodels:ShellViewModel"
+       x:Class="MusicPlayerOnline.Maui.Pages.MobileShell">
+    <TabBar>
+        <Tab Title="{Binding Playlist.Title}"
+             Icon="{Binding Playlist.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:PlaylistPage}" />
+        </Tab>
+        <Tab Title="{Binding MyFavorite.Title}"
+             Icon="{Binding MyFavorite.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
+        </Tab>
+        <Tab Title="{Binding Playing.Title}"
+             Icon="{Binding Playing.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:PlayingPage}" />
+        </Tab>
+        <Tab Title="{Binding Settings.Title}"
+             Icon="{Binding Settings.Icon}" >
+            <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}" />
+        </Tab>
+
+    </TabBar>
+</Shell>
