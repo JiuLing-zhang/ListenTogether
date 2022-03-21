@@ -1,4 +1,5 @@
-﻿using MusicPlayerOnline.Repository.Entities;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
+using MusicPlayerOnline.Repository.Entities;
 using SQLite;
 
 namespace MusicPlayerOnline.Repository
@@ -18,9 +19,9 @@ namespace MusicPlayerOnline.Repository
             {
                 if (_databaseAsync == null)
                 {
-                    if (string.IsNullOrEmpty(_dbPath))
+                    if (_dbPath.IsEmpty())
                     {
-                        throw new Exception("非法的数据库路径");
+                        throw new Exception("数据库路径未配置");
                     }
 
                     _databaseAsync = new SQLiteAsyncConnection(_dbPath);

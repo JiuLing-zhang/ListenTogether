@@ -18,6 +18,7 @@
             }
             public string Register => $"{_baseUrl}/api/user/reg";
             public string Login => $"{_baseUrl}/api/user/login";
+            public string Logout => $"{_baseUrl}/api/user/logout";
         }
 
         public UserConfigUrl UserConfig => new(BaseUrl);
@@ -44,7 +45,7 @@
             }
             public string GetAll => $"{_baseUrl}/api/playlist/list";
             public string AddOrUpdate => $"{_baseUrl}/api/playlist";
-            public string Remove => $"{_baseUrl}/api/playlist/delete";
+            public string Remove => $"{_baseUrl}/api/playlist/delete/{{0}}";
             public string RemoveAll => $"{_baseUrl}/api/playlist/clear";
         }
 
@@ -56,12 +57,12 @@
             {
                 _baseUrl = urlBase;
             }
-            public string Get => $"{_baseUrl}/api/my-favorite";
+            public string Get => $"{_baseUrl}/api/my-favorite/{{0}}";
             public string GetAll => $"{_baseUrl}/api/my-favorite/list";
-            public string GetDetail => $"{_baseUrl}/api/my-favorite/detail";
+            public string GetDetail => $"{_baseUrl}/api/my-favorite/detail/{{0}}";
             public string AddOrUpdate => $"{_baseUrl}/api/my-favorite";
-            public string Remove => $"{_baseUrl}/api/my-favorite/delete";
-            public string AddMusic => $"{_baseUrl}/api/my-favorite/add-music";
+            public string Remove => $"{_baseUrl}/api/my-favorite/delete/{{0}}";
+            public string AddMusic => $"{_baseUrl}/api/my-favorite/add-music/{{0}}";
         }
 
         public MusicUrl Music => new(BaseUrl);
@@ -72,9 +73,9 @@
             {
                 _baseUrl = urlBase;
             }
-            public string Get => $"{_baseUrl}/api/music";
+            public string Get => $"{_baseUrl}/api/music/{{0}}";
             public string AddOrUpdate => $"{_baseUrl}/api/music";
-            public string UpdateCache => $"{_baseUrl}/api/music/update-cache";
+            public string UpdateCache => $"{_baseUrl}/api/music/update-cache/{{0}}/{{1}}";
         }
     }
 }

@@ -35,10 +35,11 @@ namespace MusicPlayerOnline.Repository.Repositories
             return new Result(0, "保存成功");
         }
 
-        public async Task<List<PlaylistDto>> GetAllAsync(int userId)
+        public async Task<List<PlaylistDto>?> GetAllAsync()
         {
             var playlists = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().ToListAsync();
-            return playlists.Select(x => new PlaylistDto()
+
+            return playlists?.Select(x => new PlaylistDto()
             {
                 MusicId = x.MusicId,
                 MusicName = x.MusicName,

@@ -9,6 +9,8 @@ namespace MusicPlayerOnline.Api.Interfaces
     {
         public Task<Result> Register(User dto, string ipAddress);
         public Task<Result<UserDto>> Login(User dto, string ipAddress);
+        public Task<Result> Logout(int id);
+        //public Task<Result<UserDto?>> GetUserInfo(int id);
         public Task<UserEntity?> GetOneEnableAsync(int id);
     }
 }

@@ -18,7 +18,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         var user = context.HttpContext.Items["User"] as UserEntity;
         if (user == null)
         {
-            context.Result = new JsonResult(new { message = "您没有权限进行当前操作" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            context.Result = new JsonResult(new { message = "用户未登录" });
         }
     }
 }

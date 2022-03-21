@@ -9,7 +9,7 @@ using MusicPlayerOnline.Service.Interfaces;
 
 namespace MusicPlayerOnline.Service.Services
 {
-    public class ConfigService : IConfigService
+    public class ConfigService
     {
         public Task<UserSettingDto> ReadAllConfigAsync()
         {

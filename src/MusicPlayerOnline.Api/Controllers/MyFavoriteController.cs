@@ -17,7 +17,7 @@ namespace MusicPlayerOnline.Api.Controllers
             _myFavoriteService = myFavoriteService;
         }
 
-        [HttpGet()]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
@@ -33,7 +33,7 @@ namespace MusicPlayerOnline.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("detail")]
+        [HttpGet("detail/{id}")]
         public async Task<IActionResult> GetDetail(int id)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
@@ -49,7 +49,7 @@ namespace MusicPlayerOnline.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPost("delete")]
+        [HttpPost("delete/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;
@@ -57,7 +57,7 @@ namespace MusicPlayerOnline.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPost("add-music")]
+        [HttpPost("add-music/{id}")]
         public async Task<IActionResult> AddMusicToMyFavorite(int id, MyFavoriteDetail myFavoriteDetail)
         {
             var user = Request.HttpContext.Items["User"] as UserEntity;

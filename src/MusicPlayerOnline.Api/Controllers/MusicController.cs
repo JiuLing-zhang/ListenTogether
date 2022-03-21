@@ -16,7 +16,7 @@ namespace MusicPlayerOnline.Api.Controllers
             _musicService = musicService;
         }
 
-        [HttpGet()]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var response = await _musicService.GetOneAsync(id);
@@ -30,7 +30,7 @@ namespace MusicPlayerOnline.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPost("update-cache")]
+        [HttpPost("update-cache/{id}/{cachePath}")]
         public async Task<IActionResult> UpdateCache(string id, string cachePath)
         {
             var response = await _musicService.UpdateCacheAsync(id, cachePath);

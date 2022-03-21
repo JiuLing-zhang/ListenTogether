@@ -41,10 +41,27 @@ namespace MusicPlayerOnline.Service.Services
             string json = await response.Content.ReadAsStringAsync();
 
             var result = JsonSerializer.Deserialize<Result<UserDto>>(json);
-            if (result == null)
+            if (result == null || result.Data == null)
             {
                 return new Result<UserDto>(999, "连接服务器失败", null);
             }
+
+            HttpClientSingleton.Instance().SetToken(result.Data.Token);
+            GlobalConfig.CurrentUser = new UserInfo(result.Data.UserName, result.Data.Nickname, result.Data.Avatar, result.Data.Token, result.Data.RefreshToken);
+            return result;
+        }
+
+        public async Task<Result> Logout()
+        {
+            var json = await HttpClientSingleton.Instance().PostStringAsync(GlobalConfig.ApiSetting.User.Logout);
+            var result = JsonSerializer.Deserialize<Result>(json);
+            if (result == null)
+            {
+                return new Result(999, "连接服务器失败");
+            }
+
+            HttpClientSingleton.Instance().ClearToken();
+            GlobalConfig.CurrentUser = null;
             return result;
         }
     }

@@ -90,12 +90,32 @@ namespace MusicPlayerOnline.Api.Services
             });
 
         }
+
+        public async Task<Result> Logout(int id)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+            if (user == null)
+            {
+                return new Result(1, "用户信息检查失败");
+            }
+
+            RemoveOldRefreshTokens(user);
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+            return new Result(0, "退出成功");
+        }
+
         private void RemoveOldRefreshTokens(UserEntity user)
         {
             // remove old inactive refresh tokens from user based on TTL in app settings
             user.RefreshTokens.RemoveAll(x =>
                 !x.IsActive &&
                 x.CreateTime.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.Now);
+        }
+
+        private void RemoveAllRefreshTokens(UserEntity user)
+        {
+            user.RefreshTokens.Clear();
         }
 
         public async Task<UserEntity?> GetOneEnableAsync(int id)

@@ -7,5 +7,6 @@ namespace MusicPlayerOnline.Service.Interfaces
     {
         public Task<Result> Register(string username, string password);
         public Task<Result<UserDto>> Login(string username, string password);
+        public Task<Result> Logout();
     }
 }

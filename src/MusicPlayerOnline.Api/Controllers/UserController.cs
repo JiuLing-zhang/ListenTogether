@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPlayerOnline.Api.Authorization;
+using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Model.ApiRequest;
 
@@ -28,6 +29,15 @@ namespace MusicPlayerOnline.Api.Controllers
         public async Task<IActionResult> Login(User model)
         {
             var response = await _userService.Login(model, IpAddress());
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var user = Request.HttpContext.Items["User"] as UserEntity;
+            var response = await _userService.Logout(user.Id);
             return Ok(response);
         }
 
