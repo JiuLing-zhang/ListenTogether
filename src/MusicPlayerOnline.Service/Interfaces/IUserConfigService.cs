@@ -4,16 +4,15 @@ using MusicPlayerOnline.Model.ApiResponse;
 
 namespace MusicPlayerOnline.Service.Interfaces
 {
-    //TODO 重命名为 UserConfig
     public interface IUserConfigService
     {
-        Task<UserSettingDto?> ReadAllSettingsAsync(); 
+        Task<UserSettingDto?> ReadAllSettingsAsync();
         Task<Result> WriteGeneralSettingAsync(GeneralSetting generalSetting);
-         
+
         Task<Result> WriteSearchSettingAsync(SearchSetting searchSetting);
-         
+
         Task<Result> WritePlaySettingAsync(PlaySetting playSetting);
-         
+
         //Task WritePlayerConfigAsync(PlayerSetting playerSetting);
     }
 }
