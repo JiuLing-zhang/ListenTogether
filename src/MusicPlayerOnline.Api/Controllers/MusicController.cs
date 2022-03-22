@@ -8,7 +8,7 @@ namespace MusicPlayerOnline.Api.Controllers
     [Route("api/music")]
     [ApiController]
     [Authorize]
-    public class MusicController : ControllerBase
+    public class MusicController : ApiBaseController
     {
         private readonly IMusicService _musicService;
         public MusicController(IMusicService musicService)

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
+using MusicPlayerOnline.Api.ErrorHandler;
 using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Api.Models;
 using MusicPlayerOnline.Model;
@@ -22,7 +23,7 @@ internal class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public async Task<Result> Register(User dto, string ipAddress)
+    public async Task<Result> Register(User dto)
     {
         var isUserExist = await _context.Users.AnyAsync(x => x.Username == dto.Username);
         if (isUserExist)
@@ -53,7 +54,7 @@ internal class UserService : IUserService
         return new Result(0, "注册成功，请等待管理员审核");
     }
 
-    public async Task<Result<UserDto>> Login(User dto, string ipAddress)
+    public async Task<Result<UserDto>> Login(User dto)
     {
         var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == dto.Username && x.IsEnable);
         if (user == null)
@@ -67,15 +68,11 @@ internal class UserService : IUserService
             return new Result<UserDto>(1, "用户名或密码不正确", null);
         }
 
-        // authentication successful so generate jwt and refresh tokens
-        var jwtToken = _jwtUtils.GenerateJwtToken(user);
-        var refreshToken = _jwtUtils.GenerateRefreshToken(ipAddress);
+        var jwtToken = _jwtUtils.GenerateToken(user);
+        var refreshToken = _jwtUtils.GenerateRefreshToken();
+        user.RefreshTokens.Clear();
         user.RefreshTokens.Add(refreshToken);
 
-        // remove old refresh tokens from user
-        RemoveOldRefreshTokens(user);
-
-        // save changes to db
         _context.Update(user);
         await _context.SaveChangesAsync();
 
@@ -87,34 +84,50 @@ internal class UserService : IUserService
             Token = jwtToken,
             RefreshToken = refreshToken.Token
         });
-
     }
 
-    public async Task<Result> Logout(int id)
+    public async Task<Result<UserDto>> RefreshToken(string token)
     {
-        var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+        var user = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(r => r.Token == token));
         if (user == null)
         {
-            return new Result(1, "用户信息检查失败");
+            throw new AppException("无效Token");
         }
 
-        RemoveOldRefreshTokens(user);
+        var refreshToken = user.RefreshTokens.Single();
+        if (refreshToken.IsExpired)
+        {
+            throw new AppException("Token已过期");
+        }
+        user.RefreshTokens.Clear();
+
+        var newToken = _jwtUtils.GenerateToken(user);
+        var newRefreshToken = _jwtUtils.GenerateRefreshToken();
+        user.RefreshTokens.Add(newRefreshToken);
+
         _context.Update(user);
         await _context.SaveChangesAsync();
-        return new Result(0, "退出成功");
+
+        return new Result<UserDto>(0, "更新成功", new UserDto()
+        {
+            UserName = user.Username,
+            Nickname = user.Nickname,
+            Avatar = user.Avatar,
+            Token = newToken,
+            RefreshToken = newRefreshToken.Token
+        });
     }
 
-    private void RemoveOldRefreshTokens(UserEntity user)
+    public async Task Logout(int id)
     {
-        // remove old inactive refresh tokens from user based on TTL in app settings
-        user.RefreshTokens.RemoveAll(x =>
-            !x.IsActive &&
-            x.CreateTime.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.Now);
-    }
+        var user = _context.Users.SingleOrDefault(x => x.Id == id);
+        if (user == null)
+        {
+            throw new AppException("用户不存在");
+        }
 
-    private void RemoveAllRefreshTokens(UserEntity user)
-    {
         user.RefreshTokens.Clear();
+        await _context.SaveChangesAsync();
     }
 
     public async Task<Result<UserDto>> GetUserInfo(int id)

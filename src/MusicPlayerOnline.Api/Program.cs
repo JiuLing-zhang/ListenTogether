@@ -56,6 +56,7 @@ builder.Services.AddScoped<IUserConfigService, UserConfigService>();
 builder.Services.AddScoped<IMusicService, MusicService>();
 builder.Services.AddScoped<IMyFavoriteService, MyFavoriteService>();
 builder.Services.AddScoped<IPlaylistService, PlaylistService>();
+builder.Services.AddScoped<ILogService, LogService>();
 
 var app = builder.Build();
 

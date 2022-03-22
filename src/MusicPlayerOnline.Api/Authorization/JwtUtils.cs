@@ -11,9 +11,9 @@ using MusicPlayerOnline.Api.Models;
 namespace MusicPlayerOnline.Api.Authorization;
 public interface IJwtUtils
 {
-    public string GenerateJwtToken(UserEntity user);
-    public int? ValidateJwtToken(string? token);
-    public RefreshTokenEntity GenerateRefreshToken(string ipAddress);
+    public string GenerateToken(UserEntity user);
+    public int? ValidateToken(string? token);
+    public RefreshTokenEntity GenerateRefreshToken();
 }
 
 public class JwtUtils : IJwtUtils
@@ -27,27 +27,29 @@ public class JwtUtils : IJwtUtils
         _appSettings = appSettings.Value;
     }
 
-    public string GenerateJwtToken(UserEntity user)
+    public string GenerateToken(UserEntity user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("Id", user.Id.ToString()) }),
-            Expires = DateTime.Now.AddMinutes(15),
+            Expires = DateTime.Now.AddMinutes(60),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
 
-    public int? ValidateJwtToken(string? token)
+    public int? ValidateToken(string? token)
     {
         if (token == null)
+        {
             return null;
+        }
 
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -73,15 +75,13 @@ public class JwtUtils : IJwtUtils
         }
     }
 
-    public RefreshTokenEntity GenerateRefreshToken(string ipAddress)
+    public RefreshTokenEntity GenerateRefreshToken()
     {
         var refreshToken = new RefreshTokenEntity
         {
             Token = GetUniqueToken(),
-            // token is valid for 7 days
-            ExpireTime = DateTime.Now.AddDays(7),
-            CreateTime = DateTime.Now,
-            CreateIp = ipAddress
+            ExpireTime = DateTime.Now.AddDays(_appSettings.TokenExpireDay),
+            CreateTime = DateTime.Now
         };
 
         return refreshToken;

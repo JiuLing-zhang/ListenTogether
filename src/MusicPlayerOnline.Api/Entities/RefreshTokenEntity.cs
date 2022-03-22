@@ -20,7 +20,5 @@ public class RefreshTokenEntity
     public string Token { get; set; } = null!;
     public DateTime ExpireTime { get; set; }
     public DateTime CreateTime { get; set; }
-    public string CreateIp { get; set; } = null!;
     public bool IsExpired => DateTime.Now >= ExpireTime;
-    public bool IsActive => !IsExpired;
 }
