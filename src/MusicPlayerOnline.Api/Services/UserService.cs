@@ -68,7 +68,7 @@ internal class UserService : IUserService
             return new Result<UserDto>(1, "用户名或密码不正确", null);
         }
 
-        var jwtToken = _jwtUtils.GenerateToken(user);
+        var token = _jwtUtils.GenerateToken(user);
         var refreshToken = _jwtUtils.GenerateRefreshToken();
         user.RefreshTokens.Clear();
         user.RefreshTokens.Add(refreshToken);
@@ -81,7 +81,7 @@ internal class UserService : IUserService
             UserName = user.Username,
             Nickname = user.Nickname,
             Avatar = user.Avatar,
-            Token = jwtToken,
+            Token = token,
             RefreshToken = refreshToken.Token
         });
     }

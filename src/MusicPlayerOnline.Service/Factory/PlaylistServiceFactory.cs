@@ -1,4 +1,5 @@
 ﻿using MusicPlayerOnline.Service.Interfaces;
+using MusicPlayerOnline.Service.Net;
 using MusicPlayerOnline.Service.Services;
 
 namespace MusicPlayerOnline.Service.Factory;
@@ -8,7 +9,8 @@ internal class PlaylistServiceFactory
     {
         if (GlobalConfig.IsLogin)
         {
-            return new PlaylistApiService();
+            var apiHttpMessageHandler = new ApiHttpMessageHandler(LocalTokenServiceFactory.Create());
+            return new PlaylistApiService(new HttpClientProvider(apiHttpMessageHandler));
         }
 
         return new PlaylistLocalService();

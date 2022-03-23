@@ -18,6 +18,7 @@
             }
             public string Register => $"{_baseUrl}/api/user/reg";
             public string Login => $"{_baseUrl}/api/user/login";
+            public string RefreshToken => $"{_baseUrl}/api/user/refresh-token";
             public string Logout => $"{_baseUrl}/api/user/logout";
         }
 

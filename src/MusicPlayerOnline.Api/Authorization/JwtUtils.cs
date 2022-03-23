@@ -34,7 +34,7 @@ public class JwtUtils : IJwtUtils
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("Id", user.Id.ToString()) }),
-            Expires = DateTime.Now.AddMinutes(60),
+            Expires = DateTime.Now.AddMinutes(2 * 60),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -58,12 +58,11 @@ public class JwtUtils : IJwtUtils
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = false,
                 ValidateAudience = false,
-                // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
 
-            var jwtToken = (JwtSecurityToken)validatedToken;
-            var id = jwtToken.Claims.First(x => x.Type == "Id").Value;
+            var securityToken = (JwtSecurityToken)validatedToken;
+            var id = securityToken.Claims.First(x => x.Type == "Id").Value;
 
             // return user id from JWT token if validation successful
             return Convert.ToInt32(id);

@@ -5,7 +5,7 @@ using MusicPlayerOnline.Repository.Repositories;
 using MusicPlayerOnline.Service.Interfaces;
 
 namespace MusicPlayerOnline.Service.Services;
-internal class MyFavoriteLocalService : IMyFavoriteService
+public class MyFavoriteLocalService : IMyFavoriteService
 {
     private readonly MyFavoriteRepository _repository;
     public MyFavoriteLocalService()

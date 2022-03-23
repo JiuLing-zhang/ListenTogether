@@ -4,7 +4,7 @@ using MusicPlayerOnline.Model.ApiResponse;
 using MusicPlayerOnline.Repository.Repositories;
 using MusicPlayerOnline.Service.Interfaces;
 namespace MusicPlayerOnline.Service.Services;
-internal class UserConfigLocalService : IUserConfigService
+public class UserConfigLocalService : IUserConfigService
 {
     private readonly UserConfigRepository _repository;
     public UserConfigLocalService()

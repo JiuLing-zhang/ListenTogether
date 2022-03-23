@@ -9,17 +9,17 @@ namespace MusicPlayerOnline.Service
         {
             DatabaseProvide.SetConnection(dbPath);
         }
+        public static void SetWebApi(string baseUrl)
+        {
+            ApiSetting = new ApiSettings(baseUrl);
+        }
 
         /// <summary>
         /// API 的一些配置信息
         /// </summary>
         public static ApiSettings ApiSetting { get; set; } = null!;
-        public static UserInfo? CurrentUser { get; set; }
 
-        public static void SetWebApi(string baseUrl)
-        {
-            ApiSetting = new ApiSettings(baseUrl);
-        }
+        public static UserInfo? CurrentUser { get; set; }
         public static bool IsLogin => CurrentUser != null;
     }
 }

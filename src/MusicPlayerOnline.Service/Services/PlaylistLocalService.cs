@@ -5,7 +5,7 @@ using MusicPlayerOnline.Repository.Repositories;
 using MusicPlayerOnline.Service.Interfaces;
 
 namespace MusicPlayerOnline.Service.Services;
-internal class PlaylistLocalService : IPlaylistService
+public class PlaylistLocalService : IPlaylistService
 {
     private readonly PlaylistRepository _repository;
     public PlaylistLocalService()

@@ -25,24 +25,28 @@ namespace MusicPlayerOnline.Repository
                     }
 
                     _databaseAsync = new SQLiteAsyncConnection(_dbPath);
-                    InitTableAsync();
+                    InitTable();
                 }
                 return _databaseAsync;
             }
         }
-        private static void InitTableAsync()
+        private static void InitTable()
         {
             DatabaseAsync.CreateTableAsync<MusicEntity>().Wait();
             DatabaseAsync.CreateTableAsync<PlaylistEntity>().Wait();
             DatabaseAsync.CreateTableAsync<MyFavoriteEntity>().Wait();
             DatabaseAsync.CreateTableAsync<MyFavoriteDetailEntity>().Wait();
-
             DatabaseAsync.CreateTableAsync<UserConfigEntity>().Wait();
-
             //配置表不存在时创建
             if (DatabaseAsync.Table<UserConfigEntity>().CountAsync().Result == 0)
             {
                 DatabaseAsync.InsertAsync(new UserConfigEntity()).Wait();
+            }
+
+            DatabaseAsync.CreateTableAsync<TokenEntity>().Wait();
+            if (DatabaseAsync.Table<TokenEntity>().CountAsync().Result == 0)
+            {
+                DatabaseAsync.InsertAsync(new TokenEntity()).Wait();
             }
         }
     }
