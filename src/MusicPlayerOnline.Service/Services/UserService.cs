@@ -48,7 +48,6 @@ public class UserService : IUserService
             return new Result<UserDto>(999, "连接服务器失败", null);
         }
 
-        GlobalConfig.CurrentUser = new UserInfo(result.Data.UserName, result.Data.Nickname, result.Data.Avatar, result.Data.Token, result.Data.RefreshToken);
         return result;
     }
 
@@ -61,7 +60,6 @@ public class UserService : IUserService
             return new Result(999, "连接服务器失败");
         }
 
-        GlobalConfig.CurrentUser = null;
         return result;
     }
 }

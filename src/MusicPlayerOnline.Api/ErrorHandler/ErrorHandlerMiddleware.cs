@@ -1,4 +1,5 @@
-using System.Net;
+using MusicPlayerOnline.EasyLog;
+using MusicPlayerOnline.Model;
 using System.Text.Json;
 
 namespace MusicPlayerOnline.Api.ErrorHandler;
@@ -18,28 +19,12 @@ public class ErrorHandlerMiddleware
         {
             await _next(context);
         }
-        catch (Exception error)
+        catch (Exception ex)
         {
             var response = context.Response;
             response.ContentType = "application/json";
-
-            switch(error)
-            {
-                case AppException e:
-                    // custom application error
-                    response.StatusCode = (int)HttpStatusCode.BadRequest;
-                    break;
-                case KeyNotFoundException e:
-                    // not found error
-                    response.StatusCode = (int)HttpStatusCode.NotFound;
-                    break;
-                default:
-                    // unhandled error
-                    response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    break;
-            }
-
-            var result = JsonSerializer.Serialize(new { message = error?.Message });
+            Logger.Error("API服务内部错误。", ex);
+            var result = JsonSerializer.Serialize(new Result(-1, "系统内部异常"));
             await response.WriteAsync(result);
         }
     }
