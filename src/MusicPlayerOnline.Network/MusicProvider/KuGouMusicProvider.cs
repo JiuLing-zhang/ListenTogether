@@ -1,12 +1,10 @@
-﻿using System.Text.Json;
-using JiuLing.CommonLibs.ExtensionMethods;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
 using MusicPlayerOnline.EasyLog;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.ApiRequest;
 using MusicPlayerOnline.Model.Enums;
 using MusicPlayerOnline.Model.Network;
 using MusicPlayerOnline.Network.Models.KuGou;
 using MusicPlayerOnline.Network.Utils;
+using System.Text.Json;
 using Music = MusicPlayerOnline.Model.Network.Music;
 
 namespace MusicPlayerOnline.Network.MusicProvider;
@@ -136,7 +134,7 @@ public class KuGouMusicProvider : IMusicProvider
         };
     }
 
-    public Task<Music?> UpdateMusicDetail(Music music)
+    public Task<Music?> UpdatePlayUrl(Music music)
     {
         throw new NotImplementedException();
     }

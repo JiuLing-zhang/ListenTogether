@@ -23,29 +23,29 @@ internal class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public async Task<Result> Register(User dto)
+    public async Task<Result> Register(User user)
     {
-        var isUserExist = await _context.Users.AnyAsync(x => x.Username == dto.Username);
+        var isUserExist = await _context.Users.AnyAsync(x => x.Username == user.Username);
         if (isUserExist)
         {
             return new Result(1, "用户名已存在");
         }
 
         string salt = JiuLing.CommonLibs.GuidUtils.GetFormatN();
-        string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{dto.Password}{salt}");
+        string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{user.Password}{salt}");
 
-        var user = new UserEntity()
+        var userEntity = new UserEntity()
         {
-            Username = dto.Username,
+            Username = user.Username,
             Password = password,
             Salt = salt,
             IsEnable = false,
-            Nickname = dto.Username,
+            Nickname = user.Username,
             Avatar = "",
             CreateTime = DateTime.Now,
         };
 
-        _context.Users.Add(user);
+        _context.Users.Add(userEntity);
         var count = await _context.SaveChangesAsync();
         if (count == 0)
         {
@@ -54,79 +54,81 @@ internal class UserService : IUserService
         return new Result(0, "注册成功，请等待管理员审核");
     }
 
-    public async Task<Result<UserDto>> Login(User dto)
+    public async Task<Result<UserDto>> Login(User user, string deviceId)
     {
-        var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == dto.Username && x.IsEnable);
-        if (user == null)
+        var userEntity = await _context.Users.SingleOrDefaultAsync(x => x.Username == user.Username && x.IsEnable);
+        if (userEntity == null)
         {
             return new Result<UserDto>(1, "用户名或密码不正确", null);
         }
 
-        string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{dto.Password}{user.Salt}");
-        if (password != user.Password)
+        string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{user.Password}{userEntity.Salt}");
+        if (password != userEntity.Password)
         {
             return new Result<UserDto>(1, "用户名或密码不正确", null);
         }
 
-        var token = _jwtUtils.GenerateToken(user);
-        var refreshToken = _jwtUtils.GenerateRefreshToken();
-        user.RefreshTokens.Clear();
-        user.RefreshTokens.Add(refreshToken);
+        var token = _jwtUtils.GenerateToken(userEntity, deviceId);
+        var refreshToken = _jwtUtils.GenerateRefreshToken(deviceId);
 
-        _context.Update(user);
+        userEntity.RefreshTokens.RemoveAll(x => x.DeviceId == deviceId);
+        userEntity.RefreshTokens.Add(refreshToken);
+
+        _context.Update(userEntity);
         await _context.SaveChangesAsync();
 
         return new Result<UserDto>(0, "", new UserDto()
         {
-            UserName = user.Username,
-            Nickname = user.Nickname,
-            Avatar = user.Avatar,
+            UserName = userEntity.Username,
+            Nickname = userEntity.Nickname,
+            Avatar = userEntity.Avatar,
             Token = token,
             RefreshToken = refreshToken.Token
         });
     }
 
-    public async Task<Result<UserDto>> RefreshToken(string token)
+    public async Task<Result<UserDto>> RefreshToken(AuthenticateInfo authenticateInfo, string deviceId)
     {
-        var user = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(r => r.Token == token));
-        if (user == null)
+        var userEntity = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(r => r.Token == authenticateInfo.RefreshToken));
+        if (userEntity == null)
         {
             throw new AppException("无效Token");
         }
 
-        var refreshToken = user.RefreshTokens.Single();
+        var refreshToken = userEntity.RefreshTokens.Single();
         if (refreshToken.IsExpired)
         {
             throw new AppException("Token已过期");
         }
-        user.RefreshTokens.Clear();
 
-        var newToken = _jwtUtils.GenerateToken(user);
-        var newRefreshToken = _jwtUtils.GenerateRefreshToken();
-        user.RefreshTokens.Add(newRefreshToken);
+        var newToken = _jwtUtils.GenerateToken(userEntity, deviceId);
+        var newRefreshToken = _jwtUtils.GenerateRefreshToken(deviceId);
 
-        _context.Update(user);
+        userEntity.RefreshTokens.RemoveAll(x => x.DeviceId == deviceId);
+        userEntity.RefreshTokens.Add(newRefreshToken);
+
+        _context.Update(userEntity);
         await _context.SaveChangesAsync();
 
         return new Result<UserDto>(0, "更新成功", new UserDto()
         {
-            UserName = user.Username,
-            Nickname = user.Nickname,
-            Avatar = user.Avatar,
+            UserName = userEntity.Username,
+            Nickname = userEntity.Nickname,
+            Avatar = userEntity.Avatar,
             Token = newToken,
             RefreshToken = newRefreshToken.Token
         });
     }
 
-    public async Task Logout(int id)
+    public async Task Logout(int userId, string deviceId)
     {
-        var user = _context.Users.SingleOrDefault(x => x.Id == id);
-        if (user == null)
+        var userEntity = _context.Users.SingleOrDefault(x => x.Id == userId);
+        if (userEntity == null)
         {
             throw new AppException("用户不存在");
         }
 
-        user.RefreshTokens.Clear();
+        userEntity.RefreshTokens.RemoveAll(x => x.DeviceId == deviceId);
         await _context.SaveChangesAsync();
     }
 
@@ -148,12 +150,12 @@ internal class UserService : IUserService
 
     public async Task<UserEntity?> GetOneEnableAsync(int id)
     {
-        var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id && x.IsEnable);
-        if (user == null)
+        var userEntity = await _context.Users.SingleOrDefaultAsync(x => x.Id == id && x.IsEnable);
+        if (userEntity == null)
         {
             return null;
         }
 
-        return user;
+        return userEntity;
     }
 }

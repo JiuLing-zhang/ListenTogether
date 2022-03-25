@@ -3,11 +3,11 @@ using MusicPlayerOnline.Service.Net;
 using MusicPlayerOnline.Service.Services;
 
 namespace MusicPlayerOnline.Service.Factory;
-internal class MyFavoriteServiceFactory
+public class MyFavoriteServiceFactory
 {
     public static IMyFavoriteService Create()
     {
-        if (GlobalConfig.IsLogin)
+        if (GlobalConfig.IsUseApiInterface)
         {
             var apiHttpMessageHandler = new ApiHttpMessageHandler(LocalTokenServiceFactory.Create());
             return new MyFavoriteApiService(new HttpClientProvider(apiHttpMessageHandler));

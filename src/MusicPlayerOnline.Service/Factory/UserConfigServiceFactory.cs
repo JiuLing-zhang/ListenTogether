@@ -3,11 +3,11 @@ using MusicPlayerOnline.Service.Net;
 using MusicPlayerOnline.Service.Services;
 
 namespace MusicPlayerOnline.Service.Factory;
-internal class UserConfigServiceFactory
+public class UserConfigServiceFactory
 {
     public static IUserConfigService Create()
     {
-        if (GlobalConfig.IsLogin)
+        if (GlobalConfig.IsUseApiInterface)
         {
             var apiHttpMessageHandler = new ApiHttpMessageHandler(LocalTokenServiceFactory.Create());
             return new UserConfigApiService(new HttpClientProvider(apiHttpMessageHandler));

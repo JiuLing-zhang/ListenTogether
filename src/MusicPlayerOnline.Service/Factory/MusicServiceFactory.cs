@@ -3,11 +3,11 @@ using MusicPlayerOnline.Service.Net;
 using MusicPlayerOnline.Service.Services;
 
 namespace MusicPlayerOnline.Service.Factory;
-internal class MusicServiceFactory
+public class MusicServiceFactory
 {
     public static IMusicService Create()
     {
-        if (GlobalConfig.IsLogin)
+        if (GlobalConfig.IsUseApiInterface)
         {
             var apiHttpMessageHandler = new ApiHttpMessageHandler(LocalTokenServiceFactory.Create());
             return new MusicApiService(new HttpClientProvider(apiHttpMessageHandler));

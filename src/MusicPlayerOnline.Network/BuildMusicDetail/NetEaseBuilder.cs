@@ -3,6 +3,8 @@ using MusicPlayerOnline.Model.Network;
 using MusicPlayerOnline.Network.MusicProvider;
 
 namespace MusicPlayerOnline.Network.BuildMusicDetail;
+
+//TODO 删除文件
 public class NetEaseBuilder : BuildAbstract
 {
     private readonly IMusicProvider _myMusicProvider;

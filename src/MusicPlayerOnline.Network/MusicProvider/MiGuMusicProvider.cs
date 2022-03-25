@@ -1,5 +1,4 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
 using MusicPlayerOnline.Model.Network;
 using MusicPlayerOnline.Network.Models.MiGu;
@@ -158,7 +157,7 @@ public class MiGuMusicProvider : IMusicProvider
         };
     }
 
-    public Task<Music?> UpdateMusicDetail(Music music)
+    public Task<Music?> UpdatePlayUrl(Music music)
     {
         throw new NotImplementedException();
     }

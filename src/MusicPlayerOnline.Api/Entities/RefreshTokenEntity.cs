@@ -17,6 +17,7 @@ public class RefreshTokenEntity
     [JsonIgnore]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
+    public string DeviceId { get; set; } = null!;
     public string Token { get; set; } = null!;
     public DateTime ExpireTime { get; set; }
     public DateTime CreateTime { get; set; }

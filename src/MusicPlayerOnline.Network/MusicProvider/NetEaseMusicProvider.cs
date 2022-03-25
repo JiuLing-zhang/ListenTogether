@@ -1,11 +1,10 @@
-﻿using System.Text.Json;
-using JiuLing.CommonLibs.ExtensionMethods;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
 using MusicPlayerOnline.EasyLog;
-using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
 using MusicPlayerOnline.Model.Network;
 using MusicPlayerOnline.Network.Models.NetEase;
 using MusicPlayerOnline.Network.Utils;
+using System.Text.Json;
 
 namespace MusicPlayerOnline.Network.MusicProvider;
 public class NetEaseMusicProvider : IMusicProvider
@@ -160,7 +159,7 @@ public class NetEaseMusicProvider : IMusicProvider
         };
     }
 
-    public async Task<Music?> UpdateMusicDetail(Music music)
+    public async Task<Music?> UpdatePlayUrl(Music music)
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
         var postData = NetEaseUtils.GetPostDataForMusicUrl(music.PlatformId);

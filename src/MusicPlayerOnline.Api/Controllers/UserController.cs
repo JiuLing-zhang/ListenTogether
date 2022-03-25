@@ -16,33 +16,33 @@ public class UserController : ApiBaseController
 
     [AllowAnonymous]
     [HttpPost("reg")]
-    public async Task<IActionResult> Register(User model)
+    public async Task<IActionResult> Register(User user)
     {
-        var response = await _userService.Register(model);
+        var response = await _userService.Register(user);
         return Ok(response);
     }
 
     [AllowAnonymous]
-    [HttpPost("login")]
-    public async Task<IActionResult> Login(User model)
+    [HttpPost("{deviceId}/login")]
+    public async Task<IActionResult> Login(User user, string deviceId)
     {
-        var response = await _userService.Login(model);
+        var response = await _userService.Login(user, deviceId);
         return Ok(response);
     }
 
     [AllowAnonymous]
-    [HttpPost("refresh-token")]
-    public async Task<IActionResult> RefreshToken(AuthenticateInfo model)
+    [HttpPost("{deviceId}/refresh-token")]
+    public async Task<IActionResult> RefreshToken(AuthenticateInfo model, string deviceId)
     {
-        var response = await _userService.RefreshToken(model.RefreshToken);
+        var response = await _userService.RefreshToken(model, deviceId);
         return Ok(response);
     }
 
     [Authorize]
-    [HttpPost("logout")]
-    public async Task<IActionResult> Logout()
+    [HttpPost("{deviceId}/logout")]
+    public async Task<IActionResult> Logout(string deviceId)
     {
-        await _userService.Logout(UserId);
+        await _userService.Logout(UserId, deviceId);
         return Ok("ok");
     }
 }

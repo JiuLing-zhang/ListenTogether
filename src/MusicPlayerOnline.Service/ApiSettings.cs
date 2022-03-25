@@ -2,24 +2,28 @@
 {
     public class ApiSettings
     {
-        public ApiSettings(string urlBase)
+        public ApiSettings(string urlBase, string deviceId)
         {
             BaseUrl = urlBase;
+            DeviceId = deviceId;
         }
         public string BaseUrl { get; set; }
+        public string DeviceId { get; set; }
 
-        public UserUrl User => new(BaseUrl);
+        public UserUrl User => new(BaseUrl, DeviceId);
         public class UserUrl
         {
             private readonly string _baseUrl;
-            public UserUrl(string urlBase)
+            private readonly string _deviceId;
+            public UserUrl(string urlBase, string deviceId)
             {
                 _baseUrl = urlBase;
+                _deviceId = deviceId;
             }
             public string Register => $"{_baseUrl}/api/user/reg";
-            public string Login => $"{_baseUrl}/api/user/login";
-            public string RefreshToken => $"{_baseUrl}/api/user/refresh-token";
-            public string Logout => $"{_baseUrl}/api/user/logout";
+            public string Login => $"{_baseUrl}/api/user/{_deviceId}/login";
+            public string RefreshToken => $"{_baseUrl}/api/user/{_deviceId}/refresh-token";
+            public string Logout => $"{_baseUrl}/api/user/{_deviceId}/logout";
         }
 
         public UserConfigUrl UserConfig => new(BaseUrl);

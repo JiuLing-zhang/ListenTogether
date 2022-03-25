@@ -11,9 +11,9 @@ using MusicPlayerOnline.Api.Models;
 namespace MusicPlayerOnline.Api.Authorization;
 public interface IJwtUtils
 {
-    public string GenerateToken(UserEntity user);
+    public string GenerateToken(UserEntity user, string deviceId);
     public int? ValidateToken(string? token);
-    public RefreshTokenEntity GenerateRefreshToken();
+    public RefreshTokenEntity GenerateRefreshToken(string deviceId);
 }
 
 public class JwtUtils : IJwtUtils
@@ -27,13 +27,18 @@ public class JwtUtils : IJwtUtils
         _appSettings = appSettings.Value;
     }
 
-    public string GenerateToken(UserEntity user)
+    public string GenerateToken(UserEntity user, string deviceId)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("Id", user.Id.ToString()) }),
+            Subject = new ClaimsIdentity(
+                new[]
+                {
+                    new Claim("UserId", user.Id.ToString()),
+                    new Claim("DeviceId",deviceId)
+                }),
             Expires = DateTime.Now.AddMinutes(2 * 60),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
@@ -74,10 +79,11 @@ public class JwtUtils : IJwtUtils
         }
     }
 
-    public RefreshTokenEntity GenerateRefreshToken()
+    public RefreshTokenEntity GenerateRefreshToken(string deviceId)
     {
         var refreshToken = new RefreshTokenEntity
         {
+            DeviceId = deviceId,
             Token = GetUniqueToken(),
             ExpireTime = DateTime.Now.AddDays(_appSettings.TokenExpireDay),
             CreateTime = DateTime.Now

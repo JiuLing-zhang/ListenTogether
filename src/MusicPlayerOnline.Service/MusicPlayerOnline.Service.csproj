@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
+    <ProjectReference Include="..\MusicPlayerOnline.Network\MusicPlayerOnline.Network.csproj" />
     <ProjectReference Include="..\MusicPlayerOnline.Repository\MusicPlayerOnline.Repository.csproj" />
   </ItemGroup>
 
