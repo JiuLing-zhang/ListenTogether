@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
+using MusicPlayerOnline.Api.Enums;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.ApiRequest;
-using MusicPlayerOnline.Model.ApiResponse;
+using MusicPlayerOnline.Api.Models;
+using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
+using MusicPlayerOnline.Model.Api.Response;
 using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Api.Services
@@ -18,15 +20,15 @@ namespace MusicPlayerOnline.Api.Services
             _context = dataContext;
         }
 
-        public async Task<Result<MusicDto>> GetOneAsync(string id)
+        public async Task<Result<MusicResponse>> GetOneAsync(string id)
         {
             var music = await _context.Musics.SingleOrDefaultAsync(x => x.Id == id);
             if (music == null)
             {
-                return new Result<MusicDto>(1, "歌曲不存在", null);
+                return new Result<MusicResponse>(1, "歌曲不存在", null);
             }
 
-            return new Result<MusicDto>(0, "查询成功", new MusicDto()
+            return new Result<MusicResponse>(0, "查询成功", new MusicResponse()
             {
                 Id = id,
                 Platform = music.Platform,
@@ -44,7 +46,7 @@ namespace MusicPlayerOnline.Api.Services
             });
         }
 
-        public async Task<Result> AddOrUpdateAsync(Music music)
+        public async Task<Result> AddOrUpdateAsync(MusicRequest music)
         {
             var myMusic = await _context.Musics.SingleOrDefaultAsync(x => x.Id == music.Id);
             if (myMusic == null)

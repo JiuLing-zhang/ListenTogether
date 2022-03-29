@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.Api.Request;
 
 namespace MusicPlayerOnline.Api.Controllers;
 [ApiController]
@@ -16,7 +16,7 @@ public class UserController : ApiBaseController
 
     [AllowAnonymous]
     [HttpPost("reg")]
-    public async Task<IActionResult> Register(User user)
+    public async Task<IActionResult> Register(UserRequest user)
     {
         var response = await _userService.Register(user);
         return Ok(response);
@@ -24,7 +24,7 @@ public class UserController : ApiBaseController
 
     [AllowAnonymous]
     [HttpPost("{deviceId}/login")]
-    public async Task<IActionResult> Login(User user, string deviceId)
+    public async Task<IActionResult> Login(UserRequest user, string deviceId)
     {
         var response = await _userService.Login(user, deviceId);
         return Ok(response);
@@ -32,7 +32,7 @@ public class UserController : ApiBaseController
 
     [AllowAnonymous]
     [HttpPost("{deviceId}/refresh-token")]
-    public async Task<IActionResult> RefreshToken(AuthenticateInfo model, string deviceId)
+    public async Task<IActionResult> RefreshToken(AuthenticateRequest model, string deviceId)
     {
         var response = await _userService.RefreshToken(model, deviceId);
         return Ok(response);

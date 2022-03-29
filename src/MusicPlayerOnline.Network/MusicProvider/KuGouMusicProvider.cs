@@ -1,11 +1,10 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 using MusicPlayerOnline.EasyLog;
+using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Model.Network;
 using MusicPlayerOnline.Network.Models.KuGou;
 using MusicPlayerOnline.Network.Utils;
 using System.Text.Json;
-using Music = MusicPlayerOnline.Model.Network.Music;
 
 namespace MusicPlayerOnline.Network.MusicProvider;
 public class KuGouMusicProvider : IMusicProvider

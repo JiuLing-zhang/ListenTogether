@@ -1,6 +1,6 @@
 ﻿using MusicPlayerOnline.EasyLog;
+using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Model.Network;
 using MusicPlayerOnline.Network.MusicProvider;
 
 namespace MusicPlayerOnline.Network.SearchMusic;

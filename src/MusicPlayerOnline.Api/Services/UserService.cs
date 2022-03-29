@@ -6,9 +6,9 @@ using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.ErrorHandler;
 using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Api.Models;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.ApiRequest;
-using MusicPlayerOnline.Model.ApiResponse;
+using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
+using MusicPlayerOnline.Model.Api.Response;
 
 namespace MusicPlayerOnline.Api.Services;
 internal class UserService : IUserService
@@ -23,7 +23,7 @@ internal class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public async Task<Result> Register(User user)
+    public async Task<Result> Register(UserRequest user)
     {
         var isUserExist = await _context.Users.AnyAsync(x => x.Username == user.Username);
         if (isUserExist)
@@ -54,18 +54,18 @@ internal class UserService : IUserService
         return new Result(0, "注册成功，请等待管理员审核");
     }
 
-    public async Task<Result<UserDto>> Login(User user, string deviceId)
+    public async Task<Result<UserResponse>> Login(UserRequest user, string deviceId)
     {
         var userEntity = await _context.Users.SingleOrDefaultAsync(x => x.Username == user.Username && x.IsEnable);
         if (userEntity == null)
         {
-            return new Result<UserDto>(1, "用户名或密码不正确", null);
+            return new Result<UserResponse>(1, "用户名或密码不正确", null);
         }
 
         string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{user.Password}{userEntity.Salt}");
         if (password != userEntity.Password)
         {
-            return new Result<UserDto>(1, "用户名或密码不正确", null);
+            return new Result<UserResponse>(1, "用户名或密码不正确", null);
         }
 
         var token = _jwtUtils.GenerateToken(userEntity, deviceId);
@@ -77,7 +77,7 @@ internal class UserService : IUserService
         _context.Update(userEntity);
         await _context.SaveChangesAsync();
 
-        return new Result<UserDto>(0, "", new UserDto()
+        return new Result<UserResponse>(0, "", new UserResponse()
         {
             UserName = userEntity.Username,
             Nickname = userEntity.Nickname,
@@ -87,7 +87,7 @@ internal class UserService : IUserService
         });
     }
 
-    public async Task<Result<UserDto>> RefreshToken(AuthenticateInfo authenticateInfo, string deviceId)
+    public async Task<Result<UserResponse>> RefreshToken(AuthenticateRequest authenticateInfo, string deviceId)
     {
         var userEntity = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(r => r.Token == authenticateInfo.RefreshToken));
         if (userEntity == null)
@@ -110,7 +110,7 @@ internal class UserService : IUserService
         _context.Update(userEntity);
         await _context.SaveChangesAsync();
 
-        return new Result<UserDto>(0, "更新成功", new UserDto()
+        return new Result<UserResponse>(0, "更新成功", new UserResponse()
         {
             UserName = userEntity.Username,
             Nickname = userEntity.Nickname,
@@ -132,15 +132,15 @@ internal class UserService : IUserService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Result<UserDto>> GetUserInfo(int id)
+    public async Task<Result<UserResponse>> GetUserInfo(int id)
     {
         var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id && x.IsEnable);
         if (user == null)
         {
-            return new Result<UserDto>(1, "用户不存在", null);
+            return new Result<UserResponse>(1, "用户不存在", null);
         }
 
-        return new Result<UserDto>(0, "", new UserDto()
+        return new Result<UserResponse>(0, "", new UserResponse()
         {
             UserName = user.Username,
             Nickname = user.Nickname,

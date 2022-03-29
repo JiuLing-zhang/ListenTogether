@@ -1,7 +1,7 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 using MusicPlayerOnline.EasyLog;
-using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Model.Network;
+using MusicPlayerOnline.Model;
+using MusicPlayerOnline.Model.Enums; 
 using MusicPlayerOnline.Network.Models.NetEase;
 using MusicPlayerOnline.Network.Utils;
 using System.Text.Json;

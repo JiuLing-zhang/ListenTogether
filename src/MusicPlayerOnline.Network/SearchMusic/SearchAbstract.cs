@@ -1,5 +1,5 @@
-﻿using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Model.Network;
+﻿using MusicPlayerOnline.Model;
+using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Network.SearchMusic;
 public abstract class SearchAbstract

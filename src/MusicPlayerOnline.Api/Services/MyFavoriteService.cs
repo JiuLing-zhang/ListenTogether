@@ -2,9 +2,10 @@
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.ApiRequest;
-using MusicPlayerOnline.Model.ApiResponse;
+using MusicPlayerOnline.Api.Models;
+using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
+using MusicPlayerOnline.Model.Api.Response;
 
 namespace MusicPlayerOnline.Api.Services
 {
@@ -17,15 +18,15 @@ namespace MusicPlayerOnline.Api.Services
         }
 
 
-        public async Task<Result<MyFavoriteDto>> GetOneAsync(int userId, int id)
+        public async Task<Result<MyFavoriteResponse>> GetOneAsync(int userId, int id)
         {
             var myFavorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.Id == id && x.UserBaseId == userId);
             if (myFavorite == null)
             {
-                return new Result<MyFavoriteDto>(1, "我的收藏不存在", null);
+                return new Result<MyFavoriteResponse>(1, "我的收藏不存在", null);
             }
 
-            return new Result<MyFavoriteDto>(0, "查询成功", new MyFavoriteDto()
+            return new Result<MyFavoriteResponse>(0, "查询成功", new MyFavoriteResponse()
             {
                 Id = myFavorite.Id,
                 Name = myFavorite.Name,
@@ -34,11 +35,11 @@ namespace MusicPlayerOnline.Api.Services
             });
         }
 
-        public async Task<List<MyFavoriteDto>?> GetAllAsync(int userId)
+        public async Task<List<MyFavoriteResponse>?> GetAllAsync(int userId)
         {
             var myFavorites = await _context.MyFavorites
                 .Where(x => x.UserBaseId == userId)
-                .Select(x => new MyFavoriteDto()
+                .Select(x => new MyFavoriteResponse()
                 {
                     Id = x.Id,
                     ImageUrl = x.ImageUrl,
@@ -48,7 +49,7 @@ namespace MusicPlayerOnline.Api.Services
                 .ToListAsync();
             return myFavorites;
         }
-        public async Task<Result> AddOrUpdateAsync(int userId, MyFavorite myFavorite)
+        public async Task<Result> AddOrUpdateAsync(int userId, MyFavoriteRequest myFavorite)
         {
             var favorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.Id == myFavorite.Id && x.UserBaseId == userId);
             if (favorite == null)
@@ -97,7 +98,7 @@ namespace MusicPlayerOnline.Api.Services
             }
             return new Result(0, "删除成功");
         }
-        public async Task<Result> AddMusicToMyFavorite(int userId, int id, MyFavoriteDetail myFavoriteDetail)
+        public async Task<Result> AddMusicToMyFavorite(int userId, int id, MyFavoriteDetailRequest myFavoriteDetail)
         {
             var favorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (favorite == null)
@@ -137,7 +138,7 @@ namespace MusicPlayerOnline.Api.Services
 
         }
 
-        public async Task<List<MyFavoriteDetailDto>?> GetMyFavoriteDetail(int userId, int id)
+        public async Task<List<MyFavoriteDetailResponse>?> GetMyFavoriteDetail(int userId, int id)
         {
             var myFavorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.UserBaseId == userId && x.Id == id);
             if (myFavorite == null)
@@ -145,7 +146,7 @@ namespace MusicPlayerOnline.Api.Services
                 return default;
             }
 
-            var detail = myFavorite.Details.Select(x => new MyFavoriteDetailDto()
+            var detail = myFavorite.Details.Select(x => new MyFavoriteDetailResponse()
             {
                 Id = x.Id,
                 MyFavoriteId = x.MyFavoriteId,

@@ -1,14 +1,15 @@
-﻿using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.ApiRequest;
-using MusicPlayerOnline.Model.ApiResponse;
+﻿using MusicPlayerOnline.Api.Models;
+using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
+using MusicPlayerOnline.Model.Api.Response;
 
 namespace MusicPlayerOnline.Api.Interfaces
 {
     public interface IUserConfigService
     {
-        Task<UserSettingDto> ReadAllSettingAsync(int userId);
-        Task<Result> WriteGeneralSettingAsync(int userId, GeneralSetting generalSetting);
-        Task<Result> WriteSearchSettingAsync(int userId, SearchSetting searchSetting);
-        Task<Result> WritePlaySettingAsync(int userId, PlaySetting playSetting);
+        Task<UserSettingResponse> ReadAllSettingAsync(int userId);
+        Task<Result> WriteGeneralSettingAsync(int userId, GeneralSettingRequest generalSetting);
+        Task<Result> WriteSearchSettingAsync(int userId, SearchSettingRequest searchSetting);
+        Task<Result> WritePlaySettingAsync(int userId, PlaySettingRequest playSetting);
     }
 }

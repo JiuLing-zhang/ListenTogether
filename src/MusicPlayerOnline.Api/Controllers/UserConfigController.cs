@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.Api.Request;
 
 namespace MusicPlayerOnline.Api.Controllers
 {
@@ -24,21 +24,21 @@ namespace MusicPlayerOnline.Api.Controllers
         }
 
         [HttpPost("general")]
-        public async Task<IActionResult> WriteGeneralConfig(GeneralSetting model)
+        public async Task<IActionResult> WriteGeneralConfig(GeneralSettingRequest model)
         {
             var response = await _userConfigService.WriteGeneralSettingAsync(UserId, model);
             return Ok(response);
         }
 
         [HttpPost("play")]
-        public async Task<IActionResult> WritePlayConfig(PlaySetting model)
+        public async Task<IActionResult> WritePlayConfig(PlaySettingRequest model)
         {
             var response = await _userConfigService.WritePlaySettingAsync(UserId, model);
             return Ok(response);
         }
 
         [HttpPost("search")]
-        public async Task<IActionResult> WriteSearchConfig(SearchSetting model)
+        public async Task<IActionResult> WriteSearchConfig(SearchSettingRequest model)
         {
             var response = await _userConfigService.WriteSearchSettingAsync(UserId, model);
             return Ok(response);

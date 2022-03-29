@@ -2,9 +2,10 @@
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.ApiRequest;
-using MusicPlayerOnline.Model.ApiResponse;
+using MusicPlayerOnline.Api.Models;
+using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
+using MusicPlayerOnline.Model.Api.Response;
 
 namespace MusicPlayerOnline.Api.Services
 {
@@ -16,7 +17,7 @@ namespace MusicPlayerOnline.Api.Services
             _context = dataContext;
         }
 
-        public async Task<Result> AddOrUpdateAsync(int userId, Playlist playlist)
+        public async Task<Result> AddOrUpdateAsync(int userId, PlaylistRequest playlist)
         {
             var playlists = await _context.Playlists.SingleOrDefaultAsync(x => x.UserBaseId == userId && x.MusicId == playlist.MusicId);
             if (playlists == null)
@@ -46,11 +47,11 @@ namespace MusicPlayerOnline.Api.Services
             return new Result(0, "保存成功");
         }
 
-        public async Task<List<PlaylistDto>> GetAllAsync(int userId)
+        public async Task<List<PlaylistResponse>> GetAllAsync(int userId)
         {
             var playlists = await _context.Playlists
                 .Where(x => x.UserBaseId == userId)
-                .Select(x => new PlaylistDto()
+                .Select(x => new PlaylistResponse()
                 {
                     MusicId = x.MusicId,
                     MusicName = x.MusicName,

@@ -1,26 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="JiuLing.CommonLibs" Version="1.2.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="JiuLing.CommonLibs" Version="1.2.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Authorization\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MusicPlayerOnline.EasyLog\MusicPlayerOnline.EasyLog.csproj" />
-    <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
+	</ItemGroup>
 
 </Project>

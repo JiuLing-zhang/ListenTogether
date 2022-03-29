@@ -1,6 +1,6 @@
-using MusicPlayerOnline.EasyLog;
-using MusicPlayerOnline.Model;
 using System.Text.Json;
+using MusicPlayerOnline.Api.Models;
+using MusicPlayerOnline.Model.Api;
 
 namespace MusicPlayerOnline.Api.ErrorHandler;
 
@@ -21,9 +21,9 @@ public class ErrorHandlerMiddleware
         }
         catch (Exception ex)
         {
+            //TODO 记录日志
             var response = context.Response;
             response.ContentType = "application/json";
-            Logger.Error("API服务内部错误。", ex);
             var result = JsonSerializer.Serialize(new Result(-1, "系统内部异常"));
             await response.WriteAsync(result);
         }

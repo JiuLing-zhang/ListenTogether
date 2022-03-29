@@ -1,4 +1,5 @@
-﻿using MusicPlayerOnline.Model.Network;
+﻿using MusicPlayerOnline.Model;
+
 namespace MusicPlayerOnline.Network.MusicProvider;
 public interface IMusicProvider
 {

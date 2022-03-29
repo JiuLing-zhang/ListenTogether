@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.Api.Request;
 
 namespace MusicPlayerOnline.Api.Controllers
 {
@@ -24,7 +24,7 @@ namespace MusicPlayerOnline.Api.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> AddOrUpdate(Music music)
+        public async Task<IActionResult> AddOrUpdate(MusicRequest music)
         {
             var response = await _musicService.AddOrUpdateAsync(music);
             return Ok(response);

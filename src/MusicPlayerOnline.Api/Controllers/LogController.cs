@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.Api.Request;
 
 namespace MusicPlayerOnline.Api.Controllers;
 [Route("api/log")]
@@ -16,7 +16,7 @@ public class LogController : ApiBaseController
     }
 
     [HttpPost()]
-    public async Task<IActionResult> Write(Log log)
+    public async Task<IActionResult> Write(LogRequest log)
     {
         //过滤掉2分钟之外的请求
         var time = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.Timestamp);

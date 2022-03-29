@@ -1,6 +1,6 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
+using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Model.Network;
 using MusicPlayerOnline.Network.Models.MiGu;
 using MusicPlayerOnline.Network.Utils;
 using System.Net;

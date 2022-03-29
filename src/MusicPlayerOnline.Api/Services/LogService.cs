@@ -1,7 +1,7 @@
 ﻿using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.Api.Request;
 
 namespace MusicPlayerOnline.Api.Services;
 public class LogService : ILogService
@@ -11,7 +11,7 @@ public class LogService : ILogService
     {
         _context = dataContext;
     }
-    public async Task WriteAsync(int userId, Log log)
+    public async Task WriteAsync(int userId, LogRequest log)
     {
         var myLog = new LogEntity()
         {

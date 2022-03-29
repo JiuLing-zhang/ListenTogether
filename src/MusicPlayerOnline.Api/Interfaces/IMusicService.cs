@@ -1,13 +1,14 @@
-﻿using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.ApiRequest;
-using MusicPlayerOnline.Model.ApiResponse;
+﻿using MusicPlayerOnline.Api.Models;
+using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
+using MusicPlayerOnline.Model.Api.Response;
 
 namespace MusicPlayerOnline.Api.Interfaces
 {
     public interface IMusicService
     {
-        Task<Result<MusicDto>> GetOneAsync(string id);
-        Task<Result> AddOrUpdateAsync(Music music);
+        Task<Result<MusicResponse>> GetOneAsync(string id);
+        Task<Result> AddOrUpdateAsync(MusicRequest music);
         Task<Result> UpdateCacheAsync(string id, string cachePath);
     }
 }

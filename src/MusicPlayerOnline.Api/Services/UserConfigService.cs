@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
+using MusicPlayerOnline.Api.Enums;
 using MusicPlayerOnline.Api.ErrorHandler;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.ApiRequest;
-using MusicPlayerOnline.Model.ApiResponse;
+using MusicPlayerOnline.Api.Models;
+using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
+using MusicPlayerOnline.Model.Api.Response;
 using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Api.Services
@@ -19,7 +21,7 @@ namespace MusicPlayerOnline.Api.Services
             _context = context;
         }
 
-        public async Task<UserSettingDto> ReadAllSettingAsync(int userId)
+        public async Task<UserSettingResponse> ReadAllSettingAsync(int userId)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
@@ -27,18 +29,18 @@ namespace MusicPlayerOnline.Api.Services
                 userConfig = await InitializationUserSetting(userId);
             }
 
-            var result = new UserSettingDto();
+            var result = new UserSettingResponse();
             //通用设置
-            var generalConfig = JsonSerializer.Deserialize<GeneralSetting>(userConfig.GeneralSettingJson) ?? throw new AppException("配置信息不存在：GeneralSetting");
-            result.General = new GeneralSettingDto()
+            var generalConfig = JsonSerializer.Deserialize<GeneralSettingRequest>(userConfig.GeneralSettingJson) ?? throw new AppException("配置信息不存在：GeneralSetting");
+            result.General = new GeneralSettingResponse()
             {
                 IsAutoCheckUpdate = generalConfig.IsAutoCheckUpdate,
                 IsHideWindowWhenMinimize = generalConfig.IsHideWindowWhenMinimize,
             };
 
             //播放设置
-            var playConfig = JsonSerializer.Deserialize<PlaySetting>(userConfig.PlaySettingJson) ?? throw new AppException("配置信息不存在：PlaySetting");
-            result.Play = new PlaySettingDto()
+            var playConfig = JsonSerializer.Deserialize<PlaySettingRequest>(userConfig.PlaySettingJson) ?? throw new AppException("配置信息不存在：PlaySetting");
+            result.Play = new PlaySettingResponse()
             {
                 IsAutoNextWhenFailed = playConfig.IsAutoNextWhenFailed,
                 IsCleanPlaylistWhenPlayMyFavorite = playConfig.IsCleanPlaylistWhenPlayMyFavorite,
@@ -46,8 +48,8 @@ namespace MusicPlayerOnline.Api.Services
             };
 
             //搜索设置
-            var searchConfig = JsonSerializer.Deserialize<SearchSetting>(userConfig.SearchSettingJson) ?? throw new AppException("配置信息不存在：SearchSetting");
-            result.Search = new SearchSettingDto()
+            var searchConfig = JsonSerializer.Deserialize<SearchSettingRequest>(userConfig.SearchSettingJson) ?? throw new AppException("配置信息不存在：SearchSetting");
+            result.Search = new SearchSettingResponse()
             {
                 EnablePlatform = (int)searchConfig.EnablePlatform,
                 IsCloseSearchPageWhenPlayFailed = searchConfig.IsCloseSearchPageWhenPlayFailed,
@@ -68,21 +70,22 @@ namespace MusicPlayerOnline.Api.Services
                 return userConfig;
             }
 
+            PlatformEnum platform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu;
             userConfig = new UserConfigEntity()
             {
                 UserBaseId = userId,
-                GeneralSettingJson = JsonSerializer.Serialize(new GeneralSetting()
+                GeneralSettingJson = JsonSerializer.Serialize(new GeneralSettingRequest()
                 {
                     IsAutoCheckUpdate = true,
                     IsHideWindowWhenMinimize = true
                 }),
-                SearchSettingJson = JsonSerializer.Serialize(new SearchSetting()
+                SearchSettingJson = JsonSerializer.Serialize(new SearchSettingRequest()
                 {
-                    EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu,
+                    EnablePlatform = (int)platform,
                     IsHideShortMusic = true,
                     IsCloseSearchPageWhenPlayFailed = false
                 }),
-                PlaySettingJson = JsonSerializer.Serialize(new PlaySetting()
+                PlaySettingJson = JsonSerializer.Serialize(new PlaySettingRequest()
                 {
                     IsAutoNextWhenFailed = true,
                     IsCleanPlaylistWhenPlayMyFavorite = true,
@@ -98,7 +101,7 @@ namespace MusicPlayerOnline.Api.Services
             return userConfig;
         }
 
-        public async Task<Result> WriteGeneralSettingAsync(int userId, GeneralSetting generalSetting)
+        public async Task<Result> WriteGeneralSettingAsync(int userId, GeneralSettingRequest generalSetting)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
@@ -116,7 +119,7 @@ namespace MusicPlayerOnline.Api.Services
             return new Result(0, "保存成功");
         }
 
-        public async Task<Result> WriteSearchSettingAsync(int userId, SearchSetting searchSetting)
+        public async Task<Result> WriteSearchSettingAsync(int userId, SearchSettingRequest searchSetting)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)
@@ -133,7 +136,7 @@ namespace MusicPlayerOnline.Api.Services
             return new Result(0, "保存成功");
         }
 
-        public async Task<Result> WritePlaySettingAsync(int userId, PlaySetting playSetting)
+        public async Task<Result> WritePlaySettingAsync(int userId, PlaySettingRequest playSetting)
         {
             var userConfig = await _context.UserConfigs.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (userConfig == null)

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MusicPlayerOnline.Api.Authorization;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.ApiRequest;
+using MusicPlayerOnline.Model.Api.Request;
 
 namespace MusicPlayerOnline.Api.Controllers
 {
@@ -38,7 +38,7 @@ namespace MusicPlayerOnline.Api.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> AddOrUpdate(MyFavorite myFavorite)
+        public async Task<IActionResult> AddOrUpdate(MyFavoriteRequest myFavorite)
         {
             var response = await _myFavoriteService.AddOrUpdateAsync(UserId, myFavorite);
             return Ok(response);
@@ -52,7 +52,7 @@ namespace MusicPlayerOnline.Api.Controllers
         }
 
         [HttpPost("add-music/{id}")]
-        public async Task<IActionResult> AddMusicToMyFavorite(int id, MyFavoriteDetail myFavoriteDetail)
+        public async Task<IActionResult> AddMusicToMyFavorite(int id, MyFavoriteDetailRequest myFavoriteDetail)
         {
             var response = await _myFavoriteService.AddMusicToMyFavorite(UserId, id, myFavoriteDetail);
             return Ok(response);
