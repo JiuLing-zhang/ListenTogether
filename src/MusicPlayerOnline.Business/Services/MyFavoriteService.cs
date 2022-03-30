@@ -1,37 +1,44 @@
 ﻿using MusicPlayerOnline.Business.Interfaces;
+using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 
 namespace MusicPlayerOnline.Business.Services;
 
 public class MyFavoriteService : IMyFavoriteService
 {
-    public Task<MyFavorite?> GetOneAsync(int id)
+    private readonly IMyFavoriteRepository _repository;
+    public MyFavoriteService(IMyFavoriteRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
     }
 
-    public Task<List<MyFavorite>?> GetAllAsync()
+    public async Task<MyFavorite?> GetOneAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.GetOneAsync(id);
     }
 
-    public Task<bool> AddOrUpdateAsync(MyFavorite myFavorite)
+    public async Task<List<MyFavorite>?> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _repository.GetAllAsync();
     }
 
-    public Task<bool> RemoveAsync(int id)
+    public async Task<bool> AddOrUpdateAsync(MyFavorite myFavorite)
     {
-        throw new NotImplementedException();
+        return await _repository.AddOrUpdateAsync(myFavorite);
     }
 
-    public Task<bool> AddMusicToMyFavorite(int id, MyFavoriteDetail music)
+    public async Task<bool> RemoveAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.RemoveAsync(id);
     }
 
-    public Task<List<MyFavoriteDetail>?> GetMyFavoriteDetail(int id)
+    public async Task<bool> AddMusicToMyFavorite(int id, MyFavoriteDetail music)
     {
-        throw new NotImplementedException();
+        return await _repository.AddMusicToMyFavorite(id, music);
+    }
+
+    public async Task<List<MyFavoriteDetail>?> GetMyFavoriteDetail(int id)
+    {
+        return await _repository.GetMyFavoriteDetail(id);
     }
 }

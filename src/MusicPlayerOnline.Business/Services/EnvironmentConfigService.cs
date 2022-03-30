@@ -1,17 +1,24 @@
 ﻿using MusicPlayerOnline.Business.Interfaces;
+using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 
 namespace MusicPlayerOnline.Business.Services;
 
 public class EnvironmentConfigService : IEnvironmentConfigService
 {
-    public Task<EnvironmentSetting> ReadAllSettingsAsync()
+    private readonly IEnvironmentConfigRepository _repository;
+    public EnvironmentConfigService(IEnvironmentConfigRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
     }
 
-    public Task WritePlayerSettingAsync(PlayerSetting playerSetting)
+    public async Task<EnvironmentSetting> ReadAllSettingsAsync()
     {
-        throw new NotImplementedException();
+        return await _repository.ReadAllSettingsAsync();
+    }
+
+    public async Task WritePlayerSettingAsync(PlayerSetting playerSetting)
+    {
+        await _repository.WritePlayerSettingAsync(playerSetting);
     }
 }

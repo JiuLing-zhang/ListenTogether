@@ -1,23 +1,29 @@
 ﻿using MusicPlayerOnline.Business.Interfaces;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
+using MusicPlayerOnline.Network;
 
 namespace MusicPlayerOnline.Business.Services;
 
 public class MusicNetworkService : IMusicNetworkService
 {
-    public Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword)
+    private readonly MusicNetPlatform _musicNetPlatform;
+    public MusicNetworkService(MusicNetPlatform musicNetPlatform)
     {
-        throw new NotImplementedException();
+        _musicNetPlatform = musicNetPlatform;
+    }
+    public async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword)
+    {
+        return await _musicNetPlatform.Search(platform, keyword);
     }
 
-    public Task<Music?> GetMusicDetail(MusicSearchResult musicSearchResult)
+    public async Task<Music?> GetMusicDetail(MusicSearchResult musicSearchResult)
     {
-        throw new NotImplementedException();
+        return await _musicNetPlatform.GetMusicDetail(musicSearchResult);
     }
 
-    public Task<Music> UpdatePlayUrl(Music music)
+    public async Task<Music?> UpdatePlayUrl(Music music)
     {
-        throw new NotImplementedException();
+        return await _musicNetPlatform.UpdatePlayUrl(music);
     }
 }

@@ -1,27 +1,33 @@
 ﻿using MusicPlayerOnline.Business.Interfaces;
+using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 
 namespace MusicPlayerOnline.Business.Services;
 
 public class PlaylistService : IPlaylistService
 {
-    public Task<bool> AddOrUpdateAsync(Playlist playlist)
+    private readonly IPlaylistRepository _repository;
+    public PlaylistService(IPlaylistRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+    public async Task<bool> AddOrUpdateAsync(Playlist playlist)
+    {
+        return await _repository.AddOrUpdateAsync(playlist);
     }
 
-    public Task<List<Playlist>?> GetAllAsync()
+    public async Task<List<Playlist>?> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _repository.GetAllAsync();
     }
 
-    public Task<bool> RemoveAsync(int id)
+    public async Task<bool> RemoveAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _repository.RemoveAsync(id);
     }
 
-    public Task<bool> RemoveAllAsync()
+    public async Task<bool> RemoveAllAsync()
     {
-        throw new NotImplementedException();
+        return await _repository.RemoveAllAsync();
     }
 }

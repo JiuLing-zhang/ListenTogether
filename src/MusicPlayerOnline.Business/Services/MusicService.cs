@@ -1,22 +1,29 @@
 ﻿using MusicPlayerOnline.Business.Interfaces;
+using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 
 namespace MusicPlayerOnline.Business.Services;
 
 public class MusicService : IMusicService
 {
-    public Task<Music?> GetOneAsync(string id)
+    private readonly IMusicRepository _repository;
+    public MusicService(IMusicRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
     }
 
-    public Task<bool> AddOrUpdateAsync(Music music)
+    public async Task<Music?> GetOneAsync(string id)
     {
-        throw new NotImplementedException();
+        return await _repository.GetOneAsync(id);
     }
 
-    public Task<bool> UpdateCacheAsync(string id, string cachePath)
+    public async Task<bool> AddOrUpdateAsync(Music music)
     {
-        throw new NotImplementedException();
+        return await _repository.AddOrUpdateAsync(music);
+    }
+
+    public async Task<bool> UpdateCacheAsync(string id, string cachePath)
+    {
+        return await _repository.UpdateCacheAsync(id, cachePath);
     }
 }

@@ -1,22 +1,29 @@
 ﻿using MusicPlayerOnline.Business.Interfaces;
+using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 
 namespace MusicPlayerOnline.Business.Services;
 
 public class UserService : IUserService
 {
-    public Task<bool> Register(string username, string password)
+    private readonly IUserRepository _repository;
+    public UserService(IUserRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
     }
 
-    public Task<User> Login(string username, string password)
+    public async Task<bool> Register(string username, string password)
     {
-        throw new NotImplementedException();
+        return await _repository.Register(username, password);
     }
 
-    public Task<bool> Logout()
+    public async Task<User?> Login(string username, string password)
     {
-        throw new NotImplementedException();
+        return await _repository.Login(username, password);
+    }
+
+    public async Task<bool> Logout()
+    {
+        return await _repository.Logout();
     }
 }

@@ -6,5 +6,5 @@ public interface IMusicNetworkService
 {
     Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword);
     Task<Music?> GetMusicDetail(MusicSearchResult musicSearchResult);
-    Task<Music> UpdatePlayUrl(Music music);
+    Task<Music?> UpdatePlayUrl(Music music);
 }

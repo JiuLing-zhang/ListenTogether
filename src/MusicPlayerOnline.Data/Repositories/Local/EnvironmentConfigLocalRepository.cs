@@ -6,7 +6,7 @@ using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Data.Repositories.Local;
 
-internal class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
+public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
 {
     public async Task<EnvironmentSetting> ReadAllSettingsAsync()
     {

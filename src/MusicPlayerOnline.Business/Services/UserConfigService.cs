@@ -1,27 +1,34 @@
 ﻿using MusicPlayerOnline.Business.Interfaces;
+using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 
 namespace MusicPlayerOnline.Business.Services;
 
 public class UserConfigService : IUserConfigService
 {
-    public Task<UserSetting?> ReadAllSettingsAsync()
+
+    private readonly IUserConfigRepository _repository;
+    public UserConfigService(IUserConfigRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+    public async Task<UserSetting?> ReadAllSettingsAsync()
+    {
+        return await _repository.ReadAllSettingsAsync();
     }
 
-    public Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting)
+    public async Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting)
     {
-        throw new NotImplementedException();
+        return await _repository.WriteGeneralSettingAsync(generalSetting);
     }
 
-    public Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting)
+    public async Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting)
     {
-        throw new NotImplementedException();
+        return await _repository.WriteSearchSettingAsync(searchSetting);
     }
 
-    public Task<bool> WritePlaySettingAsync(PlaySetting playSetting)
+    public async Task<bool> WritePlaySettingAsync(PlaySetting playSetting)
     {
-        throw new NotImplementedException();
+        return await _repository.WritePlaySettingAsync(playSetting);
     }
 }
