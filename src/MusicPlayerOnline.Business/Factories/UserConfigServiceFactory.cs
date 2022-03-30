@@ -17,7 +17,8 @@ public class UserConfigServiceFactory : IUserConfigServiceFactory
 
     public IUserConfigService Create()
     {
-        var repositoryName = BusinessConfig.IsUseApiInterface ? nameof(UserConfigApiRepository) : nameof(UserConfigLocalRepository);
+        //TODO 只有本地库
+        var repositoryName = BusinessConfig.IsUseApiInterface ? nameof(UserConfigLocalRepository) : nameof(UserConfigLocalRepository);
         IUserConfigRepository repository = _repositories.First(x => x.GetType().Name == repositoryName);
         return new UserConfigService(repository);
     }

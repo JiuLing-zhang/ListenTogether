@@ -1,4 +1,5 @@
-﻿using MusicPlayerOnline.Business;
+﻿using Microsoft.Extensions.Configuration;
+using MusicPlayerOnline.Business;
 using MusicPlayerOnline.Maui.Pages;
 using MusicPlayerOnline.Maui.ViewModels;
 
@@ -10,8 +11,14 @@ namespace MusicPlayerOnline.Maui
         {
             var builder = MauiApp.CreateBuilder();
 
-            builder.Services.AddBusiness();
+            using var stream = File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"));
+            var config = new ConfigurationBuilder()
+                        .AddJsonStream(stream)
+                        .Build();
 
+            builder.Configuration.AddConfiguration(config);
+
+            builder.Services.AddBusiness();
             builder
                 .UseMauiApp<App>()
                 .ConfigureEssentials()
