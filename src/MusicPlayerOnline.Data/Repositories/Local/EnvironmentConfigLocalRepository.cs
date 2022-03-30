@@ -8,12 +8,12 @@ namespace MusicPlayerOnline.Data.Repositories.Local;
 
 public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
 {
-    public async Task<EnvironmentSetting> ReadAllSettingsAsync()
+    public EnvironmentSetting ReadAllSettings()
     {
-        var environmentConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
+        var environmentConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
         if (environmentConfig == null)
         {
-            environmentConfig = await InitializationEnvironmentSetting();
+            environmentConfig = InitializationEnvironmentSetting();
         }
 
         var result = new EnvironmentSetting();
@@ -28,9 +28,9 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         return result;
     }
 
-    private async Task<EnvironmentConfigEntity> InitializationEnvironmentSetting()
+    private EnvironmentConfigEntity InitializationEnvironmentSetting()
     {
-        var environmentConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
+        var environmentConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
         if (environmentConfig != null)
         {
             return environmentConfig;
@@ -46,7 +46,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             })
         };
 
-        var count = await DatabaseProvide.DatabaseAsync.InsertAsync(environmentConfig);
+        var count = DatabaseProvide.Database.Insert(environmentConfig);
         if (count == 0)
         {
             throw new Exception("初始化环境配置失败");
@@ -54,15 +54,15 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         return environmentConfig;
     }
 
-    public async Task WritePlayerSettingAsync(PlayerSetting playerSetting)
+    public void WritePlayerSetting(PlayerSetting playerSetting)
     {
-        var environmentConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
+        var environmentConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
         if (environmentConfig == null)
         {
             throw new Exception("环境配置信息不存在，播放设置保存失败");
         }
 
         environmentConfig.PlayerSettingJson = JsonSerializer.Serialize(playerSetting);
-        await DatabaseProvide.DatabaseAsync.UpdateAsync(environmentConfig);
+        DatabaseProvide.Database.Update(environmentConfig);
     }
 }

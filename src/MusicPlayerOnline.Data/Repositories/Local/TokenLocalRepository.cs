@@ -5,9 +5,9 @@ using MusicPlayerOnline.Model;
 namespace MusicPlayerOnline.Data.Repositories.Local;
 public class TokenLocalRepository : ITokenRepository
 {
-    public async Task<bool> Write(TokenInfo tokenInfo)
+    public bool Write(TokenInfo tokenInfo)
     {
-        var myTokenInfo = await DatabaseProvide.DatabaseAsync.Table<TokenEntity>().FirstOrDefaultAsync();
+        var myTokenInfo = DatabaseProvide.Database.Table<TokenEntity>().FirstOrDefault();
         if (myTokenInfo == null)
         {
             throw new Exception("用户授权数据不完整，写入失败");
@@ -16,13 +16,13 @@ public class TokenLocalRepository : ITokenRepository
         myTokenInfo.Token = tokenInfo.Token;
         myTokenInfo.RefreshToken = tokenInfo.RefreshToken;
 
-        int count = await DatabaseProvide.DatabaseAsync.UpdateAsync(myTokenInfo);
+        int count = DatabaseProvide.Database.Update(myTokenInfo);
         return count != 0;
     }
 
-    public async Task<TokenInfo> Read()
+    public TokenInfo Read()
     {
-        var tokens = await DatabaseProvide.DatabaseAsync.Table<TokenEntity>().ToListAsync();
+        var tokens = DatabaseProvide.Database.Table<TokenEntity>().ToList();
 
         if (tokens == null || tokens.Count != 1)
         {

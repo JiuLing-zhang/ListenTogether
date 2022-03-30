@@ -1,12 +1,14 @@
-﻿
+﻿using MusicPlayerOnline.Data;
+
 namespace MusicPlayerOnline.Business;
-public class GlobalConfig
+//TODO 文件重命名
+public class BusinessConfig
 {
-    public static void SetWebApi(string baseUrl, string deviceId)
+    public static void SetWebApi(string localDbPath, string apiBaseUrl, string deviceId)
     {
-    
+        DataConfig.SetDataConnection(localDbPath, apiBaseUrl, deviceId);
     }
-    
+
     /// <summary>
     /// 是否使用 API 接口
     /// </summary>

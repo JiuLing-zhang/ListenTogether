@@ -9,6 +9,25 @@ internal class DatabaseProvide
     public static void SetConnection(string dbPath)
     {
         _dbPath = dbPath;
+        InitTable();
+    }
+
+    private static SQLiteConnection? _database;
+    public static SQLiteConnection Database
+    {
+        get
+        {
+            if (_database == null)
+            {
+                if (_dbPath.IsEmpty())
+                {
+                    throw new Exception("数据库路径未配置");
+                }
+                _database = new SQLiteConnection(_dbPath);
+
+            }
+            return _database;
+        }
     }
 
     private static SQLiteAsyncConnection? _databaseAsync;
@@ -22,37 +41,27 @@ internal class DatabaseProvide
                 {
                     throw new Exception("数据库路径未配置");
                 }
-
                 _databaseAsync = new SQLiteAsyncConnection(_dbPath);
-                InitTable();
+
             }
             return _databaseAsync;
         }
     }
     private static void InitTable()
     {
-        DatabaseAsync.CreateTableAsync<MusicEntity>().Wait();
-        DatabaseAsync.CreateTableAsync<PlaylistEntity>().Wait();
-        DatabaseAsync.CreateTableAsync<MyFavoriteEntity>().Wait();
-        DatabaseAsync.CreateTableAsync<MyFavoriteDetailEntity>().Wait();
-        DatabaseAsync.CreateTableAsync<UserConfigEntity>().Wait();
-       
-        if (DatabaseAsync.Table<UserConfigEntity>().CountAsync().Result == 0)
+        Database.CreateTable<MusicEntity>();
+        Database.CreateTable<PlaylistEntity>();
+        Database.CreateTable<MyFavoriteEntity>();
+        Database.CreateTable<MyFavoriteDetailEntity>();
+        Database.CreateTable<UserConfigEntity>();
+ 
+        Database.CreateTable<EnvironmentConfigEntity>();
+      
+
+        Database.CreateTable<TokenEntity>();
+        if (Database.Table<TokenEntity>().Count() == 0)
         {
-            DatabaseAsync.InsertAsync(new UserConfigEntity()).Wait();
+            Database.Insert(new TokenEntity());
         }
-
-        if (DatabaseAsync.Table<EnvironmentConfigEntity>().CountAsync().Result == 0)
-        {
-            DatabaseAsync.InsertAsync(new EnvironmentConfigEntity()).Wait();
-        }
-
-        DatabaseAsync.CreateTableAsync<TokenEntity>().Wait();
-        if (DatabaseAsync.Table<TokenEntity>().CountAsync().Result == 0)
-        {
-            DatabaseAsync.InsertAsync(new TokenEntity()).Wait();
-        }
-
-
     }
 }

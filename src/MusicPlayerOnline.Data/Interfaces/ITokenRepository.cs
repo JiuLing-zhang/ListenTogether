@@ -3,6 +3,6 @@
 namespace MusicPlayerOnline.Data.Interfaces;
 public interface ITokenRepository
 {
-    public Task<TokenInfo> Read();
-    public Task<bool> Write(TokenInfo token);
+    public TokenInfo Read();
+    public bool Write(TokenInfo token);
 }

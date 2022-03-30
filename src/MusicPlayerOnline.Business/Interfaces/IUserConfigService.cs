@@ -3,10 +3,10 @@
 namespace MusicPlayerOnline.Business.Interfaces;
 public interface IUserConfigService
 {
-    Task<UserSetting?> ReadAllSettingsAsync();
-    Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting);
+    UserSetting? ReadAllSettings();
+    bool WriteGeneralSetting(GeneralSetting generalSetting);
 
-    Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting);
+    bool WriteSearchSetting(SearchSetting searchSetting);
 
-    Task<bool> WritePlaySettingAsync(PlaySetting playSetting);
+    bool WritePlaySetting(PlaySetting playSetting);
 }

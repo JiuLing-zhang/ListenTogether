@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
+             x:Class="MusicPlayerOnline.Maui.Pages.SearchPage"
+             Title="SearchPage"
+             BackgroundColor="White">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelMusicSearching" TargetType="Label">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMusicSearching}" Value="True" TargetType="Label">
+                        <Setter Property="IsVisible" Value="true"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsMusicSearching}" Value="false" TargetType="Label">
+                        <Setter Property="IsVisible" Value="false"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="CollectionViewMusicSearchResultBlock"  TargetType="CollectionView">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMusicSearching}" Value="True" TargetType="CollectionView">
+                        <Setter Property="IsVisible" Value="false"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsMusicSearching}" Value="false" TargetType="CollectionView">
+                        <Setter Property="IsVisible" Value="true"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" BackgroundColor="#010101" >
+            <SearchBar Text="{Binding SearchKeyword}"
+                       SearchCommand="{Binding SearchCommand}"
+                ></SearchBar>
+            <Label x:Name="LblMsg" Padding="10,10,10,0" FontSize="16" Text="拼命查询中..." TextColor="#E0E0E0" HorizontalOptions="Center" Style="{StaticResource LabelMusicSearching}"></Label>
+            <CollectionView ItemsSource="{Binding MusicSearchResult}" SelectedItem="{Binding MusicSelectedResult}"  SelectionChangedCommand="{Binding SelectedChangedCommand}" SelectionMode="Single" Style="{StaticResource CollectionViewMusicSearchResultBlock}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10"
+                              RowDefinitions="*"
+                              ColumnDefinitions="35,*,24" 
+                              >
+                            <StackLayout Grid.Column="0">
+                                <Label Text="{Binding Platform}" BackgroundColor="#404040" TextColor="#DADADA" HorizontalTextAlignment="Center"/>
+                                <Label Text="{Binding Duration}" TextColor="#929292" FontSize="13" HorizontalTextAlignment="Center"/>
+                            </StackLayout>
+                            <StackLayout Grid.Column="1" Orientation="Vertical">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Name}" TextColor="#E0E0E0" FontSize="15"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label TextColor="#929292" FontSize="13">
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="Artist" />
+                                            <Binding Path="Album" />
+                                        </MultiBinding>
+                                    </Label>
+
+                                </StackLayout>
+                            </StackLayout>
+                            <StackLayout Grid.Column="2" VerticalOptions="Center">
+                                <ImageButton BackgroundColor="Transparent" Source="plus_math" VerticalOptions="Center" HorizontalOptions="Center"
+                                             Aspect="AspectFill"
+                                             Command="{Binding AddToMyFavoriteCommand, Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}}"		
+                                             CommandParameter="{Binding .}"/>
+                            </StackLayout>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>

@@ -17,7 +17,7 @@ public class UserConfigServiceFactory : IUserConfigServiceFactory
 
     public IUserConfigService Create()
     {
-        var repositoryName = GlobalConfig.IsUseApiInterface ? nameof(UserConfigApiRepository) : nameof(UserConfigLocalRepository);
+        var repositoryName = BusinessConfig.IsUseApiInterface ? nameof(UserConfigApiRepository) : nameof(UserConfigLocalRepository);
         IUserConfigRepository repository = _repositories.First(x => x.GetType().Name == repositoryName);
         return new UserConfigService(repository);
     }

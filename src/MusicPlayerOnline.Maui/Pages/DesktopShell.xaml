@@ -4,22 +4,20 @@
        xmlns:pages="clr-namespace:MusicPlayerOnline.Maui.Pages"
        xmlns:root="clr-namespace:MusicPlayerOnline.Maui"
        xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
-       x:DataType="viewmodels:ShellViewModel"
-       
-       x:Class="MusicPlayerOnline.Maui.Pages.DesktopShell">
-
+       x:DataType="viewmodels:ShellViewModel"       
+       x:Class="MusicPlayerOnline.Maui.Pages.DesktopShell"
+       FlyoutBehavior="Locked">
     
     <Shell.FlyoutHeader>
-        <Grid BackgroundColor="red">
-            <Image Source="{AppThemeBinding Dark=logo_color_horizontal_darkmode.png,Light=logo_header_horizontal.png}"
-                   SemanticProperties.Description=".NET Podcast application logo"
-                   HeightRequest="142"
-                   VerticalOptions="Center"
-                   WidthRequest="230"
-                   HorizontalOptions="Center" />
+        <Grid BackgroundColor="red" WidthRequest="30">
+           
         </Grid>
     </Shell.FlyoutHeader>
 
+    <ShellContent Title="{Binding Search.Title}"
+                  Icon="{AppThemeBinding Light=playlist.png, Dark=playlist.png}"
+                  ContentTemplate="{DataTemplate pages:SearchPage}"/>
+    
     <ShellContent Title="{Binding Playlist.Title}"
                   Icon="{AppThemeBinding Light=playlist.png, Dark=playlist.png}"
                   ContentTemplate="{DataTemplate pages:PlaylistPage}"/>

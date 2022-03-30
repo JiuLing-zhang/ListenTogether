@@ -7,11 +7,12 @@ using MusicPlayerOnline.Model.Api.Response;
 using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Data.Repositories.Api;
-public class UserConfigApiRepository : IUserConfigRepository
+//TODO 删除文件，配置保存在本地
+public class UserConfigApiRepository
 {
     public async Task<UserSetting> ReadAllSettingsAsync()
     {
-        var json = await GlobalConfig.HttpClientWithToken.GetStringAsync(GlobalConfig.ApiSetting.UserConfig.Get);
+        var json = await DataConfig.HttpClientWithToken.GetStringAsync(DataConfig.ApiSetting.UserConfig.Get);
         var userSettingDto = JsonSerializer.Deserialize<UserSettingResponse>(json);
         if (userSettingDto == null)
         {
@@ -50,7 +51,7 @@ public class UserConfigApiRepository : IUserConfigRepository
         string content = JsonSerializer.Serialize(request);
 
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var response = await GlobalConfig.HttpClientWithToken.PostAsync(GlobalConfig.ApiSetting.UserConfig.WriteGeneral, sc);
+        var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.UserConfig.WriteGeneral, sc);
         var json = await response.Content.ReadAsStringAsync();
         var obj = JsonSerializer.Deserialize<Result>(json);
         if (obj == null || obj.Code != 0)
@@ -71,7 +72,7 @@ public class UserConfigApiRepository : IUserConfigRepository
         string content = JsonSerializer.Serialize(request);
 
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var response = await GlobalConfig.HttpClientWithToken.PostAsync(GlobalConfig.ApiSetting.UserConfig.WriteSearchConfig, sc);
+        var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.UserConfig.WriteSearchConfig, sc);
         var json = await response.Content.ReadAsStringAsync();
         var obj = JsonSerializer.Deserialize<Result>(json);
         if (obj == null || obj.Code != 0)
@@ -92,7 +93,7 @@ public class UserConfigApiRepository : IUserConfigRepository
         string content = JsonSerializer.Serialize(request);
 
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var response = await GlobalConfig.HttpClientWithToken.PostAsync(GlobalConfig.ApiSetting.UserConfig.WritePlayConfig, sc);
+        var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.UserConfig.WritePlayConfig, sc);
         var json = await response.Content.ReadAsStringAsync();
         var obj = JsonSerializer.Deserialize<Result>(json);
         if (obj == null || obj.Code != 0)

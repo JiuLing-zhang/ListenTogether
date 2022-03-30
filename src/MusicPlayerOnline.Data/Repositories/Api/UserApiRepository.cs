@@ -16,7 +16,7 @@ public class UserApiRepository : IUserRepository
             Password = password
         };
         var sc = new StringContent(JsonSerializer.Serialize(data), System.Text.Encoding.UTF8, "application/json");
-        var response = await GlobalConfig.HttpClientWithNoToken.PostAsync(GlobalConfig.ApiSetting.User.Register, sc);
+        var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Register, sc);
         var json = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<Result>(json);
         if (result == null)
@@ -34,7 +34,7 @@ public class UserApiRepository : IUserRepository
             Password = password
         };
         var sc = new StringContent(JsonSerializer.Serialize(data), System.Text.Encoding.UTF8, "application/json");
-        var response = await GlobalConfig.HttpClientWithNoToken.PostAsync(GlobalConfig.ApiSetting.User.Login, sc);
+        var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Login, sc);
         var json = await response.Content.ReadAsStringAsync();
 
         var result = JsonSerializer.Deserialize<Result<UserResponse>>(json);
@@ -55,7 +55,7 @@ public class UserApiRepository : IUserRepository
 
     public async Task<bool> Logout()
     {
-        var response = await GlobalConfig.HttpClientWithNoToken.PostAsync(GlobalConfig.ApiSetting.User.Logout, null);
+        var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Logout, null);
         var json = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<Result>(json);
         if (result == null)

@@ -11,8 +11,8 @@ public class MusicApiRepository : IMusicRepository
 {
     public async Task<Music?> GetOneAsync(string id)
     {
-        string url = string.Format(GlobalConfig.ApiSetting.Music.Get, id);
-        var json = await GlobalConfig.HttpClientWithToken.GetStringAsync(url);
+        string url = string.Format(DataConfig.ApiSetting.Music.Get, id);
+        var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);
         var obj = JsonSerializer.Deserialize<Result<MusicResponse>>(json);
         if (obj == null)
         {
@@ -46,7 +46,7 @@ public class MusicApiRepository : IMusicRepository
     {
         string content = JsonSerializer.Serialize(music);
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var response = await GlobalConfig.HttpClientWithToken.PostAsync(GlobalConfig.ApiSetting.Music.AddOrUpdate, sc);
+        var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.Music.AddOrUpdate, sc);
         var json = await response.Content.ReadAsStringAsync();
         var obj = JsonSerializer.Deserialize<Result>(json);
         if (obj == null || obj.Code != 0)
@@ -58,8 +58,8 @@ public class MusicApiRepository : IMusicRepository
 
     public async Task<bool> UpdateCacheAsync(string id, string cachePath)
     {
-        var url = string.Format(GlobalConfig.ApiSetting.Music.UpdateCache, id, cachePath);
-        var response = await GlobalConfig.HttpClientWithToken.PostAsync(url, null);
+        var url = string.Format(DataConfig.ApiSetting.Music.UpdateCache, id, cachePath);
+        var response = await DataConfig.HttpClientWithToken.PostAsync(url, null);
         var json = await response.Content.ReadAsStringAsync();
 
         var obj = JsonSerializer.Deserialize<Result>(json);

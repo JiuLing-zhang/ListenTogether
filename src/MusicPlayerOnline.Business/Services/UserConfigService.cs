@@ -12,23 +12,23 @@ public class UserConfigService : IUserConfigService
     {
         _repository = repository;
     }
-    public async Task<UserSetting?> ReadAllSettingsAsync()
+    public UserSetting? ReadAllSettings()
     {
-        return await _repository.ReadAllSettingsAsync();
+        return _repository.ReadAllSettings();
     }
 
-    public async Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting)
+    public bool WriteGeneralSetting(GeneralSetting generalSetting)
     {
-        return await _repository.WriteGeneralSettingAsync(generalSetting);
+        return _repository.WriteGeneralSetting(generalSetting);
     }
 
-    public async Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting)
+    public bool WriteSearchSetting(SearchSetting searchSetting)
     {
-        return await _repository.WriteSearchSettingAsync(searchSetting);
+        return _repository.WriteSearchSetting(searchSetting);
     }
 
-    public async Task<bool> WritePlaySettingAsync(PlaySetting playSetting)
+    public bool WritePlaySetting(PlaySetting playSetting)
     {
-        return await _repository.WritePlaySettingAsync(playSetting);
+        return _repository.WritePlaySetting(playSetting);
     }
 }

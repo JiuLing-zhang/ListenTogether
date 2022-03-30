@@ -7,12 +7,12 @@ using MusicPlayerOnline.Model.Enums;
 namespace MusicPlayerOnline.Data.Repositories.Local;
 public class UserConfigLocalRepository : IUserConfigRepository
 {
-    public async Task<UserSetting> ReadAllSettingsAsync()
+    public UserSetting ReadAllSettings()
     {
-        var userConfig = await DatabaseProvide.DatabaseAsync.Table<UserConfigEntity>().FirstOrDefaultAsync();
+        var userConfig = DatabaseProvide.Database.Table<UserConfigEntity>().FirstOrDefault();
         if (userConfig == null)
         {
-            userConfig = await InitializationUserSetting();
+            userConfig = InitializationUserSetting();
         }
 
         var result = new UserSetting();
@@ -48,9 +48,9 @@ public class UserConfigLocalRepository : IUserConfigRepository
     /// <summary>
     /// 初始化用户配置
     /// </summary>
-    private async Task<UserConfigEntity> InitializationUserSetting()
+    private UserConfigEntity InitializationUserSetting()
     {
-        var userConfig = await DatabaseProvide.DatabaseAsync.Table<UserConfigEntity>().FirstOrDefaultAsync();
+        var userConfig = DatabaseProvide.Database.Table<UserConfigEntity>().FirstOrDefault();
         if (userConfig != null)
         {
             return userConfig;
@@ -77,7 +77,7 @@ public class UserConfigLocalRepository : IUserConfigRepository
             })
         };
 
-        var count = await DatabaseProvide.DatabaseAsync.InsertAsync(userConfig);
+        var count = DatabaseProvide.Database.Insert(userConfig);
         if (count == 0)
         {
             throw new Exception("初始化用户配置失败");
@@ -85,16 +85,16 @@ public class UserConfigLocalRepository : IUserConfigRepository
         return userConfig;
     }
 
-    public async Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting)
+    public bool WriteGeneralSetting(GeneralSetting generalSetting)
     {
-        var userConfig = await DatabaseProvide.DatabaseAsync.Table<UserConfigEntity>().FirstOrDefaultAsync();
+        var userConfig = DatabaseProvide.Database.Table<UserConfigEntity>().FirstOrDefault();
         if (userConfig == null)
         {
             return false;
         }
 
         userConfig.GeneralSettingJson = JsonSerializer.Serialize(generalSetting);
-        var count = await DatabaseProvide.DatabaseAsync.UpdateAsync(userConfig);
+        var count = DatabaseProvide.Database.Update(userConfig);
         if (count == 0)
         {
             return false;
@@ -103,16 +103,16 @@ public class UserConfigLocalRepository : IUserConfigRepository
         return true;
     }
 
-    public async Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting)
+    public bool WriteSearchSetting(SearchSetting searchSetting)
     {
-        var userConfig = await DatabaseProvide.DatabaseAsync.Table<UserConfigEntity>().FirstOrDefaultAsync();
+        var userConfig = DatabaseProvide.Database.Table<UserConfigEntity>().FirstOrDefault();
         if (userConfig == null)
         {
             return false;
         }
 
         userConfig.SearchSettingJson = JsonSerializer.Serialize(searchSetting);
-        var count = await DatabaseProvide.DatabaseAsync.UpdateAsync(userConfig);
+        var count = DatabaseProvide.Database.Update(userConfig);
         if (count == 0)
         {
             return false;
@@ -120,16 +120,16 @@ public class UserConfigLocalRepository : IUserConfigRepository
         return true;
     }
 
-    public async Task<bool> WritePlaySettingAsync(PlaySetting playSetting)
+    public bool WritePlaySetting(PlaySetting playSetting)
     {
-        var userConfig = await DatabaseProvide.DatabaseAsync.Table<UserConfigEntity>().FirstOrDefaultAsync();
+        var userConfig = DatabaseProvide.Database.Table<UserConfigEntity>().FirstOrDefault();
         if (userConfig == null)
         {
             return false;
         }
 
         userConfig.PlaySettingJson = JsonSerializer.Serialize(playSetting);
-        var count = await DatabaseProvide.DatabaseAsync.UpdateAsync(userConfig);
+        var count = DatabaseProvide.Database.Update(userConfig);
         if (count == 0)
         {
             return false;

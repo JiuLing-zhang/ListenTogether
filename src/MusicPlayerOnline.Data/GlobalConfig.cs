@@ -1,5 +1,6 @@
 ﻿namespace MusicPlayerOnline.Data;
-public class GlobalConfig
+//TODO 文件重命名
+public class DataConfig
 {
     internal static readonly HttpClient HttpClientWithNoToken = new();
     internal static readonly HttpClient HttpClientWithToken = new(new ApiHttpMessageHandler());

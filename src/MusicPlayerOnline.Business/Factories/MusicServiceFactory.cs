@@ -16,7 +16,7 @@ public class MusicServiceFactory : IMusicServiceFactory
 
     public IMusicService Create()
     {
-        var repositoryName = GlobalConfig.IsUseApiInterface ? nameof(MusicApiRepository) : nameof(MusicLocalRepository);
+        var repositoryName = BusinessConfig.IsUseApiInterface ? nameof(MusicApiRepository) : nameof(MusicLocalRepository);
         IMusicRepository repository = _repositories.First(x => x.GetType().Name == repositoryName);
         return new MusicService(repository);
     }

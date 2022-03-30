@@ -35,8 +35,7 @@ public static class ServiceCollectionExtension
         services.AddSingleton<IMyFavoriteRepository, MyFavoriteLocalRepository>();
         services.AddSingleton<IPlaylistRepository, PlaylistApiRepository>();
         services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
-        services.AddSingleton<ITokenRepository, TokenLocalRepository>();
-        services.AddSingleton<IUserConfigRepository, UserConfigApiRepository>();
+        services.AddSingleton<ITokenRepository, TokenLocalRepository>();     
         services.AddSingleton<IUserConfigRepository, UserConfigLocalRepository>();
         services.AddSingleton<IUserRepository, UserApiRepository>();
 

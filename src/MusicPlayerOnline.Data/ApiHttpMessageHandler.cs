@@ -13,7 +13,7 @@ public class ApiHttpMessageHandler : DelegatingHandler
     public ApiHttpMessageHandler()
     {
         _localTokenService = new TokenLocalRepository();
-        _tokenInfo = _localTokenService.Read().Result;
+        _tokenInfo = _localTokenService.Read();
     }
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
@@ -26,7 +26,7 @@ public class ApiHttpMessageHandler : DelegatingHandler
 
         string content = JsonSerializer.Serialize(new { _tokenInfo.RefreshToken });
         var sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var refreshTokenRequest = new HttpRequestMessage(HttpMethod.Post, GlobalConfig.ApiSetting.User.RefreshToken)
+        var refreshTokenRequest = new HttpRequestMessage(HttpMethod.Post, DataConfig.ApiSetting.User.RefreshToken)
         {
             Content = sc
         };
@@ -42,7 +42,7 @@ public class ApiHttpMessageHandler : DelegatingHandler
 
         _tokenInfo.Token = result.Data.Token;
         _tokenInfo.RefreshToken = result.Data.RefreshToken;
-        if (await _localTokenService.Write(_tokenInfo) == false)
+        if (_localTokenService.Write(_tokenInfo) == false)
         {
             //新的 token 保存失败时，也返回原有的 response
             return response;

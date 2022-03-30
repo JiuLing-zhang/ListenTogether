@@ -17,7 +17,7 @@ public class PlaylistServiceFactory : IPlaylistServiceFactory
 
     public IPlaylistService Create()
     {
-        var repositoryName = GlobalConfig.IsUseApiInterface ? nameof(PlaylistApiRepository) : nameof(PlaylistLocalRepository);
+        var repositoryName = BusinessConfig.IsUseApiInterface ? nameof(PlaylistApiRepository) : nameof(PlaylistLocalRepository);
         IPlaylistRepository repository = _repositories.First(x => x.GetType().Name == repositoryName);
         return new PlaylistService(repository);
     }

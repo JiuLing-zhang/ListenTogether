@@ -56,6 +56,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="JiuLing.CommonLibs" Version="1.2.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\MusicPlayerOnline.Business\MusicPlayerOnline.Business.csproj" />
+	  <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Pages\MyFavoritePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -63,6 +72,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\PlaylistPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\SearchPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\SettingsPage.xaml">
