@@ -53,7 +53,6 @@ internal class DatabaseProvide
         Database.CreateTable<PlaylistEntity>();
         Database.CreateTable<MyFavoriteEntity>();
         Database.CreateTable<MyFavoriteDetailEntity>();
-        Database.CreateTable<UserConfigEntity>();
  
         Database.CreateTable<EnvironmentConfigEntity>();
       

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Configuration;
 using MusicPlayerOnline.Business;
 using MusicPlayerOnline.Maui.Pages;
 using MusicPlayerOnline.Maui.ViewModels;
@@ -18,9 +19,10 @@ namespace MusicPlayerOnline.Maui
 
             builder.Configuration.AddConfiguration(config);
 
-            builder.Services.AddBusiness();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
+                .UseBusiness()
                 .ConfigureEssentials()
                 .ConfigurePages()
                 .ConfigureViewModels()

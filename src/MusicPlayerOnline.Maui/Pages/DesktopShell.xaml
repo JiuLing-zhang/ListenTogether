@@ -6,13 +6,10 @@
        xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
        x:DataType="viewmodels:ShellViewModel"       
        x:Class="MusicPlayerOnline.Maui.Pages.DesktopShell"
-       FlyoutBehavior="Locked">
-    
-    <Shell.FlyoutHeader>
-        <Grid BackgroundColor="red" WidthRequest="30">
-           
-        </Grid>
-    </Shell.FlyoutHeader>
+       FlyoutBehavior="Locked"
+       FlyoutWidth="75"
+       NavBarIsVisible="False">   
+
 
     <ShellContent Title="{Binding Search.Title}"
                   Icon="{AppThemeBinding Light=playlist.png, Dark=playlist.png}"
@@ -32,6 +29,7 @@
 
     <ShellContent Title="{Binding Settings.Title}"
                   Icon="{AppThemeBinding Light=settings.png, Dark=settings.png}" 
-                  ContentTemplate="{DataTemplate pages:SettingsPage}" />
+                  ContentTemplate="{DataTemplate pages:SettingsPage}"            
+                  />
 
 </Shell>

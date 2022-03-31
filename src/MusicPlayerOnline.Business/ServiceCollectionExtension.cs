@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MusicPlayerOnline.Business.Factories;
+﻿using MusicPlayerOnline.Business.Factories;
 using MusicPlayerOnline.Business.Interfaces;
 using MusicPlayerOnline.Business.Services;
 using MusicPlayerOnline.Data.Interfaces;
@@ -9,37 +8,36 @@ using MusicPlayerOnline.Network;
 
 namespace MusicPlayerOnline.Business;
 
-public static class ServiceCollectionExtension
+//TODO 文件重命名
+public static class AppBuilderExtensions
 {
-    public static IServiceCollection AddBusiness(this IServiceCollection services)
+    public static MauiAppBuilder UseBusiness(this MauiAppBuilder builder)
     {
         //网络数据平台
-        services.AddSingleton<MusicNetPlatform>();
+        builder.Services.AddSingleton<MusicNetPlatform>();
 
         //本地、远程服务工厂
-        services.AddSingleton<IMusicServiceFactory, MusicServiceFactory>();
-        services.AddSingleton<IMyFavoriteServiceFactory, MyFavoriteServiceFactory>();
-        services.AddSingleton<IPlaylistServiceFactory, PlaylistServiceFactory>();
-        services.AddSingleton<IUserConfigServiceFactory, UserConfigServiceFactory>();
+        builder.Services.AddSingleton<IMusicServiceFactory, MusicServiceFactory>();
+        builder.Services.AddSingleton<IMyFavoriteServiceFactory, MyFavoriteServiceFactory>();
+        builder.Services.AddSingleton<IPlaylistServiceFactory, PlaylistServiceFactory>();
 
         //本地服务
-        services.AddSingleton<IEnvironmentConfigService, EnvironmentConfigService>();
-        services.AddSingleton<IMusicNetworkService, MusicNetworkService>();
-        services.AddSingleton<IUserService, UserService>();
+        builder.Services.AddSingleton<IEnvironmentConfigService, EnvironmentConfigService>();
+        builder.Services.AddSingleton<IMusicNetworkService, MusicNetworkService>();
+        builder.Services.AddSingleton<IUserService, UserService>();
 
         //数据服务
-        services.AddSingleton<IEnvironmentConfigRepository, EnvironmentConfigLocalRepository>();
-        services.AddSingleton<IMusicRepository, MusicApiRepository>();
-        services.AddSingleton<IMusicRepository, MusicLocalRepository>();
-        services.AddSingleton<IMyFavoriteRepository, MyFavoriteApiRepository>();
-        services.AddSingleton<IMyFavoriteRepository, MyFavoriteLocalRepository>();
-        services.AddSingleton<IPlaylistRepository, PlaylistApiRepository>();
-        services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
-        services.AddSingleton<ITokenRepository, TokenLocalRepository>();     
-        services.AddSingleton<IUserConfigRepository, UserConfigLocalRepository>();
-        services.AddSingleton<IUserRepository, UserApiRepository>();
+        builder.Services.AddSingleton<IEnvironmentConfigRepository, EnvironmentConfigLocalRepository>();
+        builder.Services.AddSingleton<IMusicRepository, MusicApiRepository>();
+        builder.Services.AddSingleton<IMusicRepository, MusicLocalRepository>();
+        builder.Services.AddSingleton<IMyFavoriteRepository, MyFavoriteApiRepository>();
+        builder.Services.AddSingleton<IMyFavoriteRepository, MyFavoriteLocalRepository>();
+        builder.Services.AddSingleton<IPlaylistRepository, PlaylistApiRepository>();
+        builder.Services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
+        builder.Services.AddSingleton<ITokenRepository, TokenLocalRepository>();
+        builder.Services.AddSingleton<IUserRepository, UserApiRepository>();
 
-        return services;
+        return builder;
     }
 
 }

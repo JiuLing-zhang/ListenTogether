@@ -56,9 +56,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Using Include="MusicPlayerOnline.Maui.Utils" />	
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre8" />
 	  <PackageReference Include="JiuLing.CommonLibs" Version="1.2.3" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+	  <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.0.30" />
 	  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.1" />
 	</ItemGroup>
 

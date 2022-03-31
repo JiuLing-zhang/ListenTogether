@@ -7,6 +7,7 @@ public static class ViewModelExtensions
         builder.Services.AddTransient<SearchResultPageViewModel>();
         builder.Services.AddTransient<SearchResultViewModel>();
         builder.Services.AddSingleton<ShellViewModel>();
+        builder.Services.AddSingleton<SettingPageViewModel>();
         return builder;
     }
 }

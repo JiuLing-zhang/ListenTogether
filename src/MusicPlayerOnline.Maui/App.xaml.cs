@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MusicPlayerOnline.Business;
-using MusicPlayerOnline.Business.Factories;
+using MusicPlayerOnline.Business.Interfaces;
 using MusicPlayerOnline.Maui.Pages;
 namespace MusicPlayerOnline.Maui;
 public partial class App : Application
 {
-    public App(IConfiguration config, IUserConfigServiceFactory userConfigServiceFactory)
+    public App(IConfiguration config, IEnvironmentConfigService configService)
     {
         InitializeComponent();
 
@@ -31,8 +31,7 @@ public partial class App : Application
         }
 
         BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataPath, appSetting.LocalDbName), appSetting.ApiDomain, deviceId);
-        GlobalConfig.MyUserSetting = userConfigServiceFactory.Create().ReadAllSettings();
-
+        GlobalConfig.MyUserSetting = configService.ReadAllSettings();
 
         //TODO 临时赋值，实际需要判断登录状态
         BusinessConfig.IsUseApiInterface = false;
@@ -45,5 +44,8 @@ public partial class App : Application
         {
             MainPage = new MobileShell();
         }
+
+        //主题
+        App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
     }
 }

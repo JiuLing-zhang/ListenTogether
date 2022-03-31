@@ -1,8 +1,6 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 using MusicPlayerOnline.Business.Factories;
 using MusicPlayerOnline.Business.Interfaces;
-using MusicPlayerOnline.Maui;
-using MusicPlayerOnline.Maui.Services;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
 using System.Collections.ObjectModel;
@@ -79,7 +77,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
             set
             {
                 _searchKeyword = value;
-                OnPropertyChanged(); 
+                OnPropertyChanged();
             }
         }
 
@@ -145,7 +143,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
                 var musics = await _searchService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, SearchKeyword);
                 if (musics.Count == 0)
                 {
-                    DependencyService.Get<IToastService>().Show("哦吼，啥也没有搜到");
+                    ToastService.Show("哦吼，啥也没有搜到");
                     return;
                 }
 
@@ -170,7 +168,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
             }
             catch (Exception ex)
             {
-                DependencyService.Get<IToastService>().Show("抱歉，网络可能出小差了~");
+                ToastService.Show("抱歉，网络可能出小差了~");
             }
             finally
             {
@@ -191,7 +189,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
                 {
                     await Shell.Current.GoToAsync("..", true);
                 }
-                DependencyService.Get<IToastService>().Show(message);
+                ToastService.Show(message);
                 return;
             }
             //TODO 重构，是否需要广播
@@ -216,7 +214,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
                 {
                     await Shell.Current.GoToAsync("..", true);
                 }
-                DependencyService.Get<IToastService>().Show(message);
+                ToastService.Show(message);
                 return;
             }
 

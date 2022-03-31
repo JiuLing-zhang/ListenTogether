@@ -21,4 +21,18 @@ public class EnvironmentConfigService : IEnvironmentConfigService
     {
         _repository.WritePlayerSetting(playerSetting);
     }
+    public bool WriteGeneralSetting(GeneralSetting generalSetting)
+    {
+        return _repository.WriteGeneralSetting(generalSetting);
+    }
+
+    public bool WriteSearchSetting(SearchSetting searchSetting)
+    {
+        return _repository.WriteSearchSetting(searchSetting);
+    }
+
+    public bool WritePlaySetting(PlaySetting playSetting)
+    {
+        return _repository.WritePlaySetting(playSetting);
+    }
 }

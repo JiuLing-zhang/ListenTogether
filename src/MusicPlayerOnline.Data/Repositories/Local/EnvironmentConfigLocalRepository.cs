@@ -25,6 +25,33 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             PlayMode = playerSetting.PlayMode
         };
 
+        //通用设置
+        var generalConfig = JsonSerializer.Deserialize<GeneralSetting>(environmentConfig.GeneralSettingJson) ?? throw new Exception("配置信息不存在：GeneralSetting");
+        result.General = new GeneralSetting()
+        {
+            IsAutoCheckUpdate = generalConfig.IsAutoCheckUpdate,
+            IsDarkMode = generalConfig.IsDarkMode,
+            IsHideWindowWhenMinimize = generalConfig.IsHideWindowWhenMinimize,
+        };
+
+        //播放设置
+        var playConfig = JsonSerializer.Deserialize<PlaySetting>(environmentConfig.PlaySettingJson) ?? throw new Exception("配置信息不存在：PlaySetting");
+        result.Play = new PlaySetting()
+        {
+            IsAutoNextWhenFailed = playConfig.IsAutoNextWhenFailed,
+            IsCleanPlaylistWhenPlayMyFavorite = playConfig.IsCleanPlaylistWhenPlayMyFavorite,
+            IsWifiPlayOnly = playConfig.IsWifiPlayOnly
+        };
+
+        //搜索设置
+        var searchConfig = JsonSerializer.Deserialize<SearchSetting>(environmentConfig.SearchSettingJson) ?? throw new Exception("配置信息不存在：SearchSetting");
+        result.Search = new SearchSetting()
+        {
+            EnablePlatform = searchConfig.EnablePlatform,
+            IsCloseSearchPageWhenPlayFailed = searchConfig.IsCloseSearchPageWhenPlayFailed,
+            IsHideShortMusic = searchConfig.IsHideShortMusic
+        };
+
         return result;
     }
 
@@ -43,6 +70,23 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
                 Voice = 50,
                 IsSoundOff = false,
                 PlayMode = PlayModeEnum.RepeatList
+            }),
+            GeneralSettingJson = JsonSerializer.Serialize(new GeneralSetting()
+            {
+                IsAutoCheckUpdate = true,
+                IsHideWindowWhenMinimize = true
+            }),
+            SearchSettingJson = JsonSerializer.Serialize(new SearchSetting()
+            {
+                EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu,
+                IsHideShortMusic = true,
+                IsCloseSearchPageWhenPlayFailed = false
+            }),
+            PlaySettingJson = JsonSerializer.Serialize(new PlaySetting()
+            {
+                IsAutoNextWhenFailed = true,
+                IsCleanPlaylistWhenPlayMyFavorite = true,
+                IsWifiPlayOnly = true
             })
         };
 
@@ -64,5 +108,57 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
 
         environmentConfig.PlayerSettingJson = JsonSerializer.Serialize(playerSetting);
         DatabaseProvide.Database.Update(environmentConfig);
+    }
+
+    public bool WriteGeneralSetting(GeneralSetting generalSetting)
+    {
+        var userConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        if (userConfig == null)
+        {
+            return false;
+        }
+
+        userConfig.GeneralSettingJson = JsonSerializer.Serialize(generalSetting);
+        var count = DatabaseProvide.Database.Update(userConfig);
+        if (count == 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool WriteSearchSetting(SearchSetting searchSetting)
+    {
+        var userConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        if (userConfig == null)
+        {
+            return false;
+        }
+
+        userConfig.SearchSettingJson = JsonSerializer.Serialize(searchSetting);
+        var count = DatabaseProvide.Database.Update(userConfig);
+        if (count == 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public bool WritePlaySetting(PlaySetting playSetting)
+    {
+        var userConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        if (userConfig == null)
+        {
+            return false;
+        }
+
+        userConfig.PlaySettingJson = JsonSerializer.Serialize(playSetting);
+        var count = DatabaseProvide.Database.Update(userConfig);
+        if (count == 0)
+        {
+            return false;
+        }
+        return true;
     }
 }
