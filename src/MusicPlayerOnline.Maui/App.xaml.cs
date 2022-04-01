@@ -36,6 +36,9 @@ public partial class App : Application
         //TODO 临时赋值，实际需要判断登录状态
         BusinessConfig.IsUseApiInterface = false;
 
+        //主题
+        App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
+
         if (Config.Desktop)
         {
             MainPage = new DesktopShell();
@@ -44,8 +47,5 @@ public partial class App : Application
         {
             MainPage = new MobileShell();
         }
-
-        //主题
-        //App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
     }
 }

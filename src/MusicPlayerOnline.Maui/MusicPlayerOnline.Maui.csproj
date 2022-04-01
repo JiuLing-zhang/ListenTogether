@@ -54,10 +54,6 @@
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
 		<PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.0.30" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<Using Include="MusicPlayerOnline.Maui.Utils" />	
-	</ItemGroup>
 	
 	<ItemGroup>
 	  <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre8" />
