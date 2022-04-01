@@ -1,12 +1,72 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              x:Class="MusicPlayerOnline.Maui.Pages.MyFavoritePage"
              Title="MyFavoritePage"
              BackgroundColor="White">
-    <StackLayout>
-        <Label Text="MyFavoritePage"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
-    </StackLayout>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="plus_math" Command="{Binding AddMyFavoriteCommand}" ></ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="EmptyTips" TargetType="Label">
+                <Setter Property="IsVisible" Value="false"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding FavoriteList.Count}" Value="0" TargetType="Label">
+                        <Setter Property="IsVisible" Value="true"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="MyFavoriteImg" TargetType="Image">
+                <Setter Property="Source" Value="music_library"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsUseDefaultImage}" Value="false" TargetType="Image">
+                        <Setter Property="Source" Value="{Binding ImageUrl}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="#000000" Padding="10">
+            <Label x:Name="LblMsg" Padding="0,10,0,0" FontSize="16" Text="还没有歌单....快去添加一个吧~~" TextColor="#E0E0E0" HorizontalOptions="Center" Style="{StaticResource EmptyTips}"></Label>
+            <CollectionView ItemsSource="{Binding FavoriteList}" SelectedItem="{Binding SelectedResult}" SelectionChangedCommand="{Binding SelectedChangedCommand}" SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="5" Orientation="Horizontal" >
+                            <StackLayout HorizontalOptions="Start" VerticalOptions="Center">
+                                <Frame CornerRadius="10" 
+                                           HeightRequest="50"
+                                           WidthRequest="50"
+                                           Padding="0"
+                                           IsClippedToBounds="True" BackgroundColor="#404040">
+                                    <Image Aspect="AspectFill" Style="{StaticResource MyFavoriteImg}"></Image>
+                                </Frame>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="Center" Spacing="0" Padding="5,0,0,0">
+                                <Label Text="{Binding Name}" TextColor="#E0E0E0" FontSize="18" VerticalOptions="End"/>
+                                <Label TextColor="#929292" FontSize="16" VerticalOptions="End" >
+                                    <MultiBinding StringFormat="共 {0} 首歌">
+                                        <Binding Path="MusicCount"></Binding>
+                                    </MultiBinding>
+                                </Label>
+                            </StackLayout>
+                            <StackLayout HorizontalOptions="End" VerticalOptions="Center">
+                                <ImageButton HeightRequest="35" BackgroundColor="Transparent" ClassId="{Binding Id}" Source="menu_vertical"
+                                             Aspect="AspectFill"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EditFavoriteCommand}"		
+                                             CommandParameter="{Binding .}"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+    
 </ContentPage>

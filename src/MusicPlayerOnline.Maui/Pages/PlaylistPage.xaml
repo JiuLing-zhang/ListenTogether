@@ -1,12 +1,82 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              x:Class="MusicPlayerOnline.Maui.Pages.PlaylistPage"
              Title="xx"
              BackgroundColor="White">
-    <StackLayout>
-        <Label Text="播放列表"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
-    </StackLayout>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="trash" Command="{Binding ClearPlaylistCommand}" ></ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelMusicSearching" TargetType="Label">
+                <Setter Property="IsVisible" Value="false"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Playlist.Count}" Value="0" TargetType="Label">
+                        <Setter Property="IsVisible" Value="true"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="Grid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                            Value="#929292" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+            <Style x:Key="PlayerStateImg" TargetType="ImageButton">
+                <Setter Property="Source" Value="null"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsPlaying}" Value="true" TargetType="ImageButton">
+                        <Setter Property="Source" Value="pause_button"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsPlaying}" Value="false" TargetType="ImageButton">
+                        <Setter Property="Source" Value="circled_play"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical"  BackgroundColor="#010101" Padding="10">
+            <StackLayout>
+                <Entry Text="{Binding SearchKeyword}" Placeholder="输入歌曲名搜索" Completed="Entry_Completed" TextColor="#DADADA" PlaceholderColor="#929292"/>
+            </StackLayout>
+            <StackLayout>
+                <Label x:Name="LblMsg" Padding="0,10,0,0" FontSize="16" Text="播放列表居然是空的...." TextColor="#E0E0E0" HorizontalOptions="Center" Style="{StaticResource LabelMusicSearching}"></Label>
+                <ListView x:Name="ListViewLyrics" ItemsSource="{Binding Playlist}" SelectedItem="{Binding SelectedItem}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.ContextActions>
+                                    <MenuItem Text="删除" Clicked="MenuItem_Clicked" />
+                                </ViewCell.ContextActions>
+                                <ViewCell.View>
+                                    <StackLayout Orientation="Horizontal" Padding="10,10,10,10">
+                                        <Label Text="{Binding Name}" TextColor="#E0E0E0" FontSize="18" MinimumWidthRequest="60" VerticalTextAlignment="Center"  LineBreakMode="NoWrap"/>
+                                        <Label TextColor="#929292" Text="{Binding Artist,StringFormat='{} - {0}'}" FontSize="15" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" />
+                                        <ImageButton BackgroundColor="Transparent" Source="plus_math" HorizontalOptions="EndAndExpand"
+                                                     Aspect="AspectFill"
+                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"		
+                                                     CommandParameter="{Binding .}"/>
+                                    </StackLayout>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>

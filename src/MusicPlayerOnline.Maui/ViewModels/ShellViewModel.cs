@@ -11,10 +11,10 @@ internal class ShellViewModel
 
     public ShellViewModel()
     {
-        Search = new AppSection() { Title = "搜索", Icon = "playlist.png", IconDark = "playlist.png", TargetType = typeof(SearchPage) };
-        Playlist = new AppSection() { Title = "播放列表", Icon = "playlist.png", IconDark = "playlist.png", TargetType = typeof(PlaylistPage) };
-        MyFavorite = new AppSection() { Title = "我的歌单", Icon = "my_favorite.png", IconDark = "my_favorite.png", TargetType = typeof(MyFavoritePage) };
-        Playing = new AppSection() { Title = "正在播放", Icon = "playing.png", IconDark = "playing.png", TargetType = typeof(PlayingPage) };
-        Settings = new AppSection() { Title = "设置", Icon = "settings.png", IconDark = "settings.png", TargetType = typeof(SettingsPage) };
+        Search = new AppSection() { Title = "搜索", Icon = "search.png", IconDark = "search_dark.png", TargetType = typeof(SearchPage) };
+        Playlist = new AppSection() { Title = "播放列表", Icon = "playlist.png", IconDark = "playlist_dark.png", TargetType = typeof(PlaylistPage) };
+        MyFavorite = new AppSection() { Title = "我的歌单", Icon = "heart.png", IconDark = "heart_dark.png", TargetType = typeof(MyFavoritePage) };
+        Playing = new AppSection() { Title = "正在播放", Icon = "music.png", IconDark = "music_dark.png", TargetType = typeof(PlayingPage) };
+        Settings = new AppSection() { Title = "设置", Icon = "setting.png", IconDark = "setting_dark.png", TargetType = typeof(SettingsPage) };
     }
 }

@@ -6,8 +6,13 @@ public static class ViewModelExtensions
     {
         builder.Services.AddTransient<SearchResultPageViewModel>();
         builder.Services.AddTransient<SearchResultViewModel>();
+        builder.Services.AddTransient<PlaylistPageViewModel>();
+        builder.Services.AddTransient<MyFavoritePageViewModel>();
+
         builder.Services.AddSingleton<ShellViewModel>();
         builder.Services.AddSingleton<SettingPageViewModel>();
+        builder.Services.AddSingleton<PlayingPageViewModel>();
+        
         return builder;
     }
 }

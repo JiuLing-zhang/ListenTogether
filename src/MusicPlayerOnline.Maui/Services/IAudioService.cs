@@ -7,4 +7,6 @@ internal interface IAudioService
     Task PauseAsync();
     bool IsPlaying { get; }
     double CurrentPosition { get; }
+
+    public event EventHandler PlayFinished;
 }

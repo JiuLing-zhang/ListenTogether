@@ -7,7 +7,7 @@ namespace MusicPlayerOnline.Maui
         /// <summary>
         /// App名称
         /// </summary>
-        private static string AppName { get; set; } = AppDomain.CurrentDomain.FriendlyName;
+        private const string AppName = "MusicPlayerOnline";
 
         /// <summary>
         /// App Data文件夹路径

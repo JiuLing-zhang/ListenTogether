@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MusicPlayerOnline.Business;
 using MusicPlayerOnline.Maui.Pages;
+using MusicPlayerOnline.Maui.Services;
 using MusicPlayerOnline.Maui.ViewModels;
 
 namespace MusicPlayerOnline.Maui
@@ -23,6 +24,7 @@ namespace MusicPlayerOnline.Maui
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseBusiness()
+                .ConfigureServices()
                 .ConfigureEssentials()
                 .ConfigurePages()
                 .ConfigureViewModels()

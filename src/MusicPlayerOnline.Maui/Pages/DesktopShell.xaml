@@ -8,28 +8,27 @@
        x:Class="MusicPlayerOnline.Maui.Pages.DesktopShell"
        FlyoutBehavior="Locked"
        FlyoutWidth="75"
-       NavBarIsVisible="False">   
+       NavBarIsVisible="False">
 
 
     <ShellContent Title="{Binding Search.Title}"
-                  Icon="{AppThemeBinding Light=playlist.png, Dark=playlist.png}"
+                  Icon="{AppThemeBinding Light=search.png, Dark=search_dark.png}"
                   ContentTemplate="{DataTemplate pages:SearchPage}"/>
-    
+
     <ShellContent Title="{Binding Playlist.Title}"
-                  Icon="{AppThemeBinding Light=playlist.png, Dark=playlist.png}"
+                  Icon="{AppThemeBinding Light=playlist.png, Dark=playlist_dark.png}"
                   ContentTemplate="{DataTemplate pages:PlaylistPage}"/>
 
     <ShellContent Title="{Binding MyFavorite.Title}"
-                  Icon="{AppThemeBinding Light=my_favorite.png, Dark=my_favorite.png}"
+                  Icon="{AppThemeBinding Light=heart.png, Dark=heart_dark.png}"
                   ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
 
     <ShellContent Title="{Binding Playing.Title}"
-                  Icon="{AppThemeBinding Light=playing.png, Dark=playing.png}"
+                  Icon="{AppThemeBinding Light=music.png, Dark=music_dark.png}"
                   ContentTemplate="{DataTemplate pages:PlayingPage}" />
 
     <ShellContent Title="{Binding Settings.Title}"
-                  Icon="{AppThemeBinding Light=settings.png, Dark=settings.png}" 
-                  ContentTemplate="{DataTemplate pages:SettingsPage}"            
-                  />
+                  Icon="{AppThemeBinding Light=setting.png, Dark=setting_dark.png}" 
+                  ContentTemplate="{DataTemplate pages:SettingsPage}" />
 
 </Shell>
