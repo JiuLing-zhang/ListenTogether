@@ -20,7 +20,9 @@ internal class PlayerService : PlayerServiceAbstract
     private Music _currentMusic;
 
     public override event EventHandler NewMusicAdded;
+    public override event EventHandler IsPlayingChanged;
     public override event EventHandler PlayFinished;
+
     public PlayerService(IAudioService audioService)
     {
         _audioService = audioService;
@@ -46,10 +48,12 @@ internal class PlayerService : PlayerServiceAbstract
         {
             await _audioService.PlayAsync(position);
         }
+        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public override async Task PauseAsync()
     {
         await _audioService.PauseAsync();
+        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 }

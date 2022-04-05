@@ -1,7 +1,4 @@
-﻿using MusicPlayerOnline.Business.Factories;
-using MusicPlayerOnline.Business.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
+﻿using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Maui.Services;
 internal class PlayerServiceProxy : PlayerServiceAbstract
@@ -13,6 +10,7 @@ internal class PlayerServiceProxy : PlayerServiceAbstract
     private readonly WifiOptionsService _wifiOptionsService;
 
     public override event EventHandler NewMusicAdded;
+    public override event EventHandler IsPlayingChanged;
     public override event EventHandler PlayFinished;
 
     public override double CurrentPosition => _playerService.CurrentPosition;
@@ -23,7 +21,8 @@ internal class PlayerServiceProxy : PlayerServiceAbstract
     {
         _playerService = new PlayerService(audioService);
         _playerService.NewMusicAdded += NewMusicAdded;
-        _playerService.PlayFinished += PlayFinishedDo;
+        _playerService.IsPlayingChanged += IsPlayingChanged;
+        _playerService.PlayFinished += PlayFinished;
 
 
         _musicNetworkService = musicNetworkService;
@@ -31,8 +30,6 @@ internal class PlayerServiceProxy : PlayerServiceAbstract
         _playlistService = playlistServiceFactory.Create();
         _wifiOptionsService = wifiOptionsService;
     }
-
-
 
     public override async Task PlayAsync(Music music, double position = 0)
     {
@@ -44,14 +41,14 @@ internal class PlayerServiceProxy : PlayerServiceAbstract
                 music = await _musicNetworkService.UpdatePlayUrl(music);
             }
 
-            if (  _wifiOptionsService.HasWifiOrCanPlayWithOutWifi())
+            if (_wifiOptionsService.HasWifiOrCanPlayWithOutWifi())
             {
                 await _playerService.PlayAsync(music, position);
             }
         }
         catch (Exception ex)
         {
-            MediaFailed();
+            await MediaFailed();
         }
     }
 
@@ -171,13 +168,11 @@ internal class PlayerServiceProxy : PlayerServiceAbstract
         }
     }
 
-    private async void PlayFinishedDo(object sender, EventArgs e)
-    {
-        await Next();
-    }
     private async Task MediaFailed()
     {
-        ToastService.Show("播放失败，准备跳到下一首");
-        await Next();
+        if (GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed)
+        {
+            await Next();
+        }
     }
 }

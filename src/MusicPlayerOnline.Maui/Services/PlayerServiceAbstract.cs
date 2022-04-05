@@ -9,8 +9,8 @@ internal abstract class PlayerServiceAbstract
     public abstract bool IsPlaying { get; }
 
     public abstract event EventHandler NewMusicAdded;
+    public abstract event EventHandler IsPlayingChanged;
     public abstract event EventHandler PlayFinished;
-
     public abstract Task PlayAsync(Music music, double position = 0);
     public abstract Task PauseAsync();
 }
