@@ -28,7 +28,7 @@ public class MusicApiRepository : IMusicRepository
         {
             Id = id,
             Platform = (PlatformEnum)music.Platform,
-            PlatformId = music.PlatformId,
+            PlatformInnerId = music.PlatformInnerId,
             PlatformName = ((PlatformEnum)music.Platform).GetDescription(),
             Name = music.Name,
             Album = music.Album,

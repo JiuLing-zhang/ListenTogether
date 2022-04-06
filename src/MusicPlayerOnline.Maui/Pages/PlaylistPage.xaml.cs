@@ -4,16 +4,17 @@ namespace MusicPlayerOnline.Maui.Pages;
 
 public partial class PlaylistPage : ContentPage
 {
-	public PlaylistPage(PlaylistPageViewModel vm)
-	{
-		InitializeComponent();
-		BindingContext = vm;
-	}
-
-    private void Entry_Completed(object sender, EventArgs e)
+    PlaylistPageViewModel vm => BindingContext as PlaylistPageViewModel;
+    public PlaylistPage(PlaylistPageViewModel vm)
     {
-        //TODO 处理搜索，看看能不能通过command绑定
-        //_myModel.Search();
+        InitializeComponent();
+        BindingContext = vm;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await vm.InitializeAsync();
     }
 
     private void MenuItem_Clicked(object sender, EventArgs e)

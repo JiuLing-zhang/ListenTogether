@@ -2,7 +2,6 @@
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Api.Models;
 using MusicPlayerOnline.Model.Api;
 using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
@@ -49,14 +48,13 @@ namespace MusicPlayerOnline.Api.Services
                 .ToListAsync();
             return myFavorites;
         }
-        public async Task<Result> AddOrUpdateAsync(int userId, MyFavoriteRequest myFavorite)
+        public async Task<Result<MyFavoriteResponse>> AddOrUpdateAsync(int userId, MyFavoriteRequest myFavorite)
         {
-            var favorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.Id == myFavorite.Id && x.UserBaseId == userId);
+            var favorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.Name == myFavorite.Name && x.UserBaseId == userId);
             if (favorite == null)
             {
                 favorite = new MyFavoriteEntity()
                 {
-                    Id = myFavorite.Id,
                     Name = myFavorite.Name,
                     UserBaseId = userId,
                     ImageUrl = myFavorite.ImageUrl
@@ -65,7 +63,6 @@ namespace MusicPlayerOnline.Api.Services
             }
             else
             {
-                favorite.Id = myFavorite.Id;
                 favorite.Name = myFavorite.Name;
                 favorite.UserBaseId = userId;
                 favorite.ImageUrl = myFavorite.ImageUrl;
@@ -75,10 +72,15 @@ namespace MusicPlayerOnline.Api.Services
             var count = await _context.SaveChangesAsync();
             if (count == 0)
             {
-                return new Result(1, "保存失败");
+                return new Result<MyFavoriteResponse>(1, "保存失败", null);
             }
 
-            return new Result(0, "保存成功");
+            return new Result<MyFavoriteResponse>(0, "保存成功", new MyFavoriteResponse()
+            {
+                Id = myFavorite.Id,
+                Name = myFavorite.Name,
+                ImageUrl = myFavorite.ImageUrl
+            });
         }
 
         public async Task<Result> RemoveAsync(int userId, int id)
@@ -98,7 +100,7 @@ namespace MusicPlayerOnline.Api.Services
             }
             return new Result(0, "删除成功");
         }
-        public async Task<Result> AddMusicToMyFavorite(int userId, int id, MyFavoriteDetailRequest myFavoriteDetail)
+        public async Task<Result> AddMusicToMyFavorite(int userId, int id, MusicRequest music)
         {
             var favorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.UserBaseId == userId);
             if (favorite == null)
@@ -106,26 +108,26 @@ namespace MusicPlayerOnline.Api.Services
                 return new Result(1, "添加失败：我的收藏不存在");
             }
 
-            var favoriteDetail = favorite.Details.SingleOrDefault(x => x.MusicId == myFavoriteDetail.MusicId);
+            var favoriteDetail = favorite.Details.SingleOrDefault(x => x.MusicId == music.Id);
             if (favoriteDetail == null)
             {
                 favoriteDetail = new MyFavoriteDetailEntity()
                 {
-                    Platform = (int)myFavoriteDetail.Platform,
+                    Platform = (int)music.Platform,
                     MyFavoriteId = id,
-                    MusicName = myFavoriteDetail.MusicName,
-                    MusicId = myFavoriteDetail.MusicId,
-                    MusicAlbum = myFavoriteDetail.MusicAlbum,
-                    MusicArtist = myFavoriteDetail.MusicArtist
+                    MusicName = music.Name,
+                    MusicId = music.Id,
+                    MusicAlbum = music.Album,
+                    MusicArtist = music.Artist
                 };
                 favorite.Details.Add(favoriteDetail);
             }
             else
             {
-                favoriteDetail.MusicId = myFavoriteDetail.MusicId;
-                favoriteDetail.MusicName = myFavoriteDetail.MusicName;
-                favoriteDetail.MusicArtist = myFavoriteDetail.MusicArtist;
-                favoriteDetail.MusicAlbum = myFavoriteDetail.MusicAlbum;
+                favoriteDetail.MusicId = music.Id;
+                favoriteDetail.MusicName = music.Name;
+                favoriteDetail.MusicArtist = music.Artist;
+                favoriteDetail.MusicAlbum = music.Album;
             }
 
             _context.MyFavorites.Update(favorite);

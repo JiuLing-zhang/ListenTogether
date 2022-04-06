@@ -1,4 +1,5 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
+using JiuLing.CommonLibs.Security;
 using MusicPlayerOnline.EasyLog;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
@@ -54,8 +55,9 @@ public class KuGouMusicProvider : IMusicProvider
                 var ts = TimeSpan.FromSeconds(httpMusic.Duration);
                 var music = new MusicSearchResult()
                 {
+                    Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.ID}"),
                     Platform = Platform,
-                    PlatformId = httpMusic.ID,
+                    PlatformInnerId = httpMusic.ID,
                     Name = KuGouUtils.RemoveSongNameTag(httpMusic.SongName),
                     Alias = "",
                     Artist = KuGouUtils.RemoveSongNameTag(httpMusic.SingerName),
@@ -121,7 +123,7 @@ public class KuGouMusicProvider : IMusicProvider
         {
             Id = sourceMusic.Id,
             Platform = sourceMusic.Platform,
-            PlatformId = sourceMusic.PlatformId,
+            PlatformInnerId = sourceMusic.PlatformInnerId,
             Name = sourceMusic.Name,
             Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,

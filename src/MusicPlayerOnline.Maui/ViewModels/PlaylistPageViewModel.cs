@@ -19,25 +19,12 @@ namespace MusicPlayerOnline.Maui.ViewModels
             _playlistService = playlistServiceFactory.Create();
             _musicService = musicServiceFactory.Create();
 
-            //TODO 更新播放列表
-            //MessagingCenter.Subscribe<SearchResultPageViewModel>(this, SubscribeKey.UpdatePlaylist, (_) =>
-            //{
-            //    GetPlaylist();
-            //});
-            //MessagingCenter.Subscribe<MyFavoriteDetailPageViewModel>(this, SubscribeKey.UpdatePlaylist, (_) =>
-            //{
-            //    GetPlaylist();
-            //});
-            GetPlaylist();
         }
-        public void OnAppearing()
+        public async Task InitializeAsync()
         {
-            if (SearchKeyword.IsNotEmpty())
-            {
-                SearchKeyword = "";
-            }
+            await GetPlaylist();
         }
-        private async void GetPlaylist()
+        private async Task GetPlaylist()
         {
             if (Playlist.Count > 0)
             {

@@ -3,22 +3,34 @@ using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Api;
 using MusicPlayerOnline.Model.Api.Response;
+using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Data.Repositories.Api;
 public class MyFavoriteApiRepository : IMyFavoriteRepository
 {
-    public async Task<bool> AddOrUpdateAsync(MyFavorite myFavorite)
+    /// <summary>
+    /// 按照名称添加或更新
+    /// </summary>
+    /// <returns>添加或更新后的id</returns>
+    public async Task<MyFavorite?> AddOrUpdateByNameAsync(MyFavorite myFavorite)
     {
         string content = JsonSerializer.Serialize(myFavorite);
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.MyFavorite.AddOrUpdate, sc);
         var json = await response.Content.ReadAsStringAsync();
-        var obj = JsonSerializer.Deserialize<Result>(json);
-        if (obj == null || obj.Code != 0)
+        var obj = JsonSerializer.Deserialize<Result<MyFavoriteResponse>>(json);
+        if (obj == null || obj.Code != 0 || obj.Data == null)
         {
-            return false;
+            return default;
         }
-        return true;
+
+        return new MyFavorite()
+        {
+            Id = obj.Data.Id,
+            Name = obj.Data.Name,
+            ImageUrl = obj.Data.ImageUrl,
+            MusicCount = obj.Data.MusicCount
+        };
     }
 
     public async Task<List<MyFavorite>?> GetAllAsync()
@@ -77,7 +89,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         return true;
     }
 
-    public async Task<bool> AddMusicToMyFavorite(int id, MyFavoriteDetail music)
+    public async Task<bool> AddMusicToMyFavorite(int id, Music music)
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id);
 
@@ -109,7 +121,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         {
             Id = x.Id,
             MusicId = x.MusicId,
-            Platform = x.Platform,
+            Platform = (PlatformEnum)x.Platform,
             MusicName = x.MusicName,
             MyFavoriteId = x.MyFavoriteId,
             MusicAlbum = x.MusicAlbum,

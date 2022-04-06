@@ -10,13 +10,9 @@ public static class PagesExtensions
         builder.Services.AddTransient<SearchPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
-        //// pages that are navigated to
-        //builder.Services.AddTransient<CategoriesPage>();
-        //builder.Services.AddTransient<CategoryPage>();
-        //builder.Services.AddTransient<EpisodeDetailPage>();
-        //builder.Services.AddTransient<ShowDetailPage>();
-        //builder.Services.AddTransient<SubscriptionsPage>();        
-
+        builder.Services.AddTransient<MyFavoriteAddPage>();
+        builder.Services.AddTransient<MyFavoriteDetailPage>();
+        
         return builder;
     }
 }

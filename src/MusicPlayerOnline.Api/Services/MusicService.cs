@@ -32,7 +32,7 @@ namespace MusicPlayerOnline.Api.Services
             {
                 Id = id,
                 Platform = music.Platform,
-                PlatformId = music.PlatformId,
+                PlatformInnerId = music.PlatformInnerId,
                 PlatformName = ((PlatformEnum)music.Platform).GetDescription(),
                 Name = music.Name,
                 Album = music.Album,
@@ -55,7 +55,7 @@ namespace MusicPlayerOnline.Api.Services
                 {
                     Id = music.Id,
                     Platform = (int)music.Platform,
-                    PlatformId = music.PlatformId,
+                    PlatformInnerId = music.PlatformInnerId,
                     Name = music.Name,
                     Album = music.Album,
                     Alias = music.Alias,
@@ -72,7 +72,7 @@ namespace MusicPlayerOnline.Api.Services
             {
                 myMusic.Id = music.Id;
                 myMusic.Platform = (int)music.Platform;
-                myMusic.PlatformId = music.PlatformId;
+                myMusic.PlatformInnerId = music.PlatformInnerId;
                 myMusic.Name = music.Name;
                 myMusic.Album = music.Album;
                 myMusic.Alias = music.Alias;

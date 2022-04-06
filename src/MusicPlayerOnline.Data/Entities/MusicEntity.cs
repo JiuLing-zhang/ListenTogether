@@ -8,7 +8,7 @@ internal class MusicEntity
     [PrimaryKey]
     public string Id { get; set; } = null!;
     public int Platform { get; set; }
-    public string PlatformId { get; set; } = null!;
+    public string PlatformInnerId { get; set; } = null!;
     public string CachePath { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string Alias { get; set; } = null!;

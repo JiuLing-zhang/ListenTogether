@@ -1,10 +1,7 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Business.Factories;
-using MusicPlayerOnline.Business.Interfaces;
-using MusicPlayerOnline.Model;
+
 using MusicPlayerOnline.Model.Enums;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 
 namespace MusicPlayerOnline.Maui.ViewModels
 {
@@ -16,8 +13,8 @@ namespace MusicPlayerOnline.Maui.ViewModels
         private readonly IPlaylistService _playlistService;
 
         private string _lastSearchKeyword = "";
-        public Command<SearchResultViewModel> AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
-        public Command SelectedChangedCommand => new Command(SearchFinished);
+        public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
+        public ICommand SelectedChangedCommand => new Command(SearchFinished);
 
         public ICommand SearchCommand => new Command(Search);
 
@@ -81,16 +78,16 @@ namespace MusicPlayerOnline.Maui.ViewModels
             }
         }
 
-        private bool _isMusicSearching;
+        private bool _isSearching;
         /// <summary>
         /// 正在搜索歌曲
         /// </summary>
-        public bool IsMusicSearching
+        public bool IsSearching
         {
-            get => _isMusicSearching;
+            get => _isSearching;
             set
             {
-                _isMusicSearching = value;
+                _isSearching = value;
                 OnPropertyChanged();
             }
         }
@@ -137,7 +134,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
 
             try
             {
-                IsMusicSearching = true;
+                IsSearching = true;
                 Title = $"搜索: {SearchKeyword}";
                 MusicSearchResult.Clear();
                 var musics = await _searchService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, SearchKeyword);
@@ -172,7 +169,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
             }
             finally
             {
-                IsMusicSearching = false;
+                IsSearching = false;
             }
         }
 
@@ -184,11 +181,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
             string message;
             (succeed, message, music) = await SaveMusic(searchResult.SourceData);
             if (succeed == false)
-            {
-                if (GlobalConfig.MyUserSetting.Search.IsCloseSearchPageWhenPlayFailed)
-                {
-                    await Shell.Current.GoToAsync("..", true);
-                }
+            {      
                 ToastService.Show(message);
                 return;
             }
@@ -210,14 +203,11 @@ namespace MusicPlayerOnline.Maui.ViewModels
             (succeed, message, music) = await SaveMusic(MusicSelectedResult.SourceData);
             if (succeed == false)
             {
-                if (GlobalConfig.MyUserSetting.Search.IsCloseSearchPageWhenPlayFailed)
-                {
-                    await Shell.Current.GoToAsync("..", true);
-                }
                 ToastService.Show(message);
                 return;
             }
 
+            // await Shell.Current.GoToAsync($"//{nameof(PlayingPage)}", true);
             //TODO 重构逻辑
             //if (await GlobalMethods.PlayMusic(music) == false)
             //{

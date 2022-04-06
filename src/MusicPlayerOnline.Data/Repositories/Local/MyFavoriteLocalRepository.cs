@@ -1,6 +1,7 @@
 ﻿using MusicPlayerOnline.Data.Entities;
 using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
+using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Data.Repositories.Local;
 public class MyFavoriteLocalRepository : IMyFavoriteRepository
@@ -36,15 +37,15 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
             Name = x.Name
         }).ToList();
     }
-    public async Task<bool> AddOrUpdateAsync(MyFavorite myFavorite)
+
+    public async Task<MyFavorite?> AddOrUpdateByNameAsync(MyFavorite myFavorite)
     {
-        var favorite = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().FirstOrDefaultAsync(x => x.Id == myFavorite.Id);
+        var favorite = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().FirstOrDefaultAsync(x => x.Name == myFavorite.Name);
         int count;
         if (favorite == null)
         {
             favorite = new MyFavoriteEntity()
             {
-                Id = myFavorite.Id,
                 Name = myFavorite.Name,
                 ImageUrl = myFavorite.ImageUrl
             };
@@ -52,17 +53,21 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         }
         else
         {
-            favorite.Id = myFavorite.Id;
             favorite.Name = myFavorite.Name;
             favorite.ImageUrl = myFavorite.ImageUrl;
             count = await DatabaseProvide.DatabaseAsync.UpdateAsync(favorite);
         }
         if (count == 0)
         {
-            return false;
+            return default;
         }
 
-        return true;
+        return new MyFavorite()
+        {
+            Id = myFavorite.Id,
+            Name = myFavorite.Name,
+            ImageUrl = myFavorite.ImageUrl
+        };
     }
 
     public async Task<bool> RemoveAsync(int id)
@@ -70,7 +75,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         await DatabaseProvide.DatabaseAsync.DeleteAsync<MyFavoriteEntity>(id);
         return true;
     }
-    public async Task<bool> AddMusicToMyFavorite(int id, MyFavoriteDetail myFavoriteDetail)
+    public async Task<bool> AddMusicToMyFavorite(int id, Music music)
     {
         var favorite = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().FirstOrDefaultAsync(x => x.Id == id);
         if (favorite == null)
@@ -78,27 +83,27 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
             return false;
         }
 
-        var favoriteDetail = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteDetailEntity>().FirstOrDefaultAsync(x => x.MusicId == myFavoriteDetail.MusicId);
+        var favoriteDetail = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteDetailEntity>().FirstOrDefaultAsync(x => x.MusicId == music.Id);
         int count;
         if (favoriteDetail == null)
         {
             favoriteDetail = new MyFavoriteDetailEntity()
             {
-                Platform = (int)myFavoriteDetail.Platform,
+                Platform = (int)music.Platform,
                 MyFavoriteId = id,
-                MusicName = myFavoriteDetail.MusicName,
-                MusicId = myFavoriteDetail.MusicId,
-                MusicAlbum = myFavoriteDetail.MusicAlbum,
-                MusicArtist = myFavoriteDetail.MusicArtist
+                MusicName = music.Name,
+                MusicId = music.Id,
+                MusicAlbum = music.Album,
+                MusicArtist = music.Artist
             };
             count = await DatabaseProvide.DatabaseAsync.InsertAsync(favoriteDetail);
         }
         else
         {
-            favoriteDetail.MusicId = myFavoriteDetail.MusicId;
-            favoriteDetail.MusicName = myFavoriteDetail.MusicName;
-            favoriteDetail.MusicArtist = myFavoriteDetail.MusicArtist;
-            favoriteDetail.MusicAlbum = myFavoriteDetail.MusicAlbum;
+            favoriteDetail.MusicId = music.Id;
+            favoriteDetail.MusicName = music.Name;
+            favoriteDetail.MusicArtist = music.Artist;
+            favoriteDetail.MusicAlbum = music.Album;
             count = await DatabaseProvide.DatabaseAsync.UpdateAsync(favoriteDetail);
         }
         if (count == 0)
@@ -121,7 +126,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         {
             Id = x.Id,
             MyFavoriteId = x.MyFavoriteId,
-            Platform = x.Platform,
+            Platform = (PlatformEnum)x.Platform,
             MusicId = x.MusicId,
             MusicName = x.MusicName,
             MusicAlbum = x.MusicAlbum,

@@ -23,7 +23,7 @@ public abstract class SearchAbstract
     protected async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword, List<MusicSearchResult> allResult)
     {
         if ((platform & _platform) == _platform)
-        {     
+        {
             await DoSearch(keyword, allResult);
         }
         if (_nextHandler != null)
@@ -32,7 +32,5 @@ public abstract class SearchAbstract
         }
         return allResult;
     }
-
-    //TODO 搜索的时候需要处理下 id
     public abstract Task<List<MusicSearchResult>> DoSearch(string keyword, List<MusicSearchResult> allResult);
 }

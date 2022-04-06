@@ -1,6 +1,4 @@
-﻿using MusicPlayerOnline.Business.Factories;
-using MusicPlayerOnline.Business.Interfaces;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace MusicPlayerOnline.Maui.ViewModels
 {
@@ -8,9 +6,9 @@ namespace MusicPlayerOnline.Maui.ViewModels
     {
         private readonly IMyFavoriteService _myFavoriteService;
 
-        public Command AddMyFavoriteCommand => new Command(AddMyFavorite);
-        public Command SelectedChangedCommand => new Command(SelectedChangedDo);
-        public Command<MyFavoriteViewModel> EditFavoriteCommand => new Command<MyFavoriteViewModel>(EditFavorite);
+        public ICommand MyFavoriteAddCommand => new Command(AddMyFavorite);
+        public ICommand MyFavoriteEditCommand => new Command<MyFavoriteViewModel>(EditMyFavorite);
+        public ICommand SelectedChangedCommand => new Command(SelectedChangedDo);
 
         public string Title => "我的歌单";
         public MyFavoritePageViewModel(IMyFavoriteServiceFactory myFavoriteServiceFactory)
@@ -20,7 +18,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
             _myFavoriteService = myFavoriteServiceFactory.Create();
         }
 
-        public async void OnAppearing()
+        public async Task InitializeAsync()
         {
             if (FavoriteList.Count > 0)
             {
@@ -64,12 +62,16 @@ namespace MusicPlayerOnline.Maui.ViewModels
 
         private async void AddMyFavorite()
         {
-            //TODO 页面跳转
-            //await Shell.Current.GoToAsync(nameof(AddMyFavoritePage), true);
+            await Shell.Current.GoToAsync($"{nameof(MyFavoriteAddPage)}", true);
         }
 
         private async void SelectedChangedDo()
         {
+            if (SelectedResult==null)
+            {
+                return;
+            }
+
             if (SelectedResult.MusicCount == 0)
             {
                 ToastService.Show("该歌单是空的");
@@ -79,7 +81,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
             //await Shell.Current.GoToAsync($"{nameof(MyFavoriteDetailPage)}?{nameof(MyFavoriteDetailPageViewModel.MyFavoriteId)}={SelectedResult.Id}", true);
         }
 
-        private async void EditFavorite(MyFavoriteViewModel myFavorite)
+        private async void EditMyFavorite(MyFavoriteViewModel myFavorite)
         {
             //TODO 页面跳转
             //await Shell.Current.GoToAsync($"{nameof(EditMyFavoritePage)}?{nameof(EditMyFavoritePageViewModel.MyFavoriteId)}={myFavorite.Id}", true);

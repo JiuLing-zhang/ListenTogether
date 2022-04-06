@@ -14,7 +14,7 @@
         /// <summary>
         /// 对应平台的ID
         /// </summary>
-        public string PlatformId { get; set; } = null!;
+        public string PlatformInnerId { get; set; } = null!;
         /// <summary>
         /// 缓存地址
         /// </summary>

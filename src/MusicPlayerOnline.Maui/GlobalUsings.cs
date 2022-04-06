@@ -6,3 +6,5 @@ global using MusicPlayerOnline.Business.Services;
 global using MusicPlayerOnline.Maui.Services;
 global using MusicPlayerOnline.Maui.ViewModels;
 global using MusicPlayerOnline.Maui.Utils;
+global using System.Windows.Input;
+global using MusicPlayerOnline.Maui.Pages;

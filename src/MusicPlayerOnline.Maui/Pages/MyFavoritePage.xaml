@@ -3,12 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              x:Class="MusicPlayerOnline.Maui.Pages.MyFavoritePage"
-             Title="MyFavoritePage"
-             BackgroundColor="White">
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="plus_math" Command="{Binding AddMyFavoriteCommand}" ></ToolbarItem>
-    </ContentPage.ToolbarItems>
+             Title="MyFavoritePage">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -33,34 +28,70 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <StackLayout BackgroundColor="#000000" Padding="10">
-            <Label x:Name="LblMsg" Padding="0,10,0,0" FontSize="16" Text="还没有歌单....快去添加一个吧~~" TextColor="#E0E0E0" HorizontalOptions="Center" Style="{StaticResource EmptyTips}"></Label>
-            <CollectionView ItemsSource="{Binding FavoriteList}" SelectedItem="{Binding SelectedResult}" SelectionChangedCommand="{Binding SelectedChangedCommand}" SelectionMode="Single">
+        <StackLayout Margin="16">
+            <StackLayout HeightRequest="20"
+                         Orientation="Horizontal"
+                         Margin="0,0,0,20">
+                <Label Text="我的歌单"
+                       HorizontalOptions="Start"
+                       Margin="0,0,10,0"/>
+                <Image HeightRequest="20"
+                       WidthRequest="20"
+                       Source="plus.png"    
+                       HorizontalOptions="End"
+                       >
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer 
+                             Command="{Binding MyFavoriteAddCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+
+            </StackLayout>
+
+            <Label FontSize="16" 
+                   Text="还没有歌单....快去添加一个吧~~" 
+                   HorizontalOptions="Center" 
+                   Style="{StaticResource EmptyTips}" />
+
+            <CollectionView ItemsSource="{Binding FavoriteList}" 
+                            SelectedItem="{Binding SelectedResult}" 
+                            SelectionChangedCommand="{Binding SelectedChangedCommand}" 
+                            SelectionMode="Single">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Padding="5" Orientation="Horizontal" >
-                            <StackLayout HorizontalOptions="Start" VerticalOptions="Center">
+                        <StackLayout Margin="0,0,0,20" 
+                                     Orientation="Horizontal" >
+                            <StackLayout HorizontalOptions="Start" 
+                                         VerticalOptions="Center">
                                 <Frame CornerRadius="10" 
-                                           HeightRequest="50"
-                                           WidthRequest="50"
-                                           Padding="0"
-                                           IsClippedToBounds="True" BackgroundColor="#404040">
-                                    <Image Aspect="AspectFill" Style="{StaticResource MyFavoriteImg}"></Image>
+                                       HeightRequest="50"
+                                       WidthRequest="50"
+                                       Padding="0"
+                                       IsClippedToBounds="True" 
+                                       BackgroundColor="#404040">
+                                    <Image Aspect="AspectFill" 
+                                           Style="{StaticResource MyFavoriteImg}"></Image>
                                 </Frame>
                             </StackLayout>
-                            <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="Center" Spacing="0" Padding="5,0,0,0">
-                                <Label Text="{Binding Name}" TextColor="#E0E0E0" FontSize="18" VerticalOptions="End"/>
-                                <Label TextColor="#929292" FontSize="16" VerticalOptions="End" >
+                            <StackLayout HorizontalOptions="StartAndExpand" 
+                                         VerticalOptions="Center" 
+                                         Spacing="0" 
+                                         Padding="5,0,0,0">
+                                <Label Text="{Binding Name}" 
+                                       VerticalOptions="End"/>
+                                <Label VerticalOptions="End" >
                                     <MultiBinding StringFormat="共 {0} 首歌">
                                         <Binding Path="MusicCount"></Binding>
                                     </MultiBinding>
                                 </Label>
                             </StackLayout>
-                            <StackLayout HorizontalOptions="End" VerticalOptions="Center">
-                                <ImageButton HeightRequest="35" BackgroundColor="Transparent" ClassId="{Binding Id}" Source="menu_vertical"
+                            <StackLayout HorizontalOptions="End" 
+                                         VerticalOptions="Center">
+                                <ImageButton HeightRequest="32" WidthRequest="32"
+                                             Source="play.png"
                                              Aspect="AspectFill"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EditFavoriteCommand}"		
-                                             CommandParameter="{Binding .}"/>
+                                             Command="{Binding MyFavoriteEditCommand}">
+                                </ImageButton>
                             </StackLayout>
                         </StackLayout>
                     </DataTemplate>
@@ -68,5 +99,4 @@
             </CollectionView>
         </StackLayout>
     </ContentPage.Content>
-    
 </ContentPage>

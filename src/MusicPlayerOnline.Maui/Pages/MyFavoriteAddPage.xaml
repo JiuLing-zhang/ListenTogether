@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicPlayerOnline.Maui.MyFavoriteAddPage"
+             Title="添加歌单">
+    <StackLayout Margin="16">
+        <StackLayout Orientation="Horizontal">
+            <Label HorizontalOptions="Start" 
+                   VerticalOptions="Center"    
+                   Text="添加歌单" />
+            <Button HorizontalOptions="EndAndExpand" 
+                    VerticalOptions="End"
+                    Text="保存" 
+                    Command="{Binding SaveMyFavoriteCommand}"></Button>
+        </StackLayout>
+        <Entry Placeholder="输入歌单名称" 
+                   Text="{Binding Name}" />
+    </StackLayout>
+</ContentPage>

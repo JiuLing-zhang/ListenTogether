@@ -145,7 +145,7 @@ public class MiGuMusicProvider : IMusicProvider
         {
             Id = sourceMusic.Id,
             Platform = sourceMusic.Platform,
-            PlatformId = sourceMusic.PlatformId,
+            PlatformInnerId = sourceMusic.PlatformInnerId,
             Name = sourceMusic.Name,
             Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,

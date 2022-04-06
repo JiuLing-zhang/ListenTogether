@@ -14,7 +14,7 @@ public class MusicSearchResult : MusicBase
     /// <summary>
     /// 对应平台的ID
     /// </summary>
-    public string PlatformId { get; set; } = null!;
+    public string PlatformInnerId { get; set; } = null!;
 
     /// <summary>
     /// 歌曲时长，格式为“分:秒”，例如：05:44

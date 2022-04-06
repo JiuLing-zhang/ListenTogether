@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Model
 {
@@ -14,7 +10,7 @@ namespace MusicPlayerOnline.Model
         /// <summary>
         /// 平台
         /// </summary>
-        public int Platform { get; set; }
+        public PlatformEnum Platform { get; set; }
         public string MusicId { get; set; } = null!;
         /// <summary>
         /// 歌曲名称

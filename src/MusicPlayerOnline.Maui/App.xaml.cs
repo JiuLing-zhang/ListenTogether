@@ -39,6 +39,9 @@ public partial class App : Application
         //主题
         App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
 
+        Routing.RegisterRoute(nameof(PlayingPage), typeof(PlayingPage));
+        Routing.RegisterRoute(nameof(MyFavoriteAddPage), typeof(MyFavoriteAddPage));        
+
         if (Config.Desktop)
         {
             MainPage = new DesktopShell();

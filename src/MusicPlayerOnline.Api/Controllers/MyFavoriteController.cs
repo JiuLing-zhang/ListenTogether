@@ -52,9 +52,9 @@ namespace MusicPlayerOnline.Api.Controllers
         }
 
         [HttpPost("add-music/{id}")]
-        public async Task<IActionResult> AddMusicToMyFavorite(int id, MyFavoriteDetailRequest myFavoriteDetail)
+        public async Task<IActionResult> AddMusicToMyFavorite(int id, MusicRequest music)
         {
-            var response = await _myFavoriteService.AddMusicToMyFavorite(UserId, id, myFavoriteDetail);
+            var response = await _myFavoriteService.AddMusicToMyFavorite(UserId, id, music);
             return Ok(response);
         }
     }

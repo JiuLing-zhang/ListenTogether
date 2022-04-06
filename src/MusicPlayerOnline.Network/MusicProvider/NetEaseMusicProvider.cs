@@ -1,7 +1,8 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
+using JiuLing.CommonLibs.Security;
 using MusicPlayerOnline.EasyLog;
 using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums; 
+using MusicPlayerOnline.Model.Enums;
 using MusicPlayerOnline.Network.Models.NetEase;
 using MusicPlayerOnline.Network.Utils;
 using System.Text.Json;
@@ -65,8 +66,9 @@ public class NetEaseMusicProvider : IMusicProvider
                 }
                 var music = new MusicSearchResult()
                 {
+                    Id = MD5Utils.GetStringValueToLower($"{Platform}-{song.id}"),
                     Platform = Platform,
-                    PlatformId = song.id.ToString(),
+                    PlatformInnerId = song.id.ToString(),
                     Name = song.name,
                     Alias = alia,
                     Artist = artistName,
@@ -93,7 +95,7 @@ public class NetEaseMusicProvider : IMusicProvider
     public async Task<Music?> GetMusicDetail(MusicSearchResult sourceMusic)
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
-        var postData = NetEaseUtils.GetPostDataForMusicUrl(sourceMusic.PlatformId);
+        var postData = NetEaseUtils.GetPostDataForMusicUrl(sourceMusic.PlatformInnerId);
 
         var form = new FormUrlEncodedContent(postData);
         var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
@@ -122,7 +124,7 @@ public class NetEaseMusicProvider : IMusicProvider
 
         //获取歌词
         url = $"{UrlBase.NetEase.Lyric}";
-        postData = NetEaseUtils.GetPostDataForLyric(sourceMusic.PlatformId);
+        postData = NetEaseUtils.GetPostDataForLyric(sourceMusic.PlatformInnerId);
 
         form = new FormUrlEncodedContent(postData);
         response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
@@ -147,7 +149,7 @@ public class NetEaseMusicProvider : IMusicProvider
         {
             Id = sourceMusic.Id,
             Platform = sourceMusic.Platform,
-            PlatformId = sourceMusic.PlatformId,
+            PlatformInnerId = sourceMusic.PlatformInnerId,
             Name = sourceMusic.Name,
             Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,
@@ -162,7 +164,7 @@ public class NetEaseMusicProvider : IMusicProvider
     public async Task<Music?> UpdatePlayUrl(Music music)
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
-        var postData = NetEaseUtils.GetPostDataForMusicUrl(music.PlatformId);
+        var postData = NetEaseUtils.GetPostDataForMusicUrl(music.PlatformInnerId);
 
         var form = new FormUrlEncodedContent(postData);
         var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
