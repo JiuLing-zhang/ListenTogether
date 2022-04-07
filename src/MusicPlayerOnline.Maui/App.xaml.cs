@@ -39,8 +39,12 @@ public partial class App : Application
         //主题
         App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
 
+        
         Routing.RegisterRoute(nameof(PlayingPage), typeof(PlayingPage));
-        Routing.RegisterRoute(nameof(MyFavoriteAddPage), typeof(MyFavoriteAddPage));        
+        Routing.RegisterRoute(nameof(MyFavoriteAddPage), typeof(MyFavoriteAddPage));
+        Routing.RegisterRoute(nameof(MyFavoriteEditPage), typeof(MyFavoriteEditPage));
+        Routing.RegisterRoute(nameof(MyFavoriteDetailPage), typeof(MyFavoriteDetailPage));
+        Routing.RegisterRoute(nameof(AddToMyFavoritePage), typeof(AddToMyFavoritePage));        
 
         if (Config.Desktop)
         {

@@ -50,22 +50,38 @@
 
     <StackLayout Orientation="Vertical"
                  Margin="16">
-        <Label x:Name="LblMsg" Padding="0,10,0,0" FontSize="16" Text="播放列表居然是空的...." TextColor="#E0E0E0" HorizontalOptions="Center" Style="{StaticResource LabelMusicSearching}"></Label>
-        <ListView x:Name="ListViewLyrics" ItemsSource="{Binding Playlist}" SelectedItem="{Binding SelectedItem}" >
+
+        <Label Text="播放列表"
+               Margin="0,0,0,20" />
+
+        <Label Text="播放列表居然是空的...." 
+               Padding="0,10,0,0" 
+               HorizontalOptions="Center" 
+               Style="{StaticResource LabelMusicSearching}"/>
+
+        <ListView ItemsSource="{Binding Playlist}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <ViewCell.ContextActions>
-                            <MenuItem Text="删除" Clicked="MenuItem_Clicked" />
+                            <MenuItem Text="删除" 
+                                      Clicked="MenuItem_Clicked" />
                         </ViewCell.ContextActions>
                         <ViewCell.View>
-                            <StackLayout Orientation="Horizontal" Padding="10,10,10,10">
-                                <Label Text="{Binding Name}" TextColor="#E0E0E0" FontSize="18" MinimumWidthRequest="60" VerticalTextAlignment="Center"  LineBreakMode="NoWrap"/>
-                                <Label TextColor="#929292" Text="{Binding Artist,StringFormat='{} - {0}'}" FontSize="15" VerticalTextAlignment="Center" LineBreakMode="TailTruncation" />
-                                <ImageButton BackgroundColor="Transparent" Source="plus_math" HorizontalOptions="EndAndExpand"
-                                                     Aspect="AspectFill"
-                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"		
-                                                     CommandParameter="{Binding .}"/>
+                            <StackLayout Orientation="Horizontal" 
+                                         Padding="10,10,10,10">
+                                <Label Text="{Binding Name}" 
+                                       MinimumWidthRequest="60" 
+                                       VerticalTextAlignment="Center" 
+                                       LineBreakMode="NoWrap"/>
+                                <Label Text="{Binding Artist,StringFormat='{} - {0}'}"
+                                       VerticalTextAlignment="Center" 
+                                       LineBreakMode="TailTruncation" />
+                                <ImageButton Source="plus_math" 
+                                             HorizontalOptions="EndAndExpand"
+                                             Aspect="AspectFill"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"	
+                                             CommandParameter="{Binding .}"/>
                             </StackLayout>
                         </ViewCell.View>
                     </ViewCell>

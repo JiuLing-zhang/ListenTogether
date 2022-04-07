@@ -9,6 +9,7 @@ namespace MusicPlayerOnline.Api.Interfaces
     {
         Task<Result<MyFavoriteResponse>> GetOneAsync(int userId, int id);
         Task<List<MyFavoriteResponse>?> GetAllAsync(int userId);
+        Task<Result> NameExist(int userId, string myFavoriteName);
         Task<Result<MyFavoriteResponse>> AddOrUpdateAsync(int userId, MyFavoriteRequest myFavorite);
         Task<Result> RemoveAsync(int userId, int id);
 

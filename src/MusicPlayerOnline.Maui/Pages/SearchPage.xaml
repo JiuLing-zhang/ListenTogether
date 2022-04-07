@@ -44,56 +44,63 @@
                            SearchCommand="{Binding SearchCommand}" />
             </Grid>
 
-
             <Label Text="拼命查询中..."
                    HorizontalOptions="Center"
                    Style="{StaticResource LabelMusicSearching}"/>
 
 
-            <CollectionView ItemsSource="{Binding MusicSearchResult}" 
-                            SelectedItem="{Binding MusicSelectedResult}"  
-                            SelectionChangedCommand="{Binding SelectedChangedCommand}" 
-                            SelectionMode="Single" 
+            <CollectionView ItemsSource="{Binding MusicSearchResult}"    
                             Style="{StaticResource CollectionViewMusicSearchResultBlock}">
-
+ 
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid ColumnDefinitions="40,60,300,300,300,*">
+                        <Grid ColumnDefinitions="40,40,60,300,300,*">
 
-                            <Label Text="{Binding Platform}"
-                                   Grid.Column="0" 
-                                   IsVisible="true"
-                                   VerticalOptions="Center"
-                                   LineBreakMode="TailTruncation"/>
-                            <Label Text="{Binding Duration}" 
-                                   Grid.Column="1" 
-                                   IsVisible="true"
-                                   VerticalOptions="Center"
-                                   LineBreakMode="TailTruncation"/>
-                            <Label Text="{Binding Name}" 
-                                   Grid.Column="2" 
-                                   IsVisible="true"
-                                   VerticalOptions="Center"
-                                   LineBreakMode="TailTruncation"/>
-                            <Label Text="{Binding Artist}" 
-                                   Grid.Column="3" 
-                                   IsVisible="true"
-                                   VerticalOptions="Center"
-                                   LineBreakMode="TailTruncation"/>
-                            <Label Text="{Binding Album}" 
-                                   Grid.Column="4" 
-                                   IsVisible="true"
-                                   VerticalOptions="Center"
-                                   LineBreakMode="TailTruncation"/>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=SelectedChangedCommand}"	
+                                                      CommandParameter="{Binding .}"/>                                
+                            </Grid.GestureRecognizers>
 
-                            <StackLayout Grid.Column="5" VerticalOptions="Center">
-                                <Image Source="plus.png" Aspect="AspectFill" WidthRequest="30" HeightRequest="30">
+                            <StackLayout Grid.Column="0"
+                                         IsVisible="true"
+                                         VerticalOptions="Center">
+                                <Image Source="plus.png" 
+                                       Aspect="AspectFill" 
+                                       WidthRequest="15">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
                                              CommandParameter="{Binding .}"></TapGestureRecognizer>
                                     </Image.GestureRecognizers>
-                                </Image>                   
+                                </Image>
                             </StackLayout>
+
+                            <Label Text="{Binding Platform}"
+                                   Grid.Column="1" 
+                                   IsVisible="true"
+                                   VerticalOptions="Center"
+                                   LineBreakMode="TailTruncation"/>
+                            <Label Text="{Binding Duration}" 
+                                   Grid.Column="2" 
+                                   IsVisible="true"
+                                   VerticalOptions="Center"
+                                   LineBreakMode="TailTruncation"/>
+                            <Label Text="{Binding Name}" 
+                                   Grid.Column="3" 
+                                   IsVisible="true"
+                                   VerticalOptions="Center"
+                                   LineBreakMode="TailTruncation"/>
+                            <Label Text="{Binding Artist}" 
+                                   Grid.Column="4" 
+                                   IsVisible="true"
+                                   VerticalOptions="Center"
+                                   LineBreakMode="TailTruncation"/>
+                            <Label Text="{Binding Album}" 
+                                   Grid.Column="5" 
+                                   IsVisible="true"
+                                   VerticalOptions="Center"
+                                   LineBreakMode="TailTruncation"/>
+
+
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

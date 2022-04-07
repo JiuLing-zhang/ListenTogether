@@ -22,9 +22,14 @@ public class MyFavoriteService : IMyFavoriteService
         return await _repository.GetAllAsync();
     }
 
-    public async Task<MyFavorite?> AddOrUpdateByNameAsync(MyFavorite myFavorite)
+    public async Task<bool> NameExist(string myFavoriteName)
     {
-        return await _repository.AddOrUpdateByNameAsync(myFavorite);
+        return await _repository.NameExist(myFavoriteName);
+    }
+
+    public async Task<MyFavorite?> AddOrUpdateAsync(MyFavorite myFavorite)
+    {
+        return await _repository.AddOrUpdateAsync(myFavorite);
     }
 
     public async Task<bool> RemoveAsync(int id)
@@ -41,4 +46,5 @@ public class MyFavoriteService : IMyFavoriteService
     {
         return await _repository.GetMyFavoriteDetail(id);
     }
+
 }

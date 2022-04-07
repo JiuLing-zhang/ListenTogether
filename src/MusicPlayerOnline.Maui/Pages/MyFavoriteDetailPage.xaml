@@ -1,12 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              x:Class="MusicPlayerOnline.Maui.MyFavoriteDetailPage"
-             Title="{Binding Title}"             >
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding PlayAllMusicsCommand}" Text="播放全部"/>
-    </ContentPage.ToolbarItems>
+             Title="我的歌单">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -33,32 +30,66 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ContentPage.Content>
-        <StackLayout Orientation="Vertical" BackgroundColor="#010101" Padding="10">
-            <CollectionView ItemsSource="{Binding MyFavoriteMusics}" SelectionMode="Single" SelectedItem="{Binding SelectedItem}" SelectionChangedCommand="{Binding SelectedChangedCommand}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="5" Orientation="Horizontal" >
-                            <StackLayout HorizontalOptions="Start" VerticalOptions="Center">
-                                <Label Text="{Binding Seq}" TextColor="#E0E0E0" FontSize="14" />
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="StartAndExpand" VerticalOptions="Center" Spacing="0" Padding="5,0,0,0">
-                                <Label Text="{Binding Name}" TextColor="#E0E0E0" FontSize="18" LineBreakMode="TailTruncation"/>
-                                <Label TextColor="#929292" FontSize="15" LineBreakMode="TailTruncation">
-                                    <MultiBinding StringFormat="{}{0} - {1}">
-                                        <Binding Path="Artist" />
-                                        <Binding Path="Album" />
-                                    </MultiBinding>
-                                </Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="End" VerticalOptions="Center">
-                                <ImageButton HeightRequest="35" BackgroundColor="Transparent" ClassId="{Binding Id}" Source="menu_vertical"></ImageButton>
-                            </StackLayout>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
-    </ContentPage.Content>
 
+    <StackLayout Margin="16">
+
+        <HorizontalStackLayout Margin="0,0,0,20">
+            <Label Text="{Binding Title,StringFormat='{}我的歌单 - {0}'}"
+                   Grid.Column="0"
+                   VerticalTextAlignment="Center"
+                   HorizontalOptions="Start"
+                   Margin="0,0,10,0" />
+
+            <HorizontalStackLayout HorizontalOptions="StartAndExpand">
+                <HorizontalStackLayout Margin="0,0,10,0">
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding MyFavoriteEditCommand}"></TapGestureRecognizer>
+                    </HorizontalStackLayout.GestureRecognizers>
+                    <Image Source="edit.png"
+                       HeightRequest="20"/>
+                    <Label Text="编辑"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout Margin="0,0,10,0">
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding MyFavoriteRemoveCommand}"></TapGestureRecognizer>
+                    </HorizontalStackLayout.GestureRecognizers>
+                    <Image Source="remove.png"
+                       HeightRequest="20"/>
+                    <Label Text="删除"/>
+                </HorizontalStackLayout>
+
+            </HorizontalStackLayout>
+        </HorizontalStackLayout>
+
+        <CollectionView ItemsSource="{Binding MyFavoriteMusics}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout>
+
+                        <HorizontalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=SelectedChangedCommand}"	
+                                                  CommandParameter="{Binding}"/>
+                        </HorizontalStackLayout.GestureRecognizers>
+
+                        <StackLayout HorizontalOptions="Start" 
+                                     VerticalOptions="Center">
+                            <Label Text="{Binding Seq}"/>
+                        </StackLayout>
+                        <StackLayout HorizontalOptions="StartAndExpand" 
+                                     VerticalOptions="Center">
+                            <Label Text="{Binding Name}"
+                                   LineBreakMode="TailTruncation"/>
+                            <Label LineBreakMode="TailTruncation">
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="Artist" />
+                                    <Binding Path="Album" />
+                                </MultiBinding>
+                            </Label>
+                        </StackLayout>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
 </ContentPage>

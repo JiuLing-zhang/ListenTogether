@@ -9,7 +9,9 @@ public static class ViewModelExtensions
         builder.Services.AddTransient<PlaylistPageViewModel>();
         builder.Services.AddTransient<MyFavoritePageViewModel>();
         builder.Services.AddTransient<MyFavoriteAddPageViewModel>();
-        builder.Services.AddTransient<MyFavoriteDetailPageViewModel>();        
+        builder.Services.AddTransient<MyFavoriteEditPageViewModel>();
+        builder.Services.AddTransient<MyFavoriteDetailPageViewModel>();
+        builder.Services.AddTransient<AddToMyFavoritePageViewModel>();
 
         builder.Services.AddSingleton<ShellViewModel>();
         builder.Services.AddSingleton<SettingPageViewModel>();

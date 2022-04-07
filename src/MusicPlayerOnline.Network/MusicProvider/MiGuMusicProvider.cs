@@ -1,4 +1,5 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
+using JiuLing.CommonLibs.Security;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Enums;
 using MusicPlayerOnline.Network.Models.MiGu;
@@ -47,6 +48,7 @@ public class MiGuMusicProvider : IMusicProvider
         {
             musics.Add(new MusicSearchResult()
             {
+                Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.Name}-{htmlMusic.Artist}"),
                 Platform = Platform,
                 Name = htmlMusic.Name,
                 Alias = "",
@@ -125,7 +127,7 @@ public class MiGuMusicProvider : IMusicProvider
         {
             return null;
         }
- 
+
         string? playUrl = response.Headers?.Location?.ToString();
         if (playUrl.IsEmpty())
         {

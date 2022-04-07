@@ -38,9 +38,19 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         }).ToList();
     }
 
-    public async Task<MyFavorite?> AddOrUpdateByNameAsync(MyFavorite myFavorite)
+    public async Task<bool> NameExist(string myFavoriteName)
     {
-        var favorite = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().FirstOrDefaultAsync(x => x.Name == myFavorite.Name);
+        var count = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().CountAsync(x => x.Name == myFavoriteName);
+        if (count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<MyFavorite?> AddOrUpdateAsync(MyFavorite myFavorite)
+    {
+        var favorite = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().FirstOrDefaultAsync(x => x.Id == myFavorite.Id);
         int count;
         if (favorite == null)
         {
@@ -64,9 +74,9 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
 
         return new MyFavorite()
         {
-            Id = myFavorite.Id,
-            Name = myFavorite.Name,
-            ImageUrl = myFavorite.ImageUrl
+            Id = favorite.Id,
+            Name = favorite.Name,
+            ImageUrl = favorite.ImageUrl
         };
     }
 
@@ -83,7 +93,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
             return false;
         }
 
-        var favoriteDetail = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteDetailEntity>().FirstOrDefaultAsync(x => x.MusicId == music.Id);
+        var favoriteDetail = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteDetailEntity>().FirstOrDefaultAsync(x => x.MyFavoriteId == id && x.MusicId == music.Id);
         int count;
         if (favoriteDetail == null)
         {

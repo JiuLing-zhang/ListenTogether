@@ -8,11 +8,20 @@ using MusicPlayerOnline.Model.Enums;
 namespace MusicPlayerOnline.Data.Repositories.Api;
 public class MyFavoriteApiRepository : IMyFavoriteRepository
 {
-    /// <summary>
-    /// 按照名称添加或更新
-    /// </summary>
-    /// <returns>添加或更新后的id</returns>
-    public async Task<MyFavorite?> AddOrUpdateByNameAsync(MyFavorite myFavorite)
+
+    public async Task<bool> NameExist(string myFavoriteName)
+    {
+        var url = string.Format(DataConfig.ApiSetting.MyFavorite.NameExist, myFavoriteName);
+        var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);
+        var obj = JsonSerializer.Deserialize<Result>(json);
+        if (obj == null || obj.Code != 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<MyFavorite?> AddOrUpdateAsync(MyFavorite myFavorite)
     {
         string content = JsonSerializer.Serialize(myFavorite);
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");

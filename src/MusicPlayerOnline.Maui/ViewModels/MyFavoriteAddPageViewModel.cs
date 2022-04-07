@@ -40,12 +40,18 @@ public class MyFavoriteAddPageViewModel : ViewModelBase
             return;
         }
 
+        if (await _myFavoriteService.NameExist(Name))
+        {
+            ToastService.Show("歌单名称已存在");
+            return;
+        }
+
         var myFavorite = new MyFavorite()
         {
             Name = Name,
             MusicCount = 0
         };
-        var newMyFavorite = await _myFavoriteService.AddOrUpdateByNameAsync(myFavorite);
+        var newMyFavorite = await _myFavoriteService.AddOrUpdateAsync(myFavorite);
         if (newMyFavorite == null)
         {
             ToastService.Show("添加失败");
@@ -67,6 +73,7 @@ public class MyFavoriteAddPageViewModel : ViewModelBase
         {
             ToastService.Show("添加失败");
         }
-        await Shell.Current.GoToAsync("../..", true);
+        await Shell.Current.GoToAsync("..", false);
+        await Shell.Current.GoToAsync("..", true);
     }
 }

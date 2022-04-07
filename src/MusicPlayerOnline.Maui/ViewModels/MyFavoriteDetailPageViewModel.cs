@@ -12,8 +12,9 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
     private readonly IMyFavoriteService _myFavoriteService;
     private readonly IPlaylistService _playlistService;
     private readonly IMusicService _musicService;
-    public Command SelectedChangedCommand => new Command(SelectedChangedDo);
-    public Command PlayAllMusicsCommand => new Command(PlayAllMusics);
+    public ICommand SelectedChangedCommand => new Command<MusicViewModel>(SelectedChangedDo);
+    public ICommand MyFavoriteEditCommand => new Command(EditMyFavorite);
+    public ICommand MyFavoriteRemoveCommand => new Command(MyFavoriteRemove);
 
     public MyFavoriteDetailPageViewModel(IMyFavoriteServiceFactory myFavoriteServiceFactory, IPlaylistServiceFactory playlistServiceFactory, IMusicServiceFactory musicServiceFactory)
     {
@@ -40,17 +41,6 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         set
         {
             _title = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private MusicViewModel _selectedItem;
-    public MusicViewModel SelectedItem
-    {
-        get => _selectedItem;
-        set
-        {
-            _selectedItem = value;
             OnPropertyChanged();
         }
     }
@@ -91,58 +81,56 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         Title = myFavorite.Name;
     }
 
-    private async void SelectedChangedDo()
+    private async void EditMyFavorite()
     {
-        var music = await _musicService.GetOneAsync(SelectedItem.Id);
+        await Shell.Current.GoToAsync($"{nameof(MyFavoriteEditPage)}?{nameof(MyFavoriteEditPageViewModel.MyFavoriteId)}={MyFavoriteId}", true);
+    }
+
+    private async void MyFavoriteRemove()
+    {
+        var isOk = await Shell.Current.DisplayAlert("提示", "确定要删除该歌单吗？", "确定", "取消");
+        if (isOk == false)
+        {
+            return;
+        }
+
+        var result = await _myFavoriteService.RemoveAsync(MyFavoriteId);
+        if (result == false)
+        {
+            ToastService.Show("删除成功");
+            return;
+        }
+        ToastService.Show("删除成功");
+        await Shell.Current.GoToAsync($"..", true);
+    }
+
+    private async void SelectedChangedDo(MusicViewModel selected)
+    {
+        var music = await _musicService.GetOneAsync(selected.Id);
         if (music == null)
         {
             ToastService.Show("获取歌曲信息失败");
             return;
         }
 
-        await _playlistService.AddToPlaylist(music);
+        var playlist = new Playlist()
+        {
+            MusicId = music.Id,
+            MusicName = music.Name,
+            MusicArtist = music.Artist
+        };
+        await _playlistService.AddToPlaylist(playlist);
 
         //TODO 播放
         //if (await GlobalMethods.PlayMusic(music) == false)
         //{
         //    return;
         //}
-        await Shell.Current.GoToAsync($"//{nameof(PlayingPage)}", true);
+        await Shell.Current.GoToAsync($"{nameof(PlayingPage)}", true);
 
         //TODO 更新播放列表
         //MessagingCenter.Send(this, SubscribeKey.UpdatePlaylist);
     }
 
-    private async void PlayAllMusics()
-    {
-        if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite)
-        {
-            await _playlistService.RemoveAllAsync();
-        }
 
-        int index = 0;
-        foreach (var myFavoriteMusic in MyFavoriteMusics)
-        {
-            var music = await _musicService.GetOneAsync(myFavoriteMusic.Id);
-            if (music == null)
-            {
-                ToastService.Show("获取歌曲信息失败");
-                return;
-            }
-            await _playlistService.AddToPlaylist(music);
-            if (index == 0)
-            {
-                //TODO 播放
-                //if (await GlobalMethods.PlayMusic(music) == false)
-                //{
-                //    return;
-                //}
-            }
-            index++;
-        }
-
-        await Shell.Current.GoToAsync($"//{nameof(PlayingPage)}", true);
-        //TODO 更新播放列表
-        //MessagingCenter.Send(this, SubscribeKey.UpdatePlaylist);
-    }
 }

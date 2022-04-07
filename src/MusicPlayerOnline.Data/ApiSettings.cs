@@ -64,6 +64,7 @@ internal class ApiSettings
         public string Get => $"{_baseUrl}/api/my-favorite/{{0}}";
         public string GetAll => $"{_baseUrl}/api/my-favorite/list";
         public string GetDetail => $"{_baseUrl}/api/my-favorite/detail/{{0}}";
+        public string NameExist => $"{_baseUrl}/api/my-favorite/name-exist/{{0}}";
         public string AddOrUpdate => $"{_baseUrl}/api/my-favorite";
         public string Remove => $"{_baseUrl}/api/my-favorite/delete/{{0}}";
         public string AddMusic => $"{_baseUrl}/api/my-favorite/add-music/{{0}}";

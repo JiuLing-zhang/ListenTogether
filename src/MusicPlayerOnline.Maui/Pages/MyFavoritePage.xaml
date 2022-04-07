@@ -45,7 +45,6 @@
                              Command="{Binding MyFavoriteAddCommand}"/>
                     </Image.GestureRecognizers>
                 </Image>
-
             </StackLayout>
 
             <Label FontSize="16" 
@@ -53,20 +52,37 @@
                    HorizontalOptions="Center" 
                    Style="{StaticResource EmptyTips}" />
 
-            <CollectionView ItemsSource="{Binding FavoriteList}" 
-                            SelectedItem="{Binding SelectedResult}" 
-                            SelectionChangedCommand="{Binding SelectedChangedCommand}" 
-                            SelectionMode="Single">
+            <CollectionView ItemsSource="{Binding FavoriteList}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Margin="0,0,0,20" 
-                                     Orientation="Horizontal" >
+                        <StackLayout Orientation="Horizontal"
+                                     Margin="0,0,0,10">
+
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=SelectedChangedCommand}"	
+                                                      CommandParameter="{Binding .}">
+                                </TapGestureRecognizer>
+                            </StackLayout.GestureRecognizers>
+
+                            <StackLayout HorizontalOptions="Start" 
+                                         VerticalOptions="Center"
+                                         Margin="0,0,10,0">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"	
+                                                          CommandParameter="{Binding .}"/>
+                                </StackLayout.GestureRecognizers>
+
+                                <Image WidthRequest="28"
+                                       Source="play.png"
+                                       Aspect="AspectFill"                                            >
+                                </Image>
+                            </StackLayout>
+
                             <StackLayout HorizontalOptions="Start" 
                                          VerticalOptions="Center">
                                 <Frame CornerRadius="10" 
                                        HeightRequest="50"
                                        WidthRequest="50"
-                                       Padding="0"
                                        IsClippedToBounds="True" 
                                        BackgroundColor="#404040">
                                     <Image Aspect="AspectFill" 
@@ -74,9 +90,8 @@
                                 </Frame>
                             </StackLayout>
                             <StackLayout HorizontalOptions="StartAndExpand" 
-                                         VerticalOptions="Center" 
-                                         Spacing="0" 
-                                         Padding="5,0,0,0">
+                                         VerticalOptions="Center"
+                                         Margin="5,0,0,0">
                                 <Label Text="{Binding Name}" 
                                        VerticalOptions="End"/>
                                 <Label VerticalOptions="End" >
@@ -84,14 +99,6 @@
                                         <Binding Path="MusicCount"></Binding>
                                     </MultiBinding>
                                 </Label>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="End" 
-                                         VerticalOptions="Center">
-                                <ImageButton HeightRequest="32" WidthRequest="32"
-                                             Source="play.png"
-                                             Aspect="AspectFill"
-                                             Command="{Binding MyFavoriteEditCommand}">
-                                </ImageButton>
                             </StackLayout>
                         </StackLayout>
                     </DataTemplate>

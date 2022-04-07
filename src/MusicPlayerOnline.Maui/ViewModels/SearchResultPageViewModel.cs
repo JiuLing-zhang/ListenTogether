@@ -14,7 +14,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
 
         private string _lastSearchKeyword = "";
         public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
-        public ICommand SelectedChangedCommand => new Command(SearchFinished);
+        public ICommand SelectedChangedCommand => new Command<SearchResultViewModel>(SearchFinished);
 
         public ICommand SearchCommand => new Command(Search);
 
@@ -181,33 +181,32 @@ namespace MusicPlayerOnline.Maui.ViewModels
             string message;
             (succeed, message, music) = await SaveMusic(searchResult.SourceData);
             if (succeed == false)
-            {      
+            {
                 ToastService.Show(message);
                 return;
             }
             //TODO 重构，是否需要广播
             //MessagingCenter.Send(this, SubscribeKey.UpdatePlaylist);
             //TODO 页面跳转
-            //await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
+            await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
             //TODO 播放音乐
             //await GlobalMethods.PlayMusic(music);
         }
 
-        private async void SearchFinished()
+        private async void SearchFinished(SearchResultViewModel selected)
         {
             Music music;
-
             bool succeed;
             string message;
 
-            (succeed, message, music) = await SaveMusic(MusicSelectedResult.SourceData);
+            (succeed, message, music) = await SaveMusic(selected.SourceData);
             if (succeed == false)
             {
                 ToastService.Show(message);
                 return;
             }
 
-            // await Shell.Current.GoToAsync($"//{nameof(PlayingPage)}", true);
+            await Shell.Current.GoToAsync($"{nameof(PlayingPage)}", true);
             //TODO 重构逻辑
             //if (await GlobalMethods.PlayMusic(music) == false)
             //{
@@ -227,7 +226,14 @@ namespace MusicPlayerOnline.Maui.ViewModels
             }
 
             await _musicService.AddOrUpdateAsync(music);
-            await _playlistService.AddToPlaylist(music);
+
+            var playlist = new Playlist()
+            {
+                MusicId = music.Id,
+                MusicName = music.Name,
+                MusicArtist = music.Artist
+            };
+            await _playlistService.AddToPlaylist(playlist);
 
             return (true, "", music);
         }

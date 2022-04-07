@@ -37,6 +37,13 @@ namespace MusicPlayerOnline.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet("name-exist/{myFavoriteName}")]
+        public async Task<IActionResult> NameExist(string myFavoriteName)
+        {
+            var response = await _myFavoriteService.NameExist(UserId, myFavoriteName);
+            return Ok(response);
+        }
+
         [HttpPost()]
         public async Task<IActionResult> AddOrUpdate(MyFavoriteRequest myFavorite)
         {

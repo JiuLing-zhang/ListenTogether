@@ -5,8 +5,8 @@ public interface IMyFavoriteRepository
 {
     Task<MyFavorite?> GetOneAsync(int id);
     Task<List<MyFavorite>?> GetAllAsync();
-
-    Task<MyFavorite?> AddOrUpdateByNameAsync(MyFavorite myFavorite);
+    Task<bool> NameExist(string myFavoriteName);
+    Task<MyFavorite?> AddOrUpdateAsync(MyFavorite myFavorite);
     Task<bool> RemoveAsync(int id);
 
     Task<bool> AddMusicToMyFavorite(int id, Music music);

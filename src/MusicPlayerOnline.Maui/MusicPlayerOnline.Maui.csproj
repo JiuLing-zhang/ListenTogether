@@ -56,8 +56,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Page Remove="Pages\AddToMyFavoritePage.xaml" />
 	  <Page Remove="Pages\MyFavoriteAddPage.xaml" />
 	  <Page Remove="Pages\MyFavoriteDetailPage.xaml" />
+	  <Page Remove="Pages\MyFavoriteEditPage.xaml" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -75,10 +77,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\AddToMyFavoritePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\MyFavoriteAddPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MyFavoriteDetailPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\MyFavoriteEditPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MyFavoritePage.xaml">

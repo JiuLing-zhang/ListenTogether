@@ -86,7 +86,7 @@
                 <!-- 歌词 -->
                 <StackLayout VerticalOptions="FillAndExpand">
                     <Label Text="暂无歌词" HorizontalTextAlignment="Center" TextColor="#E0E0E0" Style="{StaticResource LabelShowLyrics}"></Label>
-                    <ListView x:Name="ListViewLyrics" ItemsSource="{Binding Lyrics}" HorizontalOptions="Center" SelectionMode="None">
+                    <ListView ItemsSource="{Binding Lyrics}" HorizontalOptions="Center" SelectionMode="None">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>

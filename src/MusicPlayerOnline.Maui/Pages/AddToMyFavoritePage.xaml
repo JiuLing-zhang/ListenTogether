@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
+             x:Class="MusicPlayerOnline.Maui.AddToMyFavoritePage"
+             Title="添加到我的歌单">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelMyFavoriteListEmpty" TargetType="Label">
+                <Setter Property="IsVisible" Value="false"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding MyFavoriteList.Count}" Value="0" TargetType="Label">
+                        <Setter Property="IsVisible" Value="true"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout Margin="16">
+        <HorizontalStackLayout>
+            <Label Text="添加歌曲到歌单"
+                   Margin="0,0,20,0"
+                   HorizontalOptions="Start" 
+                   VerticalOptions="Center"/>
+            <HorizontalStackLayout HorizontalOptions="StartAndExpand">
+                <HorizontalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AddMyFavoriteCommand}"></TapGestureRecognizer>
+                </HorizontalStackLayout.GestureRecognizers>
+                <Image Source="plus.png"
+                       HeightRequest="20"/>
+                <Label Text="创建新歌单"/>
+            </HorizontalStackLayout>         
+        </HorizontalStackLayout>
+
+        <Label Text="您还没有歌单哦~~" 
+               HorizontalOptions="Center"
+               VerticalOptions="Start" 
+               Style="{StaticResource LabelMyFavoriteListEmpty}" />
+        
+        <CollectionView ItemsSource="{Binding MyFavoriteList}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:AddToMyFavoritePageViewModel}}, Path=SelectedChangedCommand}"	
+                                                  CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
+                        <Label Text="{Binding Name}"
+                               Grid.Column="0" 
+                               HorizontalOptions="FillAndExpand"
+                               HorizontalTextAlignment="Start"
+                               LineBreakMode="TailTruncation"/>
+                    </Grid>                   
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>
