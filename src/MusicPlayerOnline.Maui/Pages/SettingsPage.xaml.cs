@@ -9,4 +9,17 @@ public partial class SettingsPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        player.OnAppearing();
+    }
+
+    protected override void OnDisappearing()
+    {
+        player.OnDisappearing();
+        base.OnDisappearing();
+    }
+
 }

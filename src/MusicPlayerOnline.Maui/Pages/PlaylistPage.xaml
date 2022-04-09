@@ -4,8 +4,7 @@
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
              x:Class="MusicPlayerOnline.Maui.Pages.PlaylistPage"
-             Title="xx"
-             BackgroundColor="White">
+             Title="播放列表" >
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="trash" Command="{Binding ClearPlaylistCommand}" ></ToolbarItem>
     </ContentPage.ToolbarItems>

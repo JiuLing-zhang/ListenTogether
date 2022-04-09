@@ -2,8 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
+             xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
              x:Class="MusicPlayerOnline.Maui.Pages.MyFavoritePage"
-             Title="MyFavoritePage">
+             Title="我的歌单">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -26,12 +27,11 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-
-    <ContentPage.Content>
-        <StackLayout Margin="16">
+    <StackLayout Margin="16">
+        <StackLayout Margin="0,0,0,20">
             <StackLayout HeightRequest="20"
                          Orientation="Horizontal"
-                         Margin="0,0,0,20">
+                         VerticalOptions="Start">
                 <Label Text="我的歌单"
                        HorizontalOptions="Start"
                        Margin="0,0,10,0"/>
@@ -51,59 +51,66 @@
                    Text="还没有歌单....快去添加一个吧~~" 
                    HorizontalOptions="Center" 
                    Style="{StaticResource EmptyTips}" />
+        </StackLayout>
 
-            <CollectionView ItemsSource="{Binding FavoriteList}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Orientation="Horizontal"
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <CollectionView ItemsSource="{Binding FavoriteList}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal"
                                      Margin="0,0,0,10">
 
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=SelectedChangedCommand}"	
-                                                      CommandParameter="{Binding .}">
-                                </TapGestureRecognizer>
-                            </StackLayout.GestureRecognizers>
-
-                            <StackLayout HorizontalOptions="Start" 
-                                         VerticalOptions="Center"
-                                         Margin="0,0,10,0">
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"	
-                                                          CommandParameter="{Binding .}"/>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=SelectedChangedCommand}"	
+                                                      CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
                                 </StackLayout.GestureRecognizers>
 
-                                <Image WidthRequest="28"
+                                <StackLayout HorizontalOptions="Start" 
+                                         VerticalOptions="Center"
+                                         Margin="0,0,10,0">
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"	
+                                                          CommandParameter="{Binding .}"/>
+                                    </StackLayout.GestureRecognizers>
+
+                                    <Image WidthRequest="28"
                                        Source="play.png"
                                        Aspect="AspectFill"                                            >
-                                </Image>
-                            </StackLayout>
+                                    </Image>
+                                </StackLayout>
 
-                            <StackLayout HorizontalOptions="Start" 
+                                <StackLayout HorizontalOptions="Start" 
                                          VerticalOptions="Center">
-                                <Frame CornerRadius="10" 
+                                    <Frame CornerRadius="10" 
                                        HeightRequest="50"
                                        WidthRequest="50"
                                        IsClippedToBounds="True" 
                                        BackgroundColor="#404040">
-                                    <Image Aspect="AspectFill" 
+                                        <Image Aspect="AspectFill" 
                                            Style="{StaticResource MyFavoriteImg}"></Image>
-                                </Frame>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="StartAndExpand" 
+                                    </Frame>
+                                </StackLayout>
+                                <StackLayout HorizontalOptions="StartAndExpand" 
                                          VerticalOptions="Center"
                                          Margin="5,0,0,0">
-                                <Label Text="{Binding Name}" 
+                                    <Label Text="{Binding Name}" 
                                        VerticalOptions="End"/>
-                                <Label VerticalOptions="End" >
-                                    <MultiBinding StringFormat="共 {0} 首歌">
-                                        <Binding Path="MusicCount"></Binding>
-                                    </MultiBinding>
-                                </Label>
+                                    <Label VerticalOptions="End" >
+                                        <MultiBinding StringFormat="共 {0} 首歌">
+                                            <Binding Path="MusicCount"></Binding>
+                                        </MultiBinding>
+                                    </Label>
+                                </StackLayout>
                             </StackLayout>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
-    </ContentPage.Content>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+        <controls:Player x:Name="player"
+                         VerticalOptions="End" >
+        </controls:Player>
+    </StackLayout>
 </ContentPage>

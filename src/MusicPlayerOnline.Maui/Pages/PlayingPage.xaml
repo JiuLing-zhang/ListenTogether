@@ -4,8 +4,7 @@
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              xmlns:services="clr-namespace:MusicPlayerOnline.Maui.Services"
              x:Class="MusicPlayerOnline.Maui.Pages.PlayingPage"
-             Title="PlayingPage"
-             BackgroundColor="White">
+             Title="正在播放" >
     <ContentPage.Resources>
         <Style x:Key="PlayerStateImage" TargetType="ImageButton">
             <Style.Triggers>
