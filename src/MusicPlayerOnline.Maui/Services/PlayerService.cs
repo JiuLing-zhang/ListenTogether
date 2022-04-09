@@ -14,10 +14,38 @@ public class PlayerService
 
     public double CurrentPosition => _audioService.CurrentPosition;
 
+    public double CurrentVolume => _audioService.CurrentPosition;
+
     /// <summary>
     /// 是否正在播放
     /// </summary>
-    public bool IsPlaying => _audioService.IsPlaying;
+    public bool IsPlaying { get; set; }
+
+    /// <summary>
+    /// 是否静音
+    /// </summary>
+    public bool IsMuted
+    {
+        get => _audioService.IsMuted;
+        set
+        {
+            _audioService.IsMuted = value;
+            IsVolumeChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+    }
+    /// <summary>
+    /// 音量大小
+    /// </summary>
+    public double VoiceValue
+    {
+        get => _audioService.VoiceValue;
+        set
+        {
+            _audioService.VoiceValue = value;
+            IsVolumeChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
 
     /// <summary>
     /// 正在播放的歌曲信息
@@ -27,6 +55,7 @@ public class PlayerService
 
     public event EventHandler NewMusicAdded;
     public event EventHandler IsPlayingChanged;
+    public event EventHandler IsVolumeChanged;
 
     public PlayerService(IAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory, WifiOptionsService wifiOptionsService)
     {
@@ -40,7 +69,21 @@ public class PlayerService
         _wifiOptionsService = wifiOptionsService;
     }
 
-    public async Task PlayAsync(Music music, double position = 0)
+    public Task PlayAsync(Music music)
+    {
+        var isOtherMusic = CurrentMusic?.Id != music.Id;
+        var isPlaying = isOtherMusic || !_audioService.IsPlaying;
+        var position = isOtherMusic ? 0 : CurrentPosition;
+        return PlayAsync(music, position);
+    }
+    public Task PlayAsync(Music music, double position)
+    {
+        var isOtherMusic = CurrentMusic?.Id != music.Id;
+        var isPlaying = isOtherMusic || !_audioService.IsPlaying;
+        return PlayAsync(music, isPlaying, position);
+    }
+
+    public async Task PlayAsync(Music music, bool isPlaying, double position = 0)
     {
         string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.Id);
         if (!File.Exists(musicPath))
@@ -73,19 +116,33 @@ public class PlayerService
                 await _audioService.PauseAsync();
             }
             await _audioService.InitializeAsync(musicPath);
-            await _audioService.PlayAsync(position);
+            if (isPlaying)
+            {
+                await _audioService.PlayAsync(position);
+                IsPlaying = true;
+            }
+            else
+            {
+                await _audioService.PauseAsync();
+                IsPlaying = false;
+            }
+
             NewMusicAdded?.Invoke(this, EventArgs.Empty);
         }
         else
         {
-            await _audioService.PlayAsync(position);
-        }
-        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
-    }
+            if (isPlaying)
+            {
+                await _audioService.PlayAsync(position);
+                IsPlaying = true;
+            }
+            else
+            {
+                await _audioService.PauseAsync();
+                IsPlaying = false;
+            }
 
-    public async Task PauseAsync()
-    {
-        await _audioService.PauseAsync();
+        }
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 

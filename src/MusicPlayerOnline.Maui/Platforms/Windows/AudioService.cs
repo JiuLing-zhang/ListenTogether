@@ -6,10 +6,24 @@ public class AudioService : IAudioService
 {
     string _uri;
     MediaPlayer _mediaPlayer;
+    public AudioService()
+    {
+        _mediaPlayer = new MediaPlayer
+        {
+            AudioCategory = MediaPlayerAudioCategory.Media
+        };
+        _mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
+        _mediaPlayer.MediaFailed += MediaPlayer_MediaFailed;
+    }
 
-    public bool IsPlaying => _mediaPlayer != null && _mediaPlayer.CurrentState == MediaPlayerState.Playing;
+    public bool IsPlaying => _mediaPlayer.CurrentState == MediaPlayerState.Playing;
 
     public double CurrentPosition => (long)_mediaPlayer?.Position.TotalSeconds;
+
+    public bool IsMuted { get => _mediaPlayer.IsMuted; set => _mediaPlayer.IsMuted = value; }
+    public double VoiceValue { get => _mediaPlayer.Volume; set => _mediaPlayer.Volume = value; }
+
+    public double CurrentVolume => throw new NotImplementedException();
 
     public event EventHandler PlayFinished;
     public event EventHandler PlayFailed;
@@ -17,17 +31,6 @@ public class AudioService : IAudioService
     public async Task InitializeAsync(string audioURI)
     {
         _uri = audioURI;
-
-        if (_mediaPlayer == null)
-        {
-            _mediaPlayer = new MediaPlayer
-            {
-                Source = MediaSource.CreateFromUri(new Uri(_uri)),
-                AudioCategory = MediaPlayerAudioCategory.Media
-            };
-            _mediaPlayer.MediaEnded += T;
-            _mediaPlayer.MediaFailed += T2;
-        }
         if (_mediaPlayer != null)
         {
             await PauseAsync();
@@ -35,11 +38,11 @@ public class AudioService : IAudioService
         }
     }
 
-    private void T(object s, object s1)
+    private void MediaPlayer_MediaEnded(object s, object s1)
     {
         PlayFinished?.Invoke(null, null);
     }
-    private void T2(object s, object s1)
+    private void MediaPlayer_MediaFailed(object s, object s1)
     {
         PlayFailed?.Invoke(null, null);
     }

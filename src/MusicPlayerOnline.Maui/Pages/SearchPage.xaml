@@ -113,7 +113,7 @@
         </ScrollView>
 
         <controls:Player x:Name="player"
-                             VerticalOptions="End" >
+                         VerticalOptions="End" >
         </controls:Player>
     </StackLayout>
 </ContentPage>

@@ -1,5 +1,3 @@
-using MusicPlayerOnline.Maui.ViewModels;
-
 namespace MusicPlayerOnline.Maui.Pages;
 
 public partial class PlaylistPage : ContentPage
@@ -14,12 +12,17 @@ public partial class PlaylistPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        player.OnAppearing();
         await vm.InitializeAsync();
     }
-
+    protected override void OnDisappearing()
+    {
+        player.OnDisappearing();
+        base.OnDisappearing();
+    }
     private void MenuItem_Clicked(object sender, EventArgs e)
     {
-        //TODO 看看能不能通过command绑定
+        //TODO 鐪嬬湅鑳戒笉鑳介�氳繃command缁戝畾
         //MenuItem menuItem = sender as MenuItem;
         //MusicDetailViewModel contextItem = menuItem.BindingContext as MusicDetailViewModel;
         //_myModel.RemovePlaylistItem(contextItem);

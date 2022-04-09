@@ -1,5 +1,3 @@
-using MusicPlayerOnline.Maui.ViewModels;
-
 namespace MusicPlayerOnline.Maui.Pages;
 
 public partial class SearchPage : ContentPage
@@ -9,9 +7,15 @@ public partial class SearchPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-
-    private void ImageButton_Clicked(object sender, EventArgs e)
+    protected override void OnAppearing()
     {
+        base.OnAppearing();
+        player.OnAppearing();
+    }
 
+    protected override void OnDisappearing()
+    {
+        player.OnDisappearing();
+        base.OnDisappearing();
     }
 }

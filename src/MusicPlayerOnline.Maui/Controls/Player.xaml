@@ -6,7 +6,7 @@
     <ContentView.HeightRequest>
         <OnPlatform x:TypeArguments="x:Double">
             <On Platform="Android,iOS">70</On>
-            <On Platform="UWP,macOS">60</On>
+            <On Platform="UWP,macOS">70</On>
         </OnPlatform>
     </ContentView.HeightRequest>
 
@@ -17,42 +17,69 @@
                     <StackLayout Orientation="Horizontal">
                         <StackLayout HorizontalOptions="Start"
                                      Orientation="Horizontal">
-                            <Image Source="https://p1.music.126.net/zZtUDuWk6qIe3ezMt4UMjg==/109951165796417308.jpg?param=48y48"
+                            <Image x:Name="ImgCurrentMusic"
                                    WidthRequest="60"
                                    ></Image>
                             <StackLayout Margin="10,0,0,0">
-                                <Label Text="歌名" 
+                                <Label x:Name="LblName"
                                        VerticalOptions="Start" 
-                                       Margin="0,5,0,0"></Label>
-                                <Label Text="歌手-专辑" 
+                                       Margin="0,15,0,0"></Label>
+                                <Label x:Name="LblAuthor" 
                                        VerticalOptions="EndAndExpand" 
-                                       Margin="0,0,0,5"></Label>
+                                       Margin="0,0,0,15"></Label>
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout HorizontalOptions="CenterAndExpand" WidthRequest="400">
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" >
+                        <StackLayout HorizontalOptions="CenterAndExpand" 
+                                     WidthRequest="470">
+                            <StackLayout Orientation="Horizontal" 
+                                         HorizontalOptions="Center" Spacing="28" >
                                 <Image Source="repeat_one.png"
                                    WidthRequest="20"></Image>
                                 <Image Source="back.png"
-                                   WidthRequest="30"></Image>
-                                <Image Source="play.png"
-                                   WidthRequest="50"></Image>
+                                   WidthRequest="20"></Image>
+
+                                <Image x:Name="ImgPlay"
+                                       WidthRequest="40"
+                                       Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
+
                                 <Image Source="next.png"
-                                   WidthRequest="30"></Image>
+                                   WidthRequest="20"></Image>
                                 <Image Source="puzzled.png"
                                    WidthRequest="20"></Image>
                             </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="0:00" HorizontalOptions="Start"></Label>
-                                <Slider x:Name="SliderPlayProgress" Minimum="0" Maximum="1"  HorizontalOptions="FillAndExpand" ThumbColor="#0088EB" />
-                                <Label Text="5:32" HorizontalOptions="End"></Label>
-                            </StackLayout>                            
+                            <StackLayout Orientation="Horizontal"
+                                         HeightRequest="30">
+                                <Label Text="0:00" 
+                                       HorizontalOptions="Start"
+                                       VerticalTextAlignment="Center"/>
+                                <Slider HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="Center"
+                                        Margin="10,0,10,0">
+                                </Slider>
+                                <Label x:Name="LblDuration"
+                                       HorizontalOptions="End"
+                                       VerticalTextAlignment="Center"/>
+                            </StackLayout>
                         </StackLayout>
                         <StackLayout HorizontalOptions="End"
-                                      Orientation="Horizontal">
-                            <Image Source="sound_on.png"
-                                   WidthRequest="20"></Image>
-                            <Slider></Slider>
+                                     Orientation="Horizontal"
+                                     WidthRequest="200">
+
+                            <ImageButton x:Name="BtnSoundOff"
+                                         Clicked="BtnSoundOff_Clicked"
+                                         WidthRequest="20"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center"
+                                         HeightRequest="20"  
+                                         Aspect="AspectFill"/>
+                            
+                            <Slider HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="Center"
+                                        Margin="10,0,50,0"></Slider>
                         </StackLayout>
                     </StackLayout>
                 </On>
