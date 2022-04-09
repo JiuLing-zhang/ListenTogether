@@ -9,14 +9,13 @@ public interface IAudioService
     /// <summary>
     /// 是否静音
     /// </summary>
-    bool IsMuted { get; set; }
+    bool IsMuted { set; }
     /// <summary>
     /// 声音大小
     /// </summary>
-    double VoiceValue { get; set; }
+    double Volume { set; }
 
     bool IsPlaying { get; }
-    double CurrentVolume { get; }
     double CurrentPosition { get; }
 
     public event EventHandler PlayFinished;

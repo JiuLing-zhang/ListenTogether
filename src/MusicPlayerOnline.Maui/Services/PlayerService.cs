@@ -14,38 +14,13 @@ public class PlayerService
 
     public double CurrentPosition => _audioService.CurrentPosition;
 
-    public double CurrentVolume => _audioService.CurrentPosition;
+    public bool IsMuted { set => _audioService.IsMuted = value; }
+    public double Volume { set => _audioService.Volume = value; }
 
     /// <summary>
     /// 是否正在播放
     /// </summary>
     public bool IsPlaying { get; set; }
-
-    /// <summary>
-    /// 是否静音
-    /// </summary>
-    public bool IsMuted
-    {
-        get => _audioService.IsMuted;
-        set
-        {
-            _audioService.IsMuted = value;
-            IsVolumeChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-    }
-    /// <summary>
-    /// 音量大小
-    /// </summary>
-    public double VoiceValue
-    {
-        get => _audioService.VoiceValue;
-        set
-        {
-            _audioService.VoiceValue = value;
-            IsVolumeChanged?.Invoke(this, EventArgs.Empty);
-        }
-    }
 
     /// <summary>
     /// 正在播放的歌曲信息
@@ -55,7 +30,6 @@ public class PlayerService
 
     public event EventHandler NewMusicAdded;
     public event EventHandler IsPlayingChanged;
-    public event EventHandler IsVolumeChanged;
 
     public PlayerService(IAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory, WifiOptionsService wifiOptionsService)
     {

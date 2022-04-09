@@ -46,6 +46,7 @@
                        HorizontalOptions="FillAndExpand"/>
             </StackLayout>
             <Label Text="拼命查询中..."
+                   Margin="0,20,0,0"
                    HorizontalOptions="Center" 
                    Style="{StaticResource LabelMusicSearching}"/>
         </StackLayout>

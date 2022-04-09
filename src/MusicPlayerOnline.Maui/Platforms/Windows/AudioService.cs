@@ -20,10 +20,9 @@ public class AudioService : IAudioService
 
     public double CurrentPosition => (long)_mediaPlayer?.Position.TotalSeconds;
 
-    public bool IsMuted { get => _mediaPlayer.IsMuted; set => _mediaPlayer.IsMuted = value; }
-    public double VoiceValue { get => _mediaPlayer.Volume; set => _mediaPlayer.Volume = value; }
 
-    public double CurrentVolume => throw new NotImplementedException();
+    public bool IsMuted { set => _mediaPlayer.IsMuted = value; }
+    public double Volume { set => _mediaPlayer.Volume = value; }
 
     public event EventHandler PlayFinished;
     public event EventHandler PlayFailed;

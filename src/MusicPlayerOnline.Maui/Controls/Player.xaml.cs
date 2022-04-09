@@ -1,8 +1,11 @@
+using MusicPlayerOnline.Model.Enums;
+
 namespace MusicPlayerOnline.Maui.Controls;
 
 public partial class Player : ContentView
 {
     private PlayerService _playerService;
+    private IEnvironmentConfigService _configService;
     public Player()
     {
         InitializeComponent();
@@ -18,6 +21,10 @@ public partial class Player : ContentView
             _playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
             InitPlayer();
         }
+        if (_configService == null)
+        {
+            _configService = this.Handler.MauiContext.Services.GetService<IEnvironmentConfigService>();
+        }
     }
 
     internal void OnAppearing()
@@ -29,10 +36,6 @@ public partial class Player : ContentView
     {
         _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded -= playerService_NewMusicAdded;
-        if (Config.Desktop)
-        {
-            _playerService.IsVolumeChanged -= playerService_IsVolumeChanged;
-        }
     }
 
     void InitPlayer()
@@ -44,18 +47,15 @@ public partial class Player : ContentView
 
         _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded += playerService_NewMusicAdded;
-        if (Config.Desktop)
-        {
-            _playerService.IsVolumeChanged += playerService_IsVolumeChanged;
-        }
 
         this.IsVisible = _playerService.CurrentMusic != null;
         if (_playerService.CurrentMusic != null)
         {
             UpdatePlayPause();
             UpdateMusicInfo();
-            UpdateSoundOnOff();
         }
+        UpdateSoundOnOff();
+        UpdateRepeatModel();
     }
 
     private void playerService_IsVolumeChanged(object sender, EventArgs e)
@@ -92,10 +92,7 @@ public partial class Player : ContentView
         LblDuration.Text = _playerService.CurrentMusic.Duration.ToString();
     }
 
-    private void UpdateSoundOnOff()
-    {
-        ImgSoundOff.Source = _playerService.IsMuted ? "sound_off.png" : "sound_on.png";
-    }
+
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
     {
@@ -104,12 +101,71 @@ public partial class Player : ContentView
 
     private void ImgSoundOff_Tapped(object sender, EventArgs e)
     {
-        _playerService.IsMuted = !_playerService.IsMuted;
+        SetSoundOnOff();
+        UpdateSoundOnOff();
+        WritePlayerSett();
+    }
+    private void SetSoundOnOff()
+    {
+        GlobalConfig.MyUserSetting.Player.IsSoundOff = !GlobalConfig.MyUserSetting.Player.IsSoundOff;
+    }
+    private void UpdateSoundOnOff()
+    {
+        ImgSoundOff.Source = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off.png" : "sound_on.png";
+        _playerService.IsMuted = GlobalConfig.MyUserSetting.Player.IsSoundOff;
     }
 
     private void ImgRepeat_Tapped(object sender, EventArgs e)
     {
+        SetNextRepeatMode();
+        UpdateRepeatModel();
+        WritePlayerSett();
+    }
 
+    private void SetNextRepeatMode()
+    {
+        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatOne)
+        {
+            GlobalConfig.MyUserSetting.Player.PlayMode = PlayModeEnum.RepeatList;
+            return;
+        }
+
+        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatList)
+        {
+            GlobalConfig.MyUserSetting.Player.PlayMode = PlayModeEnum.Shuffle;
+            return;
+        }
+
+        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.Shuffle)
+        {
+            GlobalConfig.MyUserSetting.Player.PlayMode = PlayModeEnum.RepeatOne;
+            return;
+        }
+    }
+    private void UpdateRepeatModel()
+    {
+        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatOne)
+        {
+            ImgRepeat.Source = "repeat_one.png";
+            return;
+        }
+
+        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatList)
+        {
+            ImgRepeat.Source = "repeat_list.png";
+            return;
+        }
+
+        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.Shuffle)
+        {
+            ImgRepeat.Source = "shuffle.png";
+            return;
+        }
+    }
+
+    private void WritePlayerSett()
+    {
+        _configService.WritePlayerSetting(GlobalConfig.MyUserSetting.Player);
     }
 
     private async void Previous_Tapped(object sender, EventArgs e)
