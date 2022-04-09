@@ -54,12 +54,13 @@ public partial class Player : ContentView
         {
             UpdatePlayPause();
             UpdateMusicInfo();
+            UpdateSoundOnOff();
         }
     }
 
     private void playerService_IsVolumeChanged(object sender, EventArgs e)
     {
-        BtnSoundOff.Source = _playerService.IsMuted ? "sound_off.png" : "sound_on.png";
+        UpdateSoundOnOff();
     }
 
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
@@ -91,16 +92,38 @@ public partial class Player : ContentView
         LblDuration.Text = _playerService.CurrentMusic.Duration.ToString();
     }
 
+    private void UpdateSoundOnOff()
+    {
+        ImgSoundOff.Source = _playerService.IsMuted ? "sound_off.png" : "sound_on.png";
+    }
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
     {
         await _playerService.PlayAsync(_playerService.CurrentMusic);
     }
 
-    private void BtnSoundOff_Clicked(object sender, EventArgs e)
+    private void ImgSoundOff_Tapped(object sender, EventArgs e)
+    {
+        _playerService.IsMuted = !_playerService.IsMuted;
+    }
+
+    private void ImgRepeat_Tapped(object sender, EventArgs e)
     {
 
     }
 
+    private async void Previous_Tapped(object sender, EventArgs e)
+    {
+        await _playerService.Previous();
+    }
 
+    private async void Next_Tapped(object sender, EventArgs e)
+    {
+        await _playerService.Next();
+    }
+
+    private void Puzzled_Tapped(object sender, EventArgs e)
+    {
+        ToastService.Show("别点了，小的就是个占位的~~~");
+    }
 }

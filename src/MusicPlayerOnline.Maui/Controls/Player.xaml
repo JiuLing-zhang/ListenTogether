@@ -33,13 +33,34 @@
                                      WidthRequest="470">
                             <StackLayout Orientation="Horizontal" 
                                          HorizontalOptions="Center" Spacing="28" >
-                                <Image Source="repeat_one.png"
-                                   WidthRequest="20"></Image>
+
+                                <Image x:Name="ImgRepeat"                                       
+                                       WidthRequest="20" 
+                                       HeightRequest="20"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ImgRepeat_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+
                                 <Image Source="back.png"
-                                   WidthRequest="20"></Image>
+                                       WidthRequest="20" 
+                                       HeightRequest="20"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Previous_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
 
                                 <Image x:Name="ImgPlay"
                                        WidthRequest="40"
+                                       HeightRequest="40"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
                                        Aspect="AspectFill">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
@@ -47,10 +68,28 @@
                                 </Image>
 
                                 <Image Source="next.png"
-                                   WidthRequest="20"></Image>
+                                       WidthRequest="20"
+                                       HeightRequest="20"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Next_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+
                                 <Image Source="puzzled.png"
-                                   WidthRequest="20"></Image>
+                                       WidthRequest="20"
+                                       HeightRequest="20"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"
+                                       Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Puzzled_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
                             </StackLayout>
+
                             <StackLayout Orientation="Horizontal"
                                          HeightRequest="30">
                                 <Label Text="0:00" 
@@ -69,14 +108,17 @@
                                      Orientation="Horizontal"
                                      WidthRequest="200">
 
-                            <ImageButton x:Name="BtnSoundOff"
-                                         Clicked="BtnSoundOff_Clicked"
-                                         WidthRequest="20"
-                                         HorizontalOptions="Center"
-                                         VerticalOptions="Center"
-                                         HeightRequest="20"  
-                                         Aspect="AspectFill"/>
-                            
+                            <Image x:Name="ImgSoundOff"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   HeightRequest="20"
+                                   WidthRequest="20" 
+                                   Aspect="AspectFill">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ImgSoundOff_Tapped"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+
                             <Slider HorizontalOptions="FillAndExpand"
                                         VerticalOptions="Center"
                                         Margin="10,0,50,0"></Slider>
