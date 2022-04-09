@@ -11,7 +11,6 @@ internal class DatabaseProvide
         {
             if (_database == null)
             {
-
                 try
                 {
                     string configJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogConfig.json"));
@@ -26,8 +25,7 @@ internal class DatabaseProvide
                     {
                         Directory.CreateDirectory(appDataFolder);
                     }
-
-                    string dbPath = Path.Combine(appDataFolder, config.DbPath);
+                    string dbPath = Path.Combine(appDataFolder, config.DbName);
 
                     _database = new SQLiteConnection(dbPath);
                     InitTable();

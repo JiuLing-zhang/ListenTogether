@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
+             xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
              x:Class="MusicPlayerOnline.Maui.Pages.SearchPage"
              Title="搜索">
 
@@ -31,81 +32,88 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ScrollView>
-        <StackLayout Margin="16">
-            <Grid ColumnDefinitions="auto,*"
-                  Margin="0,0,0,20">
+    <StackLayout Margin="16">
+        <StackLayout Margin="0,0,0,20"
+                     VerticalOptions="Start">
+            <StackLayout Orientation="Horizontal">
                 <Label Text="搜索"
-                       Grid.Column="0"
-                       VerticalTextAlignment="Center"
-                       Margin="0,0,10,0" />
+                   VerticalTextAlignment="Center"
+                   HorizontalOptions="Start"
+                   Margin="0,0,10,0" />
+
                 <SearchBar Text="{Binding SearchKeyword}"
-                           Grid.Column="1"
-                           SearchCommand="{Binding SearchCommand}" />
-            </Grid>
-
+                       SearchCommand="{Binding SearchCommand}"
+                       HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
             <Label Text="拼命查询中..."
-                   HorizontalOptions="Center"
+                   HorizontalOptions="Center" 
                    Style="{StaticResource LabelMusicSearching}"/>
+        </StackLayout>
 
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <CollectionView ItemsSource="{Binding MusicSearchResult}"    
+                            Style="{StaticResource CollectionViewMusicSearchResultBlock}"
+                            >
 
-            <CollectionView ItemsSource="{Binding MusicSearchResult}"    
-                            Style="{StaticResource CollectionViewMusicSearchResultBlock}">
- 
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ColumnDefinitions="40,40,60,300,300,*">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="40,40,60,300,300,*">
 
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=SelectedChangedCommand}"	
-                                                      CommandParameter="{Binding .}"/>                                
-                            </Grid.GestureRecognizers>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"	
+                                                      CommandParameter="{Binding .}"/>
+                                </Grid.GestureRecognizers>
 
-                            <StackLayout Grid.Column="0"
+                                <StackLayout Grid.Column="0"
                                          IsVisible="true"
                                          VerticalOptions="Center">
-                                <Image Source="plus.png" 
+                                    <Image Source="plus.png" 
                                        Aspect="AspectFill" 
                                        WidthRequest="15">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
                                              CommandParameter="{Binding .}"></TapGestureRecognizer>
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </StackLayout>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </StackLayout>
 
-                            <Label Text="{Binding Platform}"
+                                <Label Text="{Binding Platform}"
                                    Grid.Column="1" 
                                    IsVisible="true"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                            <Label Text="{Binding Duration}" 
+                                <Label Text="{Binding Duration}" 
                                    Grid.Column="2" 
                                    IsVisible="true"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                            <Label Text="{Binding Name}" 
+                                <Label Text="{Binding Name}" 
                                    Grid.Column="3" 
                                    IsVisible="true"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                            <Label Text="{Binding Artist}" 
+                                <Label Text="{Binding Artist}" 
                                    Grid.Column="4" 
                                    IsVisible="true"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                            <Label Text="{Binding Album}" 
+                                <Label Text="{Binding Album}" 
                                    Grid.Column="5" 
                                    IsVisible="true"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
 
 
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
 
-        </StackLayout>
-    </ScrollView>
+        <controls:Player x:Name="player"
+                             VerticalOptions="End" >
+        </controls:Player>
+    </StackLayout>
 </ContentPage>

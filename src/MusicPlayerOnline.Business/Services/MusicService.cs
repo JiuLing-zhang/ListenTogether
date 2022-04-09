@@ -21,9 +21,4 @@ public class MusicService : IMusicService
     {
         return await _repository.AddOrUpdateAsync(music);
     }
-
-    public async Task<bool> UpdateCacheAsync(string id, string cachePath)
-    {
-        return await _repository.UpdateCacheAsync(id, cachePath);
-    }
 }

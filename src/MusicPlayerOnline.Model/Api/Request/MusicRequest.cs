@@ -14,10 +14,5 @@ namespace MusicPlayerOnline.Model.Api.Request
         /// </summary>
         [Required]
         public string PlatformInnerId { get; set; } = null!;
-        /// <summary>
-        /// 缓存地址
-        /// </summary>
-        [Required]
-        public string CachePath { get; set; } = null!;
     }
 }

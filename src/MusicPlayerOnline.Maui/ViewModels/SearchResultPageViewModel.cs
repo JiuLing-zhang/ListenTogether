@@ -1,241 +1,227 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-
 using MusicPlayerOnline.Model.Enums;
 using System.Collections.ObjectModel;
 
-namespace MusicPlayerOnline.Maui.ViewModels
+namespace MusicPlayerOnline.Maui.ViewModels;
+
+public class SearchResultPageViewModel : ViewModelBase
 {
-    [QueryProperty(nameof(SearchKeyword), nameof(SearchKeyword))]
-    public class SearchResultPageViewModel : ViewModelBase
+    private readonly IMusicNetworkService _searchService;
+    private readonly IMusicService _musicService;
+    private readonly IPlaylistService _playlistService;
+    private readonly PlayerService _playerService;
+
+    private string _lastSearchKeyword = "";
+    public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
+    public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
+    public ICommand SearchCommand => new Command(Search);
+
+    public SearchResultPageViewModel(PlayerService playerService, IMusicNetworkService searchService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory)
     {
-        private readonly IMusicNetworkService _searchService;
-        private readonly IMusicService _musicService;
-        private readonly IPlaylistService _playlistService;
+        MusicSearchResult = new ObservableCollection<SearchResultViewModel>();
 
-        private string _lastSearchKeyword = "";
-        public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
-        public ICommand SelectedChangedCommand => new Command<SearchResultViewModel>(SearchFinished);
+        _searchService = searchService;
+        _musicService = musicServiceFactory.Create();
+        _playlistService = playlistServiceFactory.Create();
+        _playerService = playerService;
+    }
 
-        public ICommand SearchCommand => new Command(Search);
-
-        public SearchResultPageViewModel(IMusicNetworkService searchService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory)
+    private string _title;
+    /// <summary>
+    /// 页面标题
+    /// </summary>
+    public string Title
+    {
+        get => _title;
+        set
         {
-            MusicSearchResult = new ObservableCollection<SearchResultViewModel>();
+            _title = value;
+            OnPropertyChanged();
+        }
+    }
 
-            _searchService = searchService;
-            _musicService = musicServiceFactory.Create();
-            _playlistService = playlistServiceFactory.Create();
+    private string _textToSearch;
+    /// <summary>
+    /// 搜索
+    /// </summary>
+    public string TextToSearch
+    {
+        get => _textToSearch;
+        set
+        {
+            _textToSearch = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+    public IEnumerable<PlatformEnum> MyEnumTypeValues
+    {
+        get
+        {
+            return System.Enum.GetValues(typeof(PlatformEnum)).Cast<PlatformEnum>();
+        }
+    }
+
+    private string _searchKeyword;
+    /// <summary>
+    /// 搜索关键字
+    /// </summary>
+    public string SearchKeyword
+    {
+        get => _searchKeyword;
+        set
+        {
+            _searchKeyword = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool _isSearching;
+    /// <summary>
+    /// 正在搜索歌曲
+    /// </summary>
+    public bool IsSearching
+    {
+        get => _isSearching;
+        set
+        {
+            _isSearching = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private ObservableCollection<SearchResultViewModel> _musicSearchResult;
+    /// <summary>
+    /// 搜索到的结果列表
+    /// </summary>
+    public ObservableCollection<SearchResultViewModel> MusicSearchResult
+    {
+        get => _musicSearchResult;
+        set
+        {
+            _musicSearchResult = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private SearchResultViewModel _musicSelectedResult;
+    /// <summary>
+    /// 选择的结果集
+    /// </summary>
+    public SearchResultViewModel MusicSelectedResult
+    {
+        get => _musicSelectedResult;
+        set
+        {
+            _musicSelectedResult = value;
+            OnPropertyChanged();
+        }
+    }
+    private async void Search()
+    {
+        if (SearchKeyword.IsEmpty())
+        {
+            return;
         }
 
-        private string _title;
-        /// <summary>
-        /// 页面标题
-        /// </summary>
-        public string Title
+        if (SearchKeyword == _lastSearchKeyword)
         {
-            get => _title;
-            set
-            {
-                _title = value;
-                OnPropertyChanged();
-            }
+            return;
         }
+        _lastSearchKeyword = SearchKeyword;
 
-        private string _textToSearch;
-        /// <summary>
-        /// 搜索
-        /// </summary>
-        public string TextToSearch
+        try
         {
-            get => _textToSearch;
-            set
+            IsSearching = true;
+            Title = $"搜索: {SearchKeyword}";
+            MusicSearchResult.Clear();
+            var musics = await _searchService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, SearchKeyword);
+            if (musics.Count == 0)
             {
-                _textToSearch = value;
-                OnPropertyChanged();
-            }
-        }
-
-
-        public IEnumerable<PlatformEnum> MyEnumTypeValues
-        {
-            get
-            {
-                return System.Enum.GetValues(typeof(PlatformEnum)).Cast<PlatformEnum>();
-            }
-        }
-
-        private string _searchKeyword;
-        /// <summary>
-        /// 搜索关键字
-        /// </summary>
-        public string SearchKeyword
-        {
-            get => _searchKeyword;
-            set
-            {
-                _searchKeyword = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _isSearching;
-        /// <summary>
-        /// 正在搜索歌曲
-        /// </summary>
-        public bool IsSearching
-        {
-            get => _isSearching;
-            set
-            {
-                _isSearching = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private ObservableCollection<SearchResultViewModel> _musicSearchResult;
-        /// <summary>
-        /// 搜索到的结果列表
-        /// </summary>
-        public ObservableCollection<SearchResultViewModel> MusicSearchResult
-        {
-            get => _musicSearchResult;
-            set
-            {
-                _musicSearchResult = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private SearchResultViewModel _musicSelectedResult;
-        /// <summary>
-        /// 选择的结果集
-        /// </summary>
-        public SearchResultViewModel MusicSelectedResult
-        {
-            get => _musicSelectedResult;
-            set
-            {
-                _musicSelectedResult = value;
-                OnPropertyChanged();
-            }
-        }
-        private async void Search()
-        {
-            if (SearchKeyword.IsEmpty())
-            {
+                ToastService.Show("哦吼，啥也没有搜到");
                 return;
             }
 
-            if (SearchKeyword == _lastSearchKeyword)
+            foreach (var musicInfo in musics)
             {
-                return;
-            }
-            _lastSearchKeyword = SearchKeyword;
-
-            try
-            {
-                IsSearching = true;
-                Title = $"搜索: {SearchKeyword}";
-                MusicSearchResult.Clear();
-                var musics = await _searchService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, SearchKeyword);
-                if (musics.Count == 0)
+                if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic && musicInfo.Duration != 0 && musicInfo.Duration <= 60 * 1000)
                 {
-                    ToastService.Show("哦吼，啥也没有搜到");
-                    return;
+                    continue;
                 }
 
-                foreach (var musicInfo in musics)
+                MusicSearchResult.Add(new SearchResultViewModel()
                 {
-                    if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic && musicInfo.Duration != 0 && musicInfo.Duration <= 60 * 1000)
-                    {
-                        continue;
-                    }
-
-                    MusicSearchResult.Add(new SearchResultViewModel()
-                    {
-                        Platform = musicInfo.Platform.GetDescription(),
-                        Name = musicInfo.Name,
-                        Alias = musicInfo.Alias == "" ? "" : $"（{musicInfo.Alias}）",
-                        Artist = musicInfo.Artist,
-                        Album = musicInfo.Album,
-                        Duration = musicInfo.DurationText,
-                        SourceData = musicInfo
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                ToastService.Show("抱歉，网络可能出小差了~");
-            }
-            finally
-            {
-                IsSearching = false;
+                    Platform = musicInfo.Platform.GetDescription(),
+                    Name = musicInfo.Name,
+                    Alias = musicInfo.Alias == "" ? "" : $"（{musicInfo.Alias}）",
+                    Artist = musicInfo.Artist,
+                    Album = musicInfo.Album,
+                    Duration = musicInfo.DurationText,
+                    SourceData = musicInfo
+                });
             }
         }
-
-        private async void AddToMyFavorite(SearchResultViewModel searchResult)
+        catch (Exception ex)
         {
-            Music music;
-
-            bool succeed;
-            string message;
-            (succeed, message, music) = await SaveMusic(searchResult.SourceData);
-            if (succeed == false)
-            {
-                ToastService.Show(message);
-                return;
-            }
-            //TODO 重构，是否需要广播
-            //MessagingCenter.Send(this, SubscribeKey.UpdatePlaylist);
-            //TODO 页面跳转
-            await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
-            //TODO 播放音乐
-            //await GlobalMethods.PlayMusic(music);
+            ToastService.Show("抱歉，网络可能出小差了~");
         }
-
-        private async void SearchFinished(SearchResultViewModel selected)
+        finally
         {
-            Music music;
-            bool succeed;
-            string message;
-
-            (succeed, message, music) = await SaveMusic(selected.SourceData);
-            if (succeed == false)
-            {
-                ToastService.Show(message);
-                return;
-            }
-
-            await Shell.Current.GoToAsync($"{nameof(PlayingPage)}", true);
-            //TODO 重构逻辑
-            //if (await GlobalMethods.PlayMusic(music) == false)
-            //{
-            //    return;
-            //}
-            //MessagingCenter.Send(this, SubscribeKey.UpdatePlaylist);
-            //await Shell.Current.GoToAsync($"..", false);
-            //await Shell.Current.GoToAsync($"//{nameof(PlayingPage)}", true);
+            IsSearching = false;
         }
+    }
 
-        private async Task<(bool Succeed, string Message, Music MusicDetailResult)> SaveMusic(MusicSearchResult searchResult)
+    private async void AddToMyFavorite(SearchResultViewModel searchResult)
+    {
+        Music music;
+
+        bool succeed;
+        string message;
+        (succeed, message, music) = await SaveMusic(searchResult.SourceData);
+        if (succeed == false)
         {
-            var music = await _searchService.GetMusicDetail(searchResult);
-            if (music == null)
-            {
-                return (false, "emm没有解析出歌曲信息", null);
-            }
-
-            await _musicService.AddOrUpdateAsync(music);
-
-            var playlist = new Playlist()
-            {
-                MusicId = music.Id,
-                MusicName = music.Name,
-                MusicArtist = music.Artist
-            };
-            await _playlistService.AddToPlaylist(playlist);
-
-            return (true, "", music);
+            ToastService.Show(message);
+            return;
         }
+
+        await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
+        await _playerService.PlayAsync(music);
+    }
+
+    private async void PlayMusic(SearchResultViewModel selected)
+    {
+        Music music;
+        bool succeed;
+        string message;
+
+        (succeed, message, music) = await SaveMusic(selected.SourceData);
+        if (succeed == false)
+        {
+            ToastService.Show(message);
+            return;
+        }
+        await _playerService.PlayAsync(music);
+    }
+
+    private async Task<(bool Succeed, string Message, Music MusicDetailResult)> SaveMusic(MusicSearchResult searchResult)
+    {
+        var music = await _searchService.GetMusicDetail(searchResult);
+        if (music == null)
+        {
+            return (false, "emm没有解析出歌曲信息", null);
+        }
+
+        await _musicService.AddOrUpdateAsync(music);
+
+        var playlist = new Playlist()
+        {
+            MusicId = music.Id,
+            MusicName = music.Name,
+            MusicArtist = music.Artist
+        };
+        await _playlistService.AddToPlaylist(playlist);
+
+        return (true, "", music);
     }
 }

@@ -56,6 +56,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Page Remove="Controls\Player.xaml" />
 	  <Page Remove="Pages\AddToMyFavoritePage.xaml" />
 	  <Page Remove="Pages\MyFavoriteAddPage.xaml" />
 	  <Page Remove="Pages\MyFavoriteDetailPage.xaml" />
@@ -77,6 +78,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Controls\Player.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\AddToMyFavoritePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -116,5 +120,11 @@
 		<OutputType>WinExe</OutputType>
 		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
 	</PropertyGroup>
-	
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Release'">
+		<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>758A760DB477F3F9B6F6E4A106B62B395238678B</PackageCertificateThumbprint>
+	</PropertyGroup>
+
 </Project>

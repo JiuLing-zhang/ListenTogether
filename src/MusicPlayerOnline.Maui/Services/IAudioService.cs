@@ -1,6 +1,6 @@
 ﻿namespace MusicPlayerOnline.Maui.Services;
 
-internal interface IAudioService
+public interface IAudioService
 {
     Task InitializeAsync(string uri);
     Task PlayAsync(double position = 0);
@@ -9,4 +9,5 @@ internal interface IAudioService
     double CurrentPosition { get; }
 
     public event EventHandler PlayFinished;
+    public event EventHandler PlayFailed;
 }

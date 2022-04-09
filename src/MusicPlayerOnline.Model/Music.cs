@@ -17,8 +17,4 @@ public class Music : MusicBase
     /// 对应平台的ID
     /// </summary>
     public string PlatformInnerId { get; set; } = null!;
-    /// <summary>
-    /// 缓存地址
-    /// </summary>
-    public string CachePath { get; set; } = null!;
 }

@@ -12,7 +12,11 @@ namespace MusicPlayerOnline.Maui
         /// <summary>
         /// App Data文件夹路径
         /// </summary>
-        public static readonly string AppDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppName);
+        public static readonly string AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppName);
+        /// <summary>
+        /// 歌曲缓存路径
+        /// </summary>
+        public static readonly string MusicCacheDirectory = Path.Combine(AppDataDirectory, "musics");
 
         public static EnvironmentSetting MyUserSetting { get; set; }
     }

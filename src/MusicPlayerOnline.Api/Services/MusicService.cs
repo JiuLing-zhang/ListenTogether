@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.Enums;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Api.Models;
 using MusicPlayerOnline.Model.Api;
 using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
@@ -38,7 +36,6 @@ namespace MusicPlayerOnline.Api.Services
                 Album = music.Album,
                 Alias = music.Alias,
                 Artist = music.Artist,
-                CachePath = music.CachePath,
                 Duration = music.Duration,
                 ImageUrl = music.ImageUrl,
                 Lyric = music.Lyric,
@@ -60,7 +57,6 @@ namespace MusicPlayerOnline.Api.Services
                     Album = music.Album,
                     Alias = music.Alias,
                     Artist = music.Artist,
-                    CachePath = music.CachePath,
                     Duration = music.Duration,
                     ImageUrl = music.ImageUrl,
                     Lyric = music.Lyric,
@@ -77,7 +73,6 @@ namespace MusicPlayerOnline.Api.Services
                 myMusic.Album = music.Album;
                 myMusic.Alias = music.Alias;
                 myMusic.Artist = music.Artist;
-                myMusic.CachePath = music.CachePath;
                 myMusic.Duration = music.Duration;
                 myMusic.ImageUrl = music.ImageUrl;
                 myMusic.Lyric = music.Lyric;
@@ -92,30 +87,6 @@ namespace MusicPlayerOnline.Api.Services
             }
 
             return new Result(0, "保存成功");
-        }
-
-        public async Task<Result> UpdateCacheAsync(string id, string cachePath)
-        {
-            var music = await _context.Musics.SingleOrDefaultAsync(x => x.Id == id);
-            if (music == null)
-            {
-                return new Result(1, "歌曲不存在");
-            }
-
-            //缓存路径没有改变时不更新
-            if (music.CachePath == cachePath)
-            {
-                return new Result(0, "更新成功");
-            }
-
-            music.CachePath = cachePath;
-            var count = await _context.SaveChangesAsync();
-            if (count == 0)
-            {
-                return new Result(2, "更新失败");
-            }
-
-            return new Result(0, "更新成功");
         }
     }
 }

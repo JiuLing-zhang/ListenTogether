@@ -18,7 +18,7 @@ public class LogService : ILogService
             UserBaseId = userId,
             LogType = log.LogType.ToString(),
             Message = log.Message,
-            Timestamp = log.Timestamp,
+            LogTime = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.Timestamp),
             CreateTime = DateTime.Now
         };
         _context.Logs.Add(myLog);

@@ -26,7 +26,6 @@ public class MusicLocalRepository : IMusicRepository
             Album = music.Album,
             Alias = music.Alias,
             Artist = music.Artist,
-            CachePath = music.CachePath,
             Duration = music.Duration,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
@@ -49,7 +48,6 @@ public class MusicLocalRepository : IMusicRepository
                 Album = music.Album,
                 Alias = music.Alias,
                 Artist = music.Artist,
-                CachePath = music.CachePath,
                 Duration = music.Duration,
                 ImageUrl = music.ImageUrl,
                 Lyric = music.Lyric,
@@ -66,37 +64,12 @@ public class MusicLocalRepository : IMusicRepository
             myMusic.Album = music.Album;
             myMusic.Alias = music.Alias;
             myMusic.Artist = music.Artist;
-            myMusic.CachePath = music.CachePath;
             myMusic.Duration = music.Duration;
             myMusic.ImageUrl = music.ImageUrl;
             myMusic.Lyric = music.Lyric;
             myMusic.PlayUrl = music.PlayUrl;
             count = await DatabaseProvide.DatabaseAsync.UpdateAsync(myMusic);
         }
-        if (count == 0)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    public async Task<bool> UpdateCacheAsync(string id, string cachePath)
-    {
-        var music = await DatabaseProvide.DatabaseAsync.Table<MusicEntity>().FirstOrDefaultAsync(x => x.Id == id);
-        if (music == null)
-        {
-            return false;
-        }
-
-        //缓存路径没有改变时不更新
-        if (music.CachePath == cachePath)
-        {
-            return true;
-        }
-
-        music.CachePath = cachePath;
-        var count = await DatabaseProvide.DatabaseAsync.UpdateAsync(music);
         if (count == 0)
         {
             return false;

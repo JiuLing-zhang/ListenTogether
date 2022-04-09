@@ -12,6 +12,6 @@ public class LogEntity
     public int UserBaseId { get; set; }
     public string LogType { get; set; } = null!;
     public string Message { get; set; } = null!;
-    public long Timestamp { get; set; }
+    public DateTime LogTime { get; set; }
     public DateTime CreateTime { get; set; }
 }

@@ -29,12 +29,5 @@ namespace MusicPlayerOnline.Api.Controllers
             var response = await _musicService.AddOrUpdateAsync(music);
             return Ok(response);
         }
-
-        [HttpPost("update-cache/{id}/{cachePath}")]
-        public async Task<IActionResult> UpdateCache(string id, string cachePath)
-        {
-            var response = await _musicService.UpdateCacheAsync(id, cachePath);
-            return Ok(response);
-        }
     }
 }

@@ -9,7 +9,6 @@ internal class MusicEntity
     public string Id { get; set; } = null!;
     public int Platform { get; set; }
     public string PlatformInnerId { get; set; } = null!;
-    public string CachePath { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string Alias { get; set; } = null!;
     public string Artist { get; set; } = null!;

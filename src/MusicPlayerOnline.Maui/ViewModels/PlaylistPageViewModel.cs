@@ -7,17 +7,17 @@ public class PlaylistPageViewModel : ViewModelBase
 {
     private readonly IMusicService _musicService;
     private readonly IPlaylistService _playlistService;
-
+    private readonly PlayerService _playerService;
     public ICommand AddToMyFavoriteCommand => new Command<MusicViewModel>(AddToMyFavorite);
     public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
     public ICommand ClearPlaylistCommand => new Command(ClearPlaylist);
-    public PlaylistPageViewModel(IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory)
+    public PlaylistPageViewModel(PlayerService playerService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory)
     {
         CreateLocalNewPlaylist();
 
         _playlistService = playlistServiceFactory.Create();
         _musicService = musicServiceFactory.Create();
-
+        _playerService = playerService;
     }
 
     private void CreateLocalNewPlaylist()
@@ -81,17 +81,6 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
-    public async void Search()
-    {
-        if (SearchKeyword.IsEmpty())
-        {
-            return;
-        }
-
-        //TODO 页面跳转
-        //await Shell.Current.GoToAsync($"{nameof(SearchResultPage)}?{nameof(SearchResultPageViewModel.SearchKeyword)}={SearchKeyword}", true);
-    }
-
     //TODO 播放
     private async void PlayMusic(MusicViewModel selectedMusic)
     {
@@ -102,12 +91,7 @@ public class PlaylistPageViewModel : ViewModelBase
             return;
         }
 
-        //TODO 播放并跳转页面
-        //if (await GlobalMethods.PlayMusic(music) == false)
-        //{
-        //    return;
-        //}
-        //await Shell.Current.GoToAsync($"//{nameof(PlayingPage)}", true);
+        await _playerService.PlayAsync(music);
     }
 
     private async void AddToMyFavorite(MusicViewModel music)
@@ -116,8 +100,8 @@ public class PlaylistPageViewModel : ViewModelBase
         {
             return;
         }
-        //TODO 跳转页面
-        //await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
+
+        await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
     }
 
     public async void RemovePlaylistItem(MusicViewModel music)
@@ -129,7 +113,7 @@ public class PlaylistPageViewModel : ViewModelBase
 
         //TODO 删除一条
         //await _playlistService.RemoveAsync(music.Id);
-        GetPlaylist();
+        await GetPlaylist();
     }
 
     private async void ClearPlaylist()

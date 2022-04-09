@@ -1,5 +1,5 @@
 ﻿namespace MusicPlayerOnline.EasyLog;
 internal class LogConfig
 {
-    public string DbPath { get; set; } = null!;
+    public string DbName { get; set; } = null!;
 }

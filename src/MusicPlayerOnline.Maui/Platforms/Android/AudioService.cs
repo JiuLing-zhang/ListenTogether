@@ -1,11 +1,12 @@
 ﻿using Android.Media;
-using MusicPlayerOnline.Maui.Services;
 
 namespace MusicPlayerOnline.Maui.Platforms.Android;
-internal class AudioService : IAudioService
+public class AudioService : IAudioService
 {
     private MediaPlayer _player;
 
+    public event EventHandler PlayFinished;
+    public event EventHandler PlayFailed;
     public bool IsPlaying => _player?.IsPlaying ?? false;
     public double CurrentPosition => _player?.CurrentPosition / 1000 ?? 0;
 
@@ -14,6 +15,8 @@ internal class AudioService : IAudioService
         if (_player == null)
         {
             _player = new MediaPlayer();
+            _player.Completion += PlayFinished; ;
+            _player.Error += (sender, _) => { PlayFailed?.Invoke(sender, null); };
         }
         else
         {

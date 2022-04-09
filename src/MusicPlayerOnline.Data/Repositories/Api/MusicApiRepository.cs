@@ -34,7 +34,6 @@ public class MusicApiRepository : IMusicRepository
             Album = music.Album,
             Alias = music.Alias,
             Artist = music.Artist,
-            CachePath = music.CachePath,
             Duration = music.Duration,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,

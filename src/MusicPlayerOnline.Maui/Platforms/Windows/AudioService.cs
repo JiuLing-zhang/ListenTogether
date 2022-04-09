@@ -2,50 +2,60 @@
 using Windows.Media.Playback;
 
 namespace MusicPlayerOnline.Maui.Platforms.Windows;
-internal class AudioService : IAudioService
+public class AudioService : IAudioService
 {
     string _uri;
-    MediaPlayer mediaPlayer;
+    MediaPlayer _mediaPlayer;
 
-    public bool IsPlaying => mediaPlayer != null
-        && mediaPlayer.CurrentState == MediaPlayerState.Playing;
+    public bool IsPlaying => _mediaPlayer != null && _mediaPlayer.CurrentState == MediaPlayerState.Playing;
 
-    public double CurrentPosition => (long)mediaPlayer?.Position.TotalSeconds;
+    public double CurrentPosition => (long)_mediaPlayer?.Position.TotalSeconds;
 
     public event EventHandler PlayFinished;
+    public event EventHandler PlayFailed;
 
     public async Task InitializeAsync(string audioURI)
     {
         _uri = audioURI;
 
-        if (this.mediaPlayer == null)
+        if (_mediaPlayer == null)
         {
-            this.mediaPlayer = new MediaPlayer
+            _mediaPlayer = new MediaPlayer
             {
                 Source = MediaSource.CreateFromUri(new Uri(_uri)),
                 AudioCategory = MediaPlayerAudioCategory.Media
             };
+            _mediaPlayer.MediaEnded += T;
+            _mediaPlayer.MediaFailed += T2;
         }
-        if (this.mediaPlayer != null)
+        if (_mediaPlayer != null)
         {
             await PauseAsync();
-            this.mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(_uri));
+            _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(_uri));
         }
+    }
 
+    private void T(object s, object s1)
+    {
+        PlayFinished?.Invoke(null, null);
+    }
+    private void T2(object s, object s1)
+    {
+        PlayFailed?.Invoke(null, null);
     }
 
     public Task PauseAsync()
     {
-        this.mediaPlayer?.Pause();
+        _mediaPlayer?.Pause();
         return Task.CompletedTask;
     }
 
     public Task PlayAsync(double position = 0)
     {
-        if (this.mediaPlayer != null)
+        if (_mediaPlayer != null)
         {
-            mediaPlayer.Position = TimeSpan.FromSeconds(position);
-            mediaPlayer.Play();
+            _mediaPlayer.Position = TimeSpan.FromSeconds(position);
+            _mediaPlayer.Play();
         }
 
         return Task.CompletedTask;
