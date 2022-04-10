@@ -50,25 +50,28 @@
 
     <StackLayout Margin="16">
 
-        <Label Text="播放列表"
-               Margin="0,0,0,20" />
+        <StackLayout Margin="0,0,0,10"
+                     VerticalOptions="Start">
+            <Label Text="播放列表"
+                   Margin="0,0,0,20" />
 
-        <Label Text="播放列表居然是空的...." 
-               Padding="0,10,0,0" 
-               HorizontalOptions="Center" 
-               Style="{StaticResource LabelMusicSearching}"/>
+            <Label Text="播放列表居然是空的...." 
+                   HorizontalOptions="Center" 
+                   Style="{StaticResource LabelMusicSearching}"/>
+        </StackLayout>
 
-        <ListView ItemsSource="{Binding Playlist}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <ViewCell.ContextActions>
-                            <MenuItem Text="删除" 
-                                      Clicked="MenuItem_Clicked" />
-                        </ViewCell.ContextActions>
-                        <ViewCell.View>
-                            <StackLayout Orientation="Horizontal" 
-                                         Padding="10,10,10,10">
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <CollectionView ItemsSource="{Binding Playlist}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <!--<MenuItem Text="删除" Clicked="MenuItem_Clicked" />-->
+                            <StackLayout Orientation="Horizontal">
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"	
+                                                          CommandParameter="{Binding .}"/>
+                                </StackLayout.GestureRecognizers>
                                 <Label Text="{Binding Name}" 
                                        MinimumWidthRequest="60" 
                                        VerticalTextAlignment="Center" 
@@ -76,17 +79,22 @@
                                 <Label Text="{Binding Artist,StringFormat='{} - {0}'}"
                                        VerticalTextAlignment="Center" 
                                        LineBreakMode="TailTruncation" />
-                                <ImageButton Source="plus_math" 
+                                <Image Source="plus_math" 
                                              HorizontalOptions="EndAndExpand"
-                                             Aspect="AspectFill"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"	
-                                             CommandParameter="{Binding .}"/>
+                                             Aspect="AspectFill">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"	
+                                             CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
                             </StackLayout>
-                        </ViewCell.View>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+
         <controls:Player x:Name="player" VerticalOptions="End">
         </controls:Player>
     </StackLayout>

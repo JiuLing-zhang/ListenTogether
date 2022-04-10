@@ -33,7 +33,7 @@
     </ContentPage.Resources>
 
     <StackLayout Margin="16">
-        <StackLayout Margin="0,0,0,20"
+        <StackLayout Margin="0,0,0,10"
                      VerticalOptions="Start">
             <StackLayout Orientation="Horizontal">
                 <Label Text="搜索"
