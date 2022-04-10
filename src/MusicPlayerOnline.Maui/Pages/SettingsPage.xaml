@@ -6,6 +6,10 @@
              x:Class="MusicPlayerOnline.Maui.Pages.SettingsPage"
              Title="设置">
     <StackLayout Margin="16">
+        <StackLayout VerticalOptions="Start">
+            <Label Text="账号"></Label>
+            <Label Text="昵称"></Label>
+        </StackLayout>
         <ScrollView VerticalOptions="FillAndExpand">
             <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
                   ColumnDefinitions="2*,8*">

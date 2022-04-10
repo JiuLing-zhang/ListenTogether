@@ -28,7 +28,7 @@
                   ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
     
     <ShellContent Title="{Binding Settings.Title}"
-                  Icon="{AppThemeBinding Light=setting.png, Dark=setting_dark.png}" 
+                  Icon="{AppThemeBinding Light=my.png, Dark=my.png}" 
                   ContentTemplate="{DataTemplate pages:SettingsPage}" />
 
 </Shell>

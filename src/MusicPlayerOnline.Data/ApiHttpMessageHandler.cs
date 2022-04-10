@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using JiuLing.CommonLibs.ExtensionMethods;
 using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Data.Repositories.Local;
 using MusicPlayerOnline.Model;
@@ -12,6 +13,7 @@ public class ApiHttpMessageHandler : DelegatingHandler
     private readonly TokenInfo _tokenInfo;
     public ApiHttpMessageHandler()
     {
+        InnerHandler = new HttpClientHandler();
         _localTokenService = new TokenLocalRepository();
         _tokenInfo = _localTokenService.Read();
     }
@@ -20,6 +22,11 @@ public class ApiHttpMessageHandler : DelegatingHandler
         request.Headers.Add("Authorization", $"Bearer {_tokenInfo.Token}");
         var response = await base.SendAsync(request, cancellationToken);
         if (response.StatusCode != System.Net.HttpStatusCode.Unauthorized)
+        {
+            return response;
+        }
+
+        if (_tokenInfo.RefreshToken.IsEmpty())
         {
             return response;
         }
