@@ -8,6 +8,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
 {
     public class PlayingPageViewModel : ViewModelBase
     {
+        private readonly PlayerService _playerService;
         public Command PlayerStateChangeCommand => new Command(PlayerStateChange);
         public Command RepeatTypeChangeCommand => new Command(RepeatTypeChange);
         public Command PreviousCommand => new Command(Previous);
@@ -21,9 +22,10 @@ namespace MusicPlayerOnline.Maui.ViewModels
         public Action<LyricViewModel> ScrollLyric { get; set; }
 
         private IEnvironmentConfigService _configService;
-        public PlayingPageViewModel(IEnvironmentConfigService configService)
+        public PlayingPageViewModel(IEnvironmentConfigService configService, PlayerService playerService)
         {
             _configService = configService;
+            _playerService = playerService;
 
             Lyrics = new ObservableCollection<LyricViewModel>();
 
@@ -39,9 +41,11 @@ namespace MusicPlayerOnline.Maui.ViewModels
 
         }
 
-        public void OnAppearing()
+        public async Task InitializeAsync()
         {
-            UpdatePlayingMusicInfo();
+            UpdateCurrentMusic();
+            GetLyricDetail();
+
             PlayModeInt = (int)GlobalConfig.MyUserSetting.Player.PlayMode;
         }
 
@@ -149,23 +153,11 @@ namespace MusicPlayerOnline.Maui.ViewModels
             }
         }
 
-        private void UpdatePlayingMusicInfo()
+        private void UpdateCurrentMusic()
         {
-            //TODO 更新正在播放的音乐
-            //if (PlayerService.Instance().PlayingMusic == null)
-            //{
-            //    return;
-            //}
-
-            //if (CurrentMusic?.Id == PlayerService.Instance().PlayingMusic.Id)
-            //{
-            //    return;
-            //}
-
-            //CurrentMusic = PlayerService.Instance().PlayingMusic;
-
-            GetLyricDetail();
+            CurrentMusic = _playerService.CurrentMusic;
         }
+
         /// <summary>
         /// 解析歌词
         /// </summary>
@@ -174,6 +166,10 @@ namespace MusicPlayerOnline.Maui.ViewModels
             if (Lyrics.Count > 0)
             {
                 Lyrics.Clear();
+            }
+            if (CurrentMusic == null)
+            {
+                return;
             }
             if (CurrentMusic.Lyric.IsEmpty())
             {

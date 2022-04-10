@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              xmlns:services="clr-namespace:MusicPlayerOnline.Maui.Services"
+             xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
              x:Class="MusicPlayerOnline.Maui.Pages.PlayingPage"
              Title="正在播放" >
     <ContentPage.Resources>
@@ -54,66 +55,66 @@
 
     </ContentPage.Resources>
 
-    <ContentPage.Content>
-        <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#000000">
-                <services:BlurredImage Opacity="0.3" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Aspect="Fill" Source="{Binding CurrentMusic.ImageUrl}"/>
-            </StackLayout>
-            <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="10,10,10,0">
-                <!-- 歌曲信息 -->
-                <StackLayout VerticalOptions="Center" Padding="0,0,0,10">
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-                        <Frame
+    <StackLayout Margin="16">
+
+        <StackLayout Margin="0,0,0,10"
+                     VerticalOptions="Start">
+            <Label Text="正在播放"
+                   Margin="0,0,0,20" />
+ 
+        </StackLayout>
+
+        <StackLayout VerticalOptions="FillAndExpand">
+           
+                <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#000000">
+                    <services:BlurredImage Opacity="0.3" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Aspect="Fill" Source="{Binding CurrentMusic.ImageUrl}"/>
+                </StackLayout>-->
+            
+                <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="10,10,10,0">
+                    <!-- 歌曲信息 -->
+                    <StackLayout VerticalOptions="Center" Padding="0,0,0,10">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Frame
                             CornerRadius="5"
                             Padding="0"
                             BackgroundColor="Transparent"
                             BorderColor="#929292"
                             VerticalOptions="Center" 
                             HasShadow="False">
-                            <Label Margin="4,1,4,1" 
+                                <Label Margin="4,1,4,1" 
                                    HorizontalOptions="Center" 
                                    BackgroundColor="Transparent"
                                    TextColor="#E0E0E0"
                                    VerticalTextAlignment="Center"
                                    VerticalOptions="Center"
                                    Text="{Binding CurrentMusic.PlatformName}" />
-                        </Frame>
-                        <Label Text="{Binding CurrentMusic.Name}" TextColor="#E0E0E0" FontSize="20"></Label>
+                            </Frame>
+                            <Label Text="{Binding CurrentMusic.Name}" TextColor="#E0E0E0" FontSize="20"></Label>
+                        </StackLayout>
+                        <Label Text="{Binding CurrentMusic.Artist}" TextColor="#929292" FontSize="15" HorizontalTextAlignment="Center"></Label>
                     </StackLayout>
-                    <Label Text="{Binding CurrentMusic.Artist}" TextColor="#929292" FontSize="15" HorizontalTextAlignment="Center"></Label>
-                </StackLayout>
-                <!-- 歌词 -->
-                <StackLayout VerticalOptions="FillAndExpand">
-                    <Label Text="暂无歌词" HorizontalTextAlignment="Center" TextColor="#E0E0E0" Style="{StaticResource LabelShowLyrics}"></Label>
-                    <ListView ItemsSource="{Binding Lyrics}" HorizontalOptions="Center" SelectionMode="None">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <ViewCell.View>
-                                        <StackLayout VerticalOptions="CenterAndExpand">
-                                            <Label Text="{Binding Info}" Style="{StaticResource LyricItem}"/>
-                                        </StackLayout>
-                                    </ViewCell.View>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackLayout>
-                <!-- 进度条 -->
-                <StackLayout Orientation="Horizontal" VerticalOptions="End" Margin="0,10,0,0">
-                    <Label TextColor="#E0E0E0" Text="{Binding CurrentTime}" HorizontalOptions="Start"></Label>
-                    <Slider x:Name="SliderPlayProgress" Minimum="0" Maximum="1" Value="{Binding Position}" HorizontalOptions="FillAndExpand" ThumbColor="#0088EB" />
-                    <Label TextColor="#E0E0E0" Text="{Binding DurationTime}" HorizontalOptions="End"></Label>
-                </StackLayout>
-                <!-- 播放按钮 -->
-                <StackLayout Padding="5" Orientation="Horizontal" VerticalOptions="End" HeightRequest="60">
-                    <ImageButton Aspect="AspectFill" Source="repeat_one" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30" VerticalOptions="Center" Command="{Binding RepeatTypeChangeCommand}" HorizontalOptions="StartAndExpand" Style="{StaticResource RepeatTypeImage}"></ImageButton>
-                    <ImageButton Aspect="AspectFill" Source="previous" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30" VerticalOptions="Center"  HorizontalOptions="CenterAndExpand" Command="{Binding PreviousCommand}"></ImageButton>
-                    <ImageButton Aspect="AspectFill" BackgroundColor="Transparent" WidthRequest="60" HeightRequest="60" VerticalOptions="Center"  HorizontalOptions="CenterAndExpand" Command="{Binding PlayerStateChangeCommand}" Style="{StaticResource PlayerStateImage}"></ImageButton>
-                    <ImageButton Aspect="AspectFill" Source="next" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30" VerticalOptions="Center"  HorizontalOptions="CenterAndExpand" Command="{Binding NextCommand}"></ImageButton>
-                    <ImageButton Aspect="AspectFill" Source="puzzled" BackgroundColor="Transparent" WidthRequest="30" HeightRequest="30" VerticalOptions="Center"  HorizontalOptions="EndAndExpand" Command="{Binding TempButtonCommand}"></ImageButton>
-                </StackLayout>
-            </StackLayout>
-        </AbsoluteLayout>
-    </ContentPage.Content>
+                    <!-- 歌词 -->
+                    <StackLayout VerticalOptions="FillAndExpand">
+                        <Label Text="暂无歌词" HorizontalTextAlignment="Center" TextColor="#E0E0E0" Style="{StaticResource LabelShowLyrics}"></Label>
+                        <ListView ItemsSource="{Binding Lyrics}" HorizontalOptions="Center" SelectionMode="None">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <ViewCell.View>
+                                            <StackLayout VerticalOptions="CenterAndExpand">
+                                                <Label Text="{Binding Info}" Style="{StaticResource LyricItem}"/>
+                                            </StackLayout>
+                                        </ViewCell.View>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>             
+                </StackLayout> 
+        </StackLayout>
+
+        <controls:Player x:Name="player" VerticalOptions="End">
+        </controls:Player>
+    </StackLayout>
+
 </ContentPage>

@@ -182,4 +182,9 @@ public partial class Player : ContentView
     {
         ToastService.Show("别点了，小的就是个占位的~~~");
     }
+
+    private async void GotoPlaying_Tapped(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync($"{nameof(PlayingPage)}");
+    }
 }

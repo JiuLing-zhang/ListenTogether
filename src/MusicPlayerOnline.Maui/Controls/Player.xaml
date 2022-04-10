@@ -17,6 +17,11 @@
                     <StackLayout Orientation="Horizontal">
                         <StackLayout HorizontalOptions="Start"
                                      Orientation="Horizontal">
+
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="GotoPlaying_Tapped"/>
+                            </StackLayout.GestureRecognizers>
+                            
                             <Image x:Name="ImgCurrentMusic"
                                    WidthRequest="60"
                                    ></Image>
