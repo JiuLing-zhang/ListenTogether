@@ -2,7 +2,7 @@
 namespace MusicPlayerOnline.Maui;
 public partial class App : Application
 {
-    public App(IConfiguration config, IEnvironmentConfigService configService)
+    public App(IConfiguration config, IEnvironmentConfigService configService, IUserLocalService userLocalService)
     {
         InitializeComponent();
 
@@ -30,11 +30,19 @@ public partial class App : Application
             deviceId = File.ReadAllText(deviceInfoFileName);
         }
 
+        BusinessConfig.TokenUpdated += (_, _) => userLocalService.UpdateToken(BusinessConfig.UserToken);
         BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataDirectory, appSetting.LocalDbName), appSetting.ApiDomain, deviceId);
-        GlobalConfig.MyUserSetting = configService.ReadAllSettings();
+        GlobalConfig.CurrentUser = userLocalService.Read();
+        if (GlobalConfig.CurrentUser != null)
+        {
+            BusinessConfig.UserToken = new TokenInfo()
+            {
+                Token = GlobalConfig.CurrentUser.Token,
+                RefreshToken = GlobalConfig.CurrentUser.RefreshToken
+            };
+        }
 
-        //TODO 临时赋值，实际需要判断登录状态
-        BusinessConfig.IsUseApiInterface = false;
+        GlobalConfig.MyUserSetting = configService.ReadAllSettings();
 
         //主题
         //App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
@@ -54,5 +62,6 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(MyFavoriteEditPage), typeof(MyFavoriteEditPage));
         Routing.RegisterRoute(nameof(MyFavoriteDetailPage), typeof(MyFavoriteDetailPage));
         Routing.RegisterRoute(nameof(AddToMyFavoritePage), typeof(AddToMyFavoritePage));
+        Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
     }
 }

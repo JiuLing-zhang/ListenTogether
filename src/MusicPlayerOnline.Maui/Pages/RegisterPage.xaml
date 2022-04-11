@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicPlayerOnline.Maui.RegisterPage"
+             Title="注册">
+
+
+    <ContentPage.Resources>
+        <Style x:Key="RegisterButton" TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RegisterSucceed}" Value="true" TargetType="Button">
+                    <Setter Property="IsVisible" Value="false"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding RegisterSucceed}" Value="false" TargetType="Button">
+                    <Setter Property="IsVisible" Value="true"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </ContentPage.Resources>
+
+
+    <StackLayout Margin="16">
+        <Entry Text="{Binding Username}"
+                       Placeholder="请输入用户名"
+                       Margin="0,10,0,10"/>
+        <Entry Text="{Binding Nickname}"
+                       Placeholder="请输入昵称" 
+                       Margin="0,0,0,10"/>
+        <Entry Text="{Binding Password}"
+                       Placeholder="密码"
+                       IsPassword="True"
+                       Margin="0,0,0,10"/>
+        <Entry Text="{Binding Password2}"
+                       Placeholder="确认密码"
+                       IsPassword="True"
+                       Margin="0,0,0,10"/>
+
+        <HorizontalStackLayout Margin="0,10,0,20">
+            <Button Text="注册"       
+                    Margin="0,0,10,0"
+                    Style="{DynamicResource RegisterButton}"
+                    Command="{Binding RegisterCommand}"/>
+            <Button Text="返回"           
+                    Command="{Binding GoBackCommand}"/>
+        </HorizontalStackLayout>
+        <Label Text="{Binding ApiMessage}"></Label>
+    </StackLayout>
+</ContentPage>

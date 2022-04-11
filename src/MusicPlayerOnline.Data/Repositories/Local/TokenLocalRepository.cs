@@ -3,36 +3,73 @@ using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 
 namespace MusicPlayerOnline.Data.Repositories.Local;
-public class TokenLocalRepository : ITokenRepository
+
+//TODO 文件重命名
+public class UserLocalRepository : IUserLocalRepository
 {
-    public bool Write(TokenInfo tokenInfo)
+    public bool Write(User user)
     {
-        var myTokenInfo = DatabaseProvide.Database.Table<TokenEntity>().FirstOrDefault();
-        if (myTokenInfo == null)
+        var dbUser = DatabaseProvide.Database.Table<UserEntity>().FirstOrDefault();
+        int count;
+        if (dbUser != null)
         {
-            throw new Exception("用户授权数据不完整，写入失败");
+            dbUser.Username = user.Username;
+            dbUser.Nickname = user.Nickname;
+            dbUser.Avatar = user.Avatar;
+            dbUser.Token = user.Token;
+            dbUser.RefreshToken = user.RefreshToken;
+            count = DatabaseProvide.Database.Update(dbUser);
+        }
+        else
+        {
+            var myUser = new UserEntity()
+            {
+                Username = user.Username,
+                Nickname = user.Nickname,
+                Avatar = user.Avatar,
+                Token = user.Token,
+                RefreshToken = user.RefreshToken
+            };
+            count = DatabaseProvide.Database.Insert(myUser);
         }
 
-        myTokenInfo.Token = tokenInfo.Token;
-        myTokenInfo.RefreshToken = tokenInfo.RefreshToken;
-
-        int count = DatabaseProvide.Database.Update(myTokenInfo);
         return count != 0;
     }
 
-    public TokenInfo Read()
+    public User? Read()
     {
-        var tokens = DatabaseProvide.Database.Table<TokenEntity>().ToList();
+        var tokens = DatabaseProvide.Database.Table<UserEntity>().ToList();
 
         if (tokens == null || tokens.Count != 1)
         {
-            throw new Exception("用户授权数据不完整，读取失败");
+            return default;
         }
 
-        return new TokenInfo()
+        return new User()
         {
+            Username = tokens[0].Username,
+            Nickname = tokens[0].Nickname,
+            Avatar = tokens[0].Avatar,
             Token = tokens[0].Token,
             RefreshToken = tokens[0].RefreshToken
         };
+    }
+
+    public void Remove()
+    {
+        DatabaseProvide.Database.DeleteAll<UserEntity>();
+    }
+
+    public void UpdateToken(TokenInfo tokenInfo)
+    {
+        var dbUser = DatabaseProvide.Database.Table<UserEntity>().FirstOrDefault();
+
+        if (dbUser == null)
+        {
+            return;
+        }
+        dbUser.Token = tokenInfo.Token;
+        dbUser.RefreshToken = tokenInfo.RefreshToken;
+        DatabaseProvide.Database.Update(dbUser);
     }
 }

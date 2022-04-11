@@ -1,6 +1,5 @@
-﻿using MusicPlayerOnline.Business.Interfaces;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
 using MusicPlayerOnline.Model.Enums;
-using System.Windows.Input;
 
 namespace MusicPlayerOnline.Maui.ViewModels;
 
@@ -9,15 +8,78 @@ public class SettingPageViewModel : ViewModelBase
     public ICommand OpenUrlCommand => new Command<string>(async (url) => await Launcher.OpenAsync(url));
     public ICommand ClearCacheCommand => new Command(ClearCache);
     public ICommand OpenLogCommand => new Command(OpenLog);
+    public ICommand LoginCommand => new Command(Login);
+    public ICommand LogoutCommand => new Command(Logout);
+    public ICommand GoToRegisterCommand => new Command(GoToRegister);
 
     private IEnvironmentConfigService _configService;
-    public SettingPageViewModel(IEnvironmentConfigService configService)
+    private IUserService _userService;
+    private IUserLocalService _userLocalService;
+    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, IUserLocalService userLocalService)
     {
         _configService = configService;
+        _userService = userService;
+        _userLocalService = userLocalService;
+    }
 
+    public async Task InitializeAsync()
+    {
         GetAppConfig();
+        UpdateUserInfo();
+
         //TODO IAppVersionInfo
         //VersionName = DependencyService.Get<IAppVersionInfo>().GetVersionName();
+    }
+
+    private bool _isLoginOk;
+    /// <summary>
+    /// 是否登录
+    /// </summary>
+    public bool IsLoginOk
+    {
+        get => _isLoginOk;
+        set
+        {
+            _isLoginOk = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private UserInfoViewModel _userInfo;
+    /// <summary>
+    /// 用户信息
+    /// </summary>
+    public UserInfoViewModel UserInfo
+    {
+        get => _userInfo;
+        set
+        {
+            _userInfo = value;
+            OnPropertyChanged();
+        }
+    }
+
+
+    private string _loginUsername;
+    public string LoginUsername
+    {
+        get => _loginUsername;
+        set
+        {
+            _loginUsername = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _loginPassword;
+    public string LoginPassword
+    {
+        get => _loginPassword;
+        set
+        {
+            _loginPassword = value;
+            OnPropertyChanged();
+        }
     }
 
     /// <summary>
@@ -225,6 +287,24 @@ public class SettingPageViewModel : ViewModelBase
         IsCleanPlaylistWhenPlayMyFavorite = GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite;
     }
 
+    private void UpdateUserInfo()
+    {
+        if (GlobalConfig.CurrentUser == null)
+        {
+            IsLoginOk = false;
+        }
+        else
+        {
+            IsLoginOk = true;
+            UserInfo = new UserInfoViewModel()
+            {
+                Username = GlobalConfig.CurrentUser.Username,
+                Nickname = GlobalConfig.CurrentUser.Nickname,
+                Avatar = GlobalConfig.CurrentUser.Avatar
+            };
+        }
+    }
+
     private bool CheckEnablePlatform(PlatformEnum platform)
     {
         if ((GlobalConfig.MyUserSetting.Search.EnablePlatform & platform) == platform)
@@ -332,5 +412,47 @@ public class SettingPageViewModel : ViewModelBase
     {
         //TODO OpenLog
         //await Shell.Current.GoToAsync($"{nameof(LogPage)}", true);
+    }
+
+    private async void Login()
+    {
+        if (LoginUsername.IsEmpty() || LoginPassword.IsEmpty())
+        {
+            ToastService.Show("请输入用户名和密码");
+            return;
+        }
+
+        var user = await _userService.Login(LoginUsername, LoginPassword);
+        if (user == null)
+        {
+            ToastService.Show("登录失败：用户名或密码错误");
+            return;
+        }
+
+        if (!_userLocalService.Write(user))
+        {
+            ToastService.Show("用户信息保存失败，请重试");
+            return;
+        }
+        GlobalConfig.CurrentUser = user;
+        UpdateUserInfo();
+    }
+
+    private async void Logout()
+    {
+        if (!await _userService.Logout())
+        {
+            ToastService.Show("操作失败，请重试");
+            return;
+        }
+
+        _userLocalService.Remove();
+        GlobalConfig.CurrentUser = null;
+        UpdateUserInfo();
+    }
+
+    private async void GoToRegister()
+    {
+        await Shell.Current.GoToAsync($"{nameof(RegisterPage)}", true);
     }
 }

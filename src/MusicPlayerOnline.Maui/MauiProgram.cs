@@ -32,7 +32,8 @@ namespace MusicPlayerOnline.Maui
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
-
+             
+           
             return builder.Build();
         }
     }

@@ -19,5 +19,10 @@ namespace MusicPlayerOnline.Maui
         public static readonly string MusicCacheDirectory = Path.Combine(AppDataDirectory, "musics");
 
         public static EnvironmentSetting MyUserSetting { get; set; }
+
+        /// <summary>
+        /// 当前用户
+        /// </summary>
+        public static User? CurrentUser { get; set; }
     }
 }

@@ -8,22 +8,23 @@ using MusicPlayerOnline.Model.Api.Response;
 namespace MusicPlayerOnline.Data.Repositories.Api;
 public class UserApiRepository : IUserRepository
 {
-    public async Task<bool> Register(string username, string password)
+    public async Task<(bool Succeed, string Message)> Register(UserRegister registerUser)
     {
-        var data = new UserRequest()
+        var data = new UserRegisterRequest()
         {
-            Username = username,
-            Password = password
+            Username = registerUser.Username,
+            Nickname = registerUser.Nickname,
+            Password = registerUser.Password
         };
         var sc = new StringContent(JsonSerializer.Serialize(data), System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Register, sc);
         var json = await response.Content.ReadAsStringAsync();
         var result = JsonSerializer.Deserialize<Result>(json);
-        if (result == null)
+        if (result == null || result.Code != 0)
         {
-            return false;
+            return (false, result == null ? "" : result.Message);
         }
-        return true;
+        return (true, result.Message);
     }
 
     public async Task<User?> Login(string username, string password)
@@ -45,7 +46,7 @@ public class UserApiRepository : IUserRepository
 
         return new User()
         {
-            UserName = result.Data.UserName,
+            Username = result.Data.Username,
             Nickname = result.Data.Nickname,
             Avatar = result.Data.Avatar,
             Token = result.Data.Token,

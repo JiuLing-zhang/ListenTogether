@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicPlayerOnline.Business"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicPlayerOnline.Data", "src\MusicPlayerOnline.Data\MusicPlayerOnline.Data.csproj", "{BD4962F1-E399-4CDB-ADB2-6B1DA837C5A0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MusicPlayerOnline.Common", "src\MusicPlayerOnline.Common\MusicPlayerOnline.Common.csproj", "{067AE5E8-DFCD-41F1-9873-12A2149ECAF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{BD4962F1-E399-4CDB-ADB2-6B1DA837C5A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD4962F1-E399-4CDB-ADB2-6B1DA837C5A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD4962F1-E399-4CDB-ADB2-6B1DA837C5A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{067AE5E8-DFCD-41F1-9873-12A2149ECAF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{067AE5E8-DFCD-41F1-9873-12A2149ECAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{067AE5E8-DFCD-41F1-9873-12A2149ECAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{067AE5E8-DFCD-41F1-9873-12A2149ECAF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

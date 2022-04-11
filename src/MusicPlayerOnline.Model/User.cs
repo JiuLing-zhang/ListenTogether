@@ -8,7 +8,7 @@ namespace MusicPlayerOnline.Model
 {
     public class User
     {
-        public string UserName { get; set; } = null!;
+        public string Username { get; set; } = null!;
         public string Nickname { get; set; } = null!;
         public string Avatar { get; set; } = null!;
         public string Token { get; set; } = null!;

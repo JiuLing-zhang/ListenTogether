@@ -53,14 +53,7 @@ internal class DatabaseProvide
         Database.CreateTable<PlaylistEntity>();
         Database.CreateTable<MyFavoriteEntity>();
         Database.CreateTable<MyFavoriteDetailEntity>();
- 
         Database.CreateTable<EnvironmentConfigEntity>();
-      
-
-        Database.CreateTable<TokenEntity>();
-        if (Database.Table<TokenEntity>().Count() == 0)
-        {
-            Database.Insert(new TokenEntity());
-        }
+        Database.CreateTable<UserEntity>();
     }
 }

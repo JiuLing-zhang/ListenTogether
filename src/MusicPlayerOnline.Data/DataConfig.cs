@@ -1,4 +1,6 @@
-﻿namespace MusicPlayerOnline.Data;
+﻿using MusicPlayerOnline.Model;
+
+namespace MusicPlayerOnline.Data;
 
 public class DataConfig
 {
@@ -10,8 +12,19 @@ public class DataConfig
     /// </summary>
     internal static ApiSettings ApiSetting { get; set; } = null!;
 
+    /// <summary>
+    /// 用于认证的Token 信息
+    /// </summary>
+    public static TokenInfo? UserToken { get; set; }
+    /// <summary>
+    /// Token 已更新
+    /// </summary>
+    public static event EventHandler? TokenUpdated;
+
     public static void SetDataConnection(string localDbPath, string apiBaseUrl, string deviceId)
     {
+        ApiHttpMessageHandler.TokenUpdated += TokenUpdated;
+
         DatabaseProvide.SetConnection(localDbPath);
         ApiSetting = new ApiSettings(apiBaseUrl, deviceId);
     }

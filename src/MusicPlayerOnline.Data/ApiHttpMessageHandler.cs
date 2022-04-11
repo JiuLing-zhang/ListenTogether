@@ -1,37 +1,32 @@
-﻿using System.Text.Json;
-using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Data.Repositories.Local;
-using MusicPlayerOnline.Model;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
+using MusicPlayerOnline.Common.Exceptions;
 using MusicPlayerOnline.Model.Api;
 using MusicPlayerOnline.Model.Api.Response;
+using System.Text.Json;
 
 namespace MusicPlayerOnline.Data;
 public class ApiHttpMessageHandler : DelegatingHandler
 {
-    private readonly ITokenRepository _localTokenService;
-    private readonly TokenInfo _tokenInfo;
+    public static event EventHandler? TokenUpdated;
     public ApiHttpMessageHandler()
     {
         InnerHandler = new HttpClientHandler();
-        _localTokenService = new TokenLocalRepository();
-        _tokenInfo = _localTokenService.Read();
     }
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        request.Headers.Add("Authorization", $"Bearer {_tokenInfo.Token}");
+        request.Headers.Add("Authorization", $"Bearer {DataConfig.UserToken?.Token}");
         var response = await base.SendAsync(request, cancellationToken);
         if (response.StatusCode != System.Net.HttpStatusCode.Unauthorized)
         {
             return response;
         }
 
-        if (_tokenInfo.RefreshToken.IsEmpty())
+        if (DataConfig.UserToken == null || DataConfig.UserToken.RefreshToken.IsEmpty())
         {
-            return response;
+            throw new AuthorizeException("无效的登录信息");
         }
 
-        string content = JsonSerializer.Serialize(new { _tokenInfo.RefreshToken });
+        string content = JsonSerializer.Serialize(new { DataConfig.UserToken.RefreshToken });
         var sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var refreshTokenRequest = new HttpRequestMessage(HttpMethod.Post, DataConfig.ApiSetting.User.RefreshToken)
         {
@@ -43,20 +38,15 @@ public class ApiHttpMessageHandler : DelegatingHandler
         var result = JsonSerializer.Deserialize<Result<UserResponse>>(json);
         if (result == null || result.Code != 0 || result.Data == null)
         {
-            //刷新失败时，返回原有的 response
-            return response;
+            throw new AuthorizeException("更新认证信息失败");
         }
 
-        _tokenInfo.Token = result.Data.Token;
-        _tokenInfo.RefreshToken = result.Data.RefreshToken;
-        if (_localTokenService.Write(_tokenInfo) == false)
-        {
-            //新的 token 保存失败时，也返回原有的 response
-            return response;
-        }
+        DataConfig.UserToken.Token = result.Data.Token;
+        DataConfig.UserToken.RefreshToken = result.Data.RefreshToken;
+        TokenUpdated?.Invoke(this, EventArgs.Empty);
 
         request.Headers.Remove("Authorization");
-        request.Headers.Add("Authorization", $"Bearer {_tokenInfo.Token}");
+        request.Headers.Add("Authorization", $"Bearer {DataConfig.UserToken.Token}");
 
         return await base.SendAsync(request, cancellationToken);
     }

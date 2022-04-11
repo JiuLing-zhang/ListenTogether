@@ -16,9 +16,9 @@ public class UserController : ApiBaseController
 
     [AllowAnonymous]
     [HttpPost("reg")]
-    public async Task<IActionResult> Register(UserRequest user)
+    public async Task<IActionResult> Register(UserRegisterRequest registerUser)
     {
-        var response = await _userService.Register(user);
+        var response = await _userService.Register(registerUser);
         return Ok(response);
     }
 

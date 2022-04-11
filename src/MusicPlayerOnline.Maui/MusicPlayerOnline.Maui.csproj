@@ -61,6 +61,7 @@
 	  <Page Remove="Pages\MyFavoriteAddPage.xaml" />
 	  <Page Remove="Pages\MyFavoriteDetailPage.xaml" />
 	  <Page Remove="Pages\MyFavoriteEditPage.xaml" />
+	  <Page Remove="Pages\RegisterPage.xaml" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -74,6 +75,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\MusicPlayerOnline.Business\MusicPlayerOnline.Business.csproj" />
+	  <ProjectReference Include="..\MusicPlayerOnline.Common\MusicPlayerOnline.Common.csproj" />
 	  <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
 	</ItemGroup>
 
@@ -100,6 +102,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\PlaylistPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\RegisterPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\SearchPage.xaml">

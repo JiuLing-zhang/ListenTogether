@@ -2,9 +2,10 @@
 global using MusicPlayerOnline.Business;
 global using MusicPlayerOnline.Business.Factories;
 global using MusicPlayerOnline.Business.Interfaces;
-global using MusicPlayerOnline.Business.Services;
 global using MusicPlayerOnline.Maui.Services;
 global using MusicPlayerOnline.Maui.ViewModels;
 global using MusicPlayerOnline.Maui.Utils;
 global using System.Windows.Input;
 global using MusicPlayerOnline.Maui.Pages;
+global using MusicPlayerOnline.Common.Exceptions;
+global using JiuLing.CommonLibs.ExtensionMethods;

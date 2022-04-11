@@ -14,7 +14,7 @@ public static class PagesExtensions
         builder.Services.AddTransient<MyFavoriteAddPage>();
         builder.Services.AddTransient<MyFavoriteEditPage>();
         builder.Services.AddTransient<MyFavoriteDetailPage>();
-
+        builder.Services.AddSingleton<RegisterPage>();
         return builder;
     }
 }

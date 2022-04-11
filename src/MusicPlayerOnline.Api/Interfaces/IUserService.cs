@@ -7,7 +7,7 @@ using MusicPlayerOnline.Model.Api.Response;
 namespace MusicPlayerOnline.Api.Interfaces;
 public interface IUserService
 {
-    public Task<Result> Register(UserRequest user);
+    public Task<Result> Register(UserRegisterRequest registerUser);
     public Task<Result<UserResponse>> Login(UserRequest user, string deviceId);
     public Task Logout(int userId, string deviceId);
     public Task<Result<UserResponse>> RefreshToken(AuthenticateRequest authenticateInfo, string deviceId);

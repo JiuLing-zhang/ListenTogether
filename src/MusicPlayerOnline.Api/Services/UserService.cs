@@ -23,24 +23,24 @@ internal class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public async Task<Result> Register(UserRequest user)
+    public async Task<Result> Register(UserRegisterRequest registerUser)
     {
-        var isUserExist = await _context.Users.AnyAsync(x => x.Username == user.Username);
+        var isUserExist = await _context.Users.AnyAsync(x => x.Username == registerUser.Username);
         if (isUserExist)
         {
             return new Result(1, "用户名已存在");
         }
 
         string salt = JiuLing.CommonLibs.GuidUtils.GetFormatN();
-        string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{user.Password}{salt}");
+        string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{registerUser.Password}{salt}");
 
         var userEntity = new UserEntity()
         {
-            Username = user.Username,
+            Username = registerUser.Username,
             Password = password,
             Salt = salt,
             IsEnable = false,
-            Nickname = user.Username,
+            Nickname = registerUser.Nickname,
             Avatar = "",
             CreateTime = DateTime.Now,
         };
@@ -79,7 +79,7 @@ internal class UserService : IUserService
 
         return new Result<UserResponse>(0, "", new UserResponse()
         {
-            UserName = userEntity.Username,
+            Username = userEntity.Username,
             Nickname = userEntity.Nickname,
             Avatar = userEntity.Avatar,
             Token = token,
@@ -112,7 +112,7 @@ internal class UserService : IUserService
 
         return new Result<UserResponse>(0, "更新成功", new UserResponse()
         {
-            UserName = userEntity.Username,
+            Username = userEntity.Username,
             Nickname = userEntity.Nickname,
             Avatar = userEntity.Avatar,
             Token = newToken,
@@ -142,7 +142,7 @@ internal class UserService : IUserService
 
         return new Result<UserResponse>(0, "", new UserResponse()
         {
-            UserName = user.Username,
+            Username = user.Username,
             Nickname = user.Nickname,
             Avatar = user.Avatar
         });

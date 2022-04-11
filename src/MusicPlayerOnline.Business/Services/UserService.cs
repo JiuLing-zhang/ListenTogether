@@ -12,9 +12,9 @@ public class UserService : IUserService
         _repository = repository;
     }
 
-    public async Task<bool> Register(string username, string password)
+    public async Task<(bool Succeed, string Message)> Register(UserRegister registerUser)
     {
-        return await _repository.Register(username, password);
+        return await _repository.Register(registerUser);
     }
 
     public async Task<User?> Login(string username, string password)
