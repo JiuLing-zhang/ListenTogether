@@ -67,7 +67,7 @@ public class MyFavoriteService : IMyFavoriteService
             {
                 Name = myFavorite.Name,
                 UserBaseId = userId,
-                ImageUrl = myFavorite.ImageUrl
+                ImageUrl = myFavorite.ImageUrl ?? ""
             };
             _context.MyFavorites.Add(favorite);
         }
@@ -75,7 +75,7 @@ public class MyFavoriteService : IMyFavoriteService
         {
             favorite.Name = myFavorite.Name;
             favorite.UserBaseId = userId;
-            favorite.ImageUrl = myFavorite.ImageUrl;
+            favorite.ImageUrl = myFavorite.ImageUrl ?? "";
             _context.MyFavorites.Update(favorite);
         }
 

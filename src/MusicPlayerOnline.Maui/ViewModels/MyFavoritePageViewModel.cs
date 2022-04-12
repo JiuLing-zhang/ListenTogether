@@ -4,24 +4,26 @@ namespace MusicPlayerOnline.Maui.ViewModels
 {
     public class MyFavoritePageViewModel : ViewModelBase
     {
-        private readonly IMyFavoriteService _myFavoriteService;
-        private readonly IPlaylistService _playlistService;
-        private readonly IMusicService _musicService;
+        readonly IServiceProvider _services;
+        private IMyFavoriteService _myFavoriteService;
+        private IPlaylistService _playlistService;
+        private IMusicService _musicService;
         public ICommand MyFavoriteAddCommand => new Command(AddMyFavorite);
         public ICommand SelectedChangedCommand => new Command<MyFavoriteViewModel>(SelectedChangedDo);
         public ICommand PlayAllMusicsCommand => new Command<MyFavoriteViewModel>(PlayAllMusics);
         public string Title => "我的歌单";
-        public MyFavoritePageViewModel(IMyFavoriteServiceFactory myFavoriteServiceFactory, IPlaylistServiceFactory playlistServiceFactory, IMusicServiceFactory musicServiceFactory)
+        public MyFavoritePageViewModel(IServiceProvider services)
         {
             FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
-
-            _myFavoriteService = myFavoriteServiceFactory.Create();
-            _playlistService = playlistServiceFactory.Create();
-            _musicService = musicServiceFactory.Create();
+            _services = services;
         }
 
         public async Task InitializeAsync()
         {
+            _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
+            _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
+            _musicService = _services.GetService<IMusicServiceFactory>().Create();
+
             if (FavoriteList.Count > 0)
             {
                 FavoriteList.Clear();

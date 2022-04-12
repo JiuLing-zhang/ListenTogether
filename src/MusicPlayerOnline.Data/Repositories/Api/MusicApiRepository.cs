@@ -13,7 +13,7 @@ public class MusicApiRepository : IMusicRepository
     {
         string url = string.Format(DataConfig.ApiSetting.Music.Get, id);
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);
-        var obj = JsonSerializer.Deserialize<Result<MusicResponse>>(json);
+        var obj = json.ToObject<Result<MusicResponse>>();
         if (obj == null)
         {
             return default;
@@ -43,11 +43,11 @@ public class MusicApiRepository : IMusicRepository
 
     public async Task<bool> AddOrUpdateAsync(Music music)
     {
-        string content = JsonSerializer.Serialize(music);
+        string content = music.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.Music.AddOrUpdate, sc);
         var json = await response.Content.ReadAsStringAsync();
-        var obj = JsonSerializer.Deserialize<Result>(json);
+        var obj = json.ToObject<Result>();
         if (obj == null || obj.Code != 0)
         {
             return false;
@@ -61,7 +61,7 @@ public class MusicApiRepository : IMusicRepository
         var response = await DataConfig.HttpClientWithToken.PostAsync(url, null);
         var json = await response.Content.ReadAsStringAsync();
 
-        var obj = JsonSerializer.Deserialize<Result>(json);
+        var obj = json.ToObject<Result>();
         if (obj == null || obj.Code != 0)
         {
             return false;

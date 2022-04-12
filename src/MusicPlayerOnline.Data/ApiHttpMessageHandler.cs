@@ -26,7 +26,7 @@ public class ApiHttpMessageHandler : DelegatingHandler
             throw new AuthorizeException("无效的登录信息");
         }
 
-        string content = JsonSerializer.Serialize(new { DataConfig.UserToken.RefreshToken });
+        string content = (new { DataConfig.UserToken.RefreshToken }).ToJson();
         var sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var refreshTokenRequest = new HttpRequestMessage(HttpMethod.Post, DataConfig.ApiSetting.User.RefreshToken)
         {
@@ -35,7 +35,7 @@ public class ApiHttpMessageHandler : DelegatingHandler
 
         using var refreshTokenResponse = await base.SendAsync(refreshTokenRequest, cancellationToken);
         var json = await refreshTokenResponse.Content.ReadAsStringAsync(cancellationToken);
-        var result = JsonSerializer.Deserialize<Result<UserResponse>>(json);
+        var result = json.ToObject<Result<UserResponse>>();
         if (result == null || result.Code != 0 || result.Data == null)
         {
             throw new AuthorizeException("更新认证信息失败");

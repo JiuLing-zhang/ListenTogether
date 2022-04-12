@@ -10,16 +10,16 @@ public class UserApiRepository : IUserRepository
 {
     public async Task<(bool Succeed, string Message)> Register(UserRegister registerUser)
     {
-        var data = new UserRegisterRequest()
-        {
-            Username = registerUser.Username,
-            Nickname = registerUser.Nickname,
-            Password = registerUser.Password
-        };
-        var sc = new StringContent(JsonSerializer.Serialize(data), System.Text.Encoding.UTF8, "application/json");
-        var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Register, sc);
+        var mfdc = new MultipartFormDataContent();
+        mfdc.Add(new StringContent(registerUser.Username), nameof(registerUser.Username));
+        mfdc.Add(new StringContent(registerUser.Nickname), nameof(registerUser.Nickname));
+        mfdc.Add(new StringContent(registerUser.Password), nameof(registerUser.Password));
+        //头像
+        mfdc.Add(new StreamContent(new MemoryStream(registerUser.Avatar.File)), "Avatar", registerUser.Avatar.FileName);
+
+        var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Register, mfdc);
         var json = await response.Content.ReadAsStringAsync();
-        var result = JsonSerializer.Deserialize<Result>(json);
+        var result = json.ToObject<Result>();
         if (result == null || result.Code != 0)
         {
             return (false, result == null ? "" : result.Message);
@@ -34,11 +34,11 @@ public class UserApiRepository : IUserRepository
             Username = username,
             Password = password
         };
-        var sc = new StringContent(JsonSerializer.Serialize(data), System.Text.Encoding.UTF8, "application/json");
+        var sc = new StringContent(data.ToJson(), System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Login, sc);
         var json = await response.Content.ReadAsStringAsync();
 
-        var result = JsonSerializer.Deserialize<Result<UserResponse>>(json);
+        var result = json.ToObject<Result<UserResponse>>();
         if (result == null || result.Data == null)
         {
             return default;
@@ -58,7 +58,7 @@ public class UserApiRepository : IUserRepository
     {
         var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Logout, null);
         var json = await response.Content.ReadAsStringAsync();
-        var result = JsonSerializer.Deserialize<Result>(json);
+        var result = json.ToObject<Result>();
         if (result == null)
         {
             return false;

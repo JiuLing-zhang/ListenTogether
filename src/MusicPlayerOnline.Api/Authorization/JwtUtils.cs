@@ -67,7 +67,7 @@ public class JwtUtils : IJwtUtils
             }, out SecurityToken validatedToken);
 
             var securityToken = (JwtSecurityToken)validatedToken;
-            var id = securityToken.Claims.First(x => x.Type == "Id").Value;
+            var id = securityToken.Claims.First(x => x.Type == "UserId").Value;
 
             // return user id from JWT token if validation successful
             return Convert.ToInt32(id);

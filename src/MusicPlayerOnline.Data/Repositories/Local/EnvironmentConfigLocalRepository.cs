@@ -17,7 +17,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         }
 
         var result = new EnvironmentSetting();
-        var playerSetting = JsonSerializer.Deserialize<PlayerSetting>(environmentConfig.PlayerSettingJson) ?? throw new Exception("配置信息不存在：PlayerSettingJson");
+        var playerSetting = environmentConfig.PlayerSettingJson.ToObject<PlayerSetting>() ?? throw new Exception("配置信息不存在：PlayerSettingJson");
         result.Player = new PlayerSetting()
         {
             Voice = playerSetting.Voice,
@@ -26,7 +26,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         };
 
         //通用设置
-        var generalConfig = JsonSerializer.Deserialize<GeneralSetting>(environmentConfig.GeneralSettingJson) ?? throw new Exception("配置信息不存在：GeneralSetting");
+        var generalConfig = environmentConfig.GeneralSettingJson.ToObject<GeneralSetting>() ?? throw new Exception("配置信息不存在：GeneralSetting");
         result.General = new GeneralSetting()
         {
             IsAutoCheckUpdate = generalConfig.IsAutoCheckUpdate,
@@ -35,7 +35,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         };
 
         //播放设置
-        var playConfig = JsonSerializer.Deserialize<PlaySetting>(environmentConfig.PlaySettingJson) ?? throw new Exception("配置信息不存在：PlaySetting");
+        var playConfig = environmentConfig.PlaySettingJson.ToObject<PlaySetting>() ?? throw new Exception("配置信息不存在：PlaySetting");
         result.Play = new PlaySetting()
         {
             IsAutoNextWhenFailed = playConfig.IsAutoNextWhenFailed,
@@ -44,7 +44,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         };
 
         //搜索设置
-        var searchConfig = JsonSerializer.Deserialize<SearchSetting>(environmentConfig.SearchSettingJson) ?? throw new Exception("配置信息不存在：SearchSetting");
+        var searchConfig = environmentConfig.SearchSettingJson.ToObject<SearchSetting>() ?? throw new Exception("配置信息不存在：SearchSetting");
         result.Search = new SearchSetting()
         {
             EnablePlatform = searchConfig.EnablePlatform,
@@ -65,29 +65,29 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
 
         environmentConfig = new EnvironmentConfigEntity()
         {
-            PlayerSettingJson = JsonSerializer.Serialize(new PlayerSetting()
+            PlayerSettingJson = (new PlayerSetting()
             {
                 Voice = 50,
                 IsSoundOff = false,
                 PlayMode = PlayModeEnum.RepeatList
-            }),
-            GeneralSettingJson = JsonSerializer.Serialize(new GeneralSetting()
+            }).ToJson(),
+            GeneralSettingJson = (new GeneralSetting()
             {
                 IsAutoCheckUpdate = true,
                 IsHideWindowWhenMinimize = true
-            }),
-            SearchSettingJson = JsonSerializer.Serialize(new SearchSetting()
+            }).ToJson(),
+            SearchSettingJson = (new SearchSetting()
             {
                 EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu,
                 IsHideShortMusic = true,
                 IsCloseSearchPageWhenPlayFailed = false
-            }),
-            PlaySettingJson = JsonSerializer.Serialize(new PlaySetting()
+            }).ToJson(),
+            PlaySettingJson = (new PlaySetting()
             {
                 IsAutoNextWhenFailed = true,
                 IsCleanPlaylistWhenPlayMyFavorite = true,
                 IsWifiPlayOnly = true
-            })
+            }).ToJson()
         };
 
         var count = DatabaseProvide.Database.Insert(environmentConfig);
@@ -106,7 +106,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             throw new Exception("环境配置信息不存在，播放设置保存失败");
         }
 
-        environmentConfig.PlayerSettingJson = JsonSerializer.Serialize(playerSetting);
+        environmentConfig.PlayerSettingJson = playerSetting.ToJson();
         DatabaseProvide.Database.Update(environmentConfig);
     }
 
@@ -118,7 +118,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             return false;
         }
 
-        userConfig.GeneralSettingJson = JsonSerializer.Serialize(generalSetting);
+        userConfig.GeneralSettingJson = generalSetting.ToJson();
         var count = DatabaseProvide.Database.Update(userConfig);
         if (count == 0)
         {
@@ -136,7 +136,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             return false;
         }
 
-        userConfig.SearchSettingJson = JsonSerializer.Serialize(searchSetting);
+        userConfig.SearchSettingJson = searchSetting.ToJson();
         var count = DatabaseProvide.Database.Update(userConfig);
         if (count == 0)
         {
@@ -153,7 +153,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             return false;
         }
 
-        userConfig.PlaySettingJson = JsonSerializer.Serialize(playSetting);
+        userConfig.PlaySettingJson = playSetting.ToJson();
         var count = DatabaseProvide.Database.Update(userConfig);
         if (count == 0)
         {

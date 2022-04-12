@@ -4,6 +4,7 @@ public class RegisterPageViewModel : ViewModelBase
 {
     public ICommand GoBackCommand => new Command(GoBack);
     public ICommand RegisterCommand => new Command(Register);
+    public ICommand ChoseImageCommand => new Command(ChoseImage);
 
 
     private IEnvironmentConfigService _configService;
@@ -71,13 +72,13 @@ public class RegisterPageViewModel : ViewModelBase
         }
     }
 
-    private bool _registerSucceed;
-    public bool RegisterSucceed
+    private bool _isShowRegister = true;
+    public bool IsShowRegister
     {
-        get => _registerSucceed;
+        get => _isShowRegister;
         set
         {
-            _registerSucceed = value;
+            _isShowRegister = value;
             OnPropertyChanged();
         }
     }
@@ -89,14 +90,24 @@ public class RegisterPageViewModel : ViewModelBase
     private async void Register()
     {
         ApiMessage = "";
+        IsShowRegister = false;
         if (Username.IsEmpty() || Nickname.IsEmpty() || Password.IsEmpty())
         {
             ApiMessage = "注册信息不完整";
+            IsShowRegister = true;
             return;
         }
         if (Password != Password2)
         {
             ApiMessage = "两次密码不一致";
+            IsShowRegister = true;
+            return;
+        }
+
+        if (_userAvatar == null)
+        {
+            ApiMessage = "请选择头像";
+            IsShowRegister = true;
             return;
         }
 
@@ -104,11 +115,64 @@ public class RegisterPageViewModel : ViewModelBase
         {
             Username = Username,
             Nickname = Nickname,
-            Password = Password
+            Password = Password,
+            Avatar = _userAvatar
         };
 
         var (succeed, message) = await _userService.Register(user);
-        RegisterSucceed = succeed;
+        IsShowRegister = !succeed;
         ApiMessage = message;
     }
+
+    private ImageSource _myImage;
+    public ImageSource MyImage
+    {
+        get => _myImage;
+        set
+        {
+            _myImage = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private UserAvatar _userAvatar;
+
+    private async void ChoseImage()
+    {
+        try
+        {
+            _userAvatar = null;
+            MyImage = null;
+
+            var result = await FilePicker.PickAsync(new PickOptions());
+            if (result == null)
+            {
+                return;
+            }
+
+            if (!result.FileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) &&
+                !result.FileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            _userAvatar = new UserAvatar();
+            _userAvatar.FileName = result.FileName;
+
+            var stream = await result.OpenReadAsync();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                stream.CopyTo(ms);
+                _userAvatar.File = ms.ToArray();
+            }
+
+            MyImage = ImageSource.FromFile(result.FullPath);
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.Show($"头像加载失败：{ex.Message}");
+        }
+    }
+
 }

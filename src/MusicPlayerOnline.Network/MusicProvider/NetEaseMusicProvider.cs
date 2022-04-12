@@ -25,7 +25,7 @@ public class NetEaseMusicProvider : IMusicProvider
         ResultBase<MusicSearchHttpResult>? result;
         try
         {
-            result = JsonSerializer.Deserialize<ResultBase<MusicSearchHttpResult>>(json);
+            result = json.ToObject<ResultBase<MusicSearchHttpResult>>();
         }
         catch (Exception ex)
         {
@@ -101,7 +101,7 @@ public class NetEaseMusicProvider : IMusicProvider
         var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-        var httpResult = JsonSerializer.Deserialize<ResultBase<MusicUrlHttpResult>>(json);
+        var httpResult = json.ToObject<ResultBase<MusicUrlHttpResult>>();
         if (httpResult == null)
         {
             return null;
@@ -130,7 +130,7 @@ public class NetEaseMusicProvider : IMusicProvider
         response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
         json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-        var lyricResult = JsonSerializer.Deserialize<MusicLyricHttpResult>(json);
+        var lyricResult = json.ToObject<MusicLyricHttpResult>();
         if (lyricResult == null)
         {
             return null;
@@ -170,7 +170,7 @@ public class NetEaseMusicProvider : IMusicProvider
         var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-        var httpResult = JsonSerializer.Deserialize<ResultBase<MusicUrlHttpResult>>(json);
+        var httpResult = json.ToObject<ResultBase<MusicUrlHttpResult>>();
         if (httpResult == null)
         {
             return null;

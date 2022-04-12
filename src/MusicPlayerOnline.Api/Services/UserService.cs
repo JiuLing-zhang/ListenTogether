@@ -23,7 +23,7 @@ internal class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public async Task<Result> Register(UserRegisterRequest registerUser)
+    public async Task<Result> Register(UserRegisterRequest registerUser, string avatarUrl)
     {
         var isUserExist = await _context.Users.AnyAsync(x => x.Username == registerUser.Username);
         if (isUserExist)
@@ -41,7 +41,7 @@ internal class UserService : IUserService
             Salt = salt,
             IsEnable = false,
             Nickname = registerUser.Nickname,
-            Avatar = "",
+            Avatar = avatarUrl,
             CreateTime = DateTime.Now,
         };
 
@@ -89,13 +89,13 @@ internal class UserService : IUserService
 
     public async Task<Result<UserResponse>> RefreshToken(AuthenticateRequest authenticateInfo, string deviceId)
     {
-        var userEntity = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(r => r.Token == authenticateInfo.RefreshToken));
+        var userEntity = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(r => r.DeviceId == deviceId & r.Token == authenticateInfo.RefreshToken));
         if (userEntity == null)
         {
             throw new AppException("无效Token");
         }
 
-        var refreshToken = userEntity.RefreshTokens.Single();
+        var refreshToken = userEntity.RefreshTokens.Single(x => x.DeviceId == deviceId);
         if (refreshToken.IsExpired)
         {
             throw new AppException("Token已过期");

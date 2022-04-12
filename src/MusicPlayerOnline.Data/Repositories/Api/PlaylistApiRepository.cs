@@ -10,11 +10,11 @@ public class PlaylistApiRepository : IPlaylistRepository
     public async Task<bool> AddOrUpdateAsync(Playlist playlist)
     {
 
-        string content = JsonSerializer.Serialize(playlist);
+        string content = playlist.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.Playlist.AddOrUpdate, sc);
         var json = await response.Content.ReadAsStringAsync();
-        var obj = JsonSerializer.Deserialize<Result>(json);
+        var obj = json.ToObject<Result>();
         if (obj == null || obj.Code != 0)
         {
             return false;
@@ -25,7 +25,7 @@ public class PlaylistApiRepository : IPlaylistRepository
     public async Task<List<Playlist>?> GetAllAsync()
     {
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(DataConfig.ApiSetting.Playlist.GetAll);
-        var obj = JsonSerializer.Deserialize<List<PlaylistResponse>>(json);
+        var obj = json.ToObject<List<PlaylistResponse>>();
         if (obj == null)
         {
             return default;
@@ -44,7 +44,7 @@ public class PlaylistApiRepository : IPlaylistRepository
         var url = string.Format(DataConfig.ApiSetting.Playlist.Remove, id);
         var response = await DataConfig.HttpClientWithToken.PostAsync(url, null);
         var json = await response.Content.ReadAsStringAsync();
-        var obj = JsonSerializer.Deserialize<Result>(json);
+        var obj = json.ToObject<Result>();
         if (obj == null || obj.Code != 0)
         {
             return false;
@@ -56,7 +56,7 @@ public class PlaylistApiRepository : IPlaylistRepository
     {
         var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.Playlist.RemoveAll, null);
         var json = await response.Content.ReadAsStringAsync();
-        var obj = JsonSerializer.Deserialize<Result>(json);
+        var obj = json.ToObject<Result>();
         if (obj == null || obj.Code != 0)
         {
             return false;

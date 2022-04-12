@@ -434,6 +434,10 @@ public class SettingPageViewModel : ViewModelBase
             ToastService.Show("用户信息保存失败，请重试");
             return;
         }
+        //清除页面绑定的用户名密码
+        LoginUsername = "";
+        LoginPassword = "";
+
         GlobalConfig.CurrentUser = user;
         UpdateUserInfo();
     }

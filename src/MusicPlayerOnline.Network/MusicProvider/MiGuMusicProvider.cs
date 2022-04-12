@@ -94,7 +94,7 @@ public class MiGuMusicProvider : IMusicProvider
         string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={argsResult.id}&resourceType=2";
         string json = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
 
-        var result = JsonSerializer.Deserialize<HttpMusicDetailResult>(json);
+        var result = json.ToObject<HttpMusicDetailResult>();
         if (result == null || result.resource == null || result.resource.Length == 0)
         {
             return null;

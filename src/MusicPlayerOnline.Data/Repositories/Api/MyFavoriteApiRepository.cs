@@ -13,7 +13,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.NameExist, myFavoriteName);
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);
-        var obj = JsonSerializer.Deserialize<Result>(json);
+        var obj = json.ToObject<Result>();
         if (obj == null || obj.Code != 0)
         {
             return true;
@@ -23,11 +23,11 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
 
     public async Task<MyFavorite?> AddOrUpdateAsync(MyFavorite myFavorite)
     {
-        string content = JsonSerializer.Serialize(myFavorite);
+        string content = myFavorite.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.MyFavorite.AddOrUpdate, sc);
         var json = await response.Content.ReadAsStringAsync();
-        var obj = JsonSerializer.Deserialize<Result<MyFavoriteResponse>>(json);
+        var obj = json.ToObject<Result<MyFavoriteResponse>>();
         if (obj == null || obj.Code != 0 || obj.Data == null)
         {
             return default;
@@ -45,7 +45,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
     public async Task<List<MyFavorite>?> GetAllAsync()
     {
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(DataConfig.ApiSetting.MyFavorite.GetAll);
-        var obj = JsonSerializer.Deserialize<List<MyFavoriteResponse>>(json);
+        var obj = json.ToObject<List<MyFavoriteResponse>>();
 
         if (obj == null)
         {
@@ -65,7 +65,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.Get, id);
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);
-        var obj = JsonSerializer.Deserialize<Result<MyFavoriteResponse>>(json);
+        var obj = json.ToObject<Result<MyFavoriteResponse>>();
         if (obj == null)
         {
             return default;
@@ -90,7 +90,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.Remove, id);
         var response = await DataConfig.HttpClientWithToken.PostAsync(url, null);
         string json = await response.Content.ReadAsStringAsync();
-        var obj = JsonSerializer.Deserialize<Result>(json);
+        var obj = json.ToObject<Result>();
         if (obj == null || obj.Code != 0)
         {
             return false;
@@ -102,12 +102,12 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id);
 
-        string content = JsonSerializer.Serialize(music);
+        string content = music.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(url, sc);
         var json = await response.Content.ReadAsStringAsync();
 
-        var obj = JsonSerializer.Deserialize<Result>(json);
+        var obj = json.ToObject<Result>();
         if (obj == null || obj.Code != 0)
         {
             return false;
@@ -119,7 +119,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.GetDetail, id);
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);
-        var obj = JsonSerializer.Deserialize<List<MyFavoriteDetailResponse>>(json);
+        var obj = json.ToObject<List<MyFavoriteDetailResponse>>();
 
         if (obj == null)
         {

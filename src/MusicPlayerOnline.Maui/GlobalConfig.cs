@@ -20,9 +20,29 @@ namespace MusicPlayerOnline.Maui
 
         public static EnvironmentSetting MyUserSetting { get; set; }
 
+        private static User? _currentUser;
         /// <summary>
         /// 当前用户
         /// </summary>
-        public static User? CurrentUser { get; set; }
+        public static User? CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                if (value == null)
+                {
+                    BusinessConfig.UserToken = null;
+                }
+                else
+                {
+                    BusinessConfig.UserToken = new TokenInfo()
+                    {
+                        Token = value.Token,
+                        RefreshToken = value.RefreshToken
+                    };
+                }
+            }
+        }
     }
 }

@@ -1,10 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
+
 namespace MusicPlayerOnline.Maui;
 public partial class App : Application
 {
     public App(IConfiguration config, IEnvironmentConfigService configService, IUserLocalService userLocalService)
     {
         InitializeComponent();
+
+        AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
 
         if (!Directory.Exists(GlobalConfig.AppDataDirectory))
         {
@@ -14,6 +19,12 @@ public partial class App : Application
         {
             Directory.CreateDirectory(GlobalConfig.MusicCacheDirectory);
         }
+
+        JsonExtension.DefaultOptions = new System.Text.Json.JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = null,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+        };
 
         var appSetting = config.GetRequiredSection("AppSettings").Get<AppSettings>();
 
@@ -33,15 +44,7 @@ public partial class App : Application
         BusinessConfig.TokenUpdated += (_, _) => userLocalService.UpdateToken(BusinessConfig.UserToken);
         BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataDirectory, appSetting.LocalDbName), appSetting.ApiDomain, deviceId);
         GlobalConfig.CurrentUser = userLocalService.Read();
-        if (GlobalConfig.CurrentUser != null)
-        {
-            BusinessConfig.UserToken = new TokenInfo()
-            {
-                Token = GlobalConfig.CurrentUser.Token,
-                RefreshToken = GlobalConfig.CurrentUser.RefreshToken
-            };
-        }
-
+        
         GlobalConfig.MyUserSetting = configService.ReadAllSettings();
 
         //主题
@@ -63,5 +66,11 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(MyFavoriteDetailPage), typeof(MyFavoriteDetailPage));
         Routing.RegisterRoute(nameof(AddToMyFavoritePage), typeof(AddToMyFavoritePage));
         Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
+    }
+
+    private void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+    {
+        string error = $"********* UNHANDLED EXCEPTION! Details: {e.Exception.ToString()}";
+        ToastService.Show(error);
     }
 }

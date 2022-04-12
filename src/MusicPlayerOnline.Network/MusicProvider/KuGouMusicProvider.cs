@@ -27,7 +27,7 @@ public class KuGouMusicProvider : IMusicProvider
         HttpResultBase<HttpMusicSearchResult>? httpResult;
         try
         {
-            httpResult = JsonSerializer.Deserialize<HttpResultBase<HttpMusicSearchResult>>(json);
+            httpResult = json.ToObject<HttpResultBase<HttpMusicSearchResult>>();
         }
         catch (Exception ex)
         {
@@ -95,7 +95,7 @@ public class KuGouMusicProvider : IMusicProvider
         {
             return null;
         }
-        var httpResult = JsonSerializer.Deserialize<HttpResultBase<MusicDetailHttpResult>>(json);
+        var httpResult = json.ToObject<HttpResultBase<MusicDetailHttpResult>>();
         if (httpResult == null)
         {
             return null;
@@ -109,7 +109,7 @@ public class KuGouMusicProvider : IMusicProvider
         url = $"{UrlBase.KuGou.Lyric}?{args}";
         json = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
 
-        var lyricResult = JsonSerializer.Deserialize<HttpResultBase<MusicLyricHttpResult>>(json);
+        var lyricResult = json.ToObject<HttpResultBase<MusicLyricHttpResult>>();
         if (lyricResult == null)
         {
             return null;

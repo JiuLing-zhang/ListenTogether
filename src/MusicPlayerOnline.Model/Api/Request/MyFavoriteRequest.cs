@@ -18,6 +18,6 @@ namespace MusicPlayerOnline.Model.Api.Request
         /// <summary>
         /// 展示的图片
         /// </summary>
-        public string ImageUrl { get; set; } = null!;
+        public string? ImageUrl { get; set; }
     }
 }
