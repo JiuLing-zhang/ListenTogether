@@ -8,7 +8,6 @@ using MusicPlayerOnline.Network;
 
 namespace MusicPlayerOnline.Business;
 
-//TODO 文件重命名
 public static class AppBuilderExtensions
 {
     public static MauiAppBuilder UseBusiness(this MauiAppBuilder builder)
