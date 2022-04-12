@@ -5,21 +5,23 @@ namespace MusicPlayerOnline.Maui.ViewModels;
 [QueryProperty(nameof(AddedMusicId), nameof(AddedMusicId))]
 public class AddToMyFavoritePageViewModel : ViewModelBase
 {
-    private readonly IMyFavoriteService _myFavoriteService;
-    private readonly IMusicService _musicService;
+    private IServiceProvider _services;
+    private IMyFavoriteService _myFavoriteService;
+    private IMusicService _musicService;
 
     public ICommand AddMyFavoriteCommand => new Command(AddMyFavorite);
     public ICommand SelectedChangedCommand => new Command<MyFavoriteViewModel>(SelectedChangedDo);
-    public AddToMyFavoritePageViewModel(IMusicServiceFactory musicServiceFactory, IMyFavoriteServiceFactory myFavoriteServiceFactory)
+    public AddToMyFavoritePageViewModel(IServiceProvider services)
     {
         MyFavoriteList = new ObservableCollection<MyFavoriteViewModel>();
-
-        _myFavoriteService = myFavoriteServiceFactory.Create();
-        _musicService = musicServiceFactory.Create();
+        _services = services;
     }
 
     public async Task InitializeAsync()
     {
+        _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
+        _musicService = _services.GetService<IMusicServiceFactory>().Create();
+
         await BindingMyFavoriteList();
     }
 

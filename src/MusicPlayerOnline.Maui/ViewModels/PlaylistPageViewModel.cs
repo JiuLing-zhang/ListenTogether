@@ -5,18 +5,18 @@ namespace MusicPlayerOnline.Maui.ViewModels;
 
 public class PlaylistPageViewModel : ViewModelBase
 {
-    private readonly IMusicService _musicService;
-    private readonly IPlaylistService _playlistService;
+    private IServiceProvider _services;
+    private IMusicService _musicService;
+    private IPlaylistService _playlistService;
     private readonly PlayerService _playerService;
     public ICommand AddToMyFavoriteCommand => new Command<MusicViewModel>(AddToMyFavorite);
     public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
     public ICommand ClearPlaylistCommand => new Command(ClearPlaylist);
-    public PlaylistPageViewModel(PlayerService playerService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory)
+    public PlaylistPageViewModel(IServiceProvider services, PlayerService playerService)
     {
         CreateLocalNewPlaylist();
 
-        _playlistService = playlistServiceFactory.Create();
-        _musicService = musicServiceFactory.Create();
+        _services = services;
         _playerService = playerService;
     }
 
@@ -27,6 +27,8 @@ public class PlaylistPageViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
+        _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
+        _musicService = _services.GetService<IMusicServiceFactory>().Create();
         await GetPlaylist();
     }
     private async Task GetPlaylist()

@@ -6,7 +6,7 @@ using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
 
 namespace MusicPlayerOnline.Data.Repositories.Api;
-public class UserApiRepository : IUserRepository
+public class UserApiRepository : IUserApiRepository
 {
     public async Task<(bool Succeed, string Message)> Register(UserRegister registerUser)
     {

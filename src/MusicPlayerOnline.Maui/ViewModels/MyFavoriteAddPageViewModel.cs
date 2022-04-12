@@ -10,15 +10,21 @@ public class MyFavoriteAddPageViewModel : ViewModelBase
     /// </summary>
     public string AddedMusicId { get; set; }
 
-    private readonly IMyFavoriteService _myFavoriteService;
-    private readonly IMusicService _musicService;
+    private IServiceProvider _services;
+    private IMyFavoriteService _myFavoriteService;
+    private IMusicService _musicService;
 
     public ICommand SaveMyFavoriteCommand => new Command(SaveMyFavorite);
 
-    public MyFavoriteAddPageViewModel(IMusicServiceFactory musicServiceFactory, IMyFavoriteServiceFactory myFavoriteServiceFactory)
+    public MyFavoriteAddPageViewModel(IServiceProvider services)
     {
-        _myFavoriteService = myFavoriteServiceFactory.Create();
-        _musicService = musicServiceFactory.Create();
+        _services = services;
+    }
+
+    public async Task InitializeAsync()
+    {
+        _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
+        _musicService = _services.GetService<IMusicServiceFactory>().Create();
     }
 
     private string _name;

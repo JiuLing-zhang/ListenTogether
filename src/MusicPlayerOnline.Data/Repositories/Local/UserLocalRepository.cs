@@ -4,7 +4,6 @@ using MusicPlayerOnline.Model;
 
 namespace MusicPlayerOnline.Data.Repositories.Local;
 
-//TODO 文件重命名
 public class UserLocalRepository : IUserLocalRepository
 {
     public bool Write(User user)

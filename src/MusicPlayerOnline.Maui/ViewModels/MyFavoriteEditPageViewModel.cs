@@ -8,17 +8,20 @@ public class MyFavoriteEditPageViewModel : ViewModelBase
 {
     public int MyFavoriteId { get; set; }
 
-    private readonly IMyFavoriteService _myFavoriteService;
+    private IServiceProvider _services;
+
+    private IMyFavoriteService _myFavoriteService;
 
     public ICommand RenameCommand => new Command(Rename);
 
-    public MyFavoriteEditPageViewModel(IMyFavoriteServiceFactory myFavoriteServiceFactory)
+    public MyFavoriteEditPageViewModel(IServiceProvider services)
     {
-        _myFavoriteService = myFavoriteServiceFactory.Create();
+        _services = services;
     }
 
     public async Task InitializeAsync()
     {
+        _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
         await GetMyFavoriteDetail();
     }
 

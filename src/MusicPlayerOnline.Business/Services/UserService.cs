@@ -6,8 +6,8 @@ namespace MusicPlayerOnline.Business.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _repository;
-    public UserService(IUserRepository repository)
+    private readonly IUserApiRepository _repository;
+    public UserService(IUserApiRepository repository)
     {
         _repository = repository;
     }

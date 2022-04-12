@@ -1,7 +1,7 @@
 ﻿using SQLite;
 
 namespace MusicPlayerOnline.Data.Entities;
-//TODO 文件重命名
+
 
 [Table("UserBase")]
 internal class UserEntity

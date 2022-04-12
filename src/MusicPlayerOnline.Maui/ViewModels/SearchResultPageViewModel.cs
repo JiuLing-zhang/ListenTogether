@@ -6,9 +6,10 @@ namespace MusicPlayerOnline.Maui.ViewModels;
 
 public class SearchResultPageViewModel : ViewModelBase
 {
+    private IServiceProvider _services;
     private readonly IMusicNetworkService _searchService;
-    private readonly IMusicService _musicService;
-    private readonly IPlaylistService _playlistService;
+    private IMusicService _musicService;
+    private IPlaylistService _playlistService;
     private readonly PlayerService _playerService;
 
     private string _lastSearchKeyword = "";
@@ -16,14 +17,19 @@ public class SearchResultPageViewModel : ViewModelBase
     public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
     public ICommand SearchCommand => new Command(Search);
 
-    public SearchResultPageViewModel(PlayerService playerService, IMusicNetworkService searchService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory)
+    public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService searchService)
     {
         MusicSearchResult = new ObservableCollection<SearchResultViewModel>();
 
+        _services = services;
         _searchService = searchService;
-        _musicService = musicServiceFactory.Create();
-        _playlistService = playlistServiceFactory.Create();
         _playerService = playerService;
+    }
+
+    public async Task InitializeAsync()
+    {
+        _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
+        _musicService = _services.GetService<IMusicServiceFactory>().Create();
     }
 
     private string _title;
