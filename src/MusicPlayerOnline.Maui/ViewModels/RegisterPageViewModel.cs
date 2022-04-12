@@ -153,6 +153,7 @@ public class RegisterPageViewModel : ViewModelBase
             if (!result.FileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) &&
                 !result.FileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
             {
+                ToastService.Show("仅支持jpg和png格式");
                 return;
             }
 

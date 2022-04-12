@@ -46,7 +46,9 @@ public class UserController : ApiBaseController
         {
             await file.CopyToAsync(stream);
         }
-        var avatarUrl = $"/{uploadDirectory}/{avatarDirectory}/{fileName}";
+
+        string avatarUrl = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}/{uploadDirectory}/{avatarDirectory}/{fileName}";
+
         var response = await _userService.Register(registerUser, avatarUrl);
         return Ok(response);
     }
