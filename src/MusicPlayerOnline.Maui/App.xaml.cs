@@ -44,7 +44,7 @@ public partial class App : Application
         BusinessConfig.TokenUpdated += (_, _) => userLocalService.UpdateToken(BusinessConfig.UserToken);
         BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataDirectory, appSetting.LocalDbName), appSetting.ApiDomain, deviceId);
         GlobalConfig.CurrentUser = userLocalService.Read();
-        
+
         GlobalConfig.MyUserSetting = configService.ReadAllSettings();
 
         //主题
@@ -68,9 +68,10 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
     }
 
-    private void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs e)
+    private void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs ex)
     {
-        string error = $"********* UNHANDLED EXCEPTION! Details: {e.Exception.ToString()}";
+        string error = $"...{Environment.NewLine}{ex.Exception.Message}";
         ToastService.Show(error);
+        Logger.Error("未处理的异常", ex.Exception);
     }
 }

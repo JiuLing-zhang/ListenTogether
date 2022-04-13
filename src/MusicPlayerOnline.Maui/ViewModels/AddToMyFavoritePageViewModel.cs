@@ -23,6 +23,11 @@ public class AddToMyFavoritePageViewModel : ViewModelBase
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
         await BindingMyFavoriteList();
+
+        if (AddedMusicId.IsNotEmpty())
+        {
+            AddedMusic = await _musicService.GetOneAsync(AddedMusicId);
+        }
     }
 
     private string _addedMusicId;
@@ -36,7 +41,6 @@ public class AddToMyFavoritePageViewModel : ViewModelBase
         {
             _addedMusicId = value;
             OnPropertyChanged();
-            GetMusicDetail();
         }
     }
 
@@ -60,11 +64,6 @@ public class AddToMyFavoritePageViewModel : ViewModelBase
             _myFavoriteList = value;
             OnPropertyChanged();
         }
-    }
-
-    private async void GetMusicDetail()
-    {
-        AddedMusic = await _musicService.GetOneAsync(AddedMusicId);
     }
 
     private async Task BindingMyFavoriteList()

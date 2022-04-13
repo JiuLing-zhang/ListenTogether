@@ -87,6 +87,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
     }
     public async Task<bool> AddMusicToMyFavorite(int id, Music music)
     {
+        //TODO 保存操作需要事务支持
         var favorite = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().FirstOrDefaultAsync(x => x.Id == id);
         if (favorite == null)
         {
@@ -116,10 +117,23 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
             favoriteDetail.MusicAlbum = music.Album;
             count = await DatabaseProvide.DatabaseAsync.UpdateAsync(favoriteDetail);
         }
+
         if (count == 0)
         {
             return false;
         }
+
+        //更新歌单图标，歌单可以前置添加，所以有可能会没有图标
+        if (favorite.ImageUrl.IsEmpty() && music.ImageUrl.IsNotEmpty())
+        {
+            favorite.ImageUrl = music.ImageUrl;
+        }
+        count = await DatabaseProvide.DatabaseAsync.UpdateAsync(favorite);
+        if (count == 0)
+        {
+            return false;
+        }
+
         return true;
 
     }

@@ -36,7 +36,7 @@ public class MiGuUtils
                 {
                     continue;
                 }
-                pattern = @"a href=""(?<musicPageUrl>\S*)""[\s\S]*<img src=""(?<imageUrl>\S*)""[\s\S]*class=""search_type"">(?<name>[\S\s]*)</h3>[\s\S]*class=""desc"">(?<artist>[\S\s]*)</p>";
+                pattern = @"a href=""(?<musicPageUrl>\S*)""[\s\S]*click_content_id:\s*'(?<id>\S+)'[\s\S]*<img src=""(?<imageUrl>\S*)""[\s\S]*class=""search_type"">(?<name>[\S\s]*)</h3>[\s\S]*class=""desc"">(?<artist>[\S\s]*)</p>";
                 var resultGroup = JiuLing.CommonLibs.Text.RegexUtils.GetMultiGroupInFirstMatch(musicHtml, pattern);
 
                 if (resultGroup.success == false)
@@ -45,6 +45,8 @@ public class MiGuUtils
                 }
                 pattern = @"<\/?.+?\/?>";
                 var regex = new System.Text.RegularExpressions.Regex(pattern);
+
+                string id = resultGroup.result["id"];
 
                 string musicPageUrl = resultGroup.result["musicPageUrl"];
                 string imageUrl = resultGroup.result["imageUrl"];
@@ -61,6 +63,7 @@ public class MiGuUtils
 
                 musics.Add(new HttpMusicSearchResult()
                 {
+                    Id = id,
                     Name = name,
                     Artist = artist,
                     ImageUrl = imageUrl,

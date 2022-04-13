@@ -50,6 +50,7 @@ public class MiGuMusicProvider : IMusicProvider
             {
                 Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.Name}-{htmlMusic.Artist}"),
                 Platform = Platform,
+                PlatformInnerId = htmlMusic.Id,
                 Name = htmlMusic.Name,
                 Alias = "",
                 Artist = htmlMusic.Artist,

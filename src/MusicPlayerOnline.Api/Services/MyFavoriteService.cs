@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
+using Microsoft.EntityFrameworkCore;
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
@@ -138,6 +139,12 @@ public class MyFavoriteService : IMyFavoriteService
             favoriteDetail.MusicName = music.Name;
             favoriteDetail.MusicArtist = music.Artist;
             favoriteDetail.MusicAlbum = music.Album;
+        }
+
+        //更新歌单图标，歌单可以前置添加，所以有可能会没有图标
+        if (favorite.ImageUrl.IsEmpty() && music.ImageUrl.IsNotEmpty())
+        {
+            favorite.ImageUrl = music.ImageUrl;
         }
 
         _context.MyFavorites.Update(favorite);

@@ -9,3 +9,4 @@ global using System.Windows.Input;
 global using MusicPlayerOnline.Maui.Pages;
 global using MusicPlayerOnline.Common.Exceptions;
 global using JiuLing.CommonLibs.ExtensionMethods;
+global using MusicPlayerOnline.EasyLog;

@@ -18,7 +18,7 @@
             </Style>
 
             <Style x:Key="MyFavoriteImg" TargetType="Image">
-                <Setter Property="Source" Value="music_library"/>
+                <Setter Property="Source" Value="my_favorite_default.png"/>
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsUseDefaultImage}" Value="false" TargetType="Image">
                         <Setter Property="Source" Value="{Binding ImageUrl}"/>
@@ -77,24 +77,23 @@
 
                                     <Image WidthRequest="28"
                                        Source="play.png"
-                                       Aspect="AspectFill"                                            >
+                                       Aspect="AspectFill">
                                     </Image>
                                 </StackLayout>
 
-                                <StackLayout HorizontalOptions="Start" 
-                                         VerticalOptions="Center">
-                                    <Frame CornerRadius="10" 
-                                       HeightRequest="50"
-                                       WidthRequest="50"
-                                       IsClippedToBounds="True" 
-                                       BackgroundColor="#404040">
-                                        <Image Aspect="AspectFill" 
-                                           Style="{StaticResource MyFavoriteImg}"></Image>
-                                    </Frame>
-                                </StackLayout>
+                                <Border StrokeThickness="4"
+                                        HeightRequest="50"
+                                        WidthRequest="50"
+                                        Margin="0,0,10,0">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" />
+                                    </Border.StrokeShape>
+                                    <Image Aspect="AspectFill"                                           
+                                           Style="{StaticResource MyFavoriteImg}"/>
+                                </Border>
+
                                 <StackLayout HorizontalOptions="StartAndExpand" 
-                                         VerticalOptions="Center"
-                                         Margin="5,0,0,0">
+                                             VerticalOptions="Center" >
                                     <Label Text="{Binding Name}" 
                                        VerticalOptions="End"/>
                                     <Label VerticalOptions="End" >

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
@@ -8,21 +8,17 @@
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 
 		<!-- Display name -->
 		<ApplicationTitle>MusicPlayerOnline.Maui</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.musicplayeronline.maui</ApplicationId>
-		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">2368DC3F-8B39-4A83-9888-8CC6164ADF3F</ApplicationId>
+		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">00495E10-0384-431B-9301-372BAF0FA32E</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-
-		<!-- Required for C# Hot Reload -->
-		<UseInterpreter Condition="'$(Configuration)' == 'Debug'">True</UseInterpreter>
 
 		<SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -49,70 +45,18 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-		<!-- Required - WinUI does not yet have buildTransitive for everything -->
-		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.0" />
-		<PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.0.30" />
-	</ItemGroup>
-
 	<ItemGroup>
-	  <Page Remove="Controls\Player.xaml" />
-	  <Page Remove="Pages\AddToMyFavoritePage.xaml" />
-	  <Page Remove="Pages\MyFavoriteAddPage.xaml" />
-	  <Page Remove="Pages\MyFavoriteDetailPage.xaml" />
-	  <Page Remove="Pages\MyFavoriteEditPage.xaml" />
-	  <Page Remove="Pages\RegisterPage.xaml" />
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre8" />
+	  <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-pre9" />
 	  <PackageReference Include="JiuLing.CommonLibs" Version="1.2.5" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.0.1" />
-	  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\MusicPlayerOnline.Business\MusicPlayerOnline.Business.csproj" />
 	  <ProjectReference Include="..\MusicPlayerOnline.Common\MusicPlayerOnline.Common.csproj" />
+	  <ProjectReference Include="..\MusicPlayerOnline.EasyLog\MusicPlayerOnline.EasyLog.csproj" />
 	  <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiXaml Update="Controls\Player.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\AddToMyFavoritePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\MyFavoriteAddPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\MyFavoriteDetailPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\MyFavoriteEditPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\MyFavoritePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\PlayingPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\PlaylistPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\RegisterPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\SearchPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\SettingsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -120,16 +64,5 @@
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
-
-	<PropertyGroup Condition="$(TargetFramework.Contains('-windows'))">
-		<OutputType>WinExe</OutputType>
-		<RuntimeIdentifier>win10-x64</RuntimeIdentifier>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Release'">
-		<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
-		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
-		<PackageCertificateThumbprint>758A760DB477F3F9B6F6E4A106B62B395238678B</PackageCertificateThumbprint>
-	</PropertyGroup>
 
 </Project>

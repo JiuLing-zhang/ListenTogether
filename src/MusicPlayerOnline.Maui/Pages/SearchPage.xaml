@@ -54,27 +54,32 @@
         <ScrollView VerticalOptions="FillAndExpand">
             <StackLayout>
                 <CollectionView ItemsSource="{Binding MusicSearchResult}"    
-                            Style="{StaticResource CollectionViewMusicSearchResultBlock}"
-                            >
+                            Style="{StaticResource CollectionViewMusicSearchResultBlock}">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="40,40,60,300,300,*">
-
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"	
-                                                      CommandParameter="{Binding .}"/>
-                                </Grid.GestureRecognizers>
-
+                            <Grid ColumnDefinitions="70,40,60,300,300,*">
                                 <StackLayout Grid.Column="0"
-                                         IsVisible="true"
-                                         VerticalOptions="Center">
+                                             Orientation="Horizontal"
+                                             VerticalOptions="Center">
+                                    <Image Source="play.png"          
+                                           Margin="0,0,10,0"
+                                           Aspect="AspectFill" 
+                                           WidthRequest="15"
+                                           HeightRequest="15">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"		
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+
                                     <Image Source="plus.png" 
-                                       Aspect="AspectFill" 
-                                       WidthRequest="15">
+                                           Aspect="AspectFill" 
+                                           WidthRequest="15"
+                                           HeightRequest="15">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
-                                             CommandParameter="{Binding .}"></TapGestureRecognizer>
+                                                                  CommandParameter="{Binding .}"/>
                                         </Image.GestureRecognizers>
                                     </Image>
                                 </StackLayout>

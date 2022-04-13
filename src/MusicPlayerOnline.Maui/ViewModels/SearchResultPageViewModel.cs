@@ -218,7 +218,10 @@ public class SearchResultPageViewModel : ViewModelBase
             return (false, "emm没有解析出歌曲信息", null);
         }
 
-        await _musicService.AddOrUpdateAsync(music);
+        if (!await _musicService.AddOrUpdateAsync(music))
+        {
+            return (false, "保存歌曲信息失败", null);
+        }
 
         var playlist = new Playlist()
         {

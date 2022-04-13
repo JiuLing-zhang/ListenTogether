@@ -1,5 +1,6 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MusicPlayerOnline.Api.Authorization;
@@ -8,6 +9,7 @@ using MusicPlayerOnline.Api.ErrorHandler;
 using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Api.Models;
 using MusicPlayerOnline.Api.Services;
+using MusicPlayerOnline.Model.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +57,24 @@ builder.Services.AddDbContext<DataContext>
 
 // configure strongly typed settings object
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = actionContext =>
+    {
+        var errors = actionContext.ModelState
+            .Where(e => e.Value != null && e.Value.Errors.Count > 0)
+            .Select(e => $"{e.Key}:{e.Value?.Errors.First().ErrorMessage}"
+          ).ToList();
+
+        var jsonOptions = new System.Text.Json.JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = null,
+            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+        };
+        return new JsonResult(new Result(999, $"参数验证失败:{string.Join(",", errors)}"), jsonOptions);
+    };
+});
 
 // configure DI for application services
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
