@@ -37,7 +37,7 @@
                        Margin="0,0,10,0"/>
                 <Image HeightRequest="20"
                        WidthRequest="20"
-                       Source="plus.png"    
+                       Source="plus.png"
                        HorizontalOptions="End"
                        >
                     <Image.GestureRecognizers>
@@ -81,19 +81,18 @@
                                     </Image>
                                 </StackLayout>
 
-                                <Border StrokeThickness="4"
-                                        HeightRequest="50"
-                                        WidthRequest="50"
-                                        Margin="0,0,10,0">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="10" />
-                                    </Border.StrokeShape>
-                                    <Image Aspect="AspectFill"                                           
-                                           Style="{StaticResource MyFavoriteImg}"/>
-                                </Border>
+                                <Frame CornerRadius="10"
+                                       HeightRequest="48"
+                                       WidthRequest="48">
+                                    <Image 
+                                           Aspect="AspectFill"                                           
+                                           Style="{StaticResource MyFavoriteImg}">
+                                    </Image>
+                                </Frame>
 
                                 <StackLayout HorizontalOptions="StartAndExpand" 
-                                             VerticalOptions="Center" >
+                                             VerticalOptions="Center"
+                                             Margin="10,0,0,0">
                                     <Label Text="{Binding Name}" 
                                        VerticalOptions="End"/>
                                     <Label VerticalOptions="End" >
