@@ -13,7 +13,7 @@ public class PlayerService
     private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
 
     public double CurrentPosition => _audioService.CurrentPosition;
-
+    public double Duration => _audioService.Duration;
     public bool IsMuted { set => _audioService.IsMuted = value; }
     public double Volume { set => _audioService.Volume = value; }
 

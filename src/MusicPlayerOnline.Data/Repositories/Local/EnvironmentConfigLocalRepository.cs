@@ -20,7 +20,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         var playerSetting = environmentConfig.PlayerSettingJson.ToObject<PlayerSetting>() ?? throw new Exception("配置信息不存在：PlayerSettingJson");
         result.Player = new PlayerSetting()
         {
-            Voice = playerSetting.Voice,
+            Volume = playerSetting.Volume,
             IsSoundOff = playerSetting.IsSoundOff,
             PlayMode = playerSetting.PlayMode
         };
@@ -67,7 +67,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         {
             PlayerSettingJson = (new PlayerSetting()
             {
-                Voice = 50,
+                Volume = 50,
                 IsSoundOff = false,
                 PlayMode = PlayModeEnum.RepeatList
             }).ToJson(),

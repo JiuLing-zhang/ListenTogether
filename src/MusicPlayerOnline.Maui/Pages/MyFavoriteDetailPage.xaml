@@ -47,7 +47,7 @@
                     </HorizontalStackLayout.GestureRecognizers>
                     <Image Source="edit.png"
                        HeightRequest="20"/>
-                    <Label Text="编辑"/>
+                    <Label Text="重命名"/>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout Margin="0,0,10,0">
@@ -56,7 +56,7 @@
                     </HorizontalStackLayout.GestureRecognizers>
                     <Image Source="remove.png"
                        HeightRequest="20"/>
-                    <Label Text="删除"/>
+                    <Label Text="删除歌单"/>
                 </HorizontalStackLayout>
 
             </HorizontalStackLayout>
@@ -65,29 +65,35 @@
         <CollectionView ItemsSource="{Binding MyFavoriteMusics}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <HorizontalStackLayout>
+                    <Grid RowDefinitions="auto,auto"
+                          ColumnDefinitions="auto,auto">
 
-                        <HorizontalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=SelectedChangedCommand}"	
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"	
                                                   CommandParameter="{Binding}"/>
-                        </HorizontalStackLayout.GestureRecognizers>
+                        </Grid.GestureRecognizers>
 
-                        <StackLayout HorizontalOptions="Start" 
-                                     VerticalOptions="Center">
-                            <Label Text="{Binding Seq}"/>
-                        </StackLayout>
-                        <StackLayout HorizontalOptions="StartAndExpand" 
-                                     VerticalOptions="Center">
-                            <Label Text="{Binding Name}"
-                                   LineBreakMode="TailTruncation"/>
-                            <Label LineBreakMode="TailTruncation">
-                                <MultiBinding StringFormat="{}{0} - {1}">
-                                    <Binding Path="Artist" />
-                                    <Binding Path="Album" />
-                                </MultiBinding>
-                            </Label>
-                        </StackLayout>
-                    </HorizontalStackLayout>
+                        <Label Text="{Binding Seq}"
+                               Grid.Row="0"
+                               Grid.RowSpan="2"
+                               Grid.Column="0"
+                               Margin="0,0,10,0"
+                               VerticalTextAlignment="Center"/>
+
+                        <Label Text="{Binding Name}"
+                               Grid.Row="0"
+                               Grid.Column="1"
+                               LineBreakMode="TailTruncation"/>
+
+                        <Label Grid.Row="1"
+                               Grid.Column="1"
+                               LineBreakMode="TailTruncation">
+                            <MultiBinding StringFormat="{}{0} - {1}">
+                                <Binding Path="Artist" />
+                                <Binding Path="Album" />
+                            </MultiBinding>
+                        </Label>
+                    </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

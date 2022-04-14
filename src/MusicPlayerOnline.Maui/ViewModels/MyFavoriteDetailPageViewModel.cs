@@ -13,7 +13,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
     private IMyFavoriteService _myFavoriteService;
     private IPlaylistService _playlistService;
     private IMusicService _musicService;
-    public ICommand SelectedChangedCommand => new Command<MusicViewModel>(SelectedChangedDo);
+    public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
     public ICommand MyFavoriteEditCommand => new Command(EditMyFavorite);
     public ICommand MyFavoriteRemoveCommand => new Command(MyFavoriteRemove);
 
@@ -107,7 +107,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         await Shell.Current.GoToAsync($"..", true);
     }
 
-    private async void SelectedChangedDo(MusicViewModel selected)
+    private async void PlayMusic(MusicViewModel selected)
     {
         var music = await _musicService.GetOneAsync(selected.Id);
         if (music == null)

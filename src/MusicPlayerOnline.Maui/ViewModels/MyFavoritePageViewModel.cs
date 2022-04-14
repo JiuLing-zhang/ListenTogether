@@ -9,7 +9,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
         private IPlaylistService _playlistService;
         private IMusicService _musicService;
         public ICommand MyFavoriteAddCommand => new Command(AddMyFavorite);
-        public ICommand SelectedChangedCommand => new Command<MyFavoriteViewModel>(SelectedChangedDo);
+        public ICommand EnterMyFavoriteDetailCommand => new Command<MyFavoriteViewModel>(EnterMyFavoriteDetail);
         public ICommand PlayAllMusicsCommand => new Command<MyFavoriteViewModel>(PlayAllMusics);
         public string Title => "我的歌单";
         public MyFavoritePageViewModel(IServiceProvider services)
@@ -58,17 +58,28 @@ namespace MusicPlayerOnline.Maui.ViewModels
             await Shell.Current.GoToAsync($"{nameof(MyFavoriteAddPage)}", true);
         }
 
-        private async void SelectedChangedDo(MyFavoriteViewModel selected)
+        private async void EnterMyFavoriteDetail(MyFavoriteViewModel selected)
         {
+            if (selected.MusicCount == 0)
+            {
+                ToastService.Show("当前歌单是空的哦");
+                return;
+            }
             await Shell.Current.GoToAsync($"{nameof(MyFavoriteDetailPage)}?{nameof(MyFavoriteDetailPageViewModel.MyFavoriteId)}={selected.Id}", true);
         }
 
-        private async void PlayAllMusics(MyFavoriteViewModel myFavorite)
+        private async void PlayAllMusics(MyFavoriteViewModel selected)
         {
-            List<MyFavoriteDetail> myFavoriteMusics = await _myFavoriteService.GetMyFavoriteDetail(myFavorite.Id);
+            if (selected.MusicCount == 0)
+            {
+                ToastService.Show("当前歌单是空的哦");
+                return;
+            }
+
+            var myFavoriteMusics = await _myFavoriteService.GetMyFavoriteDetail(selected.Id);
             if (myFavoriteMusics == null)
             {
-                ToastService.Show("播放失败：播放列表是空哒~~~");
+                ToastService.Show("播放失败：没有查询到歌单信息~~~");
                 return;
             }
 

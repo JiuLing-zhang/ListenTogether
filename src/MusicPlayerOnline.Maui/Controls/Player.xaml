@@ -97,12 +97,17 @@
 
                             <StackLayout Orientation="Horizontal"
                                          HeightRequest="30">
-                                <Label Text="0:00" 
+                                <Label x:Name="LblCurrentPosition"
                                        HorizontalOptions="Start"
                                        VerticalTextAlignment="Center"/>
-                                <Slider HorizontalOptions="FillAndExpand"
+                                <Slider x:Name="SliderPlayProgress"
+                                        HorizontalOptions="FillAndExpand"
                                         VerticalOptions="Center"
-                                        Margin="10,0,10,0">
+                                        Minimum="0"
+                                        Maximum="1"
+                                        Margin="10,0,10,0"
+                                        DragStarted="SliderPlayProgress_DragStarted"
+                                        DragCompleted="SliderPlayProgress_DragCompleted">
                                 </Slider>
                                 <Label x:Name="LblDuration"
                                        HorizontalOptions="End"
@@ -124,9 +129,13 @@
                                 </Image.GestureRecognizers>
                             </Image>
 
-                            <Slider HorizontalOptions="FillAndExpand"
-                                        VerticalOptions="Center"
-                                        Margin="10,0,50,0"></Slider>
+                            <Slider x:Name="SliderVolume"
+                                    Margin="10,0,50,0"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="Center"
+                                    Minimum="0"
+                                    Maximum="1"
+                                    ValueChanged="SliderVolume_ValueChanged"/>
                         </StackLayout>
                     </StackLayout>
                 </On>

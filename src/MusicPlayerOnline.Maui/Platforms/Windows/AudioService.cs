@@ -17,8 +17,8 @@ public class AudioService : IAudioService
     }
 
     public bool IsPlaying => _mediaPlayer.CurrentState == MediaPlayerState.Playing;
-
-    public double CurrentPosition => (long)_mediaPlayer?.Position.TotalSeconds;
+    public double CurrentPosition => (long)_mediaPlayer.Position.TotalSeconds;
+    public double Duration => (long)_mediaPlayer.NaturalDuration.TotalSeconds;
 
 
     public bool IsMuted { set => _mediaPlayer.IsMuted = value; }

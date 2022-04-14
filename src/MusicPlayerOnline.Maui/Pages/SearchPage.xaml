@@ -28,7 +28,7 @@
                         <Setter Property="IsVisible" Value="true"/>
                     </DataTrigger>
                 </Style.Triggers>
-            </Style>
+            </Style>         
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -62,7 +62,7 @@
                                 <StackLayout Grid.Column="0"
                                              Orientation="Horizontal"
                                              VerticalOptions="Center">
-                                    <Image Source="play.png"          
+                                    <Image Source="play2.png"          
                                            Margin="0,0,10,0"
                                            Aspect="AspectFill" 
                                            WidthRequest="15"
@@ -109,8 +109,6 @@
                                    IsVisible="true"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-
-
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

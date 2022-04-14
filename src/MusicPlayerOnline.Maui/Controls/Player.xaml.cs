@@ -5,6 +5,7 @@ namespace MusicPlayerOnline.Maui.Controls;
 public partial class Player : ContentView
 {
     private PlayerService _playerService;
+    private static System.Timers.Timer _timerPlayProgress;
     private IEnvironmentConfigService _configService;
     public Player()
     {
@@ -30,6 +31,29 @@ public partial class Player : ContentView
     internal void OnAppearing()
     {
         InitPlayer();
+
+        if (_timerPlayProgress == null)
+        {
+            _timerPlayProgress = new System.Timers.Timer();
+            _timerPlayProgress.Interval = 1000;
+            _timerPlayProgress.Elapsed += _timerPlayProgress_Elapsed;
+
+            _timerPlayProgress.Start();
+        }
+    }
+
+    private void _timerPlayProgress_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        if (_playerService == null || _playerService.IsPlaying == false)
+        {
+            return;
+        }
+        var currentPosition = _playerService.CurrentPosition;
+
+        LblCurrentPosition.Text = currentPosition.ToString();
+
+        double PlayProgress = currentPosition / _playerService.Duration;
+        SliderPlayProgress.Value = PlayProgress;
     }
 
     internal void OnDisappearing()
@@ -55,12 +79,8 @@ public partial class Player : ContentView
             UpdateMusicInfo();
         }
         UpdateSoundOnOff();
+        Updatevolume();
         UpdateRepeatModel();
-    }
-
-    private void playerService_IsVolumeChanged(object sender, EventArgs e)
-    {
-        UpdateSoundOnOff();
     }
 
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
@@ -89,10 +109,8 @@ public partial class Player : ContentView
         ImgCurrentMusic.Source = _playerService.CurrentMusic.ImageUrl;
         LblName.Text = _playerService.CurrentMusic.Name;
         LblAuthor.Text = $"{_playerService.CurrentMusic.Artist} - {_playerService.CurrentMusic.Album}";
-        LblDuration.Text = _playerService.CurrentMusic.Duration.ToString();
+        LblDuration.Text = _playerService.Duration.ToString();
     }
-
-
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
     {
@@ -103,7 +121,7 @@ public partial class Player : ContentView
     {
         SetSoundOnOff();
         UpdateSoundOnOff();
-        WritePlayerSett();
+        WritePlayerSetting();
     }
     private void SetSoundOnOff()
     {
@@ -114,12 +132,16 @@ public partial class Player : ContentView
         ImgSoundOff.Source = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off.png" : "sound_on.png";
         _playerService.IsMuted = GlobalConfig.MyUserSetting.Player.IsSoundOff;
     }
+    private void Updatevolume()
+    {
+        SliderVolume.Value = GlobalConfig.MyUserSetting.Player.Volume;
+    }
 
     private void ImgRepeat_Tapped(object sender, EventArgs e)
     {
         SetNextRepeatMode();
         UpdateRepeatModel();
-        WritePlayerSett();
+        WritePlayerSetting();
     }
 
     private void SetNextRepeatMode()
@@ -163,8 +185,12 @@ public partial class Player : ContentView
         }
     }
 
-    private void WritePlayerSett()
+    private void WritePlayerSetting()
     {
+        if (_configService == null)
+        {
+            return;
+        }
         _configService.WritePlayerSetting(GlobalConfig.MyUserSetting.Player);
     }
 
@@ -186,5 +212,29 @@ public partial class Player : ContentView
     private async void GotoPlaying_Tapped(object sender, EventArgs e)
     {
         await Shell.Current.GoToAsync($"{nameof(PlayingPage)}");
+    }
+
+    private void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
+    {
+        _playerService.Volume = e.NewValue;
+        GlobalConfig.MyUserSetting.Player.Volume = e.NewValue;
+
+        if (GlobalConfig.MyUserSetting.Player.IsSoundOff)
+        {
+            SetSoundOnOff();
+            UpdateSoundOnOff();
+        }
+
+        WritePlayerSetting();
+    }
+
+    private void SliderPlayProgress_DragStarted(object sender, EventArgs e)
+    {
+
+    }
+
+    private void SliderPlayProgress_DragCompleted(object sender, EventArgs e)
+    {
+
     }
 }

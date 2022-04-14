@@ -27,7 +27,7 @@ namespace MusicPlayerOnline.Model
         /// <summary>
         /// 音量
         /// </summary>
-        public double Voice { get; set; }
+        public double Volume { get; set; }
 
         /// <summary>
         /// 是否静音

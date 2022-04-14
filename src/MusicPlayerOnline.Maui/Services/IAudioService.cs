@@ -17,6 +17,7 @@ public interface IAudioService
 
     bool IsPlaying { get; }
     double CurrentPosition { get; }
+    double Duration { get; }
 
     public event EventHandler PlayFinished;
     public event EventHandler PlayFailed;
