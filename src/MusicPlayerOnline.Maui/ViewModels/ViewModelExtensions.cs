@@ -17,6 +17,7 @@ public static class ViewModelExtensions
         builder.Services.AddSingleton<SettingPageViewModel>();
         builder.Services.AddSingleton<PlayingPageViewModel>();
         builder.Services.AddSingleton<RegisterPageViewModel>();
+        builder.Services.AddSingleton<CacheCleanViewModel>();
         return builder;
     }
 }

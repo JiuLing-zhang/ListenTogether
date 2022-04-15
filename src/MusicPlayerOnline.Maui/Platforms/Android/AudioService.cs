@@ -31,10 +31,10 @@ public class AudioService : IAudioService
         _player.PrepareAsync();
     }
 
-    public Task PlayAsync(double position = 0)
+    public Task PlayAsync(double positionMillisecond = 0)
     {
         _player.Start();
-        _player.SeekTo((int)position * 1000);
+        _player.SeekTo((int)positionMillisecond );
         return Task.CompletedTask;
     }
 

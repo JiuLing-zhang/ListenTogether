@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicPlayerOnline.Maui.CacheCleanPage"
+             Title="缓存清理">
+
+    <StackLayout Margin="16">
+        <Label Text="缓存清理"
+                   Margin="0,0,0,10"/>
+
+        <Label Text="谨慎清理，有些歌曲清理后就再也找不回来咯"
+                   Margin="0,0,0,10"/>
+        <ListView ItemsSource="{Binding Caches}" SelectionMode="None">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                        </ViewCell.ContextActions>
+                        <ViewCell.View>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Name}"
+                                       LineBreakMode="NoWrap"/>
+                                <CheckBox HorizontalOptions="EndAndExpand" 
+                                          IsChecked="{Binding IsChecked}"
+                                          CheckedChanged="CheckBox_CheckedChanged" />
+                            </StackLayout>
+                        </ViewCell.View>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackLayout Orientation="Horizontal">
+            <StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="总大小：" />
+                    <Label Text="{Binding AllSizeString,StringFormat='{0}MB'}" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="已选择："/>
+                    <Label Text="{Binding SelectedSizeString,StringFormat='{0}MB'}" />
+                </StackLayout>
+            </StackLayout>
+            <Button Text="全选"
+                    Command="{Binding SelectAllCommand}"/>
+            <Button Text="删除"
+                    Command="{Binding ClearCommand}"/>
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

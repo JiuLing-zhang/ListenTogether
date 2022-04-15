@@ -108,6 +108,7 @@
             </StackLayout>
         </ScrollView>
         <controls:Player x:Name="player"
+                         Margin="0,20,0,0"
                          VerticalOptions="End" >
         </controls:Player>
     </StackLayout>

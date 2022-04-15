@@ -61,59 +61,72 @@
                      VerticalOptions="Start">
             <Label Text="正在播放"
                    Margin="0,0,0,20" />
- 
+
         </StackLayout>
 
         <StackLayout VerticalOptions="FillAndExpand">
-           
-                <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#000000">
+
+            <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#000000">
                     <services:BlurredImage Opacity="0.3" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Aspect="Fill" Source="{Binding CurrentMusic.ImageUrl}"/>
                 </StackLayout>-->
-            
-                <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" Padding="10,10,10,0">
-                    <!-- 歌曲信息 -->
-                    <StackLayout VerticalOptions="Center" Padding="0,0,0,10">
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-                            <Frame
-                            CornerRadius="5"
-                            Padding="0"
-                            BackgroundColor="Transparent"
-                            BorderColor="#929292"
-                            VerticalOptions="Center" 
-                            HasShadow="False">
-                                <Label Margin="4,1,4,1" 
-                                   HorizontalOptions="Center" 
-                                   BackgroundColor="Transparent"
-                                   TextColor="#E0E0E0"
-                                   VerticalTextAlignment="Center"
-                                   VerticalOptions="Center"
-                                   Text="{Binding CurrentMusic.PlatformName}" />
-                            </Frame>
-                            <Label Text="{Binding CurrentMusic.Name}" TextColor="#E0E0E0" FontSize="20"></Label>
-                        </StackLayout>
-                        <Label Text="{Binding CurrentMusic.Artist}" TextColor="#929292" FontSize="15" HorizontalTextAlignment="Center"></Label>
-                    </StackLayout>
-                    <!-- 歌词 -->
-                    <StackLayout VerticalOptions="FillAndExpand">
-                        <Label Text="暂无歌词" HorizontalTextAlignment="Center" TextColor="#E0E0E0" Style="{StaticResource LabelShowLyrics}"></Label>
-                        <ListView ItemsSource="{Binding Lyrics}" HorizontalOptions="Center" SelectionMode="None">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <ViewCell.View>
-                                            <StackLayout VerticalOptions="CenterAndExpand">
-                                                <Label Text="{Binding Info}" Style="{StaticResource LyricItem}"/>
-                                            </StackLayout>
-                                        </ViewCell.View>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackLayout>             
-                </StackLayout> 
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                <Frame CornerRadius="5"
+                       Padding="0"
+                       BackgroundColor="Transparent"
+                       HorizontalOptions="Center"                       
+                       BorderColor="#929292"                       
+                       HasShadow="False">
+                    <Label Margin="4,1,4,1"
+                           BackgroundColor="Transparent"
+                           TextColor="#E0E0E0"
+                           HorizontalTextAlignment="Center"
+                           Text="{Binding CurrentMusic.PlatformName}" />
+                </Frame>
+
+                <Label Text="{Binding CurrentMusic.Name}"
+                       TextColor="#E0E0E0"
+                       FontSize="20"
+                       HorizontalTextAlignment="Center"/>
+            </StackLayout>
+
+            <StackLayout VerticalOptions="Start"
+                         Margin="0,0,0,10">
+                <Label Text="{Binding CurrentMusic.Artist}"
+                       TextColor="#929292"
+                       FontSize="15"
+                       HorizontalTextAlignment="Center"/>
+            </StackLayout>
+
+            <!-- 歌词 -->
+            <StackLayout VerticalOptions="FillAndExpand">
+                <Label Text="暂无歌词" 
+                       HorizontalTextAlignment="Center" 
+                       TextColor="#E0E0E0" 
+                       Style="{StaticResource LabelShowLyrics}"/>
+                <ListView x:Name="ListViewLyrics"
+                          ItemsSource="{Binding Lyrics}" 
+                          HorizontalOptions="Center" 
+                          SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <StackLayout VerticalOptions="CenterAndExpand">
+                                        <Label Text="{Binding Info}" 
+                                               Style="{StaticResource LyricItem}"/>
+                                    </StackLayout>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
         </StackLayout>
 
-        <controls:Player x:Name="player" VerticalOptions="End">
+        <controls:Player x:Name="player"
+                         Margin="0,20,0,0"
+                         VerticalOptions="End">
         </controls:Player>
     </StackLayout>
 

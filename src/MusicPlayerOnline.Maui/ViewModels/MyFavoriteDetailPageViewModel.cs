@@ -13,15 +13,17 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
     private IMyFavoriteService _myFavoriteService;
     private IPlaylistService _playlistService;
     private IMusicService _musicService;
+    private PlayerService _playerService;
     public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
     public ICommand MyFavoriteEditCommand => new Command(EditMyFavorite);
     public ICommand MyFavoriteRemoveCommand => new Command(MyFavoriteRemove);
 
-    public MyFavoriteDetailPageViewModel(IServiceProvider services)
+    public MyFavoriteDetailPageViewModel(IServiceProvider services, PlayerService playerService)
     {
         MyFavoriteMusics = new ObservableCollection<MusicViewModel>();
 
         _services = services;
+        _playerService = playerService;
     }
 
     public async Task InitializeAsync()
@@ -103,7 +105,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
             ToastService.Show("删除成功");
             return;
         }
-        ToastService.Show("删除成功");
+        await ToastService.Show("删除成功");
         await Shell.Current.GoToAsync($"..", true);
     }
 
@@ -112,7 +114,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         var music = await _musicService.GetOneAsync(selected.Id);
         if (music == null)
         {
-            ToastService.Show("获取歌曲信息失败");
+            await ToastService.Show("获取歌曲信息失败");
             return;
         }
 
@@ -123,17 +125,6 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
             MusicArtist = music.Artist
         };
         await _playlistService.AddToPlaylist(playlist);
-
-        //TODO 播放
-        //if (await GlobalMethods.PlayMusic(music) == false)
-        //{
-        //    return;
-        //}
-        await Shell.Current.GoToAsync($"{nameof(PlayingPage)}", true);
-
-        //TODO 更新播放列表
-        //MessagingCenter.Send(this, SubscribeKey.UpdatePlaylist);
+        await _playerService.PlayAsync(music);
     }
-
-
 }

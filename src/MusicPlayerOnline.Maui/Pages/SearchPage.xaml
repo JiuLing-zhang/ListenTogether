@@ -28,7 +28,7 @@
                         <Setter Property="IsVisible" Value="true"/>
                     </DataTrigger>
                 </Style.Triggers>
-            </Style>         
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -117,6 +117,7 @@
         </ScrollView>
 
         <controls:Player x:Name="player"
+                         Margin="0,20,0,0"
                          VerticalOptions="End" >
         </controls:Player>
     </StackLayout>

@@ -9,6 +9,11 @@ public partial class PlayingPage : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
+
+        vm.ScrollLyric += (lyricItem) =>
+        {
+            ListViewLyrics.ScrollTo(lyricItem, ScrollToPosition.Center, true);
+        };
     }
     protected override async void OnAppearing()
     {

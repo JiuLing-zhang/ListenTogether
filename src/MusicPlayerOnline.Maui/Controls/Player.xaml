@@ -97,7 +97,7 @@
 
                             <StackLayout Orientation="Horizontal"
                                          HeightRequest="30">
-                                <Label x:Name="LblCurrentPosition"
+                                <Label x:Name="LblPositionMilliseconds"
                                        HorizontalOptions="Start"
                                        VerticalTextAlignment="Center"/>
                                 <Slider x:Name="SliderPlayProgress"
@@ -109,7 +109,7 @@
                                         DragStarted="SliderPlayProgress_DragStarted"
                                         DragCompleted="SliderPlayProgress_DragCompleted">
                                 </Slider>
-                                <Label x:Name="LblDuration"
+                                <Label x:Name="LblDurationMilliseconds"
                                        HorizontalOptions="End"
                                        VerticalTextAlignment="Center"/>
                             </StackLayout>

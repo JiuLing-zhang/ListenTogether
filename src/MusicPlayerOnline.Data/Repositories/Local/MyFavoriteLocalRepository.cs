@@ -87,7 +87,6 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
     }
     public async Task<bool> AddMusicToMyFavorite(int id, Music music)
     {
-        //TODO 保存操作需要事务支持
         var favorite = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().FirstOrDefaultAsync(x => x.Id == id);
         if (favorite == null)
         {
@@ -95,47 +94,45 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         }
 
         var favoriteDetail = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteDetailEntity>().FirstOrDefaultAsync(x => x.MyFavoriteId == id && x.MusicId == music.Id);
-        int count;
-        if (favoriteDetail == null)
+        try
         {
-            favoriteDetail = new MyFavoriteDetailEntity()
-            {
-                Platform = (int)music.Platform,
-                MyFavoriteId = id,
-                MusicName = music.Name,
-                MusicId = music.Id,
-                MusicAlbum = music.Album,
-                MusicArtist = music.Artist
-            };
-            count = await DatabaseProvide.DatabaseAsync.InsertAsync(favoriteDetail);
-        }
-        else
-        {
-            favoriteDetail.MusicId = music.Id;
-            favoriteDetail.MusicName = music.Name;
-            favoriteDetail.MusicArtist = music.Artist;
-            favoriteDetail.MusicAlbum = music.Album;
-            count = await DatabaseProvide.DatabaseAsync.UpdateAsync(favoriteDetail);
-        }
+            await DatabaseProvide.DatabaseAsync.RunInTransactionAsync(tran =>
+               {
+                   if (favoriteDetail == null)
+                   {
+                       favoriteDetail = new MyFavoriteDetailEntity()
+                       {
+                           Platform = (int)music.Platform,
+                           MyFavoriteId = id,
+                           MusicName = music.Name,
+                           MusicId = music.Id,
+                           MusicAlbum = music.Album,
+                           MusicArtist = music.Artist
+                       };
+                       tran.Insert(favoriteDetail);
+                   }
+                   else
+                   {
+                       favoriteDetail.MusicId = music.Id;
+                       favoriteDetail.MusicName = music.Name;
+                       favoriteDetail.MusicArtist = music.Artist;
+                       favoriteDetail.MusicAlbum = music.Album;
+                       tran.Update(favoriteDetail);
+                   }
 
-        if (count == 0)
+                   //更新歌单图标，歌单可以前置添加，所以有可能会没有图标
+                   if (favorite.ImageUrl.IsEmpty() && music.ImageUrl.IsNotEmpty())
+                   {
+                       favorite.ImageUrl = music.ImageUrl;
+                   }
+                   tran.Update(favorite);
+               });
+        }
+        catch (Exception)
         {
             return false;
         }
-
-        //更新歌单图标，歌单可以前置添加，所以有可能会没有图标
-        if (favorite.ImageUrl.IsEmpty() && music.ImageUrl.IsNotEmpty())
-        {
-            favorite.ImageUrl = music.ImageUrl;
-        }
-        count = await DatabaseProvide.DatabaseAsync.UpdateAsync(favorite);
-        if (count == 0)
-        {
-            return false;
-        }
-
         return true;
-
     }
 
     public async Task<List<MyFavoriteDetail>?> GetMyFavoriteDetail(int id)

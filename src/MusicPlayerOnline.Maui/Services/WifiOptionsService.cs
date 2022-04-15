@@ -2,7 +2,7 @@
 
 public class WifiOptionsService
 {
-    public bool HasWifiOrCanPlayWithOutWifi()
+    public async Task<bool> HasWifiOrCanPlayWithOutWifi()
     {
         if (Config.Desktop)
         {
@@ -14,7 +14,7 @@ public class WifiOptionsService
 
         if (current != NetworkAccess.Internet)
         {
-            ToastService.Show("播放失败：网络不可用");
+            await ToastService.Show("播放失败：网络不可用");
         }
         else
         {
@@ -27,7 +27,7 @@ public class WifiOptionsService
             }
             else
             {
-                ToastService.Show("播放失败：当前为非WIFI环境");
+                await ToastService.Show("播放失败：当前为非WIFI环境");
             }
         }
         return canPlayMusic;

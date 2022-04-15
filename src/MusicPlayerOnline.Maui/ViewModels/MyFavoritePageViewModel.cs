@@ -8,14 +8,16 @@ namespace MusicPlayerOnline.Maui.ViewModels
         private IMyFavoriteService _myFavoriteService;
         private IPlaylistService _playlistService;
         private IMusicService _musicService;
+        private PlayerService _playerService;
         public ICommand MyFavoriteAddCommand => new Command(AddMyFavorite);
         public ICommand EnterMyFavoriteDetailCommand => new Command<MyFavoriteViewModel>(EnterMyFavoriteDetail);
         public ICommand PlayAllMusicsCommand => new Command<MyFavoriteViewModel>(PlayAllMusics);
         public string Title => "我的歌单";
-        public MyFavoritePageViewModel(IServiceProvider services)
+        public MyFavoritePageViewModel(IServiceProvider services, PlayerService playerService)
         {
             FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
             _services = services;
+            _playerService = playerService;
         }
 
         public async Task InitializeAsync()
@@ -62,7 +64,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
         {
             if (selected.MusicCount == 0)
             {
-                ToastService.Show("当前歌单是空的哦");
+                await ToastService.Show("当前歌单是空的哦");
                 return;
             }
             await Shell.Current.GoToAsync($"{nameof(MyFavoriteDetailPage)}?{nameof(MyFavoriteDetailPageViewModel.MyFavoriteId)}={selected.Id}", true);
@@ -72,14 +74,14 @@ namespace MusicPlayerOnline.Maui.ViewModels
         {
             if (selected.MusicCount == 0)
             {
-                ToastService.Show("当前歌单是空的哦");
+                await ToastService.Show("当前歌单是空的哦");
                 return;
             }
 
             var myFavoriteMusics = await _myFavoriteService.GetMyFavoriteDetail(selected.Id);
             if (myFavoriteMusics == null)
             {
-                ToastService.Show("播放失败：没有查询到歌单信息~~~");
+                await ToastService.Show("播放失败：没有查询到歌单信息~~~");
                 return;
             }
 
@@ -101,17 +103,11 @@ namespace MusicPlayerOnline.Maui.ViewModels
                 await _playlistService.AddToPlaylist(playlist);
                 if (index == 0)
                 {
-                    //TODO 播放
-                    //if (await GlobalMethods.PlayMusic(music) == false)
-                    //{
-                    //    return;
-                    //}
+                    var music = await _musicService.GetOneAsync(myFavoriteMusic.MusicId);
+                    await _playerService.PlayAsync(music);
                 }
                 index++;
             }
-
-            //TODO 页面跳转
-            //await Shell.Current.GoToAsync($"//{nameof(PlayingPage)}", true);         
         }
     }
 }

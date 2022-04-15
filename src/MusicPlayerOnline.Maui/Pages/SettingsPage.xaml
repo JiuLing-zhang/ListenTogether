@@ -190,19 +190,15 @@
                Margin="0,24,0,0"              
                VerticalOptions="Center"/>
 
-                    <StackLayout Grid.Row="13" Grid.ColumnSpan="2">
-                        <!-- 日志 -->
-                        <StackLayout>
-                            <Button BackgroundColor="#212121" TextColor="#FFFFFF" Text="日志" Command="{Binding OpenLogCommand}"></Button>
-                        </StackLayout>
+                    <StackLayout Grid.Row="13"
+                                 Grid.ColumnSpan="2">
+                        <Button Text="日志"
+                                Command="{Binding OpenLogCommand}"/>
+                        <Button Text="本地缓存"
+                                Command="{Binding ClearCacheCommand}"/>
 
-                        <!-- 缓存 -->
-                        <StackLayout>
-                            <StackLayout>
-                                <Button BackgroundColor="#212121" TextColor="#FFFFFF" Text="歌曲缓存" Command="{Binding ClearCacheCommand}"></Button>
-                            </StackLayout>
-                        </StackLayout>
-                        <BoxView Margin="0,10,0,10" Color="#727272"  HeightRequest="1"/>
+                        <BoxView Margin="0,10,0,10"
+                                 HeightRequest="1"/>
 
                         <!-- 关于 -->
                         <StackLayout>
@@ -231,6 +227,7 @@
             </StackLayout>
         </ScrollView>
         <controls:Player x:Name="player"
+                         Margin="0,20,0,0"
                          VerticalOptions="End" >
         </controls:Player>
     </StackLayout>

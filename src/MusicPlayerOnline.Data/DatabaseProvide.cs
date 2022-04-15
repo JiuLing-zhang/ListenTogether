@@ -1,5 +1,4 @@
-﻿using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Data.Entities;
+﻿using MusicPlayerOnline.Data.Entities;
 using SQLite;
 
 namespace MusicPlayerOnline.Data;

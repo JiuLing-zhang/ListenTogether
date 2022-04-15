@@ -52,8 +52,7 @@
 
         <StackLayout Margin="0,0,0,10"
                      VerticalOptions="Start">
-            <Label Text="播放列表"
-                   Margin="0,0,0,20" />
+            <Label Text="播放列表"/>
 
             <Label Text="播放列表居然是空的...." 
                    HorizontalOptions="Center" 
@@ -95,7 +94,9 @@
             </StackLayout>
         </ScrollView>
 
-        <controls:Player x:Name="player" VerticalOptions="End">
+        <controls:Player x:Name="player"
+                         Margin="0,20,0,0"
+                         VerticalOptions="End">
         </controls:Player>
     </StackLayout>
 </ContentPage>

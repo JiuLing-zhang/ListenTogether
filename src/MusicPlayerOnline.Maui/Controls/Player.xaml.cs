@@ -1,3 +1,4 @@
+using Microsoft.Maui.Dispatching;
 using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Maui.Controls;
@@ -5,7 +6,7 @@ namespace MusicPlayerOnline.Maui.Controls;
 public partial class Player : ContentView
 {
     private PlayerService _playerService;
-    private static System.Timers.Timer _timerPlayProgress;
+    private IDispatcherTimer? _timerPlayProgress;
     private IEnvironmentConfigService _configService;
     public Player()
     {
@@ -26,40 +27,50 @@ public partial class Player : ContentView
         {
             _configService = this.Handler.MauiContext.Services.GetService<IEnvironmentConfigService>();
         }
+
+        if (_timerPlayProgress == null)
+        {
+            _timerPlayProgress = App.Current.Dispatcher.CreateTimer();
+            _timerPlayProgress.Interval = TimeSpan.FromMilliseconds(500);
+            _timerPlayProgress.Tick += _timerPlayProgress_Tick;
+            _timerPlayProgress.Start();
+        }
+    }
+
+    private void _timerPlayProgress_Tick(object sender, EventArgs e)
+    {
+        if (_playerService == null || _playerService.IsPlaying == false)
+        {
+            return;
+        }
+        var positionMillisecond = _playerService.PositionMillisecond;
+
+        var tsPosition = TimeSpan.FromMilliseconds(positionMillisecond);
+        LblPositionMilliseconds.Text = $"{tsPosition.Minutes:D2}:{tsPosition.Seconds:D2}";
+
+        double PlayProgress = positionMillisecond / _playerService.DurationMillisecond;
+        SliderPlayProgress.Value = PlayProgress;
     }
 
     internal void OnAppearing()
     {
         InitPlayer();
 
-        if (_timerPlayProgress == null)
+        if (_timerPlayProgress != null)
         {
-            _timerPlayProgress = new System.Timers.Timer();
-            _timerPlayProgress.Interval = 1000;
-            _timerPlayProgress.Elapsed += _timerPlayProgress_Elapsed;
-
             _timerPlayProgress.Start();
         }
     }
 
-    private void _timerPlayProgress_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-    {
-        if (_playerService == null || _playerService.IsPlaying == false)
-        {
-            return;
-        }
-        var currentPosition = _playerService.CurrentPosition;
-
-        LblCurrentPosition.Text = currentPosition.ToString();
-
-        double PlayProgress = currentPosition / _playerService.Duration;
-        SliderPlayProgress.Value = PlayProgress;
-    }
 
     internal void OnDisappearing()
     {
         _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded -= playerService_NewMusicAdded;
+        if (_timerPlayProgress != null)
+        {
+            _timerPlayProgress.Stop();
+        }
     }
 
     void InitPlayer()
@@ -109,7 +120,9 @@ public partial class Player : ContentView
         ImgCurrentMusic.Source = _playerService.CurrentMusic.ImageUrl;
         LblName.Text = _playerService.CurrentMusic.Name;
         LblAuthor.Text = $"{_playerService.CurrentMusic.Artist} - {_playerService.CurrentMusic.Album}";
-        LblDuration.Text = _playerService.Duration.ToString();
+
+        var tsDuration = TimeSpan.FromMilliseconds(_playerService.DurationMillisecond);
+        LblDurationMilliseconds.Text = $"{tsDuration.Minutes:D2}:{tsDuration.Seconds:D2}";
     }
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
@@ -204,9 +217,9 @@ public partial class Player : ContentView
         await _playerService.Next();
     }
 
-    private void Puzzled_Tapped(object sender, EventArgs e)
+    private async void Puzzled_Tapped(object sender, EventArgs e)
     {
-        ToastService.Show("别点了，小的就是个占位的~~~");
+        await ToastService.Show("别点了，小的就是个占位的~~~");
     }
 
     private async void GotoPlaying_Tapped(object sender, EventArgs e)
@@ -230,11 +243,16 @@ public partial class Player : ContentView
 
     private void SliderPlayProgress_DragStarted(object sender, EventArgs e)
     {
-
+        _timerPlayProgress?.Stop();
     }
 
     private void SliderPlayProgress_DragCompleted(object sender, EventArgs e)
     {
-
+        if (_playerService != null && _playerService.CurrentMusic != null)
+        {
+            var position = _playerService.DurationMillisecond * SliderPlayProgress.Value;
+            _playerService.PlayAsync(_playerService.CurrentMusic, position);
+        }
+        _timerPlayProgress?.Start();
     }
 }

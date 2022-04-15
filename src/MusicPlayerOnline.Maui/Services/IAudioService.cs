@@ -3,7 +3,7 @@
 public interface IAudioService
 {
     Task InitializeAsync(string uri);
-    Task PlayAsync(double position = 0);
+    Task PlayAsync(double positionMillisecond = 0);
     Task PauseAsync();
 
     /// <summary>
@@ -16,8 +16,8 @@ public interface IAudioService
     double Volume { set; }
 
     bool IsPlaying { get; }
-    double CurrentPosition { get; }
-    double Duration { get; }
+    double PositionMillisecond { get; }
+    double DurationMillisecond { get; }
 
     public event EventHandler PlayFinished;
     public event EventHandler PlayFailed;

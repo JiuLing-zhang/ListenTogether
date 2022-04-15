@@ -17,8 +17,8 @@ public class AudioService : IAudioService
     }
 
     public bool IsPlaying => _mediaPlayer.CurrentState == MediaPlayerState.Playing;
-    public double CurrentPosition => (long)_mediaPlayer.Position.TotalSeconds;
-    public double Duration => (long)_mediaPlayer.NaturalDuration.TotalSeconds;
+    public double PositionMillisecond => (long)_mediaPlayer.Position.TotalMilliseconds;
+    public double DurationMillisecond => (long)_mediaPlayer.NaturalDuration.TotalMilliseconds;
 
 
     public bool IsMuted { set => _mediaPlayer.IsMuted = value; }
@@ -52,11 +52,11 @@ public class AudioService : IAudioService
         return Task.CompletedTask;
     }
 
-    public Task PlayAsync(double position = 0)
+    public Task PlayAsync(double positionMillisecond = 0)
     {
         if (_mediaPlayer != null)
         {
-            _mediaPlayer.Position = TimeSpan.FromSeconds(position);
+            _mediaPlayer.Position = TimeSpan.FromSeconds(positionMillisecond);
             _mediaPlayer.Play();
         }
 

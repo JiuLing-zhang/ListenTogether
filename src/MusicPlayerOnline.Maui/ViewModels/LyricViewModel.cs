@@ -5,16 +5,16 @@
     /// </summary>
     public class LyricViewModel : ViewModelBase
     {
-        private int _position;
+        private int _positionMillisecond;
         /// <summary>
         /// 歌词位置
         /// </summary>
-        public int Position
+        public int PositionMillisecond
         {
-            get => _position;
+            get => _positionMillisecond;
             set
             {
-                _position = value;
+                _positionMillisecond = value;
                 OnPropertyChanged();
             }
         }

@@ -4,16 +4,15 @@ using MusicPlayerOnline.Model.Enums;
 namespace MusicPlayerOnline.Maui.Services;
 public class PlayerService
 {
+    private IServiceProvider _services;
     private static IAudioService _audioService;
     private readonly IMusicNetworkService _musicNetworkService;
-    private readonly IMusicService _musicService;
-    private readonly IPlaylistService _playlistService;
     private readonly WifiOptionsService _wifiOptionsService;
 
     private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
 
-    public double CurrentPosition => _audioService.CurrentPosition;
-    public double Duration => _audioService.Duration;
+    public double PositionMillisecond => _audioService.PositionMillisecond;
+    public double DurationMillisecond => _audioService.DurationMillisecond;
     public bool IsMuted { set => _audioService.IsMuted = value; }
     public double Volume { set => _audioService.Volume = value; }
 
@@ -31,33 +30,31 @@ public class PlayerService
     public event EventHandler NewMusicAdded;
     public event EventHandler IsPlayingChanged;
 
-    public PlayerService(IAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory, WifiOptionsService wifiOptionsService)
+    public PlayerService(IServiceProvider services, IAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory, WifiOptionsService wifiOptionsService)
     {
+        _services = services;
         _audioService = audioService;
         _audioService.PlayFinished += async (_, _) => await Next();
         _audioService.PlayFailed += async (_, _) => await MediaFailed();
 
         _musicNetworkService = musicNetworkService;
-        _musicService = musicServiceFactory.Create();
-        _playlistService = playlistServiceFactory.Create();
         _wifiOptionsService = wifiOptionsService;
     }
 
     public Task PlayAsync(Music music)
     {
         var isOtherMusic = CurrentMusic?.Id != music.Id;
-        var isPlaying = isOtherMusic || !_audioService.IsPlaying;
-        var position = isOtherMusic ? 0 : CurrentPosition;
-        return PlayAsync(music, position);
+        var positionMillisecond = isOtherMusic ? 0 : PositionMillisecond;
+        return PlayAsync(music, positionMillisecond);
     }
-    public Task PlayAsync(Music music, double position)
+    public Task PlayAsync(Music music, double positionMillisecond)
     {
         var isOtherMusic = CurrentMusic?.Id != music.Id;
         var isPlaying = isOtherMusic || !_audioService.IsPlaying;
-        return PlayAsync(music, isPlaying, position);
+        return PlayAsync(music, isPlaying, positionMillisecond);
     }
 
-    public async Task PlayAsync(Music music, bool isPlaying, double position = 0)
+    public async Task PlayAsync(Music music, bool isPlaying, double positionMillisecond = 0)
     {
         string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.Id);
         if (!File.Exists(musicPath))
@@ -70,7 +67,7 @@ public class PlayerService
                 music = await _musicNetworkService.UpdatePlayUrl(music);
             }
 
-            if (!_wifiOptionsService.HasWifiOrCanPlayWithOutWifi())
+            if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifi())
             {
                 await MediaFailed();
                 return;
@@ -92,7 +89,7 @@ public class PlayerService
             await _audioService.InitializeAsync(musicPath);
             if (isPlaying)
             {
-                await _audioService.PlayAsync(position);
+                await _audioService.PlayAsync(positionMillisecond);
                 IsPlaying = true;
             }
             else
@@ -107,7 +104,7 @@ public class PlayerService
         {
             if (isPlaying)
             {
-                await _audioService.PlayAsync(position);
+                await _audioService.PlayAsync(positionMillisecond);
                 IsPlaying = true;
             }
             else
@@ -130,8 +127,10 @@ public class PlayerService
             await PlayAsync(CurrentMusic);
             return;
         }
+        var musicService = _services.GetService<IMusicServiceFactory>().Create();
+        var playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
 
-        var playlist = await _playlistService.GetAllAsync();
+        var playlist = await playlistService.GetAllAsync();
         if (playlist.Count == 0)
         {
             return;
@@ -154,7 +153,7 @@ public class PlayerService
                 nextId = playlist.Count - 1;
             }
 
-            var music = await _musicService.GetOneAsync(playlist[nextId].MusicId);
+            var music = await musicService.GetOneAsync(playlist[nextId].MusicId);
             await PlayAsync(music);
             return;
         }
@@ -171,7 +170,7 @@ public class PlayerService
             {
                 randomMusicId = JiuLing.CommonLibs.Random.RandomUtils.GetOneFromList<Playlist>(playlist).MusicId;
             } while (randomMusicId == CurrentMusic.Id);
-            var music = await _musicService.GetOneAsync(randomMusicId);
+            var music = await musicService.GetOneAsync(randomMusicId);
             await PlayAsync(music);
         }
     }
@@ -187,7 +186,10 @@ public class PlayerService
             return;
         }
 
-        var playlist = await _playlistService.GetAllAsync();
+        var musicService = _services.GetService<IMusicServiceFactory>().Create();
+        var playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
+
+        var playlist = await playlistService.GetAllAsync();
         if (playlist.Count == 0)
         {
             return;
@@ -209,7 +211,7 @@ public class PlayerService
                 nextId = 0;
             }
 
-            var music = await _musicService.GetOneAsync(playlist[nextId].MusicId);
+            var music = await musicService.GetOneAsync(playlist[nextId].MusicId);
             await PlayAsync(music);
             return;
         }
@@ -226,7 +228,7 @@ public class PlayerService
             {
                 randomMusicId = JiuLing.CommonLibs.Random.RandomUtils.GetOneFromList<Playlist>(playlist).MusicId;
             } while (randomMusicId == CurrentMusic.Id);
-            var music = await _musicService.GetOneAsync(randomMusicId);
+            var music = await musicService.GetOneAsync(randomMusicId);
             await PlayAsync(music);
         }
     }

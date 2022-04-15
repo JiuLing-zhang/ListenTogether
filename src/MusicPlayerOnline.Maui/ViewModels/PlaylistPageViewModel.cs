@@ -83,13 +83,12 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
-    //TODO 播放
     private async void PlayMusic(MusicViewModel selectedMusic)
     {
         var music = await _musicService.GetOneAsync(selectedMusic.Id);
         if (music == null)
         {
-            ToastService.Show("获取歌曲信息失败");
+            await ToastService.Show("获取歌曲信息失败");
             return;
         }
 

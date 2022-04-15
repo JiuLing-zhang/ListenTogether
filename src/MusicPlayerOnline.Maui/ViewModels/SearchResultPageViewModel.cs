@@ -145,7 +145,7 @@ public class SearchResultPageViewModel : ViewModelBase
             var musics = await _searchService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, SearchKeyword);
             if (musics.Count == 0)
             {
-                ToastService.Show("哦吼，啥也没有搜到");
+                await ToastService.Show("哦吼，啥也没有搜到");
                 return;
             }
 
@@ -170,7 +170,7 @@ public class SearchResultPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ToastService.Show("抱歉，网络可能出小差了~");
+            await ToastService.Show("抱歉，网络可能出小差了~");
         }
         finally
         {
@@ -187,7 +187,7 @@ public class SearchResultPageViewModel : ViewModelBase
         (succeed, message, music) = await SaveMusic(searchResult.SourceData);
         if (succeed == false)
         {
-            ToastService.Show(message);
+            await ToastService.Show(message);
             return;
         }
 
@@ -204,7 +204,7 @@ public class SearchResultPageViewModel : ViewModelBase
         (succeed, message, music) = await SaveMusic(selected.SourceData);
         if (succeed == false)
         {
-            ToastService.Show(message);
+            await ToastService.Show(message);
             return;
         }
         await _playerService.PlayAsync(music);

@@ -1,12 +1,11 @@
-﻿using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Model.Enums;
+﻿using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Maui.ViewModels;
 
 public class SettingPageViewModel : ViewModelBase
 {
     public ICommand OpenUrlCommand => new Command<string>(async (url) => await Launcher.OpenAsync(url));
-    public ICommand ClearCacheCommand => new Command(ClearCache);
+    public ICommand ClearCacheCommand => new Command(GoCacheClean);
     public ICommand OpenLogCommand => new Command(OpenLog);
     public ICommand LoginCommand => new Command(Login);
     public ICommand LogoutCommand => new Command(Logout);
@@ -402,10 +401,9 @@ public class SettingPageViewModel : ViewModelBase
         });
     }
 
-    private async void ClearCache()
+    private async void GoCacheClean()
     {
-        //TODO ClearCache
-        //await Shell.Current.GoToAsync($"{nameof(ClearCachePage)}", true);
+        await Shell.Current.GoToAsync($"{nameof(CacheCleanPage)}", true);
     }
 
     private async void OpenLog()
@@ -418,20 +416,20 @@ public class SettingPageViewModel : ViewModelBase
     {
         if (LoginUsername.IsEmpty() || LoginPassword.IsEmpty())
         {
-            ToastService.Show("请输入用户名和密码");
+            await ToastService.Show("请输入用户名和密码");
             return;
         }
 
         var user = await _userService.Login(LoginUsername, LoginPassword);
         if (user == null)
         {
-            ToastService.Show("登录失败：用户名或密码错误");
+            await ToastService.Show("登录失败：用户名或密码错误");
             return;
         }
 
         if (!_userLocalService.Write(user))
         {
-            ToastService.Show("用户信息保存失败，请重试");
+            await ToastService.Show("用户信息保存失败，请重试");
             return;
         }
         //清除页面绑定的用户名密码
@@ -446,7 +444,7 @@ public class SettingPageViewModel : ViewModelBase
     {
         if (!await _userService.Logout())
         {
-            ToastService.Show("操作失败，请重试");
+            await ToastService.Show("操作失败，请重试");
             return;
         }
 

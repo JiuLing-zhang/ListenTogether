@@ -1,3 +1,4 @@
+using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Model.Api;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -22,7 +23,17 @@ public class ErrorHandlerMiddleware
         }
         catch (Exception ex)
         {
-            //TODO 记录日志
+            var logService = context.RequestServices.GetService(typeof(ILogService)) as ILogService;
+            if (logService != null)
+            {
+                await logService.WriteAsync(0, new Model.Api.Request.LogRequest()
+                {
+                    LogType = -1,
+                    Message = $"系统内部异常。{Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}",
+                    Timestamp = JiuLing.CommonLibs.Text.TimestampUtils.GetLen13()
+                });
+            }
+
             var response = context.Response;
             response.ContentType = "application/json";
 
