@@ -56,7 +56,7 @@ public class AudioService : IAudioService
     {
         if (_mediaPlayer != null)
         {
-            _mediaPlayer.Position = TimeSpan.FromSeconds(positionMillisecond);
+            _mediaPlayer.Position = TimeSpan.FromMilliseconds(positionMillisecond);
             _mediaPlayer.Play();
         }
 

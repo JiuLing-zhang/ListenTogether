@@ -408,8 +408,7 @@ public class SettingPageViewModel : ViewModelBase
 
     private async void OpenLog()
     {
-        //TODO OpenLog
-        //await Shell.Current.GoToAsync($"{nameof(LogPage)}", true);
+        await Shell.Current.GoToAsync($"{nameof(LogPage)}", true);
     }
 
     private async void Login()

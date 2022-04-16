@@ -41,22 +41,20 @@ public class PlayerService
         _wifiOptionsService = wifiOptionsService;
     }
 
-    public Task PlayAsync(Music music)
+    public async Task PauseAsync()
     {
-        var isOtherMusic = CurrentMusic?.Id != music.Id;
-        var positionMillisecond = isOtherMusic ? 0 : PositionMillisecond;
-        return PlayAsync(music, positionMillisecond);
-    }
-    public Task PlayAsync(Music music, double positionMillisecond)
-    {
-        var isOtherMusic = CurrentMusic?.Id != music.Id;
-        var isPlaying = isOtherMusic || !_audioService.IsPlaying;
-        return PlayAsync(music, isPlaying, positionMillisecond);
+        if (!IsPlaying)
+        {
+            return;
+        }
+        await _audioService.PauseAsync();
+        IsPlaying = false;
+        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public async Task PlayAsync(Music music, bool isPlaying, double positionMillisecond = 0)
+    public async Task PlayAsync(Music music, double positionMillisecond = 0)
     {
-        string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.Id);
+        string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.CacheFileName);
         if (!File.Exists(musicPath))
         {
             //缓存文件不存在时重新下载
@@ -87,33 +85,14 @@ public class PlayerService
                 await _audioService.PauseAsync();
             }
             await _audioService.InitializeAsync(musicPath);
-            if (isPlaying)
-            {
-                await _audioService.PlayAsync(positionMillisecond);
-                IsPlaying = true;
-            }
-            else
-            {
-                await _audioService.PauseAsync();
-                IsPlaying = false;
-            }
-
             NewMusicAdded?.Invoke(this, EventArgs.Empty);
+            await _audioService.PlayAsync(positionMillisecond);
         }
         else
         {
-            if (isPlaying)
-            {
-                await _audioService.PlayAsync(positionMillisecond);
-                IsPlaying = true;
-            }
-            else
-            {
-                await _audioService.PauseAsync();
-                IsPlaying = false;
-            }
-
+            await _audioService.PlayAsync(positionMillisecond);
         }
+        IsPlaying = true;
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 

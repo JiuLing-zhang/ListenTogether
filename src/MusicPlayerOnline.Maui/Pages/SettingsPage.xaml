@@ -194,7 +194,7 @@
                                  Grid.ColumnSpan="2">
                         <Button Text="日志"
                                 Command="{Binding OpenLogCommand}"/>
-                        <Button Text="本地缓存"
+                        <Button Text="歌曲缓存"
                                 Command="{Binding ClearCacheCommand}"/>
 
                         <BoxView Margin="0,10,0,10"

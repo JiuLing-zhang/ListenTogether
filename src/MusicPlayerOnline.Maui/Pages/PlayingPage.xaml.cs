@@ -9,21 +9,31 @@ public partial class PlayingPage : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
-
-        vm.ScrollLyric += (lyricItem) =>
-        {
-            ListViewLyrics.ScrollTo(lyricItem, ScrollToPosition.Center, true);
-        };
     }
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         player.OnAppearing();
+        vm.ScrollLyric += ShowLyric;
         await vm.InitializeAsync();
     }
     protected override void OnDisappearing()
     {
         player.OnDisappearing();
+        vm.ScrollLyric -= ShowLyric;
         base.OnDisappearing();
+    }
+
+    private void ShowLyric(LyricViewModel lyricItem)
+    {
+        try
+        {
+            ListViewLyrics.ScrollTo(lyricItem, ScrollToPosition.Center, true);
+        }
+        catch (Exception ex)
+        {
+
+            Logger.Error("歌词同步展示失败。", ex);
+        }
     }
 }

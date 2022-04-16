@@ -48,7 +48,7 @@ public class MiGuMusicProvider : IMusicProvider
         {
             musics.Add(new MusicSearchResult()
             {
-                Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.Name}-{htmlMusic.Artist}"),
+                Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.Id}"),
                 Platform = Platform,
                 PlatformInnerId = htmlMusic.Id,
                 Name = htmlMusic.Name,

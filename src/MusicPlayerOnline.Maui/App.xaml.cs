@@ -66,7 +66,8 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(MyFavoriteDetailPage), typeof(MyFavoriteDetailPage));
         Routing.RegisterRoute(nameof(AddToMyFavoritePage), typeof(AddToMyFavoritePage));
         Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
-        Routing.RegisterRoute(nameof(CacheCleanPage), typeof(CacheCleanPage));        
+        Routing.RegisterRoute(nameof(CacheCleanPage), typeof(CacheCleanPage));
+        Routing.RegisterRoute(nameof(LogPage), typeof(LogPage));
     }
 
     private void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs ex)

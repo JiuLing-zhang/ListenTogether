@@ -48,6 +48,15 @@ public class PlayingPageViewModel : ViewModelBase
         PlayModeInt = (int)GlobalConfig.MyUserSetting.Player.PlayMode;
     }
 
+    public void Dispose()
+    {
+        if (_playerService!=null)
+        {
+            _playerService.NewMusicAdded -= _playerService_NewMusicAdded;
+        }
+        _timerPlayProgress.Tick += _timerPlayProgress_Tick;
+    }
+
     /// <summary>
     /// 页面标题
     /// </summary>

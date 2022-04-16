@@ -2,9 +2,7 @@
 {
     public class MusicBase
     {
-        /// <summary>
-        /// ID，系统中唯一，guid.ToString("N")
-        /// </summary>
+
         public string Id { get; set; } = null!;
         /// <summary>
         /// 歌曲名称

@@ -7,7 +7,7 @@ public class Logger
         {
             var logEntity = new LogEntity()
             {
-                CreateTime = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds(),
+                CreateTime = new DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds(),
                 LogType = 0, //Info = 0,
                 Message = msg
             };
@@ -25,7 +25,7 @@ public class Logger
         {
             var logEntity = new LogEntity()
             {
-                CreateTime = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds(),
+                CreateTime = new DateTimeOffset(DateTime.Now).ToUnixTimeMilliseconds(),
                 LogType = 2, //Error = 2
                 Message = $"{msg}{Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}"
             };
@@ -35,5 +35,27 @@ public class Logger
         {
             // ignored
         }
+    }
+
+    /// <summary>
+    /// 获取所有日志
+    /// </summary>
+    public static List<(long CreateTime, int LogType, string Message)> GetAll(int maxCount = 30)
+    {
+        var result = new List<(long CreateTime, int LogType, string Message)>();
+        var logs = DatabaseProvide.Database.Table<LogEntity>().OrderByDescending(x => x.CreateTime).Take(maxCount).ToList();
+        foreach (var log in logs)
+        {
+            result.Add((log.CreateTime, log.LogType, log.Message));
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// 清空日志
+    /// </summary>
+    public static void RemoveAllAsync()
+    {
+        DatabaseProvide.Database.DeleteAll<LogEntity>();
     }
 }

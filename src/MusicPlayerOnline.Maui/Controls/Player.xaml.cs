@@ -39,10 +39,11 @@ public partial class Player : ContentView
 
     private void _timerPlayProgress_Tick(object sender, EventArgs e)
     {
-        if (_playerService == null || _playerService.IsPlaying == false)
+        if (_playerService == null)
         {
             return;
         }
+
         var positionMillisecond = _playerService.PositionMillisecond;
 
         var tsPosition = TimeSpan.FromMilliseconds(positionMillisecond);
@@ -102,12 +103,32 @@ public partial class Player : ContentView
         }
         else
         {
-            UpdatePlayPause();
+            if (Dispatcher.IsDispatchRequired)
+            {
+                Dispatcher.Dispatch(() =>
+                {
+                    UpdatePlayPause();
+                });
+            }
+            else
+            {
+                UpdatePlayPause();
+            }
         }
     }
     private void playerService_NewMusicAdded(object sender, EventArgs e)
     {
-        UpdateMusicInfo();
+        if (Dispatcher.IsDispatchRequired)
+        {
+            Dispatcher.Dispatch(() =>
+            {
+                UpdateMusicInfo();
+            });
+        }
+        else
+        {
+            UpdateMusicInfo();
+        }
     }
 
     private void UpdatePlayPause()
@@ -127,7 +148,14 @@ public partial class Player : ContentView
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
     {
-        await _playerService.PlayAsync(_playerService.CurrentMusic);
+        if (_playerService.IsPlaying)
+        {
+            await _playerService.PauseAsync();
+        }
+        else
+        {
+            await _playerService.PlayAsync(_playerService.CurrentMusic, _playerService.PositionMillisecond);
+        }
     }
 
     private void ImgSoundOff_Tapped(object sender, EventArgs e)
@@ -222,11 +250,6 @@ public partial class Player : ContentView
         await ToastService.Show("别点了，小的就是个占位的~~~");
     }
 
-    private async void GotoPlaying_Tapped(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync($"{nameof(PlayingPage)}");
-    }
-
     private void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
         _playerService.Volume = e.NewValue;
@@ -248,10 +271,10 @@ public partial class Player : ContentView
 
     private void SliderPlayProgress_DragCompleted(object sender, EventArgs e)
     {
-        if (_playerService != null && _playerService.CurrentMusic != null)
+        if (_playerService.CurrentMusic != null)
         {
-            var position = _playerService.DurationMillisecond * SliderPlayProgress.Value;
-            _playerService.PlayAsync(_playerService.CurrentMusic, position);
+            var positionMillisecond = _playerService.DurationMillisecond * SliderPlayProgress.Value;
+            _playerService.PlayAsync(_playerService.CurrentMusic, positionMillisecond);
         }
         _timerPlayProgress?.Start();
     }

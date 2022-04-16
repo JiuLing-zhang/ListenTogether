@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicPlayerOnline.Maui.LogPage"
+             Title="日志">
+    <StackLayout Margin="16">
+        <Label Text="日志"
+               VerticalOptions="Start"
+               Margin="0,0,0,10"/>
+
+        <ScrollView VerticalOptions="FillAndExpand"
+                    Margin="0,0,0,10">
+            <CollectionView ItemsSource="{Binding Logs}"
+                            SelectionMode="None"  >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="{Binding Time}"/>
+                            <Label Text="{Binding Message}"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <Button Text="清空"
+                VerticalOptions="End"
+                Command="{Binding ClearLogsCommand}"/>
+        <Button Text="上传"
+                VerticalOptions="End"
+                Command="{Binding UpdateLogsCommand}"/>
+    </StackLayout>
+</ContentPage>
