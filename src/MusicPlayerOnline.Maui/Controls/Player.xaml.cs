@@ -43,14 +43,20 @@ public partial class Player : ContentView
         {
             return;
         }
+        try
+        {
+            var positionMillisecond = _playerService.PositionMillisecond;
 
-        var positionMillisecond = _playerService.PositionMillisecond;
+            var tsPosition = TimeSpan.FromMilliseconds(positionMillisecond);
+            LblPositionMilliseconds.Text = $"{tsPosition.Minutes:D2}:{tsPosition.Seconds:D2}";
 
-        var tsPosition = TimeSpan.FromMilliseconds(positionMillisecond);
-        LblPositionMilliseconds.Text = $"{tsPosition.Minutes:D2}:{tsPosition.Seconds:D2}";
-
-        double PlayProgress = positionMillisecond / _playerService.DurationMillisecond;
-        SliderPlayProgress.Value = PlayProgress;
+            double PlayProgress = positionMillisecond / _playerService.DurationMillisecond;
+            SliderPlayProgress.Value = PlayProgress;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("播放组件更新失败。", ex);
+        }
     }
 
     internal void OnAppearing()

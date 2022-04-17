@@ -50,7 +50,7 @@ public class PlayingPageViewModel : ViewModelBase
 
     public void Dispose()
     {
-        if (_playerService!=null)
+        if (_playerService != null)
         {
             _playerService.NewMusicAdded -= _playerService_NewMusicAdded;
         }
@@ -213,38 +213,45 @@ public class PlayingPageViewModel : ViewModelBase
             return;
         }
 
-        var positionMillisecond = _playerService.PositionMillisecond;
-
-        //TODO andorid更新进度条
-        //var (duration, position) = PlayerService.Instance().GetPosition();
-        //Position = (decimal)position / duration;
-        //var tsDurationTime = TimeSpan.FromMilliseconds(duration);
-        //DurationTime = $"{tsDurationTime.Minutes:D2}:{tsDurationTime.Seconds:D2}";
-
-        //var tsCurrentTime = TimeSpan.FromMilliseconds(position);
-        //CurrentTime = $"{tsCurrentTime.Minutes:D2}:{tsCurrentTime.Seconds:D2}";
-
-
-        if (Lyrics.Count > 0)
+        try
         {
-            //取大于当前进度的第一行索引，在此基础上-1则为需要高亮的行
-            int highlightIndex = 0;
-            foreach (var lyric in Lyrics)
-            {
-                lyric.IsHighlight = false;
-                if (lyric.PositionMillisecond > positionMillisecond)
-                {
-                    break;
-                }
-                highlightIndex++;
-            }
-            if (highlightIndex > 0)
-            {
-                highlightIndex = highlightIndex - 1;
-            }
+            var positionMillisecond = _playerService.PositionMillisecond;
 
-            Lyrics[highlightIndex].IsHighlight = true;
-            ScrollLyric?.Invoke(Lyrics[highlightIndex]);
+            //TODO andorid更新进度条
+            //var (duration, position) = PlayerService.Instance().GetPosition();
+            //Position = (decimal)position / duration;
+            //var tsDurationTime = TimeSpan.FromMilliseconds(duration);
+            //DurationTime = $"{tsDurationTime.Minutes:D2}:{tsDurationTime.Seconds:D2}";
+
+            //var tsCurrentTime = TimeSpan.FromMilliseconds(position);
+            //CurrentTime = $"{tsCurrentTime.Minutes:D2}:{tsCurrentTime.Seconds:D2}";
+
+
+            if (Lyrics.Count > 0)
+            {
+                //取大于当前进度的第一行索引，在此基础上-1则为需要高亮的行
+                int highlightIndex = 0;
+                foreach (var lyric in Lyrics)
+                {
+                    lyric.IsHighlight = false;
+                    if (lyric.PositionMillisecond > positionMillisecond)
+                    {
+                        break;
+                    }
+                    highlightIndex++;
+                }
+                if (highlightIndex > 0)
+                {
+                    highlightIndex = highlightIndex - 1;
+                }
+
+                Lyrics[highlightIndex].IsHighlight = true;
+                ScrollLyric?.Invoke(Lyrics[highlightIndex]);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("播放页进度更新失败。", ex);
         }
     }
     //暂停、恢复
