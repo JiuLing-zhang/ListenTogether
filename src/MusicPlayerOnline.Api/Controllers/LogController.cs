@@ -15,7 +15,7 @@ public class LogController : ApiBaseController
         _logService = logService;
     }
 
-    [HttpPost()]
+    [HttpPost("write")]
     public async Task<IActionResult> Write(LogRequest log)
     {
         //过滤掉2分钟之外的请求
@@ -27,6 +27,13 @@ public class LogController : ApiBaseController
         }
 
         await _logService.WriteAsync(UserId, log);
+        return Ok("ok");
+    }
+
+    [HttpPost("write-all")]
+    public async Task<IActionResult> Write(List<LogRequest> logs)
+    {
+        await _logService.WriteListAsync(UserId, logs);
         return Ok("ok");
     }
 }
