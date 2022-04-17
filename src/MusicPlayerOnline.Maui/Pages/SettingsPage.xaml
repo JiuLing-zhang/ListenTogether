@@ -192,11 +192,11 @@
 
                     <StackLayout Grid.Row="13"
                                  Grid.ColumnSpan="2">
-                        <Button Text="日志"
+                        <Button Text="日志管理"
+                                Margin="0,0,0,5"
                                 Command="{Binding OpenLogCommand}"/>
                         <Button Text="歌曲缓存"
                                 Command="{Binding ClearCacheCommand}"/>
-
                         <BoxView Margin="0,10,0,10"
                                  HeightRequest="1"/>
 
