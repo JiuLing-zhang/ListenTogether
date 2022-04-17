@@ -26,14 +26,14 @@ public class LogController : ApiBaseController
             return BadRequest("时间戳不合法");
         }
 
-        await _logService.WriteAsync(UserId, log);
-        return Ok("ok");
+        var response = await _logService.WriteAsync(UserId, log);
+        return Ok(response);
     }
 
     [HttpPost("write-all")]
     public async Task<IActionResult> Write(List<LogRequest> logs)
     {
-        await _logService.WriteListAsync(UserId, logs);
-        return Ok("ok");
+        var response = await _logService.WriteListAsync(UserId, logs);
+        return Ok(response);
     }
 }

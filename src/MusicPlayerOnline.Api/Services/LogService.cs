@@ -1,6 +1,7 @@
 ﻿using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
+using MusicPlayerOnline.Model.Api;
 using MusicPlayerOnline.Model.Api.Request;
 
 namespace MusicPlayerOnline.Api.Services;
@@ -11,7 +12,7 @@ public class LogService : ILogService
     {
         _context = dataContext;
     }
-    public async Task WriteAsync(int userId, LogRequest log)
+    public async Task<Result> WriteAsync(int userId, LogRequest log)
     {
         var myLog = new LogEntity()
         {
@@ -23,9 +24,10 @@ public class LogService : ILogService
         };
         _context.Logs.Add(myLog);
         await _context.SaveChangesAsync();
+        return new Result(0, "上传成功");
     }
 
-    public async Task WriteListAsync(int userId, List<LogRequest> logs)
+    public async Task<Result> WriteListAsync(int userId, List<LogRequest> logs)
     {
         var createTime = DateTime.Now;
         foreach (var log in logs)
@@ -41,5 +43,6 @@ public class LogService : ILogService
             _context.Logs.Add(myLog);
         }
         await _context.SaveChangesAsync();
+        return new Result(0, "上传成功");
     }
 }
