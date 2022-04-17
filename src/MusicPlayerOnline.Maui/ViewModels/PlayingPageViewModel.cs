@@ -54,7 +54,7 @@ public class PlayingPageViewModel : ViewModelBase
         {
             _playerService.NewMusicAdded -= _playerService_NewMusicAdded;
         }
-        _timerPlayProgress.Tick += _timerPlayProgress_Tick;
+        _timerPlayProgress.Tick -= _timerPlayProgress_Tick;
     }
 
     /// <summary>
