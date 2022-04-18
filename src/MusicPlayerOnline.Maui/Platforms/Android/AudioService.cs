@@ -8,7 +8,12 @@ public class AudioService : IAudioService
     public event EventHandler PlayFinished;
     public event EventHandler PlayFailed;
     public bool IsPlaying => _player?.IsPlaying ?? false;
-    public double CurrentPosition => _player?.CurrentPosition / 1000 ?? 0;
+
+    public bool IsMuted { set => throw new NotImplementedException("当前平台不支持此功能（IsMuted）"); }
+    public double Volume { set => throw new NotImplementedException("当前平台不支持此功能（Volume）"); }
+
+    public double PositionMillisecond => _player?.CurrentPosition ?? 0;
+    public double DurationMillisecond => _player?.Duration ?? 0;
 
     public async Task InitializeAsync(string uri)
     {
@@ -34,7 +39,7 @@ public class AudioService : IAudioService
     public Task PlayAsync(double positionMillisecond = 0)
     {
         _player.Start();
-        _player.SeekTo((int)positionMillisecond );
+        _player.SeekTo((int)positionMillisecond);
         return Task.CompletedTask;
     }
 

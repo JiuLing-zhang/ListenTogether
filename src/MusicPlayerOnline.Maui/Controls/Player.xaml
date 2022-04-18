@@ -5,8 +5,8 @@
 
     <ContentView.HeightRequest>
         <OnPlatform x:TypeArguments="x:Double">
-            <On Platform="Android,iOS">70</On>
             <On Platform="UWP,macOS">70</On>
+            <On Platform="Android,iOS">40</On>
         </OnPlatform>
     </ContentView.HeightRequest>
 
@@ -136,6 +136,29 @@
                     </StackLayout>
                 </On>
                 <On Platform="Android,iOS">
+                    <StackLayout Orientation="Horizontal">
+                        <StackLayout HorizontalOptions="FillAndExpand"
+                                     Orientation="Horizontal">
+                            <Image WidthRequest="30"
+                                   Source="{Binding Source, Source={x:Reference ImgCurrentMusic}}"/>
+                            <Label Text="{Binding Text, Source={x:Reference LblName}}"
+                                       VerticalOptions="Start" 
+                                       Margin="0,15,0,0"/>
+                            <Label Text="{Binding Text, Source={x:Reference LblAuthor}}"
+                                       VerticalOptions="EndAndExpand" 
+                                       Margin="0,0,0,15"/>
+                        </StackLayout>
+                        <StackLayout HorizontalOptions="End">
+                            <Image WidthRequest="30"
+                                   HeightRequest="30"
+                                   Aspect="AspectFill"
+                                   Source="{Binding Source, Source={x:Reference ImgPlay}}">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="ImgPlay_Tapped"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
+                    </StackLayout>
                 </On>
             </OnPlatform>
         </ContentView>

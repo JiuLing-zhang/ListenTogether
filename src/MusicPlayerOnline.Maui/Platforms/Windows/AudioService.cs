@@ -12,8 +12,8 @@ public class AudioService : IAudioService
         {
             AudioCategory = MediaPlayerAudioCategory.Media
         };
-        _mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
-        _mediaPlayer.MediaFailed += MediaPlayer_MediaFailed;
+        _mediaPlayer.MediaEnded += (_, _) => PlayFinished?.Invoke(null, null);
+        _mediaPlayer.MediaFailed += (_, _) => PlayFailed?.Invoke(null, null);
     }
 
     public bool IsPlaying => _mediaPlayer.CurrentState == MediaPlayerState.Playing;
@@ -35,15 +35,6 @@ public class AudioService : IAudioService
             await PauseAsync();
             _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(_uri));
         }
-    }
-
-    private void MediaPlayer_MediaEnded(object s, object s1)
-    {
-        PlayFinished?.Invoke(null, null);
-    }
-    private void MediaPlayer_MediaFailed(object s, object s1)
-    {
-        PlayFailed?.Invoke(null, null);
     }
 
     public Task PauseAsync()

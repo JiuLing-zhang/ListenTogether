@@ -2,9 +2,8 @@
 
 public interface IAudioService
 {
-    Task InitializeAsync(string uri);
-    Task PlayAsync(double positionMillisecond = 0);
-    Task PauseAsync();
+    public event EventHandler PlayFinished;
+    public event EventHandler PlayFailed;
 
     /// <summary>
     /// 是否静音
@@ -19,6 +18,7 @@ public interface IAudioService
     double PositionMillisecond { get; }
     double DurationMillisecond { get; }
 
-    public event EventHandler PlayFinished;
-    public event EventHandler PlayFailed;
+    Task InitializeAsync(string uri);
+    Task PlayAsync(double positionMillisecond = 0);
+    Task PauseAsync();
 }
