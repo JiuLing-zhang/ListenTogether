@@ -22,9 +22,9 @@ public partial class PlaylistPage : ContentPage
     }
     private void MenuItem_Clicked(object sender, EventArgs e)
     {
-        //TODO 看看能不能通过command绑定
-        //MenuItem menuItem = sender as MenuItem;
-        //MusicDetailViewModel contextItem = menuItem.BindingContext as MusicDetailViewModel;
-        //_myModel.RemovePlaylistItem(contextItem);
+        //TODO 看看正式版发布后能不能通过command绑定
+        MenuItem menuItem = sender as MenuItem;
+        PlaylistViewModel contextItem = menuItem.BindingContext as PlaylistViewModel;
+        vm.RemovePlaylist(contextItem.Id);
     }
 }

@@ -12,6 +12,7 @@ public class PlaylistPageViewModel : ViewModelBase
     public ICommand AddToMyFavoriteCommand => new Command<MusicViewModel>(AddToMyFavorite);
     public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
     public ICommand ClearPlaylistCommand => new Command(ClearPlaylist);
+
     public PlaylistPageViewModel(IServiceProvider services, PlayerService playerService)
     {
         CreateLocalNewPlaylist();
@@ -22,7 +23,7 @@ public class PlaylistPageViewModel : ViewModelBase
 
     private void CreateLocalNewPlaylist()
     {
-        Playlist = new ObservableCollection<MusicViewModel>();
+        Playlist = new ObservableCollection<PlaylistViewModel>();
     }
 
     public async Task InitializeAsync()
@@ -40,14 +41,14 @@ public class PlaylistPageViewModel : ViewModelBase
         var playlist = await _playlistService.GetAllAsync();
         foreach (var item in playlist)
         {
-            Playlist.Add(new MusicViewModel()
+            Playlist.Add(new PlaylistViewModel()
             {
-                Id = item.MusicId,
-                Name = item.MusicName,
-                Artist = item.MusicArtist
+                Id = item.Id,
+                MusicId = item.MusicId,
+                MusicName = item.MusicName,
+                MusicArtist = item.MusicArtist
             });
         }
-
     }
 
     /// <summary>
@@ -69,11 +70,11 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
-    private ObservableCollection<MusicViewModel> _playlist;
+    private ObservableCollection<PlaylistViewModel> _playlist;
     /// <summary>
     /// 搜索到的结果列表
     /// </summary>
-    public ObservableCollection<MusicViewModel> Playlist
+    public ObservableCollection<PlaylistViewModel> Playlist
     {
         get => _playlist;
         set
@@ -105,15 +106,13 @@ public class PlaylistPageViewModel : ViewModelBase
         await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
     }
 
-    public async void RemovePlaylistItem(MusicViewModel music)
+    public async void RemovePlaylist(int id)
     {
-        if (music == null)
+        if (!await _playlistService.RemoveAsync(id))
         {
+            await ToastService.Show("删除失败");
             return;
         }
-
-        //TODO 删除一条
-        //await _playlistService.RemoveAsync(music.Id);
         await GetPlaylist();
     }
 

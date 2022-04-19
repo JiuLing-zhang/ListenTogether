@@ -39,6 +39,7 @@ public class PlaylistLocalRepository : IPlaylistRepository
 
         return playlists?.Select(x => new Playlist()
         {
+            Id = x.Id,
             MusicId = x.MusicId,
             MusicName = x.MusicName,
             MusicArtist = x.MusicArtist

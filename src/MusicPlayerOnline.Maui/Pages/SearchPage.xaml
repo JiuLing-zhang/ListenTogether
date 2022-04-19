@@ -58,21 +58,15 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="70,40,60,300,300,*">
+                            <Grid ColumnDefinitions="40,40,60,300,300,*">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
+                                                          CommandParameter="{Binding .}"
+                                                          NumberOfTapsRequired="{OnPlatform Default=1, UWP=2,MacCatalyst=2}"/>
+                                </Grid.GestureRecognizers>
                                 <StackLayout Grid.Column="0"
                                              Orientation="Horizontal"
                                              VerticalOptions="Center">
-                                    <Image Source="play2.png"          
-                                           Margin="0,0,10,0"
-                                           Aspect="AspectFill" 
-                                           WidthRequest="15"
-                                           HeightRequest="15">
-                                        <Image.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"		
-                                                                  CommandParameter="{Binding .}"/>
-                                        </Image.GestureRecognizers>
-                                    </Image>
-
                                     <Image Source="plus.png" 
                                            Aspect="AspectFill" 
                                            WidthRequest="15"

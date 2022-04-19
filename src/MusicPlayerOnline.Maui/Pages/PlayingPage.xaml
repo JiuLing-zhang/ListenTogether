@@ -124,10 +124,11 @@
             </StackLayout>
         </StackLayout>
 
-        <controls:Player x:Name="player"
-                         Margin="0,20,0,0"
-                         VerticalOptions="End">
-        </controls:Player>
+        <StackLayout VerticalOptions="End"
+                     IsVisible="{OnPlatform Default=false,UWP=true,MacCatalyst=true}">
+            <controls:Player x:Name="player"
+                             Margin="0,20,0,0">
+            </controls:Player>
+        </StackLayout>
     </StackLayout>
-
 </ContentPage>

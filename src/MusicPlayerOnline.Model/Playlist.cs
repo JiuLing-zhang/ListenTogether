@@ -8,6 +8,7 @@ namespace MusicPlayerOnline.Model
 {
     public class Playlist
     {
+        public int Id { get; set; }
         /// <summary>
         /// 歌曲ID
         /// </summary>

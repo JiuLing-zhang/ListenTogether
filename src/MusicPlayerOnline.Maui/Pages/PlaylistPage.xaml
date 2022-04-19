@@ -60,38 +60,45 @@
         </StackLayout>
 
         <ScrollView VerticalOptions="FillAndExpand">
-            <StackLayout>
-                <CollectionView ItemsSource="{Binding Playlist}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-
-                            <!--<MenuItem Text="删除" Clicked="MenuItem_Clicked" />-->
-                            <StackLayout Orientation="Horizontal">
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"	
-                                                          CommandParameter="{Binding .}"/>
-                                </StackLayout.GestureRecognizers>
-                                <Label Text="{Binding Name}" 
+            <ListView ItemsSource="{Binding Playlist}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="删除"
+                                          Clicked="MenuItem_Clicked"/>
+                            </ViewCell.ContextActions>
+                            <ViewCell.View>
+                                <StackLayout Orientation="Horizontal">
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"	
+                                                              CommandParameter="{Binding .}"
+                                                              NumberOfTapsRequired="{OnPlatform Default=1, UWP=2,MacCatalyst=2}"/>
+                                    </StackLayout.GestureRecognizers>
+                                    <Label Text="{Binding MusicName}" 
                                        MinimumWidthRequest="60" 
                                        VerticalTextAlignment="Center" 
                                        LineBreakMode="NoWrap"/>
-                                <Label Text="{Binding Artist,StringFormat='{} - {0}'}"
+                                    <Label Text="{Binding MusicArtist,StringFormat='{} - {0}'}"
                                        VerticalTextAlignment="Center" 
                                        LineBreakMode="TailTruncation" />
-                                <Image Source="plus_math" 
+                                    <Image Source="plus_math" 
                                              HorizontalOptions="EndAndExpand"
                                              Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"	
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"	
                                              CommandParameter="{Binding .}">
-                                        </TapGestureRecognizer>
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
+                                            </TapGestureRecognizer>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </StackLayout>
+
+                            </ViewCell.View>
+                        </ViewCell>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </ScrollView>
 
         <controls:Player x:Name="player"

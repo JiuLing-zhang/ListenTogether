@@ -2,7 +2,6 @@
 using MusicPlayerOnline.Api.DbContext;
 using MusicPlayerOnline.Api.Entities;
 using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Api.Models;
 using MusicPlayerOnline.Model.Api;
 using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
@@ -53,6 +52,7 @@ namespace MusicPlayerOnline.Api.Services
                 .Where(x => x.UserBaseId == userId)
                 .Select(x => new PlaylistResponse()
                 {
+                    Id = x.Id,
                     MusicId = x.MusicId,
                     MusicName = x.MusicName,
                     MusicArtist = x.MusicArtist

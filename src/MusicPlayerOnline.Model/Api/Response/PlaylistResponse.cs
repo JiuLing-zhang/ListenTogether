@@ -5,6 +5,7 @@
     /// </summary>
     public class PlaylistResponse
     {
+        public int Id { get; set; }
         /// <summary>
         /// 歌曲ID
         /// </summary>
