@@ -2,6 +2,7 @@
 using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
 using MusicPlayerOnline.Model.Enums;
 
@@ -23,7 +24,13 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
 
     public async Task<MyFavorite?> AddOrUpdateAsync(MyFavorite myFavorite)
     {
-        string content = myFavorite.ToJson();
+        var requestMyFavorite = new MyFavoriteRequest()
+        {
+            Id = myFavorite.Id,
+            Name = myFavorite.Name,
+            ImageUrl = myFavorite.ImageUrl
+        };
+        string content = requestMyFavorite.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.MyFavorite.AddOrUpdate, sc);
         var json = await response.Content.ReadAsStringAsync();
@@ -100,9 +107,25 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
 
     public async Task<bool> AddMusicToMyFavorite(int id, Music music)
     {
+
+        var requestMusic = new MusicRequest()
+        {
+            Id = music.Id,
+            Name = music.Name,
+            Platform = (int)music.Platform,
+            PlatformInnerId = music.PlatformInnerId,
+            Album = music.Album,
+            Alias = music.Alias,
+            Artist = music.Artist,
+            Duration = music.Duration,
+            ImageUrl = music.ImageUrl,
+            Lyric = music.Lyric,
+            PlayUrl = music.PlayUrl
+        };
+
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id);
 
-        string content = music.ToJson();
+        string content = requestMusic.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(url, sc);
         var json = await response.Content.ReadAsStringAsync();

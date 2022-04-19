@@ -1,6 +1,7 @@
 ﻿using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
 
 namespace MusicPlayerOnline.Data.Repositories.Api;
@@ -8,7 +9,14 @@ public class PlaylistApiRepository : IPlaylistRepository
 {
     public async Task<bool> AddOrUpdateAsync(Playlist playlist)
     {
-        string content = playlist.ToJson();
+        var requestPlaylist = new PlaylistRequest()
+        {
+            MusicId = playlist.MusicId,
+            MusicName = playlist.MusicName,
+            MusicArtist = playlist.MusicArtist
+        };
+
+        string content = requestPlaylist.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.Playlist.AddOrUpdate, sc);
         var json = await response.Content.ReadAsStringAsync();

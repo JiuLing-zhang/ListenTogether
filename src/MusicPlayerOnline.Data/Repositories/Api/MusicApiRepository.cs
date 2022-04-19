@@ -3,6 +3,7 @@ using JiuLing.CommonLibs.ExtensionMethods;
 using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Api;
+using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
 using MusicPlayerOnline.Model.Enums;
 
@@ -43,7 +44,21 @@ public class MusicApiRepository : IMusicRepository
 
     public async Task<bool> AddOrUpdateAsync(Music music)
     {
-        string content = music.ToJson();
+        var requestMusic = new MusicRequest()
+        {
+            Id = music.Id,
+            Name = music.Name,
+            Platform = (int)music.Platform,
+            PlatformInnerId = music.PlatformInnerId,
+            Album = music.Album,
+            Alias = music.Alias,
+            Artist = music.Artist,
+            Duration = music.Duration,
+            ImageUrl = music.ImageUrl,
+            Lyric = music.Lyric,
+            PlayUrl = music.PlayUrl
+        };
+        string content = requestMusic.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var response = await DataConfig.HttpClientWithToken.PostAsync(DataConfig.ApiSetting.Music.AddOrUpdate, sc);
         var json = await response.Content.ReadAsStringAsync();
