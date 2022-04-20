@@ -128,7 +128,6 @@ public class KuGouMusicProvider : IMusicProvider
             Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
-            Duration = sourceMusic.Duration,
             ImageUrl = httpResult.data.img,
             PlayUrl = httpResult.data.play_url,
             Lyric = lyricResult.data.lyrics

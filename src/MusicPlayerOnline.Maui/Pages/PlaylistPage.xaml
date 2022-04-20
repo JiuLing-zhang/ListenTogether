@@ -8,55 +8,19 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="trash" Command="{Binding ClearPlaylistCommand}" ></ToolbarItem>
     </ContentPage.ToolbarItems>
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="LabelMusicSearching" TargetType="Label">
-                <Setter Property="IsVisible" Value="false"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Playlist.Count}" Value="0" TargetType="Label">
-                        <Setter Property="IsVisible" Value="true"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style TargetType="Grid">
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal" />
-                            <VisualState x:Name="Selected">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor"
-                                            Value="#929292" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-            <Style x:Key="PlayerStateImg" TargetType="ImageButton">
-                <Setter Property="Source" Value="null"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsPlaying}" Value="true" TargetType="ImageButton">
-                        <Setter Property="Source" Value="pause_button"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding IsPlaying}" Value="false" TargetType="ImageButton">
-                        <Setter Property="Source" Value="circled_play"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <StackLayout Margin="16">
-
         <StackLayout Margin="0,0,0,10"
                      VerticalOptions="Start">
-            <Label Text="播放列表"/>
+            <HorizontalStackLayout>
+                <Label Text="播放列表"/>
+                <ActivityIndicator IsRunning="True"
+                                   
+                                   Margin="20,0,0,0"/>
+            </HorizontalStackLayout>
 
-            <Label Text="播放列表居然是空的...." 
-                   HorizontalOptions="Center" 
-                   Style="{StaticResource LabelMusicSearching}"/>
+            <Label Text="什么也没找到" 
+                   HorizontalOptions="Center"/>
         </StackLayout>
 
         <ScrollView VerticalOptions="FillAndExpand">

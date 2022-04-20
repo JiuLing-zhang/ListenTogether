@@ -154,7 +154,6 @@ public class NetEaseMusicProvider : IMusicProvider
             Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
-            Duration = sourceMusic.Duration,
             ImageUrl = sourceMusic.ImageUrl,
             PlayUrl = playUrl,
             Lyric = lyricResult.lrc.lyric

@@ -82,6 +82,8 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
 
     public async Task<bool> RemoveAsync(int id)
     {
+        string sql = $"DELETE FROM MyFavoriteDetail WHERE MyFavoriteId={id}";
+        await DatabaseProvide.DatabaseAsync.ExecuteAsync(sql);
         await DatabaseProvide.DatabaseAsync.DeleteAsync<MyFavoriteEntity>(id);
         return true;
     }

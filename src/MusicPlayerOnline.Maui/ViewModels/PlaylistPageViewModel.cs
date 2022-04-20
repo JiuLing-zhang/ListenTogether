@@ -28,9 +28,11 @@ public class PlaylistPageViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
+        IsBusy = true;
         _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
         await GetPlaylist();
+        IsBusy = false;
     }
     private async Task GetPlaylist()
     {
@@ -51,10 +53,18 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
-    /// <summary>
-    /// 页面标题
-    /// </summary>
-    public string Title => "播放列表";
+    private bool _isBusy;
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set
+        {
+            _isBusy = value;
+            OnPropertyChanged("IsBusy");
+            OnPropertyChanged("IsNotBusy");
+        }
+    }
+    public bool IsNotBusy => !_isBusy;
 
     private string _searchKeyword;
     /// <summary>

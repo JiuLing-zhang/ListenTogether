@@ -32,19 +32,19 @@ public class SearchResultPageViewModel : ViewModelBase
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
     }
 
-    private string _title;
-    /// <summary>
-    /// 页面标题
-    /// </summary>
-    public string Title
+    private bool _isBusy;
+    public bool IsBusy
     {
-        get => _title;
+        get => _isBusy;
         set
         {
-            _title = value;
-            OnPropertyChanged();
+            _isBusy = value;
+            OnPropertyChanged("IsBusy");
+            OnPropertyChanged("IsNotBusy");
         }
     }
+    public bool IsNotBusy => !_isBusy;
+
 
     private string _textToSearch;
     /// <summary>
@@ -79,20 +79,6 @@ public class SearchResultPageViewModel : ViewModelBase
         set
         {
             _searchKeyword = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private bool _isSearching;
-    /// <summary>
-    /// 正在搜索歌曲
-    /// </summary>
-    public bool IsSearching
-    {
-        get => _isSearching;
-        set
-        {
-            _isSearching = value;
             OnPropertyChanged();
         }
     }
@@ -139,13 +125,11 @@ public class SearchResultPageViewModel : ViewModelBase
 
         try
         {
-            IsSearching = true;
-            Title = $"搜索: {SearchKeyword}";
+            IsBusy = true;
             MusicSearchResult.Clear();
             var musics = await _searchService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, SearchKeyword);
             if (musics.Count == 0)
             {
-                await ToastService.Show("哦吼，啥也没有搜到");
                 return;
             }
 
@@ -174,7 +158,7 @@ public class SearchResultPageViewModel : ViewModelBase
         }
         finally
         {
-            IsSearching = false;
+            IsBusy = false;
         }
     }
 

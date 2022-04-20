@@ -24,4 +24,6 @@ public class MusicSearchResult : MusicBase
     /// 平台特有数据
     /// </summary>
     public object PlatformData { get; set; } = null!;
+
+    public int Duration { get; set; }
 }

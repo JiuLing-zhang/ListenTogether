@@ -21,10 +21,6 @@
         /// </summary>
         public string Album { get; set; } = null!;
         /// <summary>
-        /// 歌曲时长（毫秒）
-        /// </summary>
-        public int Duration { get; set; }
-        /// <summary>
         /// 图片地址
         /// </summary>
         public string ImageUrl { get; set; } = null!;

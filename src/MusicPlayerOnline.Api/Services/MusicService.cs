@@ -36,7 +36,6 @@ namespace MusicPlayerOnline.Api.Services
                 Album = music.Album,
                 Alias = music.Alias,
                 Artist = music.Artist,
-                Duration = music.Duration,
                 ImageUrl = music.ImageUrl,
                 Lyric = music.Lyric,
                 PlayUrl = music.PlayUrl
@@ -51,13 +50,12 @@ namespace MusicPlayerOnline.Api.Services
                 myMusic = new MusicEntity()
                 {
                     Id = music.Id,
-                    Platform = (int)music.Platform,
+                    Platform = music.Platform,
                     PlatformInnerId = music.PlatformInnerId,
                     Name = music.Name,
                     Album = music.Album,
                     Alias = music.Alias,
                     Artist = music.Artist,
-                    Duration = music.Duration,
                     ImageUrl = music.ImageUrl,
                     Lyric = music.Lyric,
                     PlayUrl = music.PlayUrl
@@ -67,13 +65,12 @@ namespace MusicPlayerOnline.Api.Services
             else
             {
                 myMusic.Id = music.Id;
-                myMusic.Platform = (int)music.Platform;
+                myMusic.Platform = music.Platform;
                 myMusic.PlatformInnerId = music.PlatformInnerId;
                 myMusic.Name = music.Name;
                 myMusic.Album = music.Album;
                 myMusic.Alias = music.Alias;
                 myMusic.Artist = music.Artist;
-                myMusic.Duration = music.Duration;
                 myMusic.ImageUrl = music.ImageUrl;
                 myMusic.Lyric = music.Lyric;
                 myMusic.PlayUrl = music.PlayUrl;

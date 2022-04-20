@@ -35,7 +35,6 @@ public class MusicApiRepository : IMusicRepository
             Album = music.Album,
             Alias = music.Alias,
             Artist = music.Artist,
-            Duration = music.Duration,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
             PlayUrl = music.PlayUrl
@@ -53,7 +52,6 @@ public class MusicApiRepository : IMusicRepository
             Album = music.Album,
             Alias = music.Alias,
             Artist = music.Artist,
-            Duration = music.Duration,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
             PlayUrl = music.PlayUrl

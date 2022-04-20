@@ -153,7 +153,6 @@ public class MiGuMusicProvider : IMusicProvider
             Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,
             Album = result.resource[0].album,
-            Duration = sourceMusic.Duration,
             ImageUrl = imageUrl,
             PlayUrl = playUrl,
             Lyric = lyric

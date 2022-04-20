@@ -26,7 +26,6 @@ public class MusicLocalRepository : IMusicRepository
             Album = music.Album,
             Alias = music.Alias,
             Artist = music.Artist,
-            Duration = music.Duration,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
             PlayUrl = music.PlayUrl
@@ -48,7 +47,6 @@ public class MusicLocalRepository : IMusicRepository
                 Album = music.Album,
                 Alias = music.Alias,
                 Artist = music.Artist,
-                Duration = music.Duration,
                 ImageUrl = music.ImageUrl,
                 Lyric = music.Lyric,
                 PlayUrl = music.PlayUrl
@@ -64,7 +62,6 @@ public class MusicLocalRepository : IMusicRepository
             myMusic.Album = music.Album;
             myMusic.Alias = music.Alias;
             myMusic.Artist = music.Artist;
-            myMusic.Duration = music.Duration;
             myMusic.ImageUrl = music.ImageUrl;
             myMusic.Lyric = music.Lyric;
             myMusic.PlayUrl = music.PlayUrl;
