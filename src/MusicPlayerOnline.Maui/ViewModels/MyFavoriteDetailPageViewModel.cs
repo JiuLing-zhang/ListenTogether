@@ -1,6 +1,4 @@
-﻿using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Maui.Pages;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace MusicPlayerOnline.Maui.ViewModels;
 
@@ -15,7 +13,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
     private IMusicService _musicService;
     private PlayerService _playerService;
     public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
-    public ICommand MyFavoriteEditCommand => new Command(EditMyFavorite);
+    public ICommand MyFavoriteRenameCommand => new Command(RenameMyFavorite);
     public ICommand MyFavoriteRemoveCommand => new Command(MyFavoriteRemove);
 
     public MyFavoriteDetailPageViewModel(IServiceProvider services, PlayerService playerService)
@@ -28,27 +26,44 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
+        IsBusy = true;
         _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
         _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
-        await LoadPageTitle();
+        await LoadMyFavoriteInfo();
         await GetMyFavoriteDetail();
+
+        OnPropertyChanged("IsMyFavoriteMusicsEmpty");
+        IsBusy = false;
     }
 
-    private string _title;
-    /// <summary>
-    /// 页面标题
-    /// </summary>
-    public string Title
+    private bool _isBusy;
+    public bool IsBusy
     {
-        get => _title;
+        get => _isBusy;
         set
         {
-            _title = value;
+            _isBusy = value;
+            OnPropertyChanged("IsBusy");
+            OnPropertyChanged("IsNotBusy");
+        }
+    }
+    public bool IsNotBusy => !_isBusy;
+
+
+    private MyFavoriteViewModel _currentMyFavorite;
+    public MyFavoriteViewModel CurrentMyFavorite
+    {
+        get => _currentMyFavorite;
+        set
+        {
+            _currentMyFavorite = value;
             OnPropertyChanged();
         }
     }
+
+    public bool IsMyFavoriteMusicsEmpty => IsBusy == false && (MyFavoriteMusics == null || MyFavoriteMusics.Count == 0);
 
     private ObservableCollection<MusicViewModel> _myFavoriteMusics;
     public ObservableCollection<MusicViewModel> MyFavoriteMusics
@@ -80,15 +95,57 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         }
     }
 
-    private async Task LoadPageTitle()
+    private async Task LoadMyFavoriteInfo()
     {
         var myFavorite = await _myFavoriteService.GetOneAsync(MyFavoriteId);
-        Title = myFavorite.Name;
+        CurrentMyFavorite = new MyFavoriteViewModel()
+        {
+            Id = myFavorite.Id,
+            Name = myFavorite.Name,
+            ImageUrl = myFavorite.ImageUrl,
+            MusicCount = myFavorite.MusicCount
+        };
     }
 
-    private async void EditMyFavorite()
+    private async void RenameMyFavorite()
     {
-        await Shell.Current.GoToAsync($"{nameof(MyFavoriteEditPage)}?{nameof(MyFavoriteEditPageViewModel.MyFavoriteId)}={MyFavoriteId}", true);
+        string newName = await App.Current.MainPage.DisplayPromptAsync("歌单重命名", "请输入新的歌单名称：", "修改", "取消");
+        if (newName.IsEmpty())
+        {
+            return;
+        }
+
+        if (CurrentMyFavorite.Name == newName)
+        {
+            await ToastService.Show("修改成功");
+            return;
+        }
+
+        try
+        {
+            IsBusy = true;
+
+            var myFavorite = new MyFavorite()
+            {
+                Id = CurrentMyFavorite.Id,
+                Name = newName,
+                ImageUrl = CurrentMyFavorite.ImageUrl
+            };
+
+            await _myFavoriteService.AddOrUpdateAsync(myFavorite);
+
+            await InitializeAsync();
+            await ToastService.Show("修改成功");
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("重命名失败，网络出小差了");
+            Logger.Error("歌单重命名失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private async void MyFavoriteRemove()
@@ -98,15 +155,27 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         {
             return;
         }
-
-        var result = await _myFavoriteService.RemoveAsync(MyFavoriteId);
-        if (result == false)
+        try
         {
-            ToastService.Show("删除成功");
-            return;
+            IsBusy = true;
+            var result = await _myFavoriteService.RemoveAsync(MyFavoriteId);
+            if (result == false)
+            {
+                await ToastService.Show("删除失败");
+                return;
+            }
+            await ToastService.Show("删除成功");
+            await Shell.Current.GoToAsync($"..", true);
         }
-        await ToastService.Show("删除成功");
-        await Shell.Current.GoToAsync($"..", true);
+        catch (Exception ex)
+        {
+            await ToastService.Show("删除失败，网络出小差了");
+            Logger.Error("歌单删除失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private async void PlayMusic(MusicViewModel selected)

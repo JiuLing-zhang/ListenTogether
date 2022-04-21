@@ -15,15 +15,10 @@ public class PlaylistPageViewModel : ViewModelBase
 
     public PlaylistPageViewModel(IServiceProvider services, PlayerService playerService)
     {
-        CreateLocalNewPlaylist();
+        Playlist = new ObservableCollection<PlaylistViewModel>();
 
         _services = services;
         _playerService = playerService;
-    }
-
-    private void CreateLocalNewPlaylist()
-    {
-        Playlist = new ObservableCollection<PlaylistViewModel>();
     }
 
     public async Task InitializeAsync()
@@ -33,6 +28,8 @@ public class PlaylistPageViewModel : ViewModelBase
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
         await GetPlaylist();
         IsBusy = false;
+        OnPropertyChanged("IsPlaylistEmpty");
+        OnPropertyChanged("IsPlaylistNotEmpty");
     }
     private async Task GetPlaylist()
     {
@@ -65,6 +62,9 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
     public bool IsNotBusy => !_isBusy;
+
+    public bool IsPlaylistEmpty => IsBusy == false && (Playlist == null || Playlist.Count == 0);
+    public bool IsPlaylistNotEmpty => !IsPlaylistEmpty;
 
     private string _searchKeyword;
     /// <summary>
@@ -128,12 +128,6 @@ public class PlaylistPageViewModel : ViewModelBase
 
     private async void ClearPlaylist()
     {
-        if (Playlist.Count == 0)
-        {
-            ToastService.Show("别删除了，播放列表是空哒");
-            return;
-        }
-
         var isOk = await App.Current.MainPage.DisplayAlert("提示", "确定要删除播放列表吗？", "确定", "取消");
         if (isOk == false)
         {
@@ -141,10 +135,10 @@ public class PlaylistPageViewModel : ViewModelBase
         }
         if (!await _playlistService.RemoveAllAsync())
         {
-            ToastService.Show("删除失败");
+            await ToastService.Show("删除失败");
             return;
         }
-        ToastService.Show("播放列表已删除");
-        CreateLocalNewPlaylist();
+        await ToastService.Show("删除成功");
+        await InitializeAsync();
     }
 }

@@ -7,9 +7,10 @@
              Title="搜索">
 
     <StackLayout Margin="16">
-        <StackLayout Margin="0,0,0,10"
+        <StackLayout HeightRequest="40"
                      VerticalOptions="Start">
-            <StackLayout Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal"
+                         VerticalOptions="Start">
                 <Label Text="搜索"
                        VerticalTextAlignment="Center"
                        HorizontalOptions="Start"
@@ -19,11 +20,14 @@
                            SearchCommand="{Binding SearchCommand}"
                            HorizontalOptions="FillAndExpand"/>
             </StackLayout>
-            <ActivityIndicator IsRunning="True"
-                               IsVisible="{Binding IsBusy}"
-                               Margin="0,10,0,0"/>
         </StackLayout>
-
+        
+        <ActivityIndicator IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           VerticalOptions="Start"
+                           HeightRequest="16"
+                           WidthRequest="16"/>
+        
         <ScrollView VerticalOptions="FillAndExpand">
             <StackLayout>
                 <CollectionView ItemsSource="{Binding MusicSearchResult}"

@@ -22,6 +22,7 @@ namespace MusicPlayerOnline.Maui.ViewModels
 
         public async Task InitializeAsync()
         {
+            IsBusy = true;
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
@@ -42,7 +43,21 @@ namespace MusicPlayerOnline.Maui.ViewModels
                     ImageUrl = myFavorite.ImageUrl
                 });
             }
+            IsBusy = false;
         }
+
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged("IsBusy");
+                OnPropertyChanged("IsNotBusy");
+            }
+        }
+        public bool IsNotBusy => !_isBusy;
 
         private ObservableCollection<MyFavoriteViewModel> _favoriteList;
         public ObservableCollection<MyFavoriteViewModel> FavoriteList
@@ -57,7 +72,43 @@ namespace MusicPlayerOnline.Maui.ViewModels
 
         private async void AddMyFavorite()
         {
-            await Shell.Current.GoToAsync($"{nameof(MyFavoriteAddPage)}", true);
+            string myFavoriteName = await App.Current.MainPage.DisplayPromptAsync("添加歌单", "请输入歌单名称：", "添加", "取消");
+            if (myFavoriteName.IsEmpty())
+            {
+                return;
+            }
+
+            try
+            {
+                IsBusy = true;
+                if (await _myFavoriteService.NameExist(myFavoriteName))
+                {
+                    await ToastService.Show("歌单名称已存在");
+                    return;
+                }
+
+                var myFavorite = new MyFavorite()
+                {
+                    Name = myFavoriteName,
+                    MusicCount = 0
+                };
+                var newMyFavorite = await _myFavoriteService.AddOrUpdateAsync(myFavorite);
+                if (newMyFavorite == null)
+                {
+                    await ToastService.Show("添加失败");
+                    return;
+                }
+                await InitializeAsync();
+            }
+            catch (Exception ex)
+            {
+                await ToastService.Show("添加失败，网络出小差了");
+                Logger.Error("歌单添加失败。", ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async void EnterMyFavoriteDetail(MyFavoriteViewModel selected)

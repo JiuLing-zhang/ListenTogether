@@ -1,5 +1,4 @@
-﻿using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Model.Enums;
+﻿using MusicPlayerOnline.Model.Enums;
 using System.Collections.ObjectModel;
 
 namespace MusicPlayerOnline.Maui.ViewModels;
@@ -10,6 +9,7 @@ public class SearchResultPageViewModel : ViewModelBase
     private readonly IMusicNetworkService _searchService;
     private IMusicService _musicService;
     private IPlaylistService _playlistService;
+    private IMyFavoriteService _myFavoriteService;
     private readonly PlayerService _playerService;
 
     private string _lastSearchKeyword = "";
@@ -30,6 +30,7 @@ public class SearchResultPageViewModel : ViewModelBase
     {
         _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
+        _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
     }
 
     private bool _isBusy;
@@ -164,19 +165,90 @@ public class SearchResultPageViewModel : ViewModelBase
 
     private async void AddToMyFavorite(SearchResultViewModel searchResult)
     {
-        Music music;
-
-        bool succeed;
-        string message;
-        (succeed, message, music) = await SaveMusic(searchResult.SourceData);
-        if (succeed == false)
+        try
         {
-            await ToastService.Show(message);
-            return;
-        }
+            IsBusy = true;
 
-        await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
-        await _playerService.PlayAsync(music);
+            Music music;
+
+            bool succeed;
+            string message;
+            (succeed, message, music) = await SaveMusic(searchResult.SourceData);
+            if (succeed == false)
+            {
+                await ToastService.Show(message);
+                return;
+            }
+
+            //构造待选择的歌单项
+            string[] myFavoriteButtons = null;
+            var myFavoriteList = await _myFavoriteService.GetAllAsync();
+            if (myFavoriteList != null)
+            {
+                myFavoriteButtons = myFavoriteList.Select(x => x.Name).ToArray();
+            }
+
+            int selectedMyFavoriteId;
+            string myFavoriteItem = await App.Current.MainPage.DisplayActionSheet("请选择要加入的歌单", "取消", "添加一个", myFavoriteButtons);
+            if (myFavoriteItem.IsEmpty() || myFavoriteItem == "取消")
+            {
+                return;
+            }
+
+            if (myFavoriteItem != "添加一个")
+            {
+                //使用已有歌单
+                selectedMyFavoriteId = myFavoriteList.First(x => x.Name == myFavoriteItem).Id;
+            }
+            else
+            {
+                //新增歌单
+                string myFavoriteName = await App.Current.MainPage.DisplayPromptAsync("添加歌单", "请输入歌单名称：", "添加", "取消");
+                if (myFavoriteName.IsEmpty())
+                {
+                    await ToastService.Show("操作取消");
+                    return;
+                }
+
+                if (await _myFavoriteService.NameExist(myFavoriteName))
+                {
+                    await ToastService.Show("歌单名称已存在");
+                    return;
+                }
+
+                var myFavorite = new MyFavorite()
+                {
+                    Name = myFavoriteName,
+                    MusicCount = 0
+                };
+                var newMyFavorite = await _myFavoriteService.AddOrUpdateAsync(myFavorite);
+                if (newMyFavorite == null)
+                {
+                    await ToastService.Show("添加失败");
+                    return;
+                }
+                selectedMyFavoriteId = newMyFavorite.Id;
+            }
+
+            var result = await _myFavoriteService.AddMusicToMyFavorite(selectedMyFavoriteId, music);
+            if (result == false)
+            {
+                await ToastService.Show("添加失败");
+                return;
+            }
+
+            await _playerService.PlayAsync(music);
+            await ToastService.Show("添加成功");
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("添加失败，网络出小差了");
+            Logger.Error("搜索结果添加到我的歌单失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private async void PlayMusic(SearchResultViewModel selected)

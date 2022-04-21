@@ -10,3 +10,4 @@ global using MusicPlayerOnline.Maui.Pages;
 global using MusicPlayerOnline.Common.Exceptions;
 global using JiuLing.CommonLibs.ExtensionMethods;
 global using MusicPlayerOnline.EasyLog;
+global using System.Linq;

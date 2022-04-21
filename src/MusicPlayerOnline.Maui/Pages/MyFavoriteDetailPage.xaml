@@ -3,47 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              x:Class="MusicPlayerOnline.Maui.MyFavoriteDetailPage"
-             Title="我的歌单">
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="LabelMusicSearching" TargetType="Label">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsMusicSearching}" Value="True" TargetType="Label">
-                        <Setter Property="IsVisible" Value="true"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding IsMusicSearching}" Value="false" TargetType="Label">
-                        <Setter Property="IsVisible" Value="false"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style x:Key="CollectionViewMusicSearchResultBlock"  TargetType="CollectionView">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsMusicSearching}" Value="True" TargetType="CollectionView">
-                        <Setter Property="IsVisible" Value="false"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding IsMusicSearching}" Value="false" TargetType="CollectionView">
-                        <Setter Property="IsVisible" Value="true"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+             Title="我的歌单详情">
 
     <StackLayout Margin="16">
 
-        <HorizontalStackLayout Margin="0,0,0,20">
-            <Label Text="{Binding Title,StringFormat='{}我的歌单 - {0}'}"
-                   Grid.Column="0"
-                   VerticalTextAlignment="Center"
+        <StackLayout HeightRequest="40"
+                     Orientation="Horizontal">
+            <Label Text="{Binding CurrentMyFavorite.Name,StringFormat='{}我的歌单 - {0}'}"
                    HorizontalOptions="Start"
-                   Margin="0,0,10,0" />
+                   VerticalTextAlignment="Start"/>
 
-            <HorizontalStackLayout HorizontalOptions="StartAndExpand">
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               HeightRequest="16"
+                               WidthRequest="16"
+                               HorizontalOptions="Start"
+                               VerticalOptions="Start"
+                               Margin="20,0,20,0"/>
+
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="StartAndExpand"
+                         VerticalOptions="Start">
                 <HorizontalStackLayout Margin="0,0,10,0">
                     <HorizontalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding MyFavoriteEditCommand}"></TapGestureRecognizer>
+                        <TapGestureRecognizer Command="{Binding MyFavoriteRenameCommand}"></TapGestureRecognizer>
                     </HorizontalStackLayout.GestureRecognizers>
                     <Image Source="edit.png"
                        HeightRequest="20"/>
@@ -58,44 +40,56 @@
                        HeightRequest="20"/>
                     <Label Text="删除歌单"/>
                 </HorizontalStackLayout>
+            </StackLayout>
+        </StackLayout>
 
-            </HorizontalStackLayout>
-        </HorizontalStackLayout>
+        <Label Text="歌单居然是空的...."
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               IsVisible="{Binding IsMyFavoriteMusicsEmpty}"/>
 
-        <CollectionView ItemsSource="{Binding MyFavoriteMusics}">
-            <CollectionView.ItemTemplate>
+        <ListView ItemsSource="{Binding MyFavoriteMusics}">
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid RowDefinitions="auto,auto"
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="删除"/>
+                        </ViewCell.ContextActions>
+                        <ViewCell.View>
+                            <Grid RowDefinitions="auto,auto"
                           ColumnDefinitions="auto,auto">
 
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"	
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"	
                                                   CommandParameter="{Binding}"/>
-                        </Grid.GestureRecognizers>
+                                </Grid.GestureRecognizers>
 
-                        <Label Text="{Binding Seq}"
+                                <Label Text="{Binding Seq}"
                                Grid.Row="0"
                                Grid.RowSpan="2"
                                Grid.Column="0"
                                Margin="0,0,10,0"
                                VerticalTextAlignment="Center"/>
 
-                        <Label Text="{Binding Name}"
+                                <Label Text="{Binding Name}"
                                Grid.Row="0"
                                Grid.Column="1"
                                LineBreakMode="TailTruncation"/>
 
-                        <Label Grid.Row="1"
+                                <Label Grid.Row="1"
                                Grid.Column="1"
                                LineBreakMode="TailTruncation">
-                            <MultiBinding StringFormat="{}{0} - {1}">
-                                <Binding Path="Artist" />
-                                <Binding Path="Album" />
-                            </MultiBinding>
-                        </Label>
-                    </Grid>
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Artist" />
+                                        <Binding Path="Album" />
+                                    </MultiBinding>
+                                </Label>
+                            </Grid>
+                        </ViewCell.View>
+
+                    </ViewCell>
                 </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+            </ListView.ItemTemplate>
+        </ListView>
     </StackLayout>
 </ContentPage>

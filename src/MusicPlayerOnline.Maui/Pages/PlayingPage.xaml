@@ -57,10 +57,10 @@
 
     <StackLayout Margin="16">
 
-        <StackLayout Margin="0,0,0,10"
+        <StackLayout HeightRequest="40"
                      VerticalOptions="Start">
             <Label Text="正在播放"
-                   Margin="0,0,0,20" />
+                   VerticalOptions="Start"/>
 
         </StackLayout>
 

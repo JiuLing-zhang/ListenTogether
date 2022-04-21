@@ -31,7 +31,6 @@
     </ContentPage.Resources>
 
     <StackLayout Margin="16">
-
         <ScrollView VerticalOptions="FillAndExpand">
             <StackLayout>
 

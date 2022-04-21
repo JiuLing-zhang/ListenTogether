@@ -12,6 +12,16 @@ public class MyFavoriteService : IMyFavoriteService
         _repository = repository;
     }
 
+    /// <summary>
+    /// 歌单名称不可用的关键字
+    /// </summary>
+    private List<string> UnavailableName = new List<string>()
+    {
+        "确定",
+        "取消",
+        "添加一个"
+    };
+
     public async Task<MyFavorite?> GetOneAsync(int id)
     {
         return await _repository.GetOneAsync(id);
@@ -29,6 +39,10 @@ public class MyFavoriteService : IMyFavoriteService
 
     public async Task<MyFavorite?> AddOrUpdateAsync(MyFavorite myFavorite)
     {
+        if (UnavailableName.Contains(myFavorite.Name))
+        {
+            return default;
+        }
         return await _repository.AddOrUpdateAsync(myFavorite);
     }
 

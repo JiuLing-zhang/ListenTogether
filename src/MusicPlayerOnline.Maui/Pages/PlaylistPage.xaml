@@ -3,26 +3,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MusicPlayerOnline.Maui.Pages.PlaylistPage"
              Title="播放列表" >
-    <ContentPage.ToolbarItems>
-        <ToolbarItem IconImageSource="trash" Command="{Binding ClearPlaylistCommand}" ></ToolbarItem>
-    </ContentPage.ToolbarItems>
 
     <StackLayout Margin="16">
-        <StackLayout Margin="0,0,0,10"
+        <StackLayout HeightRequest="40"
+                     Orientation="Horizontal"
                      VerticalOptions="Start">
-            <HorizontalStackLayout>
-                <Label Text="播放列表"/>
-                <ActivityIndicator IsRunning="True"
-                                   
-                                   Margin="20,0,0,0"/>
-            </HorizontalStackLayout>
 
-            <Label Text="什么也没找到" 
-                   HorizontalOptions="Center"/>
+            <Label Text="播放列表"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Start"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               HeightRequest="16"
+                               WidthRequest="16"
+                               HorizontalOptions="Start"
+                               VerticalOptions="Start"
+                               Margin="20,0,20,0"/>
+
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="StartAndExpand"
+                         VerticalOptions="Start"
+                         IsVisible="{Binding IsPlaylistNotEmpty}">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ClearPlaylistCommand}"/>
+                </StackLayout.GestureRecognizers>
+                <Image Source="remove.png"
+                       HeightRequest="20"/>
+                <Label Text="清空"/>
+            </StackLayout>
+
         </StackLayout>
-
+        <Label Text="什么也没找到"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               IsVisible="{Binding IsPlaylistEmpty}"/>
         <ScrollView VerticalOptions="FillAndExpand">
             <ListView ItemsSource="{Binding Playlist}">
                 <ListView.ItemTemplate>

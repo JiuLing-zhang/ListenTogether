@@ -8,15 +8,6 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="EmptyTips" TargetType="Label">
-                <Setter Property="IsVisible" Value="false"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding FavoriteList.Count}" Value="0" TargetType="Label">
-                        <Setter Property="IsVisible" Value="true"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
             <Style x:Key="MyFavoriteImg" TargetType="Image">
                 <Setter Property="Source" Value="my_favorite_default.png"/>
                 <Style.Triggers>
@@ -28,34 +19,37 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <StackLayout Margin="16">
-        <StackLayout Margin="0,0,0,20">
-            <StackLayout HeightRequest="20"
+        <StackLayout HeightRequest="40"
                          Orientation="Horizontal"
                          VerticalOptions="Start">
-                <Label Text="我的歌单"
+            <Label Text="我的歌单"
                        HorizontalOptions="Start"
-                       Margin="0,0,10,0"/>
-                <Image HeightRequest="20"
+                       VerticalOptions="Start"/>
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   HeightRequest="16"
+                                   WidthRequest="16"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Start"
+                                   Margin="20,0,20,0"/>
+
+            <Image HeightRequest="20"
                        WidthRequest="20"
                        Source="plus.png"
                        HorizontalOptions="End"
+                       VerticalOptions="Start"
                        >
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer 
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer 
                              Command="{Binding MyFavoriteAddCommand}"/>
-                    </Image.GestureRecognizers>
-                </Image>
-            </StackLayout>
-
-            <Label FontSize="16" 
-                   Text="还没有歌单....快去添加一个吧~~" 
-                   HorizontalOptions="Center" 
-                   Style="{StaticResource EmptyTips}" />
+                </Image.GestureRecognizers>
+            </Image>
         </StackLayout>
 
         <ScrollView VerticalOptions="FillAndExpand">
             <StackLayout>
-                <CollectionView ItemsSource="{Binding FavoriteList}">
+                <CollectionView ItemsSource="{Binding FavoriteList}"
+                                EmptyView="还没有歌单....快去添加一个吧~~"
+                                IsVisible="{Binding IsNotBusy}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Orientation="Horizontal"
