@@ -17,7 +17,7 @@ public class PlayingPageViewModel : ViewModelBase
         ToastService.Show("不知道放啥了，占个位而已~~");
     });
 
-    public Action<LyricViewModel> ScrollLyric { get; set; }
+    public Action<LyricViewModel> ScrollToLyric { get; set; }
 
     private IEnvironmentConfigService _configService;
 
@@ -246,7 +246,7 @@ public class PlayingPageViewModel : ViewModelBase
                 }
 
                 Lyrics[highlightIndex].IsHighlight = true;
-                ScrollLyric?.Invoke(Lyrics[highlightIndex]);
+                ScrollToLyric?.Invoke(Lyrics[highlightIndex]);
             }
         }
         catch (Exception ex)

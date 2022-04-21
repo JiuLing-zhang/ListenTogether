@@ -14,25 +14,24 @@ public partial class PlayingPage : ContentPage
     {
         base.OnAppearing();
         player.OnAppearing();
-        vm.ScrollLyric += ShowLyric;
+        vm.ScrollToLyric += ScrollToLyric;
         await vm.InitializeAsync();
     }
     protected override void OnDisappearing()
     {
         player.OnDisappearing();
-        vm.ScrollLyric -= ShowLyric;
+        vm.ScrollToLyric -= ScrollToLyric;
         base.OnDisappearing();
     }
 
-    private void ShowLyric(LyricViewModel lyricItem)
+    private void ScrollToLyric(LyricViewModel lyric)
     {
         try
         {
-            ListViewLyrics.ScrollTo(lyricItem, ScrollToPosition.Center, true);
+            ListLyrics.ScrollTo(lyric);
         }
         catch (Exception ex)
         {
-
             Logger.Error("歌词同步展示失败。", ex);
         }
     }

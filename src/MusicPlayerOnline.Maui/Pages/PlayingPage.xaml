@@ -35,8 +35,10 @@
         <Style x:Key="LyricItem" TargetType="Label">
             <Setter Property="TextColor" Value="#929292"/>
             <Setter Property="FontSize" Value="15"/>
-            <Setter Property="HorizontalOptions" Value="Center"/>
-            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="HorizontalTextAlignment" Value="Center"/>
+            <Setter Property="VerticalTextAlignment" Value="Center"/>
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+            <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsHighlight}" Value="true" TargetType="Label">
                     <Setter Property="TextColor" Value="#E0E0E0" />
@@ -91,7 +93,7 @@
             </StackLayout>
 
             <StackLayout VerticalOptions="Start"
-                         Margin="0,0,0,10">
+                         Margin="0,0,0,20">
                 <Label Text="{Binding CurrentMusic.Artist}"
                        TextColor="#929292"
                        FontSize="15"
@@ -99,29 +101,28 @@
             </StackLayout>
 
             <!-- 歌词 -->
-            <StackLayout VerticalOptions="FillAndExpand">
-                <Label Text="暂无歌词" 
+            <ScrollView VerticalOptions="FillAndExpand">
+                <StackLayout>
+                    <Label Text="暂无歌词" 
                        HorizontalTextAlignment="Center" 
                        TextColor="#E0E0E0" 
                        Style="{StaticResource LabelShowLyrics}"/>
-                <ListView x:Name="ListViewLyrics"
+                    <CollectionView x:Name="ListLyrics"
                           ItemsSource="{Binding Lyrics}" 
                           HorizontalOptions="Center" 
                           SelectionMode="None">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <ViewCell.View>
-                                    <StackLayout VerticalOptions="CenterAndExpand">
-                                        <Label Text="{Binding Info}" 
-                                               Style="{StaticResource LyricItem}"/>
-                                    </StackLayout>
-                                </ViewCell.View>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout HorizontalOptions="Center">
+                                    <Label Text="{Binding Info}" 
+                                           Style="{StaticResource LyricItem}"/>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+
         </StackLayout>
 
         <StackLayout VerticalOptions="End"
