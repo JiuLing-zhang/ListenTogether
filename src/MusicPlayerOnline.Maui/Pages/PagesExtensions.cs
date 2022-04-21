@@ -10,9 +10,6 @@ public static class PagesExtensions
         builder.Services.AddTransient<SearchPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
-        builder.Services.AddTransient<AddToMyFavoritePage>();
-        builder.Services.AddTransient<MyFavoriteAddPage>();
-        builder.Services.AddTransient<MyFavoriteEditPage>();
         builder.Services.AddTransient<MyFavoriteDetailPage>();
         builder.Services.AddSingleton<RegisterPage>();
         builder.Services.AddSingleton<CacheCleanPage>();

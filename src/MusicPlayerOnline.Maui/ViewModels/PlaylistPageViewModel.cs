@@ -8,6 +8,7 @@ public class PlaylistPageViewModel : ViewModelBase
     private IServiceProvider _services;
     private IMusicService _musicService;
     private IPlaylistService _playlistService;
+    private IMyFavoriteService _myFavoriteService;
     private readonly PlayerService _playerService;
     public ICommand AddToMyFavoriteCommand => new Command<MusicViewModel>(AddToMyFavorite);
     public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
@@ -26,6 +27,7 @@ public class PlaylistPageViewModel : ViewModelBase
         IsBusy = true;
         _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
+        _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
         await GetPlaylist();
         IsBusy = false;
         OnPropertyChanged("IsPlaylistEmpty");
@@ -106,14 +108,88 @@ public class PlaylistPageViewModel : ViewModelBase
         await _playerService.PlayAsync(music);
     }
 
-    private async void AddToMyFavorite(MusicViewModel music)
+    private async void AddToMyFavorite(MusicViewModel selectMusic)
     {
-        if (music == null)
+        try
         {
-            return;
-        }
+            IsBusy = true;
 
-        await Shell.Current.GoToAsync($"{nameof(AddToMyFavoritePage)}?{nameof(AddToMyFavoritePageViewModel.AddedMusicId)}={music.Id}", true);
+            var music = await _musicService.GetOneAsync(selectMusic.Id);
+            if (music == null)
+            {
+                await ToastService.Show("歌曲不存在");
+                return;
+            }
+
+            //构造待选择的歌单项
+            string[] myFavoriteButtons = null;
+            var myFavoriteList = await _myFavoriteService.GetAllAsync();
+            if (myFavoriteList != null)
+            {
+                myFavoriteButtons = myFavoriteList.Select(x => x.Name).ToArray();
+            }
+
+            int selectedMyFavoriteId;
+            string myFavoriteItem = await App.Current.MainPage.DisplayActionSheet("请选择要加入的歌单", "取消", "添加一个", myFavoriteButtons);
+            if (myFavoriteItem.IsEmpty() || myFavoriteItem == "取消")
+            {
+                return;
+            }
+
+            if (myFavoriteItem != "添加一个")
+            {
+                //使用已有歌单
+                selectedMyFavoriteId = myFavoriteList.First(x => x.Name == myFavoriteItem).Id;
+            }
+            else
+            {
+                //新增歌单
+                string myFavoriteName = await App.Current.MainPage.DisplayPromptAsync("添加歌单", "请输入歌单名称：", "添加", "取消");
+                if (myFavoriteName.IsEmpty())
+                {
+                    await ToastService.Show("操作取消");
+                    return;
+                }
+
+                if (await _myFavoriteService.NameExist(myFavoriteName))
+                {
+                    await ToastService.Show("歌单名称已存在");
+                    return;
+                }
+
+                var myFavorite = new MyFavorite()
+                {
+                    Name = myFavoriteName,
+                    MusicCount = 0
+                };
+                var newMyFavorite = await _myFavoriteService.AddOrUpdateAsync(myFavorite);
+                if (newMyFavorite == null)
+                {
+                    await ToastService.Show("添加失败");
+                    return;
+                }
+                selectedMyFavoriteId = newMyFavorite.Id;
+            }
+
+            var result = await _myFavoriteService.AddMusicToMyFavorite(selectedMyFavoriteId, music);
+            if (result == false)
+            {
+                await ToastService.Show("添加失败");
+                return;
+            }
+
+            await _playerService.PlayAsync(music);
+            await ToastService.Show("添加成功");
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("添加失败，网络出小差了");
+            Logger.Error("播放列表添加到我的歌单失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     public async void RemovePlaylist(int id)
