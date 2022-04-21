@@ -1,6 +1,6 @@
 ---
 name: 报告错误
-about: 报告一个错误来帮助我们完善程序。
+about: 报告一个错误来帮助我们完善程序
 title: "[Bug]"
 labels: 错误
 assignees: JiuLing-zhang
