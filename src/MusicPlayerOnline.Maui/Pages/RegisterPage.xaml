@@ -4,9 +4,10 @@
              x:Class="MusicPlayerOnline.Maui.RegisterPage"
              Title="注册">
 
-    <StackLayout Margin="16">
-
-        <StackLayout HeightRequest="40"
+    <StackLayout Margin="16"
+                 WidthRequest="400">
+        <StackLayout 
+                     HeightRequest="40"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
             <Label Text="新用户注册"

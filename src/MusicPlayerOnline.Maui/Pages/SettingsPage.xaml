@@ -31,36 +31,51 @@
     </ContentPage.Resources>
 
     <StackLayout Margin="16">
-        <ScrollView VerticalOptions="FillAndExpand">
-            <StackLayout>
+        <StackLayout WidthRequest="400"
+                     VerticalOptions="FillAndExpand">
 
+            <StackLayout HeightRequest="40"
+                         Orientation="Horizontal"
+                         VerticalOptions="Start">
                 <Label Text="我的"
-                       Margin="0,0,0,20"/>
+                       HorizontalOptions="Start"
+                       VerticalOptions="Start"/>
+                <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                   HeightRequest="16"
+                                   WidthRequest="16"
+                                   HorizontalOptions="Start"
+                                   VerticalOptions="Start"
+                                   Margin="20,0,20,0"/>
+            </StackLayout>
 
-                <StackLayout VerticalOptions="Start">
-                    <StackLayout Style="{DynamicResource LoginBlock}">
-                        <Entry Text="{Binding LoginUsername}"
+            <ScrollView>
+                <StackLayout>
+
+                    <!--用户模块-->
+                    <StackLayout VerticalOptions="Start">
+                        <StackLayout Style="{DynamicResource LoginBlock}">
+                            <Entry Text="{Binding LoginUsername}"
                        Placeholder="请输入用户名"
                        Margin="0,0,0,10"/>
-                        <Entry Text="{Binding LoginPassword}"
+                            <Entry Text="{Binding LoginPassword}"
                        Placeholder="密码"
                        IsPassword="True"
                        Margin="0,0,0,10"/>
 
-                        <Button Text="登录"
+                            <Button Text="登录"
                                 Margin="0,10,0,0"
                                 IsEnabled="{Binding IsNotBusy}"
                                 Command="{Binding LoginCommand}"/>
-                        <Button Text="注册"
+                            <Button Text="注册"
                                 Margin="0,0,0,0"
                                 Command="{Binding GoToRegisterCommand}"/>
 
-                    </StackLayout>
-                    <StackLayout Style="{DynamicResource UserInfoBlock}"
+                        </StackLayout>
+                        <StackLayout Style="{DynamicResource UserInfoBlock}"
                                  Margin="0,0,0,20">
-                        <Grid RowDefinitions="auto,auto"
+                            <Grid RowDefinitions="auto,auto"
                               ColumnDefinitions="auto,*">
-                            <Image Grid.Row="0"
+                                <Image Grid.Row="0"
                                    Grid.Column="0"
                                    Grid.RowSpan="2"
                                    Margin="0,0,10,0"
@@ -68,131 +83,114 @@
                                    Aspect="AspectFill"
                                    WidthRequest="64"
                                    HeightRequest="64"/>
-                            <Label Grid.Row="0"
+                                <Label Grid.Row="0"
                                    Grid.Column="1"
                                    Margin="0,5,0,0"
                                    Text="{Binding UserInfo.Nickname}"
                                    VerticalTextAlignment="Start"/>
-                            <Label Grid.Row="1"
+                                <Label Grid.Row="1"
                                    Grid.Column="1"
                                    Margin="0,0,0,5"
                                    Text="{Binding UserInfo.Username,StringFormat='{}用户名：{0}'}"
                                    VerticalTextAlignment="End"/>
-                        </Grid>
-                        <Button Text="退出账号" 
+                            </Grid>
+                            <Button Text="退出账号" 
                                 Margin="0,10,0,0"
                                 IsEnabled="{Binding IsNotBusy}"
                                 Command="{Binding LogoutCommand}"/>
+                        </StackLayout>
                     </StackLayout>
-                </StackLayout>
-                <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
-                  ColumnDefinitions="2*,8*">
-                    <Label Text="设置"
-               Margin="0,0,0,20" 
-               Grid.ColumnSpan="2"/>
 
-                    <!-- 常规设置 -->
-                    <Label Grid.Row="1" Grid.ColumnSpan="2" Text="常规" FontAttributes="Bold"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="2"
-                IsToggled="{Binding IsAutoCheckUpdate}"
-                Margin="0,24,0,0"/>
-                    <Label Text="启动时检查更新" 
-               Grid.Column="1"
-               Grid.Row="2" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
+                    <!--设置模块-->
+                    <StackLayout>
+                        <Label Text="设置"
+                               Margin="0,0,0,20"/>
 
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="3"
-                IsToggled="{Binding IsDarkMode}"
-                Margin="0,24,0,0"/>
-                    <Label Text="深色主题" 
-               Grid.Column="1"
-               Grid.Row="3" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
+                        <!-- 常规设置 -->
+                        <Label Text="常规" 
+                               FontAttributes="Bold"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="启动时检查更新"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsAutoCheckUpdate}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="深色主题"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsDarkMode}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
 
-                    <!-- 搜索设置 -->
-                    <Label Grid.Row="4" Grid.ColumnSpan="2" Text="搜索" FontAttributes="Bold"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="5"
-                IsToggled="{Binding IsEnableNetEase}"
-                Margin="0,24,0,0"/>
-                    <Label Text="网易云音乐" 
-               Grid.Column="1"
-               Grid.Row="5" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="6"
-                IsToggled="{Binding IsEnableKuGou}"
-                Margin="0,24,0,0"/>
-                    <Label Text="酷狗音乐" 
-               Grid.Column="1"
-               Grid.Row="6" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="7"
-                IsToggled="{Binding IsEnableMiGu}"
-                Margin="0,24,0,0"/>
-                    <Label Text="咪咕音乐" 
-               Grid.Column="1"
-               Grid.Row="7" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="8"
-                IsToggled="{Binding IsHideShortMusic}"
-                Margin="0,24,0,0"/>
-                    <Label Text="隐藏小于1分钟的歌曲" 
-               Grid.Column="1"
-               Grid.Row="8" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="9"
-                IsToggled="{Binding IsCloseSearchPageWhenPlayFailed}"
-                Margin="0,24,0,0"/>
-                    <Label Text="无法播放时关闭搜索页面" 
-               Grid.Column="1"
-               Grid.Row="9" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
+                        <!-- 搜索设置 -->
+                        <Label Text="搜索" 
+                               FontAttributes="Bold"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="网易云音乐"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsEnableNetEase}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="酷狗音乐"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsEnableKuGou}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="咪咕音乐"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsEnableMiGu}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="隐藏小于1分钟的歌曲"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsHideShortMusic}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="无法播放时关闭搜索页面"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsCloseSearchPageWhenPlayFailed}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
 
-                    <!-- 播放设置 -->
-                    <Label Grid.Row="9" Grid.ColumnSpan="2" Text="播放" FontAttributes="Bold"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="10"
-                IsToggled="{Binding IsWifiPlayOnly}"
-                Margin="0,24,0,0"/>
-                    <Label Text="仅在WIFI下播放未缓存的歌曲" 
-               Grid.Column="1"
-               Grid.Row="10" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="11"
-                IsToggled="{Binding IsAutoNextWhenFailed}"
-                Margin="0,24,0,0"/>
-                    <Label Text="播放失败时自动跳到下一首" 
-               Grid.Column="1"
-               Grid.Row="11" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
-                    <Switch HorizontalOptions="Center"
-                Grid.Row="12"
-                IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}"
-                Margin="0,24,0,0"/>
-                    <Label Text="播放我的歌单前清空播放列表" 
-               Grid.Column="1"
-               Grid.Row="12" 
-               Margin="0,24,0,0"              
-               VerticalOptions="Center"/>
+                        <!-- 播放设置 -->
+                        <Label Text="播放" 
+                               FontAttributes="Bold"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="仅在WIFI下播放未缓存的歌曲"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsWifiPlayOnly}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="播放失败时自动跳到下一首"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsAutoNextWhenFailed}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="播放我的歌单前清空播放列表"
+                                   HorizontalOptions="Start"
+                                   VerticalTextAlignment="Center"/>
+                            <Switch IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}"
+                                    HorizontalOptions="EndAndExpand" />
+                        </StackLayout>
+                    </StackLayout>
 
-                    <StackLayout Grid.Row="13"
-                                 Grid.ColumnSpan="2">
+                    <!--其它模块-->
+                    <StackLayout>
                         <Button Text="日志管理"
                                 Margin="0,0,0,5"
                                 Command="{Binding OpenLogCommand}"/>
@@ -224,9 +222,10 @@
                             </Label>
                         </StackLayout>
                     </StackLayout>
-                </Grid>
-            </StackLayout>
-        </ScrollView>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+
         <controls:Player x:Name="player"
                          Margin="0,20,0,0"
                          VerticalOptions="End" >
