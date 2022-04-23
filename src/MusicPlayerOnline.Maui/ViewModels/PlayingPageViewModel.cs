@@ -42,10 +42,18 @@ public class PlayingPageViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
-        UpdateCurrentMusic();
-        GetLyricDetail();
+        try
+        {
+            UpdateCurrentMusic();
+            GetLyricDetail();
 
-        PlayModeInt = (int)GlobalConfig.MyUserSetting.Player.PlayMode;
+            PlayModeInt = (int)GlobalConfig.MyUserSetting.Player.PlayMode;
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("正在播放的歌曲信息加载失败");
+            Logger.Error("播放页面初始化失败。", ex);
+        }
     }
 
     public void Dispose()

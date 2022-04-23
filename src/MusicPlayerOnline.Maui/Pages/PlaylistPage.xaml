@@ -36,7 +36,7 @@
             </StackLayout>
 
         </StackLayout>
-        <Label Text="什么也没找到"
+        <Label Text="播放列表居然是空的...."
                HorizontalOptions="Center"
                VerticalOptions="Start"
                IsVisible="{Binding IsPlaylistEmpty}"/>

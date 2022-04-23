@@ -22,28 +22,39 @@ namespace MusicPlayerOnline.Maui.ViewModels
 
         public async Task InitializeAsync()
         {
-            IsBusy = true;
-            _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
-            _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
-            _musicService = _services.GetService<IMusicServiceFactory>().Create();
-
-            if (FavoriteList.Count > 0)
+            try
             {
-                FavoriteList.Clear();
-            }
+                IsBusy = true;
+                _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
+                _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
+                _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
-            var myFavoriteList = await _myFavoriteService.GetAllAsync();
-            foreach (var myFavorite in myFavoriteList)
-            {
-                FavoriteList.Add(new MyFavoriteViewModel()
+                if (FavoriteList.Count > 0)
                 {
-                    Id = myFavorite.Id,
-                    Name = myFavorite.Name,
-                    MusicCount = myFavorite.MusicCount,
-                    ImageUrl = myFavorite.ImageUrl
-                });
+                    FavoriteList.Clear();
+                }
+
+                var myFavoriteList = await _myFavoriteService.GetAllAsync();
+                foreach (var myFavorite in myFavoriteList)
+                {
+                    FavoriteList.Add(new MyFavoriteViewModel()
+                    {
+                        Id = myFavorite.Id,
+                        Name = myFavorite.Name,
+                        MusicCount = myFavorite.MusicCount,
+                        ImageUrl = myFavorite.ImageUrl
+                    });
+                }
             }
-            IsBusy = false;
+            catch (Exception ex)
+            {
+                await ToastService.Show("我的歌单加载失败");
+                Logger.Error("我的歌单页面初始化失败。", ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private bool _isBusy;

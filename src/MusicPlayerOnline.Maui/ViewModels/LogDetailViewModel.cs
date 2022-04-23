@@ -1,11 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace MusicPlayerOnline.Maui.ViewModels;
 
-namespace MusicPlayerOnline.Maui.ViewModels;
-
-public class LogDetailViewModel
+public class LogDetailViewModel : ViewModelBase
 {
-    public string Time { get; set; }
-    public string Message { get; set; }
+    private string _time;
+    public string Time
+    {
+        get => _time;
+        set
+        {
+            _time = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _message;
+    public string Message
+    {
+        get => _message;
+        set
+        {
+            _message = value;
+            OnPropertyChanged();
+        }
+    }
 }

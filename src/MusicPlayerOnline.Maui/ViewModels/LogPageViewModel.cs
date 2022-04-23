@@ -11,8 +11,69 @@ public class LogPageViewModel : ViewModelBase
     public LogPageViewModel(IApiLogService apiLogService)
     {
         Logs = new ObservableCollection<LogDetailViewModel>();
+        Logs.CollectionChanged += Logs_CollectionChanged;
         _apiLogService = apiLogService;
     }
+
+    public async Task InitializeAsync()
+    {
+        try
+        {
+            IsBusy = true;
+
+            if (Logs.Count > 0)
+            {
+                Logs.Clear();
+            }
+
+            CurrentLogs = new List<Log>();
+            var logs = Logger.GetAll();
+            foreach (var log in logs)
+            {
+                //页面展示
+                Logs.Add(new LogDetailViewModel()
+                {
+                    Time = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.CreateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                    Message = log.Message,
+                });
+
+                //后台保存，用于上传
+                CurrentLogs.Add(new Log()
+                {
+                    Timestamp = log.CreateTime,
+                    LogType = log.LogType,
+                    Message = log.Message
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("日志加载失败");
+            Logger.Error("日志页面初始化失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    private void Logs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged("Logs");
+    }
+
+    private bool _isBusy;
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set
+        {
+            _isBusy = value;
+            OnPropertyChanged("IsBusy");
+            OnPropertyChanged("IsNotBusy");
+        }
+    }
+    public bool IsNotBusy => !_isBusy;
 
     private ObservableCollection<LogDetailViewModel> _logs;
     public ObservableCollection<LogDetailViewModel> Logs
@@ -26,34 +87,6 @@ public class LogPageViewModel : ViewModelBase
     }
 
     private List<Log> CurrentLogs;
-
-    public async Task InitializeAsync()
-    {
-        if (Logs.Count > 0)
-        {
-            Logs.Clear();
-        }
-
-        CurrentLogs = new List<Log>();
-        var logs = Logger.GetAll();
-        foreach (var log in logs)
-        {
-            //页面展示
-            Logs.Add(new LogDetailViewModel()
-            {
-                Time = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.CreateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"),
-                Message = log.Message,
-            });
-
-            //后台保存，用于上传
-            CurrentLogs.Add(new Log()
-            {
-                Timestamp = log.CreateTime,
-                LogType = log.LogType,
-                Message = log.Message
-            });
-        }
-    }
 
     private async void UpdateLogs()
     {
@@ -74,14 +107,27 @@ public class LogPageViewModel : ViewModelBase
             return;
         }
 
-        var result = await _apiLogService.WriteListAsync(CurrentLogs);
-        if (result == false)
+        try
         {
-            await ToastService.Show("日志上传失败");
+            IsBusy = true;
+            var result = await _apiLogService.WriteListAsync(CurrentLogs);
+            if (result == false)
+            {
+                await ToastService.Show("日志上传失败");
+            }
+            else
+            {
+                await ToastService.Show("日志上传成功");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await ToastService.Show("日志上传成功");
+            await ToastService.Show("上传失败，网络出小差了");
+            Logger.Error("日志上传失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 
@@ -94,6 +140,7 @@ public class LogPageViewModel : ViewModelBase
         }
 
         Logger.RemoveAllAsync();
-        Logs.Clear();
+        await ToastService.Show("日志已清空");
+        await InitializeAsync();
     }
 }

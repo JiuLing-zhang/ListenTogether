@@ -13,9 +13,4 @@ public partial class CacheCleanPage : ContentPage
         base.OnAppearing();
         await vm.InitializeAsync();
     }
-
-    private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
-    {
-        vm.CalcSelectedSize();
-    }
 }

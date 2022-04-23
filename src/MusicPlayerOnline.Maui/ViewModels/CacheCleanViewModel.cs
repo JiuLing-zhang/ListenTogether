@@ -8,7 +8,8 @@ public class CacheCleanViewModel : ViewModelBase
     public ICommand ClearCommand => new Command(Clear);
     public CacheCleanViewModel()
     {
-        Caches = new ObservableCollection<MusicFileViewModel>();
+        Caches = new ObservableCollectionEx<MusicFileViewModel>();
+        Caches.ItemChanged += Caches_ItemChanged;
     }
 
     public async Task InitializeAsync()
@@ -67,11 +68,11 @@ public class CacheCleanViewModel : ViewModelBase
         }
     }
 
-    private ObservableCollection<MusicFileViewModel> _caches;
+    private ObservableCollectionEx<MusicFileViewModel> _caches;
     /// <summary>
     /// 缓存的文件
     /// </summary>
-    public ObservableCollection<MusicFileViewModel> Caches
+    public ObservableCollectionEx<MusicFileViewModel> Caches
     {
         get => _caches;
         set
@@ -81,6 +82,10 @@ public class CacheCleanViewModel : ViewModelBase
         }
     }
 
+    private void Caches_ItemChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        CalcSelectedSize();
+    }
 
     public void CalcSelectedSize()
     {

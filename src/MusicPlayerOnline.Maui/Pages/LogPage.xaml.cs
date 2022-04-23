@@ -2,8 +2,6 @@ namespace MusicPlayerOnline.Maui;
 
 public partial class LogPage : ContentPage
 {
-
-
     LogPageViewModel vm => BindingContext as LogPageViewModel;
     public LogPage(LogPageViewModel vm)
     {

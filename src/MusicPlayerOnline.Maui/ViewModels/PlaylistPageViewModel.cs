@@ -24,14 +24,26 @@ public class PlaylistPageViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
-        IsBusy = true;
-        _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
-        _musicService = _services.GetService<IMusicServiceFactory>().Create();
-        _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
-        await GetPlaylist();
-        IsBusy = false;
-        OnPropertyChanged("IsPlaylistEmpty");
-        OnPropertyChanged("IsPlaylistNotEmpty");
+        try
+        {
+            IsBusy = true;
+            _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
+            _musicService = _services.GetService<IMusicServiceFactory>().Create();
+            _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
+            await GetPlaylist();
+
+            OnPropertyChanged("IsPlaylistEmpty");
+            OnPropertyChanged("IsPlaylistNotEmpty");
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("播放列表加载失败");
+            Logger.Error("播放列表页面初始化失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
     private async Task GetPlaylist()
     {

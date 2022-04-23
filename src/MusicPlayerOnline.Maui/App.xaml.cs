@@ -9,8 +9,6 @@ public partial class App : Application
     {
         InitializeComponent();
 
-        AppDomain.CurrentDomain.FirstChanceException += CurrentDomain_FirstChanceException;
-
         if (!Directory.Exists(GlobalConfig.AppDataDirectory))
         {
             Directory.CreateDirectory(GlobalConfig.AppDataDirectory);
@@ -65,12 +63,5 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
         Routing.RegisterRoute(nameof(CacheCleanPage), typeof(CacheCleanPage));
         Routing.RegisterRoute(nameof(LogPage), typeof(LogPage));
-    }
-
-    private void CurrentDomain_FirstChanceException(object sender, System.Runtime.ExceptionServices.FirstChanceExceptionEventArgs ex)
-    {
-        string error = $"...{Environment.NewLine}{ex.Exception.Message}";
-        ToastService.Show(error);
-        Logger.Error("未处理的异常", ex.Exception);
     }
 }
