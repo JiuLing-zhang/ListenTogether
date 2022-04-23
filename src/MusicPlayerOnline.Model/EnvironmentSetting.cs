@@ -69,11 +69,6 @@ namespace MusicPlayerOnline.Model
         /// 隐藏小于1分钟的歌曲
         /// </summary>
         public bool IsHideShortMusic { get; set; }
-
-        /// <summary>
-        /// 播放失败时关闭搜索页面
-        /// </summary>
-        public bool IsCloseSearchPageWhenPlayFailed { get; set; }
     }
 
     public class PlaySetting

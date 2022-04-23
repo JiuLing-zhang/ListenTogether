@@ -155,13 +155,6 @@
                             <Switch IsToggled="{Binding IsHideShortMusic}"
                                     HorizontalOptions="EndAndExpand" />
                         </StackLayout>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="无法播放时关闭搜索页面"
-                                   HorizontalOptions="Start"
-                                   VerticalTextAlignment="Center"/>
-                            <Switch IsToggled="{Binding IsCloseSearchPageWhenPlayFailed}"
-                                    HorizontalOptions="EndAndExpand" />
-                        </StackLayout>
 
                         <!-- 播放设置 -->
                         <Label Text="播放" 

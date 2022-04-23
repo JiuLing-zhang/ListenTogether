@@ -233,24 +233,6 @@ public class SettingPageViewModel : ViewModelBase
         }
     }
 
-
-    private bool _isCloseSearchPageWhenPlayFailed;
-    /// <summary>
-    /// 播放失败时关闭搜索页面
-    /// </summary>
-    public bool IsCloseSearchPageWhenPlayFailed
-    {
-        get => _isCloseSearchPageWhenPlayFailed;
-        set
-        {
-            _isCloseSearchPageWhenPlayFailed = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.Search.IsCloseSearchPageWhenPlayFailed = value;
-            WriteSearchConfig();
-        }
-    }
-
     private bool _isCleanPlaylistWhenPlayMyFavorite;
     /// <summary>
     /// 播放我的歌单前清空播放列表
@@ -292,7 +274,6 @@ public class SettingPageViewModel : ViewModelBase
         IsEnableKuGou = CheckEnablePlatform(PlatformEnum.KuGou);
         IsEnableMiGu = CheckEnablePlatform(PlatformEnum.MiGu);
         IsHideShortMusic = GlobalConfig.MyUserSetting.Search.IsHideShortMusic;
-        IsCloseSearchPageWhenPlayFailed = GlobalConfig.MyUserSetting.Search.IsCloseSearchPageWhenPlayFailed;
 
         //播放设置
         IsWifiPlayOnly = GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly;
