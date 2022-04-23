@@ -31,10 +31,12 @@
     </ContentPage.Resources>
 
     <StackLayout Margin="16">
-        <StackLayout WidthRequest="400"
-                     VerticalOptions="FillAndExpand">
+        <Grid RowDefinitions="40,*"
+              ColumnDefinitions="{OnPlatform Default=*, UWP=400,MacCatalyst=400}"
+              HorizontalOptions="Center"
+              VerticalOptions="FillAndExpand">
 
-            <StackLayout HeightRequest="40"
+            <StackLayout Grid.Row="0"
                          Orientation="Horizontal"
                          VerticalOptions="Start">
                 <Label Text="我的"
@@ -48,7 +50,8 @@
                                    Margin="20,0,20,0"/>
             </StackLayout>
 
-            <ScrollView VerticalOptions="FillAndExpand">
+            <ScrollView Grid.Row="1"
+                        VerticalOptions="FillAndExpand">
                 <StackLayout>
 
                     <!--用户模块-->
@@ -183,7 +186,7 @@
                     </StackLayout>
                 </StackLayout>
             </ScrollView>
-        </StackLayout>
+        </Grid>
 
         <controls:Player x:Name="player"
                          Margin="0,20,0,0"
