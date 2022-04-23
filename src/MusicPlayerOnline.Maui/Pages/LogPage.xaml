@@ -3,22 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MusicPlayerOnline.Maui.LogPage"
-             Title="日志">
-
-    <ContentPage.Resources>
-
-        <Style x:Key="IsButtonEnabled" TargetType="Button">
-            <Setter Property="IsEnabled" Value="True"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Logs.Count}" Value="0" TargetType="Button">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsBusy}" Value="True" TargetType="Button">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </ContentPage.Resources>
+             Title="日志"> 
 
     <StackLayout Margin="16">
         <StackLayout HeightRequest="40"
@@ -27,10 +12,6 @@
             <Label Text="日志"
                        HorizontalOptions="Start"
                        VerticalOptions="Start"/>
-            <Label Text="{Binding Logs.Count}"
-                      BackgroundColor="Red"/>
-            <Label Text="{Binding IsBusy}"
-                      BackgroundColor="Red"/>
             <ActivityIndicator IsRunning="{Binding IsBusy}"
                                    HeightRequest="16"
                                    WidthRequest="16"
@@ -59,11 +40,11 @@
         <Button Text="上传到服务器"
                 Margin="0,0,0,5"
                 VerticalOptions="End"
-                Style="{DynamicResource IsButtonEnabled}"
+                IsEnabled="{Binding IsNotBusy}"
                 Command="{Binding UpdateLogsCommand}"/>
         <Button Text="删除本地日志"
                 VerticalOptions="End"
-                Style="{DynamicResource IsButtonEnabled}"
+                IsEnabled="{Binding IsNotBusy}"
                 Command="{Binding ClearLogsCommand}"/>
 
     </StackLayout>

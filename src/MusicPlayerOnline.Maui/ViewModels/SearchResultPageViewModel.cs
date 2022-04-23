@@ -12,7 +12,6 @@ public class SearchResultPageViewModel : ViewModelBase
     private IMyFavoriteService _myFavoriteService;
     private readonly PlayerService _playerService;
 
-    private string _lastSearchKeyword = "";
     public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
     public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
     public ICommand SearchCommand => new Command(Search);
@@ -20,10 +19,15 @@ public class SearchResultPageViewModel : ViewModelBase
     public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService searchService)
     {
         MusicSearchResult = new ObservableCollection<SearchResultViewModel>();
-
+        MusicSearchResult.CollectionChanged += MusicSearchResult_CollectionChanged;
         _services = services;
         _searchService = searchService;
         _playerService = playerService;
+    }
+
+    private void MusicSearchResult_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        OnPropertyChanged("MusicSearchResult");
     }
 
     public async Task InitializeAsync()
@@ -117,12 +121,6 @@ public class SearchResultPageViewModel : ViewModelBase
         {
             return;
         }
-
-        if (SearchKeyword == _lastSearchKeyword)
-        {
-            return;
-        }
-        _lastSearchKeyword = SearchKeyword;
 
         try
         {

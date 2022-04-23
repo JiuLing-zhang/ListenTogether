@@ -30,6 +30,20 @@ public class SettingPageViewModel : ViewModelBase
         //VersionName = DependencyService.Get<IAppVersionInfo>().GetVersionName();
     }
 
+
+    private bool _isBusy;
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set
+        {
+            _isBusy = value;
+            OnPropertyChanged("IsBusy");
+            OnPropertyChanged("IsNotBusy");
+        }
+    }
+    public bool IsNotBusy => !_isBusy;
+
     private bool _isLoginOk;
     /// <summary>
     /// 是否登录
@@ -413,43 +427,69 @@ public class SettingPageViewModel : ViewModelBase
 
     private async void Login()
     {
-        if (LoginUsername.IsEmpty() || LoginPassword.IsEmpty())
+        try
         {
-            await ToastService.Show("请输入用户名和密码");
-            return;
-        }
+            IsBusy = true;
+            if (LoginUsername.IsEmpty() || LoginPassword.IsEmpty())
+            {
+                await ToastService.Show("请输入用户名和密码");
+                return;
+            }
 
-        var user = await _userService.Login(LoginUsername, LoginPassword);
-        if (user == null)
+            var user = await _userService.Login(LoginUsername, LoginPassword);
+            if (user == null)
+            {
+                await ToastService.Show("登录失败：用户名或密码错误");
+                return;
+            }
+
+            if (!_userLocalService.Write(user))
+            {
+                await ToastService.Show("用户信息保存失败，请重试");
+                return;
+            }
+            //清除页面绑定的用户名密码
+            LoginUsername = "";
+            LoginPassword = "";
+
+            GlobalConfig.CurrentUser = user;
+            UpdateUserInfo();
+        }
+        catch (Exception ex)
         {
-            await ToastService.Show("登录失败：用户名或密码错误");
-            return;
+            await ToastService.Show("登录失败，网络出小差了");
+            Logger.Error("登录失败。", ex);
         }
-
-        if (!_userLocalService.Write(user))
+        finally
         {
-            await ToastService.Show("用户信息保存失败，请重试");
-            return;
+            IsBusy = false;
         }
-        //清除页面绑定的用户名密码
-        LoginUsername = "";
-        LoginPassword = "";
-
-        GlobalConfig.CurrentUser = user;
-        UpdateUserInfo();
     }
 
     private async void Logout()
     {
-        if (!await _userService.Logout())
+        try
         {
-            await ToastService.Show("操作失败，请重试");
-            return;
-        }
+            IsBusy = true;
+            if (!await _userService.Logout())
+            {
+                await ToastService.Show("退出失败，网络出小差了");
+                return;
+            }
 
-        _userLocalService.Remove();
-        GlobalConfig.CurrentUser = null;
-        UpdateUserInfo();
+            _userLocalService.Remove();
+            GlobalConfig.CurrentUser = null;
+            UpdateUserInfo();
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("退出失败，网络出小差了");
+            Logger.Error("退出失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private async void GoToRegister()

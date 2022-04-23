@@ -96,8 +96,11 @@ public partial class Player : ContentView
             UpdatePlayPause();
             UpdateMusicInfo();
         }
-        UpdateSoundOnOff();
-        Updatevolume();
+        if (Config.Desktop)
+        {
+            UpdateSoundOnOff();
+            Updatevolume();
+        }
         UpdateRepeatModel();
     }
 

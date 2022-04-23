@@ -46,13 +46,14 @@
                        Placeholder="密码"
                        IsPassword="True"
                        Margin="0,0,0,10"/>
-                        <HorizontalStackLayout Margin="0,10,0,10">
-                            <Button Text="登录"
-                        Margin="0,0,10,0"
-                        Command="{Binding LoginCommand}"/>
-                            <Button Text="注册"
-                        Command="{Binding GoToRegisterCommand}"/>
-                        </HorizontalStackLayout>
+
+                        <Button Text="登录"
+                                Margin="0,10,0,0"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Command="{Binding LoginCommand}"/>
+                        <Button Text="注册"
+                                Margin="0,0,0,0"
+                                Command="{Binding GoToRegisterCommand}"/>
 
                     </StackLayout>
                     <StackLayout Style="{DynamicResource UserInfoBlock}"
@@ -79,8 +80,9 @@
                                    VerticalTextAlignment="End"/>
                         </Grid>
                         <Button Text="退出账号" 
-                        Margin="0,10,0,0"
-                        Command="{Binding LogoutCommand}"/>
+                                Margin="0,10,0,0"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Command="{Binding LogoutCommand}"/>
                     </StackLayout>
                 </StackLayout>
                 <Grid RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"

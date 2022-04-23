@@ -5,8 +5,13 @@
        xmlns:root="clr-namespace:MusicPlayerOnline.Maui"
        xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
        x:DataType="viewmodels:ShellViewModel"
-       x:Class="MusicPlayerOnline.Maui.Pages.MobileShell">
+       x:Class="MusicPlayerOnline.Maui.Pages.MobileShell"
+       NavBarIsVisible="False">
     <TabBar>
+        <Tab Title="{Binding Search.Title}"
+             Icon="{Binding Search.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:SearchPage}" />
+        </Tab>
         <Tab Title="{Binding Playlist.Title}"
              Icon="{Binding Playlist.Icon}">
             <ShellContent ContentTemplate="{DataTemplate pages:PlaylistPage}" />

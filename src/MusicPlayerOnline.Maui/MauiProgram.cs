@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using CommunityToolkit.Maui;
+using System.Reflection;
+
 namespace MusicPlayerOnline.Maui
 {
     public static class MauiProgram
@@ -8,10 +10,13 @@ namespace MusicPlayerOnline.Maui
         {
             var builder = MauiApp.CreateBuilder();
 
-            using var stream = File.OpenRead(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "appsettings.json"));
+            var a = Assembly.GetExecutingAssembly();
+            using var stream = a.GetManifestResourceStream("MusicPlayerOnline.Maui.appsettings.json");
+
             var config = new ConfigurationBuilder()
                         .AddJsonStream(stream)
                         .Build();
+
 
             builder.Configuration.AddConfiguration(config);
 

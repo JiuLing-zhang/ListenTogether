@@ -6,16 +6,24 @@ public class RegisterPageViewModel : ViewModelBase
     public ICommand RegisterCommand => new Command(Register);
     public ICommand ChoseImageCommand => new Command(ChoseImage);
 
-
-    private IEnvironmentConfigService _configService;
     private IUserService _userService;
-    private IUserLocalService _userLocalService;
-    public RegisterPageViewModel(IEnvironmentConfigService configService, IUserService userService, IUserLocalService userLocalService)
+    public RegisterPageViewModel(IUserService userService)
     {
-        _configService = configService;
         _userService = userService;
-        _userLocalService = userLocalService;
     }
+
+    private bool _isBusy;
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set
+        {
+            _isBusy = value;
+            OnPropertyChanged("IsBusy");
+            OnPropertyChanged("IsNotBusy");
+        }
+    }
+    public bool IsNotBusy => !_isBusy;
 
     private string _username;
     public string Username
@@ -72,16 +80,6 @@ public class RegisterPageViewModel : ViewModelBase
         }
     }
 
-    private bool _isShowRegister = true;
-    public bool IsShowRegister
-    {
-        get => _isShowRegister;
-        set
-        {
-            _isShowRegister = value;
-            OnPropertyChanged();
-        }
-    }
 
     private async void GoBack()
     {
@@ -89,39 +87,47 @@ public class RegisterPageViewModel : ViewModelBase
     }
     private async void Register()
     {
-        ApiMessage = "";
-        IsShowRegister = false;
-        if (Username.IsEmpty() || Nickname.IsEmpty() || Password.IsEmpty())
+        try
         {
-            ApiMessage = "注册信息不完整";
-            IsShowRegister = true;
-            return;
-        }
-        if (Password != Password2)
-        {
-            ApiMessage = "两次密码不一致";
-            IsShowRegister = true;
-            return;
-        }
+            IsBusy = true;
+            ApiMessage = "";
+            if (Username.IsEmpty() || Nickname.IsEmpty() || Password.IsEmpty())
+            {
+                ApiMessage = "注册信息不完整";
+                return;
+            }
+            if (Password != Password2)
+            {
+                ApiMessage = "两次密码不一致";
+                return;
+            }
 
-        if (_userAvatar == null)
-        {
-            ApiMessage = "请选择头像";
-            IsShowRegister = true;
-            return;
+            if (_userAvatar == null)
+            {
+                ApiMessage = "请选择头像";
+                return;
+            }
+
+            var user = new UserRegister()
+            {
+                Username = Username,
+                Nickname = Nickname,
+                Password = Password,
+                Avatar = _userAvatar
+            };
+
+            var (succeed, message) = await _userService.Register(user);
+            ApiMessage = message;
         }
-
-        var user = new UserRegister()
+        catch (Exception ex)
         {
-            Username = Username,
-            Nickname = Nickname,
-            Password = Password,
-            Avatar = _userAvatar
-        };
-
-        var (succeed, message) = await _userService.Register(user);
-        IsShowRegister = !succeed;
-        ApiMessage = message;
+            await ToastService.Show("注册失败，网络出小差了");
+            Logger.Error("注册失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private ImageSource _myImage;
@@ -141,6 +147,7 @@ public class RegisterPageViewModel : ViewModelBase
     {
         try
         {
+            IsBusy = true;
             _userAvatar = null;
             MyImage = null;
 
@@ -153,7 +160,7 @@ public class RegisterPageViewModel : ViewModelBase
             if (!result.FileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) &&
                 !result.FileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
             {
-                ToastService.Show("仅支持jpg和png格式");
+                await ToastService.Show("仅支持jpg和png格式");
                 return;
             }
 
@@ -172,8 +179,12 @@ public class RegisterPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ToastService.Show($"头像加载失败：{ex.Message}");
+            await ToastService.Show("头像加载失败，请重试");
+            Logger.Error("头像加载失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
-
 }

@@ -11,7 +11,6 @@ public class LogPageViewModel : ViewModelBase
     public LogPageViewModel(IApiLogService apiLogService)
     {
         Logs = new ObservableCollection<LogDetailViewModel>();
-        Logs.CollectionChanged += Logs_CollectionChanged;
         _apiLogService = apiLogService;
     }
 
@@ -57,10 +56,6 @@ public class LogPageViewModel : ViewModelBase
         }
     }
 
-    private void Logs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        OnPropertyChanged("Logs");
-    }
 
     private bool _isBusy;
     public bool IsBusy
