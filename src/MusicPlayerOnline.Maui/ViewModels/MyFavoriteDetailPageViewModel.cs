@@ -196,6 +196,8 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         };
         await _playlistService.AddToPlaylist(playlist);
         await _playerService.PlayAsync(music);
+
+        await Shell.Current.GoToAsync($"..", true);
     }
 
     private async void RemoveOne(MusicViewModel selected)

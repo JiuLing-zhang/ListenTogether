@@ -30,7 +30,7 @@
         </Style>
     </ContentPage.Resources>
 
-    <StackLayout Margin="{OnPlatform Default=16, UWP=0,MacCatalyst=0}">
+    <StackLayout Margin="16">
         <Grid RowDefinitions="40,*"
               ColumnDefinitions="{OnPlatform Default=*, UWP=400,MacCatalyst=400}"
               HorizontalOptions="Center"

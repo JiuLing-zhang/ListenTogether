@@ -4,7 +4,7 @@
              x:Class="MusicPlayerOnline.Maui.RegisterPage"
              Title="注册">
 
-    <Grid Margin="{OnPlatform Default=16, UWP=0,MacCatalyst=0}"
+    <Grid Margin="16"
           ColumnDefinitions="{OnPlatform Default=*, UWP=400,MacCatalyst=400}">
         <StackLayout 
                      HeightRequest="40"

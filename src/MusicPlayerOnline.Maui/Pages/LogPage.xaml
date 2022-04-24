@@ -3,22 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MusicPlayerOnline.Maui.LogPage"
-             Title="日志"> 
+             Title="日志">
 
     <StackLayout Margin="16">
-        <StackLayout HeightRequest="40"
-                         Orientation="Horizontal"
-                         VerticalOptions="Start">
+        <StackLayout Margin="0,0,0,20"
+                     Orientation="Horizontal"
+                     VerticalOptions="Start">
             <Label Text="日志"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Start"
+                   VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                                   HeightRequest="16"
-                                   WidthRequest="16"
-                                   HorizontalOptions="Start"
-                                   VerticalOptions="Start"
-                                   Margin="20,0,20,0"/>
+            <ActivityIndicator Margin="10,0,0,0"
+                               IsRunning="{Binding IsBusy}"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               VerticalOptions="CenterAndExpand"/>
         </StackLayout>
 
         <ScrollView VerticalOptions="FillAndExpand"

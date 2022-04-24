@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              x:Class="MusicPlayerOnline.Maui.MyFavoriteDetailPage"
-             Title="我的歌单详情">
+             Title="我的歌单详情"
+             BackgroundColor="#F7F7F7">
 
     <StackLayout Margin="16">
 
@@ -11,21 +12,17 @@
                      Orientation="Horizontal"
                      VerticalOptions="Start">
 
-            <Label Text="我的歌单"
+            <Label Text="{Binding CurrentMyFavorite.Name,StringFormat='{}歌单 - {0}'}"
                    VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
-
-            <Label Text="{Binding CurrentMyFavorite.Name}"
-                   Margin="5,0,0,0"
-                   HorizontalOptions="Start"
-                   VerticalTextAlignment="Start"/>
 
             <ActivityIndicator Margin="10,0,0,0"
                                IsRunning="{Binding IsBusy}"
                                HeightRequest="20"
                                WidthRequest="20"
                                VerticalOptions="CenterAndExpand"/>
-            <StackLayout Margin="20,0,0,0"
+
+            <StackLayout Margin="10,0,0,0"
                          Orientation="Horizontal"
                          HorizontalOptions="Start"
                          VerticalOptions="End"
@@ -33,7 +30,7 @@
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding MyFavoriteRenameCommand}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="remove.png"
+                <Image Source="edit.png"
                        HeightRequest="20"
                        WidthRequest="20">
                 </Image>
@@ -71,7 +68,7 @@
                                                       NumberOfTapsRequired="2"/>
                         </StackLayout.GestureRecognizers>
 
-                        <StackLayout WidthRequest="50"
+                        <StackLayout WidthRequest="30"
                                          Orientation="Horizontal">
                             <Image Source="remove.png"
                                        Aspect="AspectFill"
@@ -79,15 +76,15 @@
                                        HeightRequest="15"
                                        VerticalOptions="Center">
                                 <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneCommand}"
                                                               CommandParameter="{Binding .}"/>
                                 </Image.GestureRecognizers>
                             </Image>
                         </StackLayout>
 
-                        <Label Text="{Binding MusicName}"
+                        <Label Text="{Binding Name}"
                                    VerticalTextAlignment="Center"/>
-                        <Label Text="{Binding MusicArtist,StringFormat='{} - {0}'}"
+                        <Label Text="{Binding Artist,StringFormat='{} - {0}'}"
                                    VerticalTextAlignment="Center"
                                    LineBreakMode="TailTruncation"/>
                     </StackLayout>

@@ -4,7 +4,8 @@
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
              x:Class="MusicPlayerOnline.Maui.Pages.MyFavoritePage"
-             Title="我的歌单">
+             Title="我的歌单"
+             BackgroundColor="#F7F7F7">
 
     <ContentPage.Resources>
         <ResourceDictionary>

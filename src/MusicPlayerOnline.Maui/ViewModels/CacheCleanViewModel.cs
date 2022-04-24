@@ -14,11 +14,37 @@ public class CacheCleanViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
-        SelectedSize = 0;
-        await GetCacheFiles();
+        try
+        {
+            IsBusy = true;
+            SelectedSize = 0;
+            await GetCacheFiles();
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("缓存文件查找失败");
+            Logger.Error("缓存文件查找失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
     }
 
-    public string Title => "缓存清理";
+    private bool _isBusy;
+    public bool IsBusy
+    {
+        get => _isBusy;
+        set
+        {
+            _isBusy = value;
+            OnPropertyChanged("IsBusy");
+            OnPropertyChanged("IsNotBusy");
+        }
+    }
+    public bool IsNotBusy => !_isBusy;
+
 
     private Int64 _allSize;
     public Int64 AllSize
@@ -168,20 +194,34 @@ public class CacheCleanViewModel : ViewModelBase
             return;
         }
 
-        foreach (var cache in Caches)
+        try
         {
-            if (cache.IsChecked == true)
+            IsBusy = true;
+            foreach (var cache in Caches)
             {
-                try
+                if (cache.IsChecked == true)
                 {
-                    System.IO.File.Delete(cache.FullName);
-                }
-                catch (Exception ex)
-                {
-                    await ToastService.Show($"文件删除失败：{cache.FullName}");
+                    try
+                    {
+                        System.IO.File.Delete(cache.FullName);
+                    }
+                    catch (Exception ex)
+                    {
+                        await ToastService.Show($"文件删除失败：{cache.FullName}");
+                    }
                 }
             }
         }
+        catch (Exception ex)
+        {
+            await ToastService.Show("删除失败");
+            Logger.Error("缓存文件删除失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+
         await GetCacheFiles();
         await ToastService.Show("删除完成");
     }

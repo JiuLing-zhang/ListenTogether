@@ -16,13 +16,17 @@
     </ContentPage.Resources>
 
     <StackLayout Margin="16">
-        <StackLayout HeightRequest="40"
+        <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
             <Label Text="缓存清理"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Start"
+                   VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
+            <ActivityIndicator Margin="10,0,0,0"
+                               IsRunning="{Binding IsBusy}"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               VerticalOptions="CenterAndExpand"/>
         </StackLayout>
 
         <ScrollView VerticalOptions="FillAndExpand">
