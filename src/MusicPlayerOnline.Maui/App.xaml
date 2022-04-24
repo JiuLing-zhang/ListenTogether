@@ -2,8 +2,13 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MusicPlayerOnline.Maui"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MusicPlayerOnline.Maui.App">
     <Application.Resources>
-        <ResourceDictionary Source="Resources/Styles.xaml" />
+        <ResourceDictionary Source="Resources/Styles/DefaultTheme.xaml"/>
+        <ResourceDictionary>
+            <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
+            <toolkit:IsNotEqualConverter x:Key="IsNotEqualConverter" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -16,13 +16,13 @@
              Icon="{Binding Playlist.Icon}">
             <ShellContent ContentTemplate="{DataTemplate pages:PlaylistPage}" />
         </Tab>
-        <Tab Title="{Binding MyFavorite.Title}"
-             Icon="{Binding MyFavorite.Icon}">
-            <ShellContent ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
-        </Tab>
         <Tab Title="{Binding Playing.Title}"
              Icon="{Binding Playing.Icon}">
             <ShellContent ContentTemplate="{DataTemplate pages:PlayingPage}" />
+        </Tab>
+        <Tab Title="{Binding MyFavorite.Title}"
+             Icon="{Binding MyFavorite.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
         </Tab>
         <Tab Title="{Binding Settings.Title}"
              Icon="{Binding Settings.Icon}" >

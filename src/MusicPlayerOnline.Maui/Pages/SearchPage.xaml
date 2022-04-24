@@ -4,30 +4,28 @@
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
              x:Class="MusicPlayerOnline.Maui.Pages.SearchPage"
-             Title="搜索">
+             Title="搜索"
+             BackgroundColor="#F7F7F7">
 
     <StackLayout Margin="16">
-        <StackLayout HeightRequest="40"
+        <StackLayout Margin="0,0,0,20"
+                     Orientation="Horizontal"
                      VerticalOptions="Start">
-            <StackLayout Orientation="Horizontal"
-                         VerticalOptions="Start">
-                <Label Text="搜索"
-                       VerticalTextAlignment="Center"
-                       HorizontalOptions="Start"
-                       Margin="0,0,10,0" />
-
-                <SearchBar Text="{Binding SearchKeyword}"
-                           SearchCommand="{Binding SearchCommand}"
-                           HorizontalOptions="FillAndExpand"/>
-            </StackLayout>
+            <Label Text="搜索"
+                   VerticalTextAlignment="Center"
+                   Style="{StaticResource Title}"/>
+            <ActivityIndicator Margin="10,0,0,0"
+                               IsRunning="{Binding IsBusy}"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               VerticalOptions="CenterAndExpand"/>
         </StackLayout>
-        
-        <ActivityIndicator IsRunning="{Binding IsBusy}"
-                           IsVisible="{Binding IsBusy}"
-                           VerticalOptions="Start"
-                           HeightRequest="16"
-                           WidthRequest="16"/>
-        
+
+        <SearchBar Text="{Binding SearchKeyword}"
+                   SearchCommand="{Binding SearchCommand}"
+                   Placeholder="输入歌曲名、歌手名查找..."
+                   VerticalOptions="Start"/>
+
         <ScrollView VerticalOptions="FillAndExpand">
             <StackLayout>
                 <CollectionView ItemsSource="{Binding MusicSearchResult}"
@@ -36,19 +34,20 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="40,40,60,300,300,*">
-                                <Grid.GestureRecognizers>
+                            <StackLayout Orientation="Horizontal">
+                                <StackLayout.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
                                                           CommandParameter="{Binding .}"
-                                                          NumberOfTapsRequired="{OnPlatform Default=1, UWP=2,MacCatalyst=2}"/>
-                                </Grid.GestureRecognizers>
-                                <StackLayout Grid.Column="0"
-                                             Orientation="Horizontal"
-                                             VerticalOptions="Center">
-                                    <Image Source="plus.png" 
-                                           Aspect="AspectFill" 
+                                                          NumberOfTapsRequired="2"/>
+                                </StackLayout.GestureRecognizers>
+
+                                <StackLayout WidthRequest="30">
+                                    <Image Source="heart.png"
+                                           Aspect="AspectFill"
                                            WidthRequest="15"
-                                           HeightRequest="15">
+                                           HeightRequest="15"
+                                           VerticalOptions="CenterAndExpand"
+                                           HorizontalOptions="CenterAndExpand">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
                                                                   CommandParameter="{Binding .}"/>
@@ -57,31 +56,26 @@
                                 </StackLayout>
 
                                 <Label Text="{Binding Platform}"
-                                   Grid.Column="1" 
-                                   IsVisible="true"
+                                   WidthRequest="40"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
                                 <Label Text="{Binding Duration}" 
-                                   Grid.Column="2" 
-                                   IsVisible="true"
+                                   WidthRequest="60"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
                                 <Label Text="{Binding Name}" 
-                                   Grid.Column="3" 
-                                   IsVisible="true"
+                                   WidthRequest="300"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
                                 <Label Text="{Binding Artist}" 
-                                   Grid.Column="4" 
-                                   IsVisible="true"
+                                   WidthRequest="300"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
                                 <Label Text="{Binding Album}" 
-                                   Grid.Column="5" 
-                                   IsVisible="true"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                            </Grid>
+                            </StackLayout>
+
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

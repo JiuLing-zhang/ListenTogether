@@ -30,7 +30,7 @@
         </Style>
     </ContentPage.Resources>
 
-    <StackLayout Margin="16">
+    <StackLayout Margin="{OnPlatform Default=16, UWP=0,MacCatalyst=0}">
         <Grid RowDefinitions="40,*"
               ColumnDefinitions="{OnPlatform Default=*, UWP=400,MacCatalyst=400}"
               HorizontalOptions="Center"
@@ -41,7 +41,8 @@
                          VerticalOptions="Start">
                 <Label Text="我的"
                        HorizontalOptions="Start"
-                       VerticalOptions="Start"/>
+                       VerticalOptions="Start"
+                       Style="{StaticResource Title}"/>
                 <ActivityIndicator IsRunning="{Binding IsBusy}"
                                    HeightRequest="16"
                                    WidthRequest="16"

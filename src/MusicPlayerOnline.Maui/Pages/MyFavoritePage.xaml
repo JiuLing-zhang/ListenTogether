@@ -19,30 +19,34 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <StackLayout Margin="16">
-        <StackLayout HeightRequest="40"
-                         Orientation="Horizontal"
-                         VerticalOptions="Start">
-            <Label Text="我的歌单"
-                       HorizontalOptions="Start"
-                       VerticalOptions="Start"/>
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                                   HeightRequest="16"
-                                   WidthRequest="16"
-                                   HorizontalOptions="Start"
-                                   VerticalOptions="Start"
-                                   Margin="20,0,20,0"/>
 
-            <Image HeightRequest="20"
-                       WidthRequest="20"
-                       Source="plus.png"
-                       HorizontalOptions="End"
-                       VerticalOptions="Start"
-                       >
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer 
-                             Command="{Binding MyFavoriteAddCommand}"/>
-                </Image.GestureRecognizers>
-            </Image>
+        <StackLayout Margin="0,0,0,20"
+                     Orientation="Horizontal"
+                     VerticalOptions="Start">
+
+            <Label Text="我的歌单"
+                   VerticalTextAlignment="Center"
+                   Style="{StaticResource Title}"/>
+
+            <ActivityIndicator Margin="10,0,0,0"
+                               IsRunning="{Binding IsBusy}"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               VerticalOptions="CenterAndExpand"/>
+            <StackLayout Margin="20,0,0,0"
+                         Orientation="Horizontal"
+                         HorizontalOptions="Start"
+                         VerticalOptions="End">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding MyFavoriteAddCommand}"/>
+                </StackLayout.GestureRecognizers>
+                <Image Source="plus.png"
+                       HeightRequest="20"
+                       WidthRequest="20">                    
+                </Image>
+                <Label Text="新建歌单"
+                       VerticalTextAlignment="Center"/>
+            </StackLayout>
         </StackLayout>
 
         <ScrollView VerticalOptions="FillAndExpand">
@@ -78,8 +82,9 @@
                                 <Frame CornerRadius="10"
                                        HeightRequest="48"
                                        WidthRequest="48">
-                                    <Image 
-                                           Aspect="AspectFill"                                           
+                                    <Image HeightRequest="48"
+                                           WidthRequest="48"
+                                           Aspect="Fill"                                           
                                            Style="{StaticResource MyFavoriteImg}">
                                     </Image>
                                 </Frame>

@@ -5,81 +5,88 @@
              xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="MusicPlayerOnline.Maui.Pages.PlaylistPage"
-             Title="播放列表" >
+             Title="播放列表"
+             BackgroundColor="#F7F7F7">
 
     <StackLayout Margin="16">
-        <StackLayout HeightRequest="40"
+        <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
 
             <Label Text="播放列表"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Start"/>
+                   VerticalTextAlignment="Center"
+                   Style="{StaticResource Title}"/>
 
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               HeightRequest="16"
-                               WidthRequest="16"
-                               HorizontalOptions="Start"
-                               VerticalOptions="Start"
-                               Margin="20,0,20,0"/>
-
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="StartAndExpand"
-                         VerticalOptions="Start"
+            <ActivityIndicator Margin="10,0,0,0"
+                               IsRunning="{Binding IsBusy}"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               VerticalOptions="CenterAndExpand"/>
+            <StackLayout Margin="20,0,0,0"
+                         Orientation="Horizontal"
+                         HorizontalOptions="Start"
+                         VerticalOptions="End"
                          IsVisible="{Binding IsPlaylistNotEmpty}">
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ClearPlaylistCommand}"/>
                 </StackLayout.GestureRecognizers>
                 <Image Source="remove.png"
-                       HeightRequest="20"/>
-                <Label Text="清空"/>
+                       HeightRequest="20"
+                       WidthRequest="20">
+                </Image>
+                <Label Text="清空"
+                       VerticalTextAlignment="Center"/>
             </StackLayout>
-
         </StackLayout>
-        <Label Text="播放列表居然是空的...."
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               IsVisible="{Binding IsPlaylistEmpty}"/>
         <ScrollView VerticalOptions="FillAndExpand">
-            <ListView ItemsSource="{Binding Playlist}">
-                <ListView.ItemTemplate>
+            <CollectionView ItemsSource="{Binding Playlist}"
+                            EmptyView="播放列表居然是空的...."
+                            IsVisible="{Binding IsNotBusy}">
+                <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <ViewCell.ContextActions>
-                                <MenuItem Text="删除"
-                                          Clicked="MenuItem_Clicked"/>
-                            </ViewCell.ContextActions>
-                            <ViewCell.View>
-                                <StackLayout Orientation="Horizontal">
-                                    <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"	
-                                                              CommandParameter="{Binding .}"
-                                                              NumberOfTapsRequired="{OnPlatform Default=1, UWP=2,MacCatalyst=2}"/>
-                                    </StackLayout.GestureRecognizers>
-                                    <Label Text="{Binding MusicName}" 
-                                       MinimumWidthRequest="60" 
-                                       VerticalTextAlignment="Center" 
-                                       LineBreakMode="NoWrap"/>
-                                    <Label Text="{Binding MusicArtist,StringFormat='{} - {0}'}"
-                                       VerticalTextAlignment="Center" 
-                                       LineBreakMode="TailTruncation" />
-                                    <Image Source="plus_math" 
-                                             HorizontalOptions="EndAndExpand"
-                                             Aspect="AspectFill">
-                                        <Image.GestureRecognizers>
-                                            <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"	
-                                             CommandParameter="{Binding .}">
-                                            </TapGestureRecognizer>
-                                        </Image.GestureRecognizers>
-                                    </Image>
-                                </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"
+                                                      CommandParameter="{Binding .}"
+                                                      NumberOfTapsRequired="2"/>
+                            </StackLayout.GestureRecognizers>
 
-                            </ViewCell.View>
-                        </ViewCell>
+                            <StackLayout WidthRequest="50"
+                                         Orientation="Horizontal">
+                                <Image Source="heart.png"
+                                       Aspect="AspectFill"
+                                       WidthRequest="15"
+                                       HeightRequest="15"
+                                       VerticalOptions="Center">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
 
+                                <Image Source="remove.png"
+                                       Margin="5,0,0,0"
+                                       Aspect="AspectFill"
+                                       WidthRequest="15"
+                                       HeightRequest="15"
+                                       VerticalOptions="Center">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
+                                                               CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </StackLayout>
+
+                            <Label Text="{Binding MusicName}"
+                                   VerticalTextAlignment="Center"/>
+                            <Label Text="{Binding MusicArtist,StringFormat='{} - {0}'}"
+                                   VerticalTextAlignment="Center"
+                                   LineBreakMode="TailTruncation"/>
+                        </StackLayout>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </ScrollView>
 
         <controls:Player x:Name="player"

@@ -15,6 +15,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
     public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
     public ICommand MyFavoriteRenameCommand => new Command(RenameMyFavorite);
     public ICommand MyFavoriteRemoveCommand => new Command(MyFavoriteRemove);
+    public ICommand RemoveOneCommand => new Command<MusicViewModel>(RemoveOne);
 
     public MyFavoriteDetailPageViewModel(IServiceProvider services, PlayerService playerService)
     {
@@ -195,5 +196,25 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         };
         await _playlistService.AddToPlaylist(playlist);
         await _playerService.PlayAsync(music);
+    }
+
+    private async void RemoveOne(MusicViewModel selected)
+    {
+        try
+        {
+            IsBusy = true;
+
+            //TODO 实现删除功能
+            await ToastService.Show("删除成功");
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("删除失败，网络出小差了");
+            Logger.Error("我的歌单删除歌曲失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 }

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="MusicPlayerOnline.Maui.Resources.Styles.DefaultTheme">
+
+    <Color x:Key="LightBackground">#F7F7F7</Color>
+    <Color x:Key="LightTitle">#262626</Color>
+    <Color x:Key="LightText">#262626</Color>
+    <Color x:Key="LightTextSecond">#717171</Color>    
+    <Color x:Key="LightPlaceholder">#767676</Color>
+    <Color x:Key="LightActivity">#1279D2</Color>
+    <Color x:Key="LightLyricText">#646464</Color>
+    <Color x:Key="LightLyricHighlight">#0E6ABA</Color>
+    <Color x:Key="LightBorder">#BEBEBE</Color>
+    
+    <Color x:Key="DarkBackground">#242424</Color>
+    <Color x:Key="DarkTitle">#FCF2F7</Color>
+    <Color x:Key="DarkText">#FCF2F7</Color>
+    <Color x:Key="DarkTextSecond">#9D9D9D</Color>
+    <Color x:Key="DarkPlaceholder">#929292</Color>
+    <Color x:Key="DarkActivity">#66AEE3</Color>
+    <Color x:Key="DarkLyricText">#6B6B6B</Color>
+    <Color x:Key="DarkLyricHighlight">#EFEFEF</Color>
+    <Color x:Key="DarkBorder">#7B7B7B</Color>
+
+    <Style TargetType="Label"
+           x:Key="Title">
+        <Setter Property="FontSize"
+                Value="20" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource LightTitle}, Dark={StaticResource DarkTitle}}" />
+    </Style>
+
+    <Style TargetType="Label">
+        <Setter Property="FontSize"
+                Value="15" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
+    </Style>
+
+    <Style TargetType="ActivityIndicator">
+        <Setter Property="Color"
+                Value="{AppThemeBinding Light={StaticResource LightActivity}, Dark={StaticResource DarkActivity}}"/>
+    </Style>
+    <Style TargetType="SearchBar"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Placeholder"
+                Value="搜索"/>
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
+        <Setter Property="PlaceholderColor"
+                Value="{AppThemeBinding Light={StaticResource LightPlaceholder}, Dark={StaticResource DarkPlaceholder}}" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
+    </Style>
+
+
+    <Style TargetType="Border">
+        <Setter Property="Stroke"
+                Value="{AppThemeBinding Light={StaticResource LightBorder}, Dark={StaticResource DarkBorder}}"/>
+    </Style>
+
+</ResourceDictionary>

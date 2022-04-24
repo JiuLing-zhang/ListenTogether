@@ -20,11 +20,4 @@ public partial class PlaylistPage : ContentPage
         player.OnDisappearing();
         base.OnDisappearing();
     }
-    private void MenuItem_Clicked(object sender, EventArgs e)
-    {
-        //TODO 看看正式版发布后能不能通过command绑定
-        MenuItem menuItem = sender as MenuItem;
-        PlaylistViewModel contextItem = menuItem.BindingContext as PlaylistViewModel;
-        vm.RemovePlaylist(contextItem.Id);
-    }
 }

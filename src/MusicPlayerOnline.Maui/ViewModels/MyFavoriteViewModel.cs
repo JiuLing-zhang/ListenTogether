@@ -33,7 +33,8 @@ namespace MusicPlayerOnline.Maui.ViewModels
             set
             {
                 _imageUrl = value;
-                OnPropertyChanged();
+                OnPropertyChanged("ImageUrl");
+                OnPropertyChanged("IsUseDefaultImage");
             }
         }
          

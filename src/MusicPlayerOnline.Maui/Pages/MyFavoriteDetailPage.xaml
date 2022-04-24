@@ -7,89 +7,92 @@
 
     <StackLayout Margin="16">
 
-        <StackLayout HeightRequest="40"
-                     Orientation="Horizontal">
-            <Label Text="{Binding CurrentMyFavorite.Name,StringFormat='{}我的歌单 - {0}'}"
+        <StackLayout Margin="0,0,0,20"
+                     Orientation="Horizontal"
+                     VerticalOptions="Start">
+
+            <Label Text="我的歌单"
+                   VerticalTextAlignment="Center"
+                   Style="{StaticResource Title}"/>
+
+            <Label Text="{Binding CurrentMyFavorite.Name}"
+                   Margin="5,0,0,0"
                    HorizontalOptions="Start"
                    VerticalTextAlignment="Start"/>
 
-            <ActivityIndicator IsRunning="{Binding IsBusy}"
-                               HeightRequest="16"
-                               WidthRequest="16"
-                               HorizontalOptions="Start"
-                               VerticalOptions="Start"
-                               Margin="20,0,20,0"/>
+            <ActivityIndicator Margin="10,0,0,0"
+                               IsRunning="{Binding IsBusy}"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               VerticalOptions="CenterAndExpand"/>
+            <StackLayout Margin="20,0,0,0"
+                         Orientation="Horizontal"
+                         HorizontalOptions="Start"
+                         VerticalOptions="End"
+                         IsVisible="{Binding IsPlaylistNotEmpty}">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding MyFavoriteRenameCommand}"/>
+                </StackLayout.GestureRecognizers>
+                <Image Source="remove.png"
+                       HeightRequest="20"
+                       WidthRequest="20">
+                </Image>
+                <Label Text="重命名"
+                       VerticalTextAlignment="Center"/>
+            </StackLayout>
 
-            <StackLayout Orientation="Horizontal"
-                         HorizontalOptions="StartAndExpand"
-                         VerticalOptions="Start">
-                <HorizontalStackLayout Margin="0,0,10,0">
-                    <HorizontalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding MyFavoriteRenameCommand}"></TapGestureRecognizer>
-                    </HorizontalStackLayout.GestureRecognizers>
-                    <Image Source="edit.png"
-                       HeightRequest="20"/>
-                    <Label Text="重命名"/>
-                </HorizontalStackLayout>
-
-                <HorizontalStackLayout Margin="0,0,10,0">
-                    <HorizontalStackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding MyFavoriteRemoveCommand}"></TapGestureRecognizer>
-                    </HorizontalStackLayout.GestureRecognizers>
-                    <Image Source="remove.png"
-                       HeightRequest="20"/>
-                    <Label Text="删除歌单"/>
-                </HorizontalStackLayout>
+            <StackLayout Margin="20,0,0,0"
+                         Orientation="Horizontal"
+                         HorizontalOptions="Start"
+                         VerticalOptions="End"
+                         IsVisible="{Binding IsPlaylistNotEmpty}">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding MyFavoriteRemoveCommand}"/>
+                </StackLayout.GestureRecognizers>
+                <Image Source="remove.png"
+                       HeightRequest="20"
+                       WidthRequest="20">
+                </Image>
+                <Label Text="删除歌单"
+                       VerticalTextAlignment="Center"/>
             </StackLayout>
         </StackLayout>
 
-        <Label Text="歌单居然是空的...."
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               IsVisible="{Binding IsMyFavoriteMusicsEmpty}"/>
-
-        <ListView ItemsSource="{Binding MyFavoriteMusics}">
-            <ListView.ItemTemplate>
+        <CollectionView ItemsSource="{Binding MyFavoriteMusics}"
+                        EmptyView="歌单居然是空的...."
+                        IsVisible="{Binding IsNotBusy}">
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <ViewCell.ContextActions>
-                            <MenuItem Text="删除"/>
-                        </ViewCell.ContextActions>
-                        <ViewCell.View>
-                            <Grid RowDefinitions="auto,auto"
-                          ColumnDefinitions="auto,auto">
 
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"	
-                                                  CommandParameter="{Binding}"/>
-                                </Grid.GestureRecognizers>
+                    <StackLayout Orientation="Horizontal">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"
+                                                      CommandParameter="{Binding .}"
+                                                      NumberOfTapsRequired="2"/>
+                        </StackLayout.GestureRecognizers>
 
-                                <Label Text="{Binding Seq}"
-                               Grid.Row="0"
-                               Grid.RowSpan="2"
-                               Grid.Column="0"
-                               Margin="0,0,10,0"
-                               VerticalTextAlignment="Center"/>
+                        <StackLayout WidthRequest="50"
+                                         Orientation="Horizontal">
+                            <Image Source="remove.png"
+                                       Aspect="AspectFill"
+                                       WidthRequest="15"
+                                       HeightRequest="15"
+                                       VerticalOptions="Center">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
 
-                                <Label Text="{Binding Name}"
-                               Grid.Row="0"
-                               Grid.Column="1"
-                               LineBreakMode="TailTruncation"/>
-
-                                <Label Grid.Row="1"
-                               Grid.Column="1"
-                               LineBreakMode="TailTruncation">
-                                    <MultiBinding StringFormat="{}{0} - {1}">
-                                        <Binding Path="Artist" />
-                                        <Binding Path="Album" />
-                                    </MultiBinding>
-                                </Label>
-                            </Grid>
-                        </ViewCell.View>
-
-                    </ViewCell>
+                        <Label Text="{Binding MusicName}"
+                                   VerticalTextAlignment="Center"/>
+                        <Label Text="{Binding MusicArtist,StringFormat='{} - {0}'}"
+                                   VerticalTextAlignment="Center"
+                                   LineBreakMode="TailTruncation"/>
+                    </StackLayout>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </StackLayout>
 </ContentPage>

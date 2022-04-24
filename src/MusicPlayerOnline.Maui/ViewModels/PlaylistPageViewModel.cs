@@ -10,9 +10,10 @@ public class PlaylistPageViewModel : ViewModelBase
     private IPlaylistService _playlistService;
     private IMyFavoriteService _myFavoriteService;
     private readonly PlayerService _playerService;
-    public ICommand AddToMyFavoriteCommand => new Command<MusicViewModel>(AddToMyFavorite);
-    public ICommand PlayMusicCommand => new Command<MusicViewModel>(PlayMusic);
+    public ICommand AddToMyFavoriteCommand => new Command<PlaylistViewModel>(AddToMyFavorite);
+    public ICommand PlayMusicCommand => new Command<PlaylistViewModel>(PlayMusic);
     public ICommand ClearPlaylistCommand => new Command(ClearPlaylist);
+    public ICommand RemoveOneCommand => new Command<PlaylistViewModel>(RemoveOne);
 
     public PlaylistPageViewModel(IServiceProvider services, PlayerService playerService)
     {
@@ -108,9 +109,9 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
-    private async void PlayMusic(MusicViewModel selectedMusic)
+    private async void PlayMusic(PlaylistViewModel selected)
     {
-        var music = await _musicService.GetOneAsync(selectedMusic.Id);
+        var music = await _musicService.GetOneAsync(selected.MusicId);
         if (music == null)
         {
             await ToastService.Show("获取歌曲信息失败");
@@ -120,13 +121,13 @@ public class PlaylistPageViewModel : ViewModelBase
         await _playerService.PlayAsync(music);
     }
 
-    private async void AddToMyFavorite(MusicViewModel selectMusic)
+    private async void AddToMyFavorite(PlaylistViewModel selected)
     {
         try
         {
             IsBusy = true;
 
-            var music = await _musicService.GetOneAsync(selectMusic.Id);
+            var music = await _musicService.GetOneAsync(selected.MusicId);
             if (music == null)
             {
                 await ToastService.Show("歌曲不存在");
@@ -204,14 +205,28 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
-    public async void RemovePlaylist(int id)
+    private async void RemoveOne(PlaylistViewModel selected)
     {
-        if (!await _playlistService.RemoveAsync(id))
+        try
         {
-            await ToastService.Show("删除失败");
-            return;
+            IsBusy = true;
+            if (!await _playlistService.RemoveAsync(selected.Id))
+            {
+                await ToastService.Show("删除失败");
+                return;
+            }
+            await ToastService.Show("删除成功");
+            await GetPlaylist();
         }
-        await GetPlaylist();
+        catch (Exception ex)
+        {
+            await ToastService.Show("删除失败，网络出小差了");
+            Logger.Error("播放列表删除歌曲失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     private async void ClearPlaylist()

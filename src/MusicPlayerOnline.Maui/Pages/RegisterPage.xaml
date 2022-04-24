@@ -4,14 +4,15 @@
              x:Class="MusicPlayerOnline.Maui.RegisterPage"
              Title="注册">
 
-    <Grid Margin="16"
+    <Grid Margin="{OnPlatform Default=16, UWP=0,MacCatalyst=0}"
           ColumnDefinitions="{OnPlatform Default=*, UWP=400,MacCatalyst=400}">
         <StackLayout 
                      HeightRequest="40"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
             <Label Text="新用户注册"
-                   VerticalOptions="Start"/>
+                   VerticalOptions="Start"
+                   Style="{StaticResource Title}"/>
 
             <ActivityIndicator IsRunning="{Binding IsBusy}"
                                HeightRequest="16"

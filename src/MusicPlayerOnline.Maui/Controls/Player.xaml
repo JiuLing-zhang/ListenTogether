@@ -22,12 +22,16 @@
                                    WidthRequest="60"
                                    ></Image>
                             <StackLayout Margin="10,0,0,0">
-                                <Label x:Name="LblName"
-                                       VerticalOptions="Start" 
-                                       Margin="0,15,0,0"></Label>
-                                <Label x:Name="LblAuthor" 
-                                       VerticalOptions="EndAndExpand" 
-                                       Margin="0,0,0,15"></Label>
+                                <Label x:Name="LblMusicName"
+                                       Margin="0,15,0,0"
+                                       VerticalOptions="Start"
+                                       FontSize="15"
+                                       TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"/>
+                                <Label x:Name="LblMusicAuthor"
+                                       Margin="0,0,0,15"
+                                       VerticalOptions="EndAndExpand"
+                                       FontSize="13"
+                                       TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"/>
                             </StackLayout>
                         </StackLayout>
                         <StackLayout HorizontalOptions="CenterAndExpand" 
@@ -141,10 +145,10 @@
                                      Orientation="Horizontal">
                             <Image WidthRequest="30"
                                    Source="{Binding Source, Source={x:Reference ImgCurrentMusic}}"/>
-                            <Label Text="{Binding Text, Source={x:Reference LblName}}"
+                            <Label Text="{Binding Text, Source={x:Reference LblMusicName}}"
                                        VerticalOptions="Start" 
                                        Margin="0,15,0,0"/>
-                            <Label Text="{Binding Text, Source={x:Reference LblAuthor}}"
+                            <Label Text="{Binding Text, Source={x:Reference LblMusicAuthor}}"
                                        VerticalOptions="EndAndExpand" 
                                        Margin="0,0,0,15"/>
                         </StackLayout>

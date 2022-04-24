@@ -10,8 +10,9 @@
                          Orientation="Horizontal"
                          VerticalOptions="Start">
             <Label Text="日志"
-                       HorizontalOptions="Start"
-                       VerticalOptions="Start"/>
+                   HorizontalOptions="Start"
+                   VerticalOptions="Start"
+                   Style="{StaticResource Title}"/>
             <ActivityIndicator IsRunning="{Binding IsBusy}"
                                    HeightRequest="16"
                                    WidthRequest="16"

@@ -148,8 +148,8 @@ public partial class Player : ContentView
     private void UpdateMusicInfo()
     {
         ImgCurrentMusic.Source = _playerService.CurrentMusic.ImageUrl;
-        LblName.Text = _playerService.CurrentMusic.Name;
-        LblAuthor.Text = $"{_playerService.CurrentMusic.Artist} - {_playerService.CurrentMusic.Album}";
+        LblMusicName.Text = _playerService.CurrentMusic.Name;
+        LblMusicAuthor.Text = $"{_playerService.CurrentMusic.Artist} - {_playerService.CurrentMusic.Album}";
 
         var tsDuration = TimeSpan.FromMilliseconds(_playerService.DurationMillisecond);
         LblDurationMilliseconds.Text = $"{tsDuration.Minutes:D2}:{tsDuration.Seconds:D2}";

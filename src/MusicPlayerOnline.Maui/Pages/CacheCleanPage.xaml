@@ -21,7 +21,8 @@
                      VerticalOptions="Start">
             <Label Text="缓存清理"
                    HorizontalOptions="Start"
-                   VerticalOptions="Start"/>
+                   VerticalOptions="Start"
+                   Style="{StaticResource Title}"/>
         </StackLayout>
 
         <ScrollView VerticalOptions="FillAndExpand">
