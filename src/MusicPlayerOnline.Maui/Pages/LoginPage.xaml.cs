@@ -1,8 +1,8 @@
 namespace MusicPlayerOnline.Maui.Pages;
 
-public partial class RegisterPage : ContentPage
+public partial class LoginPage : ContentPage
 {
-    public RegisterPage(RegisterPageViewModel vm)
+    public LoginPage(LoginPageViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;

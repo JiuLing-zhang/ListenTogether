@@ -64,5 +64,12 @@ namespace MusicPlayerOnline.Api.Controllers
             var response = await _myFavoriteService.AddMusicToMyFavorite(UserId, id, music);
             return Ok(response);
         }
+
+        [HttpPost("remove-detail/{id}")]
+        public async Task<IActionResult> RemoveDetailAsync(int id)
+        {
+            var response = await _myFavoriteService.RemoveDetailAsync(UserId, id);
+            return Ok(response);
+        }
     }
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MusicPlayerOnline.Maui.CacheCleanPage"
-             Title="缓存清理">
+             x:Class="MusicPlayerOnline.Maui.Pages.CacheCleanPage"
+             Title="缓存清理"
+             BackgroundColor="#F7F7F7">
 
     <ContentPage.Resources>
         <Style x:Key="IsEnabledClear" TargetType="Button">

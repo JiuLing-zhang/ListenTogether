@@ -11,6 +11,7 @@ public static class PagesExtensions
         builder.Services.AddSingleton<SettingsPage>();
 
         builder.Services.AddTransient<MyFavoriteDetailPage>();
+        builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<RegisterPage>();
         builder.Services.AddSingleton<CacheCleanPage>();
         builder.Services.AddSingleton<LogPage>();

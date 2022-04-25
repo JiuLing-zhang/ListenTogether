@@ -6,11 +6,7 @@ namespace MusicPlayerOnline.Model
     {
         public int Id { get; set; }
         public int MyFavoriteId { get; set; }
-
-        /// <summary>
-        /// 平台
-        /// </summary>
-        public PlatformEnum Platform { get; set; }
+        public string PlatformName { get; set; } = null!;
         public string MusicId { get; set; } = null!;
         /// <summary>
         /// 歌曲名称

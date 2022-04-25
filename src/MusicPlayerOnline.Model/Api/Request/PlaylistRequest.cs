@@ -9,6 +9,7 @@
         /// 歌曲ID
         /// </summary>
         public string MusicId { get; set; } = null!;
+        public string PlatformName { get; set; } = null!;
         /// <summary>
         /// 歌曲名称
         /// </summary>
@@ -17,5 +18,6 @@
         /// 歌手名称
         /// </summary>
         public string MusicArtist { get; set; } = null!;
+        public string MusicAlbum { get; set; } = null!;
     }
 }

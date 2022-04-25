@@ -11,9 +11,11 @@ public class PlaylistApiRepository : IPlaylistRepository
     {
         var requestPlaylist = new PlaylistRequest()
         {
+            PlatformName = playlist.PlatformName,
             MusicId = playlist.MusicId,
             MusicName = playlist.MusicName,
-            MusicArtist = playlist.MusicArtist
+            MusicArtist = playlist.MusicArtist,
+            MusicAlbum = playlist.MusicAlbum
         };
 
         string content = requestPlaylist.ToJson();
@@ -40,9 +42,11 @@ public class PlaylistApiRepository : IPlaylistRepository
         return obj.Select(x => new Playlist()
         {
             Id = x.Id,
+            PlatformName = x.PlatformName,
             MusicId = x.MusicId,
             MusicArtist = x.MusicArtist,
-            MusicName = x.MusicName
+            MusicName = x.MusicName,
+            MusicAlbum = x.MusicAlbum
         }).ToList();
     }
 

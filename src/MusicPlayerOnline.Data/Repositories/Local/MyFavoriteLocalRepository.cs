@@ -1,7 +1,6 @@
 ﻿using MusicPlayerOnline.Data.Entities;
 using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Data.Repositories.Local;
 public class MyFavoriteLocalRepository : IMyFavoriteRepository
@@ -104,7 +103,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
                    {
                        favoriteDetail = new MyFavoriteDetailEntity()
                        {
-                           Platform = (int)music.Platform,
+                           PlatformName = music.PlatformName,
                            MyFavoriteId = id,
                            MusicName = music.Name,
                            MusicId = music.Id,
@@ -149,12 +148,18 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         {
             Id = x.Id,
             MyFavoriteId = x.MyFavoriteId,
-            Platform = (PlatformEnum)x.Platform,
+            PlatformName = x.PlatformName,
             MusicId = x.MusicId,
             MusicName = x.MusicName,
             MusicAlbum = x.MusicAlbum,
             MusicArtist = x.MusicArtist,
         }).ToList();
         return detail;
+    }
+
+    public async Task<bool> RemoveDetailAsync(int id)
+    {
+        await DatabaseProvide.DatabaseAsync.DeleteAsync<MyFavoriteDetailEntity>(id);
+        return true;
     }
 }

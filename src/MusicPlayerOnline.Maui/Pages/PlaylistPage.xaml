@@ -51,7 +51,7 @@
                                                       NumberOfTapsRequired="2"/>
                             </StackLayout.GestureRecognizers>
 
-                            <StackLayout WidthRequest="50"
+                            <StackLayout WidthRequest="60"
                                          Orientation="Horizontal">
                                 <Image Source="heart.png"
                                        Aspect="AspectFill"
@@ -78,11 +78,23 @@
                                 </Image>
                             </StackLayout>
 
-                            <Label Text="{Binding MusicName}"
-                                   VerticalTextAlignment="Center"/>
-                            <Label Text="{Binding MusicArtist,StringFormat='{} - {0}'}"
+                            <Border Padding="4,2,4,2"
+                                    StrokeThickness="1"
+                                    HorizontalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="5" />
+                                </Border.StrokeShape>
+                                <Label Text="{Binding PlatformName}"/>
+                            </Border>
+
+                            <Label Margin="5,0,0,0"
                                    VerticalTextAlignment="Center"
-                                   LineBreakMode="TailTruncation"/>
+                                   LineBreakMode="TailTruncation">
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="MusicName" />
+                                    <Binding Path="MusicArtist" />
+                                </MultiBinding>
+                            </Label>
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

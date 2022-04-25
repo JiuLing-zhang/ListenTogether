@@ -4,190 +4,148 @@
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
              xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
              x:Class="MusicPlayerOnline.Maui.Pages.SettingsPage"
-             Title="设置">
+             Title="设置"
+             BackgroundColor="#F7F7F7">
 
-    <ContentPage.Resources>
-        <Style x:Key="LoginBlock" TargetType="StackLayout">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsLoginOk}" Value="true" TargetType="StackLayout">
-                    <Setter Property="IsVisible" Value="false"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsLoginOk}" Value="false" TargetType="StackLayout">
-                    <Setter Property="IsVisible" Value="true"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+    <StackLayout Margin="16"
+                 MaximumWidthRequest="{OnPlatform  UWP=400,MacCatalyst=400}">
 
-        <Style x:Key="UserInfoBlock" TargetType="StackLayout">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsLoginOk}" Value="true" TargetType="StackLayout">
-                    <Setter Property="IsVisible" Value="true"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding IsLoginOk}" Value="false" TargetType="StackLayout">
-                    <Setter Property="IsVisible" Value="false"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </ContentPage.Resources>
+        <StackLayout Margin="0,0,0,20"
+                     Orientation="Horizontal"
+                     VerticalOptions="Start">
+            <Label Text="我的"
+                   VerticalTextAlignment="Center"
+                   Style="{StaticResource Title}"/>
+            <ActivityIndicator Margin="10,0,0,0"
+                               IsRunning="{Binding IsBusy}"
+                               HeightRequest="20"
+                               WidthRequest="20"
+                               VerticalOptions="CenterAndExpand"/>
+        </StackLayout>
 
-    <StackLayout Margin="16">
-        <Grid RowDefinitions="40,*"
-              ColumnDefinitions="{OnPlatform Default=*, UWP=400,MacCatalyst=400}"
-              HorizontalOptions="Center"
-              VerticalOptions="FillAndExpand">
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
 
-            <StackLayout Grid.Row="0"
-                         Orientation="Horizontal"
-                         VerticalOptions="Start">
-                <Label Text="我的"
-                       HorizontalOptions="Start"
-                       VerticalOptions="Start"
-                       Style="{StaticResource Title}"/>
-                <ActivityIndicator IsRunning="{Binding IsBusy}"
-                                   HeightRequest="16"
-                                   WidthRequest="16"
-                                   HorizontalOptions="Start"
-                                   VerticalOptions="Start"
-                                   Margin="20,0,20,0"/>
-            </StackLayout>
+                <!--用户模块-->
+                <!--未登录-->
+                <StackLayout VerticalOptions="Start"
+                             IsVisible="{Binding UserInfo, Converter={StaticResource IsEqualConverter}}">
+                    <Button Text="登录/注册 >"
+                            WidthRequest="100"
+                            BackgroundColor="Transparent"
+                            BorderWidth="0"
+                            HorizontalOptions="StartAndExpand"
+                            Command="{Binding GoToLoginCommand}"/>
+                </StackLayout>
+                <!--已登录-->
+                <StackLayout VerticalOptions="Start"
+                             Orientation="Horizontal"
+                             IsVisible="{Binding UserInfo, Converter={StaticResource IsNotEqualConverter}}">
+                    <Image Source="{Binding UserInfo.Avatar}"
+                           Aspect="AspectFill"
+                           WidthRequest="64"
+                           HeightRequest="64"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"/>
 
-            <ScrollView Grid.Row="1"
-                        VerticalOptions="FillAndExpand">
-                <StackLayout>
-
-                    <!--用户模块-->
-                    <StackLayout VerticalOptions="Start">
-                        <StackLayout Style="{DynamicResource LoginBlock}">
-                            <Entry Text="{Binding LoginUsername}"
-                       Placeholder="请输入用户名"
-                       Margin="0,0,0,10"/>
-                            <Entry Text="{Binding LoginPassword}"
-                       Placeholder="密码"
-                       IsPassword="True"
-                       Margin="0,0,0,10"/>
-
-                            <Button Text="登录"
-                                Margin="0,10,0,0"
-                                IsEnabled="{Binding IsNotBusy}"
-                                Command="{Binding LoginCommand}"/>
-                            <Button Text="注册"
-                                Margin="0,0,0,0"
-                                Command="{Binding GoToRegisterCommand}"/>
-
-                        </StackLayout>
-                        <StackLayout Style="{DynamicResource UserInfoBlock}"
-                                 Margin="0,0,0,20">
-                            <Grid RowDefinitions="auto,auto"
-                              ColumnDefinitions="auto,*">
-                                <Image Grid.Row="0"
-                                   Grid.Column="0"
-                                   Grid.RowSpan="2"
-                                   Margin="0,0,10,0"
-                                   Source="{Binding UserInfo.Avatar}"
-                                   Aspect="AspectFill"
-                                   WidthRequest="64"
-                                   HeightRequest="64"/>
-                                <Label Grid.Row="0"
-                                   Grid.Column="1"
-                                   Margin="0,5,0,0"
-                                   Text="{Binding UserInfo.Nickname}"
-                                   VerticalTextAlignment="Start"/>
-                                <Label Grid.Row="1"
-                                   Grid.Column="1"
-                                   Margin="0,0,0,5"
-                                   Text="{Binding UserInfo.Username,StringFormat='{}用户名：{0}'}"
-                                   VerticalTextAlignment="End"/>
-                            </Grid>
-                            <Button Text="退出账号" 
-                                Margin="0,10,0,0"
-                                IsEnabled="{Binding IsNotBusy}"
-                                Command="{Binding LogoutCommand}"/>
-                        </StackLayout>
-                    </StackLayout>
-
-                    <!--设置模块-->
-                    <StackLayout>
-                        <Label Text="设置"
-                               Margin="0,0,0,20"/>
-
-                        <!-- 常规设置 -->
-                        <Label Text="常规" 
-                               FontAttributes="Bold"/>
-
-                        <controls:SwitchEx Text="启动时检查更新"
-                                           IsToggled="{Binding IsAutoCheckUpdate}">
-                        </controls:SwitchEx>
-                        <controls:SwitchEx Text="深色主题"
-                                           IsToggled="{Binding IsDarkMode}">
-                        </controls:SwitchEx>
-
-                        <!-- 搜索设置 -->
-                        <Label Text="搜索" 
-                               FontAttributes="Bold"/>
-                        <controls:SwitchEx Text="网易云音乐"
-                                           IsToggled="{Binding IsEnableNetEase}">
-                        </controls:SwitchEx>
-                        <controls:SwitchEx Text="酷狗音乐"
-                                           IsToggled="{Binding IsEnableKuGou}">
-                        </controls:SwitchEx>
-                        <controls:SwitchEx Text="咪咕音乐"
-                                           IsToggled="{Binding IsEnableMiGu}">
-                        </controls:SwitchEx>
-                        <controls:SwitchEx Text="隐藏小于1分钟的歌曲"
-                                           IsToggled="{Binding IsHideShortMusic}">
-                        </controls:SwitchEx>
-
-                        <!-- 播放设置 -->
-                        <Label Text="播放" 
-                               FontAttributes="Bold"/>
-
-                        <controls:SwitchEx Text="仅在WIFI下播放未缓存的歌曲"
-                                           IsToggled="{Binding IsWifiPlayOnly}">
-                        </controls:SwitchEx>
-                        <controls:SwitchEx Text="播放失败时自动跳到下一首"
-                                           IsToggled="{Binding IsAutoNextWhenFailed}">
-                        </controls:SwitchEx>
-                        <controls:SwitchEx Text="播放我的歌单前清空播放列表"
-                                           IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}">
-                        </controls:SwitchEx>
-                    </StackLayout>
-
-                    <!--其它模块-->
-                    <StackLayout>
-                        <Button Text="日志管理"
-                                Margin="0,0,0,5"
-                                Command="{Binding OpenLogCommand}"/>
-                        <Button Text="歌曲缓存"
-                                Command="{Binding ClearCacheCommand}"/>
-                        <BoxView Margin="0,10,0,10"
-                                 HeightRequest="1"/>
-
-                        <!-- 关于 -->
-                        <StackLayout>
-                            <Label Text="在线音乐助手" TextColor="#FFFFFF" FontSize="18" HorizontalOptions="CenterAndExpand"/>
-                            <Label Text="{Binding VersionName, StringFormat='{}版本：{0}'}" TextColor="#FFFFFF" FontSize="14" HorizontalOptions="CenterAndExpand"/>
-
-                            <Label Text="本软件基于GPL-3.0协议，开源、免费" TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand" Margin="0,10,0,0"/>
-                            <Label Text="作者：九零" TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand"/>
-                            <Label TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="GitHub"
-                                      TextColor="Blue"
-                                      TextDecorations="Underline">
-                                            <Span.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
-                                                              CommandParameter="https://github.com/JiuLing-zhang/MusicPlayerOnline" />
-                                            </Span.GestureRecognizers>
-                                        </Span>
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-                        </StackLayout>
+                    <StackLayout Margin="10,0,0,0"
+                                 HeightRequest="64">
+                        <Label Margin="0,5,0,0"
+                               Text="{Binding UserInfo.Nickname}"
+                               VerticalOptions="Start"/>
+                        <Label Margin="0,0,0,5"
+                               Text="{Binding UserInfo.Username,StringFormat='{}用户名：{0}'}"
+                               VerticalOptions="EndAndExpand"/>
                     </StackLayout>
                 </StackLayout>
-            </ScrollView>
-        </Grid>
+
+                <!--设置模块-->
+                <StackLayout Margin="0,20,0,0">
+                    <Label Text="设置"
+                           Margin="0,0,0,20"/>
+
+                    <!-- 常规设置 -->
+                    <Label Text="常规" 
+                           FontAttributes="Bold"/>
+
+                    <controls:SwitchEx Text="启动时检查更新"
+                                       IsToggled="{Binding IsAutoCheckUpdate}">
+                    </controls:SwitchEx>
+                    <controls:SwitchEx Text="深色主题"
+                                       IsToggled="{Binding IsDarkMode}">
+                    </controls:SwitchEx>
+
+                    <!-- 搜索设置 -->
+                    <Label Text="搜索" 
+                           FontAttributes="Bold"/>
+                    <controls:SwitchEx Text="网易云音乐"
+                                       IsToggled="{Binding IsEnableNetEase}">
+                    </controls:SwitchEx>
+                    <controls:SwitchEx Text="酷狗音乐"
+                                       IsToggled="{Binding IsEnableKuGou}">
+                    </controls:SwitchEx>
+                    <controls:SwitchEx Text="咪咕音乐"
+                                       IsToggled="{Binding IsEnableMiGu}">
+                    </controls:SwitchEx>
+                    <controls:SwitchEx Text="隐藏小于1分钟的歌曲"
+                                       IsToggled="{Binding IsHideShortMusic}">
+                    </controls:SwitchEx>
+
+                    <!-- 播放设置 -->
+                    <Label Text="播放" 
+                           FontAttributes="Bold"/>
+
+                    <controls:SwitchEx Text="仅在WIFI下播放未缓存的歌曲"
+                                       IsToggled="{Binding IsWifiPlayOnly}">
+                    </controls:SwitchEx>
+                    <controls:SwitchEx Text="播放失败时自动跳到下一首"
+                                       IsToggled="{Binding IsAutoNextWhenFailed}">
+                    </controls:SwitchEx>
+                    <controls:SwitchEx Text="播放我的歌单前清空播放列表"
+                                       IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}">
+                    </controls:SwitchEx>
+                </StackLayout>
+
+                <!--其它模块-->
+                <StackLayout Margin="0,20,0,0">
+                    <Button Text="日志管理"
+                            Margin="0,0,0,5"
+                            Command="{Binding GoToLogCommand}"/>
+                    <Button Text="歌曲缓存"
+                            Command="{Binding GoToCacheCleanCommand}"/>
+                    <Button Text="退出账号" 
+                            Margin="0,10,0,0"
+                            IsVisible="{Binding UserInfo, Converter={StaticResource IsNotEqualConverter}}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Command="{Binding LogoutCommand}"/>
+                    <BoxView Margin="0,10,0,10"
+                             HeightRequest="1"/>
+
+                    <!-- 关于 -->
+                    <StackLayout>
+                        <Label Text="在线音乐助手" TextColor="#FFFFFF" FontSize="18" HorizontalOptions="CenterAndExpand"/>
+                        <Label Text="{Binding VersionName, StringFormat='{}版本：{0}'}" TextColor="#FFFFFF" FontSize="14" HorizontalOptions="CenterAndExpand"/>
+
+                        <Label Text="本软件基于GPL-3.0协议，开源、免费" TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand" Margin="0,10,0,0"/>
+                        <Label Text="作者：九零" TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand"/>
+                        <Label TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="GitHub"
+                                      TextColor="Blue"
+                                      TextDecorations="Underline">
+                                        <Span.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
+                                                              CommandParameter="https://github.com/JiuLing-zhang/MusicPlayerOnline" />
+                                        </Span.GestureRecognizers>
+                                    </Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
 
         <controls:Player x:Name="player"
                          Margin="0,20,0,0"

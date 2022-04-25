@@ -105,20 +105,6 @@ public class KuGouMusicProvider : IMusicProvider
             return null;
         }
 
-        args = KuGouUtils.GetMusicLyricData(extendData.Hash, extendData.AlbumId);
-        url = $"{UrlBase.KuGou.Lyric}?{args}";
-        json = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
-
-        var lyricResult = json.ToObject<HttpResultBase<MusicLyricHttpResult>>();
-        if (lyricResult == null)
-        {
-            return null;
-        }
-        if (lyricResult.status != 1 || lyricResult.error_code != 0)
-        {
-            return null;
-        }
-
         return new Music()
         {
             Id = sourceMusic.Id,
@@ -131,7 +117,7 @@ public class KuGouMusicProvider : IMusicProvider
             Album = sourceMusic.Album,
             ImageUrl = httpResult.data.img,
             PlayUrl = httpResult.data.play_url,
-            Lyric = lyricResult.data.lyrics
+            Lyric = httpResult.data.lyrics
         };
     }
 

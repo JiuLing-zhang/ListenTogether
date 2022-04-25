@@ -1,4 +1,4 @@
-namespace MusicPlayerOnline.Maui;
+namespace MusicPlayerOnline.Maui.Pages;
 
 public partial class CacheCleanPage : ContentPage
 {

@@ -13,6 +13,7 @@ public static class ViewModelExtensions
         builder.Services.AddSingleton<ShellViewModel>();
         builder.Services.AddSingleton<SettingPageViewModel>();
         builder.Services.AddSingleton<PlayingPageViewModel>();
+        builder.Services.AddSingleton<LoginPageViewModel>();
         builder.Services.AddSingleton<RegisterPageViewModel>();
         builder.Services.AddSingleton<CacheCleanViewModel>();
         builder.Services.AddSingleton<LogPageViewModel>();

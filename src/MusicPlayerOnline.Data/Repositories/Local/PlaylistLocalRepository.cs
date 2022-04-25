@@ -13,9 +13,11 @@ public class PlaylistLocalRepository : IPlaylistRepository
         {
             playlists = new PlaylistEntity()
             {
+                PlatformName = playlist.PlatformName,
                 MusicId = playlist.MusicId,
                 MusicArtist = playlist.MusicArtist,
-                MusicName = playlist.MusicName
+                MusicName = playlist.MusicName,
+                MusicAlbum = playlist.MusicAlbum
             };
             count = await DatabaseProvide.DatabaseAsync.InsertAsync(playlists);
         }
@@ -40,9 +42,11 @@ public class PlaylistLocalRepository : IPlaylistRepository
         return playlists?.Select(x => new Playlist()
         {
             Id = x.Id,
+            PlatformName = x.PlatformName,
             MusicId = x.MusicId,
             MusicName = x.MusicName,
-            MusicArtist = x.MusicArtist
+            MusicArtist = x.MusicArtist,
+            MusicAlbum = x.MusicAlbum
         }).ToList();
     }
 

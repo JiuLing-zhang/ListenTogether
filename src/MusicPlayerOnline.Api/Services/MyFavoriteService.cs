@@ -6,6 +6,7 @@ using MusicPlayerOnline.Api.Interfaces;
 using MusicPlayerOnline.Model.Api;
 using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
+using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Api.Services;
 public class MyFavoriteService : IMyFavoriteService
@@ -15,7 +16,6 @@ public class MyFavoriteService : IMyFavoriteService
     {
         _context = dataContext;
     }
-
 
     public async Task<Result<MyFavoriteResponse>> GetOneAsync(int userId, int id)
     {
@@ -124,7 +124,7 @@ public class MyFavoriteService : IMyFavoriteService
         {
             favoriteDetail = new MyFavoriteDetailEntity()
             {
-                Platform = (int)music.Platform,
+                PlatformName = ((PlatformEnum)Enum.ToObject(typeof(PlatformEnum), music.Platform)).GetDescription(),
                 MyFavoriteId = id,
                 MusicName = music.Name,
                 MusicId = music.Id,
@@ -169,12 +169,32 @@ public class MyFavoriteService : IMyFavoriteService
         {
             Id = x.Id,
             MyFavoriteId = x.MyFavoriteId,
-            Platform = x.Platform,
+            PlatformName = x.PlatformName,
             MusicId = x.MusicId,
             MusicName = x.MusicName,
             MusicAlbum = x.MusicAlbum,
             MusicArtist = x.MusicArtist,
         }).ToList();
         return detail;
+    }
+
+    public async Task<Result> RemoveDetailAsync(int userId, int id)
+    {
+        var myFavorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.Details.Any(o => o.Id == id) && x.UserBaseId == userId);
+        if (myFavorite == null)
+        {
+            return new Result(1, "数据不存在");
+        }
+
+        var myFavoriteDetail = myFavorite.Details.First(x => x.Id== id);
+        myFavorite.Details.Remove(myFavoriteDetail);
+        _context.MyFavorites.Update(myFavorite);
+
+        var count = await _context.SaveChangesAsync();
+        if (count == 0)
+        {
+            return new Result(2, "删除失败");
+        }
+        return new Result(0, "删除成功");
     }
 }

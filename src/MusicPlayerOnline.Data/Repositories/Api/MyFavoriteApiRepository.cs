@@ -1,15 +1,12 @@
-﻿using System.Text.Json;
-using MusicPlayerOnline.Data.Interfaces;
+﻿using MusicPlayerOnline.Data.Interfaces;
 using MusicPlayerOnline.Model;
 using MusicPlayerOnline.Model.Api;
 using MusicPlayerOnline.Model.Api.Request;
 using MusicPlayerOnline.Model.Api.Response;
-using MusicPlayerOnline.Model.Enums;
 
 namespace MusicPlayerOnline.Data.Repositories.Api;
 public class MyFavoriteApiRepository : IMyFavoriteRepository
 {
-
     public async Task<bool> NameExist(string myFavoriteName)
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.NameExist, myFavoriteName);
@@ -152,11 +149,23 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         {
             Id = x.Id,
             MusicId = x.MusicId,
-            Platform = (PlatformEnum)x.Platform,
+            PlatformName = x.PlatformName,
             MusicName = x.MusicName,
             MyFavoriteId = x.MyFavoriteId,
             MusicAlbum = x.MusicAlbum,
             MusicArtist = x.MusicArtist,
         }).ToList();
+    }
+    public async Task<bool> RemoveDetailAsync(int id)
+    {
+        var url = string.Format(DataConfig.ApiSetting.MyFavorite.RemoveDetail, id);
+        var response = await DataConfig.HttpClientWithToken.PostAsync(url, null);
+        string json = await response.Content.ReadAsStringAsync();
+        var obj = json.ToObject<Result>();
+        if (obj == null || obj.Code != 0)
+        {
+            return false;
+        }
+        return true;
     }
 }

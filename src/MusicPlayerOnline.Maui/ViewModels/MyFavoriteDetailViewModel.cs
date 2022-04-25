@@ -1,6 +1,6 @@
 ﻿namespace MusicPlayerOnline.Maui.ViewModels;
 
-public class PlaylistViewModel : ViewModelBase
+public class MyFavoriteDetailViewModel : ViewModelBase
 {
     private int _id;
     public int Id
@@ -9,6 +9,17 @@ public class PlaylistViewModel : ViewModelBase
         set
         {
             _id = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private int _seq;
+    public int Seq
+    {
+        get => _seq;
+        set
+        {
+            _seq = value;
             OnPropertyChanged();
         }
     }

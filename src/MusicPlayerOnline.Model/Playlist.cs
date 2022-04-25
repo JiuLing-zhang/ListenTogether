@@ -9,6 +9,7 @@ namespace MusicPlayerOnline.Model
     public class Playlist
     {
         public int Id { get; set; }
+        public string PlatformName { get; set; } = null!;
         /// <summary>
         /// 歌曲ID
         /// </summary>
@@ -21,5 +22,6 @@ namespace MusicPlayerOnline.Model
         /// 歌手名称
         /// </summary>
         public string MusicArtist { get; set; } = null!;
+        public string MusicAlbum { get; set; } = null!;
     }
 }

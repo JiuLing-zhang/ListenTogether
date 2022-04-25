@@ -80,7 +80,6 @@ public class RegisterPageViewModel : ViewModelBase
         }
     }
 
-
     private async void GoBack()
     {
         await Shell.Current.GoToAsync($"..", true);

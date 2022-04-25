@@ -187,13 +187,13 @@ public class SearchResultPageViewModel : ViewModelBase
             }
 
             int selectedMyFavoriteId;
-            string myFavoriteItem = await App.Current.MainPage.DisplayActionSheet("请选择要加入的歌单", "取消", "添加一个", myFavoriteButtons);
+            string myFavoriteItem = await App.Current.MainPage.DisplayActionSheet("请选择要加入的歌单", "取消", "创建一个新歌单", myFavoriteButtons);
             if (myFavoriteItem.IsEmpty() || myFavoriteItem == "取消")
             {
                 return;
             }
 
-            if (myFavoriteItem != "添加一个")
+            if (myFavoriteItem != "创建一个新歌单")
             {
                 //使用已有歌单
                 selectedMyFavoriteId = myFavoriteList.First(x => x.Name == myFavoriteItem).Id;
@@ -279,9 +279,11 @@ public class SearchResultPageViewModel : ViewModelBase
 
         var playlist = new Playlist()
         {
+            PlatformName = music.PlatformName,
             MusicId = music.Id,
             MusicName = music.Name,
-            MusicArtist = music.Artist
+            MusicArtist = music.Artist,
+            MusicAlbum = music.Album
         };
         await _playlistService.AddToPlaylist(playlist);
 

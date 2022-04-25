@@ -157,9 +157,11 @@ namespace MusicPlayerOnline.Maui.ViewModels
             {
                 var playlist = new Playlist()
                 {
+                    PlatformName = myFavoriteMusic.PlatformName,
                     MusicId = myFavoriteMusic.MusicId,
                     MusicName = myFavoriteMusic.MusicName,
-                    MusicArtist = myFavoriteMusic.MusicArtist
+                    MusicArtist = myFavoriteMusic.MusicArtist,
+                    MusicAlbum = myFavoriteMusic.MusicAlbum
                 };
 
                 await _playlistService.AddToPlaylist(playlist);

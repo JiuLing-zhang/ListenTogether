@@ -19,7 +19,7 @@ public class MyFavoriteService : IMyFavoriteService
     {
         "确定",
         "取消",
-        "添加一个"
+        "创建一个新歌单"
     };
 
     public async Task<MyFavorite?> GetOneAsync(int id)
@@ -61,4 +61,8 @@ public class MyFavoriteService : IMyFavoriteService
         return await _repository.GetMyFavoriteDetail(id);
     }
 
+    public async Task<bool> RemoveDetailAsync(int id)
+    {
+        return await _repository.RemoveDetailAsync(id);
+    }
 }

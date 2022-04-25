@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
-             x:Class="MusicPlayerOnline.Maui.MyFavoriteDetailPage"
+             x:Class="MusicPlayerOnline.Maui.Pages.MyFavoriteDetailPage"
              Title="我的歌单详情"
              BackgroundColor="#F7F7F7">
 
@@ -60,7 +60,6 @@
                         IsVisible="{Binding IsNotBusy}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-
                     <StackLayout Orientation="Horizontal">
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"
@@ -82,11 +81,35 @@
                             </Image>
                         </StackLayout>
 
-                        <Label Text="{Binding Name}"
+                        <Label Text="{Binding Seq}"
+                               VerticalTextAlignment="Center"/>
+
+                        <StackLayout Margin="10,0,0,0"
+                                     Spacing="5">
+                            <StackLayout Orientation="Horizontal">
+                                <Border Padding="4,2,4,2"
+                                    StrokeThickness="1"
+                                    HorizontalOptions="Center">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="5" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding PlatformName}"
                                    VerticalTextAlignment="Center"/>
-                        <Label Text="{Binding Artist,StringFormat='{} - {0}'}"
-                                   VerticalTextAlignment="Center"
-                                   LineBreakMode="TailTruncation"/>
+                                </Border>
+                                <Label Text="{Binding MusicName}"
+                                       Margin="5,0,0,0"
+                                       VerticalTextAlignment="Center"
+                                       LineBreakMode="TailTruncation"/>
+                            </StackLayout>
+
+                            <Label VerticalTextAlignment="Center"
+                                   LineBreakMode="TailTruncation">
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="MusicArtist" />
+                                    <Binding Path="MusicAlbum" />
+                                </MultiBinding>
+                            </Label>
+                        </StackLayout>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

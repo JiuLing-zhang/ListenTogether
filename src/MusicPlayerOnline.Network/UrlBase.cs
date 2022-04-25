@@ -12,7 +12,6 @@ public class UrlBase
     {
         public const string Search = "https://complexsearch.kugou.com/v2/search/song";
         public const string GetMusic = "https://wwwapi.kugou.com/yy/index.php";
-        public const string Lyric = "https://wwwapi.kugou.com/yy/index.php";
     }
 
     public class MiGu

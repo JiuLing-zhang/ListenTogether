@@ -5,11 +5,10 @@ namespace MusicPlayerOnline.Maui.ViewModels;
 public class SettingPageViewModel : ViewModelBase
 {
     public ICommand OpenUrlCommand => new Command<string>(async (url) => await Launcher.OpenAsync(url));
-    public ICommand ClearCacheCommand => new Command(GoCacheClean);
-    public ICommand OpenLogCommand => new Command(OpenLog);
-    public ICommand LoginCommand => new Command(Login);
+    public ICommand GoToCacheCleanCommand => new Command(GoToCacheClean);
+    public ICommand GoToLogCommand => new Command(GoToLog);
+    public ICommand GoToLoginCommand => new Command(GoToLogin);
     public ICommand LogoutCommand => new Command(Logout);
-    public ICommand GoToRegisterCommand => new Command(GoToRegister);
 
     private IEnvironmentConfigService _configService;
     private IUserService _userService;
@@ -44,19 +43,6 @@ public class SettingPageViewModel : ViewModelBase
     }
     public bool IsNotBusy => !_isBusy;
 
-    private bool _isLoginOk;
-    /// <summary>
-    /// 是否登录
-    /// </summary>
-    public bool IsLoginOk
-    {
-        get => _isLoginOk;
-        set
-        {
-            _isLoginOk = value;
-            OnPropertyChanged();
-        }
-    }
 
     private UserInfoViewModel _userInfo;
     /// <summary>
@@ -285,11 +271,10 @@ public class SettingPageViewModel : ViewModelBase
     {
         if (GlobalConfig.CurrentUser == null)
         {
-            IsLoginOk = false;
+            UserInfo = null;
         }
         else
         {
-            IsLoginOk = true;
             UserInfo = new UserInfoViewModel()
             {
                 Username = GlobalConfig.CurrentUser.Username,
@@ -396,55 +381,19 @@ public class SettingPageViewModel : ViewModelBase
         });
     }
 
-    private async void GoCacheClean()
+    private async void GoToCacheClean()
     {
         await Shell.Current.GoToAsync($"{nameof(CacheCleanPage)}", true);
     }
 
-    private async void OpenLog()
+    private async void GoToLog()
     {
         await Shell.Current.GoToAsync($"{nameof(LogPage)}", true);
     }
 
-    private async void Login()
+    private async void GoToLogin()
     {
-        try
-        {
-            IsBusy = true;
-            if (LoginUsername.IsEmpty() || LoginPassword.IsEmpty())
-            {
-                await ToastService.Show("请输入用户名和密码");
-                return;
-            }
-
-            var user = await _userService.Login(LoginUsername, LoginPassword);
-            if (user == null)
-            {
-                await ToastService.Show("登录失败：用户名或密码错误");
-                return;
-            }
-
-            if (!_userLocalService.Write(user))
-            {
-                await ToastService.Show("用户信息保存失败，请重试");
-                return;
-            }
-            //清除页面绑定的用户名密码
-            LoginUsername = "";
-            LoginPassword = "";
-
-            GlobalConfig.CurrentUser = user;
-            UpdateUserInfo();
-        }
-        catch (Exception ex)
-        {
-            await ToastService.Show("登录失败，网络出小差了");
-            Logger.Error("登录失败。", ex);
-        }
-        finally
-        {
-            IsBusy = false;
-        }
+        await Shell.Current.GoToAsync($"{nameof(LoginPage)}", true);
     }
 
     private async void Logout()
@@ -452,11 +401,9 @@ public class SettingPageViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            if (!await _userService.Logout())
-            {
-                await ToastService.Show("退出失败，网络出小差了");
-                return;
-            }
+
+            //服务端退出失败时不处理，直接本地清除登录信息
+            await _userService.Logout();
 
             _userLocalService.Remove();
             GlobalConfig.CurrentUser = null;
@@ -471,10 +418,5 @@ public class SettingPageViewModel : ViewModelBase
         {
             IsBusy = false;
         }
-    }
-
-    private async void GoToRegister()
-    {
-        await Shell.Current.GoToAsync($"{nameof(RegisterPage)}", true);
     }
 }

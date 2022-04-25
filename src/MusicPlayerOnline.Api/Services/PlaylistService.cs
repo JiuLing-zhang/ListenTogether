@@ -24,9 +24,11 @@ namespace MusicPlayerOnline.Api.Services
                 playlists = new PlaylistEntity()
                 {
                     UserBaseId = userId,
+                    PlatformName = playlist.PlatformName,
                     MusicId = playlist.MusicId,
                     MusicArtist = playlist.MusicArtist,
-                    MusicName = playlist.MusicName
+                    MusicName = playlist.MusicName,
+                    MusicAlbum = playlist.MusicAlbum
                 };
                 _context.Playlists.Add(playlists);
             }
@@ -34,6 +36,7 @@ namespace MusicPlayerOnline.Api.Services
             {
                 playlists.MusicArtist = playlist.MusicArtist;
                 playlists.MusicName = playlist.MusicName;
+                playlists.MusicAlbum = playlist.MusicAlbum;
                 _context.Playlists.Update(playlists);
             }
 
@@ -53,9 +56,11 @@ namespace MusicPlayerOnline.Api.Services
                 .Select(x => new PlaylistResponse()
                 {
                     Id = x.Id,
+                    PlatformName = x.PlatformName,
                     MusicId = x.MusicId,
                     MusicName = x.MusicName,
-                    MusicArtist = x.MusicArtist
+                    MusicArtist = x.MusicArtist,
+                    MusicAlbum = x.MusicAlbum
                 })
                 .ToListAsync();
             return playlists;

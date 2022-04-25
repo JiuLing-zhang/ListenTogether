@@ -15,5 +15,6 @@ namespace MusicPlayerOnline.Api.Interfaces
 
         Task<Result> AddMusicToMyFavorite(int userId, int id, MusicRequest music);
         Task<List<MyFavoriteDetailResponse>?> GetMyFavoriteDetail(int userId, int id);
+        Task<Result> RemoveDetailAsync(int userId, int id);
     }
 }

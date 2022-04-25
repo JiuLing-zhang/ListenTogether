@@ -27,19 +27,6 @@
             }
         }
 
-        private int _seq;
-        /// <summary>
-        /// 序号
-        /// </summary>
-        public int Seq
-        {
-            get => _seq;
-            set
-            {
-                _seq = value;
-                OnPropertyChanged();
-            }
-        }
         private string _name;
         /// <summary>
         /// 歌曲名称

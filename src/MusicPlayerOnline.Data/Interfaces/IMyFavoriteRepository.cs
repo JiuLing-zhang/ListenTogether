@@ -11,4 +11,5 @@ public interface IMyFavoriteRepository
 
     Task<bool> AddMusicToMyFavorite(int id, Music music);
     Task<List<MyFavoriteDetail>?> GetMyFavoriteDetail(int id);
+    Task<bool> RemoveDetailAsync(int id);
 }

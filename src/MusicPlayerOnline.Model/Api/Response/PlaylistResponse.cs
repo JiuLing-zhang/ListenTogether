@@ -6,6 +6,7 @@
     public class PlaylistResponse
     {
         public int Id { get; set; }
+        public string PlatformName { get; set; } = null!;
         /// <summary>
         /// 歌曲ID
         /// </summary>
@@ -18,5 +19,6 @@
         /// 歌手名称
         /// </summary>
         public string MusicArtist { get; set; } = null!;
+        public string MusicAlbum { get; set; } = null!;
     }
 }

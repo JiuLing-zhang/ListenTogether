@@ -60,6 +60,7 @@ public partial class App : Application
 
         Routing.RegisterRoute(nameof(PlayingPage), typeof(PlayingPage));
         Routing.RegisterRoute(nameof(MyFavoriteDetailPage), typeof(MyFavoriteDetailPage));
+        Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
         Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
         Routing.RegisterRoute(nameof(CacheCleanPage), typeof(CacheCleanPage));
         Routing.RegisterRoute(nameof(LogPage), typeof(LogPage));

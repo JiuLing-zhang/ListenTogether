@@ -1,5 +1,4 @@
-﻿using JiuLing.CommonLibs.ExtensionMethods;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace MusicPlayerOnline.Maui.ViewModels;
 
@@ -58,9 +57,11 @@ public class PlaylistPageViewModel : ViewModelBase
             Playlist.Add(new PlaylistViewModel()
             {
                 Id = item.Id,
+                PlatformName = item.PlatformName,
                 MusicId = item.MusicId,
                 MusicName = item.MusicName,
-                MusicArtist = item.MusicArtist
+                MusicArtist = item.MusicArtist,
+                MusicAlbum = item.MusicAlbum
             });
         }
     }
@@ -77,7 +78,6 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
     public bool IsNotBusy => !_isBusy;
-
     public bool IsPlaylistEmpty => IsBusy == false && (Playlist == null || Playlist.Count == 0);
     public bool IsPlaylistNotEmpty => !IsPlaylistEmpty;
 
@@ -143,13 +143,13 @@ public class PlaylistPageViewModel : ViewModelBase
             }
 
             int selectedMyFavoriteId;
-            string myFavoriteItem = await App.Current.MainPage.DisplayActionSheet("请选择要加入的歌单", "取消", "添加一个", myFavoriteButtons);
+            string myFavoriteItem = await App.Current.MainPage.DisplayActionSheet("请选择要加入的歌单", "取消", "创建一个新歌单", myFavoriteButtons);
             if (myFavoriteItem.IsEmpty() || myFavoriteItem == "取消")
             {
                 return;
             }
 
-            if (myFavoriteItem != "添加一个")
+            if (myFavoriteItem != "创建一个新歌单")
             {
                 //使用已有歌单
                 selectedMyFavoriteId = myFavoriteList.First(x => x.Name == myFavoriteItem).Id;
