@@ -7,7 +7,7 @@
              Title="设置"
              BackgroundColor="#F7F7F7">
 
-    <StackLayout Margin="16">
+    <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
 
         <StackLayout VerticalOptions="FillAndExpand"
                      MaximumWidthRequest="{OnPlatform  UWP=400,MacCatalyst=400}">

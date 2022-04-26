@@ -5,7 +5,7 @@
              Title="注册"
              BackgroundColor="#F7F7F7">
 
-    <StackLayout Margin="16"
+    <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
                  MaximumWidthRequest="{OnPlatform  UWP=400,MacCatalyst=400}">
 
         <StackLayout Margin="0,0,0,20"
