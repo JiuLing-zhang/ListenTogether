@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Network.Models.NetEase
+﻿namespace ListenTogether.Network.Models.NetEase
 {
     public class MusicSearchHttpResult
     {

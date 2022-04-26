@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MusicPlayerOnline.Api.DbContext;
-using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
-using MusicPlayerOnline.Model.Api.Response;
+using ListenTogether.Api.DbContext;
+using ListenTogether.Api.Entities;
+using ListenTogether.Api.Interfaces;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
+using ListenTogether.Model.Api.Response;
 
-namespace MusicPlayerOnline.Api.Services
+namespace ListenTogether.Api.Services
 {
     public class PlaylistService : IPlaylistService
     {

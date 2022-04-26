@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Options;
-using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Api.Models;
+using ListenTogether.Api.Interfaces;
+using ListenTogether.Api.Models;
 
-namespace MusicPlayerOnline.Api.Authorization;
+namespace ListenTogether.Api.Authorization;
 
 public class JwtMiddleware
 {

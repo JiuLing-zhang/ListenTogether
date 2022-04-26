@@ -1,8 +1,8 @@
-﻿using MusicPlayerOnline.Business.Interfaces;
-using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Model;
+﻿using ListenTogether.Business.Interfaces;
+using ListenTogether.Data.Interfaces;
+using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Business.Services;
+namespace ListenTogether.Business.Services;
 
 public class EnvironmentConfigService : IEnvironmentConfigService
 {

@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MusicPlayerOnline.EasyLog\MusicPlayerOnline.EasyLog.csproj" />
-    <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
+    <ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
+    <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
   </ItemGroup>
 
 </Project>

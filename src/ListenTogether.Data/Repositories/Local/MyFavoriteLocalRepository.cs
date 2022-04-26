@@ -1,8 +1,8 @@
-﻿using MusicPlayerOnline.Data.Entities;
-using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Model;
+﻿using ListenTogether.Data.Entities;
+using ListenTogether.Data.Interfaces;
+using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Data.Repositories.Local;
+namespace ListenTogether.Data.Repositories.Local;
 public class MyFavoriteLocalRepository : IMyFavoriteRepository
 {
     public async Task<MyFavorite?> GetOneAsync(int id)

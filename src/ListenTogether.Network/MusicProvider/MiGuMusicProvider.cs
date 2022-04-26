@@ -1,13 +1,13 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 using JiuLing.CommonLibs.Security;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Network.Models.MiGu;
-using MusicPlayerOnline.Network.Utils;
+using ListenTogether.Model;
+using ListenTogether.Model.Enums;
+using ListenTogether.Network.Models.MiGu;
+using ListenTogether.Network.Utils;
 using System.Net;
 using System.Text.Json;
 
-namespace MusicPlayerOnline.Network.MusicProvider;
+namespace ListenTogether.Network.MusicProvider;
 public class MiGuMusicProvider : IMusicProvider
 {
     private readonly HttpClient _httpClient;

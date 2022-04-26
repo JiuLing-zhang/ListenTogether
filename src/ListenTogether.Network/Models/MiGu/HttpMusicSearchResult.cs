@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Network.Models.MiGu
+﻿namespace ListenTogether.Network.Models.MiGu
 {
     public class HttpMusicSearchResult
     {

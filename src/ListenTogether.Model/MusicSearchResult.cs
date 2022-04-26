@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model.Enums;
+﻿using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Model;
+namespace ListenTogether.Model;
 /// <summary>
 /// 搜索到的结果
 /// </summary>

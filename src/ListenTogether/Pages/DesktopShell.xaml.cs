@@ -1,5 +1,5 @@
-﻿using MusicPlayerOnline.Maui.ViewModels;
-namespace MusicPlayerOnline.Maui.Pages;
+﻿using ListenTogether.ViewModels;
+namespace ListenTogether.Pages;
 public partial class DesktopShell
 {
     public DesktopShell()

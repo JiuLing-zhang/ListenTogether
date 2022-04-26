@@ -1,7 +1,7 @@
-﻿using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
+﻿using ListenTogether.Model;
+using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Network.SearchMusic;
+namespace ListenTogether.Network.SearchMusic;
 public abstract class SearchAbstract
 {
     private SearchAbstract? _nextHandler;

@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui.Services;
+﻿namespace ListenTogether.Services;
 
 internal static class ServicesExtensions
 {
@@ -6,9 +6,9 @@ internal static class ServicesExtensions
     {
 
 #if WINDOWS
-        builder.Services.AddSingleton<IAudioService, MusicPlayerOnline.Maui.Platforms.Windows.AudioService>();
+        builder.Services.AddSingleton<IAudioService, ListenTogether.Platforms.Windows.AudioService>();
 #elif ANDROID
-        builder.Services.AddSingleton<IAudioService, MusicPlayerOnline.Maui.Platforms.Android.AudioService>();
+        builder.Services.AddSingleton<IAudioService, ListenTogether.Platforms.Android.AudioService>();
 #endif
 
         builder.Services.AddTransient<WifiOptionsService>();

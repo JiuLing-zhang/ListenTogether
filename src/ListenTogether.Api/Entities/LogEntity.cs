@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MusicPlayerOnline.Api.Entities;
+namespace ListenTogether.Api.Entities;
 
 [Table("LogDetail")]
 public class LogEntity

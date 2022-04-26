@@ -1,5 +1,5 @@
-﻿using MusicPlayerOnline.Model;
-namespace MusicPlayerOnline.Data.Interfaces;
+﻿using ListenTogether.Model;
+namespace ListenTogether.Data.Interfaces;
 
 public interface ILogRepository
 {

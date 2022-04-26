@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace MusicPlayerOnline.Maui
+namespace ListenTogether
 {
     [Application]
     public class MainApplication : MauiApplication

@@ -1,6 +1,6 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 
-namespace MusicPlayerOnline.Maui.ViewModels
+namespace ListenTogether.ViewModels
 {
     public class MyFavoriteViewModel : ViewModelBase
     {

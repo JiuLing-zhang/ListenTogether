@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicPlayerOnline.Api.Authorization;
-using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
+using ListenTogether.Api.Authorization;
+using ListenTogether.Api.Interfaces;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
 
-namespace MusicPlayerOnline.Api.Controllers;
+namespace ListenTogether.Api.Controllers;
 [ApiController]
 [Route("api/user")]
 public class UserController : ApiBaseController

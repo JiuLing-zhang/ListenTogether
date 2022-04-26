@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Network;
+﻿namespace ListenTogether.Network;
 public class UrlBase
 {
     public class NetEase

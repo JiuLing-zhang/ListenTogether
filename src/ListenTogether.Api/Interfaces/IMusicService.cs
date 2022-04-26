@@ -1,8 +1,8 @@
-﻿using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
-using MusicPlayerOnline.Model.Api.Response;
+﻿using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
+using ListenTogether.Model.Api.Response;
 
-namespace MusicPlayerOnline.Api.Interfaces;
+namespace ListenTogether.Api.Interfaces;
 public interface IMusicService
 {
     Task<Result<MusicResponse>> GetOneAsync(string id);

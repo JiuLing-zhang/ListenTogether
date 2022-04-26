@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.EasyLog;
+﻿namespace ListenTogether.EasyLog;
 internal class LogConfig
 {
     public string DbName { get; set; } = null!;

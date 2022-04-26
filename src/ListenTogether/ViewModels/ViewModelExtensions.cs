@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui.ViewModels;
+﻿namespace ListenTogether.ViewModels;
 
 public static class ViewModelExtensions
 {

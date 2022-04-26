@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Api.Enums
+﻿namespace ListenTogether.Api.Enums
 {
     public enum ConfigTypeEnum
     {

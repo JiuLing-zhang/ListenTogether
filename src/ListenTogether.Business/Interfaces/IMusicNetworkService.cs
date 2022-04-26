@@ -1,7 +1,7 @@
-﻿using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
+﻿using ListenTogether.Model;
+using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Business.Interfaces;
+namespace ListenTogether.Business.Interfaces;
 public interface IMusicNetworkService
 {
     Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword);

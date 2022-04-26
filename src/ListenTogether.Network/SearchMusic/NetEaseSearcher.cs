@@ -1,9 +1,9 @@
-﻿using MusicPlayerOnline.EasyLog;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Network.MusicProvider;
+﻿using ListenTogether.EasyLog;
+using ListenTogether.Model;
+using ListenTogether.Model.Enums;
+using ListenTogether.Network.MusicProvider;
 
-namespace MusicPlayerOnline.Network.SearchMusic;
+namespace ListenTogether.Network.SearchMusic;
 public class NetEaseSearcher : SearchAbstract
 {
     private readonly IMusicProvider _myMusicProvider;

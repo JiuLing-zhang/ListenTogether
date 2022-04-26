@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model;
+﻿using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Maui.ViewModels
+namespace ListenTogether.ViewModels
 {
     public class SearchResultViewModel : ViewModelBase
     {

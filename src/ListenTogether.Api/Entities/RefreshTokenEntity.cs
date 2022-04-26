@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace MusicPlayerOnline.Api.Entities;
+namespace ListenTogether.Api.Entities;
 
 [Owned]
 [Table("RefreshToken")]

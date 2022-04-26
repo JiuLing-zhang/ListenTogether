@@ -1,12 +1,12 @@
-﻿using MusicPlayerOnline.Business.Factories;
-using MusicPlayerOnline.Business.Interfaces;
-using MusicPlayerOnline.Business.Services;
-using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Data.Repositories.Api;
-using MusicPlayerOnline.Data.Repositories.Local;
-using MusicPlayerOnline.Network;
+﻿using ListenTogether.Business.Factories;
+using ListenTogether.Business.Interfaces;
+using ListenTogether.Business.Services;
+using ListenTogether.Data.Interfaces;
+using ListenTogether.Data.Repositories.Api;
+using ListenTogether.Data.Repositories.Local;
+using ListenTogether.Network;
 
-namespace MusicPlayerOnline.Business;
+namespace ListenTogether.Business;
 
 public static class AppBuilderExtensions
 {

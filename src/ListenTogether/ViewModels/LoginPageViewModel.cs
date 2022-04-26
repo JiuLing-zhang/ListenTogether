@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MusicPlayerOnline.Maui.ViewModels;
+namespace ListenTogether.ViewModels;
 
 public class LoginPageViewModel : ViewModelBase
 {

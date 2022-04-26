@@ -1,9 +1,9 @@
 ﻿<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MusicPlayerOnline.Maui"
+             xmlns:local="clr-namespace:ListenTogether"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="MusicPlayerOnline.Maui.App">
+             x:Class="ListenTogether.App">
     <Application.Resources>
         <ResourceDictionary Source="Resources/Styles/DefaultTheme.xaml"/>
         <ResourceDictionary>

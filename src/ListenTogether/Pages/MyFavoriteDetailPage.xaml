@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
-             x:Class="MusicPlayerOnline.Maui.Pages.MyFavoriteDetailPage"
+             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+             x:Class="ListenTogether.Pages.MyFavoriteDetailPage"
              Title="我的歌单详情"
              BackgroundColor="#F7F7F7">
 

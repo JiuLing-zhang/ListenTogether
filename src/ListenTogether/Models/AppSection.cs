@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui.Models;
+﻿namespace ListenTogether.Models;
 internal class AppSection
 {
     public string Title { get; set; }

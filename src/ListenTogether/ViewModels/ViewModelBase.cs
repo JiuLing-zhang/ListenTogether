@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace MusicPlayerOnline.Maui.ViewModels
+namespace ListenTogether.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

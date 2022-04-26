@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace MusicPlayerOnline.Maui.ViewModels;
+namespace ListenTogether.ViewModels;
 
 public class ObservableCollectionEx<T> : ObservableCollection<T> where T : INotifyPropertyChanged
 {

@@ -1,7 +1,7 @@
 ﻿using SQLite;
 using System.Text.Json;
 
-namespace MusicPlayerOnline.EasyLog;
+namespace ListenTogether.EasyLog;
 internal class DatabaseProvide
 {
     private static SQLiteConnection? _database;

@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Data;
+﻿namespace ListenTogether.Data;
 internal class ApiSettings
 {
     public ApiSettings(string urlBase, string deviceId)

@@ -1,11 +1,11 @@
 ﻿using System.Text.Json;
-using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
-using MusicPlayerOnline.Model.Api.Response;
+using ListenTogether.Data.Interfaces;
+using ListenTogether.Model;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
+using ListenTogether.Model.Api.Response;
 
-namespace MusicPlayerOnline.Data.Repositories.Api;
+namespace ListenTogether.Data.Repositories.Api;
 public class UserApiRepository : IUserApiRepository
 {
     public async Task<(bool Succeed, string Message)> Register(UserRegister registerUser)

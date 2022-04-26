@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:pages="clr-namespace:MusicPlayerOnline.Maui.Pages"
-       xmlns:root="clr-namespace:MusicPlayerOnline.Maui"
-       xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
+       xmlns:pages="clr-namespace:ListenTogether.Pages"
+       xmlns:root="clr-namespace:ListenTogether"
+       xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
        x:DataType="viewmodels:ShellViewModel"
-       x:Class="MusicPlayerOnline.Maui.Pages.MobileShell"
+       x:Class="ListenTogether.Pages.MobileShell"
        NavBarIsVisible="False">
     <TabBar>
         <Tab Title="{Binding Search.Title}"

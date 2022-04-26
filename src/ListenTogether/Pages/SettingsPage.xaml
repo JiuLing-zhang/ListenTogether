@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:MusicPlayerOnline.Maui.ViewModels"
-             xmlns:controls="clr-namespace:MusicPlayerOnline.Maui.Controls"
-             x:Class="MusicPlayerOnline.Maui.Pages.SettingsPage"
+             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+             xmlns:controls="clr-namespace:ListenTogether.Controls"
+             x:Class="ListenTogether.Pages.SettingsPage"
              Title="设置"
              BackgroundColor="#F7F7F7">
 
@@ -139,7 +139,7 @@
                                       TextDecorations="Underline">
                                             <Span.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
-                                                              CommandParameter="https://github.com/JiuLing-zhang/MusicPlayerOnline" />
+                                                              CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
                                             </Span.GestureRecognizers>
                                         </Span>
                                     </FormattedString>

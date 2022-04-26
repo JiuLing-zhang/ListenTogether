@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace MusicPlayerOnline.Maui
+namespace ListenTogether
 {
     public class Program
     {

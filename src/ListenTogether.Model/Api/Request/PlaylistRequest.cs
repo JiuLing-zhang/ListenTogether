@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Model.Api.Request
+﻿namespace ListenTogether.Model.Api.Request
 {
     /// <summary>
     /// 播放列表

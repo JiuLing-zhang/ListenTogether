@@ -1,6 +1,6 @@
-using MusicPlayerOnline.Maui.ViewModels;
+using ListenTogether.ViewModels;
 
-namespace MusicPlayerOnline.Maui.Pages;
+namespace ListenTogether.Pages;
 
 public partial class PlayingPage : ContentPage
 {

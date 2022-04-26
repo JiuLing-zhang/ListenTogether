@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui.ViewModels
+﻿namespace ListenTogether.ViewModels
 {
     /// <summary>
     /// 歌词详情

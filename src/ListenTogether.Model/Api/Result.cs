@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MusicPlayerOnline.Model.Api
+namespace ListenTogether.Model.Api
 {
     public class Result
     {

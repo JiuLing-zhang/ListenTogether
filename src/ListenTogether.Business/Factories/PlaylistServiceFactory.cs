@@ -1,10 +1,10 @@
-﻿using MusicPlayerOnline.Business.Interfaces;
-using MusicPlayerOnline.Business.Services;
-using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Data.Repositories.Api;
-using MusicPlayerOnline.Data.Repositories.Local;
+﻿using ListenTogether.Business.Interfaces;
+using ListenTogether.Business.Services;
+using ListenTogether.Data.Interfaces;
+using ListenTogether.Data.Repositories.Api;
+using ListenTogether.Data.Repositories.Local;
 
-namespace MusicPlayerOnline.Business.Factories;
+namespace ListenTogether.Business.Factories;
 
 public class PlaylistServiceFactory : IPlaylistServiceFactory
 {

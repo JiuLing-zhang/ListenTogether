@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui;
+﻿namespace ListenTogether;
 
 internal class AppSettings
 {

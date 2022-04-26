@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Data.Enums;
+﻿namespace ListenTogether.Data.Enums;
 public enum LogTypeEnum
 {
     Info = 0,

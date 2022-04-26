@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 
-namespace MusicPlayerOnline.Data.Entities;
+namespace ListenTogether.Data.Entities;
 
 [Table("EnvironmentConfig")]
 internal class EnvironmentConfigEntity

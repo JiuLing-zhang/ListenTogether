@@ -1,13 +1,13 @@
-﻿using MusicPlayerOnline.Model;
+﻿using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Maui
+namespace ListenTogether
 {
     internal class GlobalConfig
     {
         /// <summary>
         /// App名称
         /// </summary>
-        private const string AppName = "MusicPlayerOnline";
+        private const string AppName = "ListenTogether";
 
         /// <summary>
         /// App Data文件夹路径

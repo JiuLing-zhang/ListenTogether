@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model.Enums;
+﻿using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Model
+namespace ListenTogether.Model
 {
     public class MyFavoriteDetail
     {

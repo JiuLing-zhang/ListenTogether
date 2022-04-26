@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model;
+﻿using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Data.Interfaces;
+namespace ListenTogether.Data.Interfaces;
 public interface IPlaylistRepository
 {
     Task<bool> AddOrUpdateAsync(Playlist playlist);

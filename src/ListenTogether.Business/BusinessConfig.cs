@@ -1,7 +1,7 @@
-﻿using MusicPlayerOnline.Data;
-using MusicPlayerOnline.Model;
+﻿using ListenTogether.Data;
+using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Business;
+namespace ListenTogether.Business;
 
 public class BusinessConfig
 {

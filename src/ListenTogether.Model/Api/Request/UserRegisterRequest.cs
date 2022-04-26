@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MusicPlayerOnline.Model.Api.Request;
+namespace ListenTogether.Model.Api.Request;
 
 public class UserRegisterRequest
 {

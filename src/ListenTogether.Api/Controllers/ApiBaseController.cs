@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.ErrorHandler;
+using ListenTogether.Api.Entities;
+using ListenTogether.Api.ErrorHandler;
 
-namespace MusicPlayerOnline.Api.Controllers;
+namespace ListenTogether.Api.Controllers;
 public class ApiBaseController : ControllerBase
 {
     protected int UserId => FindUserId();

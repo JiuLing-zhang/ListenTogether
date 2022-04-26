@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "MusicPlayerOnline.Api": {
+    "ListenTogether.Api": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

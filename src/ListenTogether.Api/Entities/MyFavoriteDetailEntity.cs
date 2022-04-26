@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace MusicPlayerOnline.Api.Entities
+namespace ListenTogether.Api.Entities
 {
     [Table("MyFavoriteDetail")]
     [Owned]

@@ -4,11 +4,11 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MusicPlayerOnline.Api.DbContext;
-using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.Models;
+using ListenTogether.Api.DbContext;
+using ListenTogether.Api.Entities;
+using ListenTogether.Api.Models;
 
-namespace MusicPlayerOnline.Api.Authorization;
+namespace ListenTogether.Api.Authorization;
 public interface IJwtUtils
 {
     public string GenerateToken(UserEntity user, string deviceId);

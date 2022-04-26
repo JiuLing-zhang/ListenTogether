@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MusicPlayerOnline.Common\MusicPlayerOnline.Common.csproj" />
-    <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
+    <ProjectReference Include="..\ListenTogether.Common\ListenTogether.Common.csproj" />
+    <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
   </ItemGroup>
 
 </Project>

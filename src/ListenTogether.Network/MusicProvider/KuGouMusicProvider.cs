@@ -1,13 +1,13 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 using JiuLing.CommonLibs.Security;
-using MusicPlayerOnline.EasyLog;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Network.Models.KuGou;
-using MusicPlayerOnline.Network.Utils;
+using ListenTogether.EasyLog;
+using ListenTogether.Model;
+using ListenTogether.Model.Enums;
+using ListenTogether.Network.Models.KuGou;
+using ListenTogether.Network.Utils;
 using System.Text.Json;
 
-namespace MusicPlayerOnline.Network.MusicProvider;
+namespace ListenTogether.Network.MusicProvider;
 public class KuGouMusicProvider : IMusicProvider
 {
     private readonly HttpClient _httpClient = new HttpClient();

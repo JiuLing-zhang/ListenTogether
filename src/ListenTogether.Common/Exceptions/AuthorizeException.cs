@@ -1,4 +1,4 @@
-namespace MusicPlayerOnline.Common.Exceptions;
+namespace ListenTogether.Common.Exceptions;
 
 public class AuthorizeException : Exception
 {

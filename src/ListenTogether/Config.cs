@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui;
+﻿namespace ListenTogether;
 public static class Config
 {
     public static bool Desktop

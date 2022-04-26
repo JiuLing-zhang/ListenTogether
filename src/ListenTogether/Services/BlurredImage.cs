@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui.Services
+﻿namespace ListenTogether.Services
 {
     public class BlurredImage : Image
     {

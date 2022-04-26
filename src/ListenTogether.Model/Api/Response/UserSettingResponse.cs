@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Model.Api.Response
+﻿namespace ListenTogether.Model.Api.Response
 {
     public class UserSettingResponse
     {

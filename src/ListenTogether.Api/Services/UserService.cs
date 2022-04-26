@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using MusicPlayerOnline.Api.Authorization;
-using MusicPlayerOnline.Api.DbContext;
-using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.ErrorHandler;
-using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Api.Models;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
-using MusicPlayerOnline.Model.Api.Response;
+using ListenTogether.Api.Authorization;
+using ListenTogether.Api.DbContext;
+using ListenTogether.Api.Entities;
+using ListenTogether.Api.ErrorHandler;
+using ListenTogether.Api.Interfaces;
+using ListenTogether.Api.Models;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
+using ListenTogether.Model.Api.Response;
 
-namespace MusicPlayerOnline.Api.Services;
+namespace ListenTogether.Api.Services;
 internal class UserService : IUserService
 {
     private readonly DataContext _context;

@@ -1,10 +1,10 @@
-﻿using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Network.BuildMusicDetail;
-using MusicPlayerOnline.Network.MusicProvider;
-using MusicPlayerOnline.Network.SearchMusic;
+﻿using ListenTogether.Model;
+using ListenTogether.Model.Enums;
+using ListenTogether.Network.BuildMusicDetail;
+using ListenTogether.Network.MusicProvider;
+using ListenTogether.Network.SearchMusic;
 
-namespace MusicPlayerOnline.Network;
+namespace ListenTogether.Network;
 public class MusicNetPlatform
 {
     //搜索链

@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Network.Models.KuGou
+﻿namespace ListenTogether.Network.Models.KuGou
 {
     public class HttpMusicSearchResult
     {

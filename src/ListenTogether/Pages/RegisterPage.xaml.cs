@@ -1,4 +1,4 @@
-namespace MusicPlayerOnline.Maui.Pages;
+namespace ListenTogether.Pages;
 
 public partial class RegisterPage : ContentPage
 {

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 
-namespace MusicPlayerOnline.Maui.Utils;
+namespace ListenTogether.Utils;
 
 internal class ToastService
 {

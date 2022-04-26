@@ -1,4 +1,4 @@
-namespace MusicPlayerOnline.Maui.Controls;
+namespace ListenTogether.Controls;
 
 public partial class SwitchEx : ContentView
 {

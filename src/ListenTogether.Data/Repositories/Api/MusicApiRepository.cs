@@ -1,13 +1,13 @@
 ﻿using System.Text.Json;
 using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
-using MusicPlayerOnline.Model.Api.Response;
-using MusicPlayerOnline.Model.Enums;
+using ListenTogether.Data.Interfaces;
+using ListenTogether.Model;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
+using ListenTogether.Model.Api.Response;
+using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Data.Repositories.Api;
+namespace ListenTogether.Data.Repositories.Api;
 public class MusicApiRepository : IMusicRepository
 {
     public async Task<Music?> GetOneAsync(string id)

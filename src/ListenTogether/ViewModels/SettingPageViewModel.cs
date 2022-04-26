@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model.Enums;
+﻿using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Maui.ViewModels;
+namespace ListenTogether.ViewModels;
 
 public class SettingPageViewModel : ViewModelBase
 {

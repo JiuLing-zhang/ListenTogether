@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MusicPlayerOnline.Model.Enums
+namespace ListenTogether.Model.Enums
 {
     [Flags]
     public enum PlatformEnum

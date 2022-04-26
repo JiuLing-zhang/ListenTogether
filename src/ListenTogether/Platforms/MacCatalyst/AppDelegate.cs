@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace MusicPlayerOnline.Maui
+namespace ListenTogether
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

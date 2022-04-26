@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace MusicPlayerOnline.EasyLog;
+namespace ListenTogether.EasyLog;
 
 [Table("LogDetail")]
 internal class LogEntity

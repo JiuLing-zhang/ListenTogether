@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model;
+﻿using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Business.Interfaces;
+namespace ListenTogether.Business.Interfaces;
 public interface IUserService
 {
     public Task<(bool Succeed, string Message)> Register(UserRegister registerUser);

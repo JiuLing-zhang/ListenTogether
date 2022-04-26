@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MusicPlayerOnline.Maui.ViewModels
+namespace ListenTogether.ViewModels
 {
     public class MusicFileViewModel : ViewModelBase
     {

@@ -1,10 +1,10 @@
-﻿using MusicPlayerOnline.Api.DbContext;
-using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
+﻿using ListenTogether.Api.DbContext;
+using ListenTogether.Api.Entities;
+using ListenTogether.Api.Interfaces;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
 
-namespace MusicPlayerOnline.Api.Services;
+namespace ListenTogether.Api.Services;
 public class LogService : ILogService
 {
     private readonly DataContext _context;

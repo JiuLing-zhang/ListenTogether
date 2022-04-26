@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Business.Interfaces;
+﻿using ListenTogether.Business.Interfaces;
 
-namespace MusicPlayerOnline.Business.Factories;
+namespace ListenTogether.Business.Factories;
 public interface IMusicServiceFactory
 {
     public IMusicService Create();

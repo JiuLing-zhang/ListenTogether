@@ -1,9 +1,9 @@
-﻿using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
+﻿using ListenTogether.Data.Interfaces;
+using ListenTogether.Model;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
 
-namespace MusicPlayerOnline.Data.Repositories.Api;
+namespace ListenTogether.Data.Repositories.Api;
 
 public class LogApiRepository : ILogRepository
 {

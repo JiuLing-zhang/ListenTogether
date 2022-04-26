@@ -1,7 +1,7 @@
 using Microsoft.Maui.Dispatching;
-using MusicPlayerOnline.Model.Enums;
+using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Maui.Controls;
+namespace ListenTogether.Controls;
 
 public partial class Player : ContentView
 {

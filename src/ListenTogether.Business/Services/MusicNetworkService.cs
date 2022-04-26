@@ -1,9 +1,9 @@
-﻿using MusicPlayerOnline.Business.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Network;
+﻿using ListenTogether.Business.Interfaces;
+using ListenTogether.Model;
+using ListenTogether.Model.Enums;
+using ListenTogether.Network;
 
-namespace MusicPlayerOnline.Business.Services;
+namespace ListenTogether.Business.Services;
 
 public class MusicNetworkService : IMusicNetworkService
 {

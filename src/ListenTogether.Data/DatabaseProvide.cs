@@ -1,7 +1,7 @@
-﻿using MusicPlayerOnline.Data.Entities;
+﻿using ListenTogether.Data.Entities;
 using SQLite;
 
-namespace MusicPlayerOnline.Data;
+namespace ListenTogether.Data;
 internal class DatabaseProvide
 {
     private static string _dbPath = "";

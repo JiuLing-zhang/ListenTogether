@@ -1,7 +1,7 @@
-﻿using MusicPlayerOnline.Model.Enums;
-using MusicPlayerOnline.Network.MusicProvider;
+﻿using ListenTogether.Model.Enums;
+using ListenTogether.Network.MusicProvider;
 
-namespace MusicPlayerOnline.Network.BuildMusicDetail;
+namespace ListenTogether.Network.BuildMusicDetail;
 public class MusicBuilderFactory
 {
     public static IMusicProvider Create(PlatformEnum platform)

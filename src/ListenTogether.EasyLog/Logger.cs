@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.EasyLog;
+﻿namespace ListenTogether.EasyLog;
 public class Logger
 {
     public static void Info(string msg)

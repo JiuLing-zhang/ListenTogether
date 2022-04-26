@@ -1,10 +1,10 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Common.Exceptions;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Response;
+using ListenTogether.Common.Exceptions;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Response;
 using System.Text.Json;
 
-namespace MusicPlayerOnline.Data;
+namespace ListenTogether.Data;
 public class ApiHttpMessageHandler : DelegatingHandler
 {
     public static event EventHandler? TokenUpdated;

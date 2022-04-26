@@ -1,7 +1,7 @@
 ﻿using JiuLing.CommonLibs.Net;
-using MusicPlayerOnline.Model.Enums;
+using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Maui.Services;
+namespace ListenTogether.Services;
 public class PlayerService
 {
     private IServiceProvider _services;

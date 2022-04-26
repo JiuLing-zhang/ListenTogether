@@ -1,6 +1,6 @@
 ﻿using Android.Media;
 
-namespace MusicPlayerOnline.Maui.Platforms.Android;
+namespace ListenTogether.Platforms.Android;
 public class AudioService : IAudioService
 {
     private MediaPlayer _player;

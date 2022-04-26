@@ -2,7 +2,7 @@
 using CommunityToolkit.Maui;
 using System.Reflection;
 
-namespace MusicPlayerOnline.Maui
+namespace ListenTogether
 {
     public static class MauiProgram
     {
@@ -11,7 +11,7 @@ namespace MusicPlayerOnline.Maui
             var builder = MauiApp.CreateBuilder();
 
             var a = Assembly.GetExecutingAssembly();
-            using var stream = a.GetManifestResourceStream("MusicPlayerOnline.Maui.appsettings.json");
+            using var stream = a.GetManifestResourceStream("ListenTogether.appsettings.json");
 
             var config = new ConfigurationBuilder()
                         .AddJsonStream(stream)

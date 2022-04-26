@@ -1,7 +1,7 @@
-﻿using MusicPlayerOnline.Model.Enums;
+﻿using ListenTogether.Model.Enums;
 using System.Collections.ObjectModel;
 
-namespace MusicPlayerOnline.Maui.ViewModels;
+namespace ListenTogether.ViewModels;
 
 public class SearchResultPageViewModel : ViewModelBase
 {

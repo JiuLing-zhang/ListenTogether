@@ -1,4 +1,4 @@
-namespace MusicPlayerOnline.Api.Authorization;
+namespace ListenTogether.Api.Authorization;
 
 [AttributeUsage(AttributeTargets.Method)]
 public class AllowAnonymousAttribute : Attribute

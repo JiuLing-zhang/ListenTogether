@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model;
+﻿using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Data;
+namespace ListenTogether.Data;
 
 public class DataConfig
 {

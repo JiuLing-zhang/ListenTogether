@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace MusicPlayerOnline.Api.Entities
+namespace ListenTogether.Api.Entities
 {
     [Table("UserBase")]
     public class UserEntity

@@ -15,9 +15,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\MusicPlayerOnline.Data\MusicPlayerOnline.Data.csproj" />
-	  <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
-	  <ProjectReference Include="..\MusicPlayerOnline.Network\MusicPlayerOnline.Network.csproj" />
+	  <ProjectReference Include="..\ListenTogether.Data\ListenTogether.Data.csproj" />
+	  <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
+	  <ProjectReference Include="..\ListenTogether.Network\ListenTogether.Network.csproj" />
 	</ItemGroup>
 
 </Project>

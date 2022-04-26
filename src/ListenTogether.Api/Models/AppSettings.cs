@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Api.Models
+﻿namespace ListenTogether.Api.Models
 {
     public class AppSettings
     {

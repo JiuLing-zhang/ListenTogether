@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace MusicPlayerOnline.Network.Utils;
+namespace ListenTogether.Network.Utils;
 public class KuGouUtils
 {
     private const string SearchKey = "NVPh5oo715z5DIWAeQlhMDsWXXQV4hwt";

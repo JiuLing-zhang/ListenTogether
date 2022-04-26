@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MusicPlayerOnline.Api.Entities;
+using ListenTogether.Api.Entities;
 
-namespace MusicPlayerOnline.Api.DbContext;
+namespace ListenTogether.Api.DbContext;
 public sealed class DataContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public DbSet<UserEntity> Users { get; set; } = null!;

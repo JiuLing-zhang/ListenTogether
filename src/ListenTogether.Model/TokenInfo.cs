@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Model;
+﻿namespace ListenTogether.Model;
 public class TokenInfo
 {
     public string Token { get; set; } = null!;

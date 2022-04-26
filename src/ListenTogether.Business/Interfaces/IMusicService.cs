@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model;
+﻿using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Business.Interfaces;
+namespace ListenTogether.Business.Interfaces;
 public interface IMusicService
 {
     Task<Music?> GetOneAsync(string id);

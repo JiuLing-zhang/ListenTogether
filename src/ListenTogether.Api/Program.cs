@@ -3,13 +3,13 @@ using System.Text.Unicode;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using MusicPlayerOnline.Api.Authorization;
-using MusicPlayerOnline.Api.DbContext;
-using MusicPlayerOnline.Api.ErrorHandler;
-using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Api.Models;
-using MusicPlayerOnline.Api.Services;
-using MusicPlayerOnline.Model.Api;
+using ListenTogether.Api.Authorization;
+using ListenTogether.Api.DbContext;
+using ListenTogether.Api.ErrorHandler;
+using ListenTogether.Api.Interfaces;
+using ListenTogether.Api.Models;
+using ListenTogether.Api.Services;
+using ListenTogether.Model.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,14 +1,14 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
-using MusicPlayerOnline.Api.DbContext;
-using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
-using MusicPlayerOnline.Model.Api.Response;
-using MusicPlayerOnline.Model.Enums;
+using ListenTogether.Api.DbContext;
+using ListenTogether.Api.Entities;
+using ListenTogether.Api.Interfaces;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
+using ListenTogether.Model.Api.Response;
+using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Api.Services;
+namespace ListenTogether.Api.Services;
 public class MyFavoriteService : IMyFavoriteService
 {
     private readonly DataContext _context;

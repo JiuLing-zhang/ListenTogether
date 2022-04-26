@@ -1,10 +1,10 @@
-﻿using MusicPlayerOnline.Api.Entities;
-using MusicPlayerOnline.Api.Models;
-using MusicPlayerOnline.Model.Api;
-using MusicPlayerOnline.Model.Api.Request;
-using MusicPlayerOnline.Model.Api.Response;
+﻿using ListenTogether.Api.Entities;
+using ListenTogether.Api.Models;
+using ListenTogether.Model.Api;
+using ListenTogether.Model.Api.Request;
+using ListenTogether.Model.Api.Response;
 
-namespace MusicPlayerOnline.Api.Interfaces;
+namespace ListenTogether.Api.Interfaces;
 public interface IUserService
 {
     public Task<Result> Register(UserRegisterRequest registerUser, string avatarUrl);

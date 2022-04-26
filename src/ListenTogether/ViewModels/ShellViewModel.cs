@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Maui.Models;
-using MusicPlayerOnline.Maui.Pages;
-namespace MusicPlayerOnline.Maui.ViewModels;
+﻿using ListenTogether.Models;
+using ListenTogether.Pages;
+namespace ListenTogether.ViewModels;
 internal class ShellViewModel
 {
     public AppSection Search { get; set; }

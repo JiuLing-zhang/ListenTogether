@@ -2,7 +2,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
-namespace MusicPlayerOnline.Maui;
+namespace ListenTogether;
 public partial class App : Application
 {
     public App(IConfiguration config, IEnvironmentConfigService configService, IUserLocalService userLocalService)
@@ -47,7 +47,7 @@ public partial class App : Application
 
         //主题
         //App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
-
+        App.Current.UserAppTheme = AppTheme.Light;
 
         if (Config.Desktop)
         {

@@ -1,10 +1,10 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-using MusicPlayerOnline.Data.Entities;
-using MusicPlayerOnline.Data.Interfaces;
-using MusicPlayerOnline.Model;
-using MusicPlayerOnline.Model.Enums;
+using ListenTogether.Data.Entities;
+using ListenTogether.Data.Interfaces;
+using ListenTogether.Model;
+using ListenTogether.Model.Enums;
 
-namespace MusicPlayerOnline.Data.Repositories.Local;
+namespace ListenTogether.Data.Repositories.Local;
 public class MusicLocalRepository : IMusicRepository
 {
     public async Task<Music?> GetOneAsync(string id)

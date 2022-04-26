@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui.Resources.Styles;
+﻿namespace ListenTogether.Resources.Styles;
 
 public partial class DefaultTheme : ResourceDictionary
 {

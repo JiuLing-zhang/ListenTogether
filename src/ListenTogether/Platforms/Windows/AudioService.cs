@@ -1,7 +1,7 @@
 ﻿using Windows.Media.Core;
 using Windows.Media.Playback;
 
-namespace MusicPlayerOnline.Maui.Platforms.Windows;
+namespace ListenTogether.Platforms.Windows;
 public class AudioService : IAudioService
 {
     string _uri;

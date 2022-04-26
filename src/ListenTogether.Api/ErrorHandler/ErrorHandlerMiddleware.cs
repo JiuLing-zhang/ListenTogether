@@ -1,10 +1,10 @@
-using MusicPlayerOnline.Api.Interfaces;
-using MusicPlayerOnline.Model.Api;
+using ListenTogether.Api.Interfaces;
+using ListenTogether.Model.Api;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 
-namespace MusicPlayerOnline.Api.ErrorHandler;
+namespace ListenTogether.Api.ErrorHandler;
 
 public class ErrorHandlerMiddleware
 {

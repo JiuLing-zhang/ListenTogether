@@ -1,4 +1,4 @@
-﻿namespace MusicPlayerOnline.Maui
+﻿namespace ListenTogether
 {
     public partial class MainPage : ContentPage
     {

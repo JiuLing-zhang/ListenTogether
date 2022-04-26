@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) and '$(MSBuildRuntimeType)' == 'Full'">$(TargetFrameworks);net6.0-windows10.0.19041</TargetFrameworks>
 		<OutputType>Exe</OutputType>
-		<RootNamespace>MusicPlayerOnline.Maui</RootNamespace>
+		<RootNamespace>ListenTogether</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -13,7 +13,7 @@
 		<ApplicationTitle>一起听</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.jiuling.musicplayeronline</ApplicationId>
+		<ApplicationId>com.jiuling.ListenTogether</ApplicationId>
 		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">DAEEFD7E-F931-420B-B6FD-DC652AD7D5B8</ApplicationId>
 
 		<!-- Versions -->
@@ -69,10 +69,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\MusicPlayerOnline.Business\MusicPlayerOnline.Business.csproj" />
-		<ProjectReference Include="..\MusicPlayerOnline.Common\MusicPlayerOnline.Common.csproj" />
-		<ProjectReference Include="..\MusicPlayerOnline.EasyLog\MusicPlayerOnline.EasyLog.csproj" />
-		<ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
+		<ProjectReference Include="..\ListenTogether.Business\ListenTogether.Business.csproj" />
+		<ProjectReference Include="..\ListenTogether.Common\ListenTogether.Common.csproj" />
+		<ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
+		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

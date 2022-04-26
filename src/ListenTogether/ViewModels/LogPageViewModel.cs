@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace MusicPlayerOnline.Maui.ViewModels;
+namespace ListenTogether.ViewModels;
 
 public class LogPageViewModel : ViewModelBase
 {

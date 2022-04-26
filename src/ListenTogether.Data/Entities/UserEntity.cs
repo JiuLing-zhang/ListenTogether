@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace MusicPlayerOnline.Data.Entities;
+namespace ListenTogether.Data.Entities;
 
 
 [Table("UserBase")]

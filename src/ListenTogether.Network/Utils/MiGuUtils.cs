@@ -1,7 +1,7 @@
-﻿using MusicPlayerOnline.EasyLog;
-using MusicPlayerOnline.Network.Models.MiGu;
+﻿using ListenTogether.EasyLog;
+using ListenTogether.Network.Models.MiGu;
 
-namespace MusicPlayerOnline.Network.Utils;
+namespace ListenTogether.Network.Utils;
 public class MiGuUtils
 {
     public static string GetSearchData(string keyword)

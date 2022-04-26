@@ -1,6 +1,6 @@
-﻿using MusicPlayerOnline.Model;
+﻿using ListenTogether.Model;
 
-namespace MusicPlayerOnline.Network.MusicProvider;
+namespace ListenTogether.Network.MusicProvider;
 public interface IMusicProvider
 {
     Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword);
