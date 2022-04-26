@@ -10,11 +10,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>MusicPlayerOnline.Maui</ApplicationTitle>
+		<ApplicationTitle>一起听</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.musicplayeronline.maui</ApplicationId>
-		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">00495E10-0384-431B-9301-372BAF0FA32E</ApplicationId>
+		<ApplicationId>com.jiuling.musicplayeronline</ApplicationId>
+		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">DAEEFD7E-F931-420B-B6FD-DC652AD7D5B8</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -25,6 +25,12 @@
 		<SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net6.0-android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</TargetPlatformMinVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Release'">
+		<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>758A760DB477F3F9B6F6E4A106B62B395238678B</PackageCertificateThumbprint>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -46,42 +52,48 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="appsettings.json" />
+		<None Remove="appsettings.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="appsettings.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </EmbeddedResource>
+		<EmbeddedResource Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-rc1" />
-	  <PackageReference Include="JiuLing.CommonLibs" Version="1.2.5" />
-	  <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
-	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0-rc1" />
+		<PackageReference Include="JiuLing.CommonLibs" Version="1.2.5" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\MusicPlayerOnline.Business\MusicPlayerOnline.Business.csproj" />
-	  <ProjectReference Include="..\MusicPlayerOnline.Common\MusicPlayerOnline.Common.csproj" />
-	  <ProjectReference Include="..\MusicPlayerOnline.EasyLog\MusicPlayerOnline.EasyLog.csproj" />
-	  <ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
+		<ProjectReference Include="..\MusicPlayerOnline.Business\MusicPlayerOnline.Business.csproj" />
+		<ProjectReference Include="..\MusicPlayerOnline.Common\MusicPlayerOnline.Common.csproj" />
+		<ProjectReference Include="..\MusicPlayerOnline.EasyLog\MusicPlayerOnline.EasyLog.csproj" />
+		<ProjectReference Include="..\MusicPlayerOnline.Model\MusicPlayerOnline.Model.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Controls\SwitchEx.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\CacheCleanPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LoginPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LogPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
+		<MauiXaml Update="Controls\SwitchEx.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Pages\CacheCleanPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Pages\LoginPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Pages\LogPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
+
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties appsettings_1json__JsonSchema="" />
+		</VisualStudio>
+	</ProjectExtensions>
 
 </Project>

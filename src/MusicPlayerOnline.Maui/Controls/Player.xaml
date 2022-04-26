@@ -23,15 +23,13 @@
                                    ></Image>
                             <StackLayout Margin="10,0,0,0">
                                 <Label x:Name="LblMusicName"
-                                       Margin="0,15,0,0"
+                                       Margin="0,10,0,0"
                                        VerticalOptions="Start"
-                                       FontSize="15"
                                        TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"/>
                                 <Label x:Name="LblMusicAuthor"
-                                       Margin="0,0,0,15"
+                                       Margin="0,0,0,10"
                                        VerticalOptions="EndAndExpand"
-                                       FontSize="13"
-                                       TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"/>
+                                       Style="{StaticResource Explain}"/>
                             </StackLayout>
                         </StackLayout>
                         <StackLayout HorizontalOptions="CenterAndExpand" 

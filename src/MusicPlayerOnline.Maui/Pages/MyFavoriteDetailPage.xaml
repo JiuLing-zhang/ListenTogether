@@ -60,7 +60,7 @@
                         IsVisible="{Binding IsNotBusy}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal">
+                    <StackLayout Orientation="Horizontal" Padding="0,0,0,10">
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"
                                                       CommandParameter="{Binding .}"
@@ -82,19 +82,21 @@
                         </StackLayout>
 
                         <Label Text="{Binding Seq}"
+                               Margin="10,0,0,0"
                                VerticalTextAlignment="Center"/>
 
-                        <StackLayout Margin="10,0,0,0"
-                                     Spacing="5">
+                        <StackLayout Margin="20,0,0,0"
+                                     Spacing="3">
                             <StackLayout Orientation="Horizontal">
-                                <Border Padding="4,2,4,2"
+                                <Border Padding="4,0,4,3"
                                     StrokeThickness="1"
                                     HorizontalOptions="Center">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="5" />
                                     </Border.StrokeShape>
                                     <Label Text="{Binding PlatformName}"
-                                   VerticalTextAlignment="Center"/>
+                                           VerticalTextAlignment="Center"
+                                           Style="{StaticResource Explain}"/>
                                 </Border>
                                 <Label Text="{Binding MusicName}"
                                        Margin="5,0,0,0"
@@ -103,7 +105,8 @@
                             </StackLayout>
 
                             <Label VerticalTextAlignment="Center"
-                                   LineBreakMode="TailTruncation">
+                                   LineBreakMode="TailTruncation"
+                                   Style="{StaticResource Explain}">
                                 <MultiBinding StringFormat="{}{0} - {1}">
                                     <Binding Path="MusicArtist" />
                                     <Binding Path="MusicAlbum" />

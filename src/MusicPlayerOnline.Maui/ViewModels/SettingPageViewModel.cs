@@ -398,6 +398,12 @@ public class SettingPageViewModel : ViewModelBase
 
     private async void Logout()
     {
+        var isOk = await Shell.Current.DisplayAlert("提示", "确定要退出吗？", "确定", "取消");
+        if (isOk == false)
+        {
+            return;
+        }
+
         try
         {
             IsBusy = true;

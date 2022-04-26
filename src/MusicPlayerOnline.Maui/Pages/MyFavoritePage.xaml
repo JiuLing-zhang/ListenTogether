@@ -43,7 +43,7 @@
                 </StackLayout.GestureRecognizers>
                 <Image Source="plus.png"
                        HeightRequest="20"
-                       WidthRequest="20">                    
+                       WidthRequest="20">
                 </Image>
                 <Label Text="新建歌单"
                        VerticalTextAlignment="Center"/>
@@ -95,7 +95,8 @@
                                              Margin="10,0,0,0">
                                     <Label Text="{Binding Name}" 
                                        VerticalOptions="End"/>
-                                    <Label VerticalOptions="End" >
+                                    <Label VerticalOptions="End"
+                                           Style="{StaticResource Explain}">
                                         <MultiBinding StringFormat="共 {0} 首歌">
                                             <Binding Path="MusicCount"></Binding>
                                         </MultiBinding>

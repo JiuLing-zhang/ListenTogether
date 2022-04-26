@@ -78,13 +78,14 @@
                                 </Image>
                             </StackLayout>
 
-                            <Border Padding="4,2,4,2"
+                            <Border Padding="4,0,4,3"
                                     StrokeThickness="1"
                                     HorizontalOptions="Center">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="5" />
                                 </Border.StrokeShape>
-                                <Label Text="{Binding PlatformName}"/>
+                                <Label Text="{Binding PlatformName}"
+                                       Style="{StaticResource Explain}"/>
                             </Border>
 
                             <Label Margin="5,0,0,0"

@@ -6,13 +6,13 @@
     <Color x:Key="LightBackground">#F7F7F7</Color>
     <Color x:Key="LightTitle">#262626</Color>
     <Color x:Key="LightText">#262626</Color>
-    <Color x:Key="LightTextSecond">#717171</Color>    
+    <Color x:Key="LightTextSecond">#717171</Color>
     <Color x:Key="LightPlaceholder">#767676</Color>
     <Color x:Key="LightActivity">#1279D2</Color>
     <Color x:Key="LightLyricText">#646464</Color>
     <Color x:Key="LightLyricHighlight">#0E6ABA</Color>
     <Color x:Key="LightBorder">#BEBEBE</Color>
-    
+
     <Color x:Key="DarkBackground">#242424</Color>
     <Color x:Key="DarkTitle">#FCF2F7</Color>
     <Color x:Key="DarkText">#FCF2F7</Color>
@@ -29,6 +29,14 @@
                 Value="20" />
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource LightTitle}, Dark={StaticResource DarkTitle}}" />
+    </Style>
+
+    <Style TargetType="Label"
+           x:Key="Explain">
+        <Setter Property="FontSize"
+                Value="13" />
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource LightTextSecond}, Dark={StaticResource DarkTextSecond}}" />
     </Style>
 
     <Style TargetType="Label">

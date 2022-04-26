@@ -57,13 +57,15 @@
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="CenterAndExpand">
 
-                <Border Padding="4,2,4,2"
+                <Border Padding="4,0,4,0"
                         StrokeThickness="1"
                         HorizontalOptions="Center">
                     <Border.StrokeShape>
                         <RoundRectangle CornerRadius="5" />
                     </Border.StrokeShape>
-                    <Label Text="{Binding CurrentMusic.PlatformName}"/>
+                    <Label Text="{Binding CurrentMusic.PlatformName}"
+                           FontSize="16"
+                           Style="{StaticResource Explain}"/>
                 </Border>
 
                 <Label Margin="10,0,0,0"
