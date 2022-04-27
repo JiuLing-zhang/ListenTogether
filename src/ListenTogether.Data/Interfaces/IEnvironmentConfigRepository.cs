@@ -4,12 +4,12 @@ namespace ListenTogether.Data.Interfaces;
 
 public interface IEnvironmentConfigRepository
 {
-    EnvironmentSetting ReadAllSettings();
-    void WritePlayerSetting(PlayerSetting playerSetting);
+    Task<EnvironmentSetting> ReadAllSettingsAsync();
+    Task WritePlayerSettingAsync(PlayerSetting playerSetting);
 
-    bool WriteGeneralSetting(GeneralSetting generalSetting);
+    Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting);
 
-    bool WriteSearchSetting(SearchSetting searchSetting);
+    Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting);
 
-    bool WritePlaySetting(PlaySetting playSetting);
+    Task<bool> WritePlaySettingAsync(PlaySetting playSetting);
 }

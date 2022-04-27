@@ -4,11 +4,11 @@ namespace ListenTogether.Business.Interfaces;
 
 public interface IEnvironmentConfigService
 {
-    EnvironmentSetting ReadAllSettings();
-    void WritePlayerSetting(PlayerSetting playerSetting);
-    bool WriteGeneralSetting(GeneralSetting generalSetting);
+    Task<EnvironmentSetting> ReadAllSettingsAsync();
+    Task WritePlayerSettingAsync(PlayerSetting playerSetting);
+    Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting);
 
-    bool WriteSearchSetting(SearchSetting searchSetting);
+    Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting);
 
-    bool WritePlaySetting(PlaySetting playSetting);
+    Task<bool> WritePlaySettingAsync(PlaySetting playSetting);
 }

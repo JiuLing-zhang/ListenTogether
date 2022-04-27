@@ -299,7 +299,7 @@ public class PlayingPageViewModel : ViewModelBase
         PlayModeInt = (int)GlobalConfig.MyUserSetting.Player.PlayMode;
         await ToastService.Show($"{GlobalConfig.MyUserSetting.Player.PlayMode.GetDescription()}");
 
-        _configService.WritePlayerSetting(GlobalConfig.MyUserSetting.Player);
+        await _configService.WritePlayerSettingAsync(GlobalConfig.MyUserSetting.Player);
     }
     /// <summary>
     /// 上一首

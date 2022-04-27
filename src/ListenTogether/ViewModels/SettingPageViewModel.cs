@@ -20,16 +20,6 @@ public class SettingPageViewModel : ViewModelBase
         _userLocalService = userLocalService;
     }
 
-    public async Task InitializeAsync()
-    {
-        GetAppConfig();
-        UpdateUserInfo();
-
-        //TODO IAppVersionInfo
-        //VersionName = DependencyService.Get<IAppVersionInfo>().GetVersionName();
-    }
-
-
     private bool _isBusy;
     public bool IsBusy
     {
@@ -43,8 +33,8 @@ public class SettingPageViewModel : ViewModelBase
     }
     public bool IsNotBusy => !_isBusy;
 
+    private UserInfoViewModel _userInfo = GetUserInfo();
 
-    private UserInfoViewModel _userInfo;
     /// <summary>
     /// 用户信息
     /// </summary>
@@ -86,7 +76,7 @@ public class SettingPageViewModel : ViewModelBase
     /// </summary>
     public string Title => "设置";
 
-    private bool _isAutoCheckUpdate;
+    private bool _isAutoCheckUpdate = GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate;
     /// <summary>
     /// 自动检查更新
     /// </summary>
@@ -99,7 +89,7 @@ public class SettingPageViewModel : ViewModelBase
             OnPropertyChanged();
 
             GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate = value;
-            WriteGeneralConfig();
+            WriteGeneralConfigAsync();
         }
     }
 
@@ -115,11 +105,11 @@ public class SettingPageViewModel : ViewModelBase
             OnPropertyChanged();
 
             GlobalConfig.MyUserSetting.General.IsDarkMode = value;
-            WriteGeneralConfig();
+            WriteGeneralConfigAsync();
         }
     }
 
-    private bool _isEnableNetEase;
+    private bool _isEnableNetEase = CheckEnablePlatform(PlatformEnum.NetEase);
     /// <summary>
     /// 网易云
     /// </summary>
@@ -131,11 +121,11 @@ public class SettingPageViewModel : ViewModelBase
             _isEnableNetEase = value;
             OnPropertyChanged();
 
-            EnableNetEase();
+            EnableNetEaseAsync();
         }
     }
 
-    private bool _isEnableKuGou;
+    private bool _isEnableKuGou = CheckEnablePlatform(PlatformEnum.KuGou);
     /// <summary>
     /// 酷狗
     /// </summary>
@@ -147,11 +137,11 @@ public class SettingPageViewModel : ViewModelBase
             _isEnableKuGou = value;
             OnPropertyChanged();
 
-            EnableKuGou();
+            EnableKuGouAsync();
         }
     }
 
-    private bool _isEnableMiGu;
+    private bool _isEnableMiGu = CheckEnablePlatform(PlatformEnum.MiGu);
     /// <summary>
     /// 咪咕
     /// </summary>
@@ -167,7 +157,7 @@ public class SettingPageViewModel : ViewModelBase
         }
     }
 
-    private bool _isHideShortMusic;
+    private bool _isHideShortMusic = GlobalConfig.MyUserSetting.Search.IsHideShortMusic;
     /// <summary>
     /// 隐藏小于1分钟的歌曲
     /// </summary>
@@ -180,12 +170,12 @@ public class SettingPageViewModel : ViewModelBase
             OnPropertyChanged();
 
             GlobalConfig.MyUserSetting.Search.IsHideShortMusic = value;
-            WriteSearchConfig();
+            WriteSearchConfigAsync();
         }
     }
 
 
-    private bool _isWifiPlayOnly;
+    private bool _isWifiPlayOnly = GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly;
     /// <summary>
     /// 仅WIFI下可播放
     /// </summary>
@@ -198,11 +188,11 @@ public class SettingPageViewModel : ViewModelBase
             OnPropertyChanged();
 
             GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly = value;
-            WritePlayConfig();
+            WritePlayConfigAsync();
         }
     }
 
-    private bool _isAutoNextWhenFailed;
+    private bool _isAutoNextWhenFailed = GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed;
     /// <summary>
     /// 播放失败时自动跳到下一首
     /// </summary>
@@ -215,11 +205,11 @@ public class SettingPageViewModel : ViewModelBase
             OnPropertyChanged();
 
             GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed = value;
-            WritePlayConfig();
+            WritePlayConfigAsync();
         }
     }
 
-    private bool _isCleanPlaylistWhenPlayMyFavorite;
+    private bool _isCleanPlaylistWhenPlayMyFavorite = GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite;
     /// <summary>
     /// 播放我的歌单前清空播放列表
     /// </summary>
@@ -232,7 +222,7 @@ public class SettingPageViewModel : ViewModelBase
             OnPropertyChanged();
 
             GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite = value;
-            WritePlayConfig();
+            WritePlayConfigAsync();
         }
     }
 
@@ -249,42 +239,7 @@ public class SettingPageViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
-
-    private void GetAppConfig()
-    {
-        //常规设置
-        IsAutoCheckUpdate = GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate;
-
-        //搜索平台设置
-        IsEnableNetEase = CheckEnablePlatform(PlatformEnum.NetEase);
-        IsEnableKuGou = CheckEnablePlatform(PlatformEnum.KuGou);
-        IsEnableMiGu = CheckEnablePlatform(PlatformEnum.MiGu);
-        IsHideShortMusic = GlobalConfig.MyUserSetting.Search.IsHideShortMusic;
-
-        //播放设置
-        IsWifiPlayOnly = GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly;
-        IsAutoNextWhenFailed = GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed;
-        IsCleanPlaylistWhenPlayMyFavorite = GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite;
-    }
-
-    private void UpdateUserInfo()
-    {
-        if (GlobalConfig.CurrentUser == null)
-        {
-            UserInfo = null;
-        }
-        else
-        {
-            UserInfo = new UserInfoViewModel()
-            {
-                Username = GlobalConfig.CurrentUser.Username,
-                Nickname = GlobalConfig.CurrentUser.Nickname,
-                Avatar = GlobalConfig.CurrentUser.Avatar
-            };
-        }
-    }
-
-    private bool CheckEnablePlatform(PlatformEnum platform)
+    private static bool CheckEnablePlatform(PlatformEnum platform)
     {
         if ((GlobalConfig.MyUserSetting.Search.EnablePlatform & platform) == platform)
         {
@@ -297,26 +252,34 @@ public class SettingPageViewModel : ViewModelBase
     /// <summary>
     /// 保存通用配置
     /// </summary>
-    private async void WriteGeneralConfig()
+    private async Task WriteGeneralConfigAsync()
     {
-        await Task.Run(() =>
-        {
-            _configService.WriteGeneralSetting(GlobalConfig.MyUserSetting.General);
-        });
+        await _configService.WriteGeneralSettingAsync(GlobalConfig.MyUserSetting.General);
     }
 
     /// <summary>
     /// 保存播放配置
     /// </summary>
-    private async void WritePlayConfig()
+    private async Task WritePlayConfigAsync()
     {
-        await Task.Run(() =>
-        {
-            _configService.WritePlaySetting(GlobalConfig.MyUserSetting.Play);
-        });
+        await _configService.WritePlaySettingAsync(GlobalConfig.MyUserSetting.Play);
     }
 
-    private async void EnableNetEase()
+    private static UserInfoViewModel GetUserInfo()
+    {
+        if (GlobalConfig.CurrentUser == null)
+        {
+            return null;
+        }
+        return new UserInfoViewModel()
+        {
+            Username = GlobalConfig.CurrentUser.Username,
+            Nickname = GlobalConfig.CurrentUser.Nickname,
+            Avatar = GlobalConfig.CurrentUser.Avatar
+        };
+    }
+
+    private async Task EnableNetEaseAsync()
     {
         if (IsEnableNetEase)
         {
@@ -332,10 +295,10 @@ public class SettingPageViewModel : ViewModelBase
                 GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform & ~PlatformEnum.NetEase;
             }
         }
-        await WriteSearchConfig();
+        await WriteSearchConfigAsync();
     }
 
-    private async void EnableKuGou()
+    private async Task EnableKuGouAsync()
     {
         if (IsEnableKuGou)
         {
@@ -351,7 +314,7 @@ public class SettingPageViewModel : ViewModelBase
                 GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform & ~PlatformEnum.KuGou;
             }
         }
-        await WriteSearchConfig();
+        await WriteSearchConfigAsync();
     }
 
     private async void EnableMiGu()
@@ -370,15 +333,12 @@ public class SettingPageViewModel : ViewModelBase
                 GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform & ~PlatformEnum.MiGu;
             }
         }
-        await WriteSearchConfig();
+        await WriteSearchConfigAsync();
     }
 
-    private async Task WriteSearchConfig()
+    private async Task WriteSearchConfigAsync()
     {
-        await Task.Run(() =>
-        {
-            _configService.WriteSearchSetting(GlobalConfig.MyUserSetting.Search);
-        });
+        await _configService.WriteSearchSettingAsync(GlobalConfig.MyUserSetting.Search);
     }
 
     private async void GoToCacheClean()
@@ -413,7 +373,7 @@ public class SettingPageViewModel : ViewModelBase
 
             _userLocalService.Remove();
             GlobalConfig.CurrentUser = null;
-            UpdateUserInfo();
+            UserInfo = null;
         }
         catch (Exception ex)
         {

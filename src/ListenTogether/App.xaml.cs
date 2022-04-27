@@ -43,8 +43,7 @@ public partial class App : Application
         BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataDirectory, appSetting.LocalDbName), appSetting.ApiDomain, deviceId);
         GlobalConfig.CurrentUser = userLocalService.Read();
 
-        GlobalConfig.MyUserSetting = configService.ReadAllSettings();
-
+        GlobalConfig.MyUserSetting = configService.ReadAllSettingsAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         //主题
         //App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
         App.Current.UserAppTheme = AppTheme.Light;

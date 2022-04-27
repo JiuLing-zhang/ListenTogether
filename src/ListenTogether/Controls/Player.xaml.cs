@@ -167,11 +167,11 @@ public partial class Player : ContentView
         }
     }
 
-    private void ImgSoundOff_Tapped(object sender, EventArgs e)
+    private async void ImgSoundOff_Tapped(object sender, EventArgs e)
     {
         SetSoundOnOff();
         UpdateSoundOnOff();
-        WritePlayerSetting();
+        await WritePlayerSettingAsync();
     }
     private void SetSoundOnOff()
     {
@@ -187,11 +187,11 @@ public partial class Player : ContentView
         SliderVolume.Value = GlobalConfig.MyUserSetting.Player.Volume;
     }
 
-    private void ImgRepeat_Tapped(object sender, EventArgs e)
+    private async void ImgRepeat_Tapped(object sender, EventArgs e)
     {
         SetNextRepeatMode();
         UpdateRepeatModel();
-        WritePlayerSetting();
+        await WritePlayerSettingAsync();
     }
 
     private void SetNextRepeatMode()
@@ -235,13 +235,13 @@ public partial class Player : ContentView
         }
     }
 
-    private void WritePlayerSetting()
+    private async Task WritePlayerSettingAsync()
     {
         if (_configService == null)
         {
             return;
         }
-        _configService.WritePlayerSetting(GlobalConfig.MyUserSetting.Player);
+        await _configService.WritePlayerSettingAsync(GlobalConfig.MyUserSetting.Player);
     }
 
     private async void Previous_Tapped(object sender, EventArgs e)
@@ -259,7 +259,7 @@ public partial class Player : ContentView
         await ToastService.Show("别点了，小的就是个占位的~~~");
     }
 
-    private void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
+    private async void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
         _playerService.Volume = e.NewValue;
         GlobalConfig.MyUserSetting.Player.Volume = e.NewValue;
@@ -270,7 +270,7 @@ public partial class Player : ContentView
             UpdateSoundOnOff();
         }
 
-        WritePlayerSetting();
+        await WritePlayerSettingAsync();
     }
 
     private void SliderPlayProgress_DragStarted(object sender, EventArgs e)

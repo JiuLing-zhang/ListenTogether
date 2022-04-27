@@ -12,27 +12,27 @@ public class EnvironmentConfigService : IEnvironmentConfigService
         _repository = repository;
     }
 
-    public EnvironmentSetting ReadAllSettings()
+    public async Task<EnvironmentSetting> ReadAllSettingsAsync()
     {
-        return _repository.ReadAllSettings();
+        return await _repository.ReadAllSettingsAsync();
     }
 
-    public void WritePlayerSetting(PlayerSetting playerSetting)
+    public async Task WritePlayerSettingAsync(PlayerSetting playerSetting)
     {
-        _repository.WritePlayerSetting(playerSetting);
+        await _repository.WritePlayerSettingAsync(playerSetting);
     }
-    public bool WriteGeneralSetting(GeneralSetting generalSetting)
+    public async Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting)
     {
-        return _repository.WriteGeneralSetting(generalSetting);
-    }
-
-    public bool WriteSearchSetting(SearchSetting searchSetting)
-    {
-        return _repository.WriteSearchSetting(searchSetting);
+        return await _repository.WriteGeneralSettingAsync(generalSetting);
     }
 
-    public bool WritePlaySetting(PlaySetting playSetting)
+    public async Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting)
     {
-        return _repository.WritePlaySetting(playSetting);
+        return await _repository.WriteSearchSettingAsync(searchSetting);
+    }
+
+    public async Task<bool> WritePlaySettingAsync(PlaySetting playSetting)
+    {
+        return await _repository.WritePlaySettingAsync(playSetting);
     }
 }

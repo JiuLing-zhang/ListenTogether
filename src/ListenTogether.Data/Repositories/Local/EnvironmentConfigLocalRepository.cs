@@ -8,12 +8,12 @@ namespace ListenTogether.Data.Repositories.Local;
 
 public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
 {
-    public EnvironmentSetting ReadAllSettings()
+    public async Task<EnvironmentSetting> ReadAllSettingsAsync()
     {
-        var environmentConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        var environmentConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
         if (environmentConfig == null)
         {
-            environmentConfig = InitializationEnvironmentSetting();
+            environmentConfig = await InitializationEnvironmentSettingAsync();
         }
 
         var result = new EnvironmentSetting();
@@ -54,9 +54,9 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         return result;
     }
 
-    private EnvironmentConfigEntity InitializationEnvironmentSetting()
+    private async Task<EnvironmentConfigEntity> InitializationEnvironmentSettingAsync()
     {
-        var environmentConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        var environmentConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
         if (environmentConfig != null)
         {
             return environmentConfig;
@@ -88,7 +88,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             }).ToJson()
         };
 
-        var count = DatabaseProvide.Database.Insert(environmentConfig);
+        var count = await DatabaseProvide.DatabaseAsync.InsertAsync(environmentConfig);
         if (count == 0)
         {
             throw new Exception("初始化环境配置失败");
@@ -96,28 +96,28 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         return environmentConfig;
     }
 
-    public void WritePlayerSetting(PlayerSetting playerSetting)
+    public async Task WritePlayerSettingAsync(PlayerSetting playerSetting)
     {
-        var environmentConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        var environmentConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
         if (environmentConfig == null)
         {
             throw new Exception("环境配置信息不存在，播放设置保存失败");
         }
 
         environmentConfig.PlayerSettingJson = playerSetting.ToJson();
-        DatabaseProvide.Database.Update(environmentConfig);
+        await DatabaseProvide.DatabaseAsync.UpdateAsync(environmentConfig);
     }
 
-    public bool WriteGeneralSetting(GeneralSetting generalSetting)
+    public async Task<bool> WriteGeneralSettingAsync(GeneralSetting generalSetting)
     {
-        var userConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        var userConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
         if (userConfig == null)
         {
             return false;
         }
 
         userConfig.GeneralSettingJson = generalSetting.ToJson();
-        var count = DatabaseProvide.Database.Update(userConfig);
+        var count = await DatabaseProvide.DatabaseAsync.UpdateAsync(userConfig);
         if (count == 0)
         {
             return false;
@@ -126,16 +126,16 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         return true;
     }
 
-    public bool WriteSearchSetting(SearchSetting searchSetting)
+    public async Task<bool> WriteSearchSettingAsync(SearchSetting searchSetting)
     {
-        var userConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        var userConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
         if (userConfig == null)
         {
             return false;
         }
 
         userConfig.SearchSettingJson = searchSetting.ToJson();
-        var count = DatabaseProvide.Database.Update(userConfig);
+        var count = await DatabaseProvide.DatabaseAsync.UpdateAsync(userConfig);
         if (count == 0)
         {
             return false;
@@ -143,16 +143,16 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         return true;
     }
 
-    public bool WritePlaySetting(PlaySetting playSetting)
+    public async Task<bool> WritePlaySettingAsync(PlaySetting playSetting)
     {
-        var userConfig = DatabaseProvide.Database.Table<EnvironmentConfigEntity>().FirstOrDefault();
+        var userConfig = await DatabaseProvide.DatabaseAsync.Table<EnvironmentConfigEntity>().FirstOrDefaultAsync();
         if (userConfig == null)
         {
             return false;
         }
 
         userConfig.PlaySettingJson = playSetting.ToJson();
-        var count = DatabaseProvide.Database.Update(userConfig);
+        var count = await DatabaseProvide.DatabaseAsync.UpdateAsync(userConfig);
         if (count == 0)
         {
             return false;

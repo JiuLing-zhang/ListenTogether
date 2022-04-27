@@ -15,7 +15,6 @@ public partial class SettingsPage : ContentPage
     {
         base.OnAppearing();
         player.OnAppearing();
-        await vm.InitializeAsync();
     }
 
     protected override void OnDisappearing()
