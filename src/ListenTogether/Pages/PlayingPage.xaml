@@ -89,31 +89,27 @@
             </StackLayout>
 
             <!-- 歌词 -->
-            <ScrollView VerticalOptions="FillAndExpand">
-                <StackLayout>
-                    <CollectionView x:Name="ListLyrics"
+            <CollectionView VerticalOptions="FillAndExpand"
+                                    x:Name="ListLyrics"
                                     EmptyView="暂无歌词"
                                     ItemsSource="{Binding Lyrics}"
                                     HorizontalOptions="Center"
                                     SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout HorizontalOptions="Center">
-                                    <Label Text="{Binding Info}" 
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout HorizontalOptions="Center">
+                            <Label Text="{Binding Info}" 
                                            Style="{StaticResource LyricItem}"/>
-                                </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </StackLayout>
-            </ScrollView>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
 
-        <StackLayout VerticalOptions="End"
-                     IsVisible="{OnPlatform Default=false,UWP=true,MacCatalyst=true}">
+        <StackLayout VerticalOptions="End">
             <controls:Player x:Name="player"
-                             Margin="0,20,0,0">
-            </controls:Player>
+                             Margin="0,20,0,0"
+                             IsMiniWhenPhone="False"/>
         </StackLayout>
     </StackLayout>
 </ContentPage>

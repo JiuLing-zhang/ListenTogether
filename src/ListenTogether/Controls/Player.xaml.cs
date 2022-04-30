@@ -1,12 +1,22 @@
-using Microsoft.Maui.Dispatching;
 using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Controls;
 
 public partial class Player : ContentView
 {
+    public static readonly BindableProperty IsMiniWhenPhoneProperty =
+        BindableProperty.Create(
+            nameof(IsMiniWhenPhone),
+            typeof(bool),
+            typeof(Player),
+            false);
+    public bool IsMiniWhenPhone
+    {
+        get { return (bool)GetValue(IsMiniWhenPhoneProperty); }
+        set { SetValue(IsMiniWhenPhoneProperty, value); }
+    }
+
     private PlayerService _playerService;
-    private IDispatcherTimer? _timerPlayProgress;
     private IEnvironmentConfigService _configService;
     public Player()
     {
@@ -21,6 +31,9 @@ public partial class Player : ContentView
         if (_playerService == null)
         {
             _playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
+            _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
+            _playerService.NewMusicAdded += playerService_NewMusicAdded;
+            _playerService.PositionChanged += _playerService_PositionChanged;
             InitPlayer();
         }
         if (_configService == null)
@@ -28,56 +41,28 @@ public partial class Player : ContentView
             _configService = this.Handler.MauiContext.Services.GetService<IEnvironmentConfigService>();
         }
 
-        if (_timerPlayProgress == null)
+        PhoneMiniBlock.IsVisible = IsMiniWhenPhone;
+        PhoneBlock.IsVisible = !IsMiniWhenPhone;
+        if (Config.Desktop)
         {
-            _timerPlayProgress = App.Current.Dispatcher.CreateTimer();
-            _timerPlayProgress.Interval = TimeSpan.FromMilliseconds(500);
-            _timerPlayProgress.Tick += _timerPlayProgress_Tick;
-            _timerPlayProgress.Start();
+            MainBlock.HeightRequest = 70;
         }
-    }
-
-    private void _timerPlayProgress_Tick(object sender, EventArgs e)
-    {
-        if (_playerService == null)
+        else
         {
-            return;
-        }
-        try
-        {
-            var positionMillisecond = _playerService.PositionMillisecond;
-
-            var tsPosition = TimeSpan.FromMilliseconds(positionMillisecond);
-            LblPositionMilliseconds.Text = $"{tsPosition.Minutes:D2}:{tsPosition.Seconds:D2}";
-
-            double PlayProgress = positionMillisecond / _playerService.DurationMillisecond;
-            SliderPlayProgress.Value = PlayProgress;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("播放组件更新失败。", ex);
+            if (IsMiniWhenPhone)
+            {
+                MainBlock.HeightRequest = 30;
+            }
+            else
+            {
+                MainBlock.HeightRequest = 60;
+            }
         }
     }
 
     internal void OnAppearing()
     {
         InitPlayer();
-
-        if (_timerPlayProgress != null)
-        {
-            _timerPlayProgress.Start();
-        }
-    }
-
-
-    internal void OnDisappearing()
-    {
-        _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
-        _playerService.NewMusicAdded -= playerService_NewMusicAdded;
-        if (_timerPlayProgress != null)
-        {
-            _timerPlayProgress.Stop();
-        }
     }
 
     void InitPlayer()
@@ -87,72 +72,82 @@ public partial class Player : ContentView
             return;
         }
 
-        _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
-        _playerService.NewMusicAdded += playerService_NewMusicAdded;
-
-        this.IsVisible = _playerService.CurrentMusic != null;
-        if (_playerService.CurrentMusic != null)
-        {
-            UpdatePlayPause();
-            UpdateMusicInfo();
-        }
+        UpdateCurrentMusic();
+        UpdateRepeatModel();
         if (Config.Desktop)
         {
             UpdateSoundOnOff();
             Updatevolume();
         }
-        UpdateRepeatModel();
     }
 
-    private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
-    {
-        if (_playerService.CurrentMusic == null)
-        {
-            IsVisible = false;
-        }
-        else
-        {
-            if (Dispatcher.IsDispatchRequired)
-            {
-                Dispatcher.Dispatch(() =>
-                {
-                    UpdatePlayPause();
-                });
-            }
-            else
-            {
-                UpdatePlayPause();
-            }
-        }
-    }
-    private void playerService_NewMusicAdded(object sender, EventArgs e)
+    private void PlayerService_IsPlayingChanged(object sender, bool e)
     {
         if (Dispatcher.IsDispatchRequired)
         {
             Dispatcher.Dispatch(() =>
             {
-                UpdateMusicInfo();
+                IsPlayingChangedDo(e);
             });
         }
         else
         {
-            UpdateMusicInfo();
+            IsPlayingChangedDo(e);
+        }
+    }
+    private void IsPlayingChangedDo(bool isPlaying)
+    {
+        ImgPlay.Source = isPlaying ? "pause.png" : "play.png";
+    }
+
+    private void playerService_NewMusicAdded(object sender, Music e)
+    {
+        this.IsVisible = true;
+        if (Dispatcher.IsDispatchRequired)
+        {
+            Dispatcher.Dispatch(() =>
+            {
+                NewMusicAddedDo(e);
+            });
+        }
+        else
+        {
+            NewMusicAddedDo(e);
         }
     }
 
-    private void UpdatePlayPause()
+    private void NewMusicAddedDo(Music music)
     {
-        this.IsVisible = true;
-        ImgPlay.Source = _playerService.IsPlaying ? "pause.png" : "play.png";
+        ImgCurrentMusic.Source = music.ImageUrl;
+        LblMusicName.Text = music.Name;
+        LblMusicInfo.Text = $"{music.Artist} - {music.Album}";
+        LblMusicArtist.Text = music.Artist;
     }
-    private void UpdateMusicInfo()
-    {
-        ImgCurrentMusic.Source = _playerService.CurrentMusic.ImageUrl;
-        LblMusicName.Text = _playerService.CurrentMusic.Name;
-        LblMusicAuthor.Text = $"{_playerService.CurrentMusic.Artist} - {_playerService.CurrentMusic.Album}";
 
-        var tsDuration = TimeSpan.FromMilliseconds(_playerService.DurationMillisecond);
-        LblDurationMilliseconds.Text = $"{tsDuration.Minutes:D2}:{tsDuration.Seconds:D2}";
+    private void _playerService_PositionChanged(object sender, MusicPosition e)
+    {
+        if (Dispatcher.IsDispatchRequired)
+        {
+            Dispatcher.Dispatch(() =>
+            {
+                PositionChangedDo(e);
+            });
+        }
+        else
+        {
+            PositionChangedDo(e);
+        }
+    }
+
+    private void PositionChangedDo(MusicPosition position)
+    {
+        LblPositionMilliseconds.Text = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
+        LblDurationMilliseconds.Text = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
+
+        if (!_isPlayProgressDragging)
+        {
+            SliderPlayProgress.Value = position.PlayProgress;
+        }
     }
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
@@ -173,6 +168,35 @@ public partial class Player : ContentView
         UpdateSoundOnOff();
         await WritePlayerSettingAsync();
     }
+
+    private void UpdateCurrentMusic()
+    {
+        if (_playerService.CurrentMusic == null)
+        {
+            return;
+        }
+        this.IsVisible = true;
+
+        var music = new Music()
+        {
+            Name = _playerService.CurrentMusic.Name,
+            Artist = _playerService.CurrentMusic.Artist,
+            Album = _playerService.CurrentMusic.Album,
+            ImageUrl = _playerService.CurrentMusic.ImageUrl
+        };
+        NewMusicAddedDo(music);
+
+        var position = new MusicPosition()
+        {
+            position = TimeSpan.FromMilliseconds(_playerService.PositionMillisecond),
+            Duration = TimeSpan.FromMilliseconds(_playerService.DurationMillisecond),
+            PlayProgress = _playerService.PositionMillisecond / _playerService.DurationMillisecond
+        };
+        PositionChangedDo(position);
+
+        IsPlayingChangedDo(_playerService.IsPlaying);
+    }
+
     private void SetSoundOnOff()
     {
         GlobalConfig.MyUserSetting.Player.IsSoundOff = !GlobalConfig.MyUserSetting.Player.IsSoundOff;
@@ -273,18 +297,18 @@ public partial class Player : ContentView
         await WritePlayerSettingAsync();
     }
 
+    private bool _isPlayProgressDragging;
     private void SliderPlayProgress_DragStarted(object sender, EventArgs e)
     {
-        _timerPlayProgress?.Stop();
+        _isPlayProgressDragging = true;
     }
-
-    private void SliderPlayProgress_DragCompleted(object sender, EventArgs e)
+    private async void SliderPlayProgress_DragCompleted(object sender, EventArgs e)
     {
         if (_playerService.CurrentMusic != null)
         {
             var positionMillisecond = _playerService.DurationMillisecond * SliderPlayProgress.Value;
-            _playerService.PlayAsync(_playerService.CurrentMusic, positionMillisecond);
+            await _playerService.PlayAsync(_playerService.CurrentMusic, positionMillisecond);
         }
-        _timerPlayProgress?.Start();
+        _isPlayProgressDragging = false;
     }
 }

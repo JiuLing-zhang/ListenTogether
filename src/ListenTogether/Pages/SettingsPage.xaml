@@ -153,7 +153,7 @@
         </StackLayout>
         <controls:Player x:Name="player"
                          Margin="0,20,0,0"
-                         VerticalOptions="End" >
-        </controls:Player>
+                         VerticalOptions="End"
+                         IsMiniWhenPhone="True"/>
     </StackLayout>
 </ContentPage>

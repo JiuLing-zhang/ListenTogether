@@ -8,6 +8,7 @@ public class PlayerService
     private static IAudioService _audioService;
     private readonly IMusicNetworkService _musicNetworkService;
     private readonly WifiOptionsService _wifiOptionsService;
+    private System.Timers.Timer _timerPlayProgress;
 
     private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
 
@@ -27,8 +28,9 @@ public class PlayerService
     public Music CurrentMusic => _currentMusic;
     private Music _currentMusic;
 
-    public event EventHandler NewMusicAdded;
-    public event EventHandler IsPlayingChanged;
+    public event EventHandler<Music> NewMusicAdded;
+    public event EventHandler<bool> IsPlayingChanged;
+    public event EventHandler<MusicPosition> PositionChanged;
 
     public PlayerService(IServiceProvider services, IAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory, WifiOptionsService wifiOptionsService)
     {
@@ -39,6 +41,26 @@ public class PlayerService
 
         _musicNetworkService = musicNetworkService;
         _wifiOptionsService = wifiOptionsService;
+
+        _timerPlayProgress = new System.Timers.Timer();
+        _timerPlayProgress.Interval = 1000;
+        _timerPlayProgress.Elapsed += _timerPlayProgress_Elapsed;
+        _timerPlayProgress.Start();
+    }
+
+    private void _timerPlayProgress_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        if (!IsPlaying)
+        {
+            return;
+        }
+
+        PositionChanged?.Invoke(this, new MusicPosition()
+        {
+            position = TimeSpan.FromMilliseconds(PositionMillisecond),
+            Duration = TimeSpan.FromMilliseconds(DurationMillisecond),
+            PlayProgress = PositionMillisecond / DurationMillisecond
+        });
     }
 
     public async Task PauseAsync()
@@ -49,7 +71,7 @@ public class PlayerService
         }
         await _audioService.PauseAsync();
         IsPlaying = false;
-        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
+        IsPlayingChanged?.Invoke(this, false);
     }
 
     public async Task PlayAsync(Music music, double positionMillisecond = 0)
@@ -85,7 +107,7 @@ public class PlayerService
                 await _audioService.PauseAsync();
             }
             await _audioService.InitializeAsync(musicPath);
-            NewMusicAdded?.Invoke(this, EventArgs.Empty);
+            NewMusicAdded?.Invoke(this, _currentMusic);
             await _audioService.PlayAsync(positionMillisecond);
         }
         else
@@ -93,7 +115,7 @@ public class PlayerService
             await _audioService.PlayAsync(positionMillisecond);
         }
         IsPlaying = true;
-        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
+        IsPlayingChanged?.Invoke(this, true);
     }
 
     /// <summary>

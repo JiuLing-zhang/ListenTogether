@@ -1,53 +1,31 @@
 ﻿using Microsoft.Maui.Dispatching;
-using ListenTogether.Model.Enums;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
 public class PlayingPageViewModel : ViewModelBase
 {
+    private IDispatcherTimer _timerLyricsUpdate;
     private readonly PlayerService _playerService;
-    public Command PlayerStateChangeCommand => new Command(PlayerStateChange);
-    public Command RepeatTypeChangeCommand => new Command(RepeatTypeChange);
-    public Command PreviousCommand => new Command(Previous);
-    public Command NextCommand => new Command(Next);
-
-    public Command TempButtonCommand => new Command(() =>
+    public EventHandler<LyricViewModel> ScrollToLyric { get; set; }
+    public PlayingPageViewModel(PlayerService playerService)
     {
-        ToastService.Show("不知道放啥了，占个位而已~~");
-    });
-
-    public Action<LyricViewModel> ScrollToLyric { get; set; }
-
-    private IEnvironmentConfigService _configService;
-
-    private IDispatcherTimer _timerPlayProgress;
-
-    public PlayingPageViewModel(IEnvironmentConfigService configService, PlayerService playerService)
-    {
-        _configService = configService;
         _playerService = playerService;
-
         Lyrics = new ObservableCollection<LyricViewModel>();
-
         _playerService.NewMusicAdded += _playerService_NewMusicAdded;
-        if (_timerPlayProgress == null)
-        {
-            _timerPlayProgress = App.Current.Dispatcher.CreateTimer();
-            _timerPlayProgress.Interval = TimeSpan.FromMilliseconds(300);
-            _timerPlayProgress.Tick += _timerPlayProgress_Tick;
-            _timerPlayProgress.Start();
-        }
+
+        _timerLyricsUpdate = App.Current.Dispatcher.CreateTimer();
+        _timerLyricsUpdate.Interval = TimeSpan.FromMilliseconds(300);
+        _timerLyricsUpdate.Tick += _timerLyricsUpdate_Tick;
+        _timerLyricsUpdate.Start();
     }
 
     public async Task InitializeAsync()
     {
         try
         {
-            UpdateCurrentMusic();
+            NewMusicAddedDo(_playerService.CurrentMusic);
             GetLyricDetail();
-
-            PlayModeInt = (int)GlobalConfig.MyUserSetting.Player.PlayMode;
         }
         catch (Exception ex)
         {
@@ -55,20 +33,6 @@ public class PlayingPageViewModel : ViewModelBase
             Logger.Error("播放页面初始化失败。", ex);
         }
     }
-
-    public void Dispose()
-    {
-        if (_playerService != null)
-        {
-            _playerService.NewMusicAdded -= _playerService_NewMusicAdded;
-        }
-        _timerPlayProgress.Tick -= _timerPlayProgress_Tick;
-    }
-
-    /// <summary>
-    /// 页面标题
-    /// </summary>
-    public string Title => "正在播放";
 
     private Music _currentMusic;
     /// <summary>
@@ -98,74 +62,13 @@ public class PlayingPageViewModel : ViewModelBase
         }
     }
 
-    private decimal _position;
-    /// <summary>
-    /// 播放进度
-    /// </summary>
-    public decimal Position
+    private void _playerService_NewMusicAdded(object sender, Music e)
     {
-        get => _position;
-        set
-        {
-            _position = value;
-            OnPropertyChanged();
-        }
+        NewMusicAddedDo(e);
     }
-
-    private string _durationTime;
-    /// <summary>
-    /// 时长时间
-    /// </summary>
-    public string DurationTime
+    private void NewMusicAddedDo(Music music)
     {
-        get => _durationTime;
-        set
-        {
-            _durationTime = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private string _currentTime;
-    /// <summary>
-    /// 当前时间
-    /// </summary>
-    public string CurrentTime
-    {
-        get => _currentTime;
-        set
-        {
-            _currentTime = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private int _playModeInt;
-    /// <summary>
-    /// 播放模式
-    /// </summary>
-    public int PlayModeInt
-    {
-        get => _playModeInt;
-        set
-        {
-            _playModeInt = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private void _playerService_NewMusicAdded(object sender, EventArgs e)
-    {
-        UpdateCurrentMusic();
-    }
-    private void _timerPlayProgress_Tick(object sender, EventArgs e)
-    {
-        UpdatePlayingProgress();
-    }
-
-    private void UpdateCurrentMusic()
-    {
-        CurrentMusic = _playerService.CurrentMusic;
+        CurrentMusic = music;
     }
 
     /// <summary>
@@ -207,10 +110,7 @@ public class PlayingPageViewModel : ViewModelBase
         }
     }
 
-    /// <summary>
-    /// 更新播放进度
-    /// </summary>
-    private void UpdatePlayingProgress()
+    private void _timerLyricsUpdate_Tick(object sender, EventArgs e)
     {
         if (CurrentMusic == null)
         {
@@ -220,100 +120,36 @@ public class PlayingPageViewModel : ViewModelBase
         {
             return;
         }
+        if (Lyrics.Count == 0)
+        {
+            return;
+        }
 
         try
         {
             var positionMillisecond = _playerService.PositionMillisecond;
-
-            //TODO andorid更新进度条
-            //var (duration, position) = PlayerService.Instance().GetPosition();
-            //Position = (decimal)position / duration;
-            //var tsDurationTime = TimeSpan.FromMilliseconds(duration);
-            //DurationTime = $"{tsDurationTime.Minutes:D2}:{tsDurationTime.Seconds:D2}";
-
-            //var tsCurrentTime = TimeSpan.FromMilliseconds(position);
-            //CurrentTime = $"{tsCurrentTime.Minutes:D2}:{tsCurrentTime.Seconds:D2}";
-
-
-            if (Lyrics.Count > 0)
+            //取大于当前进度的第一行索引，在此基础上-1则为需要高亮的行
+            int highlightIndex = 0;
+            foreach (var lyric in Lyrics)
             {
-                //取大于当前进度的第一行索引，在此基础上-1则为需要高亮的行
-                int highlightIndex = 0;
-                foreach (var lyric in Lyrics)
+                lyric.IsHighlight = false;
+                if (lyric.PositionMillisecond > positionMillisecond)
                 {
-                    lyric.IsHighlight = false;
-                    if (lyric.PositionMillisecond > positionMillisecond)
-                    {
-                        break;
-                    }
-                    highlightIndex++;
+                    break;
                 }
-                if (highlightIndex > 0)
-                {
-                    highlightIndex = highlightIndex - 1;
-                }
-
-                Lyrics[highlightIndex].IsHighlight = true;
-                ScrollToLyric?.Invoke(Lyrics[highlightIndex]);
+                highlightIndex++;
             }
+            if (highlightIndex > 0)
+            {
+                highlightIndex = highlightIndex - 1;
+            }
+
+            Lyrics[highlightIndex].IsHighlight = true;
+            ScrollToLyric?.Invoke(this, Lyrics[highlightIndex]);
         }
         catch (Exception ex)
         {
             Logger.Error("播放页进度更新失败。", ex);
         }
-    }
-    //暂停、恢复
-    private async void PlayerStateChange()
-    {
-        if (CurrentMusic == null)
-        {
-            await ToastService.Show("亲，当前没有歌曲可以播放");
-            return;
-        }
-
-        //TODO 播放和暂停
-        //if (IsPlaying == true)
-        //{
-        //    PlayerService.Instance().Pause();
-        //}
-        //else
-        //{
-        //    PlayerService.Instance().Start();
-        //} 
-    }
-    //循环方式
-    private async void RepeatTypeChange()
-    {
-        switch (GlobalConfig.MyUserSetting.Player.PlayMode)
-        {
-            case PlayModeEnum.RepeatOne:
-                GlobalConfig.MyUserSetting.Player.PlayMode = PlayModeEnum.RepeatList;
-                break;
-            case PlayModeEnum.RepeatList:
-                GlobalConfig.MyUserSetting.Player.PlayMode = PlayModeEnum.Shuffle;
-                break;
-            case PlayModeEnum.Shuffle:
-                GlobalConfig.MyUserSetting.Player.PlayMode = PlayModeEnum.RepeatOne;
-                break;
-        }
-        PlayModeInt = (int)GlobalConfig.MyUserSetting.Player.PlayMode;
-        await ToastService.Show($"{GlobalConfig.MyUserSetting.Player.PlayMode.GetDescription()}");
-
-        await _configService.WritePlayerSettingAsync(GlobalConfig.MyUserSetting.Player);
-    }
-    /// <summary>
-    /// 上一首
-    /// </summary>
-    private async void Previous()
-    {
-        await _playerService.Previous();
-    }
-
-    /// <summary>
-    /// 下一首
-    /// </summary>
-    private async void Next()
-    {
-        await _playerService.Next();
     }
 }

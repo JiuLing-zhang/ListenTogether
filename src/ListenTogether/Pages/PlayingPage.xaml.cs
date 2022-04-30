@@ -1,5 +1,3 @@
-using ListenTogether.ViewModels;
-
 namespace ListenTogether.Pages;
 
 public partial class PlayingPage : ContentPage
@@ -14,21 +12,20 @@ public partial class PlayingPage : ContentPage
     {
         base.OnAppearing();
         player.OnAppearing();
-        vm.ScrollToLyric += ScrollToLyric;
+        vm.ScrollToLyric += ScrollToLyricDo;
         await vm.InitializeAsync();
     }
     protected override void OnDisappearing()
     {
-        player.OnDisappearing();
-        vm.ScrollToLyric -= ScrollToLyric;
+        vm.ScrollToLyric -= ScrollToLyricDo;
         base.OnDisappearing();
     }
 
-    private void ScrollToLyric(LyricViewModel lyric)
+    private void ScrollToLyricDo(object sender, LyricViewModel e)
     {
         try
         {
-            ListLyrics.ScrollTo(lyric);
+            ListLyrics.ScrollTo(e);
         }
         catch (Exception ex)
         {

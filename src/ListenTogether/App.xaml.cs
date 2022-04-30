@@ -24,10 +24,10 @@ public partial class App : Application
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
         };
 
-        var appSetting = config.GetRequiredSection("AppSettings").Get<AppSettings>();
+        GlobalConfig.AppSettings = config.GetRequiredSection("AppSettings").Get<AppSettings>();
 
         //设备Id 自己生成
-        string deviceInfoFileName = Path.Combine(GlobalConfig.AppDataDirectory, appSetting.DeviceInfoFileName);
+        string deviceInfoFileName = Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.DeviceInfoFileName);
         string deviceId;
         if (!File.Exists(deviceInfoFileName))
         {
@@ -40,11 +40,13 @@ public partial class App : Application
         }
 
         BusinessConfig.TokenUpdated += (_, _) => userLocalService.UpdateToken(BusinessConfig.UserToken);
-        BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataDirectory, appSetting.LocalDbName), appSetting.ApiDomain, deviceId);
+        BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.LocalDbName), GlobalConfig.AppSettings.ApiDomain, deviceId);
         GlobalConfig.CurrentUser = userLocalService.Read();
 
-        GlobalConfig.MyUserSetting = configService.ReadAllSettingsAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        //主题
+        var task = Task.Run(configService.ReadAllSettingsAsync);
+        GlobalConfig.MyUserSetting = task.Result;
+
+        //TODO 主题
         //App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
         App.Current.UserAppTheme = AppTheme.Light;
 

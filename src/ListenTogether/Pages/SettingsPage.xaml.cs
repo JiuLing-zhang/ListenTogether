@@ -1,6 +1,4 @@
-﻿using ListenTogether.ViewModels;
-
-namespace ListenTogether.Pages;
+﻿namespace ListenTogether.Pages;
 
 public partial class SettingsPage : ContentPage
 {
@@ -15,12 +13,6 @@ public partial class SettingsPage : ContentPage
     {
         base.OnAppearing();
         player.OnAppearing();
+        await vm.InitializeAsync();
     }
-
-    protected override void OnDisappearing()
-    {
-        player.OnDisappearing();
-        base.OnDisappearing();
-    }
-
 }

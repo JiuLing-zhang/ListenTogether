@@ -26,65 +26,63 @@
                    Placeholder="输入歌曲名、歌手名查找..."
                    VerticalOptions="Start"/>
 
-        <ScrollView VerticalOptions="FillAndExpand">
-            <StackLayout>
-                <CollectionView ItemsSource="{Binding MusicSearchResult}"
-                                EmptyView="什么也没找到"
-                                IsVisible="{Binding IsNotBusy}">
+        <CollectionView VerticalOptions="FillAndExpand"
+                        ItemsSource="{Binding MusicSearchResult}"
+                        EmptyView="什么也没找到"
+                        IsVisible="{Binding IsNotBusy}">
 
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Orientation="Horizontal">
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
                                                           CommandParameter="{Binding .}"
                                                           NumberOfTapsRequired="2"/>
-                                </StackLayout.GestureRecognizers>
+                        </StackLayout.GestureRecognizers>
 
-                                <StackLayout WidthRequest="30">
-                                    <Image Source="heart.png"
+                        <StackLayout WidthRequest="30">
+                            <Image Source="heart.png"
                                            Aspect="AspectFill"
                                            WidthRequest="15"
                                            HeightRequest="15"
                                            VerticalOptions="CenterAndExpand"
                                            HorizontalOptions="CenterAndExpand">
-                                        <Image.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
                                                                   CommandParameter="{Binding .}"/>
-                                        </Image.GestureRecognizers>
-                                    </Image>
-                                </StackLayout>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </StackLayout>
 
-                                <Label Text="{Binding Platform}"
+                        <Label Text="{Binding Platform}"
                                    WidthRequest="40"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                                <Label Text="{Binding Duration}" 
+                        <Label Text="{Binding Duration}" 
                                    WidthRequest="60"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                                <Label Text="{Binding Name}" 
+                        <Label Text="{Binding Name}" 
                                    WidthRequest="300"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                                <Label Text="{Binding Artist}" 
+                        <Label Text="{Binding Artist}" 
                                    WidthRequest="300"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                                <Label Text="{Binding Album}" 
+                        <Label Text="{Binding Album}" 
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation"/>
-                            </StackLayout>
+                    </StackLayout>
 
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
-        </ScrollView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
 
         <controls:Player x:Name="player"
                          Margin="0,20,0,0"
-                         VerticalOptions="End" >
-        </controls:Player>
+                         VerticalOptions="End"
+                         IsMiniWhenPhone="True"/>
     </StackLayout>
 </ContentPage>

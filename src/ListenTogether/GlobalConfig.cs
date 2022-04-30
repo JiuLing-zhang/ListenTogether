@@ -20,6 +20,8 @@ namespace ListenTogether
 
         public static EnvironmentSetting MyUserSetting { get; set; }
 
+        public static AppSettings AppSettings { get; set; }
+
         private static User? _currentUser;
         /// <summary>
         /// 当前用户

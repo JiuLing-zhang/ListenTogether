@@ -50,67 +50,65 @@
             </StackLayout>
         </StackLayout>
 
-        <ScrollView VerticalOptions="FillAndExpand">
-            <StackLayout>
-                <CollectionView ItemsSource="{Binding FavoriteList}"
+        <CollectionView VerticalOptions="FillAndExpand"
+                                ItemsSource="{Binding FavoriteList}"
                                 EmptyView="还没有歌单....快去添加一个吧~~"
                                 IsVisible="{Binding IsNotBusy}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Orientation="Horizontal"
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Horizontal"
                                      Margin="0,0,0,10">
 
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailCommand}"	
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailCommand}"	
                                                       CommandParameter="{Binding .}">
-                                    </TapGestureRecognizer>
-                                </StackLayout.GestureRecognizers>
+                            </TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
 
-                                <StackLayout HorizontalOptions="Start" 
+                        <StackLayout HorizontalOptions="Start" 
                                          VerticalOptions="Center"
                                          Margin="0,0,10,0">
-                                    <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"	
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"	
                                                           CommandParameter="{Binding .}"/>
-                                    </StackLayout.GestureRecognizers>
+                            </StackLayout.GestureRecognizers>
 
-                                    <Image WidthRequest="28"
+                            <Image WidthRequest="28"
                                        Source="play.png"
                                        Aspect="AspectFill">
-                                    </Image>
-                                </StackLayout>
+                            </Image>
+                        </StackLayout>
 
-                                <Frame CornerRadius="10"
+                        <Frame CornerRadius="10"
                                        HeightRequest="48"
                                        WidthRequest="48">
-                                    <Image HeightRequest="48"
+                            <Image HeightRequest="48"
                                            WidthRequest="48"
                                            Aspect="Fill"                                           
                                            Style="{StaticResource MyFavoriteImg}">
-                                    </Image>
-                                </Frame>
+                            </Image>
+                        </Frame>
 
-                                <StackLayout HorizontalOptions="StartAndExpand" 
+                        <StackLayout HorizontalOptions="StartAndExpand" 
                                              VerticalOptions="Center"
                                              Margin="10,0,0,0">
-                                    <Label Text="{Binding Name}" 
+                            <Label Text="{Binding Name}" 
                                        VerticalOptions="End"/>
-                                    <Label VerticalOptions="End"
+                            <Label VerticalOptions="End"
                                            Style="{StaticResource Explain}">
-                                        <MultiBinding StringFormat="共 {0} 首歌">
-                                            <Binding Path="MusicCount"></Binding>
-                                        </MultiBinding>
-                                    </Label>
-                                </StackLayout>
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
-        </ScrollView>
+                                <MultiBinding StringFormat="共 {0} 首歌">
+                                    <Binding Path="MusicCount"></Binding>
+                                </MultiBinding>
+                            </Label>
+                        </StackLayout>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
         <controls:Player x:Name="player"
                          Margin="0,20,0,0"
-                         VerticalOptions="End" >
-        </controls:Player>
+                         VerticalOptions="End"
+                         IsMiniWhenPhone="True"/>
     </StackLayout>
 </ContentPage>

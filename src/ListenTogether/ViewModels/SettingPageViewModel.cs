@@ -19,6 +19,10 @@ public class SettingPageViewModel : ViewModelBase
         _userService = userService;
         _userLocalService = userLocalService;
     }
+    public async Task InitializeAsync()
+    {
+        UserInfo = GetUserInfo();
+    }
 
     private bool _isBusy;
     public bool IsBusy
@@ -33,7 +37,7 @@ public class SettingPageViewModel : ViewModelBase
     }
     public bool IsNotBusy => !_isBusy;
 
-    private UserInfoViewModel _userInfo = GetUserInfo();
+    private UserInfoViewModel _userInfo;
 
     /// <summary>
     /// 用户信息
@@ -275,7 +279,7 @@ public class SettingPageViewModel : ViewModelBase
         {
             Username = GlobalConfig.CurrentUser.Username,
             Nickname = GlobalConfig.CurrentUser.Nickname,
-            Avatar = GlobalConfig.CurrentUser.Avatar
+            Avatar = $"{GlobalConfig.AppSettings.ApiDomain}{GlobalConfig.CurrentUser.Avatar}"
         };
     }
 

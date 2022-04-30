@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
             <toolkit:IsNotEqualConverter x:Key="IsNotEqualConverter" />
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

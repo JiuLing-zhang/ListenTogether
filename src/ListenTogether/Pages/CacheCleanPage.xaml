@@ -65,6 +65,7 @@
             <Button Text="全选"
                     Command="{Binding SelectAllCommand}"/>
             <Button Text="删除"
+                    Margin="5,0,0,0"
                     Style="{DynamicResource IsEnabledClear}"
                     Command="{Binding ClearCommand}"/>
         </StackLayout>
