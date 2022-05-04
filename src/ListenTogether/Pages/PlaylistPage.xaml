@@ -9,7 +9,7 @@
              BackgroundColor="#F7F7F7">
 
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
-        <StackLayout Margin="0,0,0,20"
+        <StackLayout Margin="{OnPlatform UWP='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
 
@@ -24,7 +24,7 @@
                                VerticalOptions="CenterAndExpand"/>
             <StackLayout Margin="20,0,0,0"
                          Orientation="Horizontal"
-                         HorizontalOptions="Start"
+                         HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                          VerticalOptions="End"
                          IsVisible="{Binding IsPlaylistNotEmpty}">
                 <StackLayout.GestureRecognizers>
@@ -35,67 +35,129 @@
                        WidthRequest="20">
                 </Image>
                 <Label Text="清空"
+                       IsVisible="{OnPlatform UWP=True,MacCatalyst=True,Android=False,iOS=False}"
                        VerticalTextAlignment="Center"/>
             </StackLayout>
         </StackLayout>
         <CollectionView VerticalOptions="FillAndExpand"
                         ItemsSource="{Binding Playlist}"
-                        EmptyView="播放列表居然是空的...."
                         IsVisible="{Binding IsNotBusy}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Orientation="Horizontal">
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"
-                                                      CommandParameter="{Binding .}"
-                                                      NumberOfTapsRequired="2"/>
+                                                  CommandParameter="{Binding .}"
+                                                  NumberOfTapsRequired="{OnPlatform UWP=2,MacCatalyst=2,Android=1,iOS=1}"/>
                         </StackLayout.GestureRecognizers>
 
-                        <StackLayout WidthRequest="60"
+                        <OnPlatform x:TypeArguments="View">
+                            <On Platform="UWP, macOS">
+                                <StackLayout Orientation="Horizontal">
+                                    <StackLayout WidthRequest="60"
                                          Orientation="Horizontal">
-                            <Image Source="heart.png"
+                                        <Image Source="heart.png"
                                        Aspect="AspectFill"
                                        WidthRequest="15"
                                        HeightRequest="15"
                                        VerticalOptions="Center">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"
                                                               CommandParameter="{Binding .}"/>
-                                </Image.GestureRecognizers>
-                            </Image>
+                                            </Image.GestureRecognizers>
+                                        </Image>
 
-                            <Image Source="remove.png"
+                                        <Image Source="remove.png"
                                        Margin="5,0,0,0"
                                        Aspect="AspectFill"
                                        WidthRequest="15"
                                        HeightRequest="15"
                                        VerticalOptions="Center">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
                                                                CommandParameter="{Binding .}">
-                                    </TapGestureRecognizer>
-                                </Image.GestureRecognizers>
-                            </Image>
-                        </StackLayout>
+                                                </TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </StackLayout>
 
-                        <Border Padding="4,0,4,3"
+                                    <Border Padding="4,0,4,3"
                                     StrokeThickness="1"
                                     HorizontalOptions="Center">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="5" />
-                            </Border.StrokeShape>
-                            <Label Text="{Binding PlatformName}"
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="5" />
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding PlatformName}"
                                        Style="{StaticResource Explain}"/>
-                        </Border>
+                                    </Border>
 
-                        <Label Margin="5,0,0,0"
+                                    <Label Margin="5,0,0,0"
                                    VerticalTextAlignment="Center"
                                    LineBreakMode="TailTruncation">
-                            <MultiBinding StringFormat="{}{0} - {1}">
-                                <Binding Path="MusicName" />
-                                <Binding Path="MusicArtist" />
-                            </MultiBinding>
-                        </Label>
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="MusicName" />
+                                            <Binding Path="MusicArtist" />
+                                        </MultiBinding>
+                                    </Label>
+                                </StackLayout>
+                            </On>
+
+                            <On Platform="Android,iOS">
+                                <StackLayout Orientation="Horizontal"
+                                             Margin="0,0,0,10">
+                                    <StackLayout Orientation="Horizontal"
+                                                 HorizontalOptions="StartAndExpand">
+                                        <Border Padding="4,0,4,3"
+                                            HorizontalOptions="Start"
+                                            StrokeThickness="1">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="5" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding PlatformName}"
+                                       Style="{StaticResource Explain}"/>
+                                        </Border>
+
+                                        <Label Margin="5,0,0,0"
+                                           
+                                           VerticalTextAlignment="Center"
+                                           LineBreakMode="TailTruncation">
+                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                <Binding Path="MusicName" />
+                                                <Binding Path="MusicArtist" />
+                                            </MultiBinding>
+                                        </Label>
+
+                                    </StackLayout>
+                                    <StackLayout WidthRequest="60"
+                                                 Orientation="Horizontal"
+                                                 HorizontalOptions="End">
+                                        <Image Source="heart.png"
+                                       Aspect="AspectFill"
+                                       WidthRequest="15"
+                                       HeightRequest="15"
+                                       VerticalOptions="Center">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+
+                                        <Image Source="remove.png"
+                                       Margin="5,0,0,0"
+                                       Aspect="AspectFill"
+                                       WidthRequest="15"
+                                       HeightRequest="15"
+                                       VerticalOptions="Center">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
+                                                               CommandParameter="{Binding .}">
+                                                </TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </StackLayout>
+                                </StackLayout>
+                            </On>
+                        </OnPlatform>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

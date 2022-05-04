@@ -10,6 +10,24 @@
        FlyoutWidth="150"
        NavBarIsVisible="False">
 
+    <Shell.FlyoutHeader>
+        <StackLayout Orientation="Horizontal"
+                     HeightRequest="60"
+                     WidthRequest="110"
+                     VerticalOptions="CenterAndExpand"
+                     Spacing="5">
+            <Image Source="{AppThemeBinding Light=logo.png,Dark=my_dark.png}"
+                   WidthRequest="40"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center" />
+            <Label Text="一起听"
+                   TextColor="#C98FFF"
+                   Style="{StaticResource Logo}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   VerticalTextAlignment="Center"/>
+        </StackLayout>
+    </Shell.FlyoutHeader>
 
     <ShellContent Title="{Binding Search.Title}"
                   Icon="{AppThemeBinding Light=search.png, Dark=search_dark.png}"
@@ -26,7 +44,7 @@
     <ShellContent Title="{Binding MyFavorite.Title}"
                   Icon="{AppThemeBinding Light=heart.png, Dark=heart_dark.png}"
                   ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
-    
+
     <ShellContent Title="{Binding Settings.Title}"
                   Icon="{AppThemeBinding Light=my.png, Dark=my.png}" 
                   ContentTemplate="{DataTemplate pages:SettingsPage}" />

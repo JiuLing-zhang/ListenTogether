@@ -3,6 +3,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="ListenTogether.Resources.Styles.DefaultTheme">
 
+    <Color x:Key="LightLogo">#C98FFF</Color>
     <Color x:Key="LightBackground">#F7F7F7</Color>
     <Color x:Key="LightTitle">#262626</Color>
     <Color x:Key="LightText">#262626</Color>
@@ -13,6 +14,7 @@
     <Color x:Key="LightLyricHighlight">#0E6ABA</Color>
     <Color x:Key="LightBorder">#BEBEBE</Color>
 
+    <Color x:Key="DarkLogo">#C98FFF</Color>
     <Color x:Key="DarkBackground">#242424</Color>
     <Color x:Key="DarkTitle">#FCF2F7</Color>
     <Color x:Key="DarkText">#FCF2F7</Color>
@@ -23,6 +25,16 @@
     <Color x:Key="DarkLyricHighlight">#EFEFEF</Color>
     <Color x:Key="DarkBorder">#7B7B7B</Color>
 
+    <Style TargetType="Label"
+           x:Key="Logo">
+        <Setter Property="FontSize"
+                Value="20" />
+        <Setter Property="FontFamily"
+                Value="blod"/>
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Light={StaticResource LightLogo}, Dark={StaticResource DarkLogo}}" />
+    </Style>
+    
     <Style TargetType="Label"
            x:Key="Title">
         <Setter Property="FontSize"
