@@ -5,7 +5,6 @@ using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.MiGu;
 using ListenTogether.Network.Utils;
 using System.Net;
-using System.Text.Json;
 
 namespace ListenTogether.Network.MusicProvider;
 public class MiGuMusicProvider : IMusicProvider
@@ -161,6 +160,11 @@ public class MiGuMusicProvider : IMusicProvider
     }
 
     public Task<Music?> UpdatePlayUrl(Music music)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<string>> GetSearchSuggest(string keyword)
     {
         throw new NotImplementedException();
     }

@@ -12,6 +12,12 @@ public class MusicNetworkService : IMusicNetworkService
     {
         _musicNetPlatform = musicNetPlatform;
     }
+
+    public async Task<List<string>> GetSearchSuggest(string keyword)
+    {
+        return await _musicNetPlatform.GetSearchSuggest(keyword);
+    }
+
     public async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword)
     {
         return await _musicNetPlatform.Search(platform, keyword);

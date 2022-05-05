@@ -3,6 +3,7 @@ public class UrlBase
 {
     public class NetEase
     {
+        public const string Suggest = "https://music.163.com/weapi/search/suggest/web?csrf_token=";
         public const string Search = "https://music.163.com/weapi/cloudsearch/get/web?csrf_token=";
         public const string GetMusic = "https://music.163.com/weapi/song/enhance/player/url/v1?csrf_token=";
         public const string Lyric = "https://music.163.com/weapi/song/lyric?csrf_token=";

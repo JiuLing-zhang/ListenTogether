@@ -14,4 +14,9 @@ public partial class SearchPage : ContentPage
         player.OnAppearing();
         await vm.InitializeAsync();
     }
+
+    private async void TxtSearchBar_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        await vm.GetSearchSuggest(e.NewTextValue);
+    }
 }

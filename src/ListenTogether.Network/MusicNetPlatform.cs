@@ -12,11 +12,17 @@ public class MusicNetPlatform
     private readonly SearchAbstract _kuGouSearcher = new KuGouSearcher(PlatformEnum.KuGou);
     private readonly SearchAbstract _miGuSearcher = new MiGuSearcher(PlatformEnum.MiGu);
 
+    private readonly IMusicProvider _netEaseMusicProvider = new NetEaseMusicProvider();
     public MusicNetPlatform()
     {
         //搜索
         _miGuSearcher.SetNextHandler(_netEaseSearcher);
         _netEaseSearcher.SetNextHandler(_kuGouSearcher);
+    }
+
+    public async Task<List<string>> GetSearchSuggest(string keyword)
+    {
+        return await _netEaseMusicProvider.GetSearchSuggest(keyword);
     }
 
     public async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword)
@@ -36,7 +42,6 @@ public class MusicNetPlatform
             throw new ArgumentException("当前平台无需更新地址");
         }
 
-        IMusicProvider musicProvider = new NetEaseMusicProvider();
-        return await musicProvider.UpdatePlayUrl(music);
+        return await _netEaseMusicProvider.UpdatePlayUrl(music);
     }
 }

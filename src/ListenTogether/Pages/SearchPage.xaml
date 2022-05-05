@@ -14,6 +14,7 @@
             <Label Text="搜索"
                    VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
+
             <ActivityIndicator Margin="10,0,0,0"
                                IsRunning="{Binding IsBusy}"
                                HeightRequest="20"
@@ -21,10 +22,32 @@
                                VerticalOptions="CenterAndExpand"/>
         </StackLayout>
 
-        <SearchBar Text="{Binding SearchKeyword}"
+        <SearchBar x:Name="TxtSearchBar"
                    SearchCommand="{Binding SearchCommand}"
+                   SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
+                   TextChanged="TxtSearchBar_TextChanged"
                    Placeholder="输入歌曲名、歌手名查找..."
                    VerticalOptions="Start"/>
+
+        <Border VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                Padding="1"
+                StrokeThickness="1">
+            <CollectionView Margin="5,0,5,0"
+                            ItemsSource="{Binding SearchSuggest}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=SearchCommand}"
+                                                      CommandParameter="{Binding .}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label Text="{Binding .}"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
 
         <CollectionView VerticalOptions="FillAndExpand"
                         ItemsSource="{Binding MusicSearchResult}"

@@ -5,7 +5,6 @@ using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.KuGou;
 using ListenTogether.Network.Utils;
-using System.Text.Json;
 
 namespace ListenTogether.Network.MusicProvider;
 public class KuGouMusicProvider : IMusicProvider
@@ -122,6 +121,11 @@ public class KuGouMusicProvider : IMusicProvider
     }
 
     public Task<Music?> UpdatePlayUrl(Music music)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<List<string>> GetSearchSuggest(string keyword)
     {
         throw new NotImplementedException();
     }

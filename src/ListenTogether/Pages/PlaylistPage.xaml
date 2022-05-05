@@ -57,10 +57,10 @@
                                     <StackLayout WidthRequest="60"
                                          Orientation="Horizontal">
                                         <Image Source="heart.png"
-                                       Aspect="AspectFill"
-                                       WidthRequest="15"
-                                       HeightRequest="15"
-                                       VerticalOptions="Center">
+                                               Aspect="AspectFill"
+                                               WidthRequest="15"
+                                               HeightRequest="15"
+                                               VerticalOptions="Center">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"
                                                               CommandParameter="{Binding .}"/>
@@ -68,14 +68,14 @@
                                         </Image>
 
                                         <Image Source="remove.png"
-                                       Margin="5,0,0,0"
-                                       Aspect="AspectFill"
-                                       WidthRequest="15"
-                                       HeightRequest="15"
-                                       VerticalOptions="Center">
+                                               Margin="15,0,0,0"
+                                               Aspect="AspectFill"
+                                               WidthRequest="15"
+                                               HeightRequest="15"
+                                               VerticalOptions="Center">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer  Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
-                                                               CommandParameter="{Binding .}">
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
+                                                                      CommandParameter="{Binding .}">
                                                 </TapGestureRecognizer>
                                             </Image.GestureRecognizers>
                                         </Image>

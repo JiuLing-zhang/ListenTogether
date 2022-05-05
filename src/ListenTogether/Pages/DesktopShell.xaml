@@ -12,7 +12,7 @@
 
     <Shell.FlyoutHeader>
         <StackLayout Orientation="Horizontal"
-                     HeightRequest="60"
+                     HeightRequest="68"
                      WidthRequest="110"
                      VerticalOptions="CenterAndExpand"
                      Spacing="5">

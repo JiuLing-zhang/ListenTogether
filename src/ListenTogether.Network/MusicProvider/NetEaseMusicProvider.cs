@@ -5,13 +5,45 @@ using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.NetEase;
 using ListenTogether.Network.Utils;
-using System.Text.Json;
 
 namespace ListenTogether.Network.MusicProvider;
 public class NetEaseMusicProvider : IMusicProvider
 {
     private readonly HttpClient _httpClient = new HttpClient();
     private const PlatformEnum Platform = PlatformEnum.NetEase;
+
+    public async Task<List<string>> GetSearchSuggest(string keyword)
+    {
+        string url = $"{UrlBase.NetEase.Suggest}";
+
+        var postData = NetEaseUtils.GetPostDataForSuggest(keyword);
+        var form = new FormUrlEncodedContent(postData);
+        var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        ResultBase<SearchSuggestHttpResult>? result;
+        try
+        {
+            result = json.ToObject<ResultBase<SearchSuggestHttpResult>>();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("解析网易搜索建议失败。", ex);
+            return null;
+        }
+
+        if (result == null)
+        {
+            Logger.Info("解析网易搜索建议失败，服务器返回空。");
+            return null;
+        }
+        if (result.code != 200 || result.result.songs == null)
+        {
+            Logger.Info("解析网易搜索建议失败，服务器返回参数异常。");
+            return null;
+        }
+        return result.result.songs.Select(x => x.name).Distinct().ToList();
+    }
 
     public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
     {

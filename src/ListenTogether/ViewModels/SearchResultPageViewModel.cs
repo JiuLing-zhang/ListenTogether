@@ -6,7 +6,7 @@ namespace ListenTogether.ViewModels;
 public class SearchResultPageViewModel : ViewModelBase
 {
     private IServiceProvider _services;
-    private readonly IMusicNetworkService _searchService;
+    private readonly IMusicNetworkService _musicNetworkService;
     private IMusicService _musicService;
     private IPlaylistService _playlistService;
     private IMyFavoriteService _myFavoriteService;
@@ -14,14 +14,15 @@ public class SearchResultPageViewModel : ViewModelBase
 
     public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
     public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
-    public ICommand SearchCommand => new Command(Search);
+    public ICommand SearchCommand => new Command<string>(Search);
 
-    public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService searchService)
+    public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
+        SearchSuggest = new ObservableCollection<string>();
         MusicSearchResult = new ObservableCollection<SearchResultViewModel>();
         MusicSearchResult.CollectionChanged += MusicSearchResult_CollectionChanged;
         _services = services;
-        _searchService = searchService;
+        _musicNetworkService = musicNetworkService;
         _playerService = playerService;
     }
 
@@ -74,19 +75,20 @@ public class SearchResultPageViewModel : ViewModelBase
         }
     }
 
-    private string _searchKeyword;
+    private ObservableCollection<string> _searchSuggest;
     /// <summary>
-    /// 搜索关键字
+    /// 搜索建议
     /// </summary>
-    public string SearchKeyword
+    public ObservableCollection<string> SearchSuggest
     {
-        get => _searchKeyword;
+        get => _searchSuggest;
         set
         {
-            _searchKeyword = value;
+            _searchSuggest = value;
             OnPropertyChanged();
         }
     }
+
 
     private ObservableCollection<SearchResultViewModel> _musicSearchResult;
     /// <summary>
@@ -115,9 +117,38 @@ public class SearchResultPageViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
-    private async void Search()
+
+    public async Task GetSearchSuggest(string keyword)
     {
-        if (SearchKeyword.IsEmpty())
+        SearchSuggest.Clear();
+        MusicSearchResult.Clear();
+
+        if (keyword.IsEmpty())
+        {
+            OnPropertyChanged("SearchSuggest");
+            return;
+        }
+
+        var suggests = await _musicNetworkService.GetSearchSuggest(keyword);
+        if (suggests == null)
+        {
+            OnPropertyChanged("SearchSuggest");
+            return;
+        }
+        foreach (var suggest in suggests)
+        {
+            SearchSuggest.Add(suggest);
+        }
+        OnPropertyChanged("SearchSuggest");
+    }
+
+    private async void Search(string keyword)
+    {
+        throw new AuthorizeException("假装用户信息过期");
+
+        SearchSuggest.Clear();
+
+        if (keyword.IsEmpty())
         {
             return;
         }
@@ -126,7 +157,7 @@ public class SearchResultPageViewModel : ViewModelBase
         {
             IsBusy = true;
             MusicSearchResult.Clear();
-            var musics = await _searchService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, SearchKeyword);
+            var musics = await _musicNetworkService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, keyword);
             if (musics.Count == 0)
             {
                 return;
@@ -266,7 +297,7 @@ public class SearchResultPageViewModel : ViewModelBase
 
     private async Task<(bool Succeed, string Message, Music MusicDetailResult)> SaveMusic(MusicSearchResult searchResult)
     {
-        var music = await _searchService.GetMusicDetail(searchResult);
+        var music = await _musicNetworkService.GetMusicDetail(searchResult);
         if (music == null)
         {
             return (false, "emm没有解析出歌曲信息", null);
