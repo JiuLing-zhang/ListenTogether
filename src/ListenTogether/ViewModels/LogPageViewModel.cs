@@ -20,6 +20,8 @@ public class LogPageViewModel : ViewModelBase
         {
             IsBusy = true;
 
+            IsLoginSuccess = GlobalConfig.CurrentUser != null;
+
             if (Logs.Count > 0)
             {
                 Logs.Clear();
@@ -53,6 +55,17 @@ public class LogPageViewModel : ViewModelBase
         finally
         {
             IsBusy = false;
+        }
+    }
+
+    private bool _isLoginSuccess;
+    public bool IsLoginSuccess
+    {
+        get => _isLoginSuccess;
+        set
+        {
+            _isLoginSuccess = value;
+            OnPropertyChanged();
         }
     }
 

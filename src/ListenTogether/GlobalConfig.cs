@@ -1,6 +1,4 @@
-﻿using ListenTogether.Model;
-
-namespace ListenTogether
+﻿namespace ListenTogether
 {
     internal class GlobalConfig
     {

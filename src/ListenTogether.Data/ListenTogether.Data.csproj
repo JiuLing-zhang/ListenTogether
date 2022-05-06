@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ListenTogether.Common\ListenTogether.Common.csproj" />
     <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
   </ItemGroup>
 

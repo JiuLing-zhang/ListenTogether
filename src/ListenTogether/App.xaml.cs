@@ -39,7 +39,19 @@ public partial class App : Application
             deviceId = File.ReadAllText(deviceInfoFileName);
         }
 
-        BusinessConfig.TokenUpdated += (_, _) => userLocalService.UpdateToken(BusinessConfig.UserToken);
+        BusinessConfig.TokenUpdated += (_, tokenInfo) =>
+        {
+            if (tokenInfo == null)
+            {
+                GlobalConfig.CurrentUser = null;
+                userLocalService.Remove();
+            }
+            else
+            {
+                userLocalService.UpdateToken(tokenInfo);
+            }
+        };
+
         BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.LocalDbName), GlobalConfig.AppSettings.ApiDomain, deviceId);
         GlobalConfig.CurrentUser = userLocalService.Read();
 

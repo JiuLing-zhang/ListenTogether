@@ -19,7 +19,7 @@ public class SettingPageViewModel : ViewModelBase
         _userService = userService;
         _userLocalService = userLocalService;
     }
-    public async Task InitializeAsync()
+    public void InitializeAsync()
     {
         UserInfo = GetUserInfo();
     }

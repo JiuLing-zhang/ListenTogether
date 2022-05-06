@@ -144,8 +144,6 @@ public class SearchResultPageViewModel : ViewModelBase
 
     private async void Search(string keyword)
     {
-        throw new AuthorizeException("假装用户信息过期");
-
         SearchSuggest.Clear();
 
         if (keyword.IsEmpty())

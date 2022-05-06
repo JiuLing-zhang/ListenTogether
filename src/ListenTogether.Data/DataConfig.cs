@@ -17,9 +17,9 @@ public class DataConfig
     /// </summary>
     public static TokenInfo? UserToken { get; set; }
     /// <summary>
-    /// Token 已更新
+    /// 更新Token
     /// </summary>
-    public static event EventHandler? TokenUpdated;
+    public static event EventHandler<TokenInfo?>? TokenUpdated;
 
     public static void SetDataConnection(string localDbPath, string apiBaseUrl, string deviceId)
     {
@@ -28,4 +28,6 @@ public class DataConfig
         DatabaseProvide.SetConnection(localDbPath);
         ApiSetting = new ApiSettings(apiBaseUrl, deviceId);
     }
+
+
 }

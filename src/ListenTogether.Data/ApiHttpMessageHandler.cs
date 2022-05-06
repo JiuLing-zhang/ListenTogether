@@ -1,13 +1,11 @@
-﻿using JiuLing.CommonLibs.ExtensionMethods;
-using ListenTogether.Common.Exceptions;
+﻿using ListenTogether.Model;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Response;
-using System.Text.Json;
 
 namespace ListenTogether.Data;
 public class ApiHttpMessageHandler : DelegatingHandler
 {
-    public static event EventHandler? TokenUpdated;
+    public static event EventHandler<TokenInfo?>? TokenUpdated;
     public ApiHttpMessageHandler()
     {
         InnerHandler = new HttpClientHandler();
@@ -23,7 +21,8 @@ public class ApiHttpMessageHandler : DelegatingHandler
 
         if (DataConfig.UserToken == null || DataConfig.UserToken.RefreshToken.IsEmpty())
         {
-            throw new AuthorizeException("无效的登录信息");
+            TokenUpdated?.Invoke(this, null);
+            throw new Exception("UserToken或RefreshToken不存在。");
         }
 
         string content = (new { DataConfig.UserToken.RefreshToken }).ToJson();
@@ -38,15 +37,19 @@ public class ApiHttpMessageHandler : DelegatingHandler
         var result = json.ToObject<Result<UserResponse>>();
         if (result == null || result.Code != 0 || result.Data == null)
         {
-            throw new AuthorizeException("更新认证信息失败");
+            TokenUpdated?.Invoke(this, null);
+            throw new Exception("更新认证信息失败。");
         }
 
-        DataConfig.UserToken.Token = result.Data.Token;
-        DataConfig.UserToken.RefreshToken = result.Data.RefreshToken;
-        TokenUpdated?.Invoke(this, EventArgs.Empty);
+        var tokenInfo = new TokenInfo()
+        {
+            Token = result.Data.Token,
+            RefreshToken = result.Data.RefreshToken
+        };
+        TokenUpdated?.Invoke(this, tokenInfo);
 
         request.Headers.Remove("Authorization");
-        request.Headers.Add("Authorization", $"Bearer {DataConfig.UserToken.Token}");
+        request.Headers.Add("Authorization", $"Bearer {tokenInfo.Token}");
 
         return await base.SendAsync(request, cancellationToken);
     }

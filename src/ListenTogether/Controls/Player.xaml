@@ -175,8 +175,7 @@
                         <!--完整组件-->
                         <StackLayout x:Name="PhoneBlock">
                             <!-- 进度条 -->
-                            <StackLayout Orientation="Horizontal"
-                                         HeightRequest="30">
+                            <StackLayout Orientation="Horizontal">
                                 <Label Text="{Binding Text, Source={x:Reference LblPositionMilliseconds}}"
                                        HorizontalOptions="Start"
                                        VerticalTextAlignment="Center"/>
@@ -196,7 +195,7 @@
                             <!-- 播放按钮 -->
                             <StackLayout Orientation="Horizontal" 
                                          HorizontalOptions="Center"
-                                         Spacing="28" >
+                                         Spacing="10" >
 
                                 <Image Source="{Binding Source, Source={x:Reference ImgRepeat}}"
                                        WidthRequest="20" 

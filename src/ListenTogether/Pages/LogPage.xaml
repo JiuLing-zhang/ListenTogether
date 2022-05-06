@@ -20,29 +20,29 @@
                                VerticalOptions="CenterAndExpand"/>
         </StackLayout>
 
-        <ScrollView VerticalOptions="FillAndExpand"
-                    Margin="0,0,0,10">
-            <CollectionView ItemsSource="{Binding Logs}"
-                            IsVisible="{Binding IsNotBusy}"
-                            EmptyView="啥日志也没有，列表是空的"
-                            SelectionMode="None"  >
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout>
-                            <Label Text="{Binding Time}"/>
-                            <Label Text="{Binding Message}"/>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </ScrollView>
+        <CollectionView VerticalOptions="FillAndExpand"
+                        Margin="0,0,0,10"
+                        ItemsSource="{Binding Logs}"
+                        IsVisible="{Binding IsNotBusy}"
+                        EmptyView="啥日志也没有哦"
+                        SelectionMode="None"  >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="{Binding Time}"/>
+                        <Label Text="{Binding Message}"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-        <Button Text="上传到服务器"
+        <Button Text="上传"
                 Margin="0,0,0,5"
                 VerticalOptions="End"
                 IsEnabled="{Binding IsNotBusy}"
+                IsVisible="{Binding IsLoginSuccess}"
                 Command="{Binding UpdateLogsCommand}"/>
-        <Button Text="删除本地日志"
+        <Button Text="清空日志"
                 VerticalOptions="End"
                 IsEnabled="{Binding IsNotBusy}"
                 Command="{Binding ClearLogsCommand}"/>

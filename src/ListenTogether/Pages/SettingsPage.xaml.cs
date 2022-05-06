@@ -9,10 +9,10 @@ public partial class SettingsPage : ContentPage
         BindingContext = vm;
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
         player.OnAppearing();
-        await vm.InitializeAsync();
+        vm.InitializeAsync();
     }
 }
