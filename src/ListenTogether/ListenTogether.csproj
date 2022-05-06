@@ -78,7 +78,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\ListenTogether.Business\ListenTogether.Business.csproj" />
-		<ProjectReference Include="..\ListenTogether.Common\ListenTogether.Common.csproj" />
 		<ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
 		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
 	</ItemGroup>
