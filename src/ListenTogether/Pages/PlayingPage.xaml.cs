@@ -25,7 +25,7 @@ public partial class PlayingPage : ContentPage
     {
         try
         {
-            ListLyrics.ScrollTo(e);
+            ListLyrics.ScrollTo(e, null, ScrollToPosition.Center, true);
         }
         catch (Exception ex)
         {
