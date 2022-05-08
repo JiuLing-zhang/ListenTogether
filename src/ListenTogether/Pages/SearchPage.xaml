@@ -34,11 +34,11 @@
                 HorizontalOptions="FillAndExpand"
                 Padding="1"
                 StrokeThickness="1">
-            <CollectionView Margin="5,0,5,0"
+            <CollectionView Margin="{OnPlatform UWP='5,0,5,0',MacCatalyst='5,0,5,0',Android='50,0,50,0',iOS='50,0,50,0'}"
                             ItemsSource="{Binding SearchSuggest}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout>
+                        <StackLayout Margin="{OnPlatform UWP='0',MacCatalyst='0',Android='0,10,0,0',iOS='0,10,0,0'}">
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=SuggestCommand}"
                                                       CommandParameter="{Binding .}"/>
@@ -104,7 +104,7 @@
                             </On>
 
                             <On Platform="Android,iOS">
-                                <Grid Margin="0,0,0,10"
+                                <Grid Margin="0,0,0,20"
                                       RowDefinitions="auto,auto"
                                       ColumnDefinitions="40,*,30">
 

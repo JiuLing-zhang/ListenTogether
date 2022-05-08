@@ -147,6 +147,7 @@ public partial class Player : ContentView
         if (!_isPlayProgressDragging)
         {
             SliderPlayProgress.Value = position.PlayProgress;
+
         }
     }
 
@@ -306,7 +307,8 @@ public partial class Player : ContentView
     {
         if (_playerService.CurrentMusic != null)
         {
-            var positionMillisecond = _playerService.DurationMillisecond * SliderPlayProgress.Value;
+            var sliderPlayProgress = sender as Slider;
+            var positionMillisecond = _playerService.DurationMillisecond * sliderPlayProgress.Value;
             await _playerService.PlayAsync(_playerService.CurrentMusic, positionMillisecond);
         }
         _isPlayProgressDragging = false;
