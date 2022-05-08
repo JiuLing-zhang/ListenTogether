@@ -2,7 +2,6 @@
 
 public class RegisterPageViewModel : ViewModelBase
 {
-    public ICommand GoBackCommand => new Command(GoBack);
     public ICommand RegisterCommand => new Command(Register);
     public ICommand ChoseImageCommand => new Command(ChoseImage);
 
@@ -80,10 +79,6 @@ public class RegisterPageViewModel : ViewModelBase
         }
     }
 
-    private async void GoBack()
-    {
-        await Shell.Current.GoToAsync($"..", true);
-    }
     private async void Register()
     {
         try

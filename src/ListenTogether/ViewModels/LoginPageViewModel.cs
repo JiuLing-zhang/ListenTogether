@@ -10,7 +10,6 @@ public class LoginPageViewModel : ViewModelBase
 {
     public ICommand LoginCommand => new Command(Login);
     public ICommand GoToRegisterCommand => new Command(GoToRegister);
-    public ICommand GoBackCommand => new Command(GoBack);
 
     private IUserService _userService;
     private IUserLocalService _userLocalService;
@@ -83,7 +82,7 @@ public class LoginPageViewModel : ViewModelBase
             GlobalConfig.CurrentUser = user;
             Username = "";
             Password = "";
-            GoBack();
+            await Shell.Current.GoToAsync($"..", true);
         }
         catch (Exception ex)
         {
@@ -98,10 +97,5 @@ public class LoginPageViewModel : ViewModelBase
     private async void GoToRegister()
     {
         await Shell.Current.GoToAsync($"../{nameof(RegisterPage)}", true);
-    }
-
-    private async void GoBack()
-    {
-        await Shell.Current.GoToAsync($"..", true);
     }
 }

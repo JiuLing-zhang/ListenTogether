@@ -55,10 +55,6 @@
                 Margin="0,20,0,0"
                 IsEnabled="{Binding IsNotBusy}"
                 Command="{Binding RegisterCommand}"/>
-            <Button Text="返回"
-                Margin="0,5,0,0"
-                IsEnabled="{Binding IsNotBusy}"
-                Command="{Binding GoBackCommand}"/>
         </StackLayout>
     </StackLayout>
 </ContentPage>
