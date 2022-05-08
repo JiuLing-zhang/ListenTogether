@@ -83,71 +83,80 @@ public partial class Player : ContentView
 
     private void PlayerService_IsPlayingChanged(object sender, bool e)
     {
+        IsPlayingChangedDo(e);
+    }
+    private void IsPlayingChangedDo(bool isPlaying)
+    {
+        string playImagePath = isPlaying ? "pause.png" : "play.png";
         if (Dispatcher.IsDispatchRequired)
         {
             Dispatcher.Dispatch(() =>
             {
-                IsPlayingChangedDo(e);
+                ImgPlay.Source = playImagePath;
             });
         }
         else
         {
-            IsPlayingChangedDo(e);
+            ImgPlay.Source = playImagePath;
         }
-    }
-    private void IsPlayingChangedDo(bool isPlaying)
-    {
-        ImgPlay.Source = isPlaying ? "pause.png" : "play.png";
     }
 
     private void playerService_NewMusicAdded(object sender, Music e)
     {
         this.IsVisible = true;
-        if (Dispatcher.IsDispatchRequired)
-        {
-            Dispatcher.Dispatch(() =>
-            {
-                NewMusicAddedDo(e);
-            });
-        }
-        else
-        {
-            NewMusicAddedDo(e);
-        }
+        NewMusicAddedDo(e);
     }
 
     private void NewMusicAddedDo(Music music)
     {
-        ImgCurrentMusic.Source = music.ImageUrl;
-        LblMusicName.Text = music.Name;
-        LblMusicInfo.Text = $"{music.Artist} - {music.Album}";
-        LblMusicArtist.Text = music.Artist;
+        if (Dispatcher.IsDispatchRequired)
+        {
+            Dispatcher.Dispatch(() =>
+            {
+                ImgCurrentMusic.Source = music.ImageUrl;
+                LblMusicName.Text = music.Name;
+                LblMusicInfo.Text = $"{music.Artist} - {music.Album}";
+                LblMusicArtist.Text = music.Artist;
+            });
+        }
+        else
+        {
+            ImgCurrentMusic.Source = music.ImageUrl;
+            LblMusicName.Text = music.Name;
+            LblMusicInfo.Text = $"{music.Artist} - {music.Album}";
+            LblMusicArtist.Text = music.Artist;
+        }
     }
 
     private void _playerService_PositionChanged(object sender, MusicPosition e)
+    {
+        PositionChangedDo(e);
+    }
+
+    private void PositionChangedDo(MusicPosition position)
     {
         if (Dispatcher.IsDispatchRequired)
         {
             Dispatcher.Dispatch(() =>
             {
-                PositionChangedDo(e);
+                LblPositionMilliseconds.Text = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
+                LblDurationMilliseconds.Text = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
+
+                if (!_isPlayProgressDragging)
+                {
+                    SliderPlayProgress.Value = position.PlayProgress;
+                }
             });
         }
         else
         {
-            PositionChangedDo(e);
-        }
-    }
+            LblPositionMilliseconds.Text = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
+            LblDurationMilliseconds.Text = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
 
-    private void PositionChangedDo(MusicPosition position)
-    {
-        LblPositionMilliseconds.Text = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
-        LblDurationMilliseconds.Text = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
-
-        if (!_isPlayProgressDragging)
-        {
-            SliderPlayProgress.Value = position.PlayProgress;
-
+            if (!_isPlayProgressDragging)
+            {
+                SliderPlayProgress.Value = position.PlayProgress;
+            }
         }
     }
 
