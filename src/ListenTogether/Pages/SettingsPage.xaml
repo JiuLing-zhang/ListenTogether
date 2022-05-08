@@ -64,12 +64,12 @@
 
                     <!--设置模块-->
                     <StackLayout Margin="0,20,0,0">
-                        <Label Text="设置"
-                           Margin="0,0,0,20"/>
+                        <Label Margin="0,0,0,20"
+                               Text="设置"/>
 
                         <!-- 常规设置 -->
-                        <Label Text="常规" 
-                           FontAttributes="Bold"/>
+                        <Label Text="常规"
+                               FontAttributes="Bold"/>
 
                         <controls:SwitchEx Text="启动时检查更新"
                                        IsToggled="{Binding IsAutoCheckUpdate}">
@@ -79,8 +79,9 @@
                         </controls:SwitchEx>
 
                         <!-- 搜索设置 -->
-                        <Label Text="搜索" 
-                           FontAttributes="Bold"/>
+                        <Label Margin="0,20,0,0"
+                               Text="搜索"                               
+                               FontAttributes="Bold"/>
                         <controls:SwitchEx Text="网易云音乐"
                                        IsToggled="{Binding IsEnableNetEase}">
                         </controls:SwitchEx>
@@ -95,8 +96,9 @@
                         </controls:SwitchEx>
 
                         <!-- 播放设置 -->
-                        <Label Text="播放" 
-                           FontAttributes="Bold"/>
+                        <Label Margin="0,20,0,0"
+                               Text="播放"                               
+                               FontAttributes="Bold"/>
 
                         <controls:SwitchEx Text="仅在WIFI下播放未缓存的歌曲"
                                        IsToggled="{Binding IsWifiPlayOnly}">
@@ -126,17 +128,26 @@
 
                         <!-- 关于 -->
                         <StackLayout>
-                            <Label Text="一起听" TextColor="#FFFFFF" FontSize="18" HorizontalOptions="CenterAndExpand"/>
-                            <Label Text="{Binding VersionName, StringFormat='{}版本：{0}'}" TextColor="#FFFFFF" FontSize="14" HorizontalOptions="CenterAndExpand"/>
-
-                            <Label Text="本软件基于GPL-3.0协议，开源、免费" TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand" Margin="0,10,0,0"/>
-                            <Label Text="作者：九零" TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand"/>
-                            <Label TextColor="#727272" FontSize="14" HorizontalOptions="CenterAndExpand">
+                            <Label Text="一起听"
+                                   FontSize="18"
+                                   HorizontalOptions="CenterAndExpand"/>
+                            <Label Text="{Binding VersionName, StringFormat='{}版本：{0}'}"
+                                   Style="{StaticResource Explain}"
+                                   HorizontalOptions="CenterAndExpand"/>
+                            <Label Margin="0,10,0,0"
+                                   Text="本软件基于GPL-3.0协议，开源、免费"
+                                   Style="{StaticResource Explain}"
+                                   HorizontalOptions="CenterAndExpand"/>
+                            <Label Text="作者：九零"
+                                   Style="{StaticResource Explain}"
+                                   HorizontalOptions="CenterAndExpand"/>
+                            <Label Style="{StaticResource Explain}"
+                                   HorizontalOptions="CenterAndExpand">
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="GitHub"
-                                      TextColor="Blue"
-                                      TextDecorations="Underline">
+                                              TextColor="Blue"
+                                              TextDecorations="Underline">
                                             <Span.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
                                                               CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
