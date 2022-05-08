@@ -94,7 +94,8 @@
                                     EmptyView="暂无歌词"
                                     ItemsSource="{Binding Lyrics}"
                                     HorizontalOptions="Center"
-                                    SelectionMode="None">
+                                    SelectionMode="None"
+                                    Scrolled="ListLyrics_Scrolled">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout HorizontalOptions="Center">

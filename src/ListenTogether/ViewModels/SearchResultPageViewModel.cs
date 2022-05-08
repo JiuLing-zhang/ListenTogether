@@ -15,6 +15,7 @@ public class SearchResultPageViewModel : ViewModelBase
     public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
     public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
     public ICommand SearchCommand => new Command<string>(Search);
+    public ICommand SuggestCommand => new Command<string>(Suggest);
 
     public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
@@ -52,16 +53,16 @@ public class SearchResultPageViewModel : ViewModelBase
     public bool IsNotBusy => !_isBusy;
 
 
-    private string _textToSearch;
+    private string _keyword;
     /// <summary>
-    /// 搜索
+    /// 搜索关键字
     /// </summary>
-    public string TextToSearch
+    public string Keyword
     {
-        get => _textToSearch;
+        get => _keyword;
         set
         {
-            _textToSearch = value;
+            _keyword = value;
             OnPropertyChanged();
         }
     }
@@ -118,8 +119,16 @@ public class SearchResultPageViewModel : ViewModelBase
         }
     }
 
+    private bool _isDoSuggest = true;
     public async Task GetSearchSuggest(string keyword)
     {
+        if (_isDoSuggest == false)
+        {
+            SearchSuggest.Clear();
+            _isDoSuggest = true;
+            return;
+        }
+
         SearchSuggest.Clear();
         MusicSearchResult.Clear();
 
@@ -140,6 +149,13 @@ public class SearchResultPageViewModel : ViewModelBase
             SearchSuggest.Add(suggest);
         }
         OnPropertyChanged("SearchSuggest");
+    }
+
+    private void Suggest(string keyword)
+    {
+        _isDoSuggest = false;
+        Keyword = keyword;
+        Search(keyword);
     }
 
     private async void Search(string keyword)

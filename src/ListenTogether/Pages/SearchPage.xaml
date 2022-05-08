@@ -23,6 +23,7 @@
         </StackLayout>
 
         <SearchBar x:Name="TxtSearchBar"
+                   Text="{Binding Keyword}"
                    SearchCommand="{Binding SearchCommand}"
                    SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
                    TextChanged="TxtSearchBar_TextChanged"
@@ -39,7 +40,7 @@
                     <DataTemplate>
                         <StackLayout>
                             <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=SearchCommand}"
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=SuggestCommand}"
                                                       CommandParameter="{Binding .}"/>
                             </StackLayout.GestureRecognizers>
                             <Label Text="{Binding .}"/>
