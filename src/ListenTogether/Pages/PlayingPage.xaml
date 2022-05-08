@@ -9,8 +9,6 @@
              BackgroundColor="#F7F7F7">
     <ContentPage.Resources>
         <Style x:Key="LyricItem" TargetType="Label">
-            <Setter Property="TextColor"
-                    Value="{AppThemeBinding Light={StaticResource LightLyricText}, Dark={StaticResource DarkLyricText}}"/>
             <Setter Property="FontSize"
                     Value="15"/>
             <Setter Property="HorizontalTextAlignment"
@@ -27,8 +25,12 @@
                              TargetType="Label">
                     <Setter Property="TextColor"
                             Value="{AppThemeBinding Light={StaticResource LightLyricHighlight}, Dark={StaticResource DarkLyricHighlight}}" />
-                    <Setter Property="FontFamily"
-                            Value="Blod"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsHighlight}"
+                             Value="False"
+                             TargetType="Label">
+                    <Setter Property="TextColor"
+                            Value="{AppThemeBinding Light={StaticResource LightLyricText}, Dark={StaticResource DarkLyricText}}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
