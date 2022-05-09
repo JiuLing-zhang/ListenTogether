@@ -2,6 +2,6 @@
 {
     public class SearchResultExtended
     {
-        public int Fee { get; set; }
+        public string FeeFlag { get; set; }
     }
 }

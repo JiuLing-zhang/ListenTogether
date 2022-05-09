@@ -19,5 +19,6 @@
         public int Duration { get; set; }
 
         public string SingerName { get; set; }
+        public int Privilege { get; set; }
     }
 }

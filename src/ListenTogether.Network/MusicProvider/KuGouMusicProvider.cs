@@ -63,6 +63,7 @@ public class KuGouMusicProvider : IMusicProvider
                     Album = httpMusic.AlbumName,
                     Duration = (int)ts.TotalMilliseconds,
                     DurationText = $"{ts.Minutes}:{ts.Seconds:D2}",
+                    Fee = GetFeeFlag(httpMusic.Privilege),
                     PlatformData = new KuGouSearchExtendData()
                     {
                         Hash = httpMusic.FileHash,
@@ -77,6 +78,15 @@ public class KuGouMusicProvider : IMusicProvider
             }
         }
         return (true, "", musics);
+    }
+
+    private FeeEnum GetFeeFlag(int Privilege)
+    {
+        if (Privilege == 10)
+        {
+            return FeeEnum.Demo;
+        }
+        return FeeEnum.Free;
     }
 
     public async Task<Music?> GetMusicDetail(MusicSearchResult sourceMusic)

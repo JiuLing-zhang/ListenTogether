@@ -7,6 +7,27 @@
              Title="搜索"
              BackgroundColor="#F7F7F7">
 
+    <ContentPage.Resources>
+        <Style x:Key="FeeType" TargetType="Label">
+            <Setter Property="IsVisible"
+                    Value="false"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Fee}"
+                             Value="VIP"
+                             TargetType="Label">
+                    <Setter Property="IsVisible"
+                            Value="true"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Fee}"
+                             Value="试听"
+                             TargetType="Label">
+                    <Setter Property="IsVisible"
+                            Value="true"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </ContentPage.Resources>
+
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
         <StackLayout Margin="{OnPlatform UWP='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                      Orientation="Horizontal"
@@ -65,7 +86,7 @@
 
                         <OnPlatform x:TypeArguments="View">
                             <On Platform="UWP, macOS">
-                                <Grid ColumnDefinitions="30,40,60,300,300,*">
+                                <Grid ColumnDefinitions="30,40,60,40,300,300,*">
                                     <Image Grid.Column="0"
                                            Source="heart.png"
                                            Aspect="AspectFill"
@@ -88,14 +109,20 @@
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
                                     <Label Grid.Column="3"
+                                               Text="{Binding Fee}"
+                                               Style="{DynamicResource FeeType}"
+                                               TextColor="Red"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"/>
+                                    <Label Grid.Column="4"
                                            Text="{Binding Name}"
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
-                                    <Label Grid.Column="4"
+                                    <Label Grid.Column="5"
                                            Text="{Binding Artist}"
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
-                                    <Label Grid.Column="5"
+                                    <Label Grid.Column="6"
                                            Text="{Binding Album}"
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>

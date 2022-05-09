@@ -24,6 +24,9 @@ public class MusicSearchResult : MusicBase
     /// 平台特有数据
     /// </summary>
     public object PlatformData { get; set; } = null!;
-
+    /// <summary>
+    /// 费用（免费、VIP等）
+    /// </summary>
+    public FeeEnum Fee { get; set; }
     public int Duration { get; set; }
 }

@@ -108,10 +108,7 @@ public class NetEaseMusicProvider : IMusicProvider
                     ImageUrl = song.al.picUrl,
                     Duration = song.dt,
                     DurationText = $"{ts.Minutes}:{ts.Seconds:D2}",
-                    PlatformData = new SearchResultExtended()
-                    {
-                        Fee = song.fee
-                    }
+                    Fee = GetFeeFlag(song.privilege)
                 };
                 musics.Add(music);
             }
@@ -119,9 +116,25 @@ public class NetEaseMusicProvider : IMusicProvider
             {
                 Logger.Error("构建网易搜索结果失败。", ex);
             }
-
         }
         return (true, "", musics);
+    }
+
+    private FeeEnum GetFeeFlag(Privilege privilege)
+    {
+
+        if (privilege == null)
+        {
+            return FeeEnum.Free;
+        }
+        if (privilege.fee == 1)
+        {
+            return FeeEnum.Vip;
+        }
+
+        //猜测fee=0 flag=256 应该是地区无权限，样本太少没法分析
+        //TODO 验证后在增加相关逻辑
+        return FeeEnum.Free;
     }
 
     public async Task<Music?> GetMusicDetail(MusicSearchResult sourceMusic)

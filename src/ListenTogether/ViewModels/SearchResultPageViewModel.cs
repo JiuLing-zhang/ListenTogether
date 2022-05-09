@@ -192,6 +192,7 @@ public class SearchResultPageViewModel : ViewModelBase
                     Artist = musicInfo.Artist,
                     Album = musicInfo.Album,
                     Duration = musicInfo.DurationText,
+                    Fee = musicInfo.Fee.GetDescription(),
                     SourceData = musicInfo
                 });
             }

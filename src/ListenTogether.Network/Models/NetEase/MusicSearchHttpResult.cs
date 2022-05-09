@@ -23,10 +23,8 @@
         /// 时长
         /// </summary>
         public int dt { get; set; }
-        /// <summary>
-        /// 费用类型
-        /// </summary>
-        public int fee { get; set; }
+
+        public Privilege privilege { get; set; }
     }
 
     public class Album
@@ -38,5 +36,13 @@
     public class Artist
     {
         public string name { get; set; }
+    }
+
+    public class Privilege
+    {
+        /// <summary>
+        /// 费用类型
+        /// </summary>
+        public int fee { get; set; }
     }
 }

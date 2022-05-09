@@ -54,6 +54,7 @@ public class MiGuMusicProvider : IMusicProvider
                 Alias = "",
                 Artist = htmlMusic.Artist,
                 ImageUrl = htmlMusic.ImageUrl,
+                Fee = FeeEnum.Free,
                 PlatformData = new SearchResultExtended()
                 {
                     MusicPageUrl = htmlMusic.MusicPageUrl
