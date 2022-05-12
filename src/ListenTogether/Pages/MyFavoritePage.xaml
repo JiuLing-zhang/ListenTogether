@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.MyFavoritePage"
              Title="我的歌单"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -41,7 +41,7 @@
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding MyFavoriteAddCommand}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="plus.png"
+                <Image Source="{AppThemeBinding Dark='plus_dark.png',Light='plus.png'}"
                        HeightRequest="20"
                        WidthRequest="20">
                 </Image>
@@ -75,8 +75,8 @@
                             </StackLayout.GestureRecognizers>
 
                             <Image WidthRequest="28"
-                                       Source="play.png"
-                                       Aspect="AspectFill">
+                                   Source="{AppThemeBinding Dark='play_dark.png',Light='play.png'}"
+                                   Aspect="AspectFill">
                             </Image>
                         </StackLayout>
 

@@ -12,4 +12,16 @@ public static class Config
 #endif
         }
     }
+
+    public static bool IsDarkTheme
+    {
+        get
+        {
+            if (App.Current.UserAppTheme == AppTheme.Dark)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
 }

@@ -48,7 +48,7 @@
                                 </Image>
 
                                 <Image x:Name="ImgBack"
-                                       Source="back.png"
+                                       Source="{AppThemeBinding Dark='back_dark.png',Light='back.png'}"
                                        WidthRequest="20" 
                                        HeightRequest="20"
                                        VerticalOptions="Center"
@@ -71,7 +71,7 @@
                                 </Image>
 
                                 <Image x:Name="ImgNext"
-                                       Source="next.png"
+                                       Source="{AppThemeBinding Dark='next_dark.png',Light='next.png'}"
                                        WidthRequest="20"
                                        HeightRequest="20"
                                        VerticalOptions="Center"
@@ -83,7 +83,7 @@
                                 </Image>
 
                                 <Image x:Name="ImgOther"
-                                       Source="puzzled.png"
+                                       Source="{AppThemeBinding Dark='puzzled_dark.png',Light='puzzled.png'}"
                                        WidthRequest="20"
                                        HeightRequest="20"
                                        VerticalOptions="Center"

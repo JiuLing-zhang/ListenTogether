@@ -87,7 +87,7 @@ public partial class Player : ContentView
     }
     private void IsPlayingChangedDo(bool isPlaying)
     {
-        string playImagePath = isPlaying ? "pause.png" : "play.png";
+        string playImagePath = isPlaying ? GetImageName("pause") : GetImageName("play");
         if (Dispatcher.IsDispatchRequired)
         {
             Dispatcher.Dispatch(() =>
@@ -213,7 +213,7 @@ public partial class Player : ContentView
     }
     private void UpdateSoundOnOff()
     {
-        ImgSoundOff.Source = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off.png" : "sound_on.png";
+        ImgSoundOff.Source = GlobalConfig.MyUserSetting.Player.IsSoundOff ? GetImageName("sound_off") : GetImageName("sound_on");
         _playerService.IsMuted = GlobalConfig.MyUserSetting.Player.IsSoundOff;
     }
     private void Updatevolume()
@@ -252,19 +252,19 @@ public partial class Player : ContentView
     {
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatOne)
         {
-            ImgRepeat.Source = "repeat_one.png";
+            ImgRepeat.Source = GetImageName("repeat_one");
             return;
         }
 
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatList)
         {
-            ImgRepeat.Source = "repeat_list.png";
+            ImgRepeat.Source = GetImageName("repeat_list");
             return;
         }
 
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.Shuffle)
         {
-            ImgRepeat.Source = "shuffle.png";
+            ImgRepeat.Source = GetImageName("shuffle");
             return;
         }
     }
@@ -321,5 +321,14 @@ public partial class Player : ContentView
             await _playerService.PlayAsync(_playerService.CurrentMusic, positionMillisecond);
         }
         _isPlayProgressDragging = false;
+    }
+
+    private string GetImageName(string imageName)
+    {
+        if (Config.IsDarkTheme)
+        {
+            return $"{imageName}_dark.png";
+        }
+        return $"{imageName}.png";
     }
 }

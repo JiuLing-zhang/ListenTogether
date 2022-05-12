@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.SettingsPage"
              Title="设置"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
 
@@ -36,7 +36,8 @@
                                 FontSize="17"
                                 WidthRequest="120"
                                 BackgroundColor="Transparent"
-                                BorderWidth="0"
+                                BorderColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"
+                                BorderWidth="1"
                                 HorizontalOptions="StartAndExpand"
                                 Command="{Binding GoToLoginCommand}"/>
                     </StackLayout>
@@ -150,7 +151,7 @@
                                               TextDecorations="Underline">
                                             <Span.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
-                                                              CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
+                                                                      CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
                                             </Span.GestureRecognizers>
                                         </Span>
                                     </FormattedString>

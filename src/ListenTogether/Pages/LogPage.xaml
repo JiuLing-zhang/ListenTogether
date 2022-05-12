@@ -4,7 +4,7 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.LogPage"
              Title="日志"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
         <StackLayout Margin="0,0,0,20"
@@ -41,11 +41,14 @@
                 VerticalOptions="End"
                 IsEnabled="{Binding IsNotBusy}"
                 IsVisible="{Binding IsLoginSuccess}"
-                Command="{Binding UpdateLogsCommand}"/>
+                Command="{Binding UpdateLogsCommand}"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
+                TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
         <Button Text="清空日志"
                 VerticalOptions="End"
                 IsEnabled="{Binding IsNotBusy}"
-                Command="{Binding ClearLogsCommand}"/>
-
+                Command="{Binding ClearLogsCommand}"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
+                TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
     </StackLayout>
 </ContentPage>

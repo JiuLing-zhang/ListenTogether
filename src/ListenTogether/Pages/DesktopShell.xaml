@@ -16,7 +16,7 @@
                      WidthRequest="110"
                      VerticalOptions="CenterAndExpand"
                      Spacing="5">
-            <Image Source="{AppThemeBinding Light=logo.png,Dark=my_dark.png}"
+            <Image Source="{AppThemeBinding Light=logo.png,Dark=logo_dark.png}"
                    WidthRequest="40"
                    VerticalOptions="Center"
                    HorizontalOptions="Center" />

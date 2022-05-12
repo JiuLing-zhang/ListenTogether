@@ -4,7 +4,7 @@
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              x:Class="ListenTogether.Pages.MyFavoriteDetailPage"
              Title="我的歌单详情"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
 
@@ -30,7 +30,7 @@
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding MyFavoriteRenameCommand}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="edit.png"
+                <Image Source="{AppThemeBinding Dark='edit_dark.png',Light='edit.png'}"
                        HeightRequest="20"
                        WidthRequest="20">
                 </Image>
@@ -46,7 +46,8 @@
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding MyFavoriteRemoveCommand}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="remove.png"
+                <Image x:Name="ImgRemove"
+                       Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
                        HeightRequest="20"
                        WidthRequest="20">
                 </Image>
@@ -68,12 +69,12 @@
                         </StackLayout.GestureRecognizers>
 
                         <StackLayout WidthRequest="30"
-                                         Orientation="Horizontal">
-                            <Image Source="remove.png"
-                                       Aspect="AspectFill"
-                                       WidthRequest="15"
-                                       HeightRequest="15"
-                                       VerticalOptions="Center">
+                                     Orientation="Horizontal">
+                            <Image Source="{Binding Source, Source={x:Reference ImgRemove}}"
+                                   Aspect="AspectFill"
+                                   WidthRequest="15"
+                                   HeightRequest="15"
+                                   VerticalOptions="Center">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneCommand}"
                                                               CommandParameter="{Binding .}"/>

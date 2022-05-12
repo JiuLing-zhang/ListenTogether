@@ -13,6 +13,8 @@
     <Color x:Key="LightLyricText">#646464</Color>
     <Color x:Key="LightLyricHighlight">#0E6ABA</Color>
     <Color x:Key="LightBorder">#BEBEBE</Color>
+    <Color x:Key="LightBtnBackground">#FDFDFD</Color>
+    <Color x:Key="LightBtnText">#000000</Color>
 
     <Color x:Key="DarkLogo">#C98FFF</Color>
     <Color x:Key="DarkBackground">#242424</Color>
@@ -24,6 +26,8 @@
     <Color x:Key="DarkLyricText">#6B6B6B</Color>
     <Color x:Key="DarkLyricHighlight">#EFEFEF</Color>
     <Color x:Key="DarkBorder">#7B7B7B</Color>
+    <Color x:Key="DarkBtnBackground">#2F363D</Color>
+    <Color x:Key="DarkBtnText">#FFFFFF</Color>
 
     <Style TargetType="Label"
            x:Key="Logo">
@@ -34,7 +38,7 @@
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource LightLogo}, Dark={StaticResource DarkLogo}}" />
     </Style>
-    
+
     <Style TargetType="Label"
            x:Key="Title">
         <Setter Property="FontSize"
@@ -80,4 +84,10 @@
                 Value="{AppThemeBinding Light={StaticResource LightBorder}, Dark={StaticResource DarkBorder}}"/>
     </Style>
 
+    <Style TargetType="Button">
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"/>
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
+    </Style>
 </ResourceDictionary>

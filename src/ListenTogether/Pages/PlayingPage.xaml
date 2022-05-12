@@ -6,7 +6,7 @@
              xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.PlayingPage"
              Title="正在播放"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
     <ContentPage.Resources>
         <Style x:Key="LyricItem" TargetType="Label">
             <Setter Property="FontSize"

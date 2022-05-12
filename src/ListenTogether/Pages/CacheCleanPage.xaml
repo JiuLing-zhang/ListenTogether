@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ListenTogether.Pages.CacheCleanPage"
              Title="缓存清理"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <ContentPage.Resources>
         <Style x:Key="IsEnabledClear" TargetType="Button">
@@ -63,10 +63,14 @@
                 </StackLayout>
             </StackLayout>
             <Button Text="全选"
-                    Command="{Binding SelectAllCommand}"/>
+                    Command="{Binding SelectAllCommand}"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
+                    TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
             <Button Text="删除"
                     Margin="5,0,0,0"
                     Style="{DynamicResource IsEnabledClear}"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
+                    TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"
                     Command="{Binding ClearCommand}"/>
         </StackLayout>
     </StackLayout>

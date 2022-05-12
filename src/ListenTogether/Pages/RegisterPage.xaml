@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ListenTogether.Pages.RegisterPage"
              Title="注册"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
                  MaximumWidthRequest="{OnPlatform  UWP=500,MacCatalyst=500}">
@@ -44,17 +44,21 @@
                    WidthRequest="48"
                    Margin="0,0,10,0"/>
                 <Button Text="选择"
-                    IsEnabled="{Binding IsNotBusy}"
-                    Command="{Binding ChoseImageCommand}"/>
+                        IsEnabled="{Binding IsNotBusy}"
+                        Command="{Binding ChoseImageCommand}"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
+                        TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
             </HorizontalStackLayout>
 
             <Label Text="{Binding ApiMessage}"
                Margin="0,10,0,0"/>
 
             <Button Text="注册"
-                Margin="0,20,0,0"
-                IsEnabled="{Binding IsNotBusy}"
-                Command="{Binding RegisterCommand}"/>
+                    Margin="0,20,0,0"
+                    IsEnabled="{Binding IsNotBusy}"
+                    Command="{Binding RegisterCommand}"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
+                    TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
         </StackLayout>
     </StackLayout>
 </ContentPage>

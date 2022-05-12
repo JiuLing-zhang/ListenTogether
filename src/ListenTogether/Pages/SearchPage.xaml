@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.SearchPage"
              Title="搜索"
-             BackgroundColor="#F7F7F7">
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <ContentPage.Resources>
         <Style x:Key="FeeType" TargetType="Label">
@@ -88,7 +88,8 @@
                             <On Platform="UWP, macOS">
                                 <Grid ColumnDefinitions="30,40,60,40,300,300,*">
                                     <Image Grid.Column="0"
-                                           Source="heart.png"
+                                           x:Name="ImgHeart"
+                                           Source="{AppThemeBinding Dark='heart_dark.png',Light='heart.png'}"
                                            Aspect="AspectFill"
                                            WidthRequest="15"
                                            HeightRequest="15"
@@ -165,7 +166,7 @@
                                     <Image Grid.Row="0"
                                            Grid.RowSpan="2"
                                            Grid.Column="2"
-                                           Source="heart.png"
+                                           Source="{Binding Source, Source={x:Reference ImgHeart}}"
                                            Aspect="AspectFill"
                                            WidthRequest="15"
                                            HeightRequest="15"
