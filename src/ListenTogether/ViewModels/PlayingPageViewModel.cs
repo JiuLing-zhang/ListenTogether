@@ -97,7 +97,7 @@ public class PlayingPageViewModel : ViewModelBase
     private async Task SetMusicImage(string imageUrl)
     {
         var buffer = await _httpClient.GetFileByteArray(imageUrl);
-        BackgroundImage = _blurredImageService.Convert(buffer);         
+        BackgroundImage = _blurredImageService.Convert(buffer);
     }
 
     /// <summary>

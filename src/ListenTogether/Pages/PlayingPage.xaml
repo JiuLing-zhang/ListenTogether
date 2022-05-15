@@ -33,8 +33,11 @@
     </ContentPage.Resources>
 
     <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#000000">
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" 
+                     AbsoluteLayout.LayoutFlags="All" 
+                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
             <Image Source="{Binding BackgroundImage, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                   Opacity="0.3"
                    HorizontalOptions="FillAndExpand"
                    VerticalOptions="FillAndExpand"
                    Aspect="AspectFill">           
