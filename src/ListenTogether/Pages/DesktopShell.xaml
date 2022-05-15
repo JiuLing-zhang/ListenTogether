@@ -21,7 +21,6 @@
                    VerticalOptions="Center"
                    HorizontalOptions="Center" />
             <Label Text="一起听"
-                   TextColor="#C98FFF"
                    Style="{StaticResource Logo}"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
@@ -46,7 +45,7 @@
                   ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
 
     <ShellContent Title="{Binding Settings.Title}"
-                  Icon="{AppThemeBinding Light=my.png, Dark=my.png}" 
+                  Icon="{AppThemeBinding Light=my.png, Dark=my_dark.png}" 
                   ContentTemplate="{DataTemplate pages:SettingsPage}" />
 
 </Shell>

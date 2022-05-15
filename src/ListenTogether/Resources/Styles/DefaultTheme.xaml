@@ -90,4 +90,5 @@
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
     </Style>
+ 
 </ResourceDictionary>

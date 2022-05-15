@@ -1,6 +1,6 @@
-﻿namespace ListenTogether.Services
+﻿namespace ListenTogether.Services;
+
+public interface IBlurredImageService
 {
-    public class BlurredImage : Image
-    {
-    }
+    byte[] Convert(byte[] buffer);
 }

@@ -15,6 +15,6 @@ internal class ShellViewModel
         Playlist = new AppSection() { Title = "播放列表", Icon = "playlist.png", IconDark = "playlist_dark.png", TargetType = typeof(PlaylistPage) };
         MyFavorite = new AppSection() { Title = "我的歌单", Icon = "heart.png", IconDark = "heart_dark.png", TargetType = typeof(MyFavoritePage) };
         Playing = new AppSection() { Title = "正在播放", Icon = "music.png", IconDark = "music_dark.png", TargetType = typeof(PlayingPage) };
-        Settings = new AppSection() { Title = "我的", Icon = "my.png", IconDark = "my.png", TargetType = typeof(SettingsPage) };
+        Settings = new AppSection() { Title = "我的", Icon = "my.png", IconDark = "my_dark.png", TargetType = typeof(SettingsPage) };
     }
 }

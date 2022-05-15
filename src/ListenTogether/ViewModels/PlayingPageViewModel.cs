@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Dispatching;
+﻿using JiuLing.CommonLibs.Net;
+using Microsoft.Maui.Dispatching;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -7,9 +8,13 @@ public class PlayingPageViewModel : ViewModelBase
 {
     private IDispatcherTimer _timerLyricsUpdate;
     private readonly PlayerService _playerService;
+    private readonly IBlurredImageService _blurredImageService;
+    private readonly HttpClientHelper _httpClient;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; }
-    public PlayingPageViewModel(PlayerService playerService)
+    public PlayingPageViewModel(PlayerService playerService, HttpClientHelper httpClient, IBlurredImageService blurredImageService)
     {
+        _httpClient = httpClient;
+        _blurredImageService = blurredImageService;
         _playerService = playerService;
         Lyrics = new ObservableCollection<LyricViewModel>();
         _playerService.NewMusicAdded += _playerService_NewMusicAdded;
@@ -62,6 +67,20 @@ public class PlayingPageViewModel : ViewModelBase
         }
     }
 
+    private byte[] _backgroundImage;
+    /// <summary>
+    /// 歌曲的背景图片
+    /// </summary>
+    public byte[] BackgroundImage
+    {
+        get => _backgroundImage;
+        set
+        {
+            _backgroundImage = value;
+            OnPropertyChanged();
+        }
+    }
+
     private void _playerService_NewMusicAdded(object sender, Music e)
     {
         NewMusicAddedDo(e);
@@ -69,6 +88,16 @@ public class PlayingPageViewModel : ViewModelBase
     private void NewMusicAddedDo(Music music)
     {
         CurrentMusic = music;
+        if (music != null)
+        {
+            SetMusicImage(music.ImageUrl);
+        }
+    }
+
+    private async Task SetMusicImage(string imageUrl)
+    {
+        var buffer = await _httpClient.GetFileByteArray(imageUrl);
+        BackgroundImage = _blurredImageService.Convert(buffer);         
     }
 
     /// <summary>

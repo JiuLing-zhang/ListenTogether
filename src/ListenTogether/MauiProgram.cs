@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using CommunityToolkit.Maui;
-using System.Reflection;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Configuration;
 
 namespace ListenTogether
 {
@@ -10,14 +9,8 @@ namespace ListenTogether
         {
             var builder = MauiApp.CreateBuilder();
 
-            var a = Assembly.GetExecutingAssembly();
-            using var stream = a.GetManifestResourceStream("ListenTogether.appsettings.json");
-
-            var config = new ConfigurationBuilder()
-                        .AddJsonStream(stream)
-                        .Build();
-
-
+            using var stream = FileSystem.OpenAppPackageFileAsync("Settings.json").Result;
+            var config = new ConfigurationBuilder().AddJsonStream(stream).Build();
             builder.Configuration.AddConfiguration(config);
 
             builder

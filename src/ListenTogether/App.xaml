@@ -10,6 +10,7 @@
             <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
             <toolkit:IsNotEqualConverter x:Key="IsNotEqualConverter" />
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <toolkit:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

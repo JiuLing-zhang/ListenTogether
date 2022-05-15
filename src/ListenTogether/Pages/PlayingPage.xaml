@@ -9,6 +9,8 @@
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
     <ContentPage.Resources>
         <Style x:Key="LyricItem" TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource LightLyricText}, Dark={StaticResource DarkLyricText}}" />
             <Setter Property="FontSize"
                     Value="15"/>
             <Setter Property="HorizontalTextAlignment"
@@ -26,93 +28,100 @@
                     <Setter Property="TextColor"
                             Value="{AppThemeBinding Light={StaticResource LightLyricHighlight}, Dark={StaticResource DarkLyricHighlight}}" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding IsHighlight}"
-                             Value="False"
-                             TargetType="Label">
-                    <Setter Property="TextColor"
-                            Value="{AppThemeBinding Light={StaticResource LightLyricText}, Dark={StaticResource DarkLyricText}}" />
-                </DataTrigger>
             </Style.Triggers>
         </Style>
     </ContentPage.Resources>
 
-    <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
-        <StackLayout Margin="0,0,0,20"
-                     Orientation="Horizontal"
-                     VerticalOptions="Start">
-            <Label Text="正在播放"
-                   VerticalTextAlignment="Center"
-                   Style="{StaticResource Title}"/>
+    <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#000000">
+            <Image Source="{Binding BackgroundImage, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="FillAndExpand"
+                   Aspect="AspectFill">           
+            </Image>
         </StackLayout>
 
-        <Label Text="当前未播放歌曲"
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" 
+                     Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
+                     >
+            <StackLayout Margin="0,0,0,20"
+                     Orientation="Horizontal"
+                     VerticalOptions="Start">
+                <Label Text="正在播放"
+                   VerticalTextAlignment="Center"
+                   Style="{StaticResource Title}"/>
+            </StackLayout>
+
+            <Label Text="当前未播放歌曲"
                HorizontalTextAlignment="Center"
                IsVisible="{Binding CurrentMusic, Converter={StaticResource IsEqualConverter}}"/>
 
-        <StackLayout VerticalOptions="FillAndExpand"
+            <StackLayout VerticalOptions="FillAndExpand"
                      IsVisible="{Binding CurrentMusic, Converter={StaticResource IsNotEqualConverter}}">
 
-            <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#000000">
+                <!--<StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" BackgroundColor="#000000">
                     <services:BlurredImage Opacity="0.3" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Aspect="Fill" Source="{Binding CurrentMusic.ImageUrl}"/>
                 </StackLayout>-->
 
-            <StackLayout Orientation="Horizontal"
+                <StackLayout Orientation="Horizontal"
                          HorizontalOptions="CenterAndExpand">
 
-                <Border Padding="4,0,4,0"
+                    <Border Padding="4,0,4,0"
                         StrokeThickness="1"
                         HorizontalOptions="Center">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="5" />
-                    </Border.StrokeShape>
-                    <Label Text="{Binding CurrentMusic.PlatformName}"
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                        </Border.StrokeShape>
+                        <Label Text="{Binding CurrentMusic.PlatformName}"
                            FontSize="16"
                            Style="{StaticResource Explain}"/>
-                </Border>
+                    </Border>
 
-                <Label Margin="10,0,0,0"
+                    <Label Margin="10,0,0,0"
                        Text="{Binding CurrentMusic.Name}"
                        TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"
                        FontSize="22"
                        HorizontalTextAlignment="Center"/>
-            </StackLayout>
+                </StackLayout>
 
-            <StackLayout VerticalOptions="Start"
+                <StackLayout VerticalOptions="Start"
                          Margin="0,10,0,20">
-                <Label TextColor="{AppThemeBinding Light={StaticResource LightTextSecond}, Dark={StaticResource DarkTextSecond}}"
+                    <Label TextColor="{AppThemeBinding Light={StaticResource LightTextSecond}, Dark={StaticResource DarkTextSecond}}"
                        FontSize="16"
                        HorizontalTextAlignment="Center">
-                    <MultiBinding StringFormat="{}{0} - {1}">
-                        <Binding Path="CurrentMusic.Artist" />
-                        <Binding Path="CurrentMusic.Album" />
-                    </MultiBinding>
-                </Label>
+                        <MultiBinding StringFormat="{}{0} - {1}">
+                            <Binding Path="CurrentMusic.Artist" />
+                            <Binding Path="CurrentMusic.Album" />
+                        </MultiBinding>
+                    </Label>
 
-            </StackLayout>
+                </StackLayout>
 
-            <!-- 歌词 -->
-            <CollectionView VerticalOptions="FillAndExpand"
+                <!-- 歌词 -->
+                <CollectionView VerticalOptions="FillAndExpand"
                                     x:Name="ListLyrics"
                                     EmptyView="暂无歌词"
                                     ItemsSource="{Binding Lyrics}"
                                     HorizontalOptions="Center"
                                     SelectionMode="None"
                                     Scrolled="ListLyrics_Scrolled">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout HorizontalOptions="Center">
-                            <Label Text="{Binding Info}" 
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout HorizontalOptions="Center">
+                                <Label Text="{Binding Info}" 
                                            Style="{StaticResource LyricItem}"/>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
 
-        <StackLayout VerticalOptions="End">
-            <controls:Player x:Name="player"
+            <StackLayout VerticalOptions="End">
+                <controls:Player x:Name="player"
                              Margin="0,20,0,0"
                              IsMiniWhenPhone="False"/>
+            </StackLayout>
         </StackLayout>
-    </StackLayout>
+
+    </AbsoluteLayout>
 </ContentPage>

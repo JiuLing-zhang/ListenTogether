@@ -58,9 +58,7 @@ public partial class App : Application
         var task = Task.Run(configService.ReadAllSettingsAsync);
         GlobalConfig.MyUserSetting = task.Result;
 
-        //TODO 主题
-        //App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
-        App.Current.UserAppTheme = AppTheme.Light;
+        App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
 
         if (Config.Desktop)
         {

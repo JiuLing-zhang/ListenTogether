@@ -282,7 +282,6 @@ public class SearchResultPageViewModel : ViewModelBase
             }
 
             await _playerService.PlayAsync(music);
-            await ToastService.Show("添加成功");
         }
         catch (Exception ex)
         {
