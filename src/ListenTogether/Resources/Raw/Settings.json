@@ -2,6 +2,6 @@
   "AppSettings": {
     "LocalDbName": "ListenTogether.db",
     "DeviceInfoFileName": "device",
-    "ApiDomain": "http://162.14.66.2:9091"
+    "ApiDomain": ""
   }
 }
