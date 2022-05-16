@@ -147,7 +147,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="GitHub"
-                                              TextColor="Blue"
+                                              TextColor="{AppThemeBinding Dark={StaticResource DarkLink},Light={StaticResource LightLink}}"
                                               TextDecorations="Underline">
                                             <Span.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding OpenUrlCommand}"

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.SearchPage"
              Title="搜索"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
@@ -47,9 +48,13 @@
                    Text="{Binding Keyword}"
                    SearchCommand="{Binding SearchCommand}"
                    SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
-                   TextChanged="TxtSearchBar_TextChanged"
                    Placeholder="输入歌曲名、歌手名查找..."
-                   VerticalOptions="Start"/>
+                   VerticalOptions="Start">
+            <SearchBar.Behaviors>
+                <toolkit:EventToCommandBehavior EventName="TextChanged"
+                                                Command="{Binding SearchBarTextChangedCommand}"/>
+            </SearchBar.Behaviors>
+        </SearchBar>
 
         <Border VerticalOptions="Start"
                 HorizontalOptions="FillAndExpand"

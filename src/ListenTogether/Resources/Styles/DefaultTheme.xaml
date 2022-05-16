@@ -15,7 +15,8 @@
     <Color x:Key="LightBorder">#BEBEBE</Color>
     <Color x:Key="LightBtnBackground">#FDFDFD</Color>
     <Color x:Key="LightBtnText">#000000</Color>
-    <Color x:Key="LightFeeText">Red</Color>
+    <Color x:Key="LightFeeText">#D892FF</Color>
+    <Color x:Key="LightLink">#0000F0</Color>
     
     <Color x:Key="DarkLogo">#C98FFF</Color>
     <Color x:Key="DarkBackground">#242424</Color>
@@ -29,7 +30,8 @@
     <Color x:Key="DarkBorder">#7B7B7B</Color>
     <Color x:Key="DarkBtnBackground">#2F363D</Color>
     <Color x:Key="DarkBtnText">#FFFFFF</Color>
-    <Color x:Key="DarkFeeText">Red</Color>
+    <Color x:Key="DarkFeeText">#D892FF</Color>
+    <Color x:Key="DarkLink">#0000F0</Color>
     
     <Style TargetType="Label"
            x:Key="Logo">

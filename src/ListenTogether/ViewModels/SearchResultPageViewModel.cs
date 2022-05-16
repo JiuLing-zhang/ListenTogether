@@ -16,6 +16,7 @@ public class SearchResultPageViewModel : ViewModelBase
     public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
     public ICommand SearchCommand => new Command<string>(Search);
     public ICommand SuggestCommand => new Command<string>(Suggest);
+    public ICommand SearchBarTextChangedCommand => new Command<TextChangedEventArgs>(GetSearchSuggest);
 
     public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
@@ -120,8 +121,9 @@ public class SearchResultPageViewModel : ViewModelBase
     }
 
     private bool _isDoSuggest = true;
-    public async Task GetSearchSuggest(string keyword)
+    public async void GetSearchSuggest(TextChangedEventArgs e)
     {
+        string keyword = e.NewTextValue;
         if (_isDoSuggest == false)
         {
             SearchSuggest.Clear();

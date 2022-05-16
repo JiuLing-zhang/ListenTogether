@@ -6,11 +6,15 @@ namespace ListenTogether.ViewModels;
 
 public class PlayingPageViewModel : ViewModelBase
 {
+    //控制手动滚动歌词时，系统暂停歌词滚动
+    private DateTime _lastScrollToTime = DateTime.Now;
     private IDispatcherTimer _timerLyricsUpdate;
     private readonly PlayerService _playerService;
     private readonly IBlurredImageService _blurredImageService;
     private readonly HttpClientHelper _httpClient;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; }
+
+    public ICommand LyricsScrolledCommand => new Command(LyricsScrolledDo);
     public PlayingPageViewModel(PlayerService playerService, HttpClientHelper httpClient, IBlurredImageService blurredImageService)
     {
         _httpClient = httpClient;
@@ -138,9 +142,17 @@ public class PlayingPageViewModel : ViewModelBase
             Lyrics.Add(new LyricViewModel() { PositionMillisecond = totalMillisecond, Info = info });
         }
     }
-
+    private void LyricsScrolledDo()
+    {
+        _lastScrollToTime = DateTime.Now.AddSeconds(1);
+    }
     private void _timerLyricsUpdate_Tick(object sender, EventArgs e)
     {
+        if (_lastScrollToTime.Subtract(DateTime.Now).TotalMilliseconds > 0)
+        {
+            return;
+        }
+
         if (CurrentMusic == null)
         {
             return;
