@@ -9,30 +9,35 @@
                 <On Platform="UWP, macOS">
                     <StackLayout Orientation="Horizontal">
                         <StackLayout HorizontalOptions="Start"
-                                     Orientation="Horizontal">
+                                     Orientation="Horizontal"
+                                     WidthRequest="250">
 
                             <Image x:Name="ImgCurrentMusic"
+                                   HorizontalOptions="Start"
                                    WidthRequest="60">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="ImgPlaying_Tapped"/>
                                 </Image.GestureRecognizers>
                             </Image>
-                            <StackLayout Margin="10,0,0,0">
+                            <StackLayout Margin="10,0,0,0"
+                                         HorizontalOptions="FillAndExpand">
                                 <Label x:Name="LblMusicName"
                                        Margin="0,10,0,0"
                                        VerticalOptions="Start"
+                                       LineBreakMode="TailTruncation"
                                        TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"/>
-                                <Label x:Name="LblMusicInfo"
+                                <Label x:Name="LblMusicArtistAndAlbum"
                                        Margin="0,0,0,10"
                                        VerticalOptions="EndAndExpand"
-                                       Style="{StaticResource Explain}"/>
+                                       Style="{StaticResource Explain}"
+                                       LineBreakMode="TailTruncation"/>
                                 <Label x:Name="LblMusicArtist"
                                        IsVisible="False"/>
 
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout HorizontalOptions="CenterAndExpand" 
-                                     WidthRequest="470">
+                        <StackLayout HorizontalOptions="CenterAndExpand"
+                                     WidthRequest="450">
 
                             <!--播放按钮-->
                             <StackLayout Orientation="Horizontal" 
@@ -120,7 +125,7 @@
                         </StackLayout>
                         <StackLayout HorizontalOptions="End"
                                      Orientation="Horizontal"
-                                     WidthRequest="200">
+                                     WidthRequest="250">
 
                             <Image x:Name="ImgSoundOff"
                                    VerticalOptions="Center"
@@ -134,7 +139,7 @@
                             </Image>
 
                             <Slider x:Name="SliderVolume"
-                                    Margin="10,0,50,0"
+                                    Margin="10,0,100,0"
                                     HorizontalOptions="FillAndExpand"
                                     VerticalOptions="Center"
                                     Minimum="0"

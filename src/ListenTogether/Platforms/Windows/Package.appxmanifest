@@ -8,7 +8,7 @@
   <Identity Publisher="CN=User Name" />
 
   <Properties>
-    <PublisherDisplayName>User Name</PublisherDisplayName>
+    <PublisherDisplayName>九零</PublisherDisplayName>
   </Properties>
 
   <Dependencies>
@@ -22,7 +22,9 @@
 
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="$targetentrypoint$">
-      <uap:VisualElements />
+      <uap:VisualElements >
+        <uap:DefaultTile/>
+      </uap:VisualElements >
     </Application>
   </Applications>
 

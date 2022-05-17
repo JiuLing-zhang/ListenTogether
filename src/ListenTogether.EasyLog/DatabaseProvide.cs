@@ -13,19 +13,12 @@ internal class DatabaseProvide
             {
                 try
                 {
-                    string configJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LogConfig.json"));
-                    var config = JsonSerializer.Deserialize<LogConfig>(configJson);
-                    if (config == null)
-                    {
-                        throw new ArgumentException("日志组件加载失败：数据库路径未配置。");
-                    }
-
-                    string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MusicPlayerOnline");
+                    string appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ListenTogether");
                     if (!Directory.Exists(appDataFolder))
                     {
                         Directory.CreateDirectory(appDataFolder);
                     }
-                    string dbPath = Path.Combine(appDataFolder, config.DbName);
+                    string dbPath = Path.Combine(appDataFolder, "log.db");
 
                     _database = new SQLiteConnection(dbPath);
                     InitTable();

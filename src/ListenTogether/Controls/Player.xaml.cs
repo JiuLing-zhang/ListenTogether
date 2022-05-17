@@ -115,7 +115,7 @@ public partial class Player : ContentView
             {
                 ImgCurrentMusic.Source = music.ImageUrl;
                 LblMusicName.Text = music.Name;
-                LblMusicInfo.Text = $"{music.Artist} - {music.Album}";
+                LblMusicArtistAndAlbum.Text = $"{music.Artist} - {music.Album}";
                 LblMusicArtist.Text = music.Artist;
             });
         }
@@ -123,7 +123,7 @@ public partial class Player : ContentView
         {
             ImgCurrentMusic.Source = music.ImageUrl;
             LblMusicName.Text = music.Name;
-            LblMusicInfo.Text = $"{music.Artist} - {music.Album}";
+            LblMusicArtistAndAlbum.Text = $"{music.Artist} - {music.Album}";
             LblMusicArtist.Text = music.Artist;
         }
     }

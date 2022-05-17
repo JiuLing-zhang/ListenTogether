@@ -9,6 +9,8 @@ public partial class App : Application
     {
         InitializeComponent();
 
+        Logger.Info("系统启动");
+
         if (!Directory.Exists(GlobalConfig.AppDataDirectory))
         {
             Directory.CreateDirectory(GlobalConfig.AppDataDirectory);
