@@ -38,7 +38,8 @@ namespace ListenTogether.Api.Services
                 Artist = music.Artist,
                 ImageUrl = music.ImageUrl,
                 Lyric = music.Lyric,
-                PlayUrl = music.PlayUrl
+                PlayUrl = music.PlayUrl,
+                ExtendData = music.ExtendData,
             });
         }
 
@@ -58,7 +59,8 @@ namespace ListenTogether.Api.Services
                     Artist = music.Artist,
                     ImageUrl = music.ImageUrl,
                     Lyric = music.Lyric,
-                    PlayUrl = music.PlayUrl
+                    PlayUrl = music.PlayUrl,
+                    ExtendData = music.ExtendData ?? ""
                 };
                 _context.Musics.Add(myMusic);
             }
@@ -74,6 +76,7 @@ namespace ListenTogether.Api.Services
                 myMusic.ImageUrl = music.ImageUrl;
                 myMusic.Lyric = music.Lyric;
                 myMusic.PlayUrl = music.PlayUrl;
+                myMusic.ExtendData = music.ExtendData ?? "";
                 _context.Musics.Update(myMusic);
             }
 
@@ -82,7 +85,6 @@ namespace ListenTogether.Api.Services
             {
                 return new Result(1, "保存失败");
             }
-
             return new Result(0, "保存成功");
         }
     }

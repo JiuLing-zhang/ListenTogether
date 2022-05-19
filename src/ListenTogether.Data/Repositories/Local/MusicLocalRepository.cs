@@ -1,5 +1,4 @@
-﻿using JiuLing.CommonLibs.ExtensionMethods;
-using ListenTogether.Data.Entities;
+﻿using ListenTogether.Data.Entities;
 using ListenTogether.Data.Interfaces;
 using ListenTogether.Model;
 using ListenTogether.Model.Enums;
@@ -28,7 +27,8 @@ public class MusicLocalRepository : IMusicRepository
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
-            PlayUrl = music.PlayUrl
+            PlayUrl = music.PlayUrl,
+            ExtendData = music.ExtendData,
         };
     }
 
@@ -49,7 +49,8 @@ public class MusicLocalRepository : IMusicRepository
                 Artist = music.Artist,
                 ImageUrl = music.ImageUrl,
                 Lyric = music.Lyric,
-                PlayUrl = music.PlayUrl
+                PlayUrl = music.PlayUrl,
+                ExtendData = music.ExtendData
             };
             count = await DatabaseProvide.DatabaseAsync.InsertAsync(myMusic);
         }
@@ -65,6 +66,7 @@ public class MusicLocalRepository : IMusicRepository
             myMusic.ImageUrl = music.ImageUrl;
             myMusic.Lyric = music.Lyric;
             myMusic.PlayUrl = music.PlayUrl;
+            myMusic.ExtendData = music.ExtendData;
             count = await DatabaseProvide.DatabaseAsync.UpdateAsync(myMusic);
         }
         if (count == 0)

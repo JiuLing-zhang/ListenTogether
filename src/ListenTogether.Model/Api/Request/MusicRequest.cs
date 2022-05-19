@@ -14,5 +14,9 @@ namespace ListenTogether.Model.Api.Request
         /// </summary>
         [Required]
         public string PlatformInnerId { get; set; } = null!;
+        /// <summary>
+        /// 扩展数据
+        /// </summary>
+        public string? ExtendData { get; set; }
     }
 }

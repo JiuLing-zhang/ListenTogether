@@ -81,8 +81,8 @@ public class PlayerService
         {
             //缓存文件不存在时重新下载
 
-            //网易的歌曲需要更新播放地址
-            if (music.Platform == PlatformEnum.NetEase)
+            //部分平台的播放链接会失效，重新获取
+            if (music.Platform == PlatformEnum.NetEase || music.Platform == PlatformEnum.KuGou)
             {
                 music = await _musicNetworkService.UpdatePlayUrl(music);
             }

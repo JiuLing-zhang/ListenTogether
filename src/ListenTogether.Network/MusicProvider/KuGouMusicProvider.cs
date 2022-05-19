@@ -114,6 +114,7 @@ public class KuGouMusicProvider : IMusicProvider
             return null;
         }
 
+        string extendDataString = extendData.ToJson();
         return new Music()
         {
             Id = sourceMusic.Id,
@@ -126,13 +127,57 @@ public class KuGouMusicProvider : IMusicProvider
             Album = sourceMusic.Album,
             ImageUrl = httpResult.data.img,
             PlayUrl = httpResult.data.play_url,
-            Lyric = httpResult.data.lyrics
+            Lyric = httpResult.data.lyrics,
+            ExtendData = extendDataString
         };
     }
 
-    public Task<Music?> UpdatePlayUrl(Music music)
+    public async Task<Music?> UpdatePlayUrl(Music music)
     {
-        throw new NotImplementedException();
+        var extendDataString = music.ExtendData;
+        if (extendDataString.IsEmpty())
+        {
+            Logger.Info("更新酷狗播放地址失败，扩展数据不存在");
+            return music;
+        }
+        KuGouSearchExtendData extendData;
+        try
+        {
+            extendData = extendDataString.ToObject<KuGouSearchExtendData>();
+            if (extendData == null)
+            {
+                Logger.Info("更新酷狗播放地址失败，扩展数据格式错误");
+                return music;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("更新酷狗播放地址失败。", ex);
+            return music;
+        }
+
+        string args = KuGouUtils.GetMusicUrlData(extendData.Hash, extendData.AlbumId);
+        string url = $"{UrlBase.KuGou.GetMusic}?{args}";
+
+        string json = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
+        if (json.IsEmpty())
+        {
+            Logger.Info("更新酷狗播放地址失败，服务器返回空。");
+            return music;
+        }
+        var httpResult = json.ToObject<HttpResultBase<MusicDetailHttpResult>>();
+        if (httpResult == null)
+        {
+            Logger.Info("更新酷狗播放地址失败，服务器数据格式不正确。");
+            return music;
+        }
+        if (httpResult.status != 1 || httpResult.error_code != 0)
+        {
+            Logger.Info("更新酷狗播放地址失败，服务器返回错误。");
+            return music;
+        }
+        music.PlayUrl = httpResult.data.play_url;
+        return music;
     }
 
     public Task<List<string>> GetSearchSuggest(string keyword)

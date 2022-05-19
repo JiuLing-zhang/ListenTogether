@@ -202,7 +202,8 @@ public class NetEaseMusicProvider : IMusicProvider
             Album = sourceMusic.Album,
             ImageUrl = sourceMusic.ImageUrl,
             PlayUrl = playUrl,
-            Lyric = lyricResult.lrc.lyric
+            Lyric = lyricResult.lrc.lyric,
+            ExtendData = ""
         };
     }
 

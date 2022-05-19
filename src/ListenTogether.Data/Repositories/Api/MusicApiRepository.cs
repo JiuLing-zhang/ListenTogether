@@ -37,7 +37,8 @@ public class MusicApiRepository : IMusicRepository
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
-            PlayUrl = music.PlayUrl
+            PlayUrl = music.PlayUrl,
+            ExtendData = music.ExtendData,
         };
     }
 
@@ -54,7 +55,8 @@ public class MusicApiRepository : IMusicRepository
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
-            PlayUrl = music.PlayUrl
+            PlayUrl = music.PlayUrl,
+            ExtendData = music.ExtendData
         };
         string content = requestMusic.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");

@@ -156,7 +156,8 @@ public class MiGuMusicProvider : IMusicProvider
             Album = result.resource[0].album,
             ImageUrl = imageUrl,
             PlayUrl = playUrl,
-            Lyric = lyric
+            Lyric = lyric,
+            ExtendData = ""
         };
     }
 

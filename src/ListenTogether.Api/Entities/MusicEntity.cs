@@ -17,5 +17,6 @@ namespace ListenTogether.Api.Entities
         public string ImageUrl { get; set; } = null!;
         public string PlayUrl { get; set; } = null!;
         public string Lyric { get; set; } = null!;
+        public string ExtendData { get; set; } = null!;
     }
 }

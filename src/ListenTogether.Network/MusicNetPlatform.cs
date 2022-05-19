@@ -12,6 +12,7 @@ public class MusicNetPlatform
     private readonly SearchAbstract _kuGouSearcher = new KuGouSearcher(PlatformEnum.KuGou);
     private readonly SearchAbstract _miGuSearcher = new MiGuSearcher(PlatformEnum.MiGu);
 
+    private readonly IMusicProvider _kuGouMusicProvider = new KuGouMusicProvider();
     private readonly IMusicProvider _netEaseMusicProvider = new NetEaseMusicProvider();
     public MusicNetPlatform()
     {
@@ -37,11 +38,17 @@ public class MusicNetPlatform
 
     public async Task<Music?> UpdatePlayUrl(Music music)
     {
-        if (music.Platform != PlatformEnum.NetEase)
+        switch (music.Platform)
         {
-            throw new ArgumentException("当前平台无需更新地址");
+            case PlatformEnum.NetEase:
+                return await _netEaseMusicProvider.UpdatePlayUrl(music);
+            case PlatformEnum.KuGou:
+                return await _kuGouMusicProvider.UpdatePlayUrl(music);
+            case PlatformEnum.MiGu:
+                break;
+            default:
+                break;
         }
-
-        return await _netEaseMusicProvider.UpdatePlayUrl(music);
+        throw new ArgumentException("当前平台无需更新地址");
     }
 }
