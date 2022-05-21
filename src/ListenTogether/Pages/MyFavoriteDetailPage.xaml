@@ -24,7 +24,7 @@
 
             <StackLayout Margin="10,0,0,0"
                          Orientation="Horizontal"
-                         HorizontalOptions="Start"
+                         HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                          VerticalOptions="End"
                          IsVisible="{Binding IsPlaylistNotEmpty}">
                 <StackLayout.GestureRecognizers>
@@ -38,9 +38,9 @@
                        VerticalTextAlignment="Center"/>
             </StackLayout>
 
-            <StackLayout Margin="20,0,0,0"
+            <StackLayout Margin="{OnPlatform UWP='20,0,0,0',MacCatalyst='20,0,0,0',Android='5,0,0,0',iOS='5,0,0,0'}"
                          Orientation="Horizontal"
-                         HorizontalOptions="Start"
+                         HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=End,iOS=End}"
                          VerticalOptions="End"
                          IsVisible="{Binding IsPlaylistNotEmpty}">
                 <StackLayout.GestureRecognizers>
@@ -57,63 +57,139 @@
         </StackLayout>
 
         <CollectionView ItemsSource="{Binding MyFavoriteMusics}"
-                        EmptyView="歌单居然是空的...."
                         IsVisible="{Binding IsNotBusy}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal" Padding="0,0,0,10">
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"
-                                                      CommandParameter="{Binding .}"
-                                                      NumberOfTapsRequired="2"/>
-                        </StackLayout.GestureRecognizers>
+                    <StackLayout>
+                        <OnPlatform x:TypeArguments="View">
+                            <On Platform="UWP, macOS">
+                                <Grid Margin="0,0,0,20"
+                                      RowDefinitions="auto,auto"
+                                      ColumnDefinitions="30,40,*">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"
+                                                              CommandParameter="{Binding .}"
+                                                              NumberOfTapsRequired="2">
+                                        </TapGestureRecognizer>
+                                    </Grid.GestureRecognizers>
 
-                        <StackLayout WidthRequest="30"
-                                     Orientation="Horizontal">
-                            <Image Source="{Binding Source, Source={x:Reference ImgRemove}}"
-                                   Aspect="AspectFill"
-                                   WidthRequest="15"
-                                   HeightRequest="15"
-                                   VerticalOptions="Center">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneCommand}"
-                                                              CommandParameter="{Binding .}"/>
-                                </Image.GestureRecognizers>
-                            </Image>
-                        </StackLayout>
+                                    <Image Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="0"
+                                           Source="{Binding Source, Source={x:Reference ImgRemove}}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="15"
+                                           HeightRequest="15"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
 
-                        <Label Text="{Binding Seq}"
-                               Margin="10,0,0,0"
-                               VerticalTextAlignment="Center"/>
+                                    <Label Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="1"
+                                           Text="{Binding Seq}"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"/>
 
-                        <StackLayout Margin="20,0,0,0"
-                                     Spacing="3">
-                            <StackLayout Orientation="Horizontal">
-                                <Border Padding="4,0,4,3"
-                                    StrokeThickness="1"
-                                    HorizontalOptions="Center">
-                                    <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="5" />
-                                    </Border.StrokeShape>
-                                    <Label Text="{Binding PlatformName}"
+                                    <StackLayout Grid.Row="0"
+                                                 Grid.Column="2"
+                                                 Orientation="Horizontal">
+                                        <Border Padding="4,0,4,3"
+                                                StrokeThickness="1"
+                                                HorizontalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="5" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding PlatformName}"
+                                                   VerticalTextAlignment="Center"
+                                                   Style="{StaticResource Explain}"/>
+                                        </Border>
+                                        <Label Text="{Binding MusicName}"
+                                               Margin="5,0,0,0"
+                                               VerticalTextAlignment="Center"
+                                               LineBreakMode="TailTruncation"/>
+                                    </StackLayout>
+
+                                    <Label Grid.Row="1"
+                                           Grid.Column="2"
                                            VerticalTextAlignment="Center"
-                                           Style="{StaticResource Explain}"/>
-                                </Border>
-                                <Label Text="{Binding MusicName}"
-                                       Margin="5,0,0,0"
-                                       VerticalTextAlignment="Center"
-                                       LineBreakMode="TailTruncation"/>
-                            </StackLayout>
+                                           LineBreakMode="TailTruncation"
+                                           Style="{StaticResource Explain}">
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="MusicArtist" />
+                                            <Binding Path="MusicAlbum" />
+                                        </MultiBinding>
+                                    </Label>
+                                </Grid>
+                            </On>
+                            <On Platform="Android,iOS">
+                                <Grid Margin="0,0,0,20"
+                                      RowDefinitions="auto,auto"
+                                      ColumnDefinitions="40,*,30">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicCommand}"
+                                                              CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </Grid.GestureRecognizers>
 
-                            <Label VerticalTextAlignment="Center"
-                                   LineBreakMode="TailTruncation"
-                                   Style="{StaticResource Explain}">
-                                <MultiBinding StringFormat="{}{0} - {1}">
-                                    <Binding Path="MusicArtist" />
-                                    <Binding Path="MusicAlbum" />
-                                </MultiBinding>
-                            </Label>
-                        </StackLayout>
+                                    <Label Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="0"
+                                           Text="{Binding Seq}"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"/>
+
+                                    <StackLayout Grid.Row="0"
+                                                 Grid.Column="1"
+                                                 Orientation="Horizontal">
+                                        <Border Padding="4,0,4,3"
+                                                StrokeThickness="1"
+                                                HorizontalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="5" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding PlatformName}"
+                                                   VerticalTextAlignment="Center"
+                                                   Style="{StaticResource Explain}"/>
+                                        </Border>
+                                        <Label Text="{Binding MusicName}"
+                                               Margin="5,0,0,0"
+                                               VerticalTextAlignment="Center"
+                                               LineBreakMode="TailTruncation"/>
+                                    </StackLayout>
+
+                                    <Label Grid.Row="1"
+                                           Grid.Column="1"
+                                           VerticalTextAlignment="Center"
+                                           LineBreakMode="TailTruncation"
+                                           Style="{StaticResource Explain}">
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="MusicArtist" />
+                                            <Binding Path="MusicAlbum" />
+                                        </MultiBinding>
+                                    </Label>
+
+                                    <Image Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="2"
+                                           Source="{Binding Source, Source={x:Reference ImgRemove}}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="15"
+                                           HeightRequest="15"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Grid>
+                            </On>
+                        </OnPlatform>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
