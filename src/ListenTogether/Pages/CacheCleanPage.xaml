@@ -46,28 +46,35 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </ScrollView>
-        <Label Text="谨慎清理，小心有些歌曲已经是VIP的咯"
+        <Label Margin="0,10,0,5"
+               Text="谨慎清理，小心有些歌曲已经是VIP的咯"
                VerticalOptions="End"
-               Margin="0,10,0,5"/>
+               Style="{StaticResource Explain}"/>
 
         <StackLayout Orientation="Horizontal"
                      VerticalOptions="End">
             <StackLayout Margin="0,0,20,0">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="总大小：" />
-                    <Label Text="{Binding AllSizeString,StringFormat='{0}MB'}" />
+                    <Label Text="{Binding AllSizeString,StringFormat='{0}MB'}"
+                           WidthRequest="100"
+                           HorizontalTextAlignment="End"/>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal">
                     <Label Text="已选择："/>
-                    <Label Text="{Binding SelectedSizeString,StringFormat='{0}MB'}" />
+                    <Label Text="{Binding SelectedSizeString,StringFormat='{0}MB'}"
+                           WidthRequest="100"
+                           HorizontalTextAlignment="End"/>
                 </StackLayout>
             </StackLayout>
             <Button Text="全选"
+                    HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                     Command="{Binding SelectAllCommand}"
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
             <Button Text="删除"
                     Margin="5,0,0,0"
+                    HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=End,iOS=End}"
                     Style="{DynamicResource IsEnabledClear}"
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"
