@@ -18,6 +18,11 @@ public class LoginPageViewModel : ViewModelBase
         _userService = userService;
         _userLocalService = userLocalService;
     }
+    public void InitializeAsync()
+    {
+        Username = "";
+        Password = "";
+    }
 
 
     private bool _isBusy;
