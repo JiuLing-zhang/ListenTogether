@@ -10,6 +10,8 @@
 
     <ContentPage.Resources>
         <Style x:Key="FeeType" TargetType="Label">
+            <Setter Property="TextColor"
+                    Value="{AppThemeBinding Dark={StaticResource DarkFeeText},Light={StaticResource LightFeeText}}"/>
             <Setter Property="IsVisible"
                     Value="false"/>
             <Style.Triggers>
@@ -82,16 +84,15 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal">
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
-                                                          CommandParameter="{Binding .}"
-                                                          NumberOfTapsRequired="{OnPlatform UWP=2,MacCatalyst=2,Android=1,iOS=1}"/>
-                        </StackLayout.GestureRecognizers>
-
+                    <StackLayout>
                         <OnPlatform x:TypeArguments="View">
                             <On Platform="UWP, macOS">
                                 <Grid ColumnDefinitions="30,40,60,40,300,300,*">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
+                                                          CommandParameter="{Binding .}"
+                                                          NumberOfTapsRequired="2"/>
+                                    </Grid.GestureRecognizers>
                                     <Image Grid.Column="0"
                                            x:Name="ImgHeart"
                                            Source="{AppThemeBinding Dark='heart_dark.png',Light='heart.png'}"
@@ -115,11 +116,10 @@
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
                                     <Label Grid.Column="3"
-                                               Text="{Binding Fee}"
-                                               Style="{DynamicResource FeeType}"
-                                               TextColor="Red"
-                                               VerticalOptions="Center"
-                                               HorizontalOptions="Center"/>
+                                           Text="{Binding Fee}"
+                                           Style="{DynamicResource FeeType}"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"/>
                                     <Label Grid.Column="4"
                                            Text="{Binding Name}"
                                            VerticalOptions="Center"
@@ -133,14 +133,16 @@
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
                                 </Grid>
-
                             </On>
 
                             <On Platform="Android,iOS">
                                 <Grid Margin="0,0,0,20"
                                       RowDefinitions="auto,auto"
-                                      ColumnDefinitions="40,*,30">
-
+                                      ColumnDefinitions="40,*,40">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
+                                                          CommandParameter="{Binding .}"/>
+                                    </Grid.GestureRecognizers>
                                     <Label Grid.Row="0"
                                            Grid.Column="0"
                                            Text="{Binding Platform}"
@@ -153,21 +155,29 @@
                                            Text="{Binding Duration}"
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
-                                    <Label Grid.Row="0"
-                                           Grid.Column="1"
-                                           Text="{Binding Name}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation"/>
+
+                                    <HorizontalStackLayout Grid.Row="0"
+                                                               Grid.Column="1">
+                                        <Label Text="{Binding Fee}"
+                                               Style="{DynamicResource FeeType}"
+                                               VerticalOptions="Center"/>
+                                        <Label Text="{Binding Name}"
+                                               Margin="5,0,0,0"
+                                               VerticalOptions="Center"
+                                               LineBreakMode="TailTruncation"/>
+                                    </HorizontalStackLayout>
+
                                     <Label Grid.Row="1"
-                                           Grid.Column="1"
-                                           Style="{StaticResource Explain}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation">
+                                               Grid.Column="1"
+                                               Style="{StaticResource Explain}"
+                                               VerticalOptions="Center"
+                                               LineBreakMode="TailTruncation">
                                         <MultiBinding StringFormat="{}{0} - {1}">
                                             <Binding Path="Artist" />
                                             <Binding Path="Album" />
                                         </MultiBinding>
                                     </Label>
+
                                     <Image Grid.Row="0"
                                            Grid.RowSpan="2"
                                            Grid.Column="2"
@@ -178,13 +188,11 @@
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center">
                                         <Image.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"
                                                                   CommandParameter="{Binding .}"/>
                                         </Image.GestureRecognizers>
                                     </Image>
-
                                 </Grid>
-
                             </On>
                         </OnPlatform>
                     </StackLayout>
