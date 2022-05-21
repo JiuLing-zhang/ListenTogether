@@ -28,9 +28,11 @@
                         SelectionMode="None"  >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout>
-                        <Label Text="{Binding Time}"/>
-                        <Label Text="{Binding Message}"/>
+                    <StackLayout Margin="0,0,0,10">
+                        <Label Text="{Binding Time}"
+                               Style="{StaticResource Explain}"/>
+                        <Label Text="{Binding Message}"
+                               Style="{StaticResource Explain}"/>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
