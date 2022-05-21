@@ -52,57 +52,124 @@
         </StackLayout>
 
         <CollectionView VerticalOptions="FillAndExpand"
-                                ItemsSource="{Binding FavoriteList}"
-                                EmptyView="还没有歌单....快去添加一个吧~~"
-                                IsVisible="{Binding IsNotBusy}">
+                        ItemsSource="{Binding FavoriteList}"
+                        IsVisible="{Binding IsNotBusy}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Orientation="Horizontal"
-                                     Margin="0,0,0,10">
 
-                        <StackLayout.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailCommand}"	
-                                                      CommandParameter="{Binding .}">
-                            </TapGestureRecognizer>
-                        </StackLayout.GestureRecognizers>
+                    <StackLayout>
+                        <OnPlatform x:TypeArguments="View">
+                            <On Platform="UWP, macOS">
+                                <Grid Margin="0,0,0,20"
+                                      RowDefinitions="auto,auto"
+                                      ColumnDefinitions="40,60,*">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailCommand}"
+                                                              CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </Grid.GestureRecognizers>
 
-                        <StackLayout HorizontalOptions="Start" 
-                                         VerticalOptions="Center"
-                                         Margin="0,0,10,0">
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"	
-                                                          CommandParameter="{Binding .}"/>
-                            </StackLayout.GestureRecognizers>
+                                    <Image Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="0"
+                                           x:Name="ImgPlayAll"
+                                           Source="{AppThemeBinding Dark='play_dark.png',Light='play.png'}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="28"
+                                           HeightRequest="28"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
 
-                            <Image WidthRequest="28"
-                                   Source="{AppThemeBinding Dark='play_dark.png',Light='play.png'}"
-                                   Aspect="AspectFill">
-                            </Image>
-                        </StackLayout>
+                                    <Frame Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="1"
+                                           CornerRadius="10"
+                                           HeightRequest="48"
+                                           WidthRequest="48">
+                                        <Image HeightRequest="48"
+                                               WidthRequest="48"
+                                               Aspect="Fill"                                           
+                                               Style="{StaticResource MyFavoriteImg}">
+                                        </Image>
+                                    </Frame>
 
-                        <Frame CornerRadius="10"
-                                       HeightRequest="48"
-                                       WidthRequest="48">
-                            <Image HeightRequest="48"
-                                           WidthRequest="48"
-                                           Aspect="Fill"                                           
-                                           Style="{StaticResource MyFavoriteImg}">
-                            </Image>
-                        </Frame>
+                                    <Label Grid.Row="0"
+                                           Grid.Column="2"
+                                           Text="{Binding Name}"
+                                           LineBreakMode="TailTruncation"/>
 
-                        <StackLayout HorizontalOptions="StartAndExpand" 
-                                             VerticalOptions="Center"
-                                             Margin="10,0,0,0">
-                            <Label Text="{Binding Name}" 
-                                       VerticalOptions="End"/>
-                            <Label VerticalOptions="End"
-                                           Style="{StaticResource Explain}">
-                                <MultiBinding StringFormat="共 {0} 首歌">
-                                    <Binding Path="MusicCount"></Binding>
-                                </MultiBinding>
-                            </Label>
-                        </StackLayout>
+                                    <Label Grid.Row="1"
+                                           Grid.Column="2"
+                                           Style="{StaticResource Explain}"
+                                           LineBreakMode="TailTruncation">
+                                        <MultiBinding StringFormat="共 {0} 首歌">
+                                            <Binding Path="MusicCount"></Binding>
+                                        </MultiBinding>
+                                    </Label>
+                                </Grid>
+                            </On>
+
+                            <On Platform="Android,iOS">
+                                <Grid Margin="0,0,0,20"
+                                      RowDefinitions="auto,auto"
+                                      ColumnDefinitions="60,*,40">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailCommand}"
+                                                              CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </Grid.GestureRecognizers>
+
+                                    <Frame Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="0"
+                                           CornerRadius="10"
+                                           HeightRequest="48"
+                                           WidthRequest="48">
+                                        <Image HeightRequest="48"
+                                               WidthRequest="48"
+                                               Aspect="Fill"                                           
+                                               Style="{StaticResource MyFavoriteImg}">
+                                        </Image>
+                                    </Frame>
+
+                                    <Label Grid.Row="0"
+                                           Grid.Column="1"
+                                           Text="{Binding Name}"
+                                           LineBreakMode="TailTruncation"/>
+
+                                    <Label Grid.Row="1"
+                                           Grid.Column="1"
+                                           Style="{StaticResource Explain}"
+                                           LineBreakMode="TailTruncation">
+                                        <MultiBinding StringFormat="共 {0} 首歌">
+                                            <Binding Path="MusicCount"></Binding>
+                                        </MultiBinding>
+                                    </Label>
+
+                                    <Image Grid.Row="0"
+                                           Grid.RowSpan="2"
+                                           Grid.Column="2"
+                                           Source="{Binding Source, Source={x:Reference ImgPlayAll}}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="28"
+                                           HeightRequest="28"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Grid>
+                            </On>
+                        </OnPlatform>
                     </StackLayout>
+
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
