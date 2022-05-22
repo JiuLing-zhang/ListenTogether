@@ -31,8 +31,7 @@ public class PlayingPageViewModel : ViewModelBase
     {
         try
         {
-            NewMusicAddedDo(_playerService.CurrentMusic);
-            GetLyricDetail();
+            NewMusicAddedDo(_playerService.CurrentMusic);        
         }
         catch (Exception ex)
         {
@@ -76,6 +75,7 @@ public class PlayingPageViewModel : ViewModelBase
     private void NewMusicAddedDo(Music music)
     {
         CurrentMusic = music;
+        GetLyricDetail();
     }
 
     /// <summary>
