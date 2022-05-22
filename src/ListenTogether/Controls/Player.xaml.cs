@@ -55,7 +55,7 @@ public partial class Player : ContentView
             }
             else
             {
-                MainBlock.HeightRequest = 60;
+                MainBlock.HeightRequest = 80;
             }
         }
     }

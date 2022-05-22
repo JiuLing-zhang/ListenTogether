@@ -186,8 +186,7 @@
                         </StackLayout>
 
                         <!--完整组件-->
-                        <StackLayout x:Name="PhoneBlock"
-                                     Margin="0,0,0,10">
+                        <StackLayout x:Name="PhoneBlock">
                             <!-- 进度条 -->
                             <StackLayout Orientation="Horizontal">
                                 <Label Text="{Binding Text, Source={x:Reference LblPositionMilliseconds}}"
@@ -209,10 +208,10 @@
                             <!-- 播放按钮 -->
                             <StackLayout Orientation="Horizontal" 
                                          HorizontalOptions="Center"
-                                         Spacing="25" >
+                                         Spacing="30" >
 
                                 <Image Source="{Binding Source, Source={x:Reference ImgRepeat}}"
-                                       WidthRequest="30" 
+                                       WidthRequest="30"
                                        HeightRequest="30"
                                        VerticalOptions="Center"
                                        HorizontalOptions="Center"
@@ -223,7 +222,7 @@
                                 </Image>
 
                                 <Image Source="{Binding Source, Source={x:Reference ImgBack}}"
-                                       WidthRequest="30" 
+                                       WidthRequest="30"
                                        HeightRequest="30"
                                        VerticalOptions="Center"
                                        HorizontalOptions="Center"
@@ -234,8 +233,8 @@
                                 </Image>
 
                                 <Image Source="{Binding Source, Source={x:Reference ImgPlay}}"
-                                       WidthRequest="60"
-                                       HeightRequest="60"
+                                       WidthRequest="50"
+                                       HeightRequest="50"
                                        VerticalOptions="Center"
                                        HorizontalOptions="Center"
                                        Aspect="AspectFill">
@@ -245,8 +244,8 @@
                                 </Image>
 
                                 <Image Source="{Binding Source, Source={x:Reference ImgNext}}"
-                                       WidthRequest="40"
-                                       HeightRequest="40"
+                                       WidthRequest="30"
+                                       HeightRequest="30"
                                        VerticalOptions="Center"
                                        HorizontalOptions="Center"
                                        Aspect="AspectFill">
@@ -256,8 +255,8 @@
                                 </Image>
 
                                 <Image Source="{Binding Source, Source={x:Reference ImgOther}}"
-                                       WidthRequest="40"
-                                       HeightRequest="40"
+                                       WidthRequest="30"
+                                       HeightRequest="30"
                                        VerticalOptions="Center"
                                        HorizontalOptions="Center"
                                        Aspect="AspectFill">
