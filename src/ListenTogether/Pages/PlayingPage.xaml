@@ -37,9 +37,9 @@
     <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" 
                      AbsoluteLayout.LayoutFlags="All" 
-                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
+                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkPlayingBackground},Light={StaticResource LightPlayingBackground}}">
             <gaussianBlur:GaussianImage Url="{Binding CurrentMusic.ImageUrl}"
-                                        Opacity="0.3"
+                                        Opacity="0.7"
                                         HorizontalOptions="FillAndExpand"
                                         VerticalOptions="FillAndExpand"/>
         </StackLayout>

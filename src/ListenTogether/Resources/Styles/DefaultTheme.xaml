@@ -11,7 +11,8 @@
     <Color x:Key="LightPlaceholder">#767676</Color>
     <Color x:Key="LightActivity">#1279D2</Color>
     <Color x:Key="LightLyricText">#646464</Color>
-    <Color x:Key="LightLyricHighlight">#0E6ABA</Color>
+    <Color x:Key="LightLyricHighlight">#D892FF</Color>
+    <Color x:Key="LightPlayingBackground">#242424</Color>
     <Color x:Key="LightBorder">#BEBEBE</Color>
     <Color x:Key="LightBtnBackground">#FDFDFD</Color>
     <Color x:Key="LightBtnText">#000000</Color>
@@ -27,6 +28,7 @@
     <Color x:Key="DarkActivity">#66AEE3</Color>
     <Color x:Key="DarkLyricText">#6B6B6B</Color>
     <Color x:Key="DarkLyricHighlight">#EFEFEF</Color>
+    <Color x:Key="DarkPlayingBackground">#242424</Color>
     <Color x:Key="DarkBorder">#7B7B7B</Color>
     <Color x:Key="DarkBtnBackground">#2F363D</Color>
     <Color x:Key="DarkBtnText">#FFFFFF</Color>
