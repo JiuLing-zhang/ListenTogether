@@ -8,9 +8,7 @@ internal static class ServicesExtensions
     {
 
 #if WINDOWS
-        builder.Services.AddSingleton<IAudioService, ListenTogether.Platforms.Windows.AudioService>();
-        builder.Services.AddSingleton<IBlurredImageService, ListenTogether.Platforms.Windows.BlurredImageService>();
-      
+        builder.Services.AddSingleton<IAudioService, ListenTogether.Platforms.Windows.AudioService>();      
 #elif ANDROID
         builder.Services.AddSingleton<IAudioService, ListenTogether.Platforms.Android.AudioService>();
 #endif

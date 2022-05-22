@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using ListenTogether.Handlers.GaussianBlurHandler;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.LifecycleEvents;
 
@@ -31,6 +32,10 @@ namespace ListenTogether
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                })
+                .ConfigureMauiHandlers(handler =>
+                {
+                    handler.AddHandler(typeof(GaussianImage), typeof(GaussianImageHandler));
                 });
 
 #if WINDOWS
