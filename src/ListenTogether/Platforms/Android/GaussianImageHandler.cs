@@ -21,6 +21,10 @@ internal partial class GaussianImageHandler : ViewHandler<IGaussianImage, ImageV
 
     static async void MapUrl(GaussianImageHandler handler, IGaussianImage gaussianBlurImage)
     {
+        if (gaussianBlurImage.Url.IsEmpty())
+        {
+            return;
+        }
         ImageSource source = ImageSource.FromUri(new Uri(gaussianBlurImage.Url));
         Bitmap bitmap = await GetImageFromImageSource(handler.Context, source);
         handler.PlatformView.SetImageBitmap(bitmap);
