@@ -331,9 +331,4 @@ public partial class Player : ContentView
         }
         return $"{imageName}.png";
     }
-
-    private async void ImgPlaying_Tapped(object sender, EventArgs e)
-    {
-        await Shell.Current.GoToAsync("PlayingPage");
-    }
 }

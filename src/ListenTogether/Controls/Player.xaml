@@ -15,9 +15,6 @@
                             <Image x:Name="ImgCurrentMusic"
                                    HorizontalOptions="Start"
                                    WidthRequest="60">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="ImgPlaying_Tapped"/>
-                                </Image.GestureRecognizers>
                             </Image>
                             <StackLayout Margin="10,0,0,0"
                                          HorizontalOptions="FillAndExpand">
@@ -159,9 +156,6 @@
                             <Image WidthRequest="30"
                                    HorizontalOptions="Start"
                                    Source="{Binding Source, Source={x:Reference ImgCurrentMusic}}">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="ImgPlaying_Tapped"/>
-                                </Image.GestureRecognizers>
                             </Image>
 
                             <Label Margin="5,0,0,0"
