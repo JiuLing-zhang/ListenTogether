@@ -4,7 +4,7 @@
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:services="clr-namespace:ListenTogether.Services"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
-             xmlns:gaussianBlur="clr-namespace:ListenTogether.Handlers.GaussianBlurHandler"
+             xmlns:JiuLing="clr-namespace:JiuLing.Controls.Maui.Handlers.GaussianImage;assembly=JiuLing.Controls.Maui"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.PlayingPage"
              Title="正在播放"
@@ -38,12 +38,12 @@
         <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" 
                      AbsoluteLayout.LayoutFlags="All" 
                      BackgroundColor="{AppThemeBinding Dark={StaticResource DarkPlayingBackground},Light={StaticResource LightPlayingBackground}}">
-            <gaussianBlur:GaussianImage Url="{Binding CurrentMusic.ImageUrl}"
+            <JiuLing:GaussianImage Url="{Binding CurrentMusic.ImageUrl}"
                                         Opacity="0.7"
                                         HorizontalOptions="FillAndExpand"
                                         VerticalOptions="FillAndExpand"/>
         </StackLayout>
-        
+
         <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" 
                      Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
             <StackLayout Margin="0,0,0,20"

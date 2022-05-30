@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Maui;
-using ListenTogether.Handlers.GaussianBlurHandler;
+using JiuLing.Controls.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.LifecycleEvents;
 
@@ -24,6 +24,7 @@ namespace ListenTogether
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
+                .UseJiuLingControls()
                 .UseBusiness()
                 .ConfigureServices()
                 .ConfigurePages()
@@ -32,10 +33,6 @@ namespace ListenTogether
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                })
-                .ConfigureMauiHandlers(handler =>
-                {
-                    handler.AddHandler(typeof(GaussianImage), typeof(GaussianImageHandler));
                 });
 
 #if WINDOWS
