@@ -88,17 +88,10 @@ public partial class Player : ContentView
     private void IsPlayingChangedDo(bool isPlaying)
     {
         string playImagePath = isPlaying ? GetImageName("pause") : GetImageName("play");
-        if (Dispatcher.IsDispatchRequired)
-        {
-            Dispatcher.Dispatch(() =>
-            {
-                ImgPlay.Source = playImagePath;
-            });
-        }
-        else
+        MainThread.BeginInvokeOnMainThread(() =>
         {
             ImgPlay.Source = playImagePath;
-        }
+        });
     }
 
     private void playerService_NewMusicAdded(object sender, Music e)
@@ -109,23 +102,13 @@ public partial class Player : ContentView
 
     private void NewMusicAddedDo(Music music)
     {
-        if (Dispatcher.IsDispatchRequired)
-        {
-            Dispatcher.Dispatch(() =>
-            {
-                ImgCurrentMusic.Source = music.ImageUrl;
-                LblMusicName.Text = music.Name;
-                LblMusicArtistAndAlbum.Text = $"{music.Artist} - {music.Album}";
-                LblMusicArtist.Text = music.Artist;
-            });
-        }
-        else
+        MainThread.BeginInvokeOnMainThread(() =>
         {
             ImgCurrentMusic.Source = music.ImageUrl;
             LblMusicName.Text = music.Name;
             LblMusicArtistAndAlbum.Text = $"{music.Artist} - {music.Album}";
             LblMusicArtist.Text = music.Artist;
-        }
+        });
     }
 
     private void _playerService_PositionChanged(object sender, MusicPosition e)
@@ -135,20 +118,7 @@ public partial class Player : ContentView
 
     private void PositionChangedDo(MusicPosition position)
     {
-        if (Dispatcher.IsDispatchRequired)
-        {
-            Dispatcher.Dispatch(() =>
-            {
-                LblPositionMilliseconds.Text = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
-                LblDurationMilliseconds.Text = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
-
-                if (!_isPlayProgressDragging)
-                {
-                    SliderPlayProgress.Value = position.PlayProgress;
-                }
-            });
-        }
-        else
+        MainThread.BeginInvokeOnMainThread(() =>
         {
             LblPositionMilliseconds.Text = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
             LblDurationMilliseconds.Text = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
@@ -157,7 +127,7 @@ public partial class Player : ContentView
             {
                 SliderPlayProgress.Value = position.PlayProgress;
             }
-        }
+        });
     }
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)

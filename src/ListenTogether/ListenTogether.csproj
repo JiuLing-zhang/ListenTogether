@@ -20,8 +20,8 @@
 		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">DAEEFD7E-F931-420B-B6FD-DC652AD7D5B8</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0.13</ApplicationDisplayVersion>
-		<ApplicationVersion>16</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.14</ApplicationDisplayVersion>
+		<ApplicationVersion>17</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -37,13 +37,13 @@
 		<PackageCertificateThumbprint>758A760DB477F3F9B6F6E4A106B62B395238678B</PackageCertificateThumbprint>
 	</PropertyGroup>
 
-<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
-    <AndroidKeyStore>True</AndroidKeyStore>
-    <AndroidSigningKeyStore>myapp.keystore</AndroidSigningKeyStore>
-    <AndroidSigningKeyAlias>key</AndroidSigningKeyAlias>
-    <AndroidSigningKeyPass></AndroidSigningKeyPass>
-    <AndroidSigningStorePass></AndroidSigningStorePass>
-</PropertyGroup>
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
+		<AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidSigningKeyStore>myapp.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias>key</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass></AndroidSigningKeyPass>
+		<AndroidSigningStorePass></AndroidSigningStorePass>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
@@ -72,12 +72,12 @@
 		<PackageReference Include="JiuLing.CommonLibs" Version="1.2.5" />
 		<PackageReference Include="JiuLing.Controls.Maui" Version="0.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />		
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
 		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<ProjectReference Include="..\ListenTogether.Business\ListenTogether.Business.csproj" />
 		<ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
@@ -100,7 +100,9 @@
 	</ItemGroup>
 
 	<ProjectExtensions>
-		<VisualStudio><UserProperties /></VisualStudio>
+		<VisualStudio>
+			<UserProperties />
+		</VisualStudio>
 	</ProjectExtensions>
 
 </Project>

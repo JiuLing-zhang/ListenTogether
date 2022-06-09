@@ -23,6 +23,9 @@ public partial class PlayingPage : ContentPage
 
     private void ScrollToLyricDo(object sender, LyricViewModel e)
     {
-        ListLyrics.ScrollTo(e, null, ScrollToPosition.Center, true);
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            ListLyrics.ScrollTo(e, null, ScrollToPosition.Center, true);
+        });
     }
 }
