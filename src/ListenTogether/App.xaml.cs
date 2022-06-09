@@ -28,6 +28,7 @@ public partial class App : Application
 
         GlobalConfig.AppSettings = config.GetRequiredSection("AppSettings").Get<AppSettings>();
 
+        GlobalConfig.CurrentVersion = AppInfo.Current.Version;
         //设备Id 自己生成
         string deviceInfoFileName = Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.DeviceInfoFileName);
         string deviceId;

@@ -16,6 +16,9 @@
         /// </summary>
         public static readonly string MusicCacheDirectory = Path.Combine(AppDataDirectory, "musics");
 
+        public static Version CurrentVersion { get; set; }
+        public static string CurrentVersionString => CurrentVersion.ToString();
+
         public static EnvironmentSetting MyUserSetting { get; set; }
 
         public static AppSettings AppSettings { get; set; }

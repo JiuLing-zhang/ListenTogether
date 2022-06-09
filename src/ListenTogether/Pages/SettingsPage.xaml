@@ -132,7 +132,7 @@
                             <Label Text="一起听"
                                    FontSize="18"
                                    HorizontalOptions="CenterAndExpand"/>
-                            <Label Text="{Binding VersionName, StringFormat='{}版本：{0}'}"
+                            <Label Text="{Binding VersionString, StringFormat='{}版本：{0}'}"
                                    Style="{StaticResource Explain}"
                                    HorizontalOptions="CenterAndExpand"/>
                             <Label Margin="0,10,0,0"
@@ -143,19 +143,14 @@
                                    Style="{StaticResource Explain}"
                                    HorizontalOptions="CenterAndExpand"/>
                             <Label Style="{StaticResource Explain}"
-                                   HorizontalOptions="CenterAndExpand">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="GitHub"
-                                              TextColor="{AppThemeBinding Dark={StaticResource DarkLink},Light={StaticResource LightLink}}"
-                                              TextDecorations="Underline">
-                                            <Span.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
-                                                                      CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
-                                            </Span.GestureRecognizers>
-                                        </Span>
-                                    </FormattedString>
-                                </Label.FormattedText>
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextDecorations="Underline"
+                                   Text="GitHub"
+                                   TextColor="{AppThemeBinding Dark={StaticResource DarkLink},Light={StaticResource LightLink}}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
+                                                          CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
+                                </Label.GestureRecognizers>
                             </Label>
                         </StackLayout>
                     </StackLayout>

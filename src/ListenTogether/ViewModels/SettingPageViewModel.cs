@@ -4,7 +4,7 @@ namespace ListenTogether.ViewModels;
 
 public class SettingPageViewModel : ViewModelBase
 {
-    public ICommand OpenUrlCommand => new Command<string>(async (url) => await Launcher.OpenAsync(url));
+    public ICommand OpenUrlCommand => new Command<string>(OpenUrl);
     public ICommand GoToCacheCleanCommand => new Command(GoToCacheClean);
     public ICommand GoToLogCommand => new Command(GoToLog);
     public ICommand GoToLoginCommand => new Command(GoToLogin);
@@ -230,16 +230,16 @@ public class SettingPageViewModel : ViewModelBase
         }
     }
 
-    private string _versionName;
+    private string _versionString = GlobalConfig.CurrentVersionString;
     /// <summary>
     /// 版本号
     /// </summary>
-    public string VersionName
+    public string VersionString
     {
-        get => _versionName;
+        get => _versionString;
         set
         {
-            _versionName = value;
+            _versionString = value;
             OnPropertyChanged();
         }
     }
@@ -388,5 +388,21 @@ public class SettingPageViewModel : ViewModelBase
         {
             IsBusy = false;
         }
+    }
+
+    private void OpenUrl(string url)
+    {
+        Task.Run(async () =>
+        {
+            try
+            {
+                await Browser.Default.OpenAsync(url.ToUri(), BrowserLaunchMode.SystemPreferred);
+            }
+            catch (Exception ex)
+            {
+                await ToastService.Show("启动浏览器失败，请重试");
+                Logger.Error("打开链接失败。", ex);
+            }
+        });
     }
 }
