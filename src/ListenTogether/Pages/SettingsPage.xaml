@@ -20,10 +20,10 @@
                    VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
                 <ActivityIndicator Margin="10,0,0,0"
-                               IsRunning="{Binding IsBusy}"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               VerticalOptions="CenterAndExpand"/>
+                                   IsRunning="{Binding IsBusy}"
+                                   HeightRequest="20"
+                                   WidthRequest="20"
+                                   VerticalOptions="CenterAndExpand"/>
             </StackLayout>
 
             <ScrollView VerticalOptions="FillAndExpand">
@@ -132,10 +132,19 @@
                             <Label Text="一起听"
                                    FontSize="18"
                                    HorizontalOptions="CenterAndExpand"/>
-                            <Label Text="{Binding VersionString, StringFormat='{}版本：{0}'}"
+                            <Label Margin="0,15,0,0"
+                                   Text="{Binding VersionString, StringFormat='{}版本：{0}'}"
                                    Style="{StaticResource Explain}"
                                    HorizontalOptions="CenterAndExpand"/>
-                            <Label Margin="0,10,0,0"
+                            <Label Margin="0,5,0,0"
+                                   Text="检查更新"
+                                   Style="{StaticResource Explain}"
+                                   HorizontalOptions="CenterAndExpand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding CheckUpdateCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Margin="0,15,0,0"
                                    Text="本软件基于GPL-3.0协议，开源、免费"
                                    Style="{StaticResource Explain}"
                                    HorizontalOptions="CenterAndExpand"/>

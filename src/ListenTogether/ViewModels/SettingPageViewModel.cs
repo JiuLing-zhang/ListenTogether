@@ -1,10 +1,13 @@
-﻿using ListenTogether.Model.Enums;
+﻿using JiuLing.CommonLibs.Net;
+using ListenTogether.Model.Enums;
 
 namespace ListenTogether.ViewModels;
 
 public class SettingPageViewModel : ViewModelBase
 {
+    private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
     public ICommand OpenUrlCommand => new Command<string>(OpenUrl);
+    public ICommand CheckUpdateCommand => new Command(CheckUpdate);
     public ICommand GoToCacheCleanCommand => new Command(GoToCacheClean);
     public ICommand GoToLogCommand => new Command(GoToLog);
     public ICommand GoToLoginCommand => new Command(GoToLogin);
@@ -404,5 +407,76 @@ public class SettingPageViewModel : ViewModelBase
                 Logger.Error("打开链接失败。", ex);
             }
         });
+    }
+
+    private void CheckUpdate()
+    {
+        if (IsBusy == true)
+        {
+            return;
+        }
+        Task.Run(async () =>
+        {
+            try
+            {
+                IsBusy = true;
+
+                var url = GetCheckUpdateUrl();
+                string json = await _httpClient.GetReadString(url);
+                var obj = json.ToObject<JiuLing.CommonLibs.Model.AppUpgradeInfo>();
+                if (obj == null)
+                {
+                    await ToastService.Show("检查失败，未能连接到服务器");
+                    return;
+                }
+
+                var isNeedUpdate = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(obj.Version, GlobalConfig.CurrentVersionString);
+                if (isNeedUpdate == false)
+                {
+                    await ToastService.Show("当前版本为最新版");
+                    return;
+                }
+
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    var isUpdate = await App.Current.MainPage.DisplayAlert("提示", $"发现新版本 {obj.Version}，确认要下载吗？", "确定", "取消");
+                    if (isUpdate == false)
+                    {
+                        return;
+                    }
+
+                    OpenUrl(obj.DownloadUrl);
+                });
+
+            }
+            catch (Exception ex)
+            {
+                await ToastService.Show("检查失败，网络出小差了");
+                Logger.Error("自动更新检查失败。", ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        });
+    }
+
+    private string GetCheckUpdateUrl()
+    {
+        string osTag = "";
+        if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
+        {
+            osTag = "windows";
+        }
+        else if (DeviceInfo.Current.Platform == DevicePlatform.Android)
+        {
+            osTag = "android";
+        }
+        else
+        {
+            return "";
+        }
+
+        return $"{GlobalConfig.AppSettings.UpdateDomain}/api/app/listen-together/{osTag}";
     }
 }
