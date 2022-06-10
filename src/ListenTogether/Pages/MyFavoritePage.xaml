@@ -62,7 +62,7 @@
                             <On Platform="UWP, macOS">
                                 <Grid Margin="0,0,0,20"
                                       RowDefinitions="auto,auto"
-                                      ColumnDefinitions="40,60,*">
+                                      ColumnDefinitions="35,65,*">
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailCommand}"
                                                               CommandParameter="{Binding .}">
@@ -88,14 +88,18 @@
                                     <Frame Grid.Row="0"
                                            Grid.RowSpan="2"
                                            Grid.Column="1"
-                                           CornerRadius="10"
+                                           BorderColor="Transparent"
+                                           CornerRadius="8"
                                            HeightRequest="48"
-                                           WidthRequest="48">
-                                        <Image HeightRequest="48"
-                                               WidthRequest="48"
-                                               Aspect="Fill"                                           
-                                               Style="{StaticResource MyFavoriteImg}">
-                                        </Image>
+                                           WidthRequest="48"
+                                           IsClippedToBounds="True"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center">
+                                        <Image Style="{StaticResource MyFavoriteImg}"
+                                               Aspect="AspectFill"
+                                               Margin="-20"
+                                               HeightRequest="48"
+                                               WidthRequest="48" />
                                     </Frame>
 
                                     <Label Grid.Row="0"
@@ -127,14 +131,18 @@
                                     <Frame Grid.Row="0"
                                            Grid.RowSpan="2"
                                            Grid.Column="0"
-                                           CornerRadius="10"
+                                           BorderColor="Transparent"
+                                           CornerRadius="8"
                                            HeightRequest="48"
-                                           WidthRequest="48">
-                                        <Image HeightRequest="48"
-                                               WidthRequest="48"
-                                               Aspect="Fill"                                           
-                                               Style="{StaticResource MyFavoriteImg}">
-                                        </Image>
+                                           WidthRequest="48"
+                                           IsClippedToBounds="True"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center">
+                                        <Image Style="{StaticResource MyFavoriteImg}"
+                                               Aspect="AspectFill"
+                                               Margin="-20"
+                                               HeightRequest="48"
+                                               WidthRequest="48" />
                                     </Frame>
 
                                     <Label Grid.Row="0"
