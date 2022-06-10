@@ -430,7 +430,7 @@ public class SettingPageViewModel : ViewModelBase
                     return;
                 }
 
-                var isNeedUpdate = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(obj.Version, GlobalConfig.CurrentVersionString);
+                var isNeedUpdate = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, obj.Version);
                 if (isNeedUpdate == false)
                 {
                     await ToastService.Show("当前版本为最新版");
