@@ -34,7 +34,7 @@
                             </StackLayout>
                         </StackLayout>
                         <StackLayout HorizontalOptions="CenterAndExpand"
-                                     WidthRequest="450">
+                                     MaximumWidthRequest="450">
 
                             <!--播放按钮-->
                             <StackLayout Orientation="Horizontal" 
@@ -126,7 +126,7 @@
 
                             <Image x:Name="ImgSoundOff"
                                    VerticalOptions="Center"
-                                   HorizontalOptions="Center"
+                                   HorizontalOptions="EndAndExpand"
                                    HeightRequest="20"
                                    WidthRequest="20" 
                                    Aspect="AspectFill">
@@ -136,8 +136,9 @@
                             </Image>
 
                             <Slider x:Name="SliderVolume"
-                                    Margin="10,0,100,0"
-                                    HorizontalOptions="FillAndExpand"
+                                    Margin="10,0,20,0"
+                                    WidthRequest="90"
+                                    HorizontalOptions="End"
                                     VerticalOptions="Center"
                                     Minimum="0"
                                     Maximum="1"
