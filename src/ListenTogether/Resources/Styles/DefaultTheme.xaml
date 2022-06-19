@@ -9,7 +9,7 @@
     <Color x:Key="LightText">#262626</Color>
     <Color x:Key="LightTextSecond">#717171</Color>
     <Color x:Key="LightPlaceholder">#767676</Color>
-    <Color x:Key="LightActivity">#1279D2</Color>
+    <Color x:Key="LightActivity">#0366D6</Color>
     <Color x:Key="LightLyricText">#646464</Color>
     <Color x:Key="LightLyricHighlight">#D892FF</Color>
     <Color x:Key="LightPlayingBackground">#242424</Color>
@@ -17,7 +17,7 @@
     <Color x:Key="LightBtnBackground">#FDFDFD</Color>
     <Color x:Key="LightBtnText">#000000</Color>
     <Color x:Key="LightFeeText">#D892FF</Color>
-    <Color x:Key="LightLink">#0000F0</Color>
+    <Color x:Key="LightLink">#0366D6</Color>
     
     <Color x:Key="DarkLogo">#C98FFF</Color>
     <Color x:Key="DarkBackground">#242424</Color>
@@ -25,7 +25,7 @@
     <Color x:Key="DarkText">#FCF2F7</Color>
     <Color x:Key="DarkTextSecond">#9D9D9D</Color>
     <Color x:Key="DarkPlaceholder">#929292</Color>
-    <Color x:Key="DarkActivity">#66AEE3</Color>
+    <Color x:Key="DarkActivity">#2F88ED</Color>
     <Color x:Key="DarkLyricText">#6B6B6B</Color>
     <Color x:Key="DarkLyricHighlight">#EFEFEF</Color>
     <Color x:Key="DarkPlayingBackground">#242424</Color>
@@ -33,7 +33,7 @@
     <Color x:Key="DarkBtnBackground">#2F363D</Color>
     <Color x:Key="DarkBtnText">#FFFFFF</Color>
     <Color x:Key="DarkFeeText">#D892FF</Color>
-    <Color x:Key="DarkLink">#0000F0</Color>
+    <Color x:Key="DarkLink">#2F88ED</Color>
     
     <Style TargetType="Label"
            x:Key="Logo">
