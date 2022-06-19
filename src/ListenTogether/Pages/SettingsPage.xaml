@@ -73,28 +73,28 @@
                         <Label Text="常规"
                                FontAttributes="Bold"/>
 
-                        <JiuLing:TextSwitch Text="启动时检查更新"
-                                       IsToggled="{Binding IsAutoCheckUpdate}">
-                        </JiuLing:TextSwitch>
-                        <JiuLing:TextSwitch Text="深色主题" IsToggled="{Binding IsDarkMode}">
-                        </JiuLing:TextSwitch>
+                        <JiuLing:TextSwitch Text="启动时检查更新(暂不可用)"
+                                            IsEnabled="False"
+                                            IsToggled="False"/>
+
+                        <JiuLing:TextSwitch Text="深色主题" IsToggled="{Binding IsDarkMode}"/>
+
 
                         <!-- 搜索设置 -->
                         <Label Margin="0,20,0,0"
                                Text="搜索"                               
                                FontAttributes="Bold"/>
                         <JiuLing:TextSwitch Text="网易云音乐"
-                                       IsToggled="{Binding IsEnableNetEase}">
-                        </JiuLing:TextSwitch>
+                                            IsToggled="{Binding IsEnableNetEase}"/>
+                        
                         <JiuLing:TextSwitch Text="酷狗音乐"
-                                       IsToggled="{Binding IsEnableKuGou}">
-                        </JiuLing:TextSwitch>
+                                            IsToggled="{Binding IsEnableKuGou}"/>
+                        
                         <JiuLing:TextSwitch Text="咪咕音乐"
-                                       IsToggled="{Binding IsEnableMiGu}">
-                        </JiuLing:TextSwitch>
+                                            IsToggled="{Binding IsEnableMiGu}"/>
+
                         <JiuLing:TextSwitch Text="隐藏小于1分钟的歌曲"
-                                       IsToggled="{Binding IsHideShortMusic}">
-                        </JiuLing:TextSwitch>
+                                            IsToggled="{Binding IsHideShortMusic}"/>
 
                         <!-- 播放设置 -->
                         <Label Margin="0,20,0,0"
@@ -102,14 +102,14 @@
                                FontAttributes="Bold"/>
 
                         <JiuLing:TextSwitch Text="仅在WIFI下播放未缓存的歌曲"
-                                       IsToggled="{Binding IsWifiPlayOnly}">
-                        </JiuLing:TextSwitch>
+                                            IsToggled="{Binding IsWifiPlayOnly}"/>
+
                         <JiuLing:TextSwitch Text="播放失败时自动跳到下一首"
-                                       IsToggled="{Binding IsAutoNextWhenFailed}">
-                        </JiuLing:TextSwitch>
+                                            IsToggled="{Binding IsAutoNextWhenFailed}"/>
+
                         <JiuLing:TextSwitch Text="播放我的歌单前清空播放列表"
-                                       IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}">
-                        </JiuLing:TextSwitch>
+                                            IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}"/>
+
                     </StackLayout>
 
                     <!--其它模块-->
