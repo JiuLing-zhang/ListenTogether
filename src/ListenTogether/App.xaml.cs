@@ -29,17 +29,12 @@ public partial class App : Application
         GlobalConfig.AppSettings = config.GetRequiredSection("AppSettings").Get<AppSettings>();
 
         GlobalConfig.CurrentVersion = AppInfo.Current.Version;
-        //设备Id 自己生成
-        string deviceInfoFileName = Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.DeviceInfoFileName);
-        string deviceId;
-        if (!File.Exists(deviceInfoFileName))
+
+        string deviceId = Preferences.Get("DeviceId", "");
+        if (deviceId.IsEmpty())
         {
             deviceId = JiuLing.CommonLibs.GuidUtils.GetFormatDefault();
-            File.WriteAllText(deviceInfoFileName, deviceId);
-        }
-        else
-        {
-            deviceId = File.ReadAllText(deviceInfoFileName);
+            Preferences.Set("DeviceId", deviceId);
         }
 
         BusinessConfig.TokenUpdated += (_, tokenInfo) =>
