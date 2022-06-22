@@ -56,7 +56,8 @@
             </StackLayout>
         </StackLayout>
 
-        <CollectionView ItemsSource="{Binding MyFavoriteMusics}"
+        <CollectionView VerticalOptions="FillAndExpand"
+                        ItemsSource="{Binding MyFavoriteMusics}"
                         IsVisible="{Binding IsNotBusy}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
