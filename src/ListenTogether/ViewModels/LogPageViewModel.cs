@@ -148,7 +148,6 @@ public class LogPageViewModel : ViewModelBase
         }
 
         Logger.RemoveAllAsync();
-        await ToastService.Show("日志已清空");
         await InitializeAsync();
     }
 }
