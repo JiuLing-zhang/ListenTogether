@@ -130,7 +130,6 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
 
         if (CurrentMyFavorite.Name == newName)
         {
-            await ToastService.Show("修改成功");
             return;
         }
 
@@ -148,7 +147,6 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
             await _myFavoriteService.AddOrUpdateAsync(myFavorite);
 
             await InitializeAsync();
-            await ToastService.Show("修改成功");
         }
         catch (Exception ex)
         {
@@ -177,7 +175,6 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
                 await ToastService.Show("删除失败");
                 return;
             }
-            await ToastService.Show("删除成功");
             await Shell.Current.GoToAsync($"..", true);
         }
         catch (Exception ex)
@@ -231,7 +228,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
                 await ToastService.Show("删除失败，网络出小差了");
                 return;
             };
-            await ToastService.Show("删除成功");
+            await InitializeAsync();
         }
         catch (Exception ex)
         {
@@ -242,6 +239,5 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         {
             IsBusy = false;
         }
-        await InitializeAsync();
     }
 }
