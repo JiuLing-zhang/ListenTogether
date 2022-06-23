@@ -160,7 +160,6 @@ public class PlaylistPageViewModel : ViewModelBase
                 string myFavoriteName = await App.Current.MainPage.DisplayPromptAsync("添加歌单", "请输入歌单名称：", "添加", "取消");
                 if (myFavoriteName.IsEmpty())
                 {
-                    await ToastService.Show("操作取消");
                     return;
                 }
 
@@ -192,7 +191,6 @@ public class PlaylistPageViewModel : ViewModelBase
             }
 
             await _playerService.PlayAsync(music);
-            await ToastService.Show("添加成功");
         }
         catch (Exception ex)
         {
@@ -215,7 +213,6 @@ public class PlaylistPageViewModel : ViewModelBase
                 await ToastService.Show("删除失败");
                 return;
             }
-            await ToastService.Show("删除成功");
             await GetPlaylist();
         }
         catch (Exception ex)
@@ -241,7 +238,6 @@ public class PlaylistPageViewModel : ViewModelBase
             await ToastService.Show("删除失败");
             return;
         }
-        await ToastService.Show("删除成功");
         await InitializeAsync();
     }
 }
