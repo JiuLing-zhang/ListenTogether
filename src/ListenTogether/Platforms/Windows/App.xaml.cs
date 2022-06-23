@@ -17,6 +17,12 @@ namespace ListenTogether.WinUI
         public App()
         {
             this.InitializeComponent();
+            App.Current.UnhandledException += Current_UnhandledException;
+        }
+
+        private void Current_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            Logger.Error("系统遇到未处理的异常", e.Exception);
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
