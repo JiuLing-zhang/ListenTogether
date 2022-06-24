@@ -31,7 +31,7 @@
 
                     <!--用户模块-->
                     <StackLayout VerticalOptions="Start"
-                                 IsVisible="{Binding IsShowLoginBlock}">
+                                 IsVisible="{Binding IsOnlineApp}">
                         <!--未登录-->
                         <StackLayout VerticalOptions="Start"
                                  IsVisible="{Binding UserInfo, Converter={StaticResource IsEqualConverter}}">

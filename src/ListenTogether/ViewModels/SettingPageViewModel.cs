@@ -23,7 +23,7 @@ public class SettingPageViewModel : ViewModelBase
     public void InitializeAsync()
     {
         UserInfo = GetUserInfo();
-        IsShowLoginBlock = GlobalConfig.AppNetwork == AppNetworkEnum.Online;
+        IsOnlineApp = GlobalConfig.AppNetwork == AppNetworkEnum.Online;
     }
 
     private bool _isBusy;
@@ -54,13 +54,13 @@ public class SettingPageViewModel : ViewModelBase
         }
     }
 
-    private bool _isShowLoginBlock;
-    public bool IsShowLoginBlock
+    private bool _isOnlineApp;
+    public bool IsOnlineApp
     {
-        get => _isShowLoginBlock;
+        get => _isOnlineApp;
         set
         {
-            _isShowLoginBlock = value;
+            _isOnlineApp = value;
             OnPropertyChanged();
         }
     }
