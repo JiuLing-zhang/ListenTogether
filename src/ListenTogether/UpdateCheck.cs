@@ -18,6 +18,11 @@ internal class UpdateCheck
     {
         get
         {
+            if (GlobalConfig.AppSettings.UpdateDomain.IsEmpty())
+            {
+                throw new Exception("更新服务器未配置");
+            }
+
             string osTag;
             if (DeviceInfo.Current.Platform == DevicePlatform.WinUI)
             {
@@ -39,46 +44,53 @@ internal class UpdateCheck
     {
         await Task.Run(async () =>
         {
-            string json = await _httpClient.GetReadString(CheckUpdateUrl);
-            var obj = json.ToObject<JiuLing.CommonLibs.Model.AppUpgradeInfo>();
-            if (obj == null)
+            try
             {
-                await ToastService.Show("检查失败，未能连接到服务器");
-                return;
-            }
-
-            var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, obj.Version, obj.MinVersion);
-            if (isNeedUpdate == false)
-            {
-                await ToastService.Show("当前版本为最新版");
-                return;
-            }
-
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                string message = "";
-                if (isAllowRun == false)
+                string json = await _httpClient.GetReadString(CheckUpdateUrl);
+                var obj = json.ToObject<JiuLing.CommonLibs.Model.AppUpgradeInfo>();
+                if (obj == null)
                 {
-                    message = $"当前版本已过期！{Environment.NewLine}";
-                }
-                message = $"{message}发现新版本 {obj.Version}，确认要下载吗？";
-
-                var isUpdate = await App.Current.MainPage.DisplayAlert("提示", message, "确定", "取消");
-                if (isUpdate == false)
-                {
+                    await ToastService.Show("检查失败，未能连接到服务器");
                     return;
                 }
 
-                try
+                var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, obj.Version, obj.MinVersion);
+                if (isNeedUpdate == false)
                 {
-                    await Browser.Default.OpenAsync(obj.DownloadUrl.ToUri(), BrowserLaunchMode.SystemPreferred);
+                    await ToastService.Show("当前版本为最新版");
+                    return;
                 }
-                catch (Exception ex)
+
+                MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await ToastService.Show("启动浏览器失败，请重试");
-                    Logger.Error("打开链接失败。", ex);
-                }
-            });
+                    string message = "";
+                    if (isAllowRun == false)
+                    {
+                        message = $"当前版本已过期！{Environment.NewLine}";
+                    }
+                    message = $"{message}发现新版本 {obj.Version}，确认要下载吗？";
+
+                    var isUpdate = await App.Current.MainPage.DisplayAlert("提示", message, "确定", "取消");
+                    if (isUpdate == false)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        await Browser.Default.OpenAsync(obj.DownloadUrl.ToUri(), BrowserLaunchMode.SystemPreferred);
+                    }
+                    catch (Exception ex)
+                    {
+                        await ToastService.Show("启动浏览器失败，请重试");
+                        Logger.Error("打开链接失败。", ex);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                await ToastService.Show($"检查失败：{ex.Message}");
+            }
         });
     }
 
