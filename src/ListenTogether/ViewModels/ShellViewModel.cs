@@ -1,8 +1,8 @@
 ﻿using ListenTogether.Models;
-using ListenTogether.Pages;
 namespace ListenTogether.ViewModels;
 internal class ShellViewModel
 {
+    public string AppNetworkString => GlobalConfig.AppNetwork.GetDescription();
     public AppSection Search { get; set; }
     public AppSection Playlist { get; set; }
     public AppSection MyFavorite { get; set; }

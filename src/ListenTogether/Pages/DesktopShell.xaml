@@ -20,11 +20,15 @@
                    WidthRequest="40"
                    VerticalOptions="Center"
                    HorizontalOptions="Center" />
-            <Label Text="一起听"
-                   Style="{StaticResource Logo}"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"
-                   VerticalTextAlignment="Center"/>
+            <StackLayout HorizontalOptions="Center"
+                         VerticalOptions="Center">
+                <Label Text="一起听"
+                       Style="{StaticResource Logo}"/>
+                <Label Text="{Binding AppNetworkString}"
+                       Style="{StaticResource AppNetwork}"
+                       HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+
         </StackLayout>
     </Shell.FlyoutHeader>
 
