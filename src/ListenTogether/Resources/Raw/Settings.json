@@ -1,7 +1,7 @@
 {
   "AppSettings": {
     "LocalDbName": "ListenTogether.db",
-    "ApiDomain": "API服务地址",
-    "UpdateDomain": "自动更新服务地址"
+    "ApiDomain": "",
+    "UpdateDomain": ""
   }
 }

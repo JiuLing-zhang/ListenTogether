@@ -21,13 +21,14 @@ public class DataConfig
     /// </summary>
     public static event EventHandler<TokenInfo?>? TokenUpdated;
 
-    public static void SetDataConnection(string localDbPath, string apiBaseUrl, string deviceId)
+    public static void SetDataBaseConnection(string path)
     {
-        ApiHttpMessageHandler.TokenUpdated += TokenUpdated;
-
-        DatabaseProvide.SetConnection(localDbPath);
-        ApiSetting = new ApiSettings(apiBaseUrl, deviceId);
+        DatabaseProvide.SetConnection(path);
     }
 
-
+    public static void SetWebApi(string apiBaseUrl, string deviceId)
+    {
+        ApiHttpMessageHandler.TokenUpdated += TokenUpdated;
+        ApiSetting = new ApiSettings(apiBaseUrl, deviceId);
+    }
 }

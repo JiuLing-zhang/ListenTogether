@@ -17,7 +17,7 @@ public class MyFavoriteServiceFactory : IMyFavoriteServiceFactory
 
     public IMyFavoriteService Create()
     {
-        var repositoryName = BusinessConfig.IsUseApiInterface ? nameof(MyFavoriteApiRepository) : nameof(MyFavoriteLocalRepository);
+        var repositoryName = BusinessConfig.AppNetwork == Model.Enums.AppNetworkEnum.Online ? nameof(MyFavoriteApiRepository) : nameof(MyFavoriteLocalRepository);
         IMyFavoriteRepository repository = _repositories.First(x => x.GetType().Name == repositoryName);
         return new MyFavoriteService(repository);
     }

@@ -28,30 +28,34 @@ public partial class App : Application
 
         GlobalConfig.AppSettings = config.GetRequiredSection("AppSettings").Get<AppSettings>();
 
-        GlobalConfig.CurrentVersion = AppInfo.Current.Version;
+        GlobalConfig.CurrentVersion = AppInfo.Current.Version;     
 
-        string deviceId = Preferences.Get("DeviceId", "");
-        if (deviceId.IsEmpty())
+        BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.LocalDbName));
+        if (GlobalConfig.AppSettings.ApiDomain.IsNotEmpty())
         {
-            deviceId = JiuLing.CommonLibs.GuidUtils.GetFormatDefault();
-            Preferences.Set("DeviceId", deviceId);
+            BusinessConfig.TokenUpdated += (_, tokenInfo) =>
+            {
+                if (tokenInfo == null)
+                {
+                    GlobalConfig.CurrentUser = null;
+                    userLocalService.Remove();
+                }
+                else
+                {
+                    userLocalService.UpdateToken(tokenInfo);
+                }
+            };
+
+            string deviceId = Preferences.Get("DeviceId", "");
+            if (deviceId.IsEmpty())
+            {
+                deviceId = JiuLing.CommonLibs.GuidUtils.GetFormatDefault();
+                Preferences.Set("DeviceId", deviceId);
+            }
+
+            BusinessConfig.SetWebApi(GlobalConfig.AppSettings.ApiDomain, deviceId);
+            GlobalConfig.CurrentUser = userLocalService.Read();
         }
-
-        BusinessConfig.TokenUpdated += (_, tokenInfo) =>
-        {
-            if (tokenInfo == null)
-            {
-                GlobalConfig.CurrentUser = null;
-                userLocalService.Remove();
-            }
-            else
-            {
-                userLocalService.UpdateToken(tokenInfo);
-            }
-        };
-
-        BusinessConfig.SetWebApi(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.LocalDbName), GlobalConfig.AppSettings.ApiDomain, deviceId);
-        GlobalConfig.CurrentUser = userLocalService.Read();
 
         var task = Task.Run(configService.ReadAllSettingsAsync);
         GlobalConfig.MyUserSetting = task.Result;
