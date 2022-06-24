@@ -76,12 +76,12 @@
                         <Label Text="常规"
                                FontAttributes="Bold"/>
 
-                        <JiuLing:TextSwitch Text="启动时检查更新(暂不可用)"
+                        <JiuLing:TextSwitch Text="启动时检查更新（暂不可用）"
                                             IsEnabled="False"
                                             IsToggled="False"/>
 
-                        <JiuLing:TextSwitch Text="深色主题" IsToggled="{Binding IsDarkMode}"/>
-
+                        <JiuLing:TextSwitch Text="深色主题（可能需要重启）"
+                                            IsToggled="{Binding IsDarkMode}"/>
 
                         <!-- 搜索设置 -->
                         <Label Margin="0,20,0,0"
