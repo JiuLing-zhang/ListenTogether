@@ -30,10 +30,12 @@
                 <StackLayout>
 
                     <!--用户模块-->
-                    <!--未登录-->
                     <StackLayout VerticalOptions="Start"
+                                 IsVisible="{Binding IsShowLoginBlock}">
+                        <!--未登录-->
+                        <StackLayout VerticalOptions="Start"
                                  IsVisible="{Binding UserInfo, Converter={StaticResource IsEqualConverter}}">
-                        <Button Text="登录/注册 >"
+                            <Button Text="登录/注册 >"
                                 FontSize="17"
                                 WidthRequest="120"
                                 BackgroundColor="Transparent"
@@ -41,26 +43,27 @@
                                 BorderWidth="1"
                                 HorizontalOptions="StartAndExpand"
                                 Command="{Binding GoToLoginCommand}"/>
-                    </StackLayout>
-                    <!--已登录-->
-                    <StackLayout VerticalOptions="Start"
+                        </StackLayout>
+                        <!--已登录-->
+                        <StackLayout VerticalOptions="Start"
                              Orientation="Horizontal"
                              IsVisible="{Binding UserInfo, Converter={StaticResource IsNotEqualConverter}}">
-                        <Image Source="{Binding UserInfo.Avatar}"
+                            <Image Source="{Binding UserInfo.Avatar}"
                            Aspect="AspectFill"
                            WidthRequest="64"
                            HeightRequest="64"
                            VerticalOptions="Center"
                            HorizontalOptions="Center"/>
 
-                        <StackLayout Margin="10,0,0,0"
+                            <StackLayout Margin="10,0,0,0"
                                  HeightRequest="64">
-                            <Label Margin="0,5,0,0"
+                                <Label Margin="0,5,0,0"
                                Text="{Binding UserInfo.Nickname}"
                                VerticalOptions="Start"/>
-                            <Label Margin="0,0,0,5"
+                                <Label Margin="0,0,0,5"
                                Text="{Binding UserInfo.Username,StringFormat='{}用户名：{0}'}"
                                VerticalOptions="EndAndExpand"/>
+                            </StackLayout>
                         </StackLayout>
                     </StackLayout>
 
@@ -86,10 +89,10 @@
                                FontAttributes="Bold"/>
                         <JiuLing:TextSwitch Text="网易云音乐"
                                             IsToggled="{Binding IsEnableNetEase}"/>
-                        
+
                         <JiuLing:TextSwitch Text="酷狗音乐"
                                             IsToggled="{Binding IsEnableKuGou}"/>
-                        
+
                         <JiuLing:TextSwitch Text="咪咕音乐"
                                             IsToggled="{Binding IsEnableMiGu}"/>
 

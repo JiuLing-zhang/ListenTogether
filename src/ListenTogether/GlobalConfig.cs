@@ -1,4 +1,6 @@
-﻿namespace ListenTogether
+﻿using ListenTogether.Model.Enums;
+
+namespace ListenTogether
 {
     internal class GlobalConfig
     {
@@ -20,8 +22,22 @@
         public static string CurrentVersionString => CurrentVersion.ToString();
 
         public static EnvironmentSetting MyUserSetting { get; set; }
-
         public static AppSettings AppSettings { get; set; }
+
+        /// <summary>
+        /// 程序网络版本类型
+        /// </summary>
+        internal static AppNetworkEnum AppNetwork
+        {
+            get
+            {
+                if (AppSettings.ApiDomain.IsEmpty())
+                {
+                    return AppNetworkEnum.Standalone;
+                }
+                return AppNetworkEnum.Online;
+            }
+        }
 
         private static User? _currentUser;
         /// <summary>
