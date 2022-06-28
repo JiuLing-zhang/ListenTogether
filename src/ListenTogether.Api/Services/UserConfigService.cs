@@ -53,7 +53,8 @@ namespace ListenTogether.Api.Services
             {
                 EnablePlatform = (int)searchConfig.EnablePlatform,
                 IsCloseSearchPageWhenPlayFailed = searchConfig.IsCloseSearchPageWhenPlayFailed,
-                IsHideShortMusic = searchConfig.IsHideShortMusic
+                IsHideShortMusic = searchConfig.IsHideShortMusic,
+                IsPlayWhenAddToFavorite = searchConfig.IsPlayWhenAddToFavorite
             };
 
             return result;
@@ -83,7 +84,8 @@ namespace ListenTogether.Api.Services
                 {
                     EnablePlatform = (int)platform,
                     IsHideShortMusic = true,
-                    IsCloseSearchPageWhenPlayFailed = false
+                    IsCloseSearchPageWhenPlayFailed = false,
+                    IsPlayWhenAddToFavorite = false
                 }),
                 PlaySettingJson = JsonSerializer.Serialize(new PlaySettingRequest()
                 {

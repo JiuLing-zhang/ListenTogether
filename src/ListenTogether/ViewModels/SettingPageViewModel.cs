@@ -190,6 +190,22 @@ public class SettingPageViewModel : ViewModelBase
         }
     }
 
+    private bool _isPlayWhenAddToFavorite = GlobalConfig.MyUserSetting.Search.IsPlayWhenAddToFavorite;
+    /// <summary>
+    /// 添加到歌单时自动播放
+    /// </summary>
+    public bool IsPlayWhenAddToFavorite
+    {
+        get => _isPlayWhenAddToFavorite;
+        set
+        {
+            _isPlayWhenAddToFavorite = value;
+            OnPropertyChanged();
+
+            GlobalConfig.MyUserSetting.Search.IsPlayWhenAddToFavorite = value;
+            WriteSearchConfigAsync();
+        }
+    }
 
     private bool _isWifiPlayOnly = GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly;
     /// <summary>

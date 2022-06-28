@@ -99,6 +99,9 @@
                         <JiuLing:TextSwitch Text="隐藏小于1分钟的歌曲"
                                             IsToggled="{Binding IsHideShortMusic}"/>
 
+                        <JiuLing:TextSwitch Text="添加到歌单时自动播放"
+                                            IsToggled="{Binding IsPlayWhenAddToFavorite}"/>
+
                         <!-- 播放设置 -->
                         <Label Margin="0,20,0,0"
                                Text="播放"                               

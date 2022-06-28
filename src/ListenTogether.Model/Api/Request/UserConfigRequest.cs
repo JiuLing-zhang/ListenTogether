@@ -29,6 +29,11 @@
         /// 播放失败时关闭搜索页面
         /// </summary>
         public bool IsCloseSearchPageWhenPlayFailed { get; set; }
+
+        /// <summary>
+        /// 添加到歌单时自动播放
+        /// </summary>
+        public bool IsPlayWhenAddToFavorite { get; set; }
     }
 
     public class PlaySettingRequest

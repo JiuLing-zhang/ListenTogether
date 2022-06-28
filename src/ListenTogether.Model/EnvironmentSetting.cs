@@ -69,6 +69,11 @@ namespace ListenTogether.Model
         /// 隐藏小于1分钟的歌曲
         /// </summary>
         public bool IsHideShortMusic { get; set; }
+
+        /// <summary>
+        /// 添加到歌单时自动播放
+        /// </summary>
+        public bool IsPlayWhenAddToFavorite { get; set; }
     }
 
     public class PlaySetting

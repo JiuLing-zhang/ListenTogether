@@ -48,7 +48,8 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         result.Search = new SearchSetting()
         {
             EnablePlatform = searchConfig.EnablePlatform,
-            IsHideShortMusic = searchConfig.IsHideShortMusic
+            IsHideShortMusic = searchConfig.IsHideShortMusic,
+            IsPlayWhenAddToFavorite = searchConfig.IsPlayWhenAddToFavorite
         };
 
         return result;
@@ -78,7 +79,8 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             SearchSettingJson = (new SearchSetting()
             {
                 EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu,
-                IsHideShortMusic = true
+                IsHideShortMusic = true,
+                IsPlayWhenAddToFavorite = false
             }).ToJson(),
             PlaySettingJson = (new PlaySetting()
             {

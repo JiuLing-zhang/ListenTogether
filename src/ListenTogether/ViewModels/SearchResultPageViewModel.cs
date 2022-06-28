@@ -282,8 +282,14 @@ public class SearchResultPageViewModel : ViewModelBase
                 await ToastService.Show("添加失败");
                 return;
             }
-
-            await _playerService.PlayAsync(music);
+            if (GlobalConfig.MyUserSetting.Search.IsPlayWhenAddToFavorite)
+            {
+                await _playerService.PlayAsync(music);
+            }
+            else
+            {
+                await ToastService.Show("添加成功");
+            }
         }
         catch (Exception ex)
         {
