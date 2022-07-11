@@ -7,7 +7,7 @@ namespace ListenTogether.Network.SearchMusic;
 public class KuGouSearcher : SearchAbstract
 {
     private readonly IMusicProvider _myMusicProvider;
-    public KuGouSearcher(PlatformEnum platform) : base(platform)
+    public KuGouSearcher() : base(PlatformEnum.KuGou)
     {
         _myMusicProvider = new KuGouMusicProvider();
     }

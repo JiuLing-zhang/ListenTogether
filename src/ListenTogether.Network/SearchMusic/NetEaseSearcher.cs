@@ -7,7 +7,7 @@ namespace ListenTogether.Network.SearchMusic;
 public class NetEaseSearcher : SearchAbstract
 {
     private readonly IMusicProvider _myMusicProvider;
-    public NetEaseSearcher(PlatformEnum platform) : base(platform)
+    public NetEaseSearcher() : base(PlatformEnum.NetEase)
     {
         _myMusicProvider = new NetEaseMusicProvider();
     }

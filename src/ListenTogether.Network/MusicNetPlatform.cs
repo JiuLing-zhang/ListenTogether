@@ -8,9 +8,10 @@ namespace ListenTogether.Network;
 public class MusicNetPlatform
 {
     //搜索链
-    private readonly SearchAbstract _netEaseSearcher = new NetEaseSearcher(PlatformEnum.NetEase);
-    private readonly SearchAbstract _kuGouSearcher = new KuGouSearcher(PlatformEnum.KuGou);
-    private readonly SearchAbstract _miGuSearcher = new MiGuSearcher(PlatformEnum.MiGu);
+    private readonly SearchAbstract _netEaseSearcher = new NetEaseSearcher();
+    private readonly SearchAbstract _kuGouSearcher = new KuGouSearcher();
+    private readonly SearchAbstract _miGuSearcher = new MiGuSearcher();
+    private readonly SearchAbstract _kuWoSearcher = new KuWoSearcher();
 
     private readonly IMusicProvider _kuGouMusicProvider = new KuGouMusicProvider();
     private readonly IMusicProvider _netEaseMusicProvider = new NetEaseMusicProvider();
@@ -18,7 +19,8 @@ public class MusicNetPlatform
     {
         //搜索
         _miGuSearcher.SetNextHandler(_netEaseSearcher);
-        _netEaseSearcher.SetNextHandler(_kuGouSearcher);
+        _netEaseSearcher.SetNextHandler(_kuWoSearcher);
+        _kuWoSearcher.SetNextHandler(_kuGouSearcher);
     }
 
     public async Task<List<string>> GetSearchSuggest(string keyword)

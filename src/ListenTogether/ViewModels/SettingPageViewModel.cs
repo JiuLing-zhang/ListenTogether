@@ -144,6 +144,25 @@ public class SettingPageViewModel : ViewModelBase
         }
     }
 
+    private bool _isEnableKuWo = CheckEnablePlatform(PlatformEnum.KuWo);
+    /// <summary>
+    /// 酷我
+    /// </summary>
+    public bool IsEnableKuWo
+    {
+        get => _isEnableKuWo;
+        set
+        {
+            _isEnableKuWo = value;
+            OnPropertyChanged();
+
+            Task.Run(async () =>
+            {
+                await EnablePlatformAsync(PlatformEnum.KuWo, value);
+            });
+        }
+    }
+
     private bool _isEnableKuGou = CheckEnablePlatform(PlatformEnum.KuGou);
     /// <summary>
     /// 酷狗

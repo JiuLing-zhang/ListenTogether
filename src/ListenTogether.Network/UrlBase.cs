@@ -21,4 +21,11 @@ public class UrlBase
         public const string GetMusicDetailUrl = "https://c.musicapp.migu.cn/MIGUM2.0/v1.0/content/resourceinfo.do";
         public const string GetMusicPlayUrl = "https://h5.nf.migu.cn/app/providers/api/v2/song.listen.ask";
     }
+
+    public class KuWo
+    {
+        public const string Search = "http://m.kuwo.cn/newh5app/api/mobile/v1/search/all";
+        public const string GetMusicUrl = "http://antiserver.kuwo.cn/anti.s";
+        public const string GetMusicDetail = "http://m.kuwo.cn/newh5app/api/mobile/v1/music/info";
+    }
 }

@@ -10,6 +10,8 @@ namespace ListenTogether.Model.Enums
         [Description("酷狗")]
         KuGou = 2,
         [Description("咪咕")]
-        MiGu = 4
+        MiGu = 4,
+        [Description("酷我")]
+        KuWo = 8,
     }
 }

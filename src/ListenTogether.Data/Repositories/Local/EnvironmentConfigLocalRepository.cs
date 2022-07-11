@@ -78,7 +78,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             }).ToJson(),
             SearchSettingJson = (new SearchSetting()
             {
-                EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu,
+                EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu | PlatformEnum.KuWo,
                 IsHideShortMusic = true,
                 IsPlayWhenAddToFavorite = false
             }).ToJson(),
