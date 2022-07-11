@@ -18,7 +18,7 @@ internal class DatabaseProvide
                     {
                         Directory.CreateDirectory(appDataFolder);
                     }
-                    string dbPath = Path.Combine(appDataFolder, "log.db");
+                    string dbPath = Path.Combine(appDataFolder, "ListenTogether.Log.db");
 
                     _database = new SQLiteConnection(dbPath);
                     InitTable();
