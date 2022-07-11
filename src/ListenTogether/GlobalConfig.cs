@@ -8,7 +8,10 @@ namespace ListenTogether
         /// App名称
         /// </summary>
         private const string AppName = "ListenTogether";
-
+        /// <summary>
+        /// 本地数据库名
+        /// </summary>
+        public const string LocalDatabaseName = "ListenTogether.db";
         /// <summary>
         /// App Data文件夹路径
         /// </summary>

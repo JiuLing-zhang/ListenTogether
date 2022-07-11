@@ -30,7 +30,7 @@ public partial class App : Application
 
         GlobalConfig.CurrentVersion = AppInfo.Current.Version;
 
-        BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.LocalDbName));
+        BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.LocalDatabaseName));
         if (GlobalConfig.AppSettings.ApiDomain.IsNotEmpty())
         {
             BusinessConfig.TokenUpdated += (_, tokenInfo) =>
