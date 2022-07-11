@@ -137,7 +137,10 @@ public class SettingPageViewModel : ViewModelBase
             _isEnableNetEase = value;
             OnPropertyChanged();
 
-            EnableNetEaseAsync();
+            Task.Run(async () =>
+            {
+                await EnablePlatformAsync(PlatformEnum.NetEase, value);
+            });
         }
     }
 
@@ -153,7 +156,10 @@ public class SettingPageViewModel : ViewModelBase
             _isEnableKuGou = value;
             OnPropertyChanged();
 
-            EnableKuGouAsync();
+            Task.Run(async () =>
+            {
+                await EnablePlatformAsync(PlatformEnum.KuGou, value);
+            });
         }
     }
 
@@ -169,7 +175,10 @@ public class SettingPageViewModel : ViewModelBase
             _isEnableMiGu = value;
             OnPropertyChanged();
 
-            EnableMiGu();
+            Task.Run(async () =>
+            {
+                await EnablePlatformAsync(PlatformEnum.MiGu, value);
+            });
         }
     }
 
@@ -311,62 +320,25 @@ public class SettingPageViewModel : ViewModelBase
         };
     }
 
-    private async Task EnableNetEaseAsync()
+    private async Task EnablePlatformAsync(PlatformEnum platform, bool isEnable)
     {
-        if (IsEnableNetEase)
+        if (isEnable)
         {
-            if (!CheckEnablePlatform(PlatformEnum.NetEase))
+            if (!CheckEnablePlatform(platform))
             {
-                GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform | PlatformEnum.NetEase;
+                GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform | platform;
             }
         }
         else
         {
-            if (CheckEnablePlatform(PlatformEnum.NetEase))
+            if (CheckEnablePlatform(platform))
             {
-                GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform & ~PlatformEnum.NetEase;
+                GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform & ~platform;
             }
         }
         await WriteSearchConfigAsync();
     }
 
-    private async Task EnableKuGouAsync()
-    {
-        if (IsEnableKuGou)
-        {
-            if (!CheckEnablePlatform(PlatformEnum.KuGou))
-            {
-                GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform | PlatformEnum.KuGou;
-            }
-        }
-        else
-        {
-            if (CheckEnablePlatform(PlatformEnum.KuGou))
-            {
-                GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform & ~PlatformEnum.KuGou;
-            }
-        }
-        await WriteSearchConfigAsync();
-    }
-
-    private async void EnableMiGu()
-    {
-        if (IsEnableMiGu)
-        {
-            if (!CheckEnablePlatform(PlatformEnum.MiGu))
-            {
-                GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform | PlatformEnum.MiGu;
-            }
-        }
-        else
-        {
-            if (CheckEnablePlatform(PlatformEnum.MiGu))
-            {
-                GlobalConfig.MyUserSetting.Search.EnablePlatform = GlobalConfig.MyUserSetting.Search.EnablePlatform & ~PlatformEnum.MiGu;
-            }
-        }
-        await WriteSearchConfigAsync();
-    }
 
     private async Task WriteSearchConfigAsync()
     {
