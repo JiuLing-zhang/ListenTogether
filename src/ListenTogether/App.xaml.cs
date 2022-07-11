@@ -28,7 +28,7 @@ public partial class App : Application
 
         GlobalConfig.AppSettings = config.GetRequiredSection("AppSettings").Get<AppSettings>();
 
-        GlobalConfig.CurrentVersion = AppInfo.Current.Version;     
+        GlobalConfig.CurrentVersion = AppInfo.Current.Version;
 
         BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.AppSettings.LocalDbName));
         if (GlobalConfig.AppSettings.ApiDomain.IsNotEmpty())
@@ -37,13 +37,13 @@ public partial class App : Application
             {
                 if (tokenInfo == null)
                 {
-                    GlobalConfig.CurrentUser = null;
                     userLocalService.Remove();
                 }
                 else
                 {
                     userLocalService.UpdateToken(tokenInfo);
                 }
+                GlobalConfig.CurrentUser = null;
             };
 
             string deviceId = Preferences.Get("DeviceId", "");
