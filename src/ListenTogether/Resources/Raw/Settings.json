@@ -1,7 +1,6 @@
 {
   "AppSettings": {
-    "LocalDbName": "ListenTogether.db",
     "ApiDomain": "",
-    "UpdateDomain": ""
+    "UpdateDomain": "http://162.14.66.2:9090"
   }
 }
