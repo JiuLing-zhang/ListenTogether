@@ -5,7 +5,7 @@
 
     <Color x:Key="LightLogo">#C98FFF</Color>
     <Color x:Key="LightAppNetwork">#C98FFF</Color>
-    <Color x:Key="LightBackground">#767676</Color>
+    <Color x:Key="LightBackground">#FFFFFF</Color>
     <Color x:Key="LightTitle">#262626</Color>
     <Color x:Key="LightText">#262626</Color>
     <Color x:Key="LightTextSecond">#717171</Color>
