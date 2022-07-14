@@ -24,8 +24,8 @@ public class UrlBase
 
     public class KuWo
     {
-        public const string Search = "http://m.kuwo.cn/newh5app/api/mobile/v1/search/all";
+        public const string Search = "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord";
         public const string GetMusicUrl = "http://antiserver.kuwo.cn/anti.s";
-        public const string GetMusicDetail = "http://m.kuwo.cn/newh5app/api/mobile/v1/music/info";
+        public const string GetMusicDetail = "http://www.kuwo.cn/newh5/singles/songinfoandlrc";
     }
 }

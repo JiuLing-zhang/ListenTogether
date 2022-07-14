@@ -1,16 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ListenTogether.Network.Models.KuWo
+﻿namespace ListenTogether.Network.Models.KuWo
 {
     public class MusicDetailHttpResult
     {
-        public Info info { get; set; }
-        public Lrc[] lrc { get; set; }
+        public Lrclist[] lrclist { get; set; }
+        public Songinfo songinfo { get; set; }
     }
+
+    public class Songinfo
+    {
+        public string pic { get; set; }
+    }
+
+    public class Lrclist
+    {
+        public string lineLyric { get; set; }
+        public string time { get; set; }
+    }
+
+
+
+
+
+
+
+
+
 
     public class Info
     {

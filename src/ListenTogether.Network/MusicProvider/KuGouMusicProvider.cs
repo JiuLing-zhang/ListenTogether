@@ -5,18 +5,37 @@ using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.KuGou;
 using ListenTogether.Network.Utils;
+using System.Net;
 
 namespace ListenTogether.Network.MusicProvider;
 public class KuGouMusicProvider : IMusicProvider
 {
-    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly HttpClient _httpClient;
     private const PlatformEnum Platform = PlatformEnum.KuGou;
+
+    public KuGouMusicProvider()
+    {
+        var handler = new HttpClientHandler();
+        handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        _httpClient = new HttpClient(handler);
+    }
+
     public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
     {
         string args = KuGouUtils.GetSearchData(keyword);
         string url = $"{UrlBase.KuGou.Search}?{args}";
 
-        string json = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url)
+        };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
         json = KuGouUtils.RemoveHttpResultHead(json);
         if (json.IsEmpty())
         {
@@ -99,7 +118,17 @@ public class KuGouMusicProvider : IMusicProvider
         string args = KuGouUtils.GetMusicUrlData(extendData.Hash, extendData.AlbumId);
         string url = $"{UrlBase.KuGou.GetMusic}?{args}";
 
-        string json = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url)
+        };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
         if (json.IsEmpty())
         {
             return null;
@@ -115,6 +144,7 @@ public class KuGouMusicProvider : IMusicProvider
         }
 
         string extendDataString = extendData.ToJson();
+
         return new Music()
         {
             Id = sourceMusic.Id,
@@ -159,7 +189,16 @@ public class KuGouMusicProvider : IMusicProvider
         string args = KuGouUtils.GetMusicUrlData(extendData.Hash, extendData.AlbumId);
         string url = $"{UrlBase.KuGou.GetMusic}?{args}";
 
-        string json = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url)
+        };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         if (json.IsEmpty())
         {
             Logger.Info("更新酷狗播放地址失败，服务器返回空。");

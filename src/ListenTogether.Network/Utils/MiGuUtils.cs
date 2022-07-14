@@ -13,7 +13,7 @@ public class MiGuUtils
     {
         musics = new List<HttpMusicSearchResult>();
 
-        string pattern = @"<ul class=""list\"">(?<data>[\S\s]*)other-keys";
+        string pattern = @"<ul class=""list\"">(?<data>[\S\s]*)search_load_next";
         var result = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(html, pattern);
         if (result.success == false)
         {

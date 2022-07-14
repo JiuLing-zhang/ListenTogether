@@ -8,7 +8,6 @@
 
     public class Lrc
     {
-        public int version { get; set; }
         public string lyric { get; set; }
     }
 }

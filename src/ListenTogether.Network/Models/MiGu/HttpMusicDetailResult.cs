@@ -2,8 +2,6 @@
 {
     public class HttpMusicDetailResult
     {
-        public string code { get; set; }
-        public string info { get; set; }
         public Resource[] resource { get; set; }
     }
 

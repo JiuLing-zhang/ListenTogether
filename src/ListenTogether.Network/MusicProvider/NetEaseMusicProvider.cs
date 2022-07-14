@@ -5,12 +5,20 @@ using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.NetEase;
 using ListenTogether.Network.Utils;
+using System.Net;
 
 namespace ListenTogether.Network.MusicProvider;
 public class NetEaseMusicProvider : IMusicProvider
 {
-    private readonly HttpClient _httpClient = new HttpClient();
+    private readonly HttpClient _httpClient;
     private const PlatformEnum Platform = PlatformEnum.NetEase;
+
+    public NetEaseMusicProvider()
+    {
+        var handler = new HttpClientHandler();
+        handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        _httpClient = new HttpClient(handler);
+    }
 
     public async Task<List<string>> GetSearchSuggest(string keyword)
     {
@@ -18,8 +26,19 @@ public class NetEaseMusicProvider : IMusicProvider
 
         var postData = NetEaseUtils.GetPostDataForSuggest(keyword);
         var form = new FormUrlEncodedContent(postData);
-        var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
-        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        var request = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(url),
+            Content = form
+        };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         ResultBase<SearchSuggestHttpResult>? result;
         try
@@ -51,12 +70,23 @@ public class NetEaseMusicProvider : IMusicProvider
 
         var postData = NetEaseUtils.GetPostDataForSearch(keyword);
         var form = new FormUrlEncodedContent(postData);
-        var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
-        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        var request = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(url),
+            Content = form
+        };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
 
         ResultBase<MusicSearchHttpResult>? result;
         try
         {
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             result = json.ToObject<ResultBase<MusicSearchHttpResult>>();
         }
         catch (Exception ex)
@@ -141,9 +171,19 @@ public class NetEaseMusicProvider : IMusicProvider
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
         var postData = NetEaseUtils.GetPostDataForMusicUrl(sourceMusic.PlatformInnerId);
-
         var form = new FormUrlEncodedContent(postData);
-        var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
+
+        var request = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(url),
+            Content = form
+        };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var httpResult = json.ToObject<ResultBase<MusicUrlHttpResult>>();
@@ -170,9 +210,19 @@ public class NetEaseMusicProvider : IMusicProvider
         //获取歌词
         url = $"{UrlBase.NetEase.Lyric}";
         postData = NetEaseUtils.GetPostDataForLyric(sourceMusic.PlatformInnerId);
-
         form = new FormUrlEncodedContent(postData);
-        response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
+
+        request = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(url),
+            Content = form
+        };
+        request.Headers.Add("Accept", "application/json, */*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var lyricResult = json.ToObject<MusicLyricHttpResult>();
@@ -211,9 +261,19 @@ public class NetEaseMusicProvider : IMusicProvider
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
         var postData = NetEaseUtils.GetPostDataForMusicUrl(music.PlatformInnerId);
-
         var form = new FormUrlEncodedContent(postData);
-        var response = await _httpClient.PostAsync(url, form).ConfigureAwait(false);
+
+        var request = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(url),
+            Content = form
+        };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var httpResult = json.ToObject<ResultBase<MusicUrlHttpResult>>();

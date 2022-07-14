@@ -14,14 +14,10 @@ public class MiGuMusicProvider : IMusicProvider
 
     public MiGuMusicProvider()
     {
-        HttpClientHandler clientHandler = new HttpClientHandler();
-        clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-        _httpClient = new HttpClient(clientHandler);
-
-
-        _httpClient.DefaultRequestHeaders.Add("User-Agent",
-            "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Mobile Safari/537.36 Edg/92.0.902.78");
-
+        var handler = new HttpClientHandler();
+        handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+        handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        _httpClient = new HttpClient(handler);
     }
     public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
     {
@@ -33,6 +29,10 @@ public class MiGuMusicProvider : IMusicProvider
             RequestUri = new Uri(url),
             Method = HttpMethod.Get
         };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
         request.Headers.Add("Host", "www.migu.cn");
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -66,7 +66,6 @@ public class MiGuMusicProvider : IMusicProvider
 
     public async Task<Music?> GetMusicDetail(MusicSearchResult sourceMusic)
     {
-
         if (!(sourceMusic.PlatformData is SearchResultExtended platformData))
         {
             throw new ArgumentException("平台数据初始化异常");
@@ -77,9 +76,14 @@ public class MiGuMusicProvider : IMusicProvider
             RequestUri = new Uri(platformData.MusicPageUrl),
             Method = HttpMethod.Get
         };
+
+        request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
         request.Headers.Add("Host", "www.migu.cn");
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         if (response.RequestMessage == null || response.RequestMessage.RequestUri == null)
         {
@@ -93,7 +97,17 @@ public class MiGuMusicProvider : IMusicProvider
         }
 
         string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={argsResult.id}&resourceType=2";
-        string json = await _httpClient.GetStringAsync(url).ConfigureAwait(false);
+        request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        request.Headers.Add("Accept", "application/json, text/plain, */*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
+        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var result = json.ToObject<HttpMusicDetailResult>();
         if (result == null || result.resource == null || result.resource.Length == 0)
@@ -121,8 +135,12 @@ public class MiGuMusicProvider : IMusicProvider
         {
             RequestUri = new Uri(url)
         };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "identity;q=1, *;q=0");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
         response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         if (response.StatusCode != HttpStatusCode.Found || html.IsNotEmpty())
         {

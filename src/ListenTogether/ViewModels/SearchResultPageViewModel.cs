@@ -181,22 +181,29 @@ public class SearchResultPageViewModel : ViewModelBase
 
             foreach (var musicInfo in musics)
             {
-                if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic && musicInfo.Duration != 0 && musicInfo.Duration <= 60 * 1000)
+                try
                 {
-                    continue;
-                }
+                    if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic && musicInfo.Duration != 0 && musicInfo.Duration <= 60 * 1000)
+                    {
+                        continue;
+                    }
 
-                MusicSearchResult.Add(new SearchResultViewModel()
+                    MusicSearchResult.Add(new SearchResultViewModel()
+                    {
+                        Platform = musicInfo.Platform.GetDescription(),
+                        Name = musicInfo.Name,
+                        Alias = musicInfo.Alias == "" ? "" : $"（{musicInfo.Alias}）",
+                        Artist = musicInfo.Artist,
+                        Album = musicInfo.Album,
+                        Duration = musicInfo.DurationText,
+                        Fee = musicInfo.Fee.GetDescription(),
+                        SourceData = musicInfo
+                    });
+                }
+                catch (Exception e)
                 {
-                    Platform = musicInfo.Platform.GetDescription(),
-                    Name = musicInfo.Name,
-                    Alias = musicInfo.Alias == "" ? "" : $"（{musicInfo.Alias}）",
-                    Artist = musicInfo.Artist,
-                    Album = musicInfo.Album,
-                    Duration = musicInfo.DurationText,
-                    Fee = musicInfo.Fee.GetDescription(),
-                    SourceData = musicInfo
-                });
+                    Logger.Error("搜索结果添加失败。", e);
+                }
             }
         }
         catch (Exception ex)
