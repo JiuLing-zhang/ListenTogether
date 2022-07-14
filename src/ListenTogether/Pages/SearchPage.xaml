@@ -142,26 +142,14 @@
                             <On Platform="Android,iOS">
                                 <Grid Margin="0,0,0,20"
                                       RowDefinitions="auto,auto"
-                                      ColumnDefinitions="40,*,40">
+                                      ColumnDefinitions="*,40">
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
                                                           CommandParameter="{Binding .}"/>
                                     </Grid.GestureRecognizers>
-                                    <Label Grid.Row="0"
-                                           Grid.Column="0"
-                                           Text="{Binding Platform}"
-                                           Style="{StaticResource Explain}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation"/>
-                                    <Label Grid.Row="1"
-                                           Grid.Column="0"
-                                           Style="{StaticResource Explain}"
-                                           Text="{Binding Duration}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation"/>
 
                                     <HorizontalStackLayout Grid.Row="0"
-                                                               Grid.Column="1">
+                                                           Grid.Column="0">
                                         <Label Text="{Binding Fee}"
                                                Style="{DynamicResource FeeType}"
                                                VerticalOptions="Center"/>
@@ -172,10 +160,10 @@
                                     </HorizontalStackLayout>
 
                                     <Label Grid.Row="1"
-                                               Grid.Column="1"
-                                               Style="{StaticResource Explain}"
-                                               VerticalOptions="Center"
-                                               LineBreakMode="TailTruncation">
+                                           Grid.Column="0"
+                                           Style="{StaticResource Explain}"
+                                           VerticalOptions="Center"
+                                           LineBreakMode="TailTruncation">
                                         <MultiBinding StringFormat="{}{0} - {1}">
                                             <Binding Path="Artist" />
                                             <Binding Path="Album" />
@@ -183,8 +171,8 @@
                                     </Label>
 
                                     <Image Grid.Row="0"
+                                           Grid.Column="1"
                                            Grid.RowSpan="2"
-                                           Grid.Column="2"
                                            Source="{Binding Source, Source={x:Reference ImgHeart}}"
                                            Aspect="AspectFill"
                                            WidthRequest="15"
