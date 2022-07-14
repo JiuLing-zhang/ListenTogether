@@ -7,6 +7,7 @@
        x:DataType="viewmodels:ShellViewModel"       
        x:Class="ListenTogether.Pages.DesktopShell"
        FlyoutBehavior="Locked"
+       FlyoutBackgroundColor="{AppThemeBinding Dark={StaticResource DarkFlyoutBackgroundColor},Light={StaticResource LightFlyoutBackgroundColor}}"
        FlyoutWidth="150"
        NavBarIsVisible="False">
 
