@@ -80,14 +80,22 @@
 
         <CollectionView VerticalOptions="FillAndExpand"
                         ItemsSource="{Binding MusicSearchResult}"
-                        IsVisible="{Binding IsNotBusy}">
+                        IsVisible="{Binding IsNotBusy}"
+                        IsGrouped="True">
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Name}"
+                           FontSize="18"
+                           FontAttributes="Bold" />
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
                         <OnPlatform x:TypeArguments="View">
                             <On Platform="UWP, macOS">
-                                <Grid ColumnDefinitions="30,40,60,40,300,300,*">
+                                <Grid ColumnDefinitions="30,60,40,300,300,*">
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
                                                           CommandParameter="{Binding .}"
@@ -108,27 +116,23 @@
                                     </Image>
 
                                     <Label Grid.Column="1"
-                                           Text="{Binding Platform}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation"/>
-                                    <Label Grid.Column="2"
                                            Text="{Binding Duration}"
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
-                                    <Label Grid.Column="3"
+                                    <Label Grid.Column="2"
                                            Text="{Binding Fee}"
                                            Style="{DynamicResource FeeType}"
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center"/>
-                                    <Label Grid.Column="4"
+                                    <Label Grid.Column="3"
                                            Text="{Binding Name}"
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
-                                    <Label Grid.Column="5"
+                                    <Label Grid.Column="4"
                                            Text="{Binding Artist}"
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>
-                                    <Label Grid.Column="6"
+                                    <Label Grid.Column="5"
                                            Text="{Binding Album}"
                                            VerticalOptions="Center"
                                            LineBreakMode="TailTruncation"/>

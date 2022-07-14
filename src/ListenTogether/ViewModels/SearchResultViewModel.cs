@@ -1,4 +1,15 @@
 ﻿namespace ListenTogether.ViewModels;
+
+public class SearchResultGroupViewModel : List<SearchResultViewModel>
+{
+    public string Name { get; private set; }
+
+    public SearchResultGroupViewModel(string name, List<SearchResultViewModel> animals) : base(animals)
+    {
+        Name = name;
+    }
+}
+
 public class SearchResultViewModel : ViewModelBase
 {
     private string _platform;

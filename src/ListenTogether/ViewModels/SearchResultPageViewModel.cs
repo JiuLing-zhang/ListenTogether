@@ -21,7 +21,7 @@ public class SearchResultPageViewModel : ViewModelBase
     public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
         SearchSuggest = new ObservableCollection<string>();
-        MusicSearchResult = new ObservableCollection<SearchResultViewModel>();
+        MusicSearchResult = new ObservableCollection<SearchResultGroupViewModel>();
         MusicSearchResult.CollectionChanged += MusicSearchResult_CollectionChanged;
         _services = services;
         _musicNetworkService = musicNetworkService;
@@ -92,11 +92,11 @@ public class SearchResultPageViewModel : ViewModelBase
     }
 
 
-    private ObservableCollection<SearchResultViewModel> _musicSearchResult;
+    private ObservableCollection<SearchResultGroupViewModel> _musicSearchResult;
     /// <summary>
     /// 搜索到的结果列表
     /// </summary>
-    public ObservableCollection<SearchResultViewModel> MusicSearchResult
+    public ObservableCollection<SearchResultGroupViewModel> MusicSearchResult
     {
         get => _musicSearchResult;
         set
@@ -179,32 +179,40 @@ public class SearchResultPageViewModel : ViewModelBase
                 return;
             }
 
-            foreach (var musicInfo in musics)
+            //TODO: 过滤条件移入到查找歌曲的模块
+            //if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic && musicInfo.Duration != 0 && musicInfo.Duration <= 60 * 1000)
+            //{
+            //    continue;
+            //}
+
+            var platformList = musics.Select(x => x.Platform).Distinct().ToList();
+            foreach (var platform in platformList)
             {
+                string platformName = platform.GetDescription();
                 try
                 {
-                    if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic && musicInfo.Duration != 0 && musicInfo.Duration <= 60 * 1000)
-                    {
-                        continue;
-                    }
+                    var onePlatformMusics = musics.Where(x => x.Platform == platform)
+                        .Select(x => new SearchResultViewModel()
+                        {
+                            Platform = x.Platform.GetDescription(),
+                            Name = x.Name,
+                            Alias = x.Alias == "" ? "" : $"（{x.Alias}）",
+                            Artist = x.Artist,
+                            Album = x.Album,
+                            Duration = x.DurationText,
+                            Fee = x.Fee.GetDescription(),
+                            SourceData = x
+                        }).ToList();
 
-                    MusicSearchResult.Add(new SearchResultViewModel()
-                    {
-                        Platform = musicInfo.Platform.GetDescription(),
-                        Name = musicInfo.Name,
-                        Alias = musicInfo.Alias == "" ? "" : $"（{musicInfo.Alias}）",
-                        Artist = musicInfo.Artist,
-                        Album = musicInfo.Album,
-                        Duration = musicInfo.DurationText,
-                        Fee = musicInfo.Fee.GetDescription(),
-                        SourceData = musicInfo
-                    });
+                    MusicSearchResult.Add(new SearchResultGroupViewModel(platformName, onePlatformMusics));
                 }
                 catch (Exception e)
                 {
+                    await ToastService.Show($"【{platformName}】搜索结果加载失败");
                     Logger.Error("搜索结果添加失败。", e);
                 }
             }
+
         }
         catch (Exception ex)
         {
