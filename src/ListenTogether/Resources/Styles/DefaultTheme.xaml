@@ -6,7 +6,8 @@
     <Color x:Key="LightLogo">#C98FFF</Color>
     <Color x:Key="LightAppNetwork">#C98FFF</Color>
     <Color x:Key="LightFlyoutBackgroundColor">#FFFFFF</Color>
-    <Color x:Key="LightBackground">#FFFFFF</Color>
+    <Color x:Key="LightBackground">#F7F7F7</Color>
+    <Color x:Key="LightLine">#000000</Color>
     <Color x:Key="LightTitle">#262626</Color>
     <Color x:Key="LightText">#262626</Color>
     <Color x:Key="LightTextSecond">#717171</Color>
@@ -23,8 +24,9 @@
 
     <Color x:Key="DarkLogo">#C98FFF</Color>
     <Color x:Key="DarkAppNetwork">#929292</Color>
-    <Color x:Key="DarkFlyoutBackgroundColor">#000000</Color>
-    <Color x:Key="DarkBackground">#242424</Color>
+    <Color x:Key="DarkFlyoutBackgroundColor">#3B3B3B</Color>
+    <Color x:Key="DarkBackground">#333333</Color>
+    <Color x:Key="DarkLine">#767676</Color>
     <Color x:Key="DarkTitle">#FCF2F7</Color>
     <Color x:Key="DarkText">#FCF2F7</Color>
     <Color x:Key="DarkTextSecond">#9D9D9D</Color>

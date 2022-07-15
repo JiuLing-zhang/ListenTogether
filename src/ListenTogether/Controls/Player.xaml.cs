@@ -45,7 +45,7 @@ public partial class Player : ContentView
         PhoneBlock.IsVisible = !IsMiniWhenPhone;
         if (Config.Desktop)
         {
-            MainBlock.HeightRequest = 70;
+            MainBlock.HeightRequest = 90;
         }
         else
         {

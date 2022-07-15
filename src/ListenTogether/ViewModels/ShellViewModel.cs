@@ -1,7 +1,29 @@
 ﻿using ListenTogether.Models;
 namespace ListenTogether.ViewModels;
-internal class ShellViewModel
+internal class ShellViewModel : ViewModelBase
 {
+    private string _title;
+    public string Title
+    {
+        get => _title;
+        set
+        {
+            _title = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private string _icon;
+    public string Icon
+    {
+        get => _icon;
+        set
+        {
+            _icon = value;
+            OnPropertyChanged();
+        }
+    }
+
     public string AppNetworkString => GlobalConfig.AppNetwork.GetDescription();
     public AppSection Search { get; set; }
     public AppSection Playlist { get; set; }

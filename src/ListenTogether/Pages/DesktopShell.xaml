@@ -8,7 +8,7 @@
        x:Class="ListenTogether.Pages.DesktopShell"
        FlyoutBehavior="Locked"
        FlyoutBackgroundColor="{AppThemeBinding Dark={StaticResource DarkFlyoutBackgroundColor},Light={StaticResource LightFlyoutBackgroundColor}}"
-       FlyoutWidth="150"
+       FlyoutWidth="150"        
        NavBarIsVisible="False">
 
     <Shell.FlyoutHeader>
@@ -29,28 +29,50 @@
                        Style="{StaticResource AppNetwork}"
                        HorizontalOptions="EndAndExpand"/>
             </StackLayout>
-
         </StackLayout>
     </Shell.FlyoutHeader>
 
-    <ShellContent Title="{Binding Search.Title}"
-                  Icon="{AppThemeBinding Light=search.png, Dark=search_dark.png}"
-                  ContentTemplate="{DataTemplate pages:SearchPage}"/>
+    <FlyoutItem Title="{Binding Search.Title}"
+                Icon="{AppThemeBinding Light=search.png, Dark=search_dark.png}">
+        <Tab>
+            <ShellContent  ContentTemplate="{DataTemplate pages:SearchPage}" />
+        </Tab>
+    </FlyoutItem>
 
-    <ShellContent Title="{Binding Playlist.Title}"
-                  Icon="{AppThemeBinding Light=playlist.png, Dark=playlist_dark.png}"
-                  ContentTemplate="{DataTemplate pages:PlaylistPage}"/>
+    <FlyoutItem Title="{Binding Playlist.Title}"
+                Icon="{AppThemeBinding Light=playlist.png, Dark=playlist_dark.png}">
+        <Tab>
+            <ShellContent  ContentTemplate="{DataTemplate pages:PlaylistPage}" />
+        </Tab>
+    </FlyoutItem>
 
-    <ShellContent Title="{Binding Playing.Title}"
-                  Icon="{AppThemeBinding Light=music.png, Dark=music_dark.png}"
-                  ContentTemplate="{DataTemplate pages:PlayingPage}" />
+    <FlyoutItem Title="{Binding Playing.Title}"
+                Icon="{AppThemeBinding Light=music.png, Dark=music_dark.png}">
+        <Tab>
+            <ShellContent  ContentTemplate="{DataTemplate pages:PlayingPage}" />
+        </Tab>
+    </FlyoutItem>
 
-    <ShellContent Title="{Binding MyFavorite.Title}"
-                  Icon="{AppThemeBinding Light=heart.png, Dark=heart_dark.png}"
-                  ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
+    <FlyoutItem Title="{Binding MyFavorite.Title}"
+                Icon="{AppThemeBinding Light=heart.png, Dark=heart_dark.png}">
+        <Tab>
+            <ShellContent  ContentTemplate="{DataTemplate pages:MyFavoritePage}" />
+        </Tab>
+    </FlyoutItem>
 
-    <ShellContent Title="{Binding Settings.Title}"
-                  Icon="{AppThemeBinding Light=my.png, Dark=my_dark.png}" 
-                  ContentTemplate="{DataTemplate pages:SettingsPage}" />
+    <FlyoutItem Title="{Binding Settings.Title}"
+                Icon="{AppThemeBinding Light=my.png, Dark=my_dark.png}">
+        <Tab>
+            <ShellContent  ContentTemplate="{DataTemplate pages:SettingsPage}" />
+        </Tab>
+    </FlyoutItem>
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <StackLayout Orientation="Horizontal">
+                <Image Margin="6,10" WidthRequest="18" HeightRequest="18" Source="{Binding Icon}"/>
+                <Label Margin="6,10" Text="{Binding Title}"/>
+            </StackLayout>
+        </DataTemplate>
+    </Shell.ItemTemplate>
 
 </Shell>
