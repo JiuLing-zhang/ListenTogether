@@ -6,7 +6,11 @@
        xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
        x:DataType="viewmodels:ShellViewModel"
        x:Class="ListenTogether.Pages.MobileShell"
-       NavBarIsVisible="False">
+       NavBarIsVisible="False"
+       Shell.TabBarUnselectedColor="{AppThemeBinding Dark={StaticResource DarkTabBarUnselectedColor},Light={StaticResource LightTabBarUnselectedColor}}"
+       Shell.TabBarTitleColor="{AppThemeBinding Dark={StaticResource DarkTabBarTitleColor},Light={StaticResource LightTabBarTitleColor}}"
+       Shell.TabBarBackgroundColor="{AppThemeBinding Dark={StaticResource DarkTabBarBackgroundColor},Light={StaticResource LightTabBarBackgroundColor}}"
+       >
     <TabBar>
         <Tab Title="{Binding Search.Title}"
              Icon="{Binding Search.Icon}">

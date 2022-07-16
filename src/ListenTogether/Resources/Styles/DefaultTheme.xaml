@@ -21,6 +21,12 @@
     <Color x:Key="LightBtnText">#000000</Color>
     <Color x:Key="LightFeeText">#D892FF</Color>
     <Color x:Key="LightLink">#0366D6</Color>
+    <Color x:Key="LightTabBarUnselectedColor">#3B3A39</Color>
+    <Color x:Key="LightTabBarTitleColor">#C98FFF</Color>
+    <Color x:Key="LightTabBarBackgroundColor">#F7F7F7</Color>
+    <Color x:Key="LightSwitchOnColor">#F7F7F7</Color>
+    <Color x:Key="LightSwitchThumbColor">#C98FFF</Color>
+    <Color x:Key="LightSwitchThumbOffColor">#605E5C</Color>
 
     <Color x:Key="DarkLogo">#C98FFF</Color>
     <Color x:Key="DarkAppNetwork">#929292</Color>
@@ -40,6 +46,12 @@
     <Color x:Key="DarkBtnText">#FFFFFF</Color>
     <Color x:Key="DarkFeeText">#D892FF</Color>
     <Color x:Key="DarkLink">#2F88ED</Color>
+    <Color x:Key="DarkTabBarUnselectedColor">#FFFFFF</Color>
+    <Color x:Key="DarkTabBarTitleColor">#C98FFF</Color>
+    <Color x:Key="DarkTabBarBackgroundColor">#333333</Color>
+    <Color x:Key="DarkSwitchOnColor">#333333</Color>
+    <Color x:Key="DarkSwitchThumbColor">#C98FFF</Color>
+    <Color x:Key="DarkSwitchThumbOffColor">#605E5C</Color>
 
     <Style TargetType="Label"
            x:Key="Logo">
@@ -111,4 +123,26 @@
                 Value="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
     </Style>
 
+    <Style TargetType="Switch">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="On">
+                        <VisualState.Setters>
+                            <Setter Property="ThumbColor"
+                            Value="{AppThemeBinding Dark={StaticResource DarkSwitchThumbColor},Light={StaticResource LightSwitchThumbColor}}" />
+                            <Setter Property="OnColor"
+                            Value="{AppThemeBinding Dark={StaticResource DarkSwitchOnColor},Light={StaticResource LightSwitchOnColor}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Off">
+                        <VisualState.Setters>
+                            <Setter Property="ThumbColor"
+                            Value="{AppThemeBinding Dark={StaticResource DarkSwitchThumbOffColor},Light={StaticResource LightSwitchThumbOffColor}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
 </ResourceDictionary>
