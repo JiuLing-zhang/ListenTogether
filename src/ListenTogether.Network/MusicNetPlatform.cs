@@ -15,6 +15,7 @@ public class MusicNetPlatform
 
     private readonly IMusicProvider _kuGouMusicProvider = new KuGouMusicProvider();
     private readonly IMusicProvider _netEaseMusicProvider = new NetEaseMusicProvider();
+    private readonly IMusicProvider _kuWoMusicProvider = new KuWoMusicProvider();
     public MusicNetPlatform()
     {
         //搜索
@@ -44,6 +45,8 @@ public class MusicNetPlatform
         {
             case PlatformEnum.NetEase:
                 return await _netEaseMusicProvider.UpdatePlayUrl(music);
+            case PlatformEnum.KuWo:
+                return await _kuWoMusicProvider.UpdatePlayUrl(music);
             case PlatformEnum.KuGou:
                 return await _kuGouMusicProvider.UpdatePlayUrl(music);
             case PlatformEnum.MiGu:

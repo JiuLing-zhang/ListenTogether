@@ -224,8 +224,43 @@ internal class KuWoMusicProvider : IMusicProvider
             ExtendData = ""
         };
     }
-    public Task<Music?> UpdatePlayUrl(Music music)
+    public async Task<Music?> UpdatePlayUrl(Music music)
     {
-        throw new NotImplementedException();
+        string musicId = music.PlatformInnerId;
+        //换播放地址
+        string url = $"{UrlBase.KuWo.GetMusicUrl}?format=mp3&rid={musicId}&response=url&type=convert_url";
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+
+        string playUrl;
+        try
+        {
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            playUrl = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (playUrl.IsEmpty())
+            {
+                Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回空，ID:{musicId}"));
+                return music;
+            }
+            if (!JiuLing.CommonLibs.Text.RegexUtils.IsMatch(playUrl, "http\\S*\\.mp3"))
+            {
+                Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回：{playUrl}，ID:{musicId}"));
+                return music;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("更新酷我播放地址失败。", ex);
+            return music;
+        }
+        music.PlayUrl = playUrl;
+        return music;
     }
 }
