@@ -40,6 +40,32 @@ internal class UpdateCheck
         }
     }
 
+    public static async Task<bool> CheckNewVersionAsync()
+    {
+        try
+        {
+            string json = await _httpClient.GetReadString(CheckUpdateUrl);
+            var obj = json.ToObject<JiuLing.CommonLibs.Model.AppUpgradeInfo>();
+            if (obj == null)
+            {
+                Logger.Error("自动检查更新失败", new Exception("连接服务器失败"));
+                return false;
+            }
+
+            var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, obj.Version, obj.MinVersion);
+            if (isNeedUpdate == false)
+            {
+                return false;
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("自动检查更新失败", ex);
+        }
+        return false;
+    }
+
     public static async Task Do()
     {
         await Task.Run(async () =>

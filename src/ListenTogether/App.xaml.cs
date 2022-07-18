@@ -38,12 +38,13 @@ public partial class App : Application
                 if (tokenInfo == null)
                 {
                     userLocalService.Remove();
+                    GlobalConfig.CurrentUser = null;
                 }
                 else
                 {
                     userLocalService.UpdateToken(tokenInfo);
                 }
-                GlobalConfig.CurrentUser = null;
+                BusinessConfig.UserToken = tokenInfo;
             };
 
             string deviceId = Preferences.Get("DeviceId", "");
@@ -77,5 +78,15 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
         Routing.RegisterRoute(nameof(CacheCleanPage), typeof(CacheCleanPage));
         Routing.RegisterRoute(nameof(LogPage), typeof(LogPage));
+
+        if (GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate)
+        {
+            //TODO 目前 MAUI 的线程切换好像存在 bug，不能直接弹窗，因此这里暂时只检查更新
+            var taskUpdate = Task.Run(UpdateCheck.CheckNewVersionAsync);
+            if (taskUpdate.Result)
+            {
+                ToastService.Show("发现新版本，请前往设置页更新。");
+            }
+        }
     }
 }

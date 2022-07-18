@@ -20,8 +20,8 @@
 		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">DAEEFD7E-F931-420B-B6FD-DC652AD7D5B8</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0.31</ApplicationDisplayVersion>
-		<ApplicationVersion>35</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.40</ApplicationDisplayVersion>
+		<ApplicationVersion>45</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>

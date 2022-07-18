@@ -24,8 +24,8 @@
     <Color x:Key="LightTabBarUnselectedColor">#3B3A39</Color>
     <Color x:Key="LightTabBarTitleColor">#C98FFF</Color>
     <Color x:Key="LightTabBarBackgroundColor">#F7F7F7</Color>
-    <Color x:Key="LightSwitchOnColor">#F7F7F7</Color>
-    <Color x:Key="LightSwitchThumbColor">#C98FFF</Color>
+    <Color x:Key="LightSwitchOnColor">#C98FFF</Color>
+    <Color x:Key="LightSwitchThumbColor">#262626</Color>
     <Color x:Key="LightSwitchThumbOffColor">#605E5C</Color>
 
     <Color x:Key="DarkLogo">#C98FFF</Color>
@@ -49,8 +49,8 @@
     <Color x:Key="DarkTabBarUnselectedColor">#FFFFFF</Color>
     <Color x:Key="DarkTabBarTitleColor">#C98FFF</Color>
     <Color x:Key="DarkTabBarBackgroundColor">#333333</Color>
-    <Color x:Key="DarkSwitchOnColor">#333333</Color>
-    <Color x:Key="DarkSwitchThumbColor">#C98FFF</Color>
+    <Color x:Key="DarkSwitchOnColor">#C98FFF</Color>
+    <Color x:Key="DarkSwitchThumbColor">#FCF2F7</Color>
     <Color x:Key="DarkSwitchThumbOffColor">#605E5C</Color>
 
     <Style TargetType="Label"
