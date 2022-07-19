@@ -65,7 +65,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0" />
-		<PackageReference Include="JiuLing.CommonLibs" Version="1.2.7" />
+		<PackageReference Include="JiuLing.CommonLibs" Version="1.2.8" />
 		<PackageReference Include="JiuLing.Controls.Maui" Version="0.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />

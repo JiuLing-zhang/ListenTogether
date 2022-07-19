@@ -2,6 +2,7 @@ using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Controls;
 
+//TODO 发现一个bug:播放组件静音后，切换页面，静音取消
 public partial class Player : ContentView
 {
     public static readonly BindableProperty IsMiniWhenPhoneProperty =

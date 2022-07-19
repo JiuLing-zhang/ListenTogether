@@ -43,17 +43,27 @@ public class SearchPageViewModel : ViewModelBase
         }
     }
 
+    private List<string> _hotWords = new List<string>();
     public async Task InitializeAsync()
     {
-        var a = await _musicNetworkService.GetHotWord();        
+        _hotWords = await _musicNetworkService.GetHotWord();
+        await GetSearchSuggest(Keyword);
     }
 
     public async void GetSearchSuggest(TextChangedEventArgs e)
     {
-        string keyword = e.NewTextValue;
+        await GetSearchSuggest(e?.NewTextValue);
+    }
+
+    public async Task GetSearchSuggest(string keyword)
+    {
         SearchSuggest.Clear();
         if (keyword.IsEmpty())
         {
+            foreach (var hotWord in _hotWords)
+            {
+                SearchSuggest.Add(hotWord);
+            }
             return;
         }
 
@@ -67,6 +77,7 @@ public class SearchPageViewModel : ViewModelBase
             SearchSuggest.Add(suggest);
         }
     }
+
     private async void BeginSearch(string keyword)
     {
         await Shell.Current.GoToAsync($"..?Keyword={keyword}", true);

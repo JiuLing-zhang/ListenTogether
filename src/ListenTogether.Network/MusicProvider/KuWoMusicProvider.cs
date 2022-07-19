@@ -282,13 +282,12 @@ internal class KuWoMusicProvider : IMusicProvider
         {
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
             string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
+            return KuWoUtils.GetHotWordFromHtml(html);
         }
         catch (Exception ex)
         {
             Logger.Error("酷我歌曲播放地址获取失败。", ex);
             return null;
         }
-        return null;
     }
 }
