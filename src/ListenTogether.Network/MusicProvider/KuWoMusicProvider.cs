@@ -4,6 +4,7 @@ using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.KuWo;
+using ListenTogether.Network.Utils;
 using System.Net;
 using System.Text;
 
@@ -262,5 +263,32 @@ internal class KuWoMusicProvider : IMusicProvider
         }
         music.PlayUrl = playUrl;
         return music;
+    }
+
+    public async Task<List<string>?> GetHotWord()
+    {
+        string url = UrlBase.KuWo.HotWord;
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url)
+        };
+        request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
+        request.Headers.Add("Host", "m.kuwo.cn");
+
+        try
+        {
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我歌曲播放地址获取失败。", ex);
+            return null;
+        }
+        return null;
     }
 }

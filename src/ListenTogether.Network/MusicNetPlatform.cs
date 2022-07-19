@@ -24,6 +24,11 @@ public class MusicNetPlatform
         _kuWoSearcher.SetNextHandler(_kuGouSearcher);
     }
 
+    public async Task<List<string>?> GetHotWord()
+    {
+        return await _kuWoMusicProvider.GetHotWord();
+    }
+
     public async Task<List<string>> GetSearchSuggest(string keyword)
     {
         return await _netEaseMusicProvider.GetSearchSuggest(keyword);

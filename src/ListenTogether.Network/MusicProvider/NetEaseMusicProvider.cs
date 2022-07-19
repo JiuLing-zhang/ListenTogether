@@ -300,4 +300,9 @@ public class NetEaseMusicProvider : IMusicProvider
         music.PlayUrl = playUrl;
         return music;
     }
+
+    public Task<List<string>?> GetHotWord()
+    {
+        throw new NotImplementedException();
+    }
 }

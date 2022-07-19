@@ -7,7 +7,7 @@ public static class PagesExtensions
         builder.Services.AddTransient<MyFavoritePage>();
         builder.Services.AddSingleton<PlayingPage>();
         builder.Services.AddSingleton<PlaylistPage>();
-        builder.Services.AddTransient<SearchPage>();
+        builder.Services.AddTransient<SearchResultPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
         builder.Services.AddTransient<MyFavoriteDetailPage>();
@@ -15,6 +15,7 @@ public static class PagesExtensions
         builder.Services.AddSingleton<RegisterPage>();
         builder.Services.AddSingleton<CacheCleanPage>();
         builder.Services.AddSingleton<LogPage>();
+        builder.Services.AddSingleton<SearchPage>();
         return builder;
     }
 }

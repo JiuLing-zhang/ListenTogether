@@ -223,4 +223,9 @@ public class KuGouMusicProvider : IMusicProvider
     {
         throw new NotImplementedException();
     }
+
+    public Task<List<string>?> GetHotWord()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -32,4 +32,9 @@ public class MusicNetworkService : IMusicNetworkService
     {
         return await _musicNetPlatform.UpdatePlayUrl(music);
     }
+
+    public async Task<List<string>> GetHotWord()
+    {
+        return await _musicNetPlatform.GetHotWord();
+    }
 }

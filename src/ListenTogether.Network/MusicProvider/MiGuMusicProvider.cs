@@ -188,4 +188,9 @@ public class MiGuMusicProvider : IMusicProvider
     {
         throw new NotImplementedException();
     }
+
+    public Task<List<string>?> GetHotWord()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -4,6 +4,7 @@ public static class ViewModelExtensions
 {
     public static MauiAppBuilder ConfigureViewModels(this MauiAppBuilder builder)
     {
+        builder.Services.AddTransient<SearchPageViewModel>();
         builder.Services.AddTransient<SearchResultPageViewModel>();
         builder.Services.AddTransient<SearchResultViewModel>();
         builder.Services.AddTransient<PlaylistPageViewModel>();

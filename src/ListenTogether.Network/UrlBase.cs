@@ -24,6 +24,7 @@ public class UrlBase
 
     public class KuWo
     {
+        public const string HotWord = "http://m.kuwo.cn/newh5app/search";
         public const string Search = "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord";
         public const string GetMusicUrl = "http://antiserver.kuwo.cn/anti.s";
         public const string GetMusicDetail = "http://www.kuwo.cn/newh5/singles/songinfoandlrc";

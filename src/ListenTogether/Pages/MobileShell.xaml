@@ -12,9 +12,9 @@
        Shell.TabBarBackgroundColor="{AppThemeBinding Dark={StaticResource DarkTabBarBackgroundColor},Light={StaticResource LightTabBarBackgroundColor}}"
        >
     <TabBar>
-        <Tab Title="{Binding Search.Title}"
-             Icon="{Binding Search.Icon}">
-            <ShellContent ContentTemplate="{DataTemplate pages:SearchPage}" />
+        <Tab Title="{Binding SearchResult.Title}"
+             Icon="{Binding SearchResult.Icon}">
+            <ShellContent ContentTemplate="{DataTemplate pages:SearchResultPage}" />
         </Tab>
         <Tab Title="{Binding Playlist.Title}"
              Icon="{Binding Playlist.Icon}">

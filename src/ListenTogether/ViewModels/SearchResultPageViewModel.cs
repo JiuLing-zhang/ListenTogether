@@ -1,8 +1,8 @@
-﻿using ListenTogether.Model.Enums;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
+[QueryProperty(nameof(Keyword), nameof(Keyword))]
 public class SearchResultPageViewModel : ViewModelBase
 {
     private IServiceProvider _services;
@@ -14,13 +14,10 @@ public class SearchResultPageViewModel : ViewModelBase
 
     public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
     public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
-    public ICommand SearchCommand => new Command<string>(Search);
-    public ICommand SuggestCommand => new Command<string>(Suggest);
-    public ICommand SearchBarTextChangedCommand => new Command<TextChangedEventArgs>(GetSearchSuggest);
+    public ICommand GoToSearchPageCommand => new Command(GoToSearchPage);
 
     public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
-        SearchSuggest = new ObservableCollection<string>();
         MusicSearchResult = new ObservableCollection<SearchResultGroupViewModel>();
         MusicSearchResult.CollectionChanged += MusicSearchResult_CollectionChanged;
         _services = services;
@@ -65,32 +62,12 @@ public class SearchResultPageViewModel : ViewModelBase
         {
             _keyword = value;
             OnPropertyChanged();
+            Task.Run(async () =>
+            {
+                await Search(value);
+            });
         }
     }
-
-
-    public IEnumerable<PlatformEnum> MyEnumTypeValues
-    {
-        get
-        {
-            return System.Enum.GetValues(typeof(PlatformEnum)).Cast<PlatformEnum>();
-        }
-    }
-
-    private ObservableCollection<string> _searchSuggest;
-    /// <summary>
-    /// 搜索建议
-    /// </summary>
-    public ObservableCollection<string> SearchSuggest
-    {
-        get => _searchSuggest;
-        set
-        {
-            _searchSuggest = value;
-            OnPropertyChanged();
-        }
-    }
-
 
     private ObservableCollection<SearchResultGroupViewModel> _musicSearchResult;
     /// <summary>
@@ -120,50 +97,8 @@ public class SearchResultPageViewModel : ViewModelBase
         }
     }
 
-    private bool _isDoSuggest = true;
-    public async void GetSearchSuggest(TextChangedEventArgs e)
+    private async Task Search(string keyword)
     {
-        string keyword = e.NewTextValue;
-        if (_isDoSuggest == false)
-        {
-            SearchSuggest.Clear();
-            _isDoSuggest = true;
-            return;
-        }
-
-        SearchSuggest.Clear();
-        MusicSearchResult.Clear();
-
-        if (keyword.IsEmpty())
-        {
-            OnPropertyChanged("SearchSuggest");
-            return;
-        }
-
-        var suggests = await _musicNetworkService.GetSearchSuggest(keyword);
-        if (suggests == null)
-        {
-            OnPropertyChanged("SearchSuggest");
-            return;
-        }
-        foreach (var suggest in suggests)
-        {
-            SearchSuggest.Add(suggest);
-        }
-        OnPropertyChanged("SearchSuggest");
-    }
-
-    private void Suggest(string keyword)
-    {
-        _isDoSuggest = false;
-        Keyword = keyword;
-        Search(keyword);
-    }
-
-    private async void Search(string keyword)
-    {
-        SearchSuggest.Clear();
-
         if (keyword.IsEmpty())
         {
             return;
@@ -356,5 +291,11 @@ public class SearchResultPageViewModel : ViewModelBase
         await _playlistService.AddToPlaylist(playlist);
 
         return (true, "", music);
+    }
+
+    private async void GoToSearchPage()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SearchPage)}?Keyword={Keyword}", true);
+        Keyword = "";
     }
 }

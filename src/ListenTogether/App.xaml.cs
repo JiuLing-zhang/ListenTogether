@@ -72,6 +72,7 @@ public partial class App : Application
             MainPage = new MobileShell();
         }
 
+        Routing.RegisterRoute(nameof(SearchPage), typeof(SearchPage));
         Routing.RegisterRoute(nameof(PlayingPage), typeof(PlayingPage));
         Routing.RegisterRoute(nameof(MyFavoriteDetailPage), typeof(MyFavoriteDetailPage));
         Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));

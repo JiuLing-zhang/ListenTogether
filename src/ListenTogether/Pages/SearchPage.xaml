@@ -13,20 +13,6 @@
                     Value="{AppThemeBinding Dark={StaticResource DarkFeeText},Light={StaticResource LightFeeText}}"/>
             <Setter Property="IsVisible"
                     Value="false"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Fee}"
-                             Value="VIP"
-                             TargetType="Label">
-                    <Setter Property="IsVisible"
-                            Value="true"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Fee}"
-                             Value="试听"
-                             TargetType="Label">
-                    <Setter Property="IsVisible"
-                            Value="true"/>
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
     </ContentPage.Resources>
 
@@ -37,43 +23,37 @@
         </Grid.RowDefinitions>
         <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
             <StackLayout Margin="{OnPlatform UWP='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
-                     Orientation="Horizontal"
-                     VerticalOptions="Start">
+                         Orientation="Horizontal"
+                         VerticalOptions="Start">
                 <Label Text="搜索"
-                   VerticalTextAlignment="Center"
-                   Style="{StaticResource Title}"/>
-
-                <ActivityIndicator Margin="10,0,0,0"
-                               IsRunning="{Binding IsBusy}"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               VerticalOptions="CenterAndExpand"/>
+                       VerticalTextAlignment="Center"
+                       Style="{StaticResource Title}"/>
             </StackLayout>
 
-            <SearchBar x:Name="TxtSearchBar"
-                   Text="{Binding Keyword}"
-                   SearchCommand="{Binding SearchCommand}"
-                   SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
-                   Placeholder="输入歌曲名、歌手名查找..."
-                   VerticalOptions="Start">
+            <SearchBar x:Name="TxtSearchBar"                       
+                       Text="{Binding Keyword}"
+                       SearchCommand="{Binding BeginSearchCommand}"
+                       SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
+                       Placeholder="输入歌曲名、歌手名查找..."
+                       VerticalOptions="Start">
                 <SearchBar.Behaviors>
                     <toolkit:EventToCommandBehavior EventName="TextChanged"
-                                                Command="{Binding SearchBarTextChangedCommand}"/>
+                                                    Command="{Binding SearchBarTextChangedCommand}"/>
                 </SearchBar.Behaviors>
             </SearchBar>
 
             <Border VerticalOptions="Start"
-                HorizontalOptions="FillAndExpand"
-                Padding="1"
-                StrokeThickness="1">
+                    HorizontalOptions="FillAndExpand"
+                    Padding="1"
+                    StrokeThickness="1">
                 <CollectionView Margin="{OnPlatform UWP='5,0,5,0',MacCatalyst='5,0,5,0',Android='50,0,50,0',iOS='50,0,50,0'}"
-                            ItemsSource="{Binding SearchSuggest}">
+                                ItemsSource="{Binding SearchSuggest}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <StackLayout Margin="{OnPlatform UWP='0',MacCatalyst='0',Android='0,10,0,0',iOS='0,10,0,0'}">
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=SuggestCommand}"
-                                                      CommandParameter="{Binding .}"/>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=BeginSearchCommand}"
+                                                          CommandParameter="{Binding .}"/>
                                 </StackLayout.GestureRecognizers>
                                 <Label Text="{Binding .}"/>
                             </StackLayout>
@@ -81,123 +61,6 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </Border>
-
-            <CollectionView VerticalOptions="FillAndExpand"
-                        ItemsSource="{Binding MusicSearchResult}"
-                        IsVisible="{Binding IsNotBusy}"
-                        IsGrouped="True">
-                <CollectionView.GroupHeaderTemplate>
-                    <DataTemplate>
-                        <Label Text="{Binding Name}"
-                           FontSize="18"
-                           FontAttributes="Bold" />
-                    </DataTemplate>
-                </CollectionView.GroupHeaderTemplate>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout>
-                            <OnPlatform x:TypeArguments="View">
-                                <On Platform="UWP, macOS">
-                                    <Grid ColumnDefinitions="30,60,40,300,300,*">
-                                        <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
-                                                          CommandParameter="{Binding .}"
-                                                          NumberOfTapsRequired="2"/>
-                                        </Grid.GestureRecognizers>
-                                        <Image Grid.Column="0"
-                                           x:Name="ImgHeart"
-                                           Source="{AppThemeBinding Dark='heart_dark.png',Light='heart.png'}"
-                                           Aspect="AspectFill"
-                                           WidthRequest="15"
-                                           HeightRequest="15"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
-                                                                  CommandParameter="{Binding .}"/>
-                                            </Image.GestureRecognizers>
-                                        </Image>
-
-                                        <Label Grid.Column="1"
-                                           Text="{Binding Duration}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation"/>
-                                        <Label Grid.Column="2"
-                                           Text="{Binding Fee}"
-                                           Style="{DynamicResource FeeType}"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center"/>
-                                        <Label Grid.Column="3"
-                                           Text="{Binding Name}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation"/>
-                                        <Label Grid.Column="4"
-                                           Text="{Binding Artist}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation"/>
-                                        <Label Grid.Column="5"
-                                           Text="{Binding Album}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation"/>
-                                    </Grid>
-                                </On>
-
-                                <On Platform="Android,iOS">
-                                    <Grid Margin="0,0,0,20"
-                                      RowDefinitions="auto,auto"
-                                      ColumnDefinitions="*,40">
-                                        <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
-                                                          CommandParameter="{Binding .}"/>
-                                        </Grid.GestureRecognizers>
-
-                                        <HorizontalStackLayout Grid.Row="0"
-                                                           Grid.Column="0">
-                                            <Label Text="{Binding Fee}"
-                                               Style="{DynamicResource FeeType}"
-                                               VerticalOptions="Center"/>
-                                            <Label Text="{Binding Name}"
-                                               Margin="5,0,0,0"
-                                               VerticalOptions="Center"
-                                               LineBreakMode="TailTruncation"/>
-                                        </HorizontalStackLayout>
-
-                                        <Label Grid.Row="1"
-                                           Grid.Column="0"
-                                           Style="{StaticResource Explain}"
-                                           VerticalOptions="Center"
-                                           LineBreakMode="TailTruncation">
-                                            <MultiBinding StringFormat="{}{0} - {1}">
-                                                <Binding Path="Artist" />
-                                                <Binding Path="Album" />
-                                            </MultiBinding>
-                                        </Label>
-
-                                        <Image Grid.Row="0"
-                                           Grid.Column="1"
-                                           Grid.RowSpan="2"
-                                           Source="{Binding Source, Source={x:Reference ImgHeart}}"
-                                           Aspect="AspectFill"
-                                           WidthRequest="15"
-                                           HeightRequest="15"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"
-                                                                  CommandParameter="{Binding .}"/>
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                    </Grid>
-                                </On>
-                            </OnPlatform>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
         </StackLayout>
-        <controls:Player Grid.Row="1" 
-                         x:Name="player"
-                         IsMiniWhenPhone="True"/>
     </Grid>
 </ContentPage>

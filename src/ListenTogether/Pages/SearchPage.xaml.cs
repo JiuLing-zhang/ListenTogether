@@ -2,16 +2,17 @@ namespace ListenTogether.Pages;
 
 public partial class SearchPage : ContentPage
 {
-    SearchResultPageViewModel vm => BindingContext as SearchResultPageViewModel;
-    public SearchPage(SearchResultPageViewModel vm)
+    SearchPageViewModel vm => BindingContext as SearchPageViewModel;
+    public SearchPage(SearchPageViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
     }
-    protected override async void OnAppearing()
+    protected async override void OnAppearing()
     {
         base.OnAppearing();
-        player.OnAppearing();
         await vm.InitializeAsync();
+        await Task.Delay(300);
+        TxtSearchBar.Focus();
     }
 }
