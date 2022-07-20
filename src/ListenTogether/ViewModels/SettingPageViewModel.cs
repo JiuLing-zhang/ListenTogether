@@ -4,6 +4,7 @@ namespace ListenTogether.ViewModels;
 
 public class SettingPageViewModel : ViewModelBase
 {
+    public ICommand SetApiDomainCommand => new Command(SetApiDomain);
     public ICommand OpenUrlCommand => new Command<string>(OpenUrl);
     public ICommand CheckUpdateCommand => new Command(CheckUpdate);
     public ICommand GoToCacheCleanCommand => new Command(GoToCacheClean);
@@ -122,6 +123,20 @@ public class SettingPageViewModel : ViewModelBase
 
             GlobalConfig.MyUserSetting.General.IsDarkMode = value;
             WriteGeneralConfigAsync();
+        }
+    }
+
+    private string _apiDomain = GlobalConfig.ApiDomain;
+    /// <summary>
+    /// 服务器地址
+    /// </summary>
+    public string ApiDomain
+    {
+        get => _apiDomain;
+        set
+        {
+            _apiDomain = value;
+            OnPropertyChanged();
         }
     }
 
@@ -335,7 +350,7 @@ public class SettingPageViewModel : ViewModelBase
         {
             Username = GlobalConfig.CurrentUser.Username,
             Nickname = GlobalConfig.CurrentUser.Nickname,
-            Avatar = $"{GlobalConfig.AppSettings.ApiDomain}{GlobalConfig.CurrentUser.Avatar}"
+            Avatar = $"{GlobalConfig.ApiDomain}{GlobalConfig.CurrentUser.Avatar}"
         };
     }
 
@@ -362,6 +377,17 @@ public class SettingPageViewModel : ViewModelBase
     private async Task WriteSearchConfigAsync()
     {
         await _configService.WriteSearchSettingAsync(GlobalConfig.MyUserSetting.Search);
+    }
+
+    private async void SetApiDomain()
+    {
+        string result = await App.Current.MainPage.DisplayPromptAsync("服务器地址", "请输入要设置的地址（重启后生效）");
+        if (result == null)
+        {
+            return;
+        }
+        ApiDomain = result;
+        Preferences.Set("ApiDomain", result);
     }
 
     private async void GoToCacheClean()

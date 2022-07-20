@@ -11,6 +11,7 @@
             <toolkit:IsNotEqualConverter x:Key="IsNotEqualConverter" />
             <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <toolkit:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+            <toolkit:IsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

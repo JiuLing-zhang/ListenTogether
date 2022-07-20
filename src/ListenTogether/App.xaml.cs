@@ -31,7 +31,9 @@ public partial class App : Application
         GlobalConfig.CurrentVersion = AppInfo.Current.Version;
 
         BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.LocalDatabaseName));
-        if (GlobalConfig.AppSettings.ApiDomain.IsNotEmpty())
+
+        GlobalConfig.ApiDomain = Preferences.Get("ApiDomain", "");
+        if (GlobalConfig.ApiDomain.IsNotEmpty())
         {
             BusinessConfig.TokenUpdated += (_, tokenInfo) =>
             {
@@ -54,7 +56,7 @@ public partial class App : Application
                 Preferences.Set("DeviceId", deviceId);
             }
 
-            BusinessConfig.SetWebApi(GlobalConfig.AppSettings.ApiDomain, deviceId);
+            BusinessConfig.SetWebApi(GlobalConfig.ApiDomain, deviceId);
             GlobalConfig.CurrentUser = userLocalService.Read();
         }
 
@@ -88,6 +90,11 @@ public partial class App : Application
             {
                 ToastService.Show("发现新版本，请前往设置页更新。");
             }
+        }
+
+        if (GlobalConfig.ApiDomain.IsEmpty())
+        {
+            ToastService.Show("温馨提示：当前程序为【单机版】");
         }
     }
 }

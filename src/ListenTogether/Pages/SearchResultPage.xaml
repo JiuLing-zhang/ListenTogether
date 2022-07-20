@@ -39,9 +39,9 @@
             <StackLayout Margin="{OnPlatform UWP='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
-                <Label Text="搜索"
-                   VerticalTextAlignment="Center"
-                   Style="{StaticResource Title}"/>
+                <Label Text="搜索结果"
+                       VerticalTextAlignment="Center"
+                       Style="{StaticResource Title}"/>
 
                 <ActivityIndicator Margin="10,0,0,0"
                                IsRunning="{Binding IsBusy}"
@@ -51,9 +51,9 @@
             </StackLayout>
 
             <SearchBar x:Name="TxtSearchBar"
-                   Text="{Binding Keyword}"             
-                   Placeholder="输入歌曲名、歌手名查找..."
-                   VerticalOptions="Start">
+                       Text="{Binding Keyword}"
+                       Placeholder="输入歌曲名、歌手名查找..."
+                       VerticalOptions="Start">
                 <SearchBar.Behaviors>
                     <toolkit:EventToCommandBehavior EventName="Focused"
                                                     Command="{Binding GoToSearchPageCommand}"/>

@@ -28,6 +28,8 @@
                              TargetType="Label">
                     <Setter Property="TextColor"
                             Value="{AppThemeBinding Light={StaticResource LightLyricHighlight}, Dark={StaticResource DarkLyricHighlight}}" />
+                    <Setter Property="FontSize"
+                            Value="17"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>

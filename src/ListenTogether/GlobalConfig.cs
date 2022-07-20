@@ -24,6 +24,8 @@ namespace ListenTogether
         public static Version CurrentVersion { get; set; }
         public static string CurrentVersionString => CurrentVersion.ToString();
 
+        public static string ApiDomain { get; set; }
+
         public static EnvironmentSetting MyUserSetting { get; set; }
         public static AppSettings AppSettings { get; set; }
 
@@ -34,7 +36,7 @@ namespace ListenTogether
         {
             get
             {
-                if (AppSettings.ApiDomain.IsEmpty())
+                if (ApiDomain.IsEmpty())
                 {
                     return AppNetworkEnum.Standalone;
                 }

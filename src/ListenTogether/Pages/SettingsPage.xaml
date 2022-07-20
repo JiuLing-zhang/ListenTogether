@@ -85,7 +85,24 @@
                                                 IsToggled="{Binding IsAutoCheckUpdate}"/>
 
                             <JiuLing:TextSwitch Text="深色主题（可能需要重启）"
-                                            IsToggled="{Binding IsDarkMode}"/>
+                                                IsToggled="{Binding IsDarkMode}"/>
+
+                            <StackLayout Margin="0,10,0,0"
+                                         Orientation="Horizontal">
+                                <Label Text="服务器地址"
+                                       VerticalTextAlignment="Center"/>
+                                <Button Margin="80,0,0,0"
+                                        Command="{Binding SetApiDomainCommand}"
+                                        Text="修改"/>
+                            </StackLayout>
+                            <StackLayout Margin="0,5,0,0"
+                                         Orientation="Horizontal">
+                                <Label Style="{StaticResource Explain}"
+                                       Text="{Binding ApiDomain}"/>
+                                <Label Style="{StaticResource Explain}"
+                                       Text="未设置"
+                                       IsVisible="{Binding ApiDomain, Converter={StaticResource IsStringNullOrWhiteSpaceConverter}}"/>
+                            </StackLayout>
 
                             <!-- 搜索设置 -->
                             <Label Margin="0,20,0,0"

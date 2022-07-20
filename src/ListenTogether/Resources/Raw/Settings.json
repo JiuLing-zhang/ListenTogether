@@ -1,6 +1,5 @@
 {
   "AppSettings": {
-    "ApiDomain": "",
     "UpdateDomain": "http://162.14.66.2:9090"
   }
 }
