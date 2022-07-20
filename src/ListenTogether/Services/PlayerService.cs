@@ -7,6 +7,7 @@ public class PlayerService
     private IServiceProvider _services;
     private static IAudioService _audioService;
     private readonly IMusicNetworkService _musicNetworkService;
+    private readonly IPlaylistService _playlistService;
     private readonly WifiOptionsService _wifiOptionsService;
     private System.Timers.Timer _timerPlayProgress;
 
@@ -32,13 +33,14 @@ public class PlayerService
     public event EventHandler<bool> IsPlayingChanged;
     public event EventHandler<MusicPosition> PositionChanged;
 
-    public PlayerService(IServiceProvider services, IAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistServiceFactory playlistServiceFactory, WifiOptionsService wifiOptionsService)
+    public PlayerService(IServiceProvider services, IAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistService playlistService, WifiOptionsService wifiOptionsService)
     {
         _services = services;
         _audioService = audioService;
         _audioService.PlayFinished += async (_, _) => await Next();
         _audioService.PlayFailed += async (_, _) => await MediaFailed();
 
+        _playlistService = playlistService;
         _musicNetworkService = musicNetworkService;
         _wifiOptionsService = wifiOptionsService;
 
@@ -128,10 +130,9 @@ public class PlayerService
             await PlayAsync(CurrentMusic);
             return;
         }
-        var musicService = _services.GetService<IMusicServiceFactory>().Create();
-        var playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
+        var musicService = _services.GetService<IMusicServiceFactory>().Create(); 
 
-        var playlist = await playlistService.GetAllAsync();
+        var playlist = await _playlistService.GetAllAsync();
         if (playlist.Count == 0)
         {
             return;
@@ -187,10 +188,9 @@ public class PlayerService
             return;
         }
 
-        var musicService = _services.GetService<IMusicServiceFactory>().Create();
-        var playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
+        var musicService = _services.GetService<IMusicServiceFactory>().Create(); 
 
-        var playlist = await playlistService.GetAllAsync();
+        var playlist = await _playlistService.GetAllAsync();
         if (playlist.Count == 0)
         {
             return;

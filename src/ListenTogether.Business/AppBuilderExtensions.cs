@@ -18,11 +18,11 @@ public static class AppBuilderExtensions
         //本地、远程服务工厂
         builder.Services.AddSingleton<IMusicServiceFactory, MusicServiceFactory>();
         builder.Services.AddSingleton<IMyFavoriteServiceFactory, MyFavoriteServiceFactory>();
-        builder.Services.AddSingleton<IPlaylistServiceFactory, PlaylistServiceFactory>();
 
         //本地服务
         builder.Services.AddSingleton<IEnvironmentConfigService, EnvironmentConfigService>();
         builder.Services.AddSingleton<IMusicNetworkService, MusicNetworkService>();
+        builder.Services.AddSingleton<IPlaylistService, PlaylistService>();
         builder.Services.AddSingleton<IUserService, UserService>();
         builder.Services.AddSingleton<IUserLocalService, UserLocalService>();
         builder.Services.AddSingleton<IApiLogService, ApiLogService>();
@@ -33,7 +33,6 @@ public static class AppBuilderExtensions
         builder.Services.AddSingleton<IMusicRepository, MusicLocalRepository>();
         builder.Services.AddSingleton<IMyFavoriteRepository, MyFavoriteApiRepository>();
         builder.Services.AddSingleton<IMyFavoriteRepository, MyFavoriteLocalRepository>();
-        builder.Services.AddSingleton<IPlaylistRepository, PlaylistApiRepository>();
         builder.Services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
         builder.Services.AddSingleton<IUserLocalRepository, UserLocalRepository>();
         builder.Services.AddSingleton<IUserApiRepository, UserApiRepository>();

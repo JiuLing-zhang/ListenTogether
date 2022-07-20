@@ -14,12 +14,13 @@ public class PlaylistPageViewModel : ViewModelBase
     public ICommand ClearPlaylistCommand => new Command(ClearPlaylist);
     public ICommand RemoveOneCommand => new Command<PlaylistViewModel>(RemoveOne);
 
-    public PlaylistPageViewModel(IServiceProvider services, PlayerService playerService)
+    public PlaylistPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
         Playlist = new ObservableCollection<PlaylistViewModel>();
 
         _services = services;
         _playerService = playerService;
+        _playlistService = playlistService;
     }
 
     public async Task InitializeAsync()
@@ -27,7 +28,6 @@ public class PlaylistPageViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             await GetPlaylist();

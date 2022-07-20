@@ -13,11 +13,12 @@ namespace ListenTogether.ViewModels
         public ICommand EnterMyFavoriteDetailCommand => new Command<MyFavoriteViewModel>(EnterMyFavoriteDetail);
         public ICommand PlayAllMusicsCommand => new Command<MyFavoriteViewModel>(PlayAllMusics);
         public string Title => "我的歌单";
-        public MyFavoritePageViewModel(IServiceProvider services, PlayerService playerService)
+        public MyFavoritePageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
         {
             FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
             _services = services;
             _playerService = playerService;
+            _playlistService = playlistService;
         }
 
         public async Task InitializeAsync()
@@ -26,7 +27,6 @@ namespace ListenTogether.ViewModels
             {
                 IsBusy = true;
                 _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
-                _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
                 _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
                 if (FavoriteList.Count > 0)

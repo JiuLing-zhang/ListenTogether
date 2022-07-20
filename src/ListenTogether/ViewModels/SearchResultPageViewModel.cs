@@ -16,13 +16,14 @@ public class SearchResultPageViewModel : ViewModelBase
     public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
     public ICommand GoToSearchPageCommand => new Command(GoToSearchPage);
 
-    public SearchResultPageViewModel(IServiceProvider services, PlayerService playerService, IMusicNetworkService musicNetworkService)
+    public SearchResultPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
         MusicSearchResult = new ObservableCollection<SearchResultGroupViewModel>();
         MusicSearchResult.CollectionChanged += MusicSearchResult_CollectionChanged;
         _services = services;
         _musicNetworkService = musicNetworkService;
         _playerService = playerService;
+        _playlistService = playlistService;
     }
 
     private void MusicSearchResult_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -32,7 +33,6 @@ public class SearchResultPageViewModel : ViewModelBase
 
     public async Task InitializeAsync()
     {
-        _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
         _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
     }

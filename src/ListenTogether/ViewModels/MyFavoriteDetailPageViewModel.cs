@@ -17,12 +17,13 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
     public ICommand MyFavoriteRemoveCommand => new Command(MyFavoriteRemove);
     public ICommand RemoveOneCommand => new Command<MyFavoriteDetailViewModel>(RemoveOne);
 
-    public MyFavoriteDetailPageViewModel(IServiceProvider services, PlayerService playerService)
+    public MyFavoriteDetailPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
         MyFavoriteMusics = new ObservableCollection<MyFavoriteDetailViewModel>();
 
         _services = services;
         _playerService = playerService;
+        _playlistService = playlistService;
     }
 
     public async Task InitializeAsync()
@@ -31,7 +32,6 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         {
             IsBusy = true;
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
-            _playlistService = _services.GetService<IPlaylistServiceFactory>().Create();
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
             await LoadMyFavoriteInfo();
