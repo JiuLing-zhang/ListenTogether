@@ -92,6 +92,7 @@
                                 <Label Text="服务器地址"
                                        VerticalTextAlignment="Center"/>
                                 <Button Margin="80,0,0,0"
+                                        HorizontalOptions="{OnPlatform Android=EndAndExpand, iOS=EndAndExpand }"
                                         Command="{Binding SetApiDomainCommand}"
                                         Text="修改"/>
                             </StackLayout>
