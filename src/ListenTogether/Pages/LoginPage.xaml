@@ -23,12 +23,15 @@
 
         <StackLayout>
             <Entry Text="{Binding Username}"
-                       Placeholder="请输入用户名"
-                       Margin="0,0,0,10"/>
+                   Placeholder="请输入用户名"
+                   ReturnType="Next"
+                   Margin="0,0,0,10"/>
             <Entry Text="{Binding Password}"
-                       Placeholder="密码"
-                       IsPassword="True"
-                       Margin="0,0,0,10"/>
+                   Placeholder="密码"
+                   IsPassword="True"
+                   ReturnType="Done"
+                   ReturnCommand="{Binding LoginCommand}"
+                   Margin="0,0,0,10"/>
 
             <Button Text="登录"
                     Margin="0,10,0,0"
