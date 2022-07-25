@@ -76,8 +76,7 @@ namespace ListenTogether
                             if (_presenter.State==OverlappedPresenterState.Maximized)
 	                        {
                                 _presenter.Restore();
-	                        }
-                            string a=$"{_presenter.State}";
+	                        }                            
                             if (aw.Size.Width<minWidth)
 	                        {
                                 appWindow.Resize(new SizeInt32(minWidth, aw.Size.Height));
