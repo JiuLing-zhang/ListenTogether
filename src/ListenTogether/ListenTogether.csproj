@@ -20,8 +20,8 @@
 		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">DAEEFD7E-F931-420B-B6FD-DC652AD7D5B8</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0.47</ApplicationDisplayVersion>
-		<ApplicationVersion>52</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.51</ApplicationDisplayVersion>
+		<ApplicationVersion>56</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -66,7 +66,7 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="1.0.0" />
 		<PackageReference Include="JiuLing.CommonLibs" Version="1.2.8" />
-		<PackageReference Include="JiuLing.Controls.Maui" Version="0.0.10" />
+		<PackageReference Include="JiuLing.Controls.Maui" Version="0.0.12" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
 	</ItemGroup>

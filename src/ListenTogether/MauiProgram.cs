@@ -46,6 +46,9 @@ namespace ListenTogether
                         WindowId win32WindowsId = Win32Interop.GetWindowIdFromWindow(nativeWindowHandle);
                         AppWindow appWindow = AppWindow.GetFromWindowId(win32WindowsId);
 
+                        var _presenter = appWindow.Presenter as OverlappedPresenter;
+                        _presenter.IsResizable=false;
+
                         Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(win32WindowsId, Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
                         
                         //简单适配不同分辨率
@@ -70,6 +73,11 @@ namespace ListenTogether
                             {
                                 return;
                             }
+                            if (_presenter.State==OverlappedPresenterState.Maximized)
+	                        {
+                                _presenter.Restore();
+	                        }
+                            string a=$"{_presenter.State}";
                             if (aw.Size.Width<minWidth)
 	                        {
                                 appWindow.Resize(new SizeInt32(minWidth, aw.Size.Height));
