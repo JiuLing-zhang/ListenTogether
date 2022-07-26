@@ -31,6 +31,7 @@ public partial class Player : ContentView
 
         if (_playerService == null)
         {
+            //TODO 页面关闭时需要取消事件绑定
             _playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
             _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
             _playerService.NewMusicAdded += playerService_NewMusicAdded;

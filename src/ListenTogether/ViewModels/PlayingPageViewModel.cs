@@ -1,5 +1,4 @@
-﻿using JiuLing.CommonLibs.Net;
-using Microsoft.Maui.Dispatching;
+﻿using ListenTogether.Network.Models.KuGou;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -10,13 +9,12 @@ public class PlayingPageViewModel : ViewModelBase
     private DateTime _lastScrollToTime = DateTime.Now;
     private IDispatcherTimer _timerLyricsUpdate;
     private readonly PlayerService _playerService;
-    private readonly HttpClientHelper _httpClient;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; }
 
+    public ICommand CopyMusicLinkCommand => new Command(CopyMusicLink);
     public ICommand LyricsScrolledCommand => new Command(LyricsScrolledDo);
-    public PlayingPageViewModel(PlayerService playerService, HttpClientHelper httpClient)
+    public PlayingPageViewModel(PlayerService playerService)
     {
-        _httpClient = httpClient;
         _playerService = playerService;
         Lyrics = new ObservableCollection<LyricViewModel>();
         _playerService.NewMusicAdded += _playerService_NewMusicAdded;
@@ -31,7 +29,7 @@ public class PlayingPageViewModel : ViewModelBase
     {
         try
         {
-            NewMusicAddedDo(_playerService.CurrentMusic);        
+            NewMusicAddedDo(_playerService.CurrentMusic);
         }
         catch (Exception ex)
         {
@@ -115,6 +113,62 @@ public class PlayingPageViewModel : ViewModelBase
             var info = result["lyric"];
             Lyrics.Add(new LyricViewModel() { PositionMillisecond = totalMillisecond, Info = info });
         }
+    }
+
+    private async void CopyMusicLink()
+    {
+        if (CurrentMusic == null)
+        {
+            return;
+        }
+
+        try
+        {
+            var music = CurrentMusic;
+            string musicUrl;
+            switch (music.Platform)
+            {
+                case Model.Enums.PlatformEnum.NetEase:
+                    musicUrl = GetNetEaseMusicUrl(music.PlatformInnerId);
+                    break;
+                case Model.Enums.PlatformEnum.KuGou:
+                    musicUrl = GetKuGouMusicUrl(music.PlatformInnerId, music.ExtendData);
+                    break;
+                case Model.Enums.PlatformEnum.MiGu:
+                    musicUrl = GetMiGuMusicUrl(music.PlatformInnerId);
+                    break;
+                case Model.Enums.PlatformEnum.KuWo:
+                    musicUrl = GetKuWoMusicUrl(music.PlatformInnerId);
+                    break;
+                default:
+                    return;
+            }
+            await Clipboard.Default.SetTextAsync(musicUrl);
+            await ToastService.Show($"{music.Name} 歌曲链接复制完成");
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("歌曲链接解析失败");
+            Logger.Error("复制歌曲链接失败。", ex);
+        }
+    }
+
+    private string GetNetEaseMusicUrl(string id)
+    {
+        return $"https://music.163.com/#/song?id={id}";
+    }
+    private string GetKuGouMusicUrl(string id, string extendData)
+    {
+        var obj = extendData.ToObject<KuGouSearchExtendData>();
+        return $"http://www.kugou.com/song/#hash={obj.Hash}&album_id={obj.AlbumId}&album_audio_id={id}";
+    }
+    private string GetMiGuMusicUrl(string id)
+    {
+        return $"http://www.migu.cn/music/detail/{id}.html?migu_p=h5";
+    }
+    private string GetKuWoMusicUrl(string id)
+    {
+        return $"http://www.kuwo.cn/play_detail/{id}";
     }
     private void LyricsScrolledDo()
     {
