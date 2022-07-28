@@ -106,7 +106,11 @@ public partial class Player : ContentView
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            ImgCurrentMusic.Source = music.ImageUrl;
+            ImgCurrentMusic.Source = new UriImageSource
+            {
+                Uri = new Uri(music.ImageUrl),
+                CacheValidity = new TimeSpan(30, 0, 0, 0)
+            }; 
             LblMusicName.Text = music.Name;
             LblMusicArtistAndAlbum.Text = $"{music.Artist} - {music.Album}";
             LblMusicArtist.Text = music.Artist;

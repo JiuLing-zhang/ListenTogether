@@ -6,19 +6,6 @@
              x:Class="ListenTogether.Pages.MyFavoritePage"
              Title="我的歌单">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="MyFavoriteImg" TargetType="Image">
-                <Setter Property="Source" Value="my_favorite_default.png"/>
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsUseDefaultImage}" Value="false" TargetType="Image">
-                        <Setter Property="Source" Value="{Binding ImageUrl}"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
     <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -101,11 +88,15 @@
                                            IsClippedToBounds="True"
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center">
-                                            <Image Style="{StaticResource MyFavoriteImg}"
-                                               Aspect="AspectFill"
-                                               Margin="-20"
-                                               HeightRequest="48"
-                                               WidthRequest="48" />
+                                            <Image Aspect="AspectFill"
+                                                   Margin="-20"
+                                                   HeightRequest="48"
+                                                   WidthRequest="48" >
+                                                <Image.Source>
+                                                    <UriImageSource Uri="{Binding ImageUrl}"
+                                                                    CacheValidity="30" />
+                                                </Image.Source>
+                                            </Image>
                                         </Frame>
 
                                         <Label Grid.Row="0"
@@ -144,11 +135,15 @@
                                            IsClippedToBounds="True"
                                            HorizontalOptions="Center"
                                            VerticalOptions="Center">
-                                            <Image Style="{StaticResource MyFavoriteImg}"
-                                               Aspect="AspectFill"
-                                               Margin="-20"
-                                               HeightRequest="48"
-                                               WidthRequest="48" />
+                                            <Image Aspect="AspectFill"
+                                                   Margin="-20"
+                                                   HeightRequest="48"
+                                                   WidthRequest="48" >
+                                                <Image.Source>
+                                                    <UriImageSource Uri="{Binding ImageUrl}"
+                                                                    CacheValidity="30" />
+                                                </Image.Source>
+                                            </Image>
                                         </Frame>
 
                                         <Label Grid.Row="0"

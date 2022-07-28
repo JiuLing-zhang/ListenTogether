@@ -49,11 +49,15 @@
                          WidthRequest="600"
                          HeightRequest="{OnPlatform WinUI=400,iOS=400,Android=580}">
                 <StackLayout HorizontalOptions="CenterAndExpand">
-                    <Image Source="{Binding CurrentMusic.ImageUrl}"
-                           HorizontalOptions="Center"
+                    <Image HorizontalOptions="Center"
                            Aspect="AspectFit"
                            MaximumHeightRequest="250"
-                           WidthRequest="{OnPlatform WinUI=250,Android=350,iOS=350}"/>
+                           WidthRequest="{OnPlatform WinUI=250,Android=350,iOS=350}">
+                        <Image.Source>
+                            <UriImageSource Uri="{Binding CurrentMusic.ImageUrl}"
+                                            CacheValidity="30" />
+                        </Image.Source>
+                    </Image>
 
                     <Label Margin="0,10,0,0"
                            HorizontalOptions="Center"

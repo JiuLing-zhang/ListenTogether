@@ -53,12 +53,16 @@
                             <StackLayout VerticalOptions="Start"
                              Orientation="Horizontal"
                              IsVisible="{Binding UserInfo, Converter={StaticResource IsNotEqualConverter}}">
-                                <Image Source="{Binding UserInfo.Avatar}"
-                           Aspect="AspectFill"
-                           WidthRequest="64"
-                           HeightRequest="64"
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center"/>
+                                <Image Aspect="AspectFill"
+                                       WidthRequest="64"
+                                       HeightRequest="64"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center">
+                                    <Image.Source>
+                                        <UriImageSource Uri="{Binding UserInfo.Avatar}"
+                                                        CacheValidity="30" />
+                                    </Image.Source>
+                                </Image>
 
                                 <StackLayout Margin="10,0,0,0"
                                  HeightRequest="64">

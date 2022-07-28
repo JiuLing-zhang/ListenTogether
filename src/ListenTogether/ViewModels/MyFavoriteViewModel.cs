@@ -34,11 +34,8 @@ namespace ListenTogether.ViewModels
             {
                 _imageUrl = value;
                 OnPropertyChanged("ImageUrl");
-                OnPropertyChanged("IsUseDefaultImage");
             }
         }
-         
-        public bool IsUseDefaultImage => ImageUrl.IsEmpty();
 
         private int _musicCount;
         public int MusicCount

@@ -97,11 +97,12 @@ namespace ListenTogether.ViewModels
                     await ToastService.Show("歌单名称已存在");
                     return;
                 }
-
+                //TODO 这里给个默认图标
                 var myFavorite = new MyFavorite()
                 {
                     Name = myFavoriteName,
-                    MusicCount = 0
+                    MusicCount = 0,
+                    ImageUrl = ""
                 };
                 var newMyFavorite = await _myFavoriteService.AddOrUpdateAsync(myFavorite);
                 if (newMyFavorite == null)
