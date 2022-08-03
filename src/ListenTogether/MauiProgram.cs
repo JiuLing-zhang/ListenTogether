@@ -2,6 +2,7 @@
 using JiuLing.Controls.Maui;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.LifecycleEvents;
+using NativeMediaMauiLib;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -25,6 +26,7 @@ namespace ListenTogether
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
                 .UseJiuLingControls()
+                .UseNativeMedia()
                 .UseBusiness()
                 .ConfigureServices()
                 .ConfigurePages()

@@ -18,6 +18,7 @@ public partial class PlayingPage : ContentPage
     protected override void OnDisappearing()
     {
         vm.ScrollToLyric -= ScrollToLyricDo;
+        player.OnDisappearing();
         base.OnDisappearing();
     }
 

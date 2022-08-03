@@ -2,7 +2,7 @@
 
 public class WifiOptionsService
 {
-    public async Task<bool> HasWifiOrCanPlayWithOutWifi()
+    public async Task<bool> HasWifiOrCanPlayWithOutWifiAsync()
     {
         if (Config.Desktop)
         {

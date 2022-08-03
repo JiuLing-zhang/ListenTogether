@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Model", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Network", "src\ListenTogether.Network\ListenTogether.Network.csproj", "{7D639CF2-F271-4540-AF6E-55C6E146D66A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeMediaMauiLib", "src\NativeMediaMauiLib\NativeMediaMauiLib.csproj", "{458F7E4D-1FAD-4385-8F14-0D60336C41E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{7D639CF2-F271-4540-AF6E-55C6E146D66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D639CF2-F271-4540-AF6E-55C6E146D66A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D639CF2-F271-4540-AF6E-55C6E146D66A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

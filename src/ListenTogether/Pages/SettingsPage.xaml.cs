@@ -15,4 +15,10 @@ public partial class SettingsPage : ContentPage
         player.OnAppearing();
         vm.InitializeAsync();
     }
+
+    protected override void OnDisappearing()
+    {
+        player.OnDisappearing();
+        base.OnDisappearing();
+    }
 }

@@ -83,9 +83,9 @@ public partial class Player : ContentView
         }
     }
 
-    private void PlayerService_IsPlayingChanged(object sender, bool e)
+    private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
     {
-        IsPlayingChangedDo(e);
+        IsPlayingChangedDo(_playerService.IsPlaying);
     }
     private void IsPlayingChangedDo(bool isPlaying)
     {
@@ -96,10 +96,10 @@ public partial class Player : ContentView
         });
     }
 
-    private void playerService_NewMusicAdded(object sender, Music e)
+    private void playerService_NewMusicAdded(object sender, EventArgs e)
     {
         this.IsVisible = true;
-        NewMusicAddedDo(e);
+        NewMusicAddedDo(_playerService.CurrentMusic);
     }
 
     private void NewMusicAddedDo(Music music)
@@ -110,16 +110,16 @@ public partial class Player : ContentView
             {
                 Uri = new Uri(music.ImageUrl),
                 CacheValidity = new TimeSpan(30, 0, 0, 0)
-            }; 
+            };
             LblMusicName.Text = music.Name;
             LblMusicArtistAndAlbum.Text = $"{music.Artist} - {music.Album}";
             LblMusicArtist.Text = music.Artist;
         });
     }
 
-    private void _playerService_PositionChanged(object sender, MusicPosition e)
+    private void _playerService_PositionChanged(object sender, EventArgs e)
     {
-        PositionChangedDo(e);
+        PositionChangedDo(_playerService.CurrentPosition);
     }
 
     private void PositionChangedDo(MusicPosition position)
@@ -138,14 +138,7 @@ public partial class Player : ContentView
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
     {
-        if (_playerService.IsPlaying)
-        {
-            await _playerService.PauseAsync();
-        }
-        else
-        {
-            await _playerService.PlayAsync(_playerService.CurrentMusic, _playerService.PositionMillisecond);
-        }
+        await _playerService.PlayAsync(_playerService.CurrentMusic);
     }
 
     private async void ImgSoundOff_Tapped(object sender, EventArgs e)
@@ -171,14 +164,7 @@ public partial class Player : ContentView
             ImageUrl = _playerService.CurrentMusic.ImageUrl
         };
         NewMusicAddedDo(music);
-
-        var position = new MusicPosition()
-        {
-            position = TimeSpan.FromMilliseconds(_playerService.PositionMillisecond),
-            Duration = TimeSpan.FromMilliseconds(_playerService.DurationMillisecond),
-            PlayProgress = _playerService.PositionMillisecond / _playerService.DurationMillisecond
-        };
-        PositionChangedDo(position);
+        PositionChangedDo(_playerService.CurrentPosition);
 
         IsPlayingChangedDo(_playerService.IsPlaying);
     }
@@ -190,7 +176,7 @@ public partial class Player : ContentView
     private void UpdateSoundOnOff()
     {
         ImgSoundOff.Source = GlobalConfig.MyUserSetting.Player.IsSoundOff ? GetImageName("sound_off") : GetImageName("sound_on");
-        _playerService.IsMuted = GlobalConfig.MyUserSetting.Player.IsSoundOff;
+        _playerService.SetMuted(GlobalConfig.MyUserSetting.Player.IsSoundOff);
     }
     private void Updatevolume()
     {
@@ -271,8 +257,9 @@ public partial class Player : ContentView
 
     private async void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
-        _playerService.Volume = e.NewValue;
-        GlobalConfig.MyUserSetting.Player.Volume = e.NewValue;
+        int volume = (int)e.NewValue;
+        await _playerService.SetVolume(volume);
+        GlobalConfig.MyUserSetting.Player.Volume = volume;
 
         if (GlobalConfig.MyUserSetting.Player.IsSoundOff)
         {
@@ -293,7 +280,7 @@ public partial class Player : ContentView
         if (_playerService.CurrentMusic != null)
         {
             var sliderPlayProgress = sender as Slider;
-            var positionMillisecond = _playerService.DurationMillisecond * sliderPlayProgress.Value;
+            var positionMillisecond = _playerService.CurrentPosition.position.TotalMilliseconds * sliderPlayProgress.Value;
             await _playerService.PlayAsync(_playerService.CurrentMusic, positionMillisecond);
         }
         _isPlayProgressDragging = false;
@@ -306,5 +293,12 @@ public partial class Player : ContentView
             return $"{imageName}_dark.png";
         }
         return $"{imageName}.png";
+    }
+
+    internal void OnDisappearing()
+    {
+        _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
+        _playerService.NewMusicAdded -= playerService_NewMusicAdded;
+        _playerService.PositionChanged -= _playerService_PositionChanged;
     }
 }

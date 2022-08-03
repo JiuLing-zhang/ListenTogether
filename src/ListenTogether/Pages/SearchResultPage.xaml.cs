@@ -14,4 +14,9 @@ public partial class SearchResultPage : ContentPage
         player.OnAppearing();
         await vm.InitializeAsync();
     }
+    protected override void OnDisappearing()
+    {
+        player.OnDisappearing();
+        base.OnDisappearing();
+    }
 }

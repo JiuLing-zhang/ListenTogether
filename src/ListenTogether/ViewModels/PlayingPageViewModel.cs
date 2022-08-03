@@ -66,9 +66,9 @@ public class PlayingPageViewModel : ViewModelBase
         }
     }
 
-    private void _playerService_NewMusicAdded(object sender, Music e)
+    private void _playerService_NewMusicAdded(object sender, EventArgs e)
     {
-        NewMusicAddedDo(e);
+        NewMusicAddedDo(_playerService.CurrentMusic);
     }
     private void NewMusicAddedDo(Music music)
     {
@@ -196,7 +196,7 @@ public class PlayingPageViewModel : ViewModelBase
 
         try
         {
-            var positionMillisecond = _playerService.PositionMillisecond;
+            var positionMillisecond = _playerService.CurrentPosition.position.TotalSeconds;
             //取大于当前进度的第一行索引，在此基础上-1则为需要高亮的行
             int highlightIndex = 0;
             foreach (var lyric in Lyrics)

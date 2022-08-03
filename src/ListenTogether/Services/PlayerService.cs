@@ -1,11 +1,13 @@
 ﻿using JiuLing.CommonLibs.Net;
+using ListenTogether.Model;
 using ListenTogether.Model.Enums;
+using NativeMediaMauiLib;
 
 namespace ListenTogether.Services;
 public class PlayerService
 {
     private IServiceProvider _services;
-    private static IAudioService _audioService;
+    private readonly INativeAudioService _audioService;
     private readonly IMusicNetworkService _musicNetworkService;
     private readonly IPlaylistService _playlistService;
     private readonly WifiOptionsService _wifiOptionsService;
@@ -13,29 +15,23 @@ public class PlayerService
 
     private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
 
-    public double PositionMillisecond => _audioService.PositionMillisecond;
-    public double DurationMillisecond => _audioService.DurationMillisecond;
-    public bool IsMuted { set => _audioService.IsMuted = value; }
-    public double Volume { set => _audioService.Volume = value; }
-
     /// <summary>
     /// 是否正在播放
     /// </summary>
     public bool IsPlaying { get; set; }
 
-    /// <summary>
-    /// 正在播放的歌曲信息
-    /// </summary>
-    public Music CurrentMusic => _currentMusic;
-    private Music _currentMusic;
+    public Music CurrentMusic { get; set; }
 
-    public event EventHandler<Music> NewMusicAdded;
-    public event EventHandler<bool> IsPlayingChanged;
-    public event EventHandler<MusicPosition> PositionChanged;
+    public MusicPosition CurrentPosition { get; set; }
 
-    public PlayerService(IServiceProvider services, IAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistService playlistService, WifiOptionsService wifiOptionsService)
+    public event EventHandler NewMusicAdded;
+    public event EventHandler IsPlayingChanged;
+    public event EventHandler PositionChanged;
+
+    public PlayerService(IServiceProvider services, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistService playlistService, WifiOptionsService wifiOptionsService)
     {
         _services = services;
+
         _audioService = audioService;
         _audioService.PlayFinished += async (_, _) => await Next();
         _audioService.PlayFailed += async (_, _) => await MediaFailed();
@@ -57,67 +53,14 @@ public class PlayerService
             return;
         }
 
-        PositionChanged?.Invoke(this, new MusicPosition()
+        CurrentPosition = new MusicPosition()
         {
-            position = TimeSpan.FromMilliseconds(PositionMillisecond),
-            Duration = TimeSpan.FromMilliseconds(DurationMillisecond),
-            PlayProgress = PositionMillisecond / DurationMillisecond
-        });
-    }
+            position = TimeSpan.FromMilliseconds(_audioService.CurrentPosition),
+            Duration = TimeSpan.FromMilliseconds(_audioService.CurrentDuration),
+            PlayProgress = _audioService.CurrentPosition / _audioService.CurrentDuration
+        };
 
-    public async Task PauseAsync()
-    {
-        if (!IsPlaying)
-        {
-            return;
-        }
-        await _audioService.PauseAsync();
-        IsPlaying = false;
-        IsPlayingChanged?.Invoke(this, false);
-    }
-
-    public async Task PlayAsync(Music music, double positionMillisecond = 0)
-    {
-        string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.CacheFileName);
-        if (!File.Exists(musicPath))
-        {
-            //缓存文件不存在时重新下载
-
-            //部分平台的播放链接会失效，重新获取
-            if (music.Platform == PlatformEnum.NetEase || music.Platform == PlatformEnum.KuGou || music.Platform == PlatformEnum.KuWo)
-            {
-                music = await _musicNetworkService.UpdatePlayUrl(music);
-            }
-
-            if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifi())
-            {
-                await MediaFailed();
-                return;
-            }
-
-            var data = await _httpClient.GetReadByteArray(music.PlayUrl);
-            File.WriteAllBytes(musicPath, data);
-        }
-
-        var isChangeMusic = _currentMusic?.Id != music.Id;
-
-        if (isChangeMusic)
-        {
-            _currentMusic = music;
-            if (_audioService.IsPlaying)
-            {
-                await _audioService.PauseAsync();
-            }
-            await _audioService.InitializeAsync(musicPath);
-            NewMusicAdded?.Invoke(this, _currentMusic);
-            await _audioService.PlayAsync(positionMillisecond);
-        }
-        else
-        {
-            await _audioService.PlayAsync(positionMillisecond);
-        }
-        IsPlaying = true;
-        IsPlayingChanged?.Invoke(this, true);
+        PositionChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -130,7 +73,7 @@ public class PlayerService
             await PlayAsync(CurrentMusic);
             return;
         }
-        var musicService = _services.GetService<IMusicServiceFactory>().Create(); 
+        var musicService = _services.GetService<IMusicServiceFactory>().Create();
 
         var playlist = await _playlistService.GetAllAsync();
         if (playlist.Count == 0)
@@ -188,7 +131,7 @@ public class PlayerService
             return;
         }
 
-        var musicService = _services.GetService<IMusicServiceFactory>().Create(); 
+        var musicService = _services.GetService<IMusicServiceFactory>().Create();
 
         var playlist = await _playlistService.GetAllAsync();
         if (playlist.Count == 0)
@@ -240,5 +183,106 @@ public class PlayerService
         {
             await Next();
         }
+    }
+
+    public async Task PlayAsync(Music music, double position = 0)
+    {
+        if (music == null)
+        {
+            return;
+        }
+
+        var isOtherMusic = CurrentMusic?.Id != music.Id;
+        var isPlaying = isOtherMusic || !_audioService.IsPlaying;
+
+        if (isOtherMusic)
+        {
+            await CacheMusicWhenNotExist(music);
+
+            CurrentMusic = music;
+
+            if (_audioService.IsPlaying)
+            {
+                await InternalPauseAsync();
+            }
+
+            await _audioService.InitializeAsync(CurrentMusic.PlayUrl.ToString());
+
+            await InternalPlayPauseAsync(isPlaying, position);
+
+            NewMusicAdded?.Invoke(this, EventArgs.Empty);
+        }
+        else
+        {
+            await InternalPlayPauseAsync(isPlaying, position);
+        }
+
+        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    private async Task CacheMusicWhenNotExist(Music music)
+    {
+        string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.CacheFileName);
+        if (File.Exists(musicPath))
+        {
+            return;
+        }
+
+        //缓存文件不存在时重新下载
+        //部分平台的播放链接会失效，重新获取
+        if (music.Platform == PlatformEnum.NetEase || music.Platform == PlatformEnum.KuGou || music.Platform == PlatformEnum.KuWo)
+        {
+            music = await _musicNetworkService.UpdatePlayUrl(music);
+        }
+
+        if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
+        {
+            await MediaFailed();
+            return;
+        }
+
+        var data = await _httpClient.GetReadByteArray(music.PlayUrl);
+        File.WriteAllBytes(musicPath, data);
+    }
+
+    private async Task InternalPlayPauseAsync(bool isPlaying, double position)
+    {
+        if (isPlaying)
+        {
+            await InternalPlayAsync(position);
+        }
+        else
+        {
+            await InternalPauseAsync();
+        }
+    }
+
+    private async Task InternalPauseAsync()
+    {
+        await _audioService.PauseAsync();
+        IsPlaying = false;
+    }
+
+    private async Task InternalPlayAsync(double position = 0)
+    {
+        var canPlay = await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync();
+
+        if (!canPlay)
+        {
+            return;
+        }
+
+        await _audioService.PlayAsync(position);
+        IsPlaying = true;
+    }
+
+    public async Task SetMuted(bool value)
+    {
+        await _audioService.SetMuted(value);
+    }
+
+    public async Task SetVolume(int value)
+    {
+        await _audioService.SetVolume(value);
     }
 }
