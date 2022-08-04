@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using JiuLing.Controls.Maui;
+using ListenTogether.Services.MusicSwitchServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.LifecycleEvents;
 using NativeMediaMauiLib;
@@ -21,6 +22,11 @@ namespace ListenTogether
             using var stream = FileSystem.OpenAppPackageFileAsync("Settings.json").Result;
             var config = new ConfigurationBuilder().AddJsonStream(stream).Build();
             builder.Configuration.AddConfiguration(config);
+
+            builder.Services.AddSingleton<IMusicSwitchServer, MusicSwitchRepeatListServer>();
+            builder.Services.AddSingleton<IMusicSwitchServer, MusicSwitchRepeatOneServer>();
+            builder.Services.AddSingleton<IMusicSwitchServer, MusicSwitchShuffleServer>();
+            builder.Services.AddSingleton<IMusicSwitchServerFactory, MusicSwitchServerFactory>();
 
             builder
                 .UseMauiApp<App>()

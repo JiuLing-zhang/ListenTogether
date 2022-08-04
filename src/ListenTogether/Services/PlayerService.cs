@@ -1,16 +1,15 @@
 ﻿using JiuLing.CommonLibs.Net;
-using ListenTogether.Model;
 using ListenTogether.Model.Enums;
+using ListenTogether.Services.MusicSwitchServer;
 using NativeMediaMauiLib;
 
 namespace ListenTogether.Services;
 public class PlayerService
 {
-    private IServiceProvider _services;
     private readonly INativeAudioService _audioService;
     private readonly IMusicNetworkService _musicNetworkService;
-    private readonly IPlaylistService _playlistService;
     private readonly WifiOptionsService _wifiOptionsService;
+    private readonly IMusicSwitchServerFactory _musicSwitchServerFactory;
     private System.Timers.Timer _timerPlayProgress;
 
     private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
@@ -28,17 +27,15 @@ public class PlayerService
     public event EventHandler IsPlayingChanged;
     public event EventHandler PositionChanged;
 
-    public PlayerService(IServiceProvider services, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IPlaylistService playlistService, WifiOptionsService wifiOptionsService)
+    public PlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, WifiOptionsService wifiOptionsService)
     {
-        _services = services;
-
         _audioService = audioService;
         _audioService.PlayFinished += async (_, _) => await Next();
         _audioService.PlayFailed += async (_, _) => await MediaFailed();
 
-        _playlistService = playlistService;
         _musicNetworkService = musicNetworkService;
         _wifiOptionsService = wifiOptionsService;
+        _musicSwitchServerFactory = musicSwitchServerFactory;
 
         _timerPlayProgress = new System.Timers.Timer();
         _timerPlayProgress.Interval = 1000;
@@ -68,56 +65,8 @@ public class PlayerService
     /// </summary>
     public async Task Previous()
     {
-        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatOne)
-        {
-            await PlayAsync(CurrentMusic);
-            return;
-        }
-        var musicService = _services.GetService<IMusicServiceFactory>().Create();
-
-        var playlist = await _playlistService.GetAllAsync();
-        if (playlist.Count == 0)
-        {
-            return;
-        }
-
-        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatList)
-        {
-            int nextId = 0;
-            for (int i = 0; i < playlist.Count; i++)
-            {
-                if (playlist[i].MusicId == CurrentMusic.Id)
-                {
-                    nextId = i - 1;
-                    break;
-                }
-            }
-            //列表第一首
-            if (nextId < 0)
-            {
-                nextId = playlist.Count - 1;
-            }
-
-            var music = await musicService.GetOneAsync(playlist[nextId].MusicId);
-            await PlayAsync(music);
-            return;
-        }
-        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.Shuffle)
-        {
-            if (playlist.Count <= 1)
-            {
-                await PlayAsync(CurrentMusic);
-                return;
-            }
-
-            string randomMusicId;
-            do
-            {
-                randomMusicId = JiuLing.CommonLibs.Random.RandomUtils.GetOneFromList<Playlist>(playlist).MusicId;
-            } while (randomMusicId == CurrentMusic.Id);
-            var music = await musicService.GetOneAsync(randomMusicId);
-            await PlayAsync(music);
-        }
+        var previousMusic = await _musicSwitchServerFactory.Create(GlobalConfig.MyUserSetting.Player.PlayMode).GetPreviousAsync(CurrentMusic);
+        await PlayAsync(previousMusic);
     }
 
     /// <summary>
@@ -125,56 +74,8 @@ public class PlayerService
     /// </summary>
     public async Task Next()
     {
-        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatOne)
-        {
-            await PlayAsync(CurrentMusic);
-            return;
-        }
-
-        var musicService = _services.GetService<IMusicServiceFactory>().Create();
-
-        var playlist = await _playlistService.GetAllAsync();
-        if (playlist.Count == 0)
-        {
-            return;
-        }
-        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatList)
-        {
-            int nextId = 0;
-            for (int i = 0; i < playlist.Count; i++)
-            {
-                if (playlist[i].MusicId == CurrentMusic.Id)
-                {
-                    nextId = i + 1;
-                    break;
-                }
-            }
-            //列表最后一首
-            if (playlist.Count == nextId)
-            {
-                nextId = 0;
-            }
-
-            var music = await musicService.GetOneAsync(playlist[nextId].MusicId);
-            await PlayAsync(music);
-            return;
-        }
-        if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.Shuffle)
-        {
-            if (playlist.Count <= 1)
-            {
-                await PlayAsync(CurrentMusic);
-                return;
-            }
-
-            string randomMusicId;
-            do
-            {
-                randomMusicId = JiuLing.CommonLibs.Random.RandomUtils.GetOneFromList<Playlist>(playlist).MusicId;
-            } while (randomMusicId == CurrentMusic.Id);
-            var music = await musicService.GetOneAsync(randomMusicId);
-            await PlayAsync(music);
-        }
+        var previousMusic = await _musicSwitchServerFactory.Create(GlobalConfig.MyUserSetting.Player.PlayMode).GetNextAsync(CurrentMusic);
+        await PlayAsync(previousMusic);
     }
 
     private async Task MediaFailed()
