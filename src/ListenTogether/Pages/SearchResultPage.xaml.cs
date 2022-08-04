@@ -1,7 +1,8 @@
-namespace ListenTogether.Pages;
+﻿namespace ListenTogether.Pages;
 
 public partial class SearchResultPage : ContentPage
 {
+    private bool _isFirstStart = true;
     SearchResultPageViewModel vm => BindingContext as SearchResultPageViewModel;
     public SearchResultPage(SearchResultPageViewModel vm)
     {
@@ -13,6 +14,21 @@ public partial class SearchResultPage : ContentPage
         base.OnAppearing();
         player.OnAppearing();
         await vm.InitializeAsync();
+        if (GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate)
+        {
+            if (_isFirstStart)
+            {
+                _isFirstStart = false;
+
+                if (GlobalConfig.ApiDomain.IsEmpty())
+                {
+                    await ToastService.Show("温馨提示：当前程序为【单机版】");
+                }
+                //确保主线程加载完成
+                await Task.Delay(5000);
+                await UpdateCheck.Do();
+            }
+        }
     }
     protected override void OnDisappearing()
     {
