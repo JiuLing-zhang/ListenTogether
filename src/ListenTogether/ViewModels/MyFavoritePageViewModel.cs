@@ -97,7 +97,7 @@ namespace ListenTogether.ViewModels
                     await ToastService.Show("歌单名称已存在");
                     return;
                 }
-                //TODO 这里给个默认图标
+
                 var myFavorite = new MyFavorite()
                 {
                     Name = myFavoriteName,
@@ -125,11 +125,6 @@ namespace ListenTogether.ViewModels
 
         private async void EnterMyFavoriteDetail(MyFavoriteViewModel selected)
         {
-            if (selected.MusicCount == 0)
-            {
-                await ToastService.Show("当前歌单是空的哦");
-                return;
-            }
             await Shell.Current.GoToAsync($"{nameof(MyFavoriteDetailPage)}?{nameof(MyFavoriteDetailPageViewModel.MyFavoriteId)}={selected.Id}", true);
         }
 
