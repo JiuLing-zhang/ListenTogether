@@ -40,33 +40,7 @@ internal class UpdateCheck
         }
     }
 
-    public static async Task<bool> CheckNewVersionAsync()
-    {
-        try
-        {
-            string json = await _httpClient.GetReadString(CheckUpdateUrl);
-            var obj = json.ToObject<JiuLing.CommonLibs.Model.AppUpgradeInfo>();
-            if (obj == null)
-            {
-                Logger.Error("自动检查更新失败", new Exception("连接服务器失败"));
-                return false;
-            }
-
-            var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, obj.Version, obj.MinVersion);
-            if (isNeedUpdate == false)
-            {
-                return false;
-            }
-            return true;
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("自动检查更新失败", ex);
-        }
-        return false;
-    }
-
-    public static async Task Do()
+    public static async Task Do(bool isBackgroundCheck)
     {
         await Task.Run(async () =>
         {
@@ -76,14 +50,24 @@ internal class UpdateCheck
                 var obj = json.ToObject<JiuLing.CommonLibs.Model.AppUpgradeInfo>();
                 if (obj == null)
                 {
-                    await ToastService.Show("检查失败，未能连接到服务器");
+                    if (!isBackgroundCheck)
+                    {
+                        await ToastService.Show("检查失败，连接服务器失败");
+                    }
+                    else
+                    {
+                        Logger.Error("自动更新检查失败", new Exception("连接服务器失败"));
+                    }
                     return;
                 }
 
                 var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, obj.Version, obj.MinVersion);
                 if (isNeedUpdate == false)
                 {
-                    await ToastService.Show("当前版本为最新版");
+                    if (!isBackgroundCheck)
+                    {
+                        await ToastService.Show("当前版本为最新版");
+                    }
                     return;
                 }
 
@@ -115,7 +99,14 @@ internal class UpdateCheck
             }
             catch (Exception ex)
             {
-                await ToastService.Show($"检查失败：{ex.Message}");
+                if (!isBackgroundCheck)
+                {
+                    await ToastService.Show($"检查失败：{ex.Message}");
+                }
+                else
+                {
+                    Logger.Error("自动更新检查失败", ex);
+                }
             }
         });
     }

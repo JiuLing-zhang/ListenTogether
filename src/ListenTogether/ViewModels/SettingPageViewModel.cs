@@ -460,7 +460,7 @@ public class SettingPageViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            await UpdateCheck.Do();
+            await UpdateCheck.Do(false);
         }
         catch (Exception ex)
         {

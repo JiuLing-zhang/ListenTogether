@@ -26,7 +26,7 @@ public partial class SearchResultPage : ContentPage
                 }
                 //确保主线程加载完成
                 await Task.Delay(5000);
-                await UpdateCheck.Do();
+                await UpdateCheck.Do(true);
             }
         }
     }
