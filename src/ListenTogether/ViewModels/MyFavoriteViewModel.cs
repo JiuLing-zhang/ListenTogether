@@ -34,8 +34,18 @@ namespace ListenTogether.ViewModels
             {
                 _imageUrl = value;
                 OnPropertyChanged("ImageUrl");
+
+                _imageByteArray = ImageCacheUtils.GetByteArrayUsingCache(value);
+                OnPropertyChanged("ImageByteArray");
             }
         }
+
+        private byte[] _imageByteArray;
+        public byte[] ImageByteArray
+        {
+            get => _imageByteArray;
+        }
+
 
         private int _musicCount;
         public int MusicCount

@@ -91,12 +91,8 @@
                                             <Image Aspect="AspectFill"
                                                    Margin="-20"
                                                    HeightRequest="48"
-                                                   WidthRequest="48" >
-                                                <Image.Source>
-                                                    <UriImageSource Uri="{Binding ImageUrl}"
-                                                                    CacheValidity="30" />
-                                                </Image.Source>
-                                            </Image>
+                                                   WidthRequest="48"
+                                                   Source="{Binding ImageByteArray, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"/>
                                         </Frame>
 
                                         <Label Grid.Row="0"
@@ -138,12 +134,8 @@
                                             <Image Aspect="AspectFill"
                                                    Margin="-20"
                                                    HeightRequest="48"
-                                                   WidthRequest="48" >
-                                                <Image.Source>
-                                                    <UriImageSource Uri="{Binding ImageUrl}"
-                                                                    CacheValidity="30" />
-                                                </Image.Source>
-                                            </Image>
+                                                   WidthRequest="48"
+                                                   Source="{Binding ImageByteArray, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"/>
                                         </Frame>
 
                                         <Label Grid.Row="0"
