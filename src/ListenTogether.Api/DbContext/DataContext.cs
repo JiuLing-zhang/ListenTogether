@@ -8,7 +8,6 @@ public sealed class DataContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<UserConfigEntity> UserConfigs { get; set; } = null!;
     public DbSet<MusicEntity> Musics { get; set; } = null!;
     public DbSet<MyFavoriteEntity> MyFavorites { get; set; } = null!;
-    public DbSet<PlaylistEntity> Playlists { get; set; } = null!;
     public DbSet<LogEntity> Logs { get; set; } = null!;
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
