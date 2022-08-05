@@ -17,18 +17,18 @@ public class PlayingPageViewModel : ViewModelBase
     {
         _playerService = playerService;
         Lyrics = new ObservableCollection<LyricViewModel>();
-        _playerService.NewMusicAdded += _playerService_NewMusicAdded;
 
         _timerLyricsUpdate = App.Current.Dispatcher.CreateTimer();
         _timerLyricsUpdate.Interval = TimeSpan.FromMilliseconds(300);
-        _timerLyricsUpdate.Tick += _timerLyricsUpdate_Tick;
-        _timerLyricsUpdate.Start();
     }
 
     public async Task InitializeAsync()
     {
         try
         {
+            _playerService.NewMusicAdded += _playerService_NewMusicAdded;
+            _timerLyricsUpdate.Tick += _timerLyricsUpdate_Tick;
+            _timerLyricsUpdate.Start();
             NewMusicAddedDo(_playerService.CurrentMusic);
         }
         catch (Exception ex)
@@ -196,7 +196,7 @@ public class PlayingPageViewModel : ViewModelBase
 
         try
         {
-            var positionMillisecond = _playerService.CurrentPosition.position.TotalSeconds;
+            var positionMillisecond = _playerService.CurrentPosition.position.TotalMilliseconds;
             //取大于当前进度的第一行索引，在此基础上-1则为需要高亮的行
             int highlightIndex = 0;
             foreach (var lyric in Lyrics)
@@ -220,5 +220,12 @@ public class PlayingPageViewModel : ViewModelBase
         {
             Logger.Error("播放页进度更新失败。", ex);
         }
+    }
+
+    public void OnDisappearing()
+    {
+        _playerService.NewMusicAdded -= _playerService_NewMusicAdded;
+        _timerLyricsUpdate.Tick -= _timerLyricsUpdate_Tick;
+        _timerLyricsUpdate.Stop();
     }
 }

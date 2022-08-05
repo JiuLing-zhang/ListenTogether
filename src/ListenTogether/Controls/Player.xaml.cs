@@ -32,9 +32,6 @@ public partial class Player : ContentView
         if (_playerService == null)
         {
             _playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
-            _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
-            _playerService.NewMusicAdded += playerService_NewMusicAdded;
-            _playerService.PositionChanged += _playerService_PositionChanged;
             InitPlayer();
         }
         if (_configService == null)
@@ -73,6 +70,10 @@ public partial class Player : ContentView
             return;
         }
 
+        _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
+        _playerService.NewMusicAdded += playerService_NewMusicAdded;
+        _playerService.PositionChanged += _playerService_PositionChanged;
+
         UpdateCurrentMusic();
         UpdateRepeatModel();
         if (Config.Desktop)
@@ -99,6 +100,8 @@ public partial class Player : ContentView
     {
         this.IsVisible = true;
         NewMusicAddedDo(_playerService.CurrentMusic);
+        //TODO 首次播放音乐时，无法设置声音，所以先在这里临时实现
+        Updatevolume();
     }
 
     private void NewMusicAddedDo(Music music)
@@ -179,6 +182,7 @@ public partial class Player : ContentView
     private void Updatevolume()
     {
         SliderVolume.Value = GlobalConfig.MyUserSetting.Player.Volume;
+        _playerService.SetVolume((int)GlobalConfig.MyUserSetting.Player.Volume);
     }
 
     private async void ImgRepeat_Tapped(object sender, EventArgs e)
@@ -278,8 +282,8 @@ public partial class Player : ContentView
         if (_playerService.CurrentMusic != null)
         {
             var sliderPlayProgress = sender as Slider;
-            var positionMillisecond = _playerService.CurrentPosition.position.TotalMilliseconds * sliderPlayProgress.Value;
-            await _playerService.PlayAsync(_playerService.CurrentMusic, positionMillisecond);
+            var positionMillisecond = _playerService.CurrentPosition.Duration.TotalSeconds * sliderPlayProgress.Value;
+            await _playerService.SetPlayPosition(positionMillisecond);
         }
         _isPlayProgressDragging = false;
     }

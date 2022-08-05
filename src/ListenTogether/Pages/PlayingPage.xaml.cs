@@ -19,6 +19,7 @@ public partial class PlayingPage : ContentPage
     {
         vm.ScrollToLyric -= ScrollToLyricDo;
         player.OnDisappearing();
+        vm.OnDisappearing();
         base.OnDisappearing();
     }
 

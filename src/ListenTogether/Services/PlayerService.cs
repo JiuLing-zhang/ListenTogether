@@ -21,7 +21,7 @@ public class PlayerService
 
     public Music CurrentMusic { get; set; }
 
-    public MusicPosition CurrentPosition { get; set; }
+    public MusicPosition CurrentPosition { get; set; } = new MusicPosition();
 
     public event EventHandler NewMusicAdded;
     public event EventHandler IsPlayingChanged;
@@ -50,12 +50,9 @@ public class PlayerService
             return;
         }
 
-        CurrentPosition = new MusicPosition()
-        {
-            position = TimeSpan.FromMilliseconds(_audioService.CurrentPosition),
-            Duration = TimeSpan.FromMilliseconds(_audioService.CurrentDuration),
-            PlayProgress = _audioService.CurrentPosition / _audioService.CurrentDuration
-        };
+        CurrentPosition.position = TimeSpan.FromSeconds(_audioService.CurrentPosition);
+        CurrentPosition.Duration = TimeSpan.FromSeconds(_audioService.CurrentDuration);
+        CurrentPosition.PlayProgress = _audioService.CurrentPosition / _audioService.CurrentDuration;
 
         PositionChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -86,7 +83,7 @@ public class PlayerService
         }
     }
 
-    public async Task PlayAsync(Music music, double position = 0)
+    public async Task PlayAsync(Music music)
     {
         if (music == null)
         {
@@ -95,10 +92,11 @@ public class PlayerService
 
         var isOtherMusic = CurrentMusic?.Id != music.Id;
         var isPlaying = isOtherMusic || !_audioService.IsPlaying;
+        var position = isOtherMusic ? 0 : CurrentPosition.position.TotalSeconds;
 
         if (isOtherMusic)
         {
-            await CacheMusicWhenNotExist(music);
+            var musicPath = await GetMusicCachePath(music);
 
             CurrentMusic = music;
 
@@ -107,7 +105,7 @@ public class PlayerService
                 await InternalPauseAsync();
             }
 
-            await _audioService.InitializeAsync(CurrentMusic.PlayUrl.ToString());
+            await _audioService.InitializeAsync(musicPath);
 
             await InternalPlayPauseAsync(isPlaying, position);
 
@@ -121,14 +119,19 @@ public class PlayerService
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    private async Task CacheMusicWhenNotExist(Music music)
+    private async Task<string> GetMusicCachePath(Music music)
     {
         string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.CacheFileName);
         if (File.Exists(musicPath))
         {
-            return;
+            return musicPath;
         }
 
+        if (await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
+        {
+            //TODO 非WIFI，这里加个之类的
+            return "";
+        }
         //缓存文件不存在时重新下载
         //部分平台的播放链接会失效，重新获取
         if (music.Platform == PlatformEnum.NetEase || music.Platform == PlatformEnum.KuGou || music.Platform == PlatformEnum.KuWo)
@@ -136,14 +139,9 @@ public class PlayerService
             music = await _musicNetworkService.UpdatePlayUrl(music);
         }
 
-        if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
-        {
-            await MediaFailed();
-            return;
-        }
-
         var data = await _httpClient.GetReadByteArray(music.PlayUrl);
         File.WriteAllBytes(musicPath, data);
+        return musicPath;
     }
 
     private async Task InternalPlayPauseAsync(bool isPlaying, double position)
@@ -166,15 +164,13 @@ public class PlayerService
 
     private async Task InternalPlayAsync(double position = 0)
     {
-        var canPlay = await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync();
-
-        if (!canPlay)
-        {
-            return;
-        }
-
         await _audioService.PlayAsync(position);
         IsPlaying = true;
+    }
+    public async Task SetPlayPosition(double position)
+    {
+        await InternalPlayAsync(position);
+        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public async Task SetMuted(bool value)
