@@ -90,7 +90,15 @@ public class PlayerService
             return;
         }
 
-        var isOtherMusic = CurrentMusic?.Id != music.Id;
+        bool isOtherMusic;
+        if (CurrentMusic == null || CurrentMusic.Id != music.Id)
+        {
+            isOtherMusic = true;
+        }
+        else
+        {
+            isOtherMusic = false;
+        }
         var isPlaying = isOtherMusic || !_audioService.IsPlaying;
         var position = isOtherMusic ? 0 : CurrentPosition.position.TotalSeconds;
 

@@ -1,4 +1,5 @@
 ﻿using ListenTogether.Network.Models.KuGou;
+using Microsoft.Maui.ApplicationModel.DataTransfer;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -12,6 +13,7 @@ public class PlayingPageViewModel : ViewModelBase
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; }
 
     public ICommand CopyMusicLinkCommand => new Command(CopyMusicLink);
+    public ICommand ShareMusicLinkCommand => new Command(ShareMusicLink);
     public ICommand LyricsScrolledCommand => new Command(LyricsScrolledDo);
     public PlayingPageViewModel(PlayerService playerService)
     {
@@ -117,40 +119,64 @@ public class PlayingPageViewModel : ViewModelBase
 
     private async void CopyMusicLink()
     {
-        if (CurrentMusic == null)
-        {
-            return;
-        }
-
         try
         {
-            var music = CurrentMusic;
-            string musicUrl;
-            switch (music.Platform)
-            {
-                case Model.Enums.PlatformEnum.NetEase:
-                    musicUrl = GetNetEaseMusicUrl(music.PlatformInnerId);
-                    break;
-                case Model.Enums.PlatformEnum.KuGou:
-                    musicUrl = GetKuGouMusicUrl(music.PlatformInnerId, music.ExtendData);
-                    break;
-                case Model.Enums.PlatformEnum.MiGu:
-                    musicUrl = GetMiGuMusicUrl(music.PlatformInnerId);
-                    break;
-                case Model.Enums.PlatformEnum.KuWo:
-                    musicUrl = GetKuWoMusicUrl(music.PlatformInnerId);
-                    break;
-                default:
-                    return;
-            }
+            string musicUrl = GetCurrentMusicLink();
             await Clipboard.Default.SetTextAsync(musicUrl);
-            await ToastService.Show($"{music.Name} 歌曲链接复制完成");
+            await ToastService.Show($"歌曲链接已复制");
         }
         catch (Exception ex)
         {
             await ToastService.Show("歌曲链接解析失败");
             Logger.Error("复制歌曲链接失败。", ex);
         }
+    }
+
+    private async void ShareMusicLink()
+    {
+        try
+        {
+            string uri = GetCurrentMusicLink();
+            await Share.RequestAsync(new ShareTextRequest
+            {
+                Uri = uri,
+                Title = "Share Web Link"
+            });
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("歌曲链接解析失败");
+            Logger.Error("分享歌曲链接失败。", ex);
+        }
+    }
+
+    private string GetCurrentMusicLink()
+    {
+        if (CurrentMusic == null)
+        {
+            return default;
+        }
+
+        var music = CurrentMusic;
+        string musicUrl;
+        switch (music.Platform)
+        {
+            case Model.Enums.PlatformEnum.NetEase:
+                musicUrl = GetNetEaseMusicUrl(music.PlatformInnerId);
+                break;
+            case Model.Enums.PlatformEnum.KuGou:
+                musicUrl = GetKuGouMusicUrl(music.PlatformInnerId, music.ExtendData);
+                break;
+            case Model.Enums.PlatformEnum.MiGu:
+                musicUrl = GetMiGuMusicUrl(music.PlatformInnerId);
+                break;
+            case Model.Enums.PlatformEnum.KuWo:
+                musicUrl = GetKuWoMusicUrl(music.PlatformInnerId);
+                break;
+            default:
+                return default;
+        }
+        return musicUrl;
     }
 
     private string GetNetEaseMusicUrl(string id)

@@ -59,13 +59,24 @@
                         </Image.Source>
                     </Image>
 
-                    <Label Margin="0,10,0,0"
-                           HorizontalOptions="Center"
-                           Text="复制歌曲链接">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding CopyMusicLinkCommand}"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+                    <StackLayout Margin="0,10,0,0"
+                                 Orientation="Horizontal"
+                                 HorizontalOptions="Center">
+                        <Label Text="复制歌曲链接"
+                               IsVisible="{OnPlatform Android=false,iOS=false,WinUI=true,MacCatalyst=true}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CopyMusicLinkCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <Label Text="分享"
+                               IsVisible="{OnPlatform Android=true,iOS=true,WinUI=false,MacCatalyst=false}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ShareMusicLinkCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+
                 </StackLayout>
 
                 <StackLayout Margin="{OnPlatform WinUI='0',Android='0,30,0,0',iOS='0,30,0,0'}"

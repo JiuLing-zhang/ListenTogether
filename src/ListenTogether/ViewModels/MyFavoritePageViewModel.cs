@@ -148,7 +148,6 @@ namespace ListenTogether.ViewModels
                 await _playlistService.RemoveAllAsync();
             }
 
-            int index = 0;
             foreach (var myFavoriteMusic in myFavoriteMusics)
             {
                 var playlist = new Playlist()
@@ -161,12 +160,12 @@ namespace ListenTogether.ViewModels
                 };
 
                 await _playlistService.AddToPlaylist(playlist);
-                if (index == 0)
-                {
-                    var music = await _musicService.GetOneAsync(myFavoriteMusic.MusicId);
-                    await _playerService.PlayAsync(music);
-                }
-                index++;
+            }
+
+            if (myFavoriteMusics.Count > 0)
+            {
+                var music = await _musicService.GetOneAsync(myFavoriteMusics[0].MusicId);
+                await _playerService.PlayAsync(music);
             }
         }
     }
