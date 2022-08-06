@@ -14,7 +14,7 @@ public class WifiOptionsService
 
         if (current != NetworkAccess.Internet)
         {
-            await ToastService.Show("播放失败：网络不可用");
+            await Shell.Current.DisplayAlert("错误", "播放失败：网络不可用", "关闭");
         }
         else
         {
@@ -27,7 +27,7 @@ public class WifiOptionsService
             }
             else
             {
-                await ToastService.Show("播放失败：当前为非WIFI环境");
+                canPlayMusic = await Shell.Current.DisplayAlert("提示", "当前为非WIFI环境，确定用流量播放吗？", "允许本次", "取消");
             }
         }
         return canPlayMusic;

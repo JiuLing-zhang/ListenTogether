@@ -46,7 +46,7 @@
                      Margin="{OnPlatform WinUI='0,80,0,0',Android='0,10,0,0',iOS='0,10,0,0'}">
             <StackLayout VerticalOptions="StartAndExpand"
                          Orientation="{OnPlatform WinUI=Horizontal}"
-                         WidthRequest="600"
+                         WidthRequest="800"
                          HeightRequest="{OnPlatform WinUI=400,iOS=400,Android=580}">
                 <StackLayout HorizontalOptions="CenterAndExpand">
                     <Image HorizontalOptions="Center"

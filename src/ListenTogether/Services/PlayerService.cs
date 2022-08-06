@@ -97,7 +97,10 @@ public class PlayerService
         if (isOtherMusic)
         {
             var musicPath = await GetMusicCachePath(music);
-
+            if (musicPath.IsEmpty())
+            {
+                return;
+            }
             CurrentMusic = music;
 
             if (_audioService.IsPlaying)
@@ -127,7 +130,7 @@ public class PlayerService
             return musicPath;
         }
 
-        if (await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
+        if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
         {
             //TODO 非WIFI，这里加个之类的
             return "";
