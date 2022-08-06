@@ -196,6 +196,7 @@
                                 <Slider Margin="10,0,10,0"
                                         HorizontalOptions="FillAndExpand"
                                         VerticalOptions="Center"
+                                        Value="{Binding Value, Source={x:Reference SliderPlayProgress}}"
                                         Minimum="{Binding Minimum, Source={x:Reference SliderPlayProgress}}"
                                         Maximum="{Binding Maximum, Source={x:Reference SliderPlayProgress}}"
                                         DragStarted="SliderPlayProgress_DragStarted"

@@ -333,7 +333,7 @@ public class MediaPlayerService : Service,
 
                 await mediaPlayer.SetDataSourceAsync(ApplicationContext, AndroidNet.Uri.Parse(AudioUrl));
 
-                await metaRetriever.SetDataSourceAsync(AudioUrl, new Dictionary<string, string>());
+                await metaRetriever.SetDataSourceAsync(AudioUrl);
 
                 var focusResult = audioManager.RequestAudioFocus(new AudioFocusRequestClass
                     .Builder(AudioFocus.Gain)

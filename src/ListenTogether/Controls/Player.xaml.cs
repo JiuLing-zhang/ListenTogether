@@ -100,8 +100,12 @@ public partial class Player : ContentView
     {
         this.IsVisible = true;
         NewMusicAddedDo(_playerService.CurrentMusic);
-        //TODO 首次播放音乐时，无法设置声音，所以先在这里临时实现
-        Updatevolume();
+        if (Config.Desktop)
+        {
+            //TODO 首次播放音乐时，无法设置声音，所以先在这里临时实现
+            Updatevolume();
+        }
+
     }
 
     private void NewMusicAddedDo(Music music)
@@ -259,6 +263,7 @@ public partial class Player : ContentView
 
     private async void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
+ 
         int volume = (int)e.NewValue;
         await _playerService.SetVolume(volume);
         GlobalConfig.MyUserSetting.Player.Volume = volume;
