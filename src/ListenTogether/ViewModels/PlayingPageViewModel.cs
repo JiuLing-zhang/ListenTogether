@@ -140,7 +140,7 @@ public class PlayingPageViewModel : ViewModelBase
             await Share.RequestAsync(new ShareTextRequest
             {
                 Uri = uri,
-                Title = "Share Web Link"
+                Title = "分享歌曲链接"
             });
         }
         catch (Exception ex)

@@ -7,7 +7,7 @@ public interface INativeAudioService
 {
     Task InitializeAsync(string audioURI);
 
-    Task PlayAsync(double position = 0);
+    Task PlayAsync(double positionMillisecond = 0);
 
     Task PauseAsync();
 
@@ -21,9 +21,9 @@ public interface INativeAudioService
 
     bool IsPlaying { get; }
 
-    double CurrentPosition { get; }
+    double CurrentPositionMillisecond { get; }
 
-    double CurrentDuration { get; }
+    double CurrentDurationMillisecond { get; }
 
     event EventHandler<bool> IsPlayingChanged;
     event EventHandler PlayFinished;

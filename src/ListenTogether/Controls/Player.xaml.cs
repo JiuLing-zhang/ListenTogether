@@ -131,8 +131,8 @@ public partial class Player : ContentView
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            LblPositionMilliseconds.Text = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
-            LblDurationMilliseconds.Text = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
+            LblPosition.Text = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
+            LblDuration.Text = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
 
             if (!_isPlayProgressDragging)
             {
@@ -263,7 +263,7 @@ public partial class Player : ContentView
 
     private async void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
- 
+
         int volume = (int)e.NewValue;
         await _playerService.SetVolume(volume);
         GlobalConfig.MyUserSetting.Player.Volume = volume;
@@ -287,7 +287,7 @@ public partial class Player : ContentView
         if (_playerService.CurrentMusic != null)
         {
             var sliderPlayProgress = sender as Slider;
-            var positionMillisecond = _playerService.CurrentPosition.Duration.TotalSeconds * sliderPlayProgress.Value;
+            var positionMillisecond = _playerService.CurrentPosition.Duration.TotalMilliseconds * sliderPlayProgress.Value;
             await _playerService.SetPlayPosition(positionMillisecond);
         }
         _isPlayProgressDragging = false;

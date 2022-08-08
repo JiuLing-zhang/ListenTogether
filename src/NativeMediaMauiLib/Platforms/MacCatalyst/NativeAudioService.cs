@@ -12,8 +12,8 @@ public class NativeAudioService : INativeAudioService
         ? avPlayer.TimeControlStatus == AVPlayerTimeControlStatus.Playing
         : false;
 
-    public double CurrentPosition => avPlayer?.CurrentTime.Seconds ?? 0;
-    public double CurrentDuration => avPlayer?.CurrentItem?.Asset.Duration.Seconds ?? 0;
+    public double CurrentPositionMillisecond => avPlayer?.CurrentTime.Seconds * 1000 ?? 0;
+    public double CurrentDurationMillisecond => avPlayer?.CurrentItem?.Asset.Duration.Seconds * 1000 ?? 0;
     public event EventHandler<bool> IsPlayingChanged;
     public event EventHandler PlayFinished;
     public event EventHandler PlayFailed;
@@ -37,9 +37,9 @@ public class NativeAudioService : INativeAudioService
         return Task.CompletedTask;
     }
 
-    public async Task PlayAsync(double position = 0)
+    public async Task PlayAsync(double positionMillisecond = 0)
     {
-        await avPlayer.SeekAsync(new CoreMedia.CMTime((long)position, 1));
+        await avPlayer.SeekAsync(new CoreMedia.CMTime(((long)positionMillisecond / 1000), 1));
         avPlayer?.Play();
     }
 

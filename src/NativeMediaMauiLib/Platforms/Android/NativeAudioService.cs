@@ -13,9 +13,9 @@ namespace NativeMediaMauiLib.Platforms.Android
 
         public bool IsPlaying => mediaPlayer?.IsPlaying ?? false;
 
-        public double CurrentPosition => mediaPlayer?.CurrentPosition / 1000 ?? 0;
+        public double CurrentPositionMillisecond => mediaPlayer?.CurrentPosition ?? 0;
 
-        public double CurrentDuration => mediaPlayer?.Duration / 1000 ?? 0;
+        public double CurrentDurationMillisecond => mediaPlayer?.Duration ?? 0;
 
         public event EventHandler<bool> IsPlayingChanged;
         public event EventHandler PlayFinished;
@@ -67,10 +67,10 @@ namespace NativeMediaMauiLib.Platforms.Android
             return Task.CompletedTask;
         }
 
-        public async Task PlayAsync(double position = 0)
+        public async Task PlayAsync(double positionMillisecond = 0)
         {
             await instance.Binder.GetMediaPlayerService().Play();
-            await instance.Binder.GetMediaPlayerService().Seek((int)position * 1000);
+            await instance.Binder.GetMediaPlayerService().Seek((int)positionMillisecond);
         }
 
         public Task SetMuted(bool value)

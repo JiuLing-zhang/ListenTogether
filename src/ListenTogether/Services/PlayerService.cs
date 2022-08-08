@@ -50,9 +50,9 @@ public class PlayerService
             return;
         }
 
-        CurrentPosition.position = TimeSpan.FromSeconds(_audioService.CurrentPosition);
-        CurrentPosition.Duration = TimeSpan.FromSeconds(_audioService.CurrentDuration);
-        CurrentPosition.PlayProgress = _audioService.CurrentPosition / _audioService.CurrentDuration;
+        CurrentPosition.position = TimeSpan.FromMilliseconds(_audioService.CurrentPositionMillisecond);
+        CurrentPosition.Duration = TimeSpan.FromMilliseconds(_audioService.CurrentDurationMillisecond);
+        CurrentPosition.PlayProgress = _audioService.CurrentPositionMillisecond / _audioService.CurrentDurationMillisecond;
 
         PositionChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -100,7 +100,7 @@ public class PlayerService
             isOtherMusic = false;
         }
         var isPlaying = isOtherMusic || !_audioService.IsPlaying;
-        var position = isOtherMusic ? 0 : CurrentPosition.position.TotalSeconds;
+        var positionMilliseconds = isOtherMusic ? 0 : CurrentPosition.position.TotalMilliseconds;
 
         if (isOtherMusic)
         {
@@ -118,13 +118,13 @@ public class PlayerService
 
             await _audioService.InitializeAsync(musicPath);
 
-            await InternalPlayPauseAsync(isPlaying, position);
+            await InternalPlayPauseAsync(isPlaying, positionMilliseconds);
 
             NewMusicAdded?.Invoke(this, EventArgs.Empty);
         }
         else
         {
-            await InternalPlayPauseAsync(isPlaying, position);
+            await InternalPlayPauseAsync(isPlaying, positionMilliseconds);
         }
 
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
@@ -155,11 +155,11 @@ public class PlayerService
         return musicPath;
     }
 
-    private async Task InternalPlayPauseAsync(bool isPlaying, double position)
+    private async Task InternalPlayPauseAsync(bool isPlaying, double positionMilliseconds)
     {
         if (isPlaying)
         {
-            await InternalPlayAsync(position);
+            await InternalPlayAsync(positionMilliseconds);
         }
         else
         {
@@ -173,14 +173,14 @@ public class PlayerService
         IsPlaying = false;
     }
 
-    private async Task InternalPlayAsync(double position = 0)
+    private async Task InternalPlayAsync(double positionMillisecond = 0)
     {
-        await _audioService.PlayAsync(position);
+        await _audioService.PlayAsync(positionMillisecond);
         IsPlaying = true;
     }
-    public async Task SetPlayPosition(double position)
+    public async Task SetPlayPosition(double positionMillisecond)
     {
-        await InternalPlayAsync(position);
+        await InternalPlayAsync(positionMillisecond);
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 

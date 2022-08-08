@@ -69,7 +69,7 @@
                             </Label.GestureRecognizers>
                         </Label>
 
-                        <Label Text="分享"
+                        <Label Text="分享歌曲链接"
                                IsVisible="{OnPlatform Android=true,iOS=true,WinUI=false,MacCatalyst=false}">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ShareMusicLinkCommand}"/>

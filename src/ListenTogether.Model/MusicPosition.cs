@@ -3,11 +3,11 @@
 public class MusicPosition
 {
     /// <summary>
-    /// 当前进度（毫秒）
+    /// 当前进度
     /// </summary>
     public TimeSpan position { get; set; }
     /// <summary>
-    /// 总进度（毫秒）
+    /// 总进度
     /// </summary>
     public TimeSpan Duration { get; set; }
     public double PlayProgress { get; set; }

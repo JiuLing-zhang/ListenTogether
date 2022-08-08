@@ -107,7 +107,7 @@
                                 <!--进度条-->
                                 <StackLayout Orientation="Horizontal"
                                          HeightRequest="30">
-                                    <Label x:Name="LblPositionMilliseconds"
+                                    <Label x:Name="LblPosition"
                                        HorizontalOptions="Start"
                                        VerticalTextAlignment="Center"/>
                                     <Slider x:Name="SliderPlayProgress"
@@ -119,7 +119,7 @@
                                         DragStarted="SliderPlayProgress_DragStarted"
                                         DragCompleted="SliderPlayProgress_DragCompleted">
                                     </Slider>
-                                    <Label x:Name="LblDurationMilliseconds"
+                                    <Label x:Name="LblDuration"
                                        HorizontalOptions="End"
                                        VerticalTextAlignment="Center"/>
                                 </StackLayout>
@@ -190,7 +190,7 @@
                         <StackLayout x:Name="PhoneBlock">
                             <!-- 进度条 -->
                             <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding Text, Source={x:Reference LblPositionMilliseconds}}"
+                                <Label Text="{Binding Text, Source={x:Reference LblPosition}}"
                                        HorizontalOptions="Start"
                                        VerticalTextAlignment="Center"/>
                                 <Slider Margin="10,0,10,0"
@@ -202,7 +202,7 @@
                                         DragStarted="SliderPlayProgress_DragStarted"
                                         DragCompleted="SliderPlayProgress_DragCompleted">
                                 </Slider>
-                                <Label Text="{Binding Text, Source={x:Reference LblDurationMilliseconds}}"
+                                <Label Text="{Binding Text, Source={x:Reference LblDuration}}"
                                        HorizontalOptions="End"
                                        VerticalTextAlignment="Center"/>
                             </StackLayout>
