@@ -167,9 +167,9 @@
                 <On Platform="Android,iOS">
                     <StackLayout>
                         <StackLayout IsVisible="{Binding IsVisible, Source={x:Reference BufferingBlock}}"
+                                     Margin="10,0,0,0"
                                      Orientation="Horizontal"
-                                     VerticalOptions="CenterAndExpand"
-                                     HorizontalOptions="CenterAndExpand">
+                                     VerticalOptions="CenterAndExpand">
                             <ActivityIndicator IsRunning="true"
                                                HeightRequest="20"
                                                WidthRequest="20"/>
@@ -180,7 +180,6 @@
                         <!--迷你组件-->
                         <StackLayout x:Name="PhoneMiniBlock"
                                      Margin="0,0,0,5"
-                                     IsVisible="{Binding IsVisible, Source={x:Reference PlayerBlock}}"
                                      Orientation="Horizontal">
 
                             <Image WidthRequest="30"
@@ -210,8 +209,7 @@
                         </StackLayout>
 
                         <!--完整组件-->
-                        <StackLayout x:Name="PhoneBlock"
-                                     IsVisible="{Binding IsVisible, Source={x:Reference PlayerBlock}}">
+                        <StackLayout x:Name="PhoneBlock">
                             <!-- 进度条 -->
                             <StackLayout Orientation="Horizontal">
                                 <Label Text="{Binding Text, Source={x:Reference LblPosition}}"

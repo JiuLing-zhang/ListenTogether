@@ -39,8 +39,6 @@ public partial class Player : ContentView
             _configService = this.Handler.MauiContext.Services.GetService<IEnvironmentConfigService>();
         }
 
-        PhoneMiniBlock.IsVisible = IsMiniWhenPhone;
-        PhoneBlock.IsVisible = !IsMiniWhenPhone;
         if (Config.Desktop)
         {
             MainBlock.HeightRequest = 90;
@@ -91,6 +89,8 @@ public partial class Player : ContentView
             this.IsVisible = true;
             BufferingBlock.IsVisible = true;
             PlayerBlock.IsVisible = false;
+            PhoneMiniBlock.IsVisible = false;
+            PhoneBlock.IsVisible = false;
         });
     }
 
@@ -123,6 +123,9 @@ public partial class Player : ContentView
         {
             BufferingBlock.IsVisible = false;
             PlayerBlock.IsVisible = true;
+
+            PhoneMiniBlock.IsVisible = IsMiniWhenPhone;
+            PhoneBlock.IsVisible = !IsMiniWhenPhone;
 
             ImgCurrentMusic.Source = ImageSource.FromStream(
                 () => new MemoryStream(ImageCacheUtils.GetByteArrayUsingCache(music.ImageUrl))
