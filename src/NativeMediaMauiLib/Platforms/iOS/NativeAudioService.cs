@@ -17,6 +17,12 @@ public class NativeAudioService : INativeAudioService
     public event EventHandler<bool> IsPlayingChanged;
     public event EventHandler PlayFinished;
     public event EventHandler PlayFailed;
+    public event EventHandler Played;
+    public event EventHandler Paused;
+    public event EventHandler Stopped;
+    public event EventHandler SkipToNext;
+    public event EventHandler SkipToPrevious;
+
     public async Task InitializeAsync(string audioURI)
     {
         _uri = audioURI;

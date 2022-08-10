@@ -28,4 +28,11 @@ public interface INativeAudioService
     event EventHandler<bool> IsPlayingChanged;
     event EventHandler PlayFinished;
     event EventHandler PlayFailed;
+
+    //外部事件（线控、媒体中心按钮回调等）
+    event EventHandler Played;
+    event EventHandler Paused;
+    event EventHandler Stopped;
+    event EventHandler SkipToNext;
+    event EventHandler SkipToPrevious;
 }

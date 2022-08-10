@@ -73,6 +73,7 @@ public partial class Player : ContentView
         _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded += playerService_NewMusicAdded;
         _playerService.PositionChanged += _playerService_PositionChanged;
+        _playerService.Buffering += _playerService_Buffering;
 
         UpdateCurrentMusic();
         UpdateRepeatModel();
@@ -81,6 +82,16 @@ public partial class Player : ContentView
             UpdateSoundOnOff();
             Updatevolume();
         }
+    }
+
+    private void _playerService_Buffering(object sender, EventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            this.IsVisible = true;
+            BufferingBlock.IsVisible = true;
+            PlayerBlock.IsVisible = false;
+        });
     }
 
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
@@ -98,20 +109,21 @@ public partial class Player : ContentView
 
     private void playerService_NewMusicAdded(object sender, EventArgs e)
     {
-        this.IsVisible = true;
         NewMusicAddedDo(_playerService.CurrentMusic);
         if (Config.Desktop)
         {
             //TODO 首次播放音乐时，无法设置声音，所以先在这里临时实现
             Updatevolume();
         }
-
     }
 
     private void NewMusicAddedDo(Music music)
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
+            BufferingBlock.IsVisible = false;
+            PlayerBlock.IsVisible = true;
+
             ImgCurrentMusic.Source = ImageSource.FromStream(
                 () => new MemoryStream(ImageCacheUtils.GetByteArrayUsingCache(music.ImageUrl))
             );
@@ -314,5 +326,6 @@ public partial class Player : ContentView
         _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded -= playerService_NewMusicAdded;
         _playerService.PositionChanged -= _playerService_PositionChanged;
+        _playerService.Buffering -= _playerService_Buffering;
     }
 }

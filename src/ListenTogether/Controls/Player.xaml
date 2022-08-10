@@ -10,7 +10,19 @@
                     <Grid>
                         <Line Stroke="{AppThemeBinding Dark={StaticResource DarkLine},Light={StaticResource LightLine}}"
                               X2="4000" />
-                        <StackLayout Orientation="Horizontal"
+                        <StackLayout x:Name="BufferingBlock"
+                                     Orientation="Horizontal"
+                                     VerticalOptions="CenterAndExpand"
+                                     HorizontalOptions="CenterAndExpand">
+                            <ActivityIndicator IsRunning="true"
+                                               HeightRequest="20"
+                                               WidthRequest="20"/>
+                            <Label Text="歌曲缓冲中...."
+                                   Margin="10,0,0,0"
+                                   VerticalTextAlignment="Center"/>
+                        </StackLayout>
+                        <StackLayout x:Name="PlayerBlock"
+                                     Orientation="Horizontal"
                                      Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,10,10,0',iOS='10,10,10,0'}">
                             <StackLayout HorizontalOptions="Start"
                                      Orientation="Horizontal"
@@ -154,10 +166,21 @@
                 </On>
                 <On Platform="Android,iOS">
                     <StackLayout>
-
+                        <StackLayout IsVisible="{Binding IsVisible, Source={x:Reference BufferingBlock}}"
+                                     Orientation="Horizontal"
+                                     VerticalOptions="CenterAndExpand"
+                                     HorizontalOptions="CenterAndExpand">
+                            <ActivityIndicator IsRunning="true"
+                                               HeightRequest="20"
+                                               WidthRequest="20"/>
+                            <Label Text="歌曲缓冲中...."
+                                   Margin="10,0,0,0"
+                                   VerticalTextAlignment="Center"/>
+                        </StackLayout>
                         <!--迷你组件-->
                         <StackLayout x:Name="PhoneMiniBlock"
                                      Margin="0,0,0,5"
+                                     IsVisible="{Binding IsVisible, Source={x:Reference PlayerBlock}}"
                                      Orientation="Horizontal">
 
                             <Image WidthRequest="30"
@@ -187,7 +210,8 @@
                         </StackLayout>
 
                         <!--完整组件-->
-                        <StackLayout x:Name="PhoneBlock">
+                        <StackLayout x:Name="PhoneBlock"
+                                     IsVisible="{Binding IsVisible, Source={x:Reference PlayerBlock}}">
                             <!-- 进度条 -->
                             <StackLayout Orientation="Horizontal">
                                 <Label Text="{Binding Text, Source={x:Reference LblPosition}}"

@@ -20,12 +20,25 @@ namespace NativeMediaMauiLib.Platforms.Android
         public event EventHandler<bool> IsPlayingChanged;
         public event EventHandler PlayFinished;
         public event EventHandler PlayFailed;
+
+        public event EventHandler Played;
+        public event EventHandler Paused;
+        public event EventHandler Stopped;
+        public event EventHandler SkipToNext;
+        public event EventHandler SkipToPrevious;
+
         public Task InitializeAsync(string audioURI)
         {
             if (instance == null)
             {
                 var activity = CurrentActivity.CrossCurrentActivity.Current;
                 instance = activity.Activity as IAudioActivity;
+
+                instance.Binder.GetMediaPlayerService().Played += (_, _) => Played?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().Paused += (_, _) => Paused?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().Stopped += (_, _) => Stopped?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().SkipToNext += (_, _) => SkipToNext?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().SkipToPrevious += (_, _) => SkipToPrevious?.Invoke(this, EventArgs.Empty);
 
                 instance.Binder.GetMediaPlayerService().Error += (_, _) => PlayFailed?.Invoke(this, EventArgs.Empty);
                 instance.Binder.GetMediaPlayerService().Completion += (_, _) => PlayFinished?.Invoke(this, EventArgs.Empty);

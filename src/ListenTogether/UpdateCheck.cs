@@ -60,7 +60,7 @@ internal class UpdateCheck
                     }
                     return;
                 }
-
+                //TODO Android版本号比对不正确
                 var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, obj.Version, obj.MinVersion);
                 if (isNeedUpdate == false)
                 {

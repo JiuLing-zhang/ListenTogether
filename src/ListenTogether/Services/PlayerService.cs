@@ -26,12 +26,19 @@ public class PlayerService
     public event EventHandler NewMusicAdded;
     public event EventHandler IsPlayingChanged;
     public event EventHandler PositionChanged;
+    public event EventHandler Buffering;
 
     public PlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, WifiOptionsService wifiOptionsService)
     {
         _audioService = audioService;
         _audioService.PlayFinished += async (_, _) => await Next();
         _audioService.PlayFailed += async (_, _) => await MediaFailed();
+
+        _audioService.Played += async (_, _) => await PlayOnlyAsync();
+        _audioService.Paused += async (_, _) => await PauseAsync();
+        _audioService.Stopped += async (_, _) => await PauseAsync();
+        _audioService.SkipToNext += async (_, _) => await Next();
+        _audioService.SkipToPrevious += async (_, _) => await Previous();
 
         _musicNetworkService = musicNetworkService;
         _wifiOptionsService = wifiOptionsService;
@@ -89,7 +96,7 @@ public class PlayerService
         {
             return;
         }
-
+        Buffering?.Invoke(this, EventArgs.Empty);
         var musicPath = await GetMusicCachePath(music);
         if (musicPath.IsEmpty())
         {

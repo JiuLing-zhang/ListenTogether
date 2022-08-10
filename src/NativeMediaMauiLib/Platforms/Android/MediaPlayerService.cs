@@ -50,6 +50,12 @@ public class MediaPlayerService : Service,
     public event ErrorEventHandler Error;
     public event CompletionEventHandler Completion;
 
+    public event PlayedEventHandler Played;
+    public event PausedEventHandler Paused;
+    public event StoppedEventHandler Stopped;
+    public event SkipToNextEventHandler SkipToNext;
+    public event SkipToPreviousEventHandler SkipToPrevious;
+
     public string AudioUrl;
 
     public bool isCurrentEpisode = true;
@@ -106,10 +112,25 @@ public class MediaPlayerService : Service,
     {
         StatusChanged?.Invoke(this, e);
     }
-
-    protected virtual void OnPlayingChanged(bool e)
+    protected virtual void OnPlayed()
     {
-        PlayingChanged?.Invoke(this, e);
+        Played?.Invoke(this, EventArgs.Empty);
+    }
+    protected virtual void OnPaused()
+    {
+        Paused?.Invoke(this, EventArgs.Empty);
+    }
+    protected virtual void OnStopped()
+    {
+        Stopped?.Invoke(this, EventArgs.Empty);
+    }
+    protected virtual void OnSkipToNext()
+    {
+        SkipToNext?.Invoke(this, EventArgs.Empty);
+    }
+    protected virtual void OnSkipToPrevious()
+    {
+        SkipToPrevious?.Invoke(this, EventArgs.Empty);
     }
 
     protected virtual void OnCoverReloaded(EventArgs e)
@@ -708,31 +729,31 @@ public class MediaPlayerService : Service,
 
         public override async void OnPause()
         {
-            mediaPlayerService.GetMediaPlayerService().OnPlayingChanged(false);
+            mediaPlayerService.GetMediaPlayerService().OnPaused();
             base.OnPause();
         }
 
         public override async void OnPlay()
         {
-            mediaPlayerService.GetMediaPlayerService().OnPlayingChanged(true);
+            mediaPlayerService.GetMediaPlayerService().OnPlayed();
             base.OnPlay();
         }
 
         public override async void OnSkipToNext()
         {
-            await mediaPlayerService.GetMediaPlayerService().PlayNext();
+            mediaPlayerService.GetMediaPlayerService().OnSkipToNext();
             base.OnSkipToNext();
         }
 
         public override async void OnSkipToPrevious()
         {
-            await mediaPlayerService.GetMediaPlayerService().PlayPrevious();
+            mediaPlayerService.GetMediaPlayerService().OnSkipToPrevious();
             base.OnSkipToPrevious();
         }
 
         public override async void OnStop()
         {
-            await mediaPlayerService.GetMediaPlayerService().Stop();
+            mediaPlayerService.GetMediaPlayerService().OnStopped();
             base.OnStop();
         }
     }
