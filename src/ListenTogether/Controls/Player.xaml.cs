@@ -143,7 +143,14 @@ public partial class Player : ContentView
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
     {
-        await _playerService.PlayAsync(_playerService.CurrentMusic);
+        if (_playerService.IsPlaying)
+        {
+            await _playerService.PauseAsync();
+        }
+        else
+        {
+            await _playerService.PlayOnlyAsync();
+        }
     }
 
     private async void ImgSoundOff_Tapped(object sender, EventArgs e)

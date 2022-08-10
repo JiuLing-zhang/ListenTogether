@@ -90,45 +90,42 @@ public class PlayerService
             return;
         }
 
-        bool isOtherMusic;
-        if (CurrentMusic == null || CurrentMusic.Id != music.Id)
+        var musicPath = await GetMusicCachePath(music);
+        if (musicPath.IsEmpty())
         {
-            isOtherMusic = true;
+            return;
         }
-        else
+        CurrentMusic = music;
+
+        if (_audioService.IsPlaying)
         {
-            isOtherMusic = false;
-        }
-        var isPlaying = isOtherMusic || !_audioService.IsPlaying;
-        var positionMilliseconds = isOtherMusic ? 0 : CurrentPosition.position.TotalMilliseconds;
-
-        if (isOtherMusic)
-        {
-            var musicPath = await GetMusicCachePath(music);
-            if (musicPath.IsEmpty())
-            {
-                return;
-            }
-            CurrentMusic = music;
-
-            if (_audioService.IsPlaying)
-            {
-                await InternalPauseAsync();
-            }
-
-            await _audioService.InitializeAsync(musicPath);
-
-            await InternalPlayPauseAsync(isPlaying, positionMilliseconds);
-
-            NewMusicAdded?.Invoke(this, EventArgs.Empty);
-        }
-        else
-        {
-            await InternalPlayPauseAsync(isPlaying, positionMilliseconds);
+            await InternalPauseAsync();
         }
 
+        await _audioService.InitializeAsync(musicPath);
+        await InternalPlayAsync(0);
+
+        NewMusicAdded?.Invoke(this, EventArgs.Empty);
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
+
+    public async Task PlayOnlyAsync()
+    {
+        if (!_audioService.IsPlaying)
+        {
+            await InternalPlayAsync(CurrentPosition.position.TotalMilliseconds);
+        }
+        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
+    }
+    public async Task PauseAsync()
+    {
+        if (_audioService.IsPlaying)
+        {
+            await InternalPauseAsync();
+        }
+        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
+    }
+
 
     private async Task<string> GetMusicCachePath(Music music)
     {
@@ -140,7 +137,6 @@ public class PlayerService
 
         if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
         {
-            //TODO 非WIFI，这里加个之类的
             return "";
         }
         //缓存文件不存在时重新下载
@@ -153,18 +149,6 @@ public class PlayerService
         var data = await _httpClient.GetReadByteArray(music.PlayUrl);
         File.WriteAllBytes(musicPath, data);
         return musicPath;
-    }
-
-    private async Task InternalPlayPauseAsync(bool isPlaying, double positionMilliseconds)
-    {
-        if (isPlaying)
-        {
-            await InternalPlayAsync(positionMilliseconds);
-        }
-        else
-        {
-            await InternalPauseAsync();
-        }
     }
 
     private async Task InternalPauseAsync()
