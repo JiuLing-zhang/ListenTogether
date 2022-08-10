@@ -5,7 +5,7 @@
 
 public interface INativeAudioService
 {
-    Task InitializeAsync(string audioURI);
+    Task InitializeAsync(string audioURI, AudioMetadata audioMetadata);
 
     Task PlayAsync(double positionMillisecond = 0);
 

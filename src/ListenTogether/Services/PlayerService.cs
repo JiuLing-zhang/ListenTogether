@@ -109,7 +109,8 @@ public class PlayerService
             await InternalPauseAsync();
         }
 
-        await _audioService.InitializeAsync(musicPath);
+        var image = await _httpClient.GetFileByteArray(music.ImageUrl);
+        await _audioService.InitializeAsync(musicPath, new AudioMetadata(image, music.Name, music.Artist, music.Album));
         await InternalPlayAsync(0);
 
         NewMusicAdded?.Invoke(this, EventArgs.Empty);

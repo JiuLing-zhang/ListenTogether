@@ -1,13 +1,14 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.Media;
 using Android.OS;
 using AndroidX.Core.App;
 using static Android.App.Notification;
 using static Android.Resource;
 using AndroidMedia = Android.Media;
-
+using Drawable = Android.Resource.Drawable;
 
 namespace NativeMediaMauiLib.Platforms.Android;
 
@@ -63,7 +64,7 @@ public static class NotificationHelper
         Context context,
         MediaMetadata mediaMetadata,
         AndroidMedia.Session.MediaSession mediaSession,
-        object largeIcon,
+        NotificationInfo notificationInfo,
         bool isPlaying)
     {
         var pendingIntent = PendingIntent.GetActivity(
@@ -71,18 +72,17 @@ public static class NotificationHelper
             0,
             new Intent(context, typeof(Activity)),
             PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Mutable);
-        MediaMetadata currentTrack = mediaMetadata;
 
         MediaStyle style = new MediaStyle();
         style.SetMediaSession(mediaSession.SessionToken);
 
         var builder = new Builder(context, CHANNEL_ID)
             .SetStyle(style)
-            .SetContentTitle(currentTrack.GetString(MediaMetadata.MetadataKeyTitle))
-            .SetContentText(currentTrack.GetString(MediaMetadata.MetadataKeyArtist))
-            .SetSubText(currentTrack.GetString(MediaMetadata.MetadataKeyAlbum))
-            .SetSmallIcon(Resource.Drawable.abc_ab_share_pack_mtrl_alpha) //TODO player_play
-            .SetLargeIcon(largeIcon as Bitmap)
+            .SetContentTitle(notificationInfo.ContentTitle)
+            .SetContentText(notificationInfo.ContentText)
+            .SetSubText(notificationInfo.SubText)
+            .SetSmallIcon(Icon.CreateWithBitmap(notificationInfo.Icon))
+            .SetLargeIcon(notificationInfo.Icon)
             .SetContentIntent(pendingIntent)
             .SetShowWhen(false)
             .SetOngoing(isPlaying)

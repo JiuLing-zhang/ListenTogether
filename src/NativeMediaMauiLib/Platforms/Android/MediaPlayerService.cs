@@ -57,6 +57,7 @@ public class MediaPlayerService : Service,
     public event SkipToPreviousEventHandler SkipToPrevious;
 
     public string AudioUrl;
+    public NotificationInfo NotificationInfo;
 
     public bool isCurrentEpisode = true;
 
@@ -293,23 +294,6 @@ public class MediaPlayerService : Service,
         }
     }
 
-    private Bitmap cover;
-
-    public object Cover
-    {
-        get
-        {
-            if (cover == null)
-                cover = BitmapFactory.DecodeResource(Resources, Resource.Drawable.abc_ab_share_pack_mtrl_alpha); //TODO player_play
-            return cover;
-        }
-        private set
-        {
-            cover = value as Bitmap;
-            OnCoverReloaded(EventArgs.Empty);
-        }
-    }
-
     /// <summary>
     /// Intializes the player.
     /// </summary>
@@ -373,12 +357,6 @@ public class MediaPlayerService : Service,
                 AquireWifiLock();
                 UpdateMediaMetadataCompat(metaRetriever);
                 StartNotification();
-
-                byte[] imageByteArray = metaRetriever.GetEmbeddedPicture();
-                if (imageByteArray == null)
-                    Cover = await BitmapFactory.DecodeResourceAsync(Resources, Resource.Drawable.abc_ab_share_pack_mtrl_alpha); //TODO player_play
-                else
-                    Cover = await BitmapFactory.DecodeByteArrayAsync(imageByteArray, 0, imageByteArray.Length);
             }
         }
         catch (Exception ex)
@@ -538,7 +516,7 @@ public class MediaPlayerService : Service,
             ApplicationContext,
             mediaController.Metadata,
             mediaSession,
-            Cover,
+            NotificationInfo,
             MediaPlayerState == PlaybackStateCode.Playing);
     }
 
@@ -576,7 +554,7 @@ public class MediaPlayerService : Service,
                 .PutString(MediaMetadata.MetadataKeyArtist, mediaSession.Controller.Metadata.GetString(MediaMetadata.MetadataKeyArtist))
                 .PutString(MediaMetadata.MetadataKeyTitle, mediaSession.Controller.Metadata.GetString(MediaMetadata.MetadataKeyTitle));
         }
-        builder.PutBitmap(MediaMetadata.MetadataKeyAlbumArt, Cover as Bitmap);
+        builder.PutBitmap(MediaMetadata.MetadataKeyAlbumArt, NotificationInfo.Icon);
 
         mediaSession.SetMetadata(builder.Build());
     }

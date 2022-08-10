@@ -23,7 +23,7 @@ public class NativeAudioService : INativeAudioService
     public event EventHandler SkipToNext;
     public event EventHandler SkipToPrevious;
 
-    public async Task InitializeAsync(string audioURI)
+    public async Task InitializeAsync(string audioURI, AudioMetadata audioMetadata)
     {
         _uri = audioURI;
         NSUrl fileURL = new NSUrl(_uri.ToString());

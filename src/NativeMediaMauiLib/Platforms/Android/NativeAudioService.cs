@@ -1,4 +1,5 @@
-﻿using Android.Media;
+﻿using Android.Graphics;
+using Android.Media;
 using AndroidApp = Android.App;
 
 namespace NativeMediaMauiLib.Platforms.Android
@@ -27,7 +28,7 @@ namespace NativeMediaMauiLib.Platforms.Android
         public event EventHandler SkipToNext;
         public event EventHandler SkipToPrevious;
 
-        public Task InitializeAsync(string audioURI)
+        public Task InitializeAsync(string audioURI, AudioMetadata audioMetadata)
         {
             if (instance == null)
             {
@@ -66,6 +67,11 @@ namespace NativeMediaMauiLib.Platforms.Android
             };
 
             instance.Binder.GetMediaPlayerService().AudioUrl = audioURI;
+            instance.Binder.GetMediaPlayerService().NotificationInfo = new NotificationInfo(
+               BitmapFactory.DecodeByteArray(audioMetadata.Image, 0, audioMetadata.Image.Length),
+               audioMetadata.Name,
+               audioMetadata.Artist,
+               audioMetadata.Album);
 
             return Task.CompletedTask;
         }
