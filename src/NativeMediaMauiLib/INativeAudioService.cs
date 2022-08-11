@@ -5,6 +5,7 @@
 
 public interface INativeAudioService
 {
+    Task SetAppIcon(byte[] appIcon);
     Task InitializeAsync(string audioURI, AudioMetadata audioMetadata);
 
     Task PlayAsync(double positionMillisecond = 0);

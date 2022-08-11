@@ -4,6 +4,7 @@ using ListenTogether.Services.MusicSwitchServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.LifecycleEvents;
 using NativeMediaMauiLib;
+using System.IO;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -19,6 +20,13 @@ namespace ListenTogether
         {
             var builder = MauiApp.CreateBuilder();
 
+#if ANDROID
+            using var appIconStream = FileSystem.OpenAppPackageFileAsync("appicon.png").Result;
+            using StreamReader reader = new StreamReader(appIconStream);
+            var ms = new MemoryStream();
+            appIconStream.CopyTo(ms);
+            GlobalConfig.AppIcon = ms.ToArray();
+#endif
             using var stream = FileSystem.OpenAppPackageFileAsync("Settings.json").Result;
             var config = new ConfigurationBuilder().AddJsonStream(stream).Build();
             builder.Configuration.AddConfiguration(config);

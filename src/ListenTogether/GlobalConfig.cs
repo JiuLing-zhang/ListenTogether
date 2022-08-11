@@ -21,6 +21,8 @@ namespace ListenTogether
         /// </summary>
         public static readonly string MusicCacheDirectory = Path.Combine(AppDataDirectory, "musics");
 
+        public static byte[] AppIcon { get; set; }
+
         public static Version CurrentVersion { get; set; }
         public static string CurrentVersionString => CurrentVersion.ToString();
 

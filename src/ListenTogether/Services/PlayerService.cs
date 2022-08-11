@@ -40,6 +40,9 @@ public class PlayerService
         _audioService.SkipToNext += async (_, _) => await Next();
         _audioService.SkipToPrevious += async (_, _) => await Previous();
 
+#if ANDROID
+        _audioService.SetAppIcon(GlobalConfig.AppIcon);
+#endif
         _musicNetworkService = musicNetworkService;
         _wifiOptionsService = wifiOptionsService;
         _musicSwitchServerFactory = musicSwitchServerFactory;

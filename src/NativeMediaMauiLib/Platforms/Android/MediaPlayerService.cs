@@ -554,7 +554,7 @@ public class MediaPlayerService : Service,
                 .PutString(MediaMetadata.MetadataKeyArtist, mediaSession.Controller.Metadata.GetString(MediaMetadata.MetadataKeyArtist))
                 .PutString(MediaMetadata.MetadataKeyTitle, mediaSession.Controller.Metadata.GetString(MediaMetadata.MetadataKeyTitle));
         }
-        builder.PutBitmap(MediaMetadata.MetadataKeyAlbumArt, NotificationInfo.Icon);
+        builder.PutBitmap(MediaMetadata.MetadataKeyAlbumArt, NotificationInfo.LargeIcon);
 
         mediaSession.SetMetadata(builder.Build());
     }

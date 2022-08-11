@@ -14,7 +14,7 @@ namespace NativeMediaMauiLib.Platforms.Android;
 
 public static class NotificationHelper
 {
-    public static readonly string CHANNEL_ID = "location_notification";
+    public static readonly string CHANNEL_ID = "listen_together_notification";
     private const int NotificationId = 1000;
 
     internal static Notification.Action GenerateActionCompat(Context context, int icon, string title, string intentAction)
@@ -49,8 +49,8 @@ public static class NotificationHelper
             return;
         }
 
-        var name = "Local Notifications";
-        var description = "The count from MainActivity.";
+        var name = "播放组件";
+        var description = "通知栏的播放组件";
         var channel = new NotificationChannel(CHANNEL_ID, name, NotificationImportance.Default)
         {
             Description = description
@@ -81,8 +81,8 @@ public static class NotificationHelper
             .SetContentTitle(notificationInfo.ContentTitle)
             .SetContentText(notificationInfo.ContentText)
             .SetSubText(notificationInfo.SubText)
-            .SetSmallIcon(Icon.CreateWithBitmap(notificationInfo.Icon))
-            .SetLargeIcon(notificationInfo.Icon)
+            .SetSmallIcon(Icon.CreateWithBitmap(notificationInfo.SmallIcon))
+            .SetLargeIcon(notificationInfo.LargeIcon)
             .SetContentIntent(pendingIntent)
             .SetShowWhen(false)
             .SetOngoing(isPlaying)

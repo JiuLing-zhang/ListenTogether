@@ -22,6 +22,11 @@ public class NativeAudioService : INativeAudioService
     public event EventHandler SkipToNext;
     public event EventHandler SkipToPrevious;
 
+    public Task SetAppIcon(byte[] appIcon)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task InitializeAsync(string audioURI, AudioMetadata audioMetadata)
     {
         _uri = audioURI;
