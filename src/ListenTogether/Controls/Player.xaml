@@ -165,7 +165,7 @@
 
                 </On>
                 <On Platform="Android,iOS">
-                    <StackLayout>
+                    <StackLayout Margin="10,5,10,5">
                         <StackLayout IsVisible="{Binding IsVisible, Source={x:Reference BufferingBlock}}"
                                      Margin="10,0,0,0"
                                      Orientation="Horizontal"
@@ -179,7 +179,6 @@
                         </StackLayout>
                         <!--迷你组件-->
                         <StackLayout x:Name="PhoneMiniBlock"
-                                     Margin="0,0,0,5"
                                      Orientation="Horizontal">
 
                             <Image WidthRequest="30"
