@@ -11,7 +11,7 @@
     <ContentPage.Resources>
         <Style x:Key="LyricItem" TargetType="Label">
             <Setter Property="TextColor"
-                    Value="{AppThemeBinding Light={StaticResource LightLyricText}, Dark={StaticResource DarkLyricText}}" />
+                    Value="{StaticResource PlayingPageLyricText}" />
             <Setter Property="FontSize"
                     Value="15"/>
             <Setter Property="HorizontalTextAlignment"
@@ -27,7 +27,7 @@
                              Value="True"
                              TargetType="Label">
                     <Setter Property="TextColor"
-                            Value="{AppThemeBinding Light={StaticResource LightLyricHighlight}, Dark={StaticResource DarkLyricHighlight}}" />
+                            Value="{StaticResource PlayingPageLyricHighlight}" />
                     <Setter Property="FontSize"
                             Value="17"/>
                 </DataTrigger>
@@ -35,7 +35,7 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid BackgroundColor="{StaticResource PlayingPageBackgroundColor}">
         <JiuLing:GaussianImage Url="{Binding CurrentMusic.ImageUrl}"
                                BackgroundColor="#000"
                                Opacity="0.6"
@@ -47,7 +47,7 @@
             <StackLayout VerticalOptions="StartAndExpand"
                          Orientation="{OnPlatform WinUI=Horizontal}"
                          WidthRequest="800"
-                         HeightRequest="{OnPlatform WinUI=400,iOS=400,Android=580}">
+                         HeightRequest="{OnPlatform WinUI=400,iOS=400,Android=550}">
                 <StackLayout HorizontalOptions="CenterAndExpand">
                     <Image HorizontalOptions="Center"
                            Aspect="AspectFit"
@@ -63,6 +63,7 @@
                                  Orientation="Horizontal"
                                  HorizontalOptions="Center">
                         <Label Text="复制歌曲链接"
+                               TextColor="{StaticResource PlayingPageText}"
                                IsVisible="{OnPlatform Android=false,iOS=false,WinUI=true,MacCatalyst=true}">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding CopyMusicLinkCommand}"/>
@@ -70,6 +71,7 @@
                         </Label>
 
                         <Label Text="分享歌曲链接"
+                               TextColor="{StaticResource PlayingPageText}"
                                IsVisible="{OnPlatform Android=true,iOS=true,WinUI=false,MacCatalyst=false}">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ShareMusicLinkCommand}"/>
@@ -83,6 +85,7 @@
                              VerticalOptions="FillAndExpand"
                              HorizontalOptions="CenterAndExpand">
                     <Label Text="当前未播放歌曲"
+                           TextColor="{StaticResource PlayingPageText}"
                            HorizontalTextAlignment="Center"
                            IsVisible="{Binding CurrentMusic, Converter={StaticResource IsEqualConverter}}"/>
 
@@ -106,7 +109,7 @@
 
                             <Label Margin="10,0,0,0"
                                    Text="{Binding CurrentMusic.Name}"
-                                   TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"
+                                   TextColor="{StaticResource PlayingPageText}"
                                    FontSize="22"
                                    VerticalOptions="Center"
                                    HorizontalTextAlignment="Center"/>
@@ -114,7 +117,7 @@
 
                         <StackLayout VerticalOptions="Start"
                                      Margin="0,10,0,20">
-                            <Label TextColor="{AppThemeBinding Light={StaticResource LightTextSecond}, Dark={StaticResource DarkTextSecond}}"
+                            <Label TextColor="{StaticResource PlayingPageTextSecond}"
                                    FontSize="16"
                                    HorizontalTextAlignment="Center">
                                 <MultiBinding StringFormat="{}{0} - {1}">

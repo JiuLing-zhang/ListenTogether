@@ -5,293 +5,286 @@
 
     <ContentView.Content>
         <ContentView x:Name="MainBlock">
-            <OnPlatform x:TypeArguments="View">
-                <On Platform="UWP, macOS">
-                    <Grid>
-                        <Line Stroke="{AppThemeBinding Dark={StaticResource DarkLine},Light={StaticResource LightLine}}"
-                              X2="4000" />
-                        <StackLayout x:Name="BufferingBlock"
-                                     Orientation="Horizontal"
-                                     VerticalOptions="CenterAndExpand"
-                                     HorizontalOptions="CenterAndExpand">
-                            <ActivityIndicator IsRunning="true"
+            <StackLayout>
+                <StackLayout x:Name="Buffering"
+                             Orientation="Horizontal"
+                             VerticalOptions="CenterAndExpand"
+                             HorizontalOptions="CenterAndExpand">
+                    <ActivityIndicator IsRunning="true"
+                                       HeightRequest="20"
+                                       WidthRequest="20"/>
+                    <Label Text="歌曲缓冲中...."
+                           Margin="10,0,0,0"
+                           VerticalTextAlignment="Center"/>
+                </StackLayout>
+                <OnPlatform x:TypeArguments="View">
+                    <On Platform="UWP, macOS">
+                        <Grid>
+                            <Line Stroke="{AppThemeBinding Dark={StaticResource DarkLine},Light={StaticResource LightLine}}"
+                                  X2="4000" />
+                            <StackLayout Orientation="Horizontal"
+                                         Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,10,10,0',iOS='10,10,10,0'}">
+                                <StackLayout HorizontalOptions="Start"
+                                             Orientation="Horizontal"
+                                             WidthRequest="250">
+
+                                    <Image x:Name="ImgCurrentMusic"
+                                           HorizontalOptions="Start"
+                                           WidthRequest="60">
+                                    </Image>
+                                    <StackLayout Margin="10,0,0,0"
+                                                 HorizontalOptions="FillAndExpand">
+                                        <Label x:Name="LblMusicName"
+                                               Margin="0,10,0,0"
+                                               VerticalOptions="Start"
+                                               LineBreakMode="TailTruncation"
+                                               TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"/>
+                                        <Label x:Name="LblMusicArtistAndAlbum"
+                                               Margin="0,0,0,10"
+                                               VerticalOptions="EndAndExpand"
+                                               Style="{StaticResource Explain}"
+                                               LineBreakMode="TailTruncation"/>
+                                        <Label x:Name="LblMusicArtist"
+                                               IsVisible="False"/>
+
+                                    </StackLayout>
+                                </StackLayout>
+                                <StackLayout HorizontalOptions="CenterAndExpand"
+                                             MaximumWidthRequest="450">
+
+                                    <!--播放按钮-->
+                                    <StackLayout Orientation="Horizontal" 
+                                                 HorizontalOptions="Center"
+                                                 Spacing="28" >
+
+                                        <Image x:Name="ImgRepeat"
+                                               WidthRequest="20"
                                                HeightRequest="20"
-                                               WidthRequest="20"/>
-                            <Label Text="歌曲缓冲中...."
-                                   Margin="10,0,0,0"
-                                   VerticalTextAlignment="Center"/>
-                        </StackLayout>
-                        <StackLayout x:Name="PlayerBlock"
-                                     Orientation="Horizontal"
-                                     Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,10,10,0',iOS='10,10,10,0'}">
-                            <StackLayout HorizontalOptions="Start"
-                                     Orientation="Horizontal"
-                                     WidthRequest="250">
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"
+                                               Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="ImgRepeat_Tapped"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
 
-                                <Image x:Name="ImgCurrentMusic"
-                                   HorizontalOptions="Start"
-                                   WidthRequest="60">
-                                </Image>
-                                <StackLayout Margin="10,0,0,0"
-                                         HorizontalOptions="FillAndExpand">
-                                    <Label x:Name="LblMusicName"
-                                       Margin="0,10,0,0"
-                                       VerticalOptions="Start"
-                                       LineBreakMode="TailTruncation"
-                                       TextColor="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}"/>
-                                    <Label x:Name="LblMusicArtistAndAlbum"
-                                       Margin="0,0,0,10"
-                                       VerticalOptions="EndAndExpand"
-                                       Style="{StaticResource Explain}"
-                                       LineBreakMode="TailTruncation"/>
-                                    <Label x:Name="LblMusicArtist"
-                                       IsVisible="False"/>
+                                        <Image x:Name="ImgBack"
+                                               Source="{AppThemeBinding Dark='back_dark.png',Light='back.png'}"
+                                               WidthRequest="20"
+                                               HeightRequest="20"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"
+                                               Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="Previous_Tapped"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
 
+                                        <Image x:Name="ImgPlay"
+                                               WidthRequest="40"
+                                               HeightRequest="40"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"
+                                               Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+
+                                        <Image x:Name="ImgNext"
+                                               Source="{AppThemeBinding Dark='next_dark.png',Light='next.png'}"
+                                               WidthRequest="20"
+                                               HeightRequest="20"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"
+                                               Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="Next_Tapped"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+
+                                        <Image x:Name="ImgOther"
+                                               Source="{AppThemeBinding Dark='puzzled_dark.png',Light='puzzled.png'}"
+                                               WidthRequest="20"
+                                               HeightRequest="20"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"
+                                               Aspect="AspectFill">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="Puzzled_Tapped"/>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </StackLayout>
+
+                                    <!--进度条-->
+                                    <StackLayout Orientation="Horizontal"
+                                                 HeightRequest="30">
+                                        <Label x:Name="LblPosition"
+                                               HorizontalOptions="Start"
+                                               VerticalTextAlignment="Center"/>
+                                        <Slider x:Name="SliderPlayProgress"
+                                                HorizontalOptions="FillAndExpand"
+                                                VerticalOptions="Center"
+                                                Minimum="0"
+                                                Maximum="1"
+                                                Margin="10,0,10,0"
+                                                DragStarted="SliderPlayProgress_DragStarted"
+                                                DragCompleted="SliderPlayProgress_DragCompleted">
+                                        </Slider>
+                                        <Label x:Name="LblDuration"
+                                               HorizontalOptions="End"
+                                               VerticalTextAlignment="Center"/>
+                                    </StackLayout>
+                                </StackLayout>
+                                <StackLayout HorizontalOptions="End"
+                                             Orientation="Horizontal"
+                                             WidthRequest="250">
+
+                                    <Image x:Name="ImgSoundOff"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="EndAndExpand"
+                                           HeightRequest="20"
+                                           WidthRequest="20"
+                                           Aspect="AspectFill">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="ImgSoundOff_Tapped"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+
+                                    <Slider x:Name="SliderVolume"
+                                            Margin="10,0,20,0"
+                                            WidthRequest="90"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Center"
+                                            Minimum="0"
+                                            Maximum="100"
+                                            ValueChanged="SliderVolume_ValueChanged"/>
                                 </StackLayout>
                             </StackLayout>
-                            <StackLayout HorizontalOptions="CenterAndExpand"
-                                     MaximumWidthRequest="450">
+                        </Grid>
 
-                                <!--播放按钮-->
-                                <StackLayout Orientation="Horizontal" 
-                                         HorizontalOptions="Center"
-                                         Spacing="28" >
+                    </On>
+                    <On Platform="Android,iOS">
+                        <StackLayout Margin="10,5,10,5">                          
+                            <!--迷你组件-->
+                            <StackLayout x:Name="PhoneMiniPlayer"
+                                         Orientation="Horizontal">
 
-                                    <Image x:Name="ImgRepeat"                                       
-                                       WidthRequest="20" 
-                                       HeightRequest="20"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
+                                <Image WidthRequest="30"
+                                       HorizontalOptions="Start"
+                                       Source="{Binding Source, Source={x:Reference ImgCurrentMusic}}">
+                                </Image>
+
+                                <Label Margin="5,0,0,0"
+                                       HorizontalOptions="StartAndExpand"
+                                       VerticalTextAlignment="Center"
+                                       LineBreakMode="TailTruncation">
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Text" Source="{x:Reference LblMusicName}"/>
+                                        <Binding Path="Text" Source="{x:Reference LblMusicArtist}"/>
+                                    </MultiBinding>
+                                </Label>
+
+                                <Image WidthRequest="30"
+                                       HeightRequest="30"
+                                       Aspect="AspectFill"
+                                       HorizontalOptions="End"
+                                       Source="{Binding Source, Source={x:Reference ImgPlay}}">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="ImgPlay_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </StackLayout>
+
+                            <!--完整组件-->
+                            <StackLayout x:Name="PhoneFullPlayer">
+                                <!-- 进度条 -->
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Text, Source={x:Reference LblPosition}}"
+                                           HorizontalOptions="Start"
+                                           VerticalTextAlignment="Center"/>
+                                    <Slider Margin="5,0,5,0"
+                                            HorizontalOptions="FillAndExpand"
+                                            VerticalOptions="Center"
+                                            Value="{Binding Value, Source={x:Reference SliderPlayProgress}}"
+                                            Minimum="{Binding Minimum, Source={x:Reference SliderPlayProgress}}"
+                                            Maximum="{Binding Maximum, Source={x:Reference SliderPlayProgress}}"
+                                            DragStarted="SliderPlayProgress_DragStarted"
+                                            DragCompleted="SliderPlayProgress_DragCompleted">
+                                    </Slider>
+                                    <Label Text="{Binding Text, Source={x:Reference LblDuration}}"
+                                           HorizontalOptions="End"
+                                           VerticalTextAlignment="Center"/>
+                                </StackLayout>
+
+                                <!-- 播放按钮 -->
+                                <Grid ColumnDefinitions="*,*,*,*,*"
+                                  Margin="0,5,0,10">
+                                    <Image Source="{Binding Source, Source={x:Reference ImgRepeat}}"
+                                           Grid.Column="0"
+                                           WidthRequest="30"
+                                           HeightRequest="30"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           Aspect="AspectFill">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="ImgRepeat_Tapped"/>
                                         </Image.GestureRecognizers>
                                     </Image>
 
-                                    <Image x:Name="ImgBack"
-                                       Source="{AppThemeBinding Dark='back_dark.png',Light='back.png'}"
-                                       WidthRequest="20" 
-                                       HeightRequest="20"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
+                                    <Image Source="{Binding Source, Source={x:Reference ImgBack}}"
+                                           Grid.Column="1"
+                                           WidthRequest="30"
+                                           HeightRequest="30"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           Aspect="AspectFill">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="Previous_Tapped"/>
                                         </Image.GestureRecognizers>
                                     </Image>
 
-                                    <Image x:Name="ImgPlay"
-                                       WidthRequest="40"
-                                       HeightRequest="40"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
+                                    <Image Source="{Binding Source, Source={x:Reference ImgPlay}}"
+                                           Grid.Column="2"
+                                           WidthRequest="50"
+                                           HeightRequest="50"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           Aspect="AspectFill">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
                                         </Image.GestureRecognizers>
                                     </Image>
 
-                                    <Image x:Name="ImgNext"
-                                       Source="{AppThemeBinding Dark='next_dark.png',Light='next.png'}"
-                                       WidthRequest="20"
-                                       HeightRequest="20"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
+                                    <Image Source="{Binding Source, Source={x:Reference ImgNext}}"
+                                           Grid.Column="3"
+                                           WidthRequest="30"
+                                           HeightRequest="30"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           Aspect="AspectFill">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="Next_Tapped"/>
                                         </Image.GestureRecognizers>
                                     </Image>
 
-                                    <Image x:Name="ImgOther"
-                                       Source="{AppThemeBinding Dark='puzzled_dark.png',Light='puzzled.png'}"
-                                       WidthRequest="20"
-                                       HeightRequest="20"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
+                                    <Image Source="{Binding Source, Source={x:Reference ImgOther}}"
+                                           Grid.Column="4"
+                                           WidthRequest="30"
+                                           HeightRequest="30"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           Aspect="AspectFill">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="Puzzled_Tapped"/>
                                         </Image.GestureRecognizers>
                                     </Image>
-                                </StackLayout>
-
-                                <!--进度条-->
-                                <StackLayout Orientation="Horizontal"
-                                         HeightRequest="30">
-                                    <Label x:Name="LblPosition"
-                                       HorizontalOptions="Start"
-                                       VerticalTextAlignment="Center"/>
-                                    <Slider x:Name="SliderPlayProgress"
-                                        HorizontalOptions="FillAndExpand"
-                                        VerticalOptions="Center"
-                                        Minimum="0"
-                                        Maximum="1"
-                                        Margin="10,0,10,0"
-                                        DragStarted="SliderPlayProgress_DragStarted"
-                                        DragCompleted="SliderPlayProgress_DragCompleted">
-                                    </Slider>
-                                    <Label x:Name="LblDuration"
-                                       HorizontalOptions="End"
-                                       VerticalTextAlignment="Center"/>
-                                </StackLayout>
-                            </StackLayout>
-                            <StackLayout HorizontalOptions="End"
-                                     Orientation="Horizontal"
-                                     WidthRequest="250">
-
-                                <Image x:Name="ImgSoundOff"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="EndAndExpand"
-                                   HeightRequest="20"
-                                   WidthRequest="20" 
-                                   Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="ImgSoundOff_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Slider x:Name="SliderVolume"
-                                    Margin="10,0,20,0"
-                                    WidthRequest="90"
-                                    HorizontalOptions="End"
-                                    VerticalOptions="Center"
-                                    Minimum="0"
-                                    Maximum="100"
-                                    ValueChanged="SliderVolume_ValueChanged"/>
+                                </Grid>
                             </StackLayout>
                         </StackLayout>
-                    </Grid>
-
-                </On>
-                <On Platform="Android,iOS">
-                    <StackLayout Margin="10,5,10,5">
-                        <StackLayout IsVisible="{Binding IsVisible, Source={x:Reference BufferingBlock}}"
-                                     Margin="10,0,0,0"
-                                     Orientation="Horizontal"
-                                     VerticalOptions="CenterAndExpand">
-                            <ActivityIndicator IsRunning="true"
-                                               HeightRequest="20"
-                                               WidthRequest="20"/>
-                            <Label Text="歌曲缓冲中...."
-                                   Margin="10,0,0,0"
-                                   VerticalTextAlignment="Center"/>
-                        </StackLayout>
-                        <!--迷你组件-->
-                        <StackLayout x:Name="PhoneMiniBlock"
-                                     Orientation="Horizontal">
-
-                            <Image WidthRequest="30"
-                                   HorizontalOptions="Start"
-                                   Source="{Binding Source, Source={x:Reference ImgCurrentMusic}}">
-                            </Image>
-
-                            <Label Margin="5,0,0,0"
-                                   HorizontalOptions="StartAndExpand"
-                                   VerticalTextAlignment="Center"
-                                   LineBreakMode="TailTruncation">
-                                <MultiBinding StringFormat="{}{0} - {1}">
-                                    <Binding Path="Text" Source="{x:Reference LblMusicName}"/>
-                                    <Binding Path="Text" Source="{x:Reference LblMusicArtist}"/>
-                                </MultiBinding>
-                            </Label>
-
-                            <Image WidthRequest="30"
-                                   HeightRequest="30"
-                                   Aspect="AspectFill"
-                                   HorizontalOptions="End"
-                                   Source="{Binding Source, Source={x:Reference ImgPlay}}">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="ImgPlay_Tapped"/>
-                                </Image.GestureRecognizers>
-                            </Image>
-                        </StackLayout>
-
-                        <!--完整组件-->
-                        <StackLayout x:Name="PhoneBlock">
-                            <!-- 进度条 -->
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding Text, Source={x:Reference LblPosition}}"
-                                       HorizontalOptions="Start"
-                                       VerticalTextAlignment="Center"/>
-                                <Slider Margin="10,0,10,0"
-                                        HorizontalOptions="FillAndExpand"
-                                        VerticalOptions="Center"
-                                        Value="{Binding Value, Source={x:Reference SliderPlayProgress}}"
-                                        Minimum="{Binding Minimum, Source={x:Reference SliderPlayProgress}}"
-                                        Maximum="{Binding Maximum, Source={x:Reference SliderPlayProgress}}"
-                                        DragStarted="SliderPlayProgress_DragStarted"
-                                        DragCompleted="SliderPlayProgress_DragCompleted">
-                                </Slider>
-                                <Label Text="{Binding Text, Source={x:Reference LblDuration}}"
-                                       HorizontalOptions="End"
-                                       VerticalTextAlignment="Center"/>
-                            </StackLayout>
-
-                            <!-- 播放按钮 -->
-                            <StackLayout Orientation="Horizontal" 
-                                         HorizontalOptions="Center"
-                                         Spacing="30" >
-
-                                <Image Source="{Binding Source, Source={x:Reference ImgRepeat}}"
-                                       WidthRequest="30"
-                                       HeightRequest="30"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="ImgRepeat_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Image Source="{Binding Source, Source={x:Reference ImgBack}}"
-                                       WidthRequest="30"
-                                       HeightRequest="30"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="Previous_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Image Source="{Binding Source, Source={x:Reference ImgPlay}}"
-                                       WidthRequest="50"
-                                       HeightRequest="50"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Image Source="{Binding Source, Source={x:Reference ImgNext}}"
-                                       WidthRequest="30"
-                                       HeightRequest="30"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="Next_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Image Source="{Binding Source, Source={x:Reference ImgOther}}"
-                                       WidthRequest="30"
-                                       HeightRequest="30"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="Puzzled_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </StackLayout>
-                        </StackLayout>
-                    </StackLayout>
-                </On>
-            </OnPlatform>
+                    </On>
+                </OnPlatform>
+            </StackLayout>
         </ContentView>
     </ContentView.Content>
 </ContentView>

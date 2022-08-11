@@ -51,8 +51,10 @@ public partial class Player : ContentView
             }
             else
             {
-                MainBlock.HeightRequest = 80;
+                MainBlock.HeightRequest = 120;
             }
+            PhoneMiniPlayer.IsVisible = IsMiniWhenPhone;
+            PhoneFullPlayer.IsVisible = !IsMiniWhenPhone;
         }
     }
 
@@ -87,10 +89,7 @@ public partial class Player : ContentView
         MainThread.BeginInvokeOnMainThread(() =>
         {
             this.IsVisible = true;
-            BufferingBlock.IsVisible = true;
-            PlayerBlock.IsVisible = false;
-            PhoneMiniBlock.IsVisible = false;
-            PhoneBlock.IsVisible = false;
+            Buffering.IsVisible = true;
         });
     }
 
@@ -121,12 +120,7 @@ public partial class Player : ContentView
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            BufferingBlock.IsVisible = false;
-            PlayerBlock.IsVisible = true;
-
-            PhoneMiniBlock.IsVisible = IsMiniWhenPhone;
-            PhoneBlock.IsVisible = !IsMiniWhenPhone;
-
+            Buffering.IsVisible = false;
             ImgCurrentMusic.Source = ImageSource.FromStream(
                 () => new MemoryStream(ImageCacheUtils.GetByteArrayUsingCache(music.ImageUrl))
             );

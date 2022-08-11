@@ -86,7 +86,8 @@ public static class NotificationHelper
             .SetContentIntent(pendingIntent)
             .SetShowWhen(false)
             .SetOngoing(isPlaying)
-            .SetVisibility(NotificationVisibility.Public);
+            .SetVisibility(NotificationVisibility.Public)
+            .SetOnlyAlertOnce(true);
 
         builder.AddAction(GenerateActionCompat(context, Drawable.IcMediaPrevious, "Previous", MediaPlayerService.ActionPrevious));
         AddPlayPauseActionCompat(builder, context, isPlaying);
