@@ -35,3 +35,17 @@ src
 ## 关于同步歌单
 程序默认未配置服务器地址，因此为单机版本（无法同步歌单）。  
 需要同步歌单时，可以自己发布下`ListenTogether.Api`项目（用`.NET 6`写的），然后在程序设置页面配置下服务器地址即可。  
+
+## 来几张图片
+
+### Windows
+
+![win_playing.png](https://s2.loli.net/2022/08/12/tmIvjS81ukFG5hM.png)  
+
+![win_search.png](https://s2.loli.net/2022/08/12/YTpZHV9xbol8XsD.png)  
+
+### Android
+
+![phone_playing.jpg](https://s2.loli.net/2022/08/12/rbF6qPntT97lG2I.jpg)  
+
+![phone_playlist.jpg](https://s2.loli.net/2022/08/12/82bqSKjsfDCReBL.jpg)  
