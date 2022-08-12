@@ -47,11 +47,11 @@ public partial class Player : ContentView
         {
             if (IsMiniWhenPhone)
             {
-                MainBlock.HeightRequest = 30;
+                MainBlock.HeightRequest = 40;
             }
             else
             {
-                MainBlock.HeightRequest = 120;
+                MainBlock.HeightRequest = 110;
             }
             PhoneMiniPlayer.IsVisible = IsMiniWhenPhone;
             PhoneFullPlayer.IsVisible = !IsMiniWhenPhone;
@@ -73,7 +73,9 @@ public partial class Player : ContentView
         _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded += playerService_NewMusicAdded;
         _playerService.PositionChanged += _playerService_PositionChanged;
-        _playerService.Buffering += _playerService_Buffering;
+        _playerService.BufferingStarted += _playerService_BufferingStarted;
+        _playerService.BufferingEnded += _playerService_BufferingEnded;
+
 
         UpdateCurrentMusic();
         UpdateRepeatModel();
@@ -83,8 +85,7 @@ public partial class Player : ContentView
             Updatevolume();
         }
     }
-
-    private void _playerService_Buffering(object sender, EventArgs e)
+    private void _playerService_BufferingStarted(object sender, EventArgs e)
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
@@ -93,6 +94,13 @@ public partial class Player : ContentView
         });
     }
 
+    private void _playerService_BufferingEnded(object sender, EventArgs e)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            Buffering.IsVisible = false;
+        });
+    }
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
     {
         IsPlayingChangedDo(_playerService.IsPlaying);
@@ -102,6 +110,8 @@ public partial class Player : ContentView
         string playImagePath = isPlaying ? GetImageName("pause") : GetImageName("play");
         MainThread.BeginInvokeOnMainThread(() =>
         {
+            this.IsVisible = true;
+            Buffering.IsVisible = false;
             ImgPlay.Source = playImagePath;
         });
     }
@@ -120,7 +130,6 @@ public partial class Player : ContentView
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            Buffering.IsVisible = false;
             ImgCurrentMusic.Source = ImageSource.FromStream(
                 () => new MemoryStream(ImageCacheUtils.GetByteArrayUsingCache(music.ImageUrl))
             );
@@ -175,7 +184,8 @@ public partial class Player : ContentView
         {
             return;
         }
-        this.IsVisible = true;
+
+
 
         var music = new Music()
         {
@@ -323,6 +333,7 @@ public partial class Player : ContentView
         _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded -= playerService_NewMusicAdded;
         _playerService.PositionChanged -= _playerService_PositionChanged;
-        _playerService.Buffering -= _playerService_Buffering;
+        _playerService.BufferingStarted -= _playerService_BufferingStarted;
+        _playerService.BufferingEnded -= _playerService_BufferingEnded;
     }
 }

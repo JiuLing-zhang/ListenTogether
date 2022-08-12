@@ -20,8 +20,8 @@
 		<ApplicationId Condition="$(TargetFramework.Contains('-windows'))">DAEEFD7E-F931-420B-B6FD-DC652AD7D5B8</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0.66</ApplicationDisplayVersion>
-		<ApplicationVersion>71</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0.69</ApplicationDisplayVersion>
+		<ApplicationVersion>74</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -50,7 +50,7 @@
 		<MauiIcon Include="Resources\appicon.svg" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\appiconfg.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\appiconfg.svg" Color="#C98FFF" BaseSize="96,96" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />

@@ -132,7 +132,7 @@ public class SettingPageViewModel : ViewModelBase
     /// </summary>
     public string ApiDomain
     {
-        get => _apiDomain;
+        get => _apiDomain.IsEmpty() ? "未设置" : _apiDomain;
         set
         {
             _apiDomain = value;

@@ -11,6 +11,7 @@ public class PlayerService
     private readonly WifiOptionsService _wifiOptionsService;
     private readonly IMusicSwitchServerFactory _musicSwitchServerFactory;
     private System.Timers.Timer _timerPlayProgress;
+    private bool _isBuffering = false;
 
     private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
 
@@ -26,8 +27,8 @@ public class PlayerService
     public event EventHandler NewMusicAdded;
     public event EventHandler IsPlayingChanged;
     public event EventHandler PositionChanged;
-    public event EventHandler Buffering;
-
+    public event EventHandler BufferingStarted;
+    public event EventHandler BufferingEnded;
     public PlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, WifiOptionsService wifiOptionsService)
     {
         _audioService = audioService;
@@ -99,10 +100,18 @@ public class PlayerService
         {
             return;
         }
-        Buffering?.Invoke(this, EventArgs.Empty);
+        if (_isBuffering)
+        {
+            return;
+        }
+        _isBuffering = true;
+
+        BufferingStarted?.Invoke(this, EventArgs.Empty);
         var musicPath = await GetMusicCachePath(music);
         if (musicPath.IsEmpty())
         {
+            _isBuffering = false;
+            BufferingEnded?.Invoke(this, EventArgs.Empty);
             return;
         }
         CurrentMusic = music;
@@ -114,6 +123,8 @@ public class PlayerService
 
         var image = await _httpClient.GetReadByteArray(music.ImageUrl);
         await _audioService.InitializeAsync(musicPath, new AudioMetadata(image, music.Name, music.Artist, music.Album));
+        _isBuffering = false;
+        BufferingEnded?.Invoke(this, EventArgs.Empty);
         await InternalPlayAsync(0);
 
         NewMusicAdded?.Invoke(this, EventArgs.Empty);

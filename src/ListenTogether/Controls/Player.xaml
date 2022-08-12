@@ -5,17 +5,25 @@
 
     <ContentView.Content>
         <ContentView x:Name="MainBlock">
-            <StackLayout>
+            <Grid>
                 <StackLayout x:Name="Buffering"
-                             Orientation="Horizontal"
-                             VerticalOptions="CenterAndExpand"
-                             HorizontalOptions="CenterAndExpand">
-                    <ActivityIndicator IsRunning="true"
+                             Margin="10,0,10,0"
+                             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+                             ZIndex="1"
+                             IsVisible="false"
+                             VerticalOptions="Fill"
+                             HorizontalOptions="Fill">
+                    <StackLayout Orientation="Horizontal"
+                                 HorizontalOptions="{OnPlatform UWP=CenterAndExpand,MacCatalyst=CenterAndExpand,Android=Start,iOS=Start}"
+                                 VerticalOptions="CenterAndExpand">
+                        <ActivityIndicator IsRunning="true"                                       
                                        HeightRequest="20"
                                        WidthRequest="20"/>
-                    <Label Text="歌曲缓冲中...."
-                           Margin="10,0,0,0"
+                        <Label Text="歌曲缓冲中...."
+                           Margin="10,0,0,0"                           
                            VerticalTextAlignment="Center"/>
+                    </StackLayout>
+
                 </StackLayout>
                 <OnPlatform x:TypeArguments="View">
                     <On Platform="UWP, macOS">
@@ -165,7 +173,7 @@
 
                     </On>
                     <On Platform="Android,iOS">
-                        <StackLayout Margin="10,5,10,5">                          
+                        <StackLayout Margin="10,5,10,5">
                             <!--迷你组件-->
                             <StackLayout x:Name="PhoneMiniPlayer"
                                          Orientation="Horizontal">
@@ -284,7 +292,7 @@
                         </StackLayout>
                     </On>
                 </OnPlatform>
-            </StackLayout>
+            </Grid>
         </ContentView>
     </ContentView.Content>
 </ContentView>

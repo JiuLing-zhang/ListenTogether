@@ -108,8 +108,9 @@
                                 </On>
 
                                 <On Platform="Android,iOS">
-                                    <Grid Margin="0,0,0,20"
-                                      ColumnDefinitions="50,*,30,30">
+                                    <Grid Margin="0,12,0,0"
+                                          RowDefinitions="*,12"
+                                          ColumnDefinitions="50,*,30,30">
 
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"
@@ -158,9 +159,15 @@
                                            HorizontalOptions="Center">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
-                                                       CommandParameter="{Binding .}"/>
+                                                                      CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>
+
+                                        <Label Grid.Row="2"
+											   Grid.ColumnSpan="4"
+                                               Margin="0,11,0,0"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"></Label>
+
                                     </Grid>
                                 </On>
                             </OnPlatform>

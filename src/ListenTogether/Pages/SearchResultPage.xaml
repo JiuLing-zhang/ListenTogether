@@ -50,15 +50,17 @@
                                VerticalOptions="CenterAndExpand"/>
             </StackLayout>
 
-            <SearchBar x:Name="TxtSearchBar"
-                       Text="{Binding Keyword}"
-                       Placeholder="输入歌曲名、歌手名查找..."
-                       VerticalOptions="Start">
-                <SearchBar.Behaviors>
-                    <toolkit:EventToCommandBehavior EventName="Focused"
-                                                    Command="{Binding GoToSearchPageCommand}"/>
-                </SearchBar.Behaviors>
-            </SearchBar>
+            <Grid VerticalOptions="Start">
+                <StackLayout ZIndex="1" BackgroundColor="Transparent">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=GoToSearchPageCommand}"
+                                              CommandParameter="{Binding .}"/>
+                    </StackLayout.GestureRecognizers>
+                </StackLayout>
+                <SearchBar x:Name="TxtSearchBar"
+                           Text="{Binding Keyword}"
+                           Placeholder="输入歌曲名、歌手名查找..."/>
+            </Grid>
 
             <CollectionView VerticalOptions="FillAndExpand"
                         ItemsSource="{Binding MusicSearchResult}"
@@ -67,8 +69,11 @@
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                         <Label Text="{Binding Name}"
-                           FontSize="18"
-                           FontAttributes="Bold" />
+                               BackgroundColor="{AppThemeBinding Dark={StaticResource DarkGroupBackgroundColor},Light={StaticResource LightGroupBackgroundColor}}"
+                               Margin="0,20,0,10"
+                               Padding="5,0,0,0"
+                               FontSize="18"
+                               FontAttributes="Bold"/>
                     </DataTemplate>
                 </CollectionView.GroupHeaderTemplate>
 
@@ -122,9 +127,9 @@
                                 </On>
 
                                 <On Platform="Android,iOS">
-                                    <Grid Margin="0,0,0,20"
-                                      RowDefinitions="auto,auto"
-                                      ColumnDefinitions="*,40">
+                                    <Grid Margin="0,10,0,0" 
+                                          RowDefinitions="auto,auto,10"
+                                          ColumnDefinitions="*,40">
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
                                                           CommandParameter="{Binding .}"/>
@@ -166,6 +171,11 @@
                                                                   CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>
+
+                                        <Label Grid.Row="2" 
+                                               Grid.ColumnSpan="2"
+                                               Margin="0,9,0,0"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"></Label>
                                     </Grid>
                                 </On>
                             </OnPlatform>

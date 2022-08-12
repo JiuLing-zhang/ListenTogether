@@ -24,7 +24,6 @@ internal class ShellViewModel : ViewModelBase
         }
     }
 
-    public string AppNetworkString => GlobalConfig.AppNetwork.GetDescription();
     public AppSection SearchResult { get; set; }
     public AppSection Playlist { get; set; }
     public AppSection MyFavorite { get; set; }
