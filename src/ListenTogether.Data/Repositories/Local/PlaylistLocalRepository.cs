@@ -17,7 +17,8 @@ public class PlaylistLocalRepository : IPlaylistRepository
                 MusicId = playlist.MusicId,
                 MusicArtist = playlist.MusicArtist,
                 MusicName = playlist.MusicName,
-                MusicAlbum = playlist.MusicAlbum
+                MusicAlbum = playlist.MusicAlbum,
+                EditTime = DateTime.Now
             };
             count = await DatabaseProvide.DatabaseAsync.InsertAsync(playlists);
         }
@@ -25,6 +26,7 @@ public class PlaylistLocalRepository : IPlaylistRepository
         {
             playlists.MusicArtist = playlist.MusicArtist;
             playlists.MusicName = playlist.MusicName;
+            playlists.EditTime = DateTime.Now;
             count = await DatabaseProvide.DatabaseAsync.UpdateAsync(playlists);
         }
         if (count == 0)
@@ -46,7 +48,8 @@ public class PlaylistLocalRepository : IPlaylistRepository
             MusicId = x.MusicId,
             MusicName = x.MusicName,
             MusicArtist = x.MusicArtist,
-            MusicAlbum = x.MusicAlbum
+            MusicAlbum = x.MusicAlbum,
+            EditTime = x.EditTime
         }).ToList();
     }
 

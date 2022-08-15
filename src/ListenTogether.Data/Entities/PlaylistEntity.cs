@@ -12,4 +12,5 @@ internal class PlaylistEntity
     public string MusicName { get; set; } = null!;
     public string MusicArtist { get; set; } = null!;
     public string MusicAlbum { get; set; } = null!;
+    public DateTime EditTime { get; set; }
 }

@@ -13,7 +13,6 @@ public class PlaylistPageViewModel : ViewModelBase
     public ICommand PlayMusicCommand => new Command<PlaylistViewModel>(PlayMusic);
     public ICommand ClearPlaylistCommand => new Command(ClearPlaylist);
     public ICommand RemoveOneCommand => new Command<PlaylistViewModel>(RemoveOne);
-
     public PlaylistPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
         Playlist = new ObservableCollection<PlaylistViewModel>();
@@ -31,7 +30,6 @@ public class PlaylistPageViewModel : ViewModelBase
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             await GetPlaylist();
-
             OnPropertyChanged("IsPlaylistEmpty");
             OnPropertyChanged("IsPlaylistNotEmpty");
         }
@@ -47,11 +45,32 @@ public class PlaylistPageViewModel : ViewModelBase
     }
     private async Task GetPlaylist()
     {
+        var playlist = await _playlistService.GetAllAsync();
+        if (playlist == null || playlist.Count == 0)
+        {
+            if (Playlist.Count > 0)
+            {
+                Playlist.Clear();
+            }
+            return;
+        }
+
+        if (playlist.Count == Playlist.Count)
+        {
+            //数据未发生变更时不更新列表
+            var dbLastEditTime = playlist.OrderByDescending(x => x.EditTime).First().EditTime;
+            var pageLast = Playlist.OrderByDescending(x => x.EditTime).FirstOrDefault();
+
+            if (pageLast != null && pageLast.EditTime.Subtract(dbLastEditTime).TotalDays >= 0)
+            {
+                return;
+            }
+        }
+
         if (Playlist.Count > 0)
         {
             Playlist.Clear();
         }
-        var playlist = await _playlistService.GetAllAsync();
         foreach (var item in playlist)
         {
             Playlist.Add(new PlaylistViewModel()
@@ -61,7 +80,8 @@ public class PlaylistPageViewModel : ViewModelBase
                 MusicId = item.MusicId,
                 MusicName = item.MusicName,
                 MusicArtist = item.MusicArtist,
-                MusicAlbum = item.MusicAlbum
+                MusicAlbum = item.MusicAlbum,
+                EditTime = item.EditTime
             });
         }
     }

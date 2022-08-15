@@ -67,4 +67,5 @@ public class PlaylistViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
+    public DateTime EditTime { get; set; }
 }

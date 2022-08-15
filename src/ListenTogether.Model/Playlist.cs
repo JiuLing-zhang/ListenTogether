@@ -23,5 +23,6 @@ namespace ListenTogether.Model
         /// </summary>
         public string MusicArtist { get; set; } = null!;
         public string MusicAlbum { get; set; } = null!;
+        public DateTime EditTime { get; set; }
     }
 }
