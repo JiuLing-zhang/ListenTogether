@@ -18,5 +18,7 @@
         /// 歌曲总数
         /// </summary>
         public int MusicCount { get; set; }
+
+        public DateTime EditTime { get; set; }
     }
 }

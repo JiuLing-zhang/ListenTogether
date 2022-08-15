@@ -61,6 +61,7 @@ public class MyFavoriteService : IMyFavoriteService
 
     public async Task<Result<MyFavoriteResponse>> AddOrUpdateAsync(int userId, MyFavoriteRequest myFavorite)
     {
+        DateTime editTime = DateTime.Now;
         var favorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.Id == myFavorite.Id && x.UserBaseId == userId);
         if (favorite == null)
         {
@@ -68,7 +69,8 @@ public class MyFavoriteService : IMyFavoriteService
             {
                 Name = myFavorite.Name,
                 UserBaseId = userId,
-                ImageUrl = myFavorite.ImageUrl ?? ""
+                ImageUrl = myFavorite.ImageUrl ?? "",
+                EditTime = editTime
             };
             _context.MyFavorites.Add(favorite);
         }
@@ -77,6 +79,7 @@ public class MyFavoriteService : IMyFavoriteService
             favorite.Name = myFavorite.Name;
             favorite.UserBaseId = userId;
             favorite.ImageUrl = myFavorite.ImageUrl ?? "";
+            favorite.EditTime = editTime;
             _context.MyFavorites.Update(favorite);
         }
 
@@ -90,7 +93,8 @@ public class MyFavoriteService : IMyFavoriteService
         {
             Id = favorite.Id,
             Name = favorite.Name,
-            ImageUrl = favorite.ImageUrl
+            ImageUrl = favorite.ImageUrl,
+            EditTime = editTime
         });
     }
 
@@ -146,6 +150,7 @@ public class MyFavoriteService : IMyFavoriteService
         {
             favorite.ImageUrl = music.ImageUrl;
         }
+        favorite.EditTime = DateTime.Now;
 
         _context.MyFavorites.Update(favorite);
         var count = await _context.SaveChangesAsync();
@@ -185,9 +190,10 @@ public class MyFavoriteService : IMyFavoriteService
         {
             return new Result(1, "数据不存在");
         }
-
-        var myFavoriteDetail = myFavorite.Details.First(x => x.Id== id);
+ 
+        var myFavoriteDetail = myFavorite.Details.First(x => x.Id == id);
         myFavorite.Details.Remove(myFavoriteDetail);
+        myFavorite.EditTime = DateTime.Now;
         _context.MyFavorites.Update(myFavorite);
 
         var count = await _context.SaveChangesAsync();
