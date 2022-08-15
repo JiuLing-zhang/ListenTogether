@@ -29,12 +29,32 @@ namespace ListenTogether.ViewModels
                 _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
                 _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
+                var myFavoriteList = await _myFavoriteService.GetAllAsync();
+                if (myFavoriteList == null || myFavoriteList.Count == 0)
+                {
+                    if (FavoriteList.Count > 0)
+                    {
+                        FavoriteList.Clear();
+                    }
+                    return;
+                }
+
+                if (myFavoriteList.Count == FavoriteList.Count)
+                {
+                    //数据未发生变更时不更新列表
+                    var dbLastEditTime = myFavoriteList.OrderByDescending(x => x.EditTime).First().EditTime;
+                    var pageLast = FavoriteList.OrderByDescending(x => x.EditTime).FirstOrDefault();
+
+                    if (pageLast != null && pageLast.EditTime.Subtract(dbLastEditTime).TotalDays >= 0)
+                    {
+                        return;
+                    }
+                }
+
                 if (FavoriteList.Count > 0)
                 {
                     FavoriteList.Clear();
                 }
-
-                var myFavoriteList = await _myFavoriteService.GetAllAsync();
                 foreach (var myFavorite in myFavoriteList)
                 {
                     FavoriteList.Add(new MyFavoriteViewModel()
@@ -42,7 +62,8 @@ namespace ListenTogether.ViewModels
                         Id = myFavorite.Id,
                         Name = myFavorite.Name,
                         MusicCount = myFavorite.MusicCount,
-                        ImageUrl = myFavorite.ImageUrl
+                        ImageUrl = myFavorite.ImageUrl,
+                        EditTime = myFavorite.EditTime
                     });
                 }
             }

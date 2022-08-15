@@ -51,62 +51,85 @@ namespace ListenTogether
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-#if WINDOWS
+
             builder.ConfigureLifecycleEvents(events =>
             {
+#if WINDOWS
                 events.AddWindows(wndLifeCycleBuilder =>
                 {
                     wndLifeCycleBuilder.OnWindowCreated(window =>
-                    {                        
+                    {
                         IntPtr nativeWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
                         WindowId win32WindowsId = Win32Interop.GetWindowIdFromWindow(nativeWindowHandle);
                         AppWindow appWindow = AppWindow.GetFromWindowId(win32WindowsId);
 
                         var _presenter = appWindow.Presenter as OverlappedPresenter;
-                        _presenter.IsResizable=false;
+                        _presenter.IsResizable = false;
 
                         Microsoft.UI.Windowing.DisplayArea displayArea = Microsoft.UI.Windowing.DisplayArea.GetFromWindowId(win32WindowsId, Microsoft.UI.Windowing.DisplayAreaFallback.Nearest);
-                        
+
                         //简单适配不同分辨率
                         int minWidth;
                         int minHeight;
-                        if (displayArea.WorkArea.Width>2000)
+                        if (displayArea.WorkArea.Width > 2000)
                         {
-                            minWidth=1650;
-                            minHeight=975;
-                        }else if (displayArea.WorkArea.Width>1000)
-	                    {
-                            minWidth=1100;
-                            minHeight=650;
-	                    }else
+                            minWidth = 1650;
+                            minHeight = 975;
+                        }
+                        else if (displayArea.WorkArea.Width > 1000)
                         {
-                            minWidth=880;
-                            minHeight=520;
+                            minWidth = 1100;
+                            minHeight = 650;
+                        }
+                        else
+                        {
+                            minWidth = 880;
+                            minHeight = 520;
                         }
 
-                        appWindow.Changed+=(aw,e)=>{
-                            if(!e.DidSizeChange)
+                        appWindow.Changed += (aw, e) =>
+                        {
+                            if (!e.DidSizeChange)
                             {
                                 return;
                             }
-                            if (_presenter.State==OverlappedPresenterState.Maximized)
-	                        {
+                            if (_presenter.State == OverlappedPresenterState.Maximized)
+                            {
                                 _presenter.Restore();
-	                        }                            
-                            if (aw.Size.Width<minWidth)
-	                        {
+                            }
+                            if (aw.Size.Width < minWidth)
+                            {
                                 appWindow.Resize(new SizeInt32(minWidth, aw.Size.Height));
-	                        }
-                            if (aw.Size.Height<minHeight)
-	                        {
+                            }
+                            if (aw.Size.Height < minHeight)
+                            {
                                 appWindow.Resize(new SizeInt32(aw.Size.Width, minHeight));
-	                        }
+                            }
                         };
                         appWindow.MoveAndResize(new RectInt32(displayArea.WorkArea.Width / 2 - minWidth / 2, displayArea.WorkArea.Height / 2 - minHeight / 2, minWidth, minHeight));
                     });
                 });
-            });
 #endif
+#if ANDROID
+                events.AddAndroid(android =>
+                {
+                    android
+                    .OnActivityResult((activity, requestCode, resultCode, data) => Logger.Info("OnActivityResult"))
+                    .OnApplicationCreate(x => Logger.Info("OnApplicationCreate"))
+                    .OnCreate((activity, bundle) => Logger.Info("OnCreate"))
+                    .OnDestroy(x => Logger.Info("OnDestroy"))
+                    .OnPause(x => Logger.Info("OnPause"))
+                    .OnPostResume(x => Logger.Info("OnPostResume"))
+                    .OnRestart(x => Logger.Info("OnRestart"))
+                    .OnRestoreInstanceState((activity, bundle) => Logger.Info("OnRestoreInstanceState"))
+                    .OnResume(x => Logger.Info("OnResume"))
+                    .OnStart(x => Logger.Info("OnStart"))
+                    .OnStop(x => Logger.Info("OnStop"));
+
+                });
+#endif
+            });
+
             return builder.Build();
         }
     }
