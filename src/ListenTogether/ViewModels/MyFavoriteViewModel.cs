@@ -35,7 +35,14 @@ namespace ListenTogether.ViewModels
                 _imageUrl = value;
                 OnPropertyChanged("ImageUrl");
 
-                _imageByteArray = ImageCacheUtils.GetByteArrayUsingCache(value);
+                if (value.IsEmpty())
+                {
+                    _imageByteArray = GlobalConfig.AppIcon;
+                }
+                else
+                {
+                    _imageByteArray = ImageCacheUtils.GetByteArrayUsingCache(value);
+                }
                 OnPropertyChanged("ImageByteArray");
             }
         }
