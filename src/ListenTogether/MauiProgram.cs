@@ -113,18 +113,18 @@ namespace ListenTogether
 #if ANDROID
                 events.AddAndroid(android =>
                 {
-                    android
-                    .OnActivityResult((activity, requestCode, resultCode, data) => Logger.Info("OnActivityResult"))
-                    .OnApplicationCreate(x => Logger.Info("OnApplicationCreate"))
-                    .OnCreate((activity, bundle) => Logger.Info("OnCreate"))
-                    .OnDestroy(x => Logger.Info("OnDestroy"))
-                    .OnPause(x => Logger.Info("OnPause"))
-                    .OnPostResume(x => Logger.Info("OnPostResume"))
-                    .OnRestart(x => Logger.Info("OnRestart"))
-                    .OnRestoreInstanceState((activity, bundle) => Logger.Info("OnRestoreInstanceState"))
-                    .OnResume(x => Logger.Info("OnResume"))
-                    .OnStart(x => Logger.Info("OnStart"))
-                    .OnStop(x => Logger.Info("OnStop"));
+                    //android
+                    //.OnActivityResult((activity, requestCode, resultCode, data) => Logger.Info("OnActivityResult"))
+                    //.OnApplicationCreate(x => Logger.Info("OnApplicationCreate"))
+                    //.OnCreate((activity, bundle) => Logger.Info("OnCreate"))
+                    //.OnDestroy(x => Logger.Info("OnDestroy"))
+                    //.OnPause(x => Logger.Info("OnPause"))
+                    //.OnPostResume(x => Logger.Info("OnPostResume"))
+                    //.OnRestart(x => Logger.Info("OnRestart"))
+                    //.OnRestoreInstanceState((activity, bundle) => Logger.Info("OnRestoreInstanceState"))
+                    //.OnResume(x => Logger.Info("OnResume"))
+                    //.OnStart(x => Logger.Info("OnStart"))
+                    //.OnStop(x => Logger.Info("OnStop"));
 
                 });
 #endif
