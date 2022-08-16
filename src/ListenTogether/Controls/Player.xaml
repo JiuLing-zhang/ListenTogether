@@ -6,22 +6,22 @@
     <ContentView.Content>
         <ContentView x:Name="MainBlock">
             <Grid>
-                <StackLayout x:Name="Buffering"
-                             Margin="10,0,10,0"
+                <StackLayout x:Name="Buffering"                             
                              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
                              ZIndex="1"
                              IsVisible="false"
                              VerticalOptions="Fill"
                              HorizontalOptions="Fill">
                     <StackLayout Orientation="Horizontal"
+                                 Margin="10,0,10,0"
                                  HorizontalOptions="{OnPlatform UWP=CenterAndExpand,MacCatalyst=CenterAndExpand,Android=Start,iOS=Start}"
                                  VerticalOptions="CenterAndExpand">
                         <ActivityIndicator IsRunning="true"                                       
                                        HeightRequest="20"
                                        WidthRequest="20"/>
                         <Label Text="歌曲缓冲中...."
-                           Margin="10,0,0,0"                           
-                           VerticalTextAlignment="Center"/>
+                               Margin="10,0,0,0"
+                               VerticalTextAlignment="Center"/>
                     </StackLayout>
 
                 </StackLayout>

@@ -100,15 +100,6 @@ public class MediaPlayerService : Service,
             }
         };
     }
-
-    protected virtual void OnError(EventArgs e)
-    {
-        Error?.Invoke(this, e);
-    }
-    protected virtual void OnCompletion(EventArgs e)
-    {
-        Completion?.Invoke(this, e);
-    }
     protected virtual void OnStatusChanged(EventArgs e)
     {
         StatusChanged?.Invoke(this, e);
@@ -215,9 +206,6 @@ public class MediaPlayerService : Service,
         mediaPlayer.SetOnCompletionListener(this);
         mediaPlayer.SetOnErrorListener(this);
         mediaPlayer.SetOnPreparedListener(this);
-
-        mediaPlayer.Error += (_, _) => OnError(EventArgs.Empty);
-        mediaPlayer.Completion += (_, _) => OnCompletion(EventArgs.Empty);
     }
 
     public void OnBufferingUpdate(MediaPlayer mp, int percent)
@@ -235,12 +223,12 @@ public class MediaPlayerService : Service,
 
     public async void OnCompletion(MediaPlayer mp)
     {
-        await PlayNext();
+        Completion?.Invoke(this, EventArgs.Empty);
     }
 
     public bool OnError(MediaPlayer mp, MediaError what, int extra)
     {
-        UpdatePlaybackState(PlaybackStateCode.Error);
+        Error?.Invoke(this, EventArgs.Empty);
         return true;
     }
 
