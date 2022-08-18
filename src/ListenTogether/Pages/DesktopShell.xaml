@@ -42,14 +42,6 @@
             <ShellContent  ContentTemplate="{DataTemplate pages:PlaylistPage}" />
         </Tab>
     </FlyoutItem>
-
-    <FlyoutItem Title="{Binding Playing.Title}"
-                Icon="{AppThemeBinding Light=music.png, Dark=music_dark.png}">
-        <Tab>
-            <ShellContent  ContentTemplate="{DataTemplate pages:PlayingPage}" />
-        </Tab>
-    </FlyoutItem>
-
     <FlyoutItem Title="{Binding MyFavorite.Title}"
                 Icon="{AppThemeBinding Light=heart.png, Dark=heart_dark.png}">
         <Tab>
