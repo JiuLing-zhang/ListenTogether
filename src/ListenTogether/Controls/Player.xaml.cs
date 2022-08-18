@@ -5,16 +5,16 @@ namespace ListenTogether.Controls;
 //TODO 发现一个bug:播放组件静音后，切换页面，静音取消
 public partial class Player : ContentView
 {
-    public static readonly BindableProperty IsMiniWhenPhoneProperty =
+    public static readonly BindableProperty IsPlayingPageProperty =
         BindableProperty.Create(
-            nameof(IsMiniWhenPhone),
+            nameof(IsPlayingPage),
             typeof(bool),
             typeof(Player),
             false);
-    public bool IsMiniWhenPhone
+    public bool IsPlayingPage
     {
-        get { return (bool)GetValue(IsMiniWhenPhoneProperty); }
-        set { SetValue(IsMiniWhenPhoneProperty, value); }
+        get { return (bool)GetValue(IsPlayingPageProperty); }
+        set { SetValue(IsPlayingPageProperty, value); }
     }
 
     private PlayerService _playerService;
@@ -45,16 +45,9 @@ public partial class Player : ContentView
         }
         else
         {
-            if (IsMiniWhenPhone)
-            {
-                MainBlock.HeightRequest = 40;
-            }
-            else
-            {
-                MainBlock.HeightRequest = 110;
-            }
-            PhoneMiniPlayer.IsVisible = IsMiniWhenPhone;
-            PhoneFullPlayer.IsVisible = !IsMiniWhenPhone;
+            MainBlock.HeightRequest = IsPlayingPage ? 110 : 40;
+            PhoneMiniPlayer.IsVisible = !IsPlayingPage;
+            PhoneFullPlayer.IsVisible = IsPlayingPage;
         }
     }
 
@@ -84,6 +77,37 @@ public partial class Player : ContentView
             UpdateSoundOnOff();
             Updatevolume();
         }
+        if (!IsPlayingPage && !Config.IsDarkTheme)
+        {
+            ImgBack.Source = "back.png";
+            ImgNext.Source = "next.png";
+            ImgOther.Source = "puzzled.png";
+
+            //目前 MAUI 无法正确读取资源文件，所以临时使用16进制颜色解决
+            //var lightText = (Color)Application.Current.Resources["LightText"];
+            //var lightTextSecond = (Color)Application.Current.Resources["LightTextSecond"];            
+            LblMusicName.TextColor = Color.FromArgb("#262626");
+            LblMusicArtistAndAlbum.TextColor = Color.FromArgb("#717171");
+
+            SliderPlayProgress.MinimumTrackColor = Color.FromArgb("#262626");
+            SliderPlayProgress.MaximumTrackColor = Color.FromArgb("#717171");
+            SliderPlayProgress.ThumbColor = Color.FromArgb("#C98FFF");
+        }
+        else
+        {
+            ImgBack.Source = "back_dark.png";
+            ImgNext.Source = "next_dark.png";
+            ImgOther.Source = "puzzled_dark.png";
+
+            //var darkText = (Color)Application.Current.Resources["DarkText"]; 
+            //var darkTextSecond = (Color)Application.Current.Resources["DarkTextSecond"];
+            LblMusicName.TextColor = Color.FromArgb("#FCF2F7");
+            LblMusicArtistAndAlbum.TextColor = Color.FromArgb("#9D9D9D");
+
+            SliderPlayProgress.MinimumTrackColor = Color.FromArgb("#FFFFFF");
+            SliderPlayProgress.MaximumTrackColor = Color.FromArgb("#FCF2F7");
+            SliderPlayProgress.ThumbColor = Color.FromArgb("#C98FFF");
+        }
     }
     private void _playerService_BufferingStarted(object sender, EventArgs e)
     {
@@ -108,7 +132,7 @@ public partial class Player : ContentView
     private void IsPlayingChangedDo(bool isPlaying)
     {
         string playImagePath;
-        if (!Config.Desktop && IsMiniWhenPhone && !Config.IsDarkTheme)
+        if (!IsPlayingPage && !Config.IsDarkTheme)
         {
             playImagePath = isPlaying ? "pause.png" : "play.png";
         }
@@ -214,7 +238,17 @@ public partial class Player : ContentView
     }
     private void UpdateSoundOnOff()
     {
-        ImgSoundOff.Source = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off_dark.png" : "sound_on_dark.png";
+        string imagePath;
+        if (!IsPlayingPage && !Config.IsDarkTheme)
+        {
+            imagePath = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off.png" : "sound_on.png";
+        }
+        else
+        {
+            imagePath = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off_dark.png" : "sound_on_dark.png";
+        }
+
+        ImgSoundOff.Source = imagePath;
         _playerService.SetMuted(GlobalConfig.MyUserSetting.Player.IsSoundOff);
     }
     private void Updatevolume()
@@ -254,19 +288,40 @@ public partial class Player : ContentView
     {
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatOne)
         {
-            ImgRepeat.Source = "repeat_one_dark.png";
+            if (!IsPlayingPage && !Config.IsDarkTheme)
+            {
+                ImgRepeat.Source = "repeat_one.png";
+            }
+            else
+            {
+                ImgRepeat.Source = "repeat_one_dark.png";
+            }
             return;
         }
 
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatList)
         {
-            ImgRepeat.Source = "repeat_list_dark.png";
+            if (!IsPlayingPage && !Config.IsDarkTheme)
+            {
+                ImgRepeat.Source = "repeat_list.png";
+            }
+            else
+            {
+                ImgRepeat.Source = "repeat_list_dark.png";
+            }
             return;
         }
 
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.Shuffle)
         {
-            ImgRepeat.Source = "shuffle_dark.png";
+            if (!IsPlayingPage && !Config.IsDarkTheme)
+            {
+                ImgRepeat.Source = "shuffle.png";
+            }
+            else
+            {
+                ImgRepeat.Source = "shuffle_dark.png";
+            }
             return;
         }
     }

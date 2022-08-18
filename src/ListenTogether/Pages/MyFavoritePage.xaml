@@ -183,7 +183,7 @@
         </StackLayout>
         <controls:Player Grid.Row="1" 
                          x:Name="player"
-                         IsMiniWhenPhone="True"/>
+                         IsPlayingPage="False"/>
     </Grid>
 
 </ContentPage>

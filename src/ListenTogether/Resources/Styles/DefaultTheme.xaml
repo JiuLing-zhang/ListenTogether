@@ -6,7 +6,6 @@
     <Color x:Key="LightLogo">#C98FFF</Color>
     <Color x:Key="LightFlyoutBackgroundColor">#FFFFFF</Color>
     <Color x:Key="LightBackground">#F7F7F7</Color>
-    <Color x:Key="LightLine">#000000</Color>
     <Color x:Key="LightListLine">#EDEDED</Color>
     <Color x:Key="LightTitle">#262626</Color>
     <Color x:Key="LightText">#262626</Color>
@@ -32,7 +31,6 @@
     <Color x:Key="DarkLogo">#C98FFF</Color>
     <Color x:Key="DarkFlyoutBackgroundColor">#3B3B3B</Color>
     <Color x:Key="DarkBackground">#333333</Color>
-    <Color x:Key="DarkLine">#767676</Color>
     <Color x:Key="DarkListLine">#333333</Color>
     <Color x:Key="DarkTitle">#FCF2F7</Color>
     <Color x:Key="DarkText">#FCF2F7</Color>
@@ -55,6 +53,7 @@
     <Color x:Key="DarkSwitchThumbOffColor">#605E5C</Color>
     <Color x:Key="DarkGroupBackgroundColor">#605E5C</Color>
 
+    <Color x:Key="PlayingPageLine">#767676</Color>
     <Color x:Key="PlayingPageBackgroundColor">#333333</Color>
     <Color x:Key="PlayingPageText">#FCF2F7</Color>
     <Color x:Key="PlayingPageTextSecond">#9D9D9D</Color>
@@ -63,7 +62,7 @@
     <Color x:Key="PlayerSliderThumbColor">#C98FFF</Color>
     <Color x:Key="PlayerSliderThumbLeftColor">#FFFFFF</Color>
     <Color x:Key="PlayerSliderThumbRightColor">#FCF2F7</Color>
-    
+ 
     <Style TargetType="Label"
            x:Key="Logo">
         <Setter Property="FontSize"
@@ -87,24 +86,22 @@
         <Setter Property="FontSize"
                 Value="13" />
         <Setter Property="TextColor"
-                Value="{StaticResource PlayingPageTextSecond}" />
+                Value="{AppThemeBinding Light={StaticResource LightTextSecond}, Dark={StaticResource DarkTextSecond}}" />
     </Style>
 
+    <Style TargetType="Label"
+           x:Key="ExplainFontSize">
+        <Setter Property="FontSize"
+                Value="13" />
+    </Style>
+    
     <Style TargetType="Label">
         <Setter Property="FontSize"
                 Value="15" />
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
     </Style>
-
-    <Style TargetType="Label"
-           x:Key="DarkLabel">
-        <Setter Property="FontSize"
-                Value="15" />
-        <Setter Property="TextColor"
-                Value="{StaticResource DarkText}" />
-    </Style>
-    
+ 
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color"
                 Value="{AppThemeBinding Light={StaticResource LightActivity}, Dark={StaticResource DarkActivity}}"/>

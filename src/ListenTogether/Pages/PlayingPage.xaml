@@ -156,7 +156,7 @@
             </StackLayout>
             <StackLayout VerticalOptions="End">
                 <controls:Player x:Name="player"
-                             IsMiniWhenPhone="False"/>
+                                 IsPlayingPage="True"/>
             </StackLayout>
         </StackLayout>
 
