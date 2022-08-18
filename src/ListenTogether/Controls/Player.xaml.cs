@@ -90,7 +90,7 @@ public partial class Player : ContentView
         MainThread.BeginInvokeOnMainThread(() =>
         {
             this.IsVisible = true;
-            Buffering.IsVisible = true;
+            PlayerLoading.IsVisible = true;
         });
     }
 
@@ -98,7 +98,7 @@ public partial class Player : ContentView
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            Buffering.IsVisible = false;
+            PlayerLoading.IsVisible = false;
         });
     }
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
@@ -107,11 +107,19 @@ public partial class Player : ContentView
     }
     private void IsPlayingChangedDo(bool isPlaying)
     {
-        string playImagePath = isPlaying ? GetImageName("pause") : GetImageName("play");
+        string playImagePath;
+        if (!Config.Desktop && IsMiniWhenPhone && !Config.IsDarkTheme)
+        {
+            playImagePath = isPlaying ? "pause.png" : "play.png";
+        }
+        else
+        {
+            playImagePath = isPlaying ? "pause_dark.png" : "play_dark.png";
+        }
         MainThread.BeginInvokeOnMainThread(() =>
         {
             this.IsVisible = true;
-            Buffering.IsVisible = false;
+            PlayerLoading.IsVisible = false;
             ImgPlay.Source = playImagePath;
         });
     }
@@ -206,7 +214,7 @@ public partial class Player : ContentView
     }
     private void UpdateSoundOnOff()
     {
-        ImgSoundOff.Source = GlobalConfig.MyUserSetting.Player.IsSoundOff ? GetImageName("sound_off") : GetImageName("sound_on");
+        ImgSoundOff.Source = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off_dark.png" : "sound_on_dark.png";
         _playerService.SetMuted(GlobalConfig.MyUserSetting.Player.IsSoundOff);
     }
     private void Updatevolume()
@@ -246,19 +254,19 @@ public partial class Player : ContentView
     {
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatOne)
         {
-            ImgRepeat.Source = GetImageName("repeat_one");
+            ImgRepeat.Source = "repeat_one_dark.png";
             return;
         }
 
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatList)
         {
-            ImgRepeat.Source = GetImageName("repeat_list");
+            ImgRepeat.Source = "repeat_list_dark.png";
             return;
         }
 
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.Shuffle)
         {
-            ImgRepeat.Source = GetImageName("shuffle");
+            ImgRepeat.Source = "shuffle_dark.png";
             return;
         }
     }
@@ -319,15 +327,6 @@ public partial class Player : ContentView
         _isPlayProgressDragging = false;
     }
 
-    private string GetImageName(string imageName)
-    {
-        if (Config.IsDarkTheme)
-        {
-            return $"{imageName}_dark.png";
-        }
-        return $"{imageName}.png";
-    }
-
     internal void OnDisappearing()
     {
         _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
@@ -335,5 +334,14 @@ public partial class Player : ContentView
         _playerService.PositionChanged -= _playerService_PositionChanged;
         _playerService.BufferingStarted -= _playerService_BufferingStarted;
         _playerService.BufferingEnded -= _playerService_BufferingEnded;
+    }
+
+    private async void GoToPlayingPage_Tapped(object sender, EventArgs e)
+    {
+        if (Shell.Current.CurrentPage.GetType() == typeof(PlayingPage))
+        {
+            return;
+        }
+        await Shell.Current.GoToAsync($"{nameof(PlayingPage)}", true);
     }
 }

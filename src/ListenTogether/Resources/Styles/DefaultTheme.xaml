@@ -60,7 +60,10 @@
     <Color x:Key="PlayingPageTextSecond">#9D9D9D</Color>
     <Color x:Key="PlayingPageLyricText">#BAB7B2</Color>
     <Color x:Key="PlayingPageLyricHighlight">#EFEFEF</Color>
-
+    <Color x:Key="PlayerSliderThumbColor">#C98FFF</Color>
+    <Color x:Key="PlayerSliderThumbLeftColor">#FFFFFF</Color>
+    <Color x:Key="PlayerSliderThumbRightColor">#FCF2F7</Color>
+    
     <Style TargetType="Label"
            x:Key="Logo">
         <Setter Property="FontSize"
@@ -94,6 +97,14 @@
                 Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
     </Style>
 
+    <Style TargetType="Label"
+           x:Key="DarkLabel">
+        <Setter Property="FontSize"
+                Value="15" />
+        <Setter Property="TextColor"
+                Value="{StaticResource DarkText}" />
+    </Style>
+    
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color"
                 Value="{AppThemeBinding Light={StaticResource LightActivity}, Dark={StaticResource DarkActivity}}"/>
