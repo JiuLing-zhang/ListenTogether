@@ -55,15 +55,14 @@
             <ShellContent  ContentTemplate="{DataTemplate pages:SettingsPage}" />
         </Tab>
     </FlyoutItem>
-    <!--<Shell.ItemTemplate>
+    <Shell.ItemTemplate>
         <DataTemplate>
             <StackLayout Orientation="Horizontal">
-                <Image Margin="6,10" WidthRequest="18" HeightRequest="18" Source="{Binding Icon}" BackgroundColor="Red"/>
+                <Image Margin="6,10" WidthRequest="18" HeightRequest="18" Source="{Binding Icon}"/>
                 <Label Margin="6,10"
                        Text="{Binding Title}"
                        TextColor="{AppThemeBinding Dark={StaticResource DarkTitle},Light={StaticResource LightTitle}}"/>
             </StackLayout>
         </DataTemplate>
-    </Shell.ItemTemplate>-->
-
+    </Shell.ItemTemplate>
 </Shell>
