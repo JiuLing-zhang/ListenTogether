@@ -1,14 +1,25 @@
 ﻿using ListenTogether.EasyLog;
 using ListenTogether.Network.Models.MiGu;
+using System.Web;
 
 namespace ListenTogether.Network.Utils;
 public class MiGuUtils
 {
-    public static string GetSearchData(string keyword)
+    public static string GetSearchArgs(string keyword)
     {
-        return $"migu_p=h5&pn=1&type=allLobby&_ch=&content={keyword}";
+        keyword = HttpUtility.UrlEncode(keyword).Replace("+", "%20").ToUpper();
+        var c = "001002A";
+        var f = "html";
+        var k = "52bf846c-c287-4200-b629-888f37402e71-n41660916240309";
+        var s = JiuLing.CommonLibs.Text.TimestampUtils.GetLen10();
+        var u = JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeUserAgent;
+        var v = "3.23.5";
+        keyword = "孤勇者";
+        var signString = $"c{c}f{f}k{k}keyword{keyword}s{s}u{u}v{v}";
+        signString = HttpUtility.UrlEncode(signString).Replace("+", "%20").Replace("%2f", "%2F").Replace("%2c", "%2C").Replace("%3b", "%3B");
+        var sign = JiuLing.CommonLibs.Security.SHA1Utils.GetStringValueToLower(signString);
+        return $"page=1&type=song&i={sign}&f={f}&s={s}&c={c}&keyword={keyword}&v={v}";
     }
-
     public static bool TryScanSearchResult(string html, out List<HttpMusicSearchResult> musics)
     {
         musics = new List<HttpMusicSearchResult>();

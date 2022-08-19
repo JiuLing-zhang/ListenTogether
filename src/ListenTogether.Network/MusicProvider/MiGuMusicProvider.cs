@@ -10,33 +10,19 @@ namespace ListenTogether.Network.MusicProvider;
 public class MiGuMusicProvider : IMusicProvider
 {
     private readonly HttpClient _httpClient;
-    private readonly CookieContainer _cookieContainer = new CookieContainer();
     private const PlatformEnum Platform = PlatformEnum.MiGu;
 
     public MiGuMusicProvider()
     {
         var handler = new HttpClientHandler();
-        handler.CookieContainer = _cookieContainer;
         handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
         handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         _httpClient = new HttpClient(handler);
     }
 
-    private async Task InitCookie()
-    {
-        var aa = await _httpClient.GetStringAsync("https://music.migu.cn/v3").ConfigureAwait(false);
-    }
-
     public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
     {
-        if (_cookieContainer.Count == 0)
-        {
-            await InitCookie();
-        }
-
-        var csrf = _cookieContainer.GetCookies(new Uri("https://music.migu.cn"))["migu_cookie_id"]?.Value;
-
-        string args = MiGuUtils.GetSearchData(keyword);
+        string args = MiGuUtils.GetSearchArgs(keyword); 
         string url = $"{UrlBase.MiGu.Search}?{args}";
 
         var request = new HttpRequestMessage()
@@ -48,7 +34,9 @@ public class MiGuMusicProvider : IMusicProvider
         {
             request.Headers.Add(header.Key, header.Value);
         }
-        request.Headers.Add("Host", "www.migu.cn");
+        request.Headers.Add("Host", "music.migu.cn");
+        request.Headers.Add("Referer", $"{UrlBase.MiGu.Search}?{MiGuUtils.GetSearchArgs(keyword)}");
+        
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
