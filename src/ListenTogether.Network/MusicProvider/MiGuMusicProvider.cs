@@ -10,17 +10,32 @@ namespace ListenTogether.Network.MusicProvider;
 public class MiGuMusicProvider : IMusicProvider
 {
     private readonly HttpClient _httpClient;
+    private readonly CookieContainer _cookieContainer = new CookieContainer();
     private const PlatformEnum Platform = PlatformEnum.MiGu;
 
     public MiGuMusicProvider()
     {
         var handler = new HttpClientHandler();
+        handler.CookieContainer = _cookieContainer;
         handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
         handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         _httpClient = new HttpClient(handler);
     }
+
+    private async Task InitCookie()
+    {
+        var aa = await _httpClient.GetStringAsync("https://music.migu.cn/v3").ConfigureAwait(false);
+    }
+
     public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
     {
+        if (_cookieContainer.Count == 0)
+        {
+            await InitCookie();
+        }
+
+        var csrf = _cookieContainer.GetCookies(new Uri("https://music.migu.cn"))["migu_cookie_id"]?.Value;
+
         string args = MiGuUtils.GetSearchData(keyword);
         string url = $"{UrlBase.MiGu.Search}?{args}";
 
@@ -115,6 +130,18 @@ public class MiGuMusicProvider : IMusicProvider
             return null;
         }
 
+        if (result.resource[0].newRateFormats == null || result.resource[0].newRateFormats.Count == 0)
+        {
+            return null;
+        }
+
+        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats);
+        if (playUrlPath.IsEmpty())
+        {
+            return null;
+        }
+        string playUrl = $"{UrlBase.MiGu.PlayUrlDomain}{playUrlPath}";
+
         string lyricUrl = result.resource[0].lrcUrl;
         if (lyricUrl.IsEmpty())
         {
@@ -122,36 +149,6 @@ public class MiGuMusicProvider : IMusicProvider
         }
 
         string lyric = await _httpClient.GetStringAsync(lyricUrl);
-        string contentId = result.resource[0].contentId;
-        if (contentId.IsEmpty())
-        {
-            return null;
-        }
-
-        string args = MiGuUtils.GetPlayUrlData(contentId, argsResult.id);
-        url = $"{UrlBase.MiGu.GetMusicPlayUrl}?{args}";
-
-        request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url)
-        };
-        request.Headers.Add("Accept", "*/*");
-        request.Headers.Add("Accept-Encoding", "identity;q=1, *;q=0");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
-        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        if (response.StatusCode != HttpStatusCode.Found || html.IsNotEmpty())
-        {
-            return null;
-        }
-
-        string? playUrl = response.Headers?.Location?.ToString();
-        if (playUrl.IsEmpty())
-        {
-            return null;
-        }
 
         string imageUrl = sourceMusic.ImageUrl;
         if (result.resource[0].albumImgs != null && result.resource[0].albumImgs.Count > 0)

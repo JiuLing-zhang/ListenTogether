@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using ListenTogether.Filters.MusicSearchFilter;
+using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
@@ -97,9 +98,14 @@ public class SearchResultPageViewModel : ViewModelBase
         }
     }
 
+    int running = 0;
     private async Task Search(string keyword)
     {
         if (keyword.IsEmpty())
+        {
+            return;
+        }
+        if (Interlocked.CompareExchange(ref running, 1, 0) != 0)
         {
             return;
         }
@@ -109,16 +115,27 @@ public class SearchResultPageViewModel : ViewModelBase
             IsBusy = true;
             MusicSearchResult.Clear();
             var musics = await _musicNetworkService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, keyword);
+
+            if (GlobalConfig.MyUserSetting.Search.IsMatchSearchKey)
+            {
+                IMusicSearchFilter filter = new SearchKeyFilter(keyword);
+                musics = filter.Filter(musics);
+            }
+            if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic)
+            {
+                IMusicSearchFilter filter = new ShortMusicFilter();
+                musics = filter.Filter(musics);
+            }
+            if (GlobalConfig.MyUserSetting.Search.IsHideVipMusic)
+            {
+                IMusicSearchFilter filter = new VipMusicFilter();
+                musics = filter.Filter(musics);
+            }
+
             if (musics.Count == 0)
             {
                 return;
             }
-
-            //TODO: 过滤条件移入到查找歌曲的模块
-            //if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic && musicInfo.Duration != 0 && musicInfo.Duration <= 60 * 1000)
-            //{
-            //    continue;
-            //}
 
             var platformList = musics.Select(x => x.Platform).Distinct().ToList();
             foreach (var platform in platformList)
@@ -156,6 +173,7 @@ public class SearchResultPageViewModel : ViewModelBase
         finally
         {
             IsBusy = false;
+            Interlocked.Exchange(ref running, 0);
         }
     }
 
@@ -232,7 +250,7 @@ public class SearchResultPageViewModel : ViewModelBase
                 await ToastService.Show("添加失败");
                 return;
             }
-            if (GlobalConfig.MyUserSetting.Search.IsPlayWhenAddToFavorite)
+            if (GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite)
             {
                 await _playerService.PlayAsync(music);
             }

@@ -71,9 +71,14 @@ namespace ListenTogether.Model
         public bool IsHideShortMusic { get; set; }
 
         /// <summary>
-        /// 添加到歌单时自动播放
+        /// 歌曲名或歌手名必须包含搜索词
         /// </summary>
-        public bool IsPlayWhenAddToFavorite { get; set; }
+        public bool IsMatchSearchKey { get; set; }
+
+        /// <summary>
+        /// 隐藏收费歌曲
+        /// </summary>
+        public bool IsHideVipMusic { get; set; }
     }
 
     public class PlaySetting
@@ -82,6 +87,11 @@ namespace ListenTogether.Model
         /// 仅WIFI下可播放
         /// </summary>
         public bool IsWifiPlayOnly { get; set; }
+
+        /// <summary>
+        /// 添加到歌单时自动播放
+        /// </summary>
+        public bool IsPlayWhenAddToFavorite { get; set; }
 
         /// <summary>
         /// 播放我的歌单前清空播放列表

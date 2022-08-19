@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using ListenTogether.Data.Entities;
+﻿using ListenTogether.Data.Entities;
 using ListenTogether.Data.Interfaces;
 using ListenTogether.Model;
 using ListenTogether.Model.Enums;
@@ -40,7 +39,8 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         {
             IsAutoNextWhenFailed = playConfig.IsAutoNextWhenFailed,
             IsCleanPlaylistWhenPlayMyFavorite = playConfig.IsCleanPlaylistWhenPlayMyFavorite,
-            IsWifiPlayOnly = playConfig.IsWifiPlayOnly
+            IsWifiPlayOnly = playConfig.IsWifiPlayOnly,
+            IsPlayWhenAddToFavorite = playConfig.IsPlayWhenAddToFavorite
         };
 
         //搜索设置
@@ -49,7 +49,8 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         {
             EnablePlatform = searchConfig.EnablePlatform,
             IsHideShortMusic = searchConfig.IsHideShortMusic,
-            IsPlayWhenAddToFavorite = searchConfig.IsPlayWhenAddToFavorite
+            IsMatchSearchKey = searchConfig.IsMatchSearchKey,
+            IsHideVipMusic = searchConfig.IsHideVipMusic
         };
 
         return result;
@@ -80,13 +81,15 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             {
                 EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu | PlatformEnum.KuWo,
                 IsHideShortMusic = true,
-                IsPlayWhenAddToFavorite = false
+                IsMatchSearchKey = false,
+                IsHideVipMusic = true
             }).ToJson(),
             PlaySettingJson = (new PlaySetting()
             {
                 IsAutoNextWhenFailed = true,
                 IsCleanPlaylistWhenPlayMyFavorite = true,
-                IsWifiPlayOnly = true
+                IsWifiPlayOnly = true,
+                IsPlayWhenAddToFavorite = false
             }).ToJson()
         };
 

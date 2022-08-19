@@ -210,7 +210,7 @@ public class PlaylistPageViewModel : ViewModelBase
                 return;
             }
 
-            if (GlobalConfig.MyUserSetting.Search.IsPlayWhenAddToFavorite)
+            if (GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite)
             {
                 await _playerService.PlayAsync(music);
             }

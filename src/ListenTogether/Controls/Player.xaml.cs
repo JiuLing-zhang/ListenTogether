@@ -154,6 +154,7 @@ public partial class Player : ContentView
         if (Config.Desktop)
         {
             //TODO 首次播放音乐时，无法设置声音，所以先在这里临时实现
+            UpdateSoundOnOff();
             Updatevolume();
         }
     }

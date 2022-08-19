@@ -233,19 +233,37 @@ public class SettingPageViewModel : ViewModelBase
         }
     }
 
-    private bool _isPlayWhenAddToFavorite = GlobalConfig.MyUserSetting.Search.IsPlayWhenAddToFavorite;
+    private bool _isMatchSearchKey = GlobalConfig.MyUserSetting.Search.IsMatchSearchKey;
     /// <summary>
-    /// 添加到歌单时自动播放
+    /// 歌曲名或歌手名必须包含搜索词
     /// </summary>
-    public bool IsPlayWhenAddToFavorite
+    public bool IsMatchSearchKey
     {
-        get => _isPlayWhenAddToFavorite;
+        get => _isMatchSearchKey;
         set
         {
-            _isPlayWhenAddToFavorite = value;
+            _isMatchSearchKey = value;
             OnPropertyChanged();
 
-            GlobalConfig.MyUserSetting.Search.IsPlayWhenAddToFavorite = value;
+            GlobalConfig.MyUserSetting.Search.IsMatchSearchKey = value;
+            WriteSearchConfigAsync();
+        }
+    }
+
+
+    private bool _isHideVipMusic = GlobalConfig.MyUserSetting.Search.IsHideVipMusic;
+    /// <summary>
+    /// 隐藏收费歌曲
+    /// </summary>
+    public bool IsHideVipMusic
+    {
+        get => _isHideVipMusic;
+        set
+        {
+            _isHideVipMusic = value;
+            OnPropertyChanged();
+
+            GlobalConfig.MyUserSetting.Search.IsHideVipMusic = value;
             WriteSearchConfigAsync();
         }
     }
@@ -263,6 +281,24 @@ public class SettingPageViewModel : ViewModelBase
             OnPropertyChanged();
 
             GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly = value;
+            WritePlayConfigAsync();
+        }
+    }
+
+
+    private bool _isPlayWhenAddToFavorite = GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite;
+    /// <summary>
+    /// 添加到歌单时自动播放
+    /// </summary>
+    public bool IsPlayWhenAddToFavorite
+    {
+        get => _isPlayWhenAddToFavorite;
+        set
+        {
+            _isPlayWhenAddToFavorite = value;
+            OnPropertyChanged();
+
+            GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite = value;
             WritePlayConfigAsync();
         }
     }

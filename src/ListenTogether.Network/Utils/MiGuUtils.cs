@@ -97,4 +97,18 @@ public class MiGuUtils
         Int64 timestamp = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToLen13(time);
         return $"id={id}&copyrightId={copyrightId}&resourceType=2&_={timestampLast}&v={timestamp}";
     }
+
+    public static string GetPlayUrlPath(List<NewRateFormats> playResources)
+    {
+        string ftpHeadPattern = @"^ftp://\d+\.\d+\.\d+\.\d+:\d+";
+        foreach (var playInfo in playResources.OrderByDescending(x => x.SizeInt))
+        {
+            if (!JiuLing.CommonLibs.Text.RegexUtils.IsMatch(playInfo.url, ftpHeadPattern))
+            {
+                continue;
+            }
+            return JiuLing.CommonLibs.Text.RegexUtils.Replace(playInfo.url, ftpHeadPattern, "");
+        }
+        return "";
+    }
 }
