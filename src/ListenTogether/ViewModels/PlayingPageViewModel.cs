@@ -190,7 +190,7 @@ public class PlayingPageViewModel : ViewModelBase
     }
     private string GetMiGuMusicUrl(string id)
     {
-        return $"http://www.migu.cn/music/detail/{id}.html?migu_p=h5";
+        return $"http://music.migu.cn/v3/music/song/{id}";
     }
     private string GetKuWoMusicUrl(string id)
     {

@@ -18,13 +18,34 @@ public class MiGuMusicProvider : IMusicProvider
         handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
         handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         _httpClient = new HttpClient(handler);
+
+        Task.Run(async () =>
+        {
+            await InitCommonArgs();
+        });
     }
+
+    private async Task InitCommonArgs()
+    {
+        var html = await _httpClient.GetStringAsync("https://music.migu.cn/v3").ConfigureAwait(false);
+
+        string pattern = @"SOURCE_ID\s*:\s*'(?<SOURCE_ID>\d+)'\s*,";
+        var (_, sourceId) = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(html, pattern);
+
+        pattern = @"CHANNEL_ID\s*:\s*'(?<CHANNEL_ID>\S+)'\s*,";
+        var (_, channelId) = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(html, pattern);
+
+        pattern = @"APP_VERSION\s*:\s*'(?<APP_VERSION>\S+)'\s*,";
+        var (_, appVersion) = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(html, pattern);
+
+        MiGuUtils.SetCommonArgs(sourceId, channelId, appVersion);
+    }
+
 
     public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
     {
-        string args = MiGuUtils.GetSearchArgs(keyword); 
+        string args = MiGuUtils.GetSearchArgs(keyword);
         string url = $"{UrlBase.MiGu.Search}?{args}";
-
         var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
@@ -34,9 +55,10 @@ public class MiGuMusicProvider : IMusicProvider
         {
             request.Headers.Add(header.Key, header.Value);
         }
+        request.Headers.Add("Cookie", $"migu_cookie_id={MiGuUtils.CookieId}");
         request.Headers.Add("Host", "music.migu.cn");
-        request.Headers.Add("Referer", $"{UrlBase.MiGu.Search}?{MiGuUtils.GetSearchArgs(keyword)}");
-        
+        request.Headers.Add("Referer", UrlBase.MiGu.Index);
+
         var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -50,17 +72,18 @@ public class MiGuMusicProvider : IMusicProvider
         {
             musics.Add(new MusicSearchResult()
             {
-                Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.Id}"),
+                Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.id}"),
                 Platform = Platform,
-                PlatformInnerId = htmlMusic.Id,
-                Name = htmlMusic.Name,
+                PlatformInnerId = htmlMusic.id,
+                Name = htmlMusic.title,
                 Alias = "",
-                Artist = htmlMusic.Artist,
-                ImageUrl = htmlMusic.ImageUrl,
+                Artist = htmlMusic.singer,
+                Album = htmlMusic.album,
+                ImageUrl = htmlMusic.imgUrl,
                 Fee = FeeEnum.Free,
                 PlatformData = new SearchResultExtended()
                 {
-                    MusicPageUrl = htmlMusic.MusicPageUrl
+                    // MusicPageUrl = htmlMusic.MusicPageUrl
                 }
             });
         }
@@ -74,33 +97,8 @@ public class MiGuMusicProvider : IMusicProvider
             throw new ArgumentException("平台数据初始化异常");
         }
 
+        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={sourceMusic.PlatformInnerId}&resourceType=2";
         var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(platformData.MusicPageUrl),
-            Method = HttpMethod.Get
-        };
-
-        request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
-        request.Headers.Add("Host", "www.migu.cn");
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        if (response.RequestMessage == null || response.RequestMessage.RequestUri == null)
-        {
-            return null;
-        }
-
-        var argsResult = MiGuUtils.GetMusicRealArgs(response.RequestMessage.RequestUri.ToString());
-        if (argsResult.success == false)
-        {
-            return null;
-        }
-
-        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={argsResult.id}&resourceType=2";
-        request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
             Method = HttpMethod.Get
@@ -109,7 +107,7 @@ public class MiGuMusicProvider : IMusicProvider
         request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
         request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
         request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
-        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
         string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var result = json.ToObject<HttpMusicDetailResult>();

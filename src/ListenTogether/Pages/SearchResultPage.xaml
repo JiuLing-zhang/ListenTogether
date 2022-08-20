@@ -71,7 +71,7 @@
                         <Label Text="{Binding Name}"
                                BackgroundColor="{AppThemeBinding Dark={StaticResource DarkGroupBackgroundColor},Light={StaticResource LightGroupBackgroundColor}}"
                                Margin="0,20,0,10"
-                               Padding="5,0,0,0"
+                               Padding="5,0,5,0"
                                FontSize="18"
                                FontAttributes="Bold"/>
                     </DataTemplate>

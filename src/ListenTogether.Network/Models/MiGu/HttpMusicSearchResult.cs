@@ -2,10 +2,12 @@
 {
     public class HttpMusicSearchResult
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Artist { get; set; }
-        public string ImageUrl { get; set; }
-        public string MusicPageUrl { get; set; }
+        public string id => linkUrl.Replace("/v3/music/song/", "");
+        public string type { get; set; }
+        public string title { get; set; }
+        public string singer { get; set; }
+        public string album { get; set; }
+        public string linkUrl { get; set; }
+        public string imgUrl { get; set; }
     }
 }
