@@ -47,6 +47,13 @@ public class SearchPageViewModel : ViewModelBase
     public async Task InitializeAsync()
     {
         _hotWords = await _musicNetworkService.GetHotWord();
+        //TODO 目前搜索栏的TextChanged 事件有bug，暂时屏蔽搜索建议
+        foreach (var hotWord in _hotWords)
+        {
+            SearchSuggest.Add(hotWord);
+        }
+        return;
+        //TODO End
         await GetSearchSuggest(Keyword);
     }
 
@@ -57,6 +64,9 @@ public class SearchPageViewModel : ViewModelBase
 
     public async Task GetSearchSuggest(string keyword)
     {
+        //TODO 目前搜索栏的TextChanged 事件有bug，暂时屏蔽搜索建议
+        return;
+        //TODO End
         SearchSuggest.Clear();
         if (keyword.IsEmpty())
         {
