@@ -549,6 +549,7 @@ public class MediaPlayerService : Service,
 
     public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
     {
+        StartForeground(NotificationHelper.ForegroundNotificationId, NotificationHelper.GetForegroundNotification(ApplicationContext));
         HandleIntent(intent);
         return base.OnStartCommand(intent, flags, startId);
     }

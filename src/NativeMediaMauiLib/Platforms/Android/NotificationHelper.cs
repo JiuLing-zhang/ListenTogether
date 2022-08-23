@@ -17,6 +17,8 @@ public static class NotificationHelper
     public static readonly string CHANNEL_ID = "listen_together_notification";
     private const int NotificationId = 1000;
 
+    public static readonly string CHANNEL_ID_FOREGROUND = "listen_together_foreground";
+    public const int ForegroundNotificationId = 1001;
     internal static Notification.Action GenerateActionCompat(Context context, int icon, string title, string intentAction)
     {
         Intent intent = new Intent(context, typeof(MediaPlayerService));
@@ -106,5 +108,21 @@ public static class NotificationHelper
             builder.AddAction(GenerateActionCompat(context, Drawable.IcMediaPause, "Pause", MediaPlayerService.ActionPause));
         else
             builder.AddAction(GenerateActionCompat(context, Drawable.IcMediaPlay, "Play", MediaPlayerService.ActionPlay));
+    }
+
+    internal static Notification GetForegroundNotification(Context context)
+    {
+        var name = "前台服务组件";
+        var description = "用于维持后台服务的组件";
+        var channel = new NotificationChannel(CHANNEL_ID_FOREGROUND, name, NotificationImportance.Min)
+        {
+            Description = description
+        };
+
+        var notificationManager = (NotificationManager)context.GetSystemService(Context.NotificationService);
+        notificationManager.CreateNotificationChannel(channel);
+
+        var builder = new Notification.Builder(context, CHANNEL_ID_FOREGROUND);
+        return builder.Build();
     }
 }
