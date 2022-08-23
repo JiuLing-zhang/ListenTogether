@@ -16,7 +16,7 @@ public class NetEaseMusicProvider : IMusicProvider
     public NetEaseMusicProvider()
     {
         var handler = new HttpClientHandler();
-        handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+        handler.AutomaticDecompression = DecompressionMethods.All;
         _httpClient = new HttpClient(handler);
     }
 
