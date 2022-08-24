@@ -1,13 +1,13 @@
-## 一起听
+## ![logo](https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/logo.svg) 一起听
 基于`.NET MAUI`开发的多平台、极简的在线音乐播放器。  
 
-* 支持`Windows`、`Android`两个平台。（没有尊贵的 `APPLE` 调试环境）  
+* 支持`Windows`、`Android`两个平台。（没有尊贵的 `APPLE` 调试环境:full_moon_with_face::full_moon_with_face:）  
 * 支持**网易**、**酷狗**、**酷我**、**咪咕**数据源。  
 * 不支持登录对应平台账号。  
-* 程序只是整合了不同平台的音乐链接，并不是破解会员啊什么的巴拉巴拉~~  
+* 程序只是整合了不同平台的音乐链接，当一个平台听不了时你可以方便的去另一个平台再碰碰运气:dog::dog:  
 
 ## 1、声明
-该项目仅供学习使用。  
+该项目仅供学习使用:warning::warning::warning:  
 该项目牵扯多家平台的协议分析，所以 **禁止`Fork` 禁止`Fork` 禁止`Fork`**。  
 另外还请您不要将这些协议参数用于各种暴力途径。 
 
@@ -34,10 +34,10 @@ src
 
 ## 4、高级设置
 ### &nbsp;4.1、同步歌单
-&nbsp;&nbsp;程序默认未配置服务器地址，因此为单机版本（无法同步歌单）。  
+&nbsp;&nbsp;程序默认未配置服务器地址，因此为单机版本（无法同步歌单）:100:  
 &nbsp;&nbsp;需要同步歌单时，可以自己发布下`ListenTogether.Api`项目（用`.NET 6`写的），然后在程序设置页面配置下服务器地址即可（例如：`http://xxx.xxx`）。  
 ### &nbsp;4.2、自动更新
-&nbsp;&nbsp;目前暂时不考虑开放自动更新模块。  
+&nbsp;&nbsp;目前暂时不考虑开放自动更新模块:interrobang:  
 
 ## 5、来几张图片
 
