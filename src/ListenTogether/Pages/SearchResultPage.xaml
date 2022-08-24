@@ -51,15 +51,15 @@
             </StackLayout>
 
             <Grid VerticalOptions="Start">
-                <StackLayout ZIndex="1" BackgroundColor="Transparent">
+                <SearchBar x:Name="TxtSearchBar"
+                           Text="{Binding Keyword}"
+                           Placeholder="输入歌曲名、歌手名查找..."/>
+                <StackLayout BackgroundColor="Transparent">
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=GoToSearchPageCommand}"
                                               CommandParameter="{Binding .}"/>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
-                <SearchBar x:Name="TxtSearchBar"
-                           Text="{Binding Keyword}"
-                           Placeholder="输入歌曲名、歌手名查找..."/>
             </Grid>
 
             <CollectionView VerticalOptions="FillAndExpand"
