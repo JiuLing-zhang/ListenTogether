@@ -1,4 +1,5 @@
-## ![logo](https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/logo.svg) 一起听
+![logo](https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/logo.svg)  
+## 一起听
 基于`.NET MAUI`开发的多平台、极简的在线音乐播放器。  
 
 * 支持`Windows`、`Android`两个平台。（没有尊贵的 `APPLE` 调试环境:full_moon_with_face::full_moon_with_face:）  
