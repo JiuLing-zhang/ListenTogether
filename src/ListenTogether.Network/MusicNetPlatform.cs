@@ -19,9 +19,9 @@ public class MusicNetPlatform
     public MusicNetPlatform()
     {
         //搜索
-        _miGuSearcher.SetNextHandler(_netEaseSearcher);
-        _netEaseSearcher.SetNextHandler(_kuWoSearcher);
-        _kuWoSearcher.SetNextHandler(_kuGouSearcher);
+        _miGuSearcher.SetNextHandler(_kuWoSearcher);
+        _kuWoSearcher.SetNextHandler(_netEaseSearcher);
+        _netEaseSearcher.SetNextHandler(_kuGouSearcher);       
     }
 
     public async Task<List<string>?> GetHotWord()
