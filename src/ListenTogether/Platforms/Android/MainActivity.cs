@@ -7,10 +7,7 @@ using NativeMediaMauiLib.Platforms.Android.CurrentActivity;
 
 namespace ListenTogether;
 
-[Activity(
-    Theme = "@style/Maui.SplashTheme",
-    MainLauncher = true,
-    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
+[Activity(Theme = "@style/Maui.SplashTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
 public class MainActivity : MauiAppCompatActivity, IAudioActivity
 {
     MediaPlayerServiceConnection mediaPlayerServiceConnection;
@@ -40,4 +37,4 @@ public class MainActivity : MauiAppCompatActivity, IAudioActivity
         var mediaPlayerServiceIntent = new Intent(ApplicationContext, typeof(MediaPlayerService));
         BindService(mediaPlayerServiceIntent, mediaPlayerServiceConnection, Bind.AutoCreate);
     }
-}   
+}

@@ -14,8 +14,4 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<MauiImage Include="Resources\Images\*" />
-	</ItemGroup>
-
 </Project>

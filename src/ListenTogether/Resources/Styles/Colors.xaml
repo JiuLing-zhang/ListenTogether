@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Color x:Key="LightLogo">#C98FFF</Color>
+    <Color x:Key="LightFlyoutBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="LightBackground">#F7F7F7</Color>
+    <Color x:Key="LightListLine">#EDEDED</Color>
+    <Color x:Key="LightTitle">#262626</Color>
+    <Color x:Key="LightText">#262626</Color>
+    <Color x:Key="LightTextSecond">#717171</Color>
+    <Color x:Key="LightPlaceholder">#767676</Color>
+    <Color x:Key="LightActivity">#0366D6</Color>
+    <Color x:Key="LightLyricText">#CDCBC6</Color>
+    <Color x:Key="LightLyricHighlight">#101010</Color>
+    <Color x:Key="LightPlayingBackground">#F7F7F7</Color>
+    <Color x:Key="LightBorder">#BEBEBE</Color>
+    <Color x:Key="LightBtnBackground">#D7ABFF</Color>
+    <Color x:Key="LightBtnText">#000000</Color>
+    <Color x:Key="LightFeeText">#D892FF</Color>
+    <Color x:Key="LightLink">#0366D6</Color>
+    <Color x:Key="LightTabBarUnselectedColor">#3B3A39</Color>
+    <Color x:Key="LightTabBarTitleColor">#C98FFF</Color>
+    <Color x:Key="LightTabBarBackgroundColor">#F7F7F7</Color>
+    <Color x:Key="LightSwitchOnColor">#E2C1FF</Color>
+    <Color x:Key="LightSwitchThumbOnColor">#C98FFF</Color>
+    <Color x:Key="LightSwitchThumbOffColor">#605E5C</Color>
+    <Color x:Key="LightGroupBackgroundColor">#F0F0F0</Color>
+
+    <Color x:Key="DarkLogo">#C98FFF</Color>
+    <Color x:Key="DarkFlyoutBackgroundColor">#3B3B3B</Color>
+    <Color x:Key="DarkBackground">#333333</Color>
+    <Color x:Key="DarkListLine">#333333</Color>
+    <Color x:Key="DarkTitle">#FCF2F7</Color>
+    <Color x:Key="DarkText">#FCF2F7</Color>
+    <Color x:Key="DarkTextSecond">#9D9D9D</Color>
+    <Color x:Key="DarkPlaceholder">#929292</Color>
+    <Color x:Key="DarkActivity">#2F88ED</Color>
+    <Color x:Key="DarkLyricText">#BAB7B2</Color>
+    <Color x:Key="DarkLyricHighlight">#EFEFEF</Color>
+    <Color x:Key="DarkPlayingBackground">#605E5C</Color>
+    <Color x:Key="DarkBorder">#7B7B7B</Color>
+    <Color x:Key="DarkBtnBackground">#A180BF</Color>
+    <Color x:Key="DarkBtnText">#FFFFFF</Color>
+    <Color x:Key="DarkFeeText">#D892FF</Color>
+    <Color x:Key="DarkLink">#2F88ED</Color>
+    <Color x:Key="DarkTabBarUnselectedColor">#FFFFFF</Color>
+    <Color x:Key="DarkTabBarTitleColor">#C98FFF</Color>
+    <Color x:Key="DarkTabBarBackgroundColor">#333333</Color>
+    <Color x:Key="DarkSwitchOnColor">#E2C1FF</Color>
+    <Color x:Key="DarkSwitchThumbOnColor">#C98FFF</Color>
+    <Color x:Key="DarkSwitchThumbOffColor">#605E5C</Color>
+    <Color x:Key="DarkGroupBackgroundColor">#605E5C</Color>
+
+    <Color x:Key="PlayingPageLine">#767676</Color>
+    <Color x:Key="PlayingPageBackgroundColor">#333333</Color>
+    <Color x:Key="PlayingPageText">#FCF2F7</Color>
+    <Color x:Key="PlayingPageTextSecond">#9D9D9D</Color>
+    <Color x:Key="PlayingPageLyricText">#BAB7B2</Color>
+    <Color x:Key="PlayingPageLyricHighlight">#EFEFEF</Color>
+    <Color x:Key="PlayerSliderThumbColor">#C98FFF</Color>
+    <Color x:Key="PlayerSliderThumbLeftColor">#FFFFFF</Color>
+    <Color x:Key="PlayerSliderThumbRightColor">#FCF2F7</Color>
+
+</ResourceDictionary>
