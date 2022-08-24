@@ -24,6 +24,8 @@ src
   └─NativeMediaMauiLib          本地播放模块（魔改自.NET博客项目）
 ```
 
+`ListenTogether.Api`项目的[数据库脚本](https://github.com/JiuLing-zhang/ListenTogether/blob/main/docs/design/api_database.md)  
+
 ## 3、使用
 直接下载安装就行。  
 
@@ -41,15 +43,13 @@ src
 
 ### Windows
 
-![win_playing.png](https://s2.loli.net/2022/08/12/tmIvjS81ukFG5hM.png)  
+![win_playing.png](https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/windows_playing.png)  
 
-![win_search.png](https://s2.loli.net/2022/08/12/YTpZHV9xbol8XsD.png)  
+![windows_playlist.png](https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/windows_playlist.png)  
 
 ### Android
 
-![phone_playing.jpg](https://s2.loli.net/2022/08/12/rbF6qPntT97lG2I.jpg)  
-
-![phone_playlist.jpg](https://s2.loli.net/2022/08/12/82bqSKjsfDCReBL.jpg)  
+![phone_playing.jpg](https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/android.png)  
 
 ## 6、开源协议
 本项目基于`GPL-3.0 license`协议。  
