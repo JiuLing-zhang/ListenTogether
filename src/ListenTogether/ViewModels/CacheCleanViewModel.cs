@@ -1,17 +1,16 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace ListenTogether.ViewModels;
 
-public class CacheCleanViewModel : ViewModelBase
+public partial class CacheCleanViewModel : ObservableObject
 {
-    public ICommand SelectAllCommand => new Command(SelectAll);
-    public ICommand ClearCommand => new Command(Clear);
     public CacheCleanViewModel()
     {
         Caches = new ObservableCollectionEx<MusicFileViewModel>();
         Caches.ItemChanged += Caches_ItemChanged;
+        Caches.CollectionChanged += Caches_CollectionChanged;
     }
-
     public async Task InitializeAsync()
     {
         try
@@ -29,90 +28,36 @@ public class CacheCleanViewModel : ViewModelBase
         {
             IsBusy = false;
         }
-
     }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("IsNotBusy");
-        }
-    }
+
     public bool IsNotBusy => !_isBusy;
 
-
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AllSizeString))]
     private Int64 _allSize;
-    public Int64 AllSize
-    {
-        get => _allSize;
-        set
-        {
-            _allSize = value;
-            OnPropertyChanged();
+    public string AllSizeString => SizeToString(AllSize);
 
-            AllSizeString = SizeToString(value);
-        }
-    }
 
-    private string _allSizeString;
-    public string AllSizeString
-    {
-        get => _allSizeString;
-        set
-        {
-            _allSizeString = value;
-            OnPropertyChanged();
-        }
-    }
-
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SelectedSizeString))]
     private Int64 _selectedSize;
-    public Int64 SelectedSize
-    {
-        get => _selectedSize;
-        set
-        {
-            _selectedSize = value;
-            OnPropertyChanged();
+    public string SelectedSizeString => SizeToString(SelectedSize);
 
-            SelectedSizeString = SizeToString(value);
-        }
-    }
-
-    private string _selectedSizeString;
-    public string SelectedSizeString
-    {
-        get => _selectedSizeString;
-        set
-        {
-            _selectedSizeString = value;
-            OnPropertyChanged();
-        }
-    }
-
+    [ObservableProperty]
     private ObservableCollectionEx<MusicFileViewModel> _caches;
-    /// <summary>
-    /// 缓存的文件
-    /// </summary>
-    public ObservableCollectionEx<MusicFileViewModel> Caches
-    {
-        get => _caches;
-        set
-        {
-            _caches = value;
-            OnPropertyChanged();
-        }
-    }
 
     private void Caches_ItemChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         CalcSelectedSize();
     }
-
+    private void Caches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    {
+        CalcSelectedSize();
+    }
     public void CalcSelectedSize()
     {
         SelectedSize = 0;
@@ -169,6 +114,7 @@ public class CacheCleanViewModel : ViewModelBase
         });
     }
 
+    [RelayCommand]
     private void SelectAll()
     {
         if (Caches.Count == Caches.Count(x => x.IsChecked == true))
@@ -186,6 +132,8 @@ public class CacheCleanViewModel : ViewModelBase
             }
         }
     }
+
+    [RelayCommand]
     private async void Clear()
     {
         var isOk = await App.Current.MainPage.DisplayAlert("提示", "确定要删除吗？删除后不可恢复。", "确定", "取消");

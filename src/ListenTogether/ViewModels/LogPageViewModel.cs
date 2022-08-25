@@ -1,12 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-public class LogPageViewModel : ViewModelBase
+public partial class LogPageViewModel : ObservableObject
 {
-    public ICommand UpdateLogsCommand => new Command(UpdateLogs);
-    public ICommand ClearLogsCommand => new Command(ClearLogs);
-
     private IApiLogService _apiLogService;
     public LogPageViewModel(IApiLogService apiLogService)
     {
@@ -27,7 +26,7 @@ public class LogPageViewModel : ViewModelBase
                 Logs.Clear();
             }
 
-            CurrentLogs = new List<Log>();
+            _updateLogs = new List<Log>();
             var logs = Logger.GetAll();
             foreach (var log in logs)
             {
@@ -39,7 +38,7 @@ public class LogPageViewModel : ViewModelBase
                 });
 
                 //后台保存，用于上传
-                CurrentLogs.Add(new Log()
+                _updateLogs.Add(new Log()
                 {
                     Timestamp = log.CreateTime,
                     LogType = log.LogType,
@@ -58,44 +57,21 @@ public class LogPageViewModel : ViewModelBase
         }
     }
 
+    [ObservableProperty]
     private bool _isLoginSuccess;
-    public bool IsLoginSuccess
-    {
-        get => _isLoginSuccess;
-        set
-        {
-            _isLoginSuccess = value;
-            OnPropertyChanged();
-        }
-    }
 
-
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("IsNotBusy");
-        }
-    }
+
     public bool IsNotBusy => !_isBusy;
 
+    [ObservableProperty]
     private ObservableCollection<LogDetailViewModel> _logs;
-    public ObservableCollection<LogDetailViewModel> Logs
-    {
-        get => _logs;
-        set
-        {
-            _logs = value;
-            OnPropertyChanged();
-        }
-    }
 
-    private List<Log> CurrentLogs;
+    private List<Log> _updateLogs;
 
+    [RelayCommand]
     private async void UpdateLogs()
     {
         if (GlobalConfig.CurrentUser == null)
@@ -103,7 +79,7 @@ public class LogPageViewModel : ViewModelBase
             await ToastService.Show("上传失败，用户未登录");
             return;
         }
-        if (CurrentLogs.Count == 0)
+        if (_updateLogs.Count == 0)
         {
             await ToastService.Show("没有要上传的日志");
             return;
@@ -118,7 +94,7 @@ public class LogPageViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-            var result = await _apiLogService.WriteListAsync(CurrentLogs);
+            var result = await _apiLogService.WriteListAsync(_updateLogs);
             if (result == false)
             {
                 await ToastService.Show("日志上传失败");
@@ -139,6 +115,7 @@ public class LogPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void ClearLogs()
     {
         var isOk = await App.Current.MainPage.DisplayAlert("提示", "确定要清空日志吗？", "确定", "取消");

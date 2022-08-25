@@ -1,26 +1,12 @@
-﻿namespace ListenTogether.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class LogDetailViewModel : ViewModelBase
+namespace ListenTogether.ViewModels;
+
+public partial class LogDetailViewModel : ObservableObject
 {
+    [ObservableProperty]
     private string _time;
-    public string Time
-    {
-        get => _time;
-        set
-        {
-            _time = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
     private string _message;
-    public string Message
-    {
-        get => _message;
-        set
-        {
-            _message = value;
-            OnPropertyChanged();
-        }
-    }
 }

@@ -1,51 +1,17 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace ListenTogether.ViewModels
+namespace ListenTogether.ViewModels;
+public partial class MusicFileViewModel : ObservableObject
 {
-    public class MusicFileViewModel : ViewModelBase
-    {
-        private string _name;
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
+    [ObservableProperty]
+    private string _name;
 
-        private string _fullName;
-        public string FullName
-        {
-            get => _fullName;
-            set
-            {
-                _fullName = value;
-                OnPropertyChanged();
-            }
-        }
+    [ObservableProperty]
+    private string _fullName;
 
-        private Int64 _size;
-        public Int64 Size
-        {
-            get => _size;
-            set
-            {
-                _size = value;
-                OnPropertyChanged();
-            }
-        }
+    [ObservableProperty]
+    private Int64 _size;
 
-        private bool _isChecked;
-        public bool IsChecked
-        {
-            get => _isChecked;
-            set
-            {
-                _isChecked = value;
-                OnPropertyChanged();
-            }
-        }
-    }
+    [ObservableProperty]
+    private bool _isChecked;
 }

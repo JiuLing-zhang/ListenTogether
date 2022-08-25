@@ -1,98 +1,64 @@
-﻿namespace ListenTogether.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel.DataAnnotations;
 
-public class RegisterPageViewModel : ViewModelBase
+namespace ListenTogether.ViewModels;
+
+public partial class RegisterPageViewModel : ObservableValidator
 {
-    public ICommand RegisterCommand => new Command(Register);
-    public ICommand ChoseImageCommand => new Command(ChoseImage);
-
     private IUserService _userService;
     public RegisterPageViewModel(IUserService userService)
     {
         _userService = userService;
     }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("IsNotBusy");
-        }
-    }
     public bool IsNotBusy => !_isBusy;
 
+
+    [ObservableProperty]
+    [Required(ErrorMessage = "请填写用户名")]
     private string _username;
-    public string Username
-    {
-        get => _username;
-        set
-        {
-            _username = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
+    [Required(ErrorMessage = "请填写昵称")]
     private string _nickname;
-    public string Nickname
-    {
-        get => _nickname;
-        set
-        {
-            _nickname = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
+    [Required(ErrorMessage = "请填写密码")]
     private string _password;
-    public string Password
-    {
-        get => _password;
-        set
-        {
-            _password = value;
-            OnPropertyChanged();
-        }
-    }
 
     private string _password2;
+    [Required(ErrorMessage = "请填写确认密码")]
+    [Compare(otherProperty: nameof(Password), ErrorMessage = "两次密码不一致")]
     public string Password2
     {
         get => _password2;
-        set
-        {
-            _password2 = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _password2, value);
     }
 
+    [ObservableProperty]
+    private ImageSource _myImage;
+
+    private UserAvatar _userAvatar;
+
+    [ObservableProperty]
     private string _apiMessage;
-    public string ApiMessage
-    {
-        get => _apiMessage;
-        set
-        {
-            _apiMessage = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [RelayCommand]
     private async void Register()
     {
         try
         {
             IsBusy = true;
             ApiMessage = "";
-            if (Username.IsEmpty() || Nickname.IsEmpty() || Password.IsEmpty())
+
+            ValidateAllProperties();
+            if (HasErrors)
             {
-                ApiMessage = "注册信息不完整";
-                return;
-            }
-            if (Password != Password2)
-            {
-                ApiMessage = "两次密码不一致";
+                ApiMessage = GetErrors().First().ErrorMessage;
                 return;
             }
 
@@ -124,19 +90,8 @@ public class RegisterPageViewModel : ViewModelBase
         }
     }
 
-    private ImageSource _myImage;
-    public ImageSource MyImage
-    {
-        get => _myImage;
-        set
-        {
-            _myImage = value;
-            OnPropertyChanged();
-        }
-    }
 
-    private UserAvatar _userAvatar;
-
+    [RelayCommand]
     private async void ChoseImage()
     {
         try
@@ -145,16 +100,15 @@ public class RegisterPageViewModel : ViewModelBase
             _userAvatar = null;
             MyImage = null;
 
-            var result = await FilePicker.PickAsync(new PickOptions());
+            PickOptions options = new()
+            {
+                PickerTitle = "请选择头像",
+                FileTypes = FilePickerFileType.Images
+            };
+
+            var result = await FilePicker.PickAsync(options);
             if (result == null)
             {
-                return;
-            }
-
-            if (!result.FileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) &&
-                !result.FileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-            {
-                await ToastService.Show("仅支持jpg和png格式");
                 return;
             }
 

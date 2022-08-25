@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace ListenTogether.ViewModels;
 
-public class LoginPageViewModel : ViewModelBase
+public partial class LoginPageViewModel : ObservableObject
 {
-    public ICommand LoginCommand => new Command(Login);
-    public ICommand GoToRegisterCommand => new Command(GoToRegister);
-
     private IUserService _userService;
     private IUserLocalService _userLocalService;
     public LoginPageViewModel(IUserService userService, IUserLocalService userLocalService)
@@ -24,42 +18,18 @@ public class LoginPageViewModel : ViewModelBase
         Password = "";
     }
 
-
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("IsNotBusy");
-        }
-    }
     public bool IsNotBusy => !_isBusy;
 
+    [ObservableProperty]
     private string _username;
-    public string Username
-    {
-        get => _username;
-        set
-        {
-            _username = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
     private string _password;
-    public string Password
-    {
-        get => _password;
-        set
-        {
-            _password = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [RelayCommand]
     private async void Login()
     {
         try
@@ -99,6 +69,8 @@ public class LoginPageViewModel : ViewModelBase
             IsBusy = false;
         }
     }
+
+    [RelayCommand]
     private async void GoToRegister()
     {
         await Shell.Current.GoToAsync($"../{nameof(RegisterPage)}", true);
