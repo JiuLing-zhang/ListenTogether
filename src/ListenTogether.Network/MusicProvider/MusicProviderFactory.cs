@@ -1,8 +1,7 @@
 ﻿using ListenTogether.Model.Enums;
-using ListenTogether.Network.MusicProvider;
 
-namespace ListenTogether.Network.BuildMusicDetail;
-public class MusicBuilderFactory
+namespace ListenTogether.Network.MusicProvider;
+internal class MusicProviderFactory
 {
     public static IMusicProvider Create(PlatformEnum platform)
     {

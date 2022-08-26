@@ -1,6 +1,5 @@
 ﻿using ListenTogether.Model;
 using ListenTogether.Model.Enums;
-using ListenTogether.Network.BuildMusicDetail;
 using ListenTogether.Network.MusicProvider;
 using ListenTogether.Network.SearchMusic;
 
@@ -12,26 +11,23 @@ public class MusicNetPlatform
     private readonly SearchAbstract _kuGouSearcher = new KuGouSearcher();
     private readonly SearchAbstract _miGuSearcher = new MiGuSearcher();
     private readonly SearchAbstract _kuWoSearcher = new KuWoSearcher();
-
-    private readonly IMusicProvider _kuGouMusicProvider = new KuGouMusicProvider();
-    private readonly IMusicProvider _netEaseMusicProvider = new NetEaseMusicProvider();
-    private readonly IMusicProvider _kuWoMusicProvider = new KuWoMusicProvider();
+     
     public MusicNetPlatform()
     {
         //搜索
         _miGuSearcher.SetNextHandler(_kuWoSearcher);
         _kuWoSearcher.SetNextHandler(_netEaseSearcher);
-        _netEaseSearcher.SetNextHandler(_kuGouSearcher);       
+        _netEaseSearcher.SetNextHandler(_kuGouSearcher);
     }
 
     public async Task<List<string>?> GetHotWord()
     {
-        return await _kuWoMusicProvider.GetHotWord();
+        return await MusicProviderFactory.Create(PlatformEnum.KuWo).GetHotWord();
     }
 
     public async Task<List<string>> GetSearchSuggest(string keyword)
     {
-        return await _netEaseMusicProvider.GetSearchSuggest(keyword);
+        return await MusicProviderFactory.Create(PlatformEnum.NetEase).GetSearchSuggest(keyword);
     }
 
     public async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword)
@@ -41,24 +37,11 @@ public class MusicNetPlatform
 
     public async Task<Music?> GetMusicDetail(MusicSearchResult music)
     {
-        return await MusicBuilderFactory.Create(music.Platform).GetMusicDetail(music);
+        return await MusicProviderFactory.Create(music.Platform).GetMusicDetail(music);
     }
 
     public async Task<Music?> UpdatePlayUrl(Music music)
     {
-        switch (music.Platform)
-        {
-            case PlatformEnum.NetEase:
-                return await _netEaseMusicProvider.UpdatePlayUrl(music);
-            case PlatformEnum.KuWo:
-                return await _kuWoMusicProvider.UpdatePlayUrl(music);
-            case PlatformEnum.KuGou:
-                return await _kuGouMusicProvider.UpdatePlayUrl(music);
-            case PlatformEnum.MiGu:
-                break;
-            default:
-                break;
-        }
-        throw new ArgumentException("当前平台无需更新地址");
+        return await MusicProviderFactory.Create(music.Platform).UpdatePlayUrl(music);
     }
 }

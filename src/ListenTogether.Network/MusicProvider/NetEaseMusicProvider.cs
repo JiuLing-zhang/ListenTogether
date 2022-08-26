@@ -305,4 +305,9 @@ public class NetEaseMusicProvider : IMusicProvider
     {
         throw new NotImplementedException();
     }
+
+    public Task<string> GetMusicShareUrl(Music music)
+    {
+        return Task.FromResult($"{UrlBase.NetEase.GetMusicPlayPage}?id={music.PlatformInnerId}");
+    }
 }

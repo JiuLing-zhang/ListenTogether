@@ -176,4 +176,9 @@ public class MiGuMusicProvider : IMusicProvider
     {
         throw new NotImplementedException();
     }
+
+    public Task<string> GetMusicShareUrl(Music music)
+    {
+        return Task.FromResult($"{UrlBase.MiGu.GetMusicPlayPage}/{music.PlatformInnerId}");
+    }
 }

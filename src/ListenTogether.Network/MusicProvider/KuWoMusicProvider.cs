@@ -290,4 +290,9 @@ internal class KuWoMusicProvider : IMusicProvider
             return null;
         }
     }
+
+    public Task<string> GetMusicShareUrl(Music music)
+    {
+        return Task.FromResult($"{UrlBase.KuWo.GetMusicPlayPage}/{music.PlatformInnerId}");
+    }
 }

@@ -7,12 +7,15 @@ public class UrlBase
         public const string Search = "https://music.163.com/weapi/cloudsearch/get/web?csrf_token=";
         public const string GetMusic = "https://music.163.com/weapi/song/enhance/player/url/v1?csrf_token=";
         public const string Lyric = "https://music.163.com/weapi/song/lyric?csrf_token=";
+        public const string GetMusicPlayPage = "https://music.163.com/#/song";
     }
 
     public class KuGou
     {
+        public const string Index = "https://www.kugou.com/";
         public const string Search = "https://complexsearch.kugou.com/v2/search/song";
         public const string GetMusic = "https://wwwapi.kugou.com/yy/index.php";
+        public const string GetMusicPlayPage = "https://www.kugou.com/song";
     }
 
     public class MiGu
@@ -22,6 +25,7 @@ public class UrlBase
         public const string GetMusicDetailUrl = "https://c.musicapp.migu.cn/MIGUM2.0/v1.0/content/resourceinfo.do";
         public const string GetMusicPlayUrl = "https://h5.nf.migu.cn/app/providers/api/v2/song.listen.ask";
         public const string PlayUrlDomain = "http://freetyst.nf.migu.cn";
+        public const string GetMusicPlayPage = "https://music.migu.cn/v3/music/song";
     }
 
     public class KuWo
@@ -30,5 +34,6 @@ public class UrlBase
         public const string Search = "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord";
         public const string GetMusicUrl = "http://antiserver.kuwo.cn/anti.s";
         public const string GetMusicDetail = "http://www.kuwo.cn/newh5/singles/songinfoandlrc";
+        public const string GetMusicPlayPage = "https://www.kuwo.cn/play_detail";
     }
 }

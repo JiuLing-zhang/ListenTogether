@@ -228,4 +228,14 @@ public class KuGouMusicProvider : IMusicProvider
     {
         throw new NotImplementedException();
     }
+
+    public Task<string> GetMusicShareUrl(Music music)
+    {
+        var obj = music.ExtendData.ToObject<KuGouSearchExtendData>();
+        if (obj == null)
+        {
+            return Task.FromResult(UrlBase.KuGou.Index);
+        }
+        return Task.FromResult($"{UrlBase.KuGou.GetMusicPlayPage}/#hash={obj.Hash}&album_id={obj.AlbumId}&album_audio_id={music.PlatformInnerId}");
+    }
 }
