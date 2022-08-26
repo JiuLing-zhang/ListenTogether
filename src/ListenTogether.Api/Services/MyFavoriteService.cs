@@ -30,7 +30,8 @@ public class MyFavoriteService : IMyFavoriteService
             Id = myFavorite.Id,
             Name = myFavorite.Name,
             ImageUrl = myFavorite.ImageUrl,
-            MusicCount = myFavorite.MusicCount
+            MusicCount = myFavorite.MusicCount,
+            EditTime = myFavorite.EditTime
         });
     }
 
@@ -43,7 +44,8 @@ public class MyFavoriteService : IMyFavoriteService
                 Id = x.Id,
                 ImageUrl = x.ImageUrl,
                 MusicCount = x.MusicCount,
-                Name = x.Name
+                Name = x.Name,
+                EditTime = x.EditTime
             })
             .ToListAsync();
         return myFavorites;
@@ -190,7 +192,7 @@ public class MyFavoriteService : IMyFavoriteService
         {
             return new Result(1, "数据不存在");
         }
- 
+
         var myFavoriteDetail = myFavorite.Details.First(x => x.Id == id);
         myFavorite.Details.Remove(myFavoriteDetail);
         myFavorite.EditTime = DateTime.Now;

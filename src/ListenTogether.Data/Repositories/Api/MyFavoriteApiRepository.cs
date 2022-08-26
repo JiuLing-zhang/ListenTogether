@@ -62,6 +62,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
             ImageUrl = x.ImageUrl,
             MusicCount = x.MusicCount,
             Name = x.Name,
+            EditTime = x.EditTime
         }).ToList();
     }
 
