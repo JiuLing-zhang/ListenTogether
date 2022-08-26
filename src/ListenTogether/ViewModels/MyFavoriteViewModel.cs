@@ -1,66 +1,22 @@
-﻿namespace ListenTogether.ViewModels;
-public class MyFavoriteViewModel : ViewModelBase
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace ListenTogether.ViewModels;
+public partial class MyFavoriteViewModel : ObservableObject
 {
+    [ObservableProperty]
     private int _id;
-    public int Id
-    {
-        get => _id;
-        set
-        {
-            _id = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
     private string _name;
-    public string Name
-    {
-        get => _name;
-        set
-        {
-            _name = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ImageByteArray))]
     private string _imageUrl;
-    public string ImageUrl
-    {
-        get => _imageUrl;
-        set
-        {
-            _imageUrl = value;
-            OnPropertyChanged("ImageUrl");
 
-            if (value.IsEmpty())
-            {
-                _imageByteArray = GlobalConfig.AppIcon;
-            }
-            else
-            {
-                _imageByteArray = ImageCacheUtils.GetByteArrayUsingCache(value);
-            }
-            OnPropertyChanged("ImageByteArray");
-        }
-    }
+    public byte[] ImageByteArray => ImageUrl.IsEmpty() ? GlobalConfig.AppIcon : ImageCacheUtils.GetByteArrayUsingCache(ImageUrl);
 
-    private byte[] _imageByteArray;
-    public byte[] ImageByteArray
-    {
-        get => _imageByteArray;
-    }
-
-
+    [ObservableProperty]
     private int _musicCount;
-    public int MusicCount
-    {
-        get => _musicCount;
-        set
-        {
-            _musicCount = value;
-            OnPropertyChanged();
-        }
-    }
 
     public DateTime EditTime { get; set; }
 }

@@ -1,28 +1,13 @@
-﻿using ListenTogether.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ListenTogether.Models;
 namespace ListenTogether.ViewModels;
-internal class ShellViewModel : ViewModelBase
+internal partial class ShellViewModel : ObservableObject
 {
+    [ObservableProperty]
     private string _title;
-    public string Title
-    {
-        get => _title;
-        set
-        {
-            _title = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
     private string _icon;
-    public string Icon
-    {
-        get => _icon;
-        set
-        {
-            _icon = value;
-            OnPropertyChanged();
-        }
-    }
 
     public AppSection SearchResult { get; set; }
     public AppSection Playlist { get; set; }

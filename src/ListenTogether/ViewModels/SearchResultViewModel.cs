@@ -1,128 +1,64 @@
-﻿namespace ListenTogether.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace ListenTogether.ViewModels;
 
 public class SearchResultGroupViewModel : List<SearchResultViewModel>
 {
     public string Name { get; private set; }
 
-    public SearchResultGroupViewModel(string name, List<SearchResultViewModel> animals) : base(animals)
+    public SearchResultGroupViewModel(string name, List<SearchResultViewModel> searchResults) : base(searchResults)
     {
         Name = name;
     }
 }
 
-public class SearchResultViewModel : ViewModelBase
+public partial class SearchResultViewModel : ObservableObject
 {
-    private string _platform;
-
     /// <summary>
     /// 平台名称
     /// </summary>
-    public string Platform
-    {
-        get => _platform;
-        set
-        {
-            _platform = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _platform;
 
-    private string _name;
     /// <summary>
     /// 歌曲名称
     /// </summary>
-    public string Name
-    {
-        get => _name;
-        set
-        {
-            _name = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _name;
 
-    private string _alias;
     /// <summary>
     /// 歌曲别名
     /// </summary>
-    public string Alias
-    {
-        get => _alias;
-        set
-        {
-            _alias = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _alias;
 
-
-    private string _artist;
     /// <summary>
     /// 歌手名称
     /// </summary>
-    public string Artist
-    {
-        get => _artist;
-        set
-        {
-            _artist = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _artist;
 
-    private string _album;
     /// <summary>
     /// 专辑名称
     /// </summary>
-    public string Album
-    {
-        get => _album;
-        set
-        {
-            _album = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _album;
 
-    private string _duration;
     /// <summary>
     /// 时长
     /// </summary>
-    public string Duration
-    {
-        get => _duration;
-        set
-        {
-            _duration = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _duration;
 
-    private string _fee;
     /// <summary>
     /// 费用（免费、VIP等）
     /// </summary>
-    public string Fee
-    {
-        get => _fee;
-        set
-        {
-            _fee = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _fee;
 
-    private MusicSearchResult _sourceData;
     /// <summary>
     /// 源数据，对应的MusicSearchResult
     /// </summary>
-    public MusicSearchResult SourceData
-    {
-        get => _sourceData;
-        set
-        {
-            _sourceData = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private MusicSearchResult _sourceData;
 }

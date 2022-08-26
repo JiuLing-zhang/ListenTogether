@@ -1,193 +1,179 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
-namespace ListenTogether.ViewModels
+namespace ListenTogether.ViewModels;
+public partial class MyFavoritePageViewModel : ObservableObject
 {
-    public class MyFavoritePageViewModel : ViewModelBase
+    readonly IServiceProvider _services;
+    private IMyFavoriteService _myFavoriteService;
+    private IPlaylistService _playlistService;
+    private IMusicService _musicService;
+    private PlayerService _playerService;
+
+    public string Title => "我的歌单";
+    public MyFavoritePageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
-        readonly IServiceProvider _services;
-        private IMyFavoriteService _myFavoriteService;
-        private IPlaylistService _playlistService;
-        private IMusicService _musicService;
-        private PlayerService _playerService;
-        public ICommand MyFavoriteAddCommand => new Command(AddMyFavorite);
-        public ICommand EnterMyFavoriteDetailCommand => new Command<MyFavoriteViewModel>(EnterMyFavoriteDetail);
-        public ICommand PlayAllMusicsCommand => new Command<MyFavoriteViewModel>(PlayAllMusics);
-        public string Title => "我的歌单";
-        public MyFavoritePageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
-        {
-            FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
-            _services = services;
-            _playerService = playerService;
-            _playlistService = playlistService;
-        }
+        FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
+        _services = services;
+        _playerService = playerService;
+        _playlistService = playlistService;
+    }
 
-        public async Task InitializeAsync()
+    public async Task InitializeAsync()
+    {
+        try
         {
-            try
+            IsBusy = true;
+            _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
+            _musicService = _services.GetService<IMusicServiceFactory>().Create();
+
+            var myFavoriteList = await _myFavoriteService.GetAllAsync();
+            if (myFavoriteList == null || myFavoriteList.Count == 0)
             {
-                IsBusy = true;
-                _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
-                _musicService = _services.GetService<IMusicServiceFactory>().Create();
-
-                var myFavoriteList = await _myFavoriteService.GetAllAsync();
-                if (myFavoriteList == null || myFavoriteList.Count == 0)
-                {
-                    if (FavoriteList.Count > 0)
-                    {
-                        FavoriteList.Clear();
-                    }
-                    return;
-                }
-
-                if (myFavoriteList.Count == FavoriteList.Count)
-                {
-                    //数据未发生变更时不更新列表
-                    var dbLastEditTime = myFavoriteList.OrderByDescending(x => x.EditTime).First().EditTime;
-                    var pageLast = FavoriteList.OrderByDescending(x => x.EditTime).FirstOrDefault();
-
-                    if (pageLast != null && pageLast.EditTime.Subtract(dbLastEditTime).TotalDays >= 0)
-                    {
-                        return;
-                    }
-                }
-
                 if (FavoriteList.Count > 0)
                 {
                     FavoriteList.Clear();
                 }
-                foreach (var myFavorite in myFavoriteList)
-                {
-                    FavoriteList.Add(new MyFavoriteViewModel()
-                    {
-                        Id = myFavorite.Id,
-                        Name = myFavorite.Name,
-                        MusicCount = myFavorite.MusicCount,
-                        ImageUrl = myFavorite.ImageUrl,
-                        EditTime = myFavorite.EditTime
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                await ToastService.Show("我的歌单加载失败");
-                Logger.Error("我的歌单页面初始化失败。", ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        private bool _isBusy;
-        public bool IsBusy
-        {
-            get => _isBusy;
-            set
-            {
-                _isBusy = value;
-                OnPropertyChanged("IsBusy");
-                OnPropertyChanged("IsNotBusy");
-            }
-        }
-        public bool IsNotBusy => !_isBusy;
-
-        private ObservableCollection<MyFavoriteViewModel> _favoriteList;
-        public ObservableCollection<MyFavoriteViewModel> FavoriteList
-        {
-            get => _favoriteList;
-            set
-            {
-                _favoriteList = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private async void AddMyFavorite()
-        {
-            string myFavoriteName = await App.Current.MainPage.DisplayPromptAsync("添加歌单", "请输入歌单名称：", "添加", "取消");
-            if (myFavoriteName.IsEmpty())
-            {
                 return;
             }
 
-            try
+            if (myFavoriteList.Count == FavoriteList.Count)
             {
-                IsBusy = true;
-                if (await _myFavoriteService.NameExist(myFavoriteName))
+                //数据未发生变更时不更新列表
+                var dbLastEditTime = myFavoriteList.OrderByDescending(x => x.EditTime).First().EditTime;
+                var pageLast = FavoriteList.OrderByDescending(x => x.EditTime).FirstOrDefault();
+
+                if (pageLast != null && pageLast.EditTime.Subtract(dbLastEditTime).TotalDays >= 0)
                 {
-                    await ToastService.Show("歌单名称已存在");
                     return;
                 }
+            }
 
-                var myFavorite = new MyFavorite()
-                {
-                    Name = myFavoriteName,
-                    MusicCount = 0,
-                    ImageUrl = ""
-                };
-                var newMyFavorite = await _myFavoriteService.AddOrUpdateAsync(myFavorite);
-                if (newMyFavorite == null)
-                {
-                    await ToastService.Show("添加失败");
-                    return;
-                }
-                await InitializeAsync();
-            }
-            catch (Exception ex)
+            if (FavoriteList.Count > 0)
             {
-                await ToastService.Show("添加失败，网络出小差了");
-                Logger.Error("歌单添加失败。", ex);
+                FavoriteList.Clear();
             }
-            finally
+            foreach (var myFavorite in myFavoriteList)
             {
-                IsBusy = false;
+                FavoriteList.Add(new MyFavoriteViewModel()
+                {
+                    Id = myFavorite.Id,
+                    Name = myFavorite.Name,
+                    MusicCount = myFavorite.MusicCount,
+                    ImageUrl = myFavorite.ImageUrl,
+                    EditTime = myFavorite.EditTime
+                });
             }
         }
-
-        private async void EnterMyFavoriteDetail(MyFavoriteViewModel selected)
+        catch (Exception ex)
         {
-            await Shell.Current.GoToAsync($"{nameof(MyFavoriteDetailPage)}?{nameof(MyFavoriteDetailPageViewModel.MyFavoriteId)}={selected.Id}", true);
+            await ToastService.Show("我的歌单加载失败");
+            Logger.Error("我的歌单页面初始化失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
+    private bool _isBusy;
+
+    public bool IsNotBusy => !_isBusy;
+
+    [ObservableProperty]
+    private ObservableCollection<MyFavoriteViewModel> _favoriteList;
+
+    [RelayCommand]
+    private async void AddMyFavorite()
+    {
+        string myFavoriteName = await App.Current.MainPage.DisplayPromptAsync("添加歌单", "请输入歌单名称：", "添加", "取消");
+        if (myFavoriteName.IsEmpty())
+        {
+            return;
         }
 
-        private async void PlayAllMusics(MyFavoriteViewModel selected)
+        try
         {
-            if (selected.MusicCount == 0)
+            IsBusy = true;
+            if (await _myFavoriteService.NameExist(myFavoriteName))
             {
-                await ToastService.Show("当前歌单是空的哦");
+                await ToastService.Show("歌单名称已存在");
                 return;
             }
 
-            var myFavoriteMusics = await _myFavoriteService.GetMyFavoriteDetail(selected.Id);
-            if (myFavoriteMusics == null)
+            var myFavorite = new MyFavorite()
             {
-                await ToastService.Show("播放失败：没有查询到歌单信息~~~");
+                Name = myFavoriteName,
+                MusicCount = 0,
+                ImageUrl = ""
+            };
+            var newMyFavorite = await _myFavoriteService.AddOrUpdateAsync(myFavorite);
+            if (newMyFavorite == null)
+            {
+                await ToastService.Show("添加失败");
                 return;
             }
+            await InitializeAsync();
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("添加失败，网络出小差了");
+            Logger.Error("歌单添加失败。", ex);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
-            if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite)
+    [RelayCommand]
+    private async void EnterMyFavoriteDetail(MyFavoriteViewModel selected)
+    {
+        await Shell.Current.GoToAsync($"{nameof(MyFavoriteDetailPage)}?{nameof(MyFavoriteDetailPageViewModel.MyFavoriteId)}={selected.Id}", true);
+    }
+
+    [RelayCommand]
+    private async void PlayAllMusics(MyFavoriteViewModel selected)
+    {
+        if (selected.MusicCount == 0)
+        {
+            await ToastService.Show("当前歌单是空的哦");
+            return;
+        }
+
+        var myFavoriteMusics = await _myFavoriteService.GetMyFavoriteDetail(selected.Id);
+        if (myFavoriteMusics == null)
+        {
+            await ToastService.Show("播放失败：没有查询到歌单信息~~~");
+            return;
+        }
+
+        if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite)
+        {
+            await _playlistService.RemoveAllAsync();
+        }
+
+        foreach (var myFavoriteMusic in myFavoriteMusics)
+        {
+            var playlist = new Playlist()
             {
-                await _playlistService.RemoveAllAsync();
-            }
+                PlatformName = myFavoriteMusic.PlatformName,
+                MusicId = myFavoriteMusic.MusicId,
+                MusicName = myFavoriteMusic.MusicName,
+                MusicArtist = myFavoriteMusic.MusicArtist,
+                MusicAlbum = myFavoriteMusic.MusicAlbum
+            };
 
-            foreach (var myFavoriteMusic in myFavoriteMusics)
-            {
-                var playlist = new Playlist()
-                {
-                    PlatformName = myFavoriteMusic.PlatformName,
-                    MusicId = myFavoriteMusic.MusicId,
-                    MusicName = myFavoriteMusic.MusicName,
-                    MusicArtist = myFavoriteMusic.MusicArtist,
-                    MusicAlbum = myFavoriteMusic.MusicAlbum
-                };
+            await _playlistService.AddToPlaylist(playlist);
+        }
 
-                await _playlistService.AddToPlaylist(playlist);
-            }
-
-            if (myFavoriteMusics.Count > 0)
-            {
-                var music = await _musicService.GetOneAsync(myFavoriteMusics[0].MusicId);
-                await _playerService.PlayAsync(music);
-            }
+        if (myFavoriteMusics.Count > 0)
+        {
+            var music = await _musicService.GetOneAsync(myFavoriteMusics[0].MusicId);
+            await _playerService.PlayAsync(music);
         }
     }
 }

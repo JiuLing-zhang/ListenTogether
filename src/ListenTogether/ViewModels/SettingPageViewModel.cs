@@ -1,17 +1,11 @@
-﻿using ListenTogether.Model.Enums;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Model.Enums;
 
 namespace ListenTogether.ViewModels;
 
-public class SettingPageViewModel : ViewModelBase
+public partial class SettingPageViewModel : ObservableObject
 {
-    public ICommand SetApiDomainCommand => new Command(SetApiDomain);
-    public ICommand OpenUrlCommand => new Command<string>(OpenUrl);
-    public ICommand CheckUpdateCommand => new Command(CheckUpdate);
-    public ICommand GoToCacheCleanCommand => new Command(GoToCacheClean);
-    public ICommand GoToLogCommand => new Command(GoToLog);
-    public ICommand GoToLoginCommand => new Command(GoToLogin);
-    public ICommand LogoutCommand => new Command(Logout);
-
     private IEnvironmentConfigService _configService;
     private IUserService _userService;
     private IUserLocalService _userLocalService;
@@ -27,329 +21,198 @@ public class SettingPageViewModel : ViewModelBase
         IsOnlineApp = GlobalConfig.AppNetwork == AppNetworkEnum.Online;
     }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("IsNotBusy");
-        }
-    }
     public bool IsNotBusy => !_isBusy;
-
-    private UserInfoViewModel _userInfo;
 
     /// <summary>
     /// 用户信息
     /// </summary>
-    public UserInfoViewModel UserInfo
-    {
-        get => _userInfo;
-        set
-        {
-            _userInfo = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private UserInfoViewModel _userInfo;
 
+
+    [ObservableProperty]
     private bool _isOnlineApp;
-    public bool IsOnlineApp
-    {
-        get => _isOnlineApp;
-        set
-        {
-            _isOnlineApp = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
     private string _loginUsername;
-    public string LoginUsername
-    {
-        get => _loginUsername;
-        set
-        {
-            _loginUsername = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
     private string _loginPassword;
-    public string LoginPassword
-    {
-        get => _loginPassword;
-        set
-        {
-            _loginPassword = value;
-            OnPropertyChanged();
-        }
-    }
+
 
     /// <summary>
     /// 页面标题
     /// </summary>
     public string Title => "设置";
 
-    private bool _isAutoCheckUpdate = GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate;
     /// <summary>
     /// 自动检查更新
     /// </summary>
-    public bool IsAutoCheckUpdate
+    [ObservableProperty]
+    private bool _isAutoCheckUpdate = GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate;
+    partial void OnIsAutoCheckUpdateChanged(bool value)
     {
-        get => _isAutoCheckUpdate;
-        set
-        {
-            _isAutoCheckUpdate = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate = value;
-            WriteGeneralConfigAsync();
-        }
+        GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate = value;
+        WriteGeneralConfigAsync();
     }
 
     /// <summary>
     /// 深色主题
     /// </summary>
-    public bool IsDarkMode
+    [ObservableProperty]
+    private bool _isDarkMode = App.Current.UserAppTheme == AppTheme.Dark;
+    partial void OnIsDarkModeChanged(bool value)
     {
-        get => App.Current.UserAppTheme == AppTheme.Dark;
-        set
-        {
-            App.Current.UserAppTheme = value ? AppTheme.Dark : AppTheme.Light;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.General.IsDarkMode = value;
-            WriteGeneralConfigAsync();
-        }
+        App.Current.UserAppTheme = value ? AppTheme.Dark : AppTheme.Light;
+        GlobalConfig.MyUserSetting.General.IsDarkMode = value;
+        WriteGeneralConfigAsync();
     }
 
-    private string _apiDomain = GlobalConfig.ApiDomain;
     /// <summary>
     /// 服务器地址
     /// </summary>
-    public string ApiDomain
-    {
-        get => _apiDomain.IsEmpty() ? "未设置" : _apiDomain;
-        set
-        {
-            _apiDomain = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _apiDomain = GlobalConfig.ApiDomain.IsEmpty() ? "未设置" : GlobalConfig.ApiDomain;
 
-    private bool _isEnableNetEase = CheckEnablePlatform(PlatformEnum.NetEase);
     /// <summary>
     /// 网易云
     /// </summary>
-    public bool IsEnableNetEase
+    [ObservableProperty]
+    private bool _isEnableNetEase = CheckEnablePlatform(PlatformEnum.NetEase);
+    partial void OnIsEnableNetEaseChanged(bool value)
     {
-        get => _isEnableNetEase;
-        set
+        Task.Run(async () =>
         {
-            _isEnableNetEase = value;
-            OnPropertyChanged();
-
-            Task.Run(async () =>
-            {
-                await EnablePlatformAsync(PlatformEnum.NetEase, value);
-            });
-        }
+            await EnablePlatformAsync(PlatformEnum.NetEase, value);
+        });
     }
 
-    private bool _isEnableKuWo = CheckEnablePlatform(PlatformEnum.KuWo);
     /// <summary>
     /// 酷我
     /// </summary>
-    public bool IsEnableKuWo
+    [ObservableProperty]
+    private bool _isEnableKuWo = CheckEnablePlatform(PlatformEnum.KuWo);
+    partial void OnIsEnableKuWoChanged(bool value)
     {
-        get => _isEnableKuWo;
-        set
+        Task.Run(async () =>
         {
-            _isEnableKuWo = value;
-            OnPropertyChanged();
-
-            Task.Run(async () =>
-            {
-                await EnablePlatformAsync(PlatformEnum.KuWo, value);
-            });
-        }
+            await EnablePlatformAsync(PlatformEnum.KuWo, value);
+        });
     }
 
-    private bool _isEnableKuGou = CheckEnablePlatform(PlatformEnum.KuGou);
     /// <summary>
     /// 酷狗
     /// </summary>
-    public bool IsEnableKuGou
+    [ObservableProperty]
+    private bool _isEnableKuGou = CheckEnablePlatform(PlatformEnum.KuGou);
+    partial void OnIsEnableKuGouChanged(bool value)
     {
-        get => _isEnableKuGou;
-        set
+        Task.Run(async () =>
         {
-            _isEnableKuGou = value;
-            OnPropertyChanged();
-
-            Task.Run(async () =>
-            {
-                await EnablePlatformAsync(PlatformEnum.KuGou, value);
-            });
-        }
+            await EnablePlatformAsync(PlatformEnum.KuGou, value);
+        });
     }
 
-    private bool _isEnableMiGu = CheckEnablePlatform(PlatformEnum.MiGu);
     /// <summary>
     /// 咪咕
     /// </summary>
-    public bool IsEnableMiGu
+    [ObservableProperty]
+    private bool _isEnableMiGu = CheckEnablePlatform(PlatformEnum.MiGu);
+    partial void OnIsEnableMiGuChanged(bool value)
     {
-        get => _isEnableMiGu;
-        set
+        Task.Run(async () =>
         {
-            _isEnableMiGu = value;
-            OnPropertyChanged();
-
-            Task.Run(async () =>
-            {
-                await EnablePlatformAsync(PlatformEnum.MiGu, value);
-            });
-        }
+            await EnablePlatformAsync(PlatformEnum.MiGu, value);
+        });
     }
 
-    private bool _isHideShortMusic = GlobalConfig.MyUserSetting.Search.IsHideShortMusic;
     /// <summary>
     /// 隐藏小于1分钟的歌曲
     /// </summary>
-    public bool IsHideShortMusic
+    [ObservableProperty]
+    private bool _isHideShortMusic = GlobalConfig.MyUserSetting.Search.IsHideShortMusic;
+    partial void OnIsHideShortMusicChanged(bool value)
     {
-        get => _isHideShortMusic;
-        set
-        {
-            _isHideShortMusic = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.Search.IsHideShortMusic = value;
-            WriteSearchConfigAsync();
-        }
+        GlobalConfig.MyUserSetting.Search.IsHideShortMusic = value;
+        WriteSearchConfigAsync();
     }
 
-    private bool _isMatchSearchKey = GlobalConfig.MyUserSetting.Search.IsMatchSearchKey;
     /// <summary>
     /// 歌曲名或歌手名必须包含搜索词
     /// </summary>
-    public bool IsMatchSearchKey
+    [ObservableProperty]
+    private bool _isMatchSearchKey = GlobalConfig.MyUserSetting.Search.IsMatchSearchKey;
+    partial void OnIsMatchSearchKeyChanged(bool value)
     {
-        get => _isMatchSearchKey;
-        set
-        {
-            _isMatchSearchKey = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.Search.IsMatchSearchKey = value;
-            WriteSearchConfigAsync();
-        }
+        GlobalConfig.MyUserSetting.Search.IsMatchSearchKey = value;
+        WriteSearchConfigAsync();
     }
 
-
-    private bool _isHideVipMusic = GlobalConfig.MyUserSetting.Search.IsHideVipMusic;
     /// <summary>
     /// 隐藏收费歌曲
     /// </summary>
-    public bool IsHideVipMusic
+    [ObservableProperty]
+    private bool _isHideVipMusic = GlobalConfig.MyUserSetting.Search.IsHideVipMusic;
+    partial void OnIsHideVipMusicChanged(bool value)
     {
-        get => _isHideVipMusic;
-        set
-        {
-            _isHideVipMusic = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.Search.IsHideVipMusic = value;
-            WriteSearchConfigAsync();
-        }
+        GlobalConfig.MyUserSetting.Search.IsHideVipMusic = value;
+        WriteSearchConfigAsync();
     }
 
-    private bool _isWifiPlayOnly = GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly;
     /// <summary>
     /// 仅WIFI下可播放
     /// </summary>
-    public bool IsWifiPlayOnly
+    [ObservableProperty]
+    private bool _isWifiPlayOnly = GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly;
+    partial void OnIsWifiPlayOnlyChanged(bool value)
     {
-        get => _isWifiPlayOnly;
-        set
-        {
-            _isWifiPlayOnly = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly = value;
-            WritePlayConfigAsync();
-        }
+        GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly = value;
+        WritePlayConfigAsync();
     }
 
-
-    private bool _isPlayWhenAddToFavorite = GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite;
     /// <summary>
     /// 添加到歌单时自动播放
     /// </summary>
-    public bool IsPlayWhenAddToFavorite
+    [ObservableProperty]
+    private bool _isPlayWhenAddToFavorite = GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite;
+    partial void OnIsPlayWhenAddToFavoriteChanged(bool value)
     {
-        get => _isPlayWhenAddToFavorite;
-        set
-        {
-            _isPlayWhenAddToFavorite = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite = value;
-            WritePlayConfigAsync();
-        }
+        GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite = value;
+        WritePlayConfigAsync();
     }
 
-    private bool _isAutoNextWhenFailed = GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed;
     /// <summary>
     /// 播放失败时自动跳到下一首
     /// </summary>
-    public bool IsAutoNextWhenFailed
+    [ObservableProperty]
+    private bool _isAutoNextWhenFailed = GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed;
+    partial void OnIsAutoNextWhenFailedChanged(bool value)
     {
-        get => _isAutoNextWhenFailed;
-        set
-        {
-            _isAutoNextWhenFailed = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed = value;
-            WritePlayConfigAsync();
-        }
+        GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed = value;
+        WritePlayConfigAsync();
     }
 
-    private bool _isCleanPlaylistWhenPlayMyFavorite = GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite;
     /// <summary>
     /// 播放我的歌单前清空播放列表
     /// </summary>
-    public bool IsCleanPlaylistWhenPlayMyFavorite
+    [ObservableProperty]
+    private bool _isCleanPlaylistWhenPlayMyFavorite = GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite;
+    partial void OnIsCleanPlaylistWhenPlayMyFavoriteChanged(bool value)
     {
-        get => _isCleanPlaylistWhenPlayMyFavorite;
-        set
-        {
-            _isCleanPlaylistWhenPlayMyFavorite = value;
-            OnPropertyChanged();
-
-            GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite = value;
-            WritePlayConfigAsync();
-        }
+        GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite = value;
+        WritePlayConfigAsync();
     }
 
-    private string _versionString = GlobalConfig.CurrentVersionString;
     /// <summary>
     /// 版本号
     /// </summary>
-    public string VersionString
-    {
-        get => _versionString;
-        set
-        {
-            _versionString = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _versionString = GlobalConfig.CurrentVersionString;
+
+
     private static bool CheckEnablePlatform(PlatformEnum platform)
     {
         if ((GlobalConfig.MyUserSetting.Search.EnablePlatform & platform) == platform)
@@ -415,6 +278,7 @@ public class SettingPageViewModel : ViewModelBase
         await _configService.WriteSearchSettingAsync(GlobalConfig.MyUserSetting.Search);
     }
 
+    [RelayCommand]
     private async void SetApiDomain()
     {
         string result = await App.Current.MainPage.DisplayPromptAsync("服务器地址", "请输入要设置的地址（重启后生效）");
@@ -426,21 +290,25 @@ public class SettingPageViewModel : ViewModelBase
         Preferences.Set("ApiDomain", result);
     }
 
+    [RelayCommand]
     private async void GoToCacheClean()
     {
         await Shell.Current.GoToAsync($"{nameof(CacheCleanPage)}", true);
     }
 
+    [RelayCommand]
     private async void GoToLog()
     {
         await Shell.Current.GoToAsync($"{nameof(LogPage)}", true);
     }
 
+    [RelayCommand]
     private async void GoToLogin()
     {
         await Shell.Current.GoToAsync($"{nameof(LoginPage)}", true);
     }
 
+    [RelayCommand]
     private async void Logout()
     {
         var isOk = await Shell.Current.DisplayAlert("提示", "确定要退出吗？", "确定", "取消");
@@ -471,6 +339,7 @@ public class SettingPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private void OpenUrl(string url)
     {
         Task.Run(async () =>
@@ -487,6 +356,7 @@ public class SettingPageViewModel : ViewModelBase
         });
     }
 
+    [RelayCommand]
     private async void CheckUpdate()
     {
         if (IsBusy == true)

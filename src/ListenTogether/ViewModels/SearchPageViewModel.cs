@@ -1,13 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
 [QueryProperty(nameof(Keyword), nameof(Keyword))]
-public class SearchPageViewModel : ViewModelBase
+public partial class SearchPageViewModel : ObservableObject
 {
     private readonly IMusicNetworkService _musicNetworkService;
-    public ICommand BeginSearchCommand => new Command<string>(BeginSearch);
-    public ICommand SearchBarTextChangedCommand => new Command<TextChangedEventArgs>(GetSearchSuggest);
 
     public SearchPageViewModel(IMusicNetworkService musicNetworkService)
     {
@@ -15,34 +15,18 @@ public class SearchPageViewModel : ViewModelBase
         _musicNetworkService = musicNetworkService;
     }
 
-    private string _keyword;
     /// <summary>
     /// 搜索关键字
     /// </summary>
-    public string Keyword
-    {
-        get => _keyword;
-        set
-        {
-            _keyword = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _keyword;
 
-    private ObservableCollection<string> _searchSuggest;
     /// <summary>
     /// 搜索建议
     /// </summary>
-    public ObservableCollection<string> SearchSuggest
-    {
-        get => _searchSuggest;
-        set
-        {
-            _searchSuggest = value;
-            OnPropertyChanged();
-        }
-    }
-
+    [ObservableProperty]
+    private ObservableCollection<string> _searchSuggest;
+      
     private List<string> _hotWords = new List<string>();
     public async Task InitializeAsync()
     {
@@ -57,6 +41,7 @@ public class SearchPageViewModel : ViewModelBase
         await GetSearchSuggest(Keyword);
     }
 
+    [RelayCommand]
     public async void GetSearchSuggest(TextChangedEventArgs e)
     {
         await GetSearchSuggest(e?.NewTextValue);
@@ -88,6 +73,7 @@ public class SearchPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void BeginSearch(string keyword)
     {
         await Shell.Current.GoToAsync($"..?Keyword={keyword}", true);

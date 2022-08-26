@@ -1,50 +1,27 @@
-﻿namespace ListenTogether.ViewModels
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace ListenTogether.ViewModels;
+/// <summary>
+/// 歌词详情
+/// </summary>
+public partial class LyricViewModel : ObservableObject
 {
     /// <summary>
-    /// 歌词详情
+    /// 歌词位置
     /// </summary>
-    public class LyricViewModel : ViewModelBase
-    {
-        private int _positionMillisecond;
-        /// <summary>
-        /// 歌词位置
-        /// </summary>
-        public int PositionMillisecond
-        {
-            get => _positionMillisecond;
-            set
-            {
-                _positionMillisecond = value;
-                OnPropertyChanged();
-            }
-        }
+    [ObservableProperty]
+    private int _positionMillisecond;
 
-        private string _info;
-        /// <summary>
-        /// 歌词
-        /// </summary>
-        public string Info
-        {
-            get => _info;
-            set
-            {
-                _info = value;
-                OnPropertyChanged();
-            }
-        }
+    /// <summary>
+    /// 歌词
+    /// </summary>
+    [ObservableProperty]
+    private string _info;
 
-        private bool _isHighlight = false;
-        /// <summary>
-        /// 是否高亮显示
-        /// </summary>
-        public bool IsHighlight
-        {
-            get => _isHighlight;
-            set
-            {
-                _isHighlight = value;
-                OnPropertyChanged();
-            }
-        }
-    }
+    /// <summary>
+    /// 是否高亮显示
+    /// </summary>
+    [ObservableProperty]
+    private bool _isHighlight = false;
+
 }

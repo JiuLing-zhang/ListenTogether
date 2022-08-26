@@ -1,10 +1,12 @@
-﻿using ListenTogether.Filters.MusicSearchFilter;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Filters.MusicSearchFilter;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
 [QueryProperty(nameof(Keyword), nameof(Keyword))]
-public class SearchResultPageViewModel : ViewModelBase
+public partial class SearchResultPageViewModel : ObservableObject
 {
     private IServiceProvider _services;
     private readonly IMusicNetworkService _musicNetworkService;
@@ -13,23 +15,13 @@ public class SearchResultPageViewModel : ViewModelBase
     private IMyFavoriteService _myFavoriteService;
     private readonly PlayerService _playerService;
 
-    public ICommand AddToMyFavoriteCommand => new Command<SearchResultViewModel>(AddToMyFavorite);
-    public ICommand PlayMusicCommand => new Command<SearchResultViewModel>(PlayMusic);
-    public ICommand GoToSearchPageCommand => new Command(GoToSearchPage);
-
     public SearchResultPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
         MusicSearchResult = new ObservableCollection<SearchResultGroupViewModel>();
-        MusicSearchResult.CollectionChanged += MusicSearchResult_CollectionChanged;
         _services = services;
         _musicNetworkService = musicNetworkService;
         _playerService = playerService;
         _playlistService = playlistService;
-    }
-
-    private void MusicSearchResult_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        OnPropertyChanged("MusicSearchResult");
     }
 
     public async Task InitializeAsync()
@@ -38,65 +30,35 @@ public class SearchResultPageViewModel : ViewModelBase
         _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
     }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("IsNotBusy");
-        }
-    }
     public bool IsNotBusy => !_isBusy;
 
-
-    private string _keyword;
     /// <summary>
     /// 搜索关键字
     /// </summary>
-    public string Keyword
+    [ObservableProperty]
+    private string _keyword;
+    partial void OnKeywordChanged(string value)
     {
-        get => _keyword;
-        set
+        Task.Run(async () =>
         {
-            _keyword = value;
-            OnPropertyChanged();
-            Task.Run(async () =>
-            {
-                await Search(value);
-            });
-        }
+            await Search(value);
+        });
     }
 
-    private ObservableCollection<SearchResultGroupViewModel> _musicSearchResult;
     /// <summary>
     /// 搜索到的结果列表
     /// </summary>
-    public ObservableCollection<SearchResultGroupViewModel> MusicSearchResult
-    {
-        get => _musicSearchResult;
-        set
-        {
-            _musicSearchResult = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private ObservableCollection<SearchResultGroupViewModel> _musicSearchResult;
 
-    private SearchResultViewModel _musicSelectedResult;
     /// <summary>
     /// 选择的结果集
     /// </summary>
-    public SearchResultViewModel MusicSelectedResult
-    {
-        get => _musicSelectedResult;
-        set
-        {
-            _musicSelectedResult = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private SearchResultViewModel _musicSelectedResult;
 
     int running = 0;
     private async Task Search(string keyword)
@@ -177,6 +139,7 @@ public class SearchResultPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void AddToMyFavorite(SearchResultViewModel searchResult)
     {
         try
@@ -270,6 +233,7 @@ public class SearchResultPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void PlayMusic(SearchResultViewModel selected)
     {
         Music music;
@@ -311,6 +275,7 @@ public class SearchResultPageViewModel : ViewModelBase
         return (true, "", music);
     }
 
+    [RelayCommand]
     private async void GoToSearchPage()
     {
         await Shell.Current.GoToAsync($"{nameof(SearchPage)}?Keyword={Keyword}", true);

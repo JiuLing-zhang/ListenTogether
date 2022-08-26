@@ -1,38 +1,15 @@
-﻿namespace ListenTogether.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class UserInfoViewModel : ViewModelBase
+namespace ListenTogether.ViewModels;
+
+public partial class UserInfoViewModel : ObservableObject
 {
-
+    [ObservableProperty]
     private string _username;
-    public string Username
-    {
-        get => _username;
-        set
-        {
-            _username = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
     private string _nickname;
-    public string Nickname
-    {
-        get => _nickname;
-        set
-        {
-            _nickname = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
     private string _avatar;
-    public string Avatar
-    {
-        get => _avatar;
-        set
-        {
-            _avatar = value;
-            OnPropertyChanged();
-        }
-    }
 }

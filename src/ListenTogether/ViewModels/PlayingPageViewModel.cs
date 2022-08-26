@@ -1,10 +1,11 @@
-﻿using ListenTogether.Network.Models.KuGou;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Network.Models.KuGou;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-public class PlayingPageViewModel : ViewModelBase
+public partial class PlayingPageViewModel : ObservableObject
 {
     //控制手动滚动歌词时，系统暂停歌词滚动
     private DateTime _lastScrollToTime = DateTime.Now;
@@ -12,9 +13,6 @@ public class PlayingPageViewModel : ViewModelBase
     private readonly PlayerService _playerService;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; }
 
-    public ICommand CopyMusicLinkCommand => new Command(CopyMusicLink);
-    public ICommand ShareMusicLinkCommand => new Command(ShareMusicLink);
-    public ICommand LyricsScrolledCommand => new Command(LyricsScrolledDo);
     public PlayingPageViewModel(PlayerService playerService)
     {
         _playerService = playerService;
@@ -40,33 +38,17 @@ public class PlayingPageViewModel : ViewModelBase
         }
     }
 
-    private Music _currentMusic;
     /// <summary>
     /// 当前播放的歌曲
     /// </summary>
-    public Music CurrentMusic
-    {
-        get => _currentMusic;
-        set
-        {
-            _currentMusic = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private Music _currentMusic;
 
-    private ObservableCollection<LyricViewModel> _lyrics;
     /// <summary>
     /// 每行的歌词
     /// </summary>
-    public ObservableCollection<LyricViewModel> Lyrics
-    {
-        get => _lyrics;
-        set
-        {
-            _lyrics = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private ObservableCollection<LyricViewModel> _lyrics;
 
     private void _playerService_NewMusicAdded(object sender, EventArgs e)
     {
@@ -117,6 +99,7 @@ public class PlayingPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void CopyMusicLink()
     {
         try
@@ -132,6 +115,7 @@ public class PlayingPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void ShareMusicLink()
     {
         try
@@ -196,10 +180,13 @@ public class PlayingPageViewModel : ViewModelBase
     {
         return $"http://www.kuwo.cn/play_detail/{id}";
     }
+
+    [RelayCommand]
     private void LyricsScrolledDo()
     {
         _lastScrollToTime = DateTime.Now.AddSeconds(1);
     }
+
     private void _timerLyricsUpdate_Tick(object sender, EventArgs e)
     {
         if (_lastScrollToTime.Subtract(DateTime.Now).TotalMilliseconds > 0)

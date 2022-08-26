@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
 [QueryProperty(nameof(MyFavoriteId), nameof(MyFavoriteId))]
-public class MyFavoriteDetailPageViewModel : ViewModelBase
+public partial class MyFavoriteDetailPageViewModel : ObservableObject
 {
     public int MyFavoriteId { get; set; }
 
@@ -12,10 +14,6 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
     private IPlaylistService _playlistService;
     private IMusicService _musicService;
     private PlayerService _playerService;
-    public ICommand PlayMusicCommand => new Command<MyFavoriteDetailViewModel>(PlayMusic);
-    public ICommand MyFavoriteRenameCommand => new Command(RenameMyFavorite);
-    public ICommand MyFavoriteRemoveCommand => new Command(MyFavoriteRemove);
-    public ICommand RemoveOneCommand => new Command<MyFavoriteDetailViewModel>(RemoveOne);
 
     public MyFavoriteDetailPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
@@ -37,7 +35,6 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
             await LoadMyFavoriteInfo();
             await GetMyFavoriteDetail();
 
-            OnPropertyChanged("IsMyFavoriteMusicsEmpty");
         }
         catch (Exception ex)
         {
@@ -50,43 +47,21 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         }
     }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsMyFavoriteMusicsEmpty))]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("IsNotBusy");
-        }
-    }
+
     public bool IsNotBusy => !_isBusy;
 
-
+    [ObservableProperty]
     private MyFavoriteViewModel _currentMyFavorite;
-    public MyFavoriteViewModel CurrentMyFavorite
-    {
-        get => _currentMyFavorite;
-        set
-        {
-            _currentMyFavorite = value;
-            OnPropertyChanged();
-        }
-    }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsMyFavoriteMusicsEmpty))]
+    private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics;
     public bool IsMyFavoriteMusicsEmpty => IsBusy == false && (MyFavoriteMusics == null || MyFavoriteMusics.Count == 0);
 
-    private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics;
-    public ObservableCollection<MyFavoriteDetailViewModel> MyFavoriteMusics
-    {
-        get => _myFavoriteMusics;
-        set
-        {
-            _myFavoriteMusics = value;
-            OnPropertyChanged();
-        }
-    }
 
     private async Task GetMyFavoriteDetail()
     {
@@ -120,6 +95,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         };
     }
 
+    [RelayCommand]
     private async void RenameMyFavorite()
     {
         string newName = await App.Current.MainPage.DisplayPromptAsync("歌单重命名", "请输入新的歌单名称：", "修改", "取消");
@@ -159,6 +135,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void MyFavoriteRemove()
     {
         var isOk = await Shell.Current.DisplayAlert("提示", "确定要删除该歌单吗？", "确定", "取消");
@@ -188,6 +165,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void PlayMusic(MyFavoriteDetailViewModel selected)
     {
         var music = await _musicService.GetOneAsync(selected.MusicId);
@@ -211,6 +189,7 @@ public class MyFavoriteDetailPageViewModel : ViewModelBase
         await Shell.Current.GoToAsync($"..", true);
     }
 
+    [RelayCommand]
     private async void RemoveOne(MyFavoriteDetailViewModel selected)
     {
         var isOk = await Shell.Current.DisplayAlert("提示", $"确定从歌单删除吗？{Environment.NewLine}{selected.MusicName}", "确定", "取消");

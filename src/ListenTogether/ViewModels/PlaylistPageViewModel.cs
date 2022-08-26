@@ -1,18 +1,17 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-public class PlaylistPageViewModel : ViewModelBase
+public partial class PlaylistPageViewModel : ObservableObject
 {
     private IServiceProvider _services;
     private IMusicService _musicService;
     private IPlaylistService _playlistService;
     private IMyFavoriteService _myFavoriteService;
     private readonly PlayerService _playerService;
-    public ICommand AddToMyFavoriteCommand => new Command<PlaylistViewModel>(AddToMyFavorite);
-    public ICommand PlayMusicCommand => new Command<PlaylistViewModel>(PlayMusic);
-    public ICommand ClearPlaylistCommand => new Command(ClearPlaylist);
-    public ICommand RemoveOneCommand => new Command<PlaylistViewModel>(RemoveOne);
+
     public PlaylistPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
         Playlist = new ObservableCollection<PlaylistViewModel>();
@@ -30,8 +29,6 @@ public class PlaylistPageViewModel : ViewModelBase
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             await GetPlaylist();
-            OnPropertyChanged("IsPlaylistEmpty");
-            OnPropertyChanged("IsPlaylistNotEmpty");
         }
         catch (Exception ex)
         {
@@ -86,49 +83,31 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
+    [NotifyPropertyChangedFor(nameof(IsPlaylistEmpty))]
+    [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
     private bool _isBusy;
-    public bool IsBusy
-    {
-        get => _isBusy;
-        set
-        {
-            _isBusy = value;
-            OnPropertyChanged("IsBusy");
-            OnPropertyChanged("IsNotBusy");
-        }
-    }
+
     public bool IsNotBusy => !_isBusy;
     public bool IsPlaylistEmpty => IsBusy == false && (Playlist == null || Playlist.Count == 0);
     public bool IsPlaylistNotEmpty => !IsPlaylistEmpty;
 
-    private string _searchKeyword;
     /// <summary>
     /// 搜索关键字
     /// </summary>
-    public string SearchKeyword
-    {
-        get => _searchKeyword;
-        set
-        {
-            _searchKeyword = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    private string _searchKeyword;
 
-    private ObservableCollection<PlaylistViewModel> _playlist;
     /// <summary>
     /// 搜索到的结果列表
     /// </summary>
-    public ObservableCollection<PlaylistViewModel> Playlist
-    {
-        get => _playlist;
-        set
-        {
-            _playlist = value;
-            OnPropertyChanged();
-        }
-    }
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPlaylistEmpty))]
+    [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
+    private ObservableCollection<PlaylistViewModel> _playlist;
 
+    [RelayCommand]
     private async void PlayMusic(PlaylistViewModel selected)
     {
         var music = await _musicService.GetOneAsync(selected.MusicId);
@@ -141,6 +120,7 @@ public class PlaylistPageViewModel : ViewModelBase
         await _playerService.PlayAsync(music);
     }
 
+    [RelayCommand]
     private async void AddToMyFavorite(PlaylistViewModel selected)
     {
         try
@@ -230,6 +210,7 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void RemoveOne(PlaylistViewModel selected)
     {
         try
@@ -253,6 +234,7 @@ public class PlaylistPageViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
     private async void ClearPlaylist()
     {
         var isOk = await App.Current.MainPage.DisplayAlert("提示", "确定要删除播放列表吗？", "确定", "取消");
