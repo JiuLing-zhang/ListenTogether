@@ -11,7 +11,7 @@ public class MusicNetPlatform
     private readonly SearchAbstract _kuGouSearcher = new KuGouSearcher();
     private readonly SearchAbstract _miGuSearcher = new MiGuSearcher();
     private readonly SearchAbstract _kuWoSearcher = new KuWoSearcher();
-     
+
     public MusicNetPlatform()
     {
         //搜索
@@ -43,5 +43,10 @@ public class MusicNetPlatform
     public async Task<Music?> UpdatePlayUrl(Music music)
     {
         return await MusicProviderFactory.Create(music.Platform).UpdatePlayUrl(music);
+    }
+
+    public Task<string> GetMusicPlayPageUrl(Music music)
+    {
+        return MusicProviderFactory.Create(music.Platform).GetMusicShareUrl(music);
     }
 }

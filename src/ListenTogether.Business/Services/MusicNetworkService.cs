@@ -33,6 +33,11 @@ public class MusicNetworkService : IMusicNetworkService
         return await _musicNetPlatform.UpdatePlayUrl(music);
     }
 
+    public Task<string> GetMusicPlayPageUrl(Music music)
+    {
+        return _musicNetPlatform.GetMusicPlayPageUrl(music);
+    }
+
     public async Task<List<string>> GetHotWord()
     {
         return await _musicNetPlatform.GetHotWord();

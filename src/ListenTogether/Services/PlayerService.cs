@@ -13,7 +13,7 @@ public class PlayerService
     private System.Timers.Timer _timerPlayProgress;
     private bool _isBuffering = false;
 
-    private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
+    private static readonly HttpClientHelper _httpClient = new HttpClientHelper();
 
     /// <summary>
     /// 是否正在播放

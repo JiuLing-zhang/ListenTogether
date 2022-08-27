@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ListenTogether.Network.Models.KuGou;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -9,12 +8,14 @@ public partial class PlayingPageViewModel : ObservableObject
 {
     //控制手动滚动歌词时，系统暂停歌词滚动
     private DateTime _lastScrollToTime = DateTime.Now;
-    private IDispatcherTimer _timerLyricsUpdate;
+    private readonly IDispatcherTimer _timerLyricsUpdate;
     private readonly PlayerService _playerService;
+    private readonly IMusicNetworkService _musicNetworkService;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; }
 
-    public PlayingPageViewModel(PlayerService playerService)
+    public PlayingPageViewModel(PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
+        _musicNetworkService = musicNetworkService;
         _playerService = playerService;
         Lyrics = new ObservableCollection<LyricViewModel>();
 
@@ -49,6 +50,13 @@ public partial class PlayingPageViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private ObservableCollection<LyricViewModel> _lyrics;
+
+
+    /// <summary>
+    /// 分享按钮的文本
+    /// </summary>
+    [ObservableProperty]
+    private string _shareLabelText = Config.Desktop ? "复制歌曲链接" : "分享歌曲链接";
 
     private void _playerService_NewMusicAdded(object sender, EventArgs e)
     {
@@ -100,85 +108,35 @@ public partial class PlayingPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void CopyMusicLink()
+    private async void ShareMusicLink()
     {
+        if (CurrentMusic == null)
+        {
+            return;
+        }
+
         try
         {
-            string musicUrl = GetCurrentMusicLink();
-            await Clipboard.Default.SetTextAsync(musicUrl);
-            await ToastService.Show($"歌曲链接已复制");
+            string musicUrl = await _musicNetworkService.GetMusicPlayPageUrl(CurrentMusic);
+            if (Config.Desktop)
+            {
+                await Clipboard.Default.SetTextAsync(musicUrl);
+                await ToastService.Show($"{CurrentMusic.Name} - {CurrentMusic.Artist}{Environment.NewLine}歌曲链接已复制");
+            }
+            else
+            {
+                await Share.RequestAsync(new ShareTextRequest
+                {
+                    Uri = musicUrl,
+                    Title = $"分享歌曲链接{Environment.NewLine}{CurrentMusic.Name} - {CurrentMusic.Artist}"
+                });
+            }
         }
         catch (Exception ex)
         {
             await ToastService.Show("歌曲链接解析失败");
             Logger.Error("复制歌曲链接失败。", ex);
         }
-    }
-
-    [RelayCommand]
-    private async void ShareMusicLink()
-    {
-        try
-        {
-            string uri = GetCurrentMusicLink();
-            await Share.RequestAsync(new ShareTextRequest
-            {
-                Uri = uri,
-                Title = "分享歌曲链接"
-            });
-        }
-        catch (Exception ex)
-        {
-            await ToastService.Show("歌曲链接解析失败");
-            Logger.Error("分享歌曲链接失败。", ex);
-        }
-    }
-
-    private string GetCurrentMusicLink()
-    {
-        if (CurrentMusic == null)
-        {
-            return default;
-        }
-
-        var music = CurrentMusic;
-        string musicUrl;
-        switch (music.Platform)
-        {
-            case Model.Enums.PlatformEnum.NetEase:
-                musicUrl = GetNetEaseMusicUrl(music.PlatformInnerId);
-                break;
-            case Model.Enums.PlatformEnum.KuGou:
-                musicUrl = GetKuGouMusicUrl(music.PlatformInnerId, music.ExtendData);
-                break;
-            case Model.Enums.PlatformEnum.MiGu:
-                musicUrl = GetMiGuMusicUrl(music.PlatformInnerId);
-                break;
-            case Model.Enums.PlatformEnum.KuWo:
-                musicUrl = GetKuWoMusicUrl(music.PlatformInnerId);
-                break;
-            default:
-                return default;
-        }
-        return musicUrl;
-    }
-
-    private string GetNetEaseMusicUrl(string id)
-    {
-        return $"https://music.163.com/#/song?id={id}";
-    }
-    private string GetKuGouMusicUrl(string id, string extendData)
-    {
-        var obj = extendData.ToObject<KuGouSearchExtendData>();
-        return $"http://www.kugou.com/song/#hash={obj.Hash}&album_id={obj.AlbumId}&album_audio_id={id}";
-    }
-    private string GetMiGuMusicUrl(string id)
-    {
-        return $"http://music.migu.cn/v3/music/song/{id}";
-    }
-    private string GetKuWoMusicUrl(string id)
-    {
-        return $"http://www.kuwo.cn/play_detail/{id}";
     }
 
     [RelayCommand]
