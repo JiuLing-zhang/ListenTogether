@@ -35,7 +35,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+        <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
+        <StackLayout Grid.Row="0" Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
             <StackLayout Margin="{OnPlatform UWP='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
@@ -43,11 +44,7 @@
                        VerticalTextAlignment="Center"
                        Style="{StaticResource Title}"/>
 
-                <ActivityIndicator Margin="10,0,0,0"
-                               IsRunning="{Binding IsBusy}"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               VerticalOptions="CenterAndExpand"/>
+             
             </StackLayout>
 
             <Grid VerticalOptions="Start">
@@ -64,7 +61,6 @@
 
             <CollectionView VerticalOptions="FillAndExpand"
                         ItemsSource="{Binding MusicSearchResult}"
-                        IsVisible="{Binding IsNotBusy}"
                         IsGrouped="True">
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>

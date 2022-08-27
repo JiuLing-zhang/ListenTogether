@@ -6,14 +6,14 @@ using System.Collections.ObjectModel;
 namespace ListenTogether.ViewModels;
 
 [QueryProperty(nameof(Keyword), nameof(Keyword))]
-public partial class SearchResultPageViewModel : ObservableObject
+public partial class SearchResultPageViewModel : ViewModelBase
 {
-    private IServiceProvider _services;
+    private readonly IServiceProvider _services;
     private readonly IMusicNetworkService _musicNetworkService;
-    private IMusicService _musicService;
-    private IPlaylistService _playlistService;
-    private IMyFavoriteService _myFavoriteService;
+    private readonly IPlaylistService _playlistService;
     private readonly PlayerService _playerService;
+    private IMusicService _musicService;
+    private IMyFavoriteService _myFavoriteService;
 
     public SearchResultPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
@@ -29,11 +29,6 @@ public partial class SearchResultPageViewModel : ObservableObject
         _musicService = _services.GetService<IMusicServiceFactory>().Create();
         _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
     }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-    public bool IsNotBusy => !_isBusy;
 
     /// <summary>
     /// 搜索关键字
@@ -60,21 +55,21 @@ public partial class SearchResultPageViewModel : ObservableObject
     [ObservableProperty]
     private SearchResultViewModel _musicSelectedResult;
 
-    int running = 0;
+    private int _isSearching = 0;
     private async Task Search(string keyword)
     {
         if (keyword.IsEmpty())
         {
             return;
         }
-        if (Interlocked.CompareExchange(ref running, 1, 0) != 0)
+        if (Interlocked.CompareExchange(ref _isSearching, 1, 0) != 0)
         {
             return;
         }
 
         try
         {
-            IsBusy = true;
+            StartLoading("正在搜索....");
             MusicSearchResult.Clear();
             var musics = await _musicNetworkService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, keyword);
 
@@ -134,8 +129,8 @@ public partial class SearchResultPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
-            Interlocked.Exchange(ref running, 0);
+            StopLoading();
+            Interlocked.Exchange(ref _isSearching, 0);
         }
     }
 
@@ -144,13 +139,9 @@ public partial class SearchResultPageViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("处理中....");
 
-            Music music;
-
-            bool succeed;
-            string message;
-            (succeed, message, music) = await SaveMusic(searchResult.SourceData);
+            var (succeed, message, music) = await SaveMusic(searchResult.SourceData);
             if (succeed == false)
             {
                 await ToastService.Show(message);
@@ -229,18 +220,14 @@ public partial class SearchResultPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 
     [RelayCommand]
     private async void PlayMusic(SearchResultViewModel selected)
     {
-        Music music;
-        bool succeed;
-        string message;
-
-        (succeed, message, music) = await SaveMusic(selected.SourceData);
+        var (succeed, message, music) = await SaveMusic(selected.SourceData);
         if (succeed == false)
         {
             await ToastService.Show(message);

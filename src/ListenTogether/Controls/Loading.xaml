@@ -2,21 +2,21 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ListenTogether.Controls.Loading"
-             x:Name="selfLoading">
+             x:Name="SelfLoading">
 
     <StackLayout
         AbsoluteLayout.LayoutBounds="0,0,1,1"
         AbsoluteLayout.LayoutFlags="All"
         VerticalOptions="Center"
         HorizontalOptions="Center"
-        IsVisible="{Binding IsRunning, Source={x:Reference selfLoading}}">
+        IsVisible="{Binding IsRunning, Source={x:Reference SelfLoading}}">
         <ActivityIndicator
             Color="{StaticResource Main}"
-            IsRunning="{Binding IsRunning, Source={x:Reference selfLoading}}" />
+            IsRunning="{Binding IsRunning, Source={x:Reference SelfLoading}}" />
         <Label
             Margin="0,10,0,0"
             TextColor="{StaticResource Main}"
-            Text="{Binding Text, Source={x:Reference selfLoading}}" />
+            Text="{Binding Text, Source={x:Reference SelfLoading}}" />
     </StackLayout>
 
 </ContentView>

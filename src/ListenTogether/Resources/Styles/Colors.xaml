@@ -4,6 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
+    <Color x:Key="Main">#C98FFF</Color>
+
     <Color x:Key="LightLogo">#C98FFF</Color>
     <Color x:Key="LightFlyoutBackgroundColor">#FFFFFF</Color>
     <Color x:Key="LightBackground">#F7F7F7</Color>
