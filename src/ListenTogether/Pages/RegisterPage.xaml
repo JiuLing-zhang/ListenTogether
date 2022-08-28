@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.RegisterPage"
              Title="注册"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
@@ -8,17 +9,13 @@
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
                  MaximumWidthRequest="{OnPlatform  UWP=500,MacCatalyst=500}">
 
+        <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
         <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
             <Label Text="新用户注册"
                    VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
-            <ActivityIndicator Margin="10,0,0,0"
-                               IsRunning="{Binding IsBusy}"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               VerticalOptions="CenterAndExpand"/>
         </StackLayout>
 
         <StackLayout>
@@ -48,7 +45,6 @@
                    WidthRequest="48"
                    Margin="0,0,10,0"/>
                 <Button Text="选择"
-                        IsEnabled="{Binding IsNotBusy}"
                         Command="{Binding ChoseImageCommand}"
                         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                         TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
@@ -59,7 +55,6 @@
 
             <Button Text="注册"
                     Margin="0,20,0,0"
-                    IsEnabled="{Binding IsNotBusy}"
                     Command="{Binding RegisterCommand}"
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>

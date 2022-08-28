@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-public partial class LogPageViewModel : ObservableObject
+public partial class LogPageViewModel : ViewModelBase
 {
-    private IApiLogService _apiLogService;
+    private readonly IApiLogService _apiLogService;
     public LogPageViewModel(IApiLogService apiLogService)
     {
         Logs = new ObservableCollection<LogDetailViewModel>();
@@ -17,7 +17,7 @@ public partial class LogPageViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("");
 
             IsLoginSuccess = GlobalConfig.CurrentUser != null;
 
@@ -53,18 +53,12 @@ public partial class LogPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 
     [ObservableProperty]
     private bool _isLoginSuccess;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-
-    public bool IsNotBusy => !_isBusy;
 
     [ObservableProperty]
     private ObservableCollection<LogDetailViewModel> _logs;
@@ -93,7 +87,7 @@ public partial class LogPageViewModel : ObservableObject
 
         try
         {
-            IsBusy = true;
+            StartLoading("正在上传....");
             var result = await _apiLogService.WriteListAsync(_updateLogs);
             if (result == false)
             {
@@ -111,7 +105,7 @@ public partial class LogPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 

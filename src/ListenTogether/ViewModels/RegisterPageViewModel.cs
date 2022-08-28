@@ -4,19 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ListenTogether.ViewModels;
 
-public partial class RegisterPageViewModel : ObservableValidator
+public partial class RegisterPageViewModel : ViewModelBase
 {
-    private IUserService _userService;
+    private readonly IUserService _userService;
     public RegisterPageViewModel(IUserService userService)
     {
         _userService = userService;
     }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-    public bool IsNotBusy => !_isBusy;
-
 
     [ObservableProperty]
     [Required(ErrorMessage = "请填写用户名")]
@@ -52,7 +46,7 @@ public partial class RegisterPageViewModel : ObservableValidator
     {
         try
         {
-            IsBusy = true;
+            StartLoading("正在注册....");
             ApiMessage = "";
 
             ValidateAllProperties();
@@ -86,7 +80,7 @@ public partial class RegisterPageViewModel : ObservableValidator
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 
@@ -96,7 +90,6 @@ public partial class RegisterPageViewModel : ObservableValidator
     {
         try
         {
-            IsBusy = true;
             _userAvatar = null;
             MyImage = null;
 
@@ -111,6 +104,7 @@ public partial class RegisterPageViewModel : ObservableValidator
             {
                 return;
             }
+            StartLoading("");
 
             _userAvatar = new UserAvatar();
             _userAvatar.FileName = result.FileName;
@@ -132,7 +126,7 @@ public partial class RegisterPageViewModel : ObservableValidator
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 }

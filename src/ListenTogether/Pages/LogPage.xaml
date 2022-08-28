@@ -2,28 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.LogPage"
              Title="日志"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+
+        <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
         <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
             <Label Text="日志"
                    VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
-            <ActivityIndicator Margin="10,0,0,0"
-                               IsRunning="{Binding IsBusy}"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               VerticalOptions="CenterAndExpand"/>
         </StackLayout>
 
         <CollectionView VerticalOptions="FillAndExpand"
                         Margin="0,0,0,10"
                         ItemsSource="{Binding Logs}"
-                        IsVisible="{Binding IsNotBusy}"
                         EmptyView="啥日志也没有哦"
                         SelectionMode="None"  >
             <CollectionView.ItemTemplate>
@@ -41,14 +38,12 @@
         <Button Text="上传"
                 Margin="0,0,0,5"
                 VerticalOptions="End"
-                IsEnabled="{Binding IsNotBusy}"
                 IsVisible="{Binding IsLoginSuccess}"
                 Command="{Binding UpdateLogsCommand}"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                 TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
         <Button Text="清空日志"
                 VerticalOptions="End"
-                IsEnabled="{Binding IsNotBusy}"
                 Command="{Binding ClearLogsCommand}"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                 TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>

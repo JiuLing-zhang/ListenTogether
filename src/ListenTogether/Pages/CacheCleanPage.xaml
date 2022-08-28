@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.CacheCleanPage"
              Title="缓存清理"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
@@ -17,17 +18,13 @@
     </ContentPage.Resources>
 
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+        <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
         <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
             <Label Text="缓存清理"
                    VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
-            <ActivityIndicator Margin="10,0,0,0"
-                               IsRunning="{Binding IsBusy}"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               VerticalOptions="CenterAndExpand"/>
         </StackLayout>
 
         <ScrollView VerticalOptions="FillAndExpand">

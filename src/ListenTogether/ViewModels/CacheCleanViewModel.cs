@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace ListenTogether.ViewModels;
 
-public partial class CacheCleanViewModel : ObservableObject
+public partial class CacheCleanViewModel : ViewModelBase
 {
     public CacheCleanViewModel()
     {
@@ -15,7 +15,7 @@ public partial class CacheCleanViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("");
             SelectedSize = 0;
             await GetCacheFiles();
         }
@@ -26,15 +26,9 @@ public partial class CacheCleanViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-
-    public bool IsNotBusy => !_isBusy;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AllSizeString))]
@@ -144,7 +138,7 @@ public partial class CacheCleanViewModel : ObservableObject
 
         try
         {
-            IsBusy = true;
+            StartLoading("处理中....");
             foreach (var cache in Caches)
             {
                 if (cache.IsChecked == true)
@@ -167,7 +161,7 @@ public partial class CacheCleanViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
 
         await GetCacheFiles();

@@ -23,6 +23,11 @@ public partial class SettingPageViewModel : ViewModelBase
             UserInfo = GetUserInfo();
             IsOnlineApp = GlobalConfig.AppNetwork == AppNetworkEnum.Online;
         }
+        catch (Exception ex)
+        {
+            await ToastService.Show("设置页加载失败");
+            Logger.Error("设置页加载失败。", ex);
+        }
         finally
         {
             StopLoading();

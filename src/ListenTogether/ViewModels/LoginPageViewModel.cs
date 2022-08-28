@@ -3,10 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace ListenTogether.ViewModels;
 
-public partial class LoginPageViewModel : ObservableObject
+public partial class LoginPageViewModel : ViewModelBase
 {
-    private IUserService _userService;
-    private IUserLocalService _userLocalService;
+    private readonly IUserService _userService;
+    private readonly IUserLocalService _userLocalService;
     public LoginPageViewModel(IUserService userService, IUserLocalService userLocalService)
     {
         _userService = userService;
@@ -19,11 +19,6 @@ public partial class LoginPageViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-    public bool IsNotBusy => !_isBusy;
-
-    [ObservableProperty]
     private string _username;
 
     [ObservableProperty]
@@ -34,7 +29,7 @@ public partial class LoginPageViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("正在登录....");
             if (Username.IsEmpty() || Password.IsEmpty())
             {
                 await ToastService.Show("请输入用户名和密码");
@@ -66,7 +61,7 @@ public partial class LoginPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 

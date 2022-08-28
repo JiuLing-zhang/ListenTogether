@@ -5,16 +5,15 @@ using System.Collections.ObjectModel;
 namespace ListenTogether.ViewModels;
 
 [QueryProperty(nameof(MyFavoriteId), nameof(MyFavoriteId))]
-public partial class MyFavoriteDetailPageViewModel : ObservableObject
+public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 {
     public int MyFavoriteId { get; set; }
 
-    private IServiceProvider _services;
+    private readonly PlayerService _playerService;
+    private readonly IServiceProvider _services;
+    private readonly IPlaylistService _playlistService;
     private IMyFavoriteService _myFavoriteService;
-    private IPlaylistService _playlistService;
     private IMusicService _musicService;
-    private PlayerService _playerService;
-
     public MyFavoriteDetailPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
         MyFavoriteMusics = new ObservableCollection<MyFavoriteDetailViewModel>();
@@ -28,7 +27,7 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("");
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
@@ -43,16 +42,9 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsMyFavoriteMusicsEmpty))]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-
-    public bool IsNotBusy => !_isBusy;
 
     [ObservableProperty]
     private MyFavoriteViewModel _currentMyFavorite;
@@ -60,8 +52,7 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsMyFavoriteMusicsEmpty))]
     private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics;
-    public bool IsMyFavoriteMusicsEmpty => IsBusy == false && (MyFavoriteMusics == null || MyFavoriteMusics.Count == 0);
-
+    public bool IsMyFavoriteMusicsEmpty => MyFavoriteMusics == null || MyFavoriteMusics.Count == 0;
 
     private async Task GetMyFavoriteDetail()
     {
@@ -111,7 +102,7 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
 
         try
         {
-            IsBusy = true;
+            StartLoading("处理中....");
 
             var myFavorite = new MyFavorite()
             {
@@ -131,7 +122,7 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 
@@ -145,7 +136,7 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
         }
         try
         {
-            IsBusy = true;
+            StartLoading("处理中....");
             var result = await _myFavoriteService.RemoveAsync(MyFavoriteId);
             if (result == false)
             {
@@ -161,7 +152,7 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 
@@ -200,7 +191,7 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
 
         try
         {
-            IsBusy = true;
+            StartLoading("处理中....");
 
             if (!await _myFavoriteService.RemoveDetailAsync(selected.Id))
             {
@@ -216,7 +207,7 @@ public partial class MyFavoriteDetailPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 }

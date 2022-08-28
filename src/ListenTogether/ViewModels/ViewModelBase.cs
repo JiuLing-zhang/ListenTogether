@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ListenTogether.ViewModels;
-public partial class ViewModelBase : ObservableObject
+public partial class ViewModelBase : ObservableValidator
 {
     [ObservableProperty]
     private bool _isLoading;

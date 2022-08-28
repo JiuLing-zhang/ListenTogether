@@ -3,13 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
-public partial class MyFavoritePageViewModel : ObservableObject
+public partial class MyFavoritePageViewModel : ViewModelBase
 {
-    readonly IServiceProvider _services;
+    private readonly PlayerService _playerService;
+    private readonly IServiceProvider _services;
+    private readonly IPlaylistService _playlistService;
     private IMyFavoriteService _myFavoriteService;
-    private IPlaylistService _playlistService;
     private IMusicService _musicService;
-    private PlayerService _playerService;
 
     public string Title => "我的歌单";
     public MyFavoritePageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
@@ -24,7 +24,7 @@ public partial class MyFavoritePageViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("");
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
@@ -73,15 +73,9 @@ public partial class MyFavoritePageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-
-    public bool IsNotBusy => !_isBusy;
 
     [ObservableProperty]
     private ObservableCollection<MyFavoriteViewModel> _favoriteList;
@@ -97,7 +91,7 @@ public partial class MyFavoritePageViewModel : ObservableObject
 
         try
         {
-            IsBusy = true;
+            StartLoading("处理中....");
             if (await _myFavoriteService.NameExist(myFavoriteName))
             {
                 await ToastService.Show("歌单名称已存在");
@@ -125,7 +119,7 @@ public partial class MyFavoritePageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 

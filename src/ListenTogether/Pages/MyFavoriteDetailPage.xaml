@@ -2,12 +2,14 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+             xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.MyFavoriteDetailPage"
              Title="我的歌单详情"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
     <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
 
+        <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
         <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
@@ -15,12 +17,6 @@
             <Label Text="{Binding CurrentMyFavorite.Name,StringFormat='{}歌单 - {0}'}"
                    VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
-
-            <ActivityIndicator Margin="10,0,0,0"
-                               IsRunning="{Binding IsBusy}"
-                               HeightRequest="20"
-                               WidthRequest="20"
-                               VerticalOptions="CenterAndExpand"/>
 
             <StackLayout Margin="10,0,0,0"
                          Orientation="Horizontal"
@@ -57,8 +53,7 @@
         </StackLayout>
 
         <CollectionView VerticalOptions="FillAndExpand"
-                        ItemsSource="{Binding MyFavoriteMusics}"
-                        IsVisible="{Binding IsNotBusy}">
+                        ItemsSource="{Binding MyFavoriteMusics}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
