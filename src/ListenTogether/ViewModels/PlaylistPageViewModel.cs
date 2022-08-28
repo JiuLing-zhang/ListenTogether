@@ -4,12 +4,12 @@ using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-public partial class PlaylistPageViewModel : ObservableObject
+public partial class PlaylistPageViewModel : ViewModelBase
 {
-    private IServiceProvider _services;
     private IMusicService _musicService;
-    private IPlaylistService _playlistService;
     private IMyFavoriteService _myFavoriteService;
+    private readonly IServiceProvider _services;
+    private readonly IPlaylistService _playlistService;
     private readonly PlayerService _playerService;
 
     public PlaylistPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
@@ -25,7 +25,7 @@ public partial class PlaylistPageViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("页面加载中....");
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             await GetPlaylist();
@@ -37,7 +37,7 @@ public partial class PlaylistPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
     private async Task GetPlaylist()
@@ -83,24 +83,11 @@ public partial class PlaylistPageViewModel : ObservableObject
         }
     }
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    [NotifyPropertyChangedFor(nameof(IsPlaylistEmpty))]
-    [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
-    private bool _isBusy;
-
-    public bool IsNotBusy => !_isBusy;
-    public bool IsPlaylistEmpty => IsBusy == false && (Playlist == null || Playlist.Count == 0);
+    public bool IsPlaylistEmpty =>  (Playlist == null || Playlist.Count == 0);
     public bool IsPlaylistNotEmpty => !IsPlaylistEmpty;
-
+    
     /// <summary>
-    /// 搜索关键字
-    /// </summary>
-    [ObservableProperty]
-    private string _searchKeyword;
-
-    /// <summary>
-    /// 搜索到的结果列表
+    /// 播放列表
     /// </summary>
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsPlaylistEmpty))]
@@ -125,7 +112,7 @@ public partial class PlaylistPageViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("处理中....");
 
             var music = await _musicService.GetOneAsync(selected.MusicId);
             if (music == null)
@@ -206,7 +193,7 @@ public partial class PlaylistPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 
@@ -215,7 +202,7 @@ public partial class PlaylistPageViewModel : ObservableObject
     {
         try
         {
-            IsBusy = true;
+            StartLoading("正在删除....");
             if (!await _playlistService.RemoveAsync(selected.Id))
             {
                 await ToastService.Show("删除失败");
@@ -230,7 +217,7 @@ public partial class PlaylistPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 
