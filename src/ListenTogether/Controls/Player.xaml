@@ -6,14 +6,14 @@
     <ContentView.Content>
         <ContentView x:Name="MainBlock">
             <OnPlatform x:TypeArguments="View">
-                <On Platform="UWP, macOS">
+                <On Platform="WinUI, macOS">
                     <Grid>
                         <Line
                             Stroke="{StaticResource PlayingPageLine}"
                             X2="4000" />
                         <StackLayout 
                             Orientation="Horizontal"
-                            Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,10,10,0',iOS='10,10,10,0'}">
+                            Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,10,10,0',iOS='10,10,10,0'}">
                             <StackLayout 
                                 HorizontalOptions="Start"
                                 Orientation="Horizontal"

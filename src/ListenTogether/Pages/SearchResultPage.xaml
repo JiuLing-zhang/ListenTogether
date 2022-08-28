@@ -36,8 +36,8 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
-        <StackLayout Grid.Row="0" Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
-            <StackLayout Margin="{OnPlatform UWP='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
+        <StackLayout Grid.Row="0" Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+            <StackLayout Margin="{OnPlatform WinUI='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
                 <Label Text="搜索结果"
@@ -77,7 +77,7 @@
                     <DataTemplate>
                         <StackLayout>
                             <OnPlatform x:TypeArguments="View">
-                                <On Platform="UWP, macOS">
+                                <On Platform="WinUI, macOS">
                                     <Grid ColumnDefinitions="30,60,40,300,300,*">
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"

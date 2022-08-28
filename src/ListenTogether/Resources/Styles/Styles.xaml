@@ -17,7 +17,7 @@
     <Style TargetType="Label"
            x:Key="Title">
         <Setter Property="FontSize"
-                Value="{OnPlatform UWP=20,MacCatalyst=20,Android=18,iOS=18}" />
+                Value="{OnPlatform WinUI=20,MacCatalyst=20,Android=18,iOS=18}" />
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource LightTitle}, Dark={StaticResource DarkTitle}}" />
     </Style>

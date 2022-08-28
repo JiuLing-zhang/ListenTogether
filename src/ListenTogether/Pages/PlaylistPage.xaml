@@ -14,8 +14,8 @@
         </Grid.RowDefinitions>
 
         <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
-        <StackLayout Grid.Row="0" Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
-            <StackLayout Margin="{OnPlatform UWP='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
+        <StackLayout Grid.Row="0" Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+            <StackLayout Margin="{OnPlatform WinUI='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                      Orientation="Horizontal"
                      VerticalOptions="Start">
 
@@ -25,7 +25,7 @@
 
                 <StackLayout Margin="20,0,0,0"
                          Orientation="Horizontal"
-                         HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
+                         HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                          VerticalOptions="End"
                          IsVisible="{Binding IsPlaylistNotEmpty}">
                     <StackLayout.GestureRecognizers>
@@ -33,7 +33,7 @@
                     </StackLayout.GestureRecognizers>
                     <Image x:Name="ImgRemove"
                        Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
-                       IsVisible="{OnPlatform UWP=True,MacCatalyst=True,Android=False,iOS=False}"
+                       IsVisible="{OnPlatform WinUI=True,MacCatalyst=True,Android=False,iOS=False}"
                        HeightRequest="20"
                        WidthRequest="20">
                     </Image>
@@ -47,7 +47,7 @@
                     <DataTemplate>
                         <StackLayout>
                             <OnPlatform x:TypeArguments="View">
-                                <On Platform="UWP, macOS">
+                                <On Platform="WinUI, macOS">
                                     <StackLayout Orientation="Horizontal">
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"

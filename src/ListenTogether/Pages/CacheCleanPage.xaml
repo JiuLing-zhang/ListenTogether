@@ -17,7 +17,7 @@
         </Style>
     </ContentPage.Resources>
 
-    <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+    <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
         <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
         <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
@@ -65,13 +65,13 @@
                 </StackLayout>
             </StackLayout>
             <Button Text="全选"
-                    HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
+                    HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                     Command="{Binding SelectAllCommand}"
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
             <Button Text="删除"
                     Margin="5,0,0,0"
-                    HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=End,iOS=End}"
+                    HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"
                     Style="{DynamicResource IsEnabledClear}"
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"

@@ -21,8 +21,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
-            <StackLayout Margin="{OnPlatform UWP='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
+        <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+            <StackLayout Margin="{OnPlatform WinUI='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                          Orientation="Horizontal"
                          VerticalOptions="Start">
                 <Label Text="搜索"
@@ -46,11 +46,11 @@
                     HorizontalOptions="FillAndExpand"
                     Padding="1"
                     StrokeThickness="1">
-                <CollectionView Margin="{OnPlatform UWP='5,0,5,0',MacCatalyst='5,0,5,0',Android='50,0,50,0',iOS='50,0,50,0'}"
+                <CollectionView Margin="{OnPlatform WinUI='5,0,5,0',MacCatalyst='5,0,5,0',Android='50,0,50,0',iOS='50,0,50,0'}"
                                 ItemsSource="{Binding SearchSuggest}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Margin="{OnPlatform UWP='0',MacCatalyst='0',Android='0,10,0,0',iOS='0,10,0,0'}">
+                            <StackLayout Margin="{OnPlatform WinUI='0',MacCatalyst='0',Android='0,10,0,0',iOS='0,10,0,0'}">
                                 <StackLayout.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=BeginSearchCommand}"
                                                           CommandParameter="{Binding .}"/>

@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
 
         <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
-        <StackLayout Grid.Row="0" Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+        <StackLayout Grid.Row="0" Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
 
             <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
@@ -25,7 +25,7 @@
 
                 <StackLayout Margin="20,0,0,0"
                          Orientation="Horizontal"
-                         HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
+                         HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                          VerticalOptions="End">
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding MyFavoriteAddCommand}"/>
@@ -35,7 +35,7 @@
                        WidthRequest="20">
                     </Image>
                     <Label Text="新建歌单"
-                       IsVisible="{OnPlatform UWP=True,MacCatalyst=True,Android=False,iOS=False}"
+                       IsVisible="{OnPlatform WinUI=True,MacCatalyst=True,Android=False,iOS=False}"
                        VerticalTextAlignment="Center"/>
                 </StackLayout>
             </StackLayout>
@@ -47,7 +47,7 @@
 
                         <StackLayout>
                             <OnPlatform x:TypeArguments="View">
-                                <On Platform="UWP, macOS">
+                                <On Platform="WinUI, macOS">
                                     <Grid Margin="0,0,0,20"
                                       RowDefinitions="auto,auto"
                                       ColumnDefinitions="35,65,*">

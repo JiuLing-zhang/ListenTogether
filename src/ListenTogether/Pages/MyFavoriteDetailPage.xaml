@@ -7,7 +7,7 @@
              Title="我的歌单详情"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
-    <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+    <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
 
         <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
         <StackLayout Margin="0,0,0,20"
@@ -20,7 +20,7 @@
 
             <StackLayout Margin="10,0,0,0"
                          Orientation="Horizontal"
-                         HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
+                         HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                          VerticalOptions="End"
                          IsVisible="{Binding IsPlaylistNotEmpty}">
                 <StackLayout.GestureRecognizers>
@@ -34,9 +34,9 @@
                        VerticalTextAlignment="Center"/>
             </StackLayout>
 
-            <StackLayout Margin="{OnPlatform UWP='20,0,0,0',MacCatalyst='20,0,0,0',Android='5,0,0,0',iOS='5,0,0,0'}"
+            <StackLayout Margin="{OnPlatform WinUI='20,0,0,0',MacCatalyst='20,0,0,0',Android='5,0,0,0',iOS='5,0,0,0'}"
                          Orientation="Horizontal"
-                         HorizontalOptions="{OnPlatform UWP=Start,MacCatalyst=Start,Android=End,iOS=End}"
+                         HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"
                          VerticalOptions="End"
                          IsVisible="{Binding IsPlaylistNotEmpty}">
                 <StackLayout.GestureRecognizers>
@@ -58,7 +58,7 @@
                 <DataTemplate>
                     <StackLayout>
                         <OnPlatform x:TypeArguments="View">
-                            <On Platform="UWP, macOS">
+                            <On Platform="WinUI, macOS">
                                 <Grid Margin="0,0,0,20"
                                       RowDefinitions="auto,auto"
                                       ColumnDefinitions="30,40,*">

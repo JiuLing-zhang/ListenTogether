@@ -7,7 +7,7 @@
              Title="日志"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
-    <StackLayout Margin="{OnPlatform UWP=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+    <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
 
         <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
         <StackLayout Margin="0,0,0,20"
