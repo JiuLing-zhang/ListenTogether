@@ -4,27 +4,30 @@ using ListenTogether.Model.Enums;
 
 namespace ListenTogether.ViewModels;
 
-public partial class SettingPageViewModel : ObservableObject
+public partial class SettingPageViewModel : ViewModelBase
 {
-    private IEnvironmentConfigService _configService;
-    private IUserService _userService;
-    private IUserLocalService _userLocalService;
+    private readonly IEnvironmentConfigService _configService;
+    private readonly IUserService _userService;
+    private readonly IUserLocalService _userLocalService;
     public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, IUserLocalService userLocalService)
     {
         _configService = configService;
         _userService = userService;
         _userLocalService = userLocalService;
     }
-    public void InitializeAsync()
+    public async void InitializeAsync()
     {
-        UserInfo = GetUserInfo();
-        IsOnlineApp = GlobalConfig.AppNetwork == AppNetworkEnum.Online;
+        try
+        {
+            StartLoading("");
+            UserInfo = GetUserInfo();
+            IsOnlineApp = GlobalConfig.AppNetwork == AppNetworkEnum.Online;
+        }
+        finally
+        {
+            StopLoading();
+        }
     }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _isBusy;
-    public bool IsNotBusy => !_isBusy;
 
     /// <summary>
     /// 用户信息
@@ -319,7 +322,7 @@ public partial class SettingPageViewModel : ObservableObject
 
         try
         {
-            IsBusy = true;
+            StartLoading("");
 
             //服务端退出失败时不处理，直接本地清除登录信息
             await _userService.Logout();
@@ -335,7 +338,7 @@ public partial class SettingPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 
@@ -359,13 +362,9 @@ public partial class SettingPageViewModel : ObservableObject
     [RelayCommand]
     private async void CheckUpdate()
     {
-        if (IsBusy == true)
-        {
-            return;
-        }
         try
         {
-            IsBusy = true;
+            StartLoading("正在检查更新....");
             await UpdateCheck.Do(false);
         }
         catch (Exception ex)
@@ -375,7 +374,7 @@ public partial class SettingPageViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            StopLoading();
         }
     }
 }
