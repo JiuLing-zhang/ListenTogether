@@ -153,6 +153,11 @@
                                 IsToggled="{Binding IsWifiPlayOnly}"/>
 
                             <jiuLing:TextSwitch 
+                                Text="播放页面禁止屏幕关闭"
+                                IsVisible="{OnIdiom Default=false,Phone=true}"
+                                IsToggled="{Binding IsPlayingPageKeepScreenOn}"/>
+
+                            <jiuLing:TextSwitch 
                                 Text="添加到歌单时自动播放"
                                 IsToggled="{Binding IsPlayWhenAddToFavorite}"/>
 

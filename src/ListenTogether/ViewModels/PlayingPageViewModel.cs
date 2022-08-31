@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-public partial class PlayingPageViewModel : ObservableObject
+public partial class PlayingPageViewModel : ViewModelBase
 {
     //控制手动滚动歌词时，系统暂停歌词滚动
     private DateTime _lastScrollToTime = DateTime.Now;
@@ -27,6 +27,11 @@ public partial class PlayingPageViewModel : ObservableObject
     {
         try
         {
+            if (!Config.Desktop && GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn)
+            {
+                DeviceDisplay.Current.KeepScreenOn = true;
+            }
+
             _playerService.NewMusicAdded += _playerService_NewMusicAdded;
             _timerLyricsUpdate.Tick += _timerLyricsUpdate_Tick;
             _timerLyricsUpdate.Start();
@@ -195,6 +200,11 @@ public partial class PlayingPageViewModel : ObservableObject
 
     public void OnDisappearing()
     {
+        if (DeviceDisplay.Current.KeepScreenOn == true)
+        {
+            DeviceDisplay.Current.KeepScreenOn = false;
+        }
+
         _playerService.NewMusicAdded -= _playerService_NewMusicAdded;
         _timerLyricsUpdate.Tick -= _timerLyricsUpdate_Tick;
         _timerLyricsUpdate.Stop();

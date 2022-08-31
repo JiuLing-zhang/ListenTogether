@@ -89,6 +89,11 @@ namespace ListenTogether.Model
         public bool IsWifiPlayOnly { get; set; }
 
         /// <summary>
+        /// 播放页面禁止屏幕关闭
+        /// </summary>
+        public bool IsPlayingPageKeepScreenOn { get; set; }
+
+        /// <summary>
         /// 添加到歌单时自动播放
         /// </summary>
         public bool IsPlayWhenAddToFavorite { get; set; }

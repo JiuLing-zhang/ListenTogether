@@ -182,6 +182,17 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// 播放页面禁止屏幕关闭
+    /// </summary>
+    [ObservableProperty]
+    private bool _isPlayingPageKeepScreenOn = GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn;
+    partial void OnIsPlayingPageKeepScreenOnChanged(bool value)
+    {
+        GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn = value;
+        WritePlayConfigAsync();
+    }
+
+    /// <summary>
     /// 添加到歌单时自动播放
     /// </summary>
     [ObservableProperty]

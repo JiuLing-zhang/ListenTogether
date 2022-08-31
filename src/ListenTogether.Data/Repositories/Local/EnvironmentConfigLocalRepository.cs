@@ -37,6 +37,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         var playConfig = environmentConfig.PlaySettingJson.ToObject<PlaySetting>() ?? throw new Exception("配置信息不存在：PlaySetting");
         result.Play = new PlaySetting()
         {
+            IsPlayingPageKeepScreenOn = playConfig.IsPlayingPageKeepScreenOn,
             IsAutoNextWhenFailed = playConfig.IsAutoNextWhenFailed,
             IsCleanPlaylistWhenPlayMyFavorite = playConfig.IsCleanPlaylistWhenPlayMyFavorite,
             IsWifiPlayOnly = playConfig.IsWifiPlayOnly,
@@ -86,6 +87,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             }).ToJson(),
             PlaySettingJson = (new PlaySetting()
             {
+                IsPlayingPageKeepScreenOn = true,
                 IsAutoNextWhenFailed = true,
                 IsCleanPlaylistWhenPlayMyFavorite = true,
                 IsWifiPlayOnly = true,
