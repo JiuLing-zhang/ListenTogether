@@ -191,7 +191,7 @@
                             <Label 
                                 Margin="5,0,0,0"
                                 TextColor="{Binding TextColor, Source={x:Reference LblMusicName}}"
-                                HorizontalOptions="Start"
+                                HorizontalOptions="StartAndExpand"
                                 VerticalTextAlignment="Center"
                                 LineBreakMode="TailTruncation">
                                 <MultiBinding StringFormat="{}{0} - {1}">
@@ -199,14 +199,6 @@
                                     <Binding Path="Text" Source="{x:Reference LblMusicArtist}"/>
                                 </MultiBinding>
                             </Label>
-
-                            <ActivityIndicator
-                                x:Name="PlayerLoading"
-                                HorizontalOptions="StartAndExpand"
-                                IsVisible="false"
-                                IsRunning="True"
-                                HeightRequest="20"
-                                WidthRequest="20"/>
 
                             <Image 
                                 WidthRequest="30"

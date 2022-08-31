@@ -41,7 +41,7 @@
                                Opacity="0.6"
                                HorizontalOptions="FillAndExpand"
                                VerticalOptions="FillAndExpand"/>
-
+        <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
         <StackLayout VerticalOptions="FillAndExpand"
                      Margin="{OnPlatform WinUI='0,80,0,0',Android='0,10,0,0',iOS='0,10,0,0'}">
             <StackLayout VerticalOptions="StartAndExpand"

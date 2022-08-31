@@ -66,9 +66,6 @@ public partial class Player : ContentView
         _playerService.IsPlayingChanged += PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded += playerService_NewMusicAdded;
         _playerService.PositionChanged += _playerService_PositionChanged;
-        _playerService.BufferingStarted += _playerService_BufferingStarted;
-        _playerService.BufferingEnded += _playerService_BufferingEnded;
-
 
         UpdateCurrentMusic();
         UpdateRepeatModel();
@@ -109,22 +106,7 @@ public partial class Player : ContentView
             SliderPlayProgress.ThumbColor = Color.FromArgb("#C98FFF");
         }
     }
-    private void _playerService_BufferingStarted(object sender, EventArgs e)
-    {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            this.IsVisible = true;
-            PlayerLoading.IsVisible = true;
-        });
-    }
 
-    private void _playerService_BufferingEnded(object sender, EventArgs e)
-    {
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            PlayerLoading.IsVisible = false;
-        });
-    }
     private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
     {
         IsPlayingChangedDo(_playerService.IsPlaying);
@@ -143,7 +125,6 @@ public partial class Player : ContentView
         MainThread.BeginInvokeOnMainThread(() =>
         {
             this.IsVisible = true;
-            PlayerLoading.IsVisible = false;
             ImgPlay.Source = playImagePath;
         });
     }
@@ -388,8 +369,6 @@ public partial class Player : ContentView
         _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded -= playerService_NewMusicAdded;
         _playerService.PositionChanged -= _playerService_PositionChanged;
-        _playerService.BufferingStarted -= _playerService_BufferingStarted;
-        _playerService.BufferingEnded -= _playerService_BufferingEnded;
     }
 
     private async void GoToPlayingPage_Tapped(object sender, EventArgs e)

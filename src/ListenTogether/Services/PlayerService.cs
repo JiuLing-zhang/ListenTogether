@@ -27,8 +27,7 @@ public class PlayerService
     public event EventHandler NewMusicAdded;
     public event EventHandler IsPlayingChanged;
     public event EventHandler PositionChanged;
-    public event EventHandler BufferingStarted;
-    public event EventHandler BufferingEnded;
+
     public PlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, WifiOptionsService wifiOptionsService)
     {
         _audioService = audioService;
@@ -106,12 +105,10 @@ public class PlayerService
         }
         _isBuffering = true;
 
-        BufferingStarted?.Invoke(this, EventArgs.Empty);
         var musicPath = await GetMusicCachePath(music);
         if (musicPath.IsEmpty())
         {
             _isBuffering = false;
-            BufferingEnded?.Invoke(this, EventArgs.Empty);
             return;
         }
         CurrentMusic = music;
@@ -124,7 +121,6 @@ public class PlayerService
         var image = await _httpClient.GetReadByteArray(music.ImageUrl);
         await _audioService.InitializeAsync(musicPath, new AudioMetadata(image, music.Name, music.Artist, music.Album));
         _isBuffering = false;
-        BufferingEnded?.Invoke(this, EventArgs.Empty);
         await InternalPlayAsync(0);
 
         NewMusicAdded?.Invoke(this, EventArgs.Empty);
@@ -161,15 +157,19 @@ public class PlayerService
         {
             return "";
         }
+
+        MessagingCenter.Instance.Send<PlayerService, bool>(this, "Player buffering", true);
+
         //缓存文件不存在时重新下载
         //部分平台的播放链接会失效，重新获取
         if (music.Platform == PlatformEnum.NetEase || music.Platform == PlatformEnum.KuGou || music.Platform == PlatformEnum.KuWo)
         {
             music = await _musicNetworkService.UpdatePlayUrl(music);
         }
-
         var data = await _httpClient.GetReadByteArray(music.PlayUrl);
         File.WriteAllBytes(musicPath, data);
+
+        MessagingCenter.Instance.Send<PlayerService, bool>(this, "Player buffering", false);
         return musicPath;
     }
 
