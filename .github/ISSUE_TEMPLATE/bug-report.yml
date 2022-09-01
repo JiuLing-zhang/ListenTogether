@@ -1,6 +1,6 @@
 name: 报告错误
 description: 报告一个错误
-labels: "[错误]"
+labels: [错误]
 assignees: [JiuLing-zhang]
 body:
   - type: textarea
