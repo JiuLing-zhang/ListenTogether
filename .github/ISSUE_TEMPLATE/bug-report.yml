@@ -23,7 +23,7 @@ body:
     validations:
       required: true
   - type: textarea
-    id: description
+    id: remark
     attributes:
       label: 问题补充
       description: 如果可以，请补充提供下错误截图等。
