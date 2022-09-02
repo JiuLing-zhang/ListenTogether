@@ -53,10 +53,7 @@ src
 ![phone_playing.jpg](https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/android.png)  
 
 ## 6、已知问题
-* 软件主题和系统主题不一致时，UI很丑（Windows）  
-* 首次安装并运行时，通知栏有个黑色小图标（Android）
-* 部分label无法完全展示时没有截断（Android）
-* 后台播放未缓存的歌曲时，有可能会造成假死（Android）
+[点击查看Issues](https://github.com/JiuLing-zhang/ListenTogether/issues):bug:
 
 ## 7、开源协议
 本项目基于`GPL-3.0 license`协议。  
