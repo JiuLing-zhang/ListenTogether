@@ -6,15 +6,20 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.PlaylistPage"
              Title="播放列表">
-
+    
     <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <controls:Loading IsRunning="{Binding IsLoading}" Text="{Binding LoadingText}"/>
-        <StackLayout Grid.Row="0" Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+        <controls:Loading
+            IsRunning="{Binding IsLoading}"
+            Text="{Binding LoadingText}"/>
+        <StackLayout 
+            Grid.Row="0" 
+            Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
+            Style="{StaticResource StackLayoutLoading}">
             <StackLayout Margin="{OnPlatform WinUI='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                      Orientation="Horizontal"
                      VerticalOptions="Start">

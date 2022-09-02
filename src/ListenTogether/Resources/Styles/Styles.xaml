@@ -95,4 +95,20 @@
         </Setter>
     </Style>
 
+    <Style x:Key="StackLayoutLoading" TargetType="StackLayout">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsLoading}"
+                             Value="True"
+                             TargetType="StackLayout">
+                <Setter Property="Opacity"
+                            Value="0.2"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsLoading}"
+                             Value="False"
+                             TargetType="StackLayout">
+                <Setter Property="Opacity"
+                            Value="1"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

@@ -12,7 +12,7 @@
         IsVisible="{Binding IsRunning, Source={x:Reference SelfLoading}}">
         <ActivityIndicator
             Color="{StaticResource Main}"
-            IsRunning="{Binding IsRunning, Source={x:Reference SelfLoading}}" />
+            IsRunning="True" />
         <Label
             Margin="0,10,0,0"
             TextColor="{StaticResource Main}"
