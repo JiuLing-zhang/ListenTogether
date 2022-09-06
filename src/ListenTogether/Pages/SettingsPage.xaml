@@ -178,14 +178,15 @@
                                          RadioButtonGroup.GroupName="音质"
                                          RadioButtonGroup.SelectedValue="{Binding MusicFormatType}">
                                 <Label Text="尝试选择音质（仅部分平台可用）" />
-                                <RadioButton Content="普通"
+                                <RadioButton Content="普通 5M/首"
                                              Value="PQ"/>
-                                <RadioButton Content="高品质"
+                                <RadioButton Content="高级 10M/首"
                                              Value="HQ" />
-                                <RadioButton Content="超高品质"
+                                <RadioButton Content="超高 30M/首"
                                              Value="SQ" />
-                                <RadioButton Content="比超高还高，应该叫啥？"
-                                             Value="ZQ" />
+                                <RadioButton Content="极致 70M/首"
+                                             Value="ZQ"
+                                             IsEnabled="False"/>
                             </StackLayout>
                         </StackLayout>
 
