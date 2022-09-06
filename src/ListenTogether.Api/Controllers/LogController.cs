@@ -16,7 +16,7 @@ public class LogController : ApiBaseController
     }
 
     [HttpPost("write")]
-    public async Task<IActionResult> Write(LogRequest log)
+    public async Task<IActionResult> WriteAsync(LogRequest log)
     {
         //过滤掉2分钟之外的请求
         var time = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.Timestamp);
@@ -31,7 +31,7 @@ public class LogController : ApiBaseController
     }
 
     [HttpPost("write-all")]
-    public async Task<IActionResult> Write(List<LogRequest> logs)
+    public async Task<IActionResult> WriteAsync(List<LogRequest> logs)
     {
         var response = await _logService.WriteListAsync(UserId, logs);
         return Ok(response);

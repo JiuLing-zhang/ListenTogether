@@ -41,7 +41,8 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             IsAutoNextWhenFailed = playConfig.IsAutoNextWhenFailed,
             IsCleanPlaylistWhenPlayMyFavorite = playConfig.IsCleanPlaylistWhenPlayMyFavorite,
             IsWifiPlayOnly = playConfig.IsWifiPlayOnly,
-            IsPlayWhenAddToFavorite = playConfig.IsPlayWhenAddToFavorite
+            IsPlayWhenAddToFavorite = playConfig.IsPlayWhenAddToFavorite,
+            MusicFormatType = playConfig.MusicFormatType
         };
 
         //搜索设置
@@ -91,7 +92,8 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
                 IsAutoNextWhenFailed = true,
                 IsCleanPlaylistWhenPlayMyFavorite = true,
                 IsWifiPlayOnly = true,
-                IsPlayWhenAddToFavorite = false
+                IsPlayWhenAddToFavorite = false,
+                MusicFormatType = MusicFormatTypeEnum.HQ
             }).ToJson()
         };
 

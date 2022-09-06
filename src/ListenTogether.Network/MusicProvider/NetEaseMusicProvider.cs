@@ -20,7 +20,7 @@ public class NetEaseMusicProvider : IMusicProvider
         _httpClient = new HttpClient(handler);
     }
 
-    public async Task<List<string>> GetSearchSuggest(string keyword)
+    public async Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
         string url = $"{UrlBase.NetEase.Suggest}";
 
@@ -64,7 +64,7 @@ public class NetEaseMusicProvider : IMusicProvider
         return result.result.songs.Select(x => x.name).Distinct().ToList();
     }
 
-    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
+    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword)
     {
         string url = $"{UrlBase.NetEase.Search}";
 
@@ -113,8 +113,6 @@ public class NetEaseMusicProvider : IMusicProvider
         {
             try
             {
-                var ts = TimeSpan.FromMilliseconds(song.dt);
-
                 string alia = "";
                 if (song.alia.Length > 0)
                 {
@@ -136,8 +134,7 @@ public class NetEaseMusicProvider : IMusicProvider
                     Artist = artistName,
                     Album = song.al.name,
                     ImageUrl = song.al.picUrl,
-                    Duration = song.dt,
-                    DurationText = $"{ts.Minutes}:{ts.Seconds:D2}",
+                    Duration = TimeSpan.FromMilliseconds(song.dt),
                     Fee = GetFeeFlag(song.privilege)
                 };
                 musics.Add(music);
@@ -167,7 +164,7 @@ public class NetEaseMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public async Task<Music?> GetMusicDetail(MusicSearchResult sourceMusic)
+    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
         var postData = NetEaseUtils.GetPostDataForMusicUrl(sourceMusic.PlatformInnerId);
@@ -257,7 +254,7 @@ public class NetEaseMusicProvider : IMusicProvider
         };
     }
 
-    public async Task<Music?> UpdatePlayUrl(Music music)
+    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
         var postData = NetEaseUtils.GetPostDataForMusicUrl(music.PlatformInnerId);
@@ -301,12 +298,12 @@ public class NetEaseMusicProvider : IMusicProvider
         return music;
     }
 
-    public Task<List<string>?> GetHotWord()
+    public Task<List<string>?> GetHotWordAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<string> GetMusicShareUrl(Music music)
+    public Task<string> GetMusicShareUrlAsync(Music music)
     {
         return Task.FromResult($"{UrlBase.NetEase.GetMusicPlayPage}?id={music.PlatformInnerId}");
     }

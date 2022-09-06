@@ -51,7 +51,7 @@ public class MyFavoriteService : IMyFavoriteService
         return myFavorites;
     }
 
-    public async Task<Result> NameExist(int userId, string myFavoriteName)
+    public async Task<Result> NameExistAsync(int userId, string myFavoriteName)
     {
         var any = await _context.MyFavorites.AnyAsync(x => x.Name == myFavoriteName && x.UserBaseId == userId);
         if (any)
@@ -117,7 +117,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         return new Result(0, "删除成功");
     }
-    public async Task<Result> AddMusicToMyFavorite(int userId, int id, MusicRequest music)
+    public async Task<Result> AddMusicToMyFavoriteAsync(int userId, int id, MusicRequest music)
     {
         var favorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.UserBaseId == userId && x.Id == id);
         if (favorite == null)
@@ -164,7 +164,7 @@ public class MyFavoriteService : IMyFavoriteService
 
     }
 
-    public async Task<List<MyFavoriteDetailResponse>?> GetMyFavoriteDetail(int userId, int id)
+    public async Task<List<MyFavoriteDetailResponse>?> GetMyFavoriteDetailAsync(int userId, int id)
     {
         var myFavorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.UserBaseId == userId && x.Id == id);
         if (myFavorite == null)

@@ -105,7 +105,7 @@ public class PlayerService
         }
         _isBuffering = true;
 
-        var musicPath = await GetMusicCachePath(music);
+        var musicPath = await GetMusicCachePathAsync(music);
         if (musicPath.IsEmpty())
         {
             _isBuffering = false;
@@ -145,7 +145,7 @@ public class PlayerService
     }
 
 
-    private async Task<string> GetMusicCachePath(Music music)
+    private async Task<string> GetMusicCachePathAsync(Music music)
     {
         string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.CacheFileName);
         if (File.Exists(musicPath))
@@ -164,7 +164,7 @@ public class PlayerService
         //部分平台的播放链接会失效，重新获取
         if (music.Platform == PlatformEnum.NetEase || music.Platform == PlatformEnum.KuGou || music.Platform == PlatformEnum.KuWo)
         {
-            music = await _musicNetworkService.UpdatePlayUrl(music);
+            music = await _musicNetworkService.UpdatePlayUrlAsync(music, GlobalConfig.MyUserSetting.Play.MusicFormatType);
         }
         var data = await _httpClient.GetReadByteArray(music.PlayUrl);
         File.WriteAllBytes(musicPath, data);

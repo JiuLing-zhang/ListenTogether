@@ -13,33 +13,33 @@ public class MusicNetworkService : IMusicNetworkService
         _musicNetPlatform = musicNetPlatform;
     }
 
-    public async Task<List<string>> GetSearchSuggest(string keyword)
+    public async Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
-        return await _musicNetPlatform.GetSearchSuggest(keyword);
+        return await _musicNetPlatform.GetSearchSuggestAsync(keyword);
     }
 
-    public async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword)
+    public async Task<List<MusicSearchResult>> SearchAsync(PlatformEnum platform, string keyword)
     {
-        return await _musicNetPlatform.Search(platform, keyword);
+        return await _musicNetPlatform.SearchAsync(platform, keyword);
     }
 
-    public async Task<Music?> GetMusicDetail(MusicSearchResult musicSearchResult)
+    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult musicSearchResult, MusicFormatTypeEnum musicFormatType)
     {
-        return await _musicNetPlatform.GetMusicDetail(musicSearchResult);
+        return await _musicNetPlatform.GetMusicDetailAsync(musicSearchResult, musicFormatType);
     }
 
-    public async Task<Music?> UpdatePlayUrl(Music music)
+    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
-        return await _musicNetPlatform.UpdatePlayUrl(music);
+        return await _musicNetPlatform.UpdatePlayUrlAsync(music, musicFormatType);
     }
 
-    public Task<string> GetMusicPlayPageUrl(Music music)
+    public Task<string> GetMusicPlayPageUrlAsync(Music music)
     {
-        return _musicNetPlatform.GetMusicPlayPageUrl(music);
+        return _musicNetPlatform.GetMusicPlayPageUrlAsync(music);
     }
 
-    public async Task<List<string>> GetHotWord()
+    public async Task<List<string>?> GetHotWordAsync()
     {
-        return await _musicNetPlatform.GetHotWord();
+        return await _musicNetPlatform.GetHotWordAsync();
     }
 }

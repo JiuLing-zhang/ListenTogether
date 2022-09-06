@@ -28,7 +28,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
             StartLoading("页面加载中....");
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
-            await GetPlaylist();
+            await GetPlaylistAsync();
         }
         catch (Exception ex)
         {
@@ -40,7 +40,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
             StopLoading();
         }
     }
-    private async Task GetPlaylist()
+    private async Task GetPlaylistAsync()
     {
         var playlist = await _playlistService.GetAllAsync();
         if (playlist == null || playlist.Count == 0)
@@ -95,7 +95,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     private ObservableCollection<PlaylistViewModel> _playlist;
 
     [RelayCommand]
-    private async void PlayMusic(PlaylistViewModel selected)
+    private async void PlayMusicAsync(PlaylistViewModel selected)
     {
         var music = await _musicService.GetOneAsync(selected.MusicId);
         if (music == null)
@@ -108,7 +108,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void AddToMyFavorite(PlaylistViewModel selected)
+    private async void AddToMyFavoriteAsync(PlaylistViewModel selected)
     {
         try
         {
@@ -150,7 +150,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
                     return;
                 }
 
-                if (await _myFavoriteService.NameExist(myFavoriteName))
+                if (await _myFavoriteService.NameExistAsync(myFavoriteName))
                 {
                     await ToastService.Show("歌单名称已存在");
                     return;
@@ -170,7 +170,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
                 selectedMyFavoriteId = newMyFavorite.Id;
             }
 
-            var result = await _myFavoriteService.AddMusicToMyFavorite(selectedMyFavoriteId, music);
+            var result = await _myFavoriteService.AddMusicToMyFavoriteAsync(selectedMyFavoriteId, music);
             if (result == false)
             {
                 await ToastService.Show("添加失败");
@@ -198,7 +198,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void RemoveOne(PlaylistViewModel selected)
+    private async void RemoveOneAsync(PlaylistViewModel selected)
     {
         try
         {
@@ -208,7 +208,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
                 await ToastService.Show("删除失败");
                 return;
             }
-            await GetPlaylist();
+            await GetPlaylistAsync();
         }
         catch (Exception ex)
         {
@@ -222,7 +222,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void ClearPlaylist()
+    private async void ClearPlaylistAsync()
     {
         var isOk = await App.Current.MainPage.DisplayAlert("提示", "确定要删除播放列表吗？", "确定", "取消");
         if (isOk == false)

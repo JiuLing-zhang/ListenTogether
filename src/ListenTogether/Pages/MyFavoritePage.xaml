@@ -31,7 +31,7 @@
                          HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                          VerticalOptions="End">
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding MyFavoriteAddCommand}"/>
+                        <TapGestureRecognizer Command="{Binding AddMyFavoriteAsyncCommand}"/>
                     </StackLayout.GestureRecognizers>
                     <Image Source="{AppThemeBinding Dark='plus_dark.png',Light='plus.png'}"
                        HeightRequest="20"
@@ -55,7 +55,7 @@
                                       RowDefinitions="auto,auto"
                                       ColumnDefinitions="35,65,*">
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailCommand}"
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailAsyncCommand}"
                                                               CommandParameter="{Binding .}">
                                             </TapGestureRecognizer>
                                         </Grid.GestureRecognizers>
@@ -71,7 +71,7 @@
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsAsyncCommand}"
                                                                   CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>
@@ -114,7 +114,7 @@
                                           RowDefinitions="auto,auto,10"
                                           ColumnDefinitions="60,*,40">
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailCommand}"
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailAsyncCommand}"
                                                               CommandParameter="{Binding .}">
                                             </TapGestureRecognizer>
                                         </Grid.GestureRecognizers>
@@ -160,7 +160,7 @@
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsCommand}"
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsAsyncCommand}"
                                                                   CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>

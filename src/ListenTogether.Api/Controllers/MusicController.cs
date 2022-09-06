@@ -17,14 +17,14 @@ namespace ListenTogether.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> GetAsync(string id)
         {
             var response = await _musicService.GetOneAsync(id);
             return Ok(response);
         }
 
         [HttpPost()]
-        public async Task<IActionResult> AddOrUpdate(MusicRequest music)
+        public async Task<IActionResult> AddOrUpdateAsync(MusicRequest music)
         {
             var response = await _musicService.AddOrUpdateAsync(music);
             return Ok(response);

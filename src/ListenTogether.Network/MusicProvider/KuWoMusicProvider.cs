@@ -27,12 +27,12 @@ internal class KuWoMusicProvider : IMusicProvider
         await _httpClient.GetStringAsync("http://www.kuwo.cn").ConfigureAwait(false);
     }
 
-    public Task<List<string>> GetSearchSuggest(string keyword)
+    public Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
+    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword)
     {
         string url = $"{UrlBase.KuWo.Search}?key={keyword}&pn=1&rn=20";
         var request = new HttpRequestMessage()
@@ -100,7 +100,8 @@ internal class KuWoMusicProvider : IMusicProvider
                     Alias = "",
                     Artist = httpMusic.artist.Replace("&nbsp;", " "),
                     Album = httpMusic.album.Replace("&nbsp;", " "),
-                    Fee = GetFeeFlag(httpMusic.payInfo.listen_fragment)
+                    Fee = GetFeeFlag(httpMusic.payInfo.listen_fragment),
+                    Duration = TimeSpan.FromSeconds(httpMusic.duration)
                 };
                 musics.Add(music);
             }
@@ -122,7 +123,7 @@ internal class KuWoMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public async Task<Music?> GetMusicDetail(MusicSearchResult sourceMusic)
+    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
         string musicId = sourceMusic.PlatformInnerId;
         //换播放地址
@@ -225,7 +226,7 @@ internal class KuWoMusicProvider : IMusicProvider
             ExtendData = ""
         };
     }
-    public async Task<Music?> UpdatePlayUrl(Music music)
+    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         string musicId = music.PlatformInnerId;
         //换播放地址
@@ -265,7 +266,7 @@ internal class KuWoMusicProvider : IMusicProvider
         return music;
     }
 
-    public async Task<List<string>?> GetHotWord()
+    public async Task<List<string>?> GetHotWordAsync()
     {
         string url = UrlBase.KuWo.HotWord;
         var request = new HttpRequestMessage()
@@ -291,7 +292,7 @@ internal class KuWoMusicProvider : IMusicProvider
         }
     }
 
-    public Task<string> GetMusicShareUrl(Music music)
+    public Task<string> GetMusicShareUrlAsync(Music music)
     {
         return Task.FromResult($"{UrlBase.KuWo.GetMusicPlayPage}/{music.PlatformInnerId}");
     }

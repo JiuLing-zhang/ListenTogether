@@ -113,7 +113,7 @@ public partial class PlayingPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void ShareMusicLink()
+    private async void ShareMusicLinkAsync()
     {
         if (CurrentMusic == null)
         {
@@ -122,7 +122,7 @@ public partial class PlayingPageViewModel : ViewModelBase
 
         try
         {
-            string musicUrl = await _musicNetworkService.GetMusicPlayPageUrl(CurrentMusic);
+            string musicUrl = await _musicNetworkService.GetMusicPlayPageUrlAsync(CurrentMusic);
             if (Config.Desktop)
             {
                 await Clipboard.Default.SetTextAsync(musicUrl);

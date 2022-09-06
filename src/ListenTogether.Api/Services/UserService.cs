@@ -23,7 +23,7 @@ internal class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public async Task<Result> Register(UserRegisterRequest registerUser, string avatarUrl)
+    public async Task<Result> RegisterAsync(UserRegisterRequest registerUser, string avatarUrl)
     {
         var isUserExist = await _context.Users.AnyAsync(x => x.Username == registerUser.Username);
         if (isUserExist)
@@ -54,7 +54,7 @@ internal class UserService : IUserService
         return new Result(0, "注册成功，请等待管理员审核");
     }
 
-    public async Task<Result<UserResponse>> Login(UserRequest user, string deviceId)
+    public async Task<Result<UserResponse>> LoginAsync(UserRequest user, string deviceId)
     {
         var userEntity = await _context.Users.SingleOrDefaultAsync(x => x.Username == user.Username && x.IsEnable);
         if (userEntity == null)
@@ -87,7 +87,7 @@ internal class UserService : IUserService
         });
     }
 
-    public async Task<Result<UserResponse>> RefreshToken(AuthenticateRequest authenticateInfo, string deviceId)
+    public async Task<Result<UserResponse>> RefreshTokenAsync(AuthenticateRequest authenticateInfo, string deviceId)
     {
         var userEntity = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(r => r.DeviceId == deviceId & r.Token == authenticateInfo.RefreshToken));
         if (userEntity == null)
@@ -120,7 +120,7 @@ internal class UserService : IUserService
         });
     }
 
-    public async Task Logout(int userId, string deviceId)
+    public async Task LogoutAsync(int userId, string deviceId)
     {
         var userEntity = _context.Users.SingleOrDefault(x => x.Id == userId);
         if (userEntity == null)
@@ -132,7 +132,7 @@ internal class UserService : IUserService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Result<UserResponse>> GetUserInfo(int id)
+    public async Task<Result<UserResponse>> GetUserInfoAsync(int id)
     {
         var user = await _context.Users.SingleOrDefaultAsync(x => x.Id == id && x.IsEnable);
         if (user == null)

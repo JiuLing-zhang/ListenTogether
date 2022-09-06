@@ -226,6 +226,17 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// 音质设置
+    /// </summary>
+    [ObservableProperty]
+    private string _musicFormatType = GlobalConfig.MyUserSetting.Play.MusicFormatType.ToString();
+    partial void OnMusicFormatTypeChanged(string value)
+    {
+        GlobalConfig.MyUserSetting.Play.MusicFormatType = (MusicFormatTypeEnum)Enum.Parse(typeof(MusicFormatTypeEnum), value);
+        WritePlayConfigAsync();
+    }
+
+    /// <summary>
     /// 版本号
     /// </summary>
     [ObservableProperty]
@@ -322,13 +333,13 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void GoToLogin()
+    private async void GoToLoginAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(LoginPage)}", true);
     }
 
     [RelayCommand]
-    private async void Logout()
+    private async void LogoutAsync()
     {
         var isOk = await Shell.Current.DisplayAlert("提示", "确定要退出吗？", "确定", "取消");
         if (isOk == false)
@@ -341,7 +352,7 @@ public partial class SettingPageViewModel : ViewModelBase
             StartLoading("");
 
             //服务端退出失败时不处理，直接本地清除登录信息
-            await _userService.Logout();
+            await _userService.LogoutAsync();
 
             _userLocalService.Remove();
             GlobalConfig.CurrentUser = null;

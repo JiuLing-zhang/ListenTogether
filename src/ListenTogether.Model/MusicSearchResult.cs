@@ -17,10 +17,6 @@ public class MusicSearchResult : MusicBase
     public string PlatformInnerId { get; set; } = null!;
 
     /// <summary>
-    /// 歌曲时长，格式为“分:秒”，例如：05:44
-    /// </summary>
-    public string DurationText { get; set; } = null!;
-    /// <summary>
     /// 平台特有数据
     /// </summary>
     public object PlatformData { get; set; } = null!;
@@ -28,5 +24,14 @@ public class MusicSearchResult : MusicBase
     /// 费用（免费、VIP等）
     /// </summary>
     public FeeEnum Fee { get; set; }
-    public int Duration { get; set; }
+
+    /// <summary>
+    /// 歌曲时长
+    /// </summary>
+    public TimeSpan Duration { get; set; }
+
+    /// <summary>
+    /// 歌曲时长，格式为“分:秒”，例如：05:44
+    /// </summary>
+    public string DurationText => $"{Duration.Minutes}:{Duration.Seconds:D2}";
 }

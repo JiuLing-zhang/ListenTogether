@@ -7,7 +7,7 @@ using ListenTogether.Model.Api.Response;
 namespace ListenTogether.Data.Repositories.Api;
 public class MyFavoriteApiRepository : IMyFavoriteRepository
 {
-    public async Task<bool> NameExist(string myFavoriteName)
+    public async Task<bool> NameExistAsync(string myFavoriteName)
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.NameExist, myFavoriteName);
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);
@@ -103,9 +103,8 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         return true;
     }
 
-    public async Task<bool> AddMusicToMyFavorite(int id, Music music)
+    public async Task<bool> AddMusicToMyFavoriteAsync(int id, Music music)
     {
-
         var requestMusic = new MusicRequest()
         {
             Id = music.Id,
@@ -135,7 +134,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         return true;
     }
 
-    public async Task<List<MyFavoriteDetail>?> GetMyFavoriteDetail(int id)
+    public async Task<List<MyFavoriteDetail>?> GetMyFavoriteDetailAsync(int id)
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.GetDetail, id);
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);

@@ -54,7 +54,7 @@ public class Logger
     /// <summary>
     /// 清空日志
     /// </summary>
-    public static void RemoveAllAsync()
+    public static void RemoveAll()
     {
         DatabaseProvide.Database.DeleteAll<LogEntity>();
     }

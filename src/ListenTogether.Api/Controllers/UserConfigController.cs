@@ -17,28 +17,28 @@ namespace ListenTogether.Api.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             var response = await _userConfigService.ReadAllSettingAsync(UserId);
             return Ok(response);
         }
 
         [HttpPost("general")]
-        public async Task<IActionResult> WriteGeneralConfig(GeneralSettingRequest model)
+        public async Task<IActionResult> WriteGeneralConfigAsync(GeneralSettingRequest model)
         {
             var response = await _userConfigService.WriteGeneralSettingAsync(UserId, model);
             return Ok(response);
         }
 
         [HttpPost("play")]
-        public async Task<IActionResult> WritePlayConfig(PlaySettingRequest model)
+        public async Task<IActionResult> WritePlayConfigAsync(PlaySettingRequest model)
         {
             var response = await _userConfigService.WritePlaySettingAsync(UserId, model);
             return Ok(response);
         }
 
         [HttpPost("search")]
-        public async Task<IActionResult> WriteSearchConfig(SearchSettingRequest model)
+        public async Task<IActionResult> WriteSearchConfigAsync(SearchSettingRequest model)
         {
             var response = await _userConfigService.WriteSearchSettingAsync(UserId, model);
             return Ok(response);

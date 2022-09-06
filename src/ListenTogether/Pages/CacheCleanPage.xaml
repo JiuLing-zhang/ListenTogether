@@ -77,7 +77,7 @@
                     Style="{DynamicResource IsEnabledClear}"
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"
-                    Command="{Binding ClearCommand}"/>
+                    Command="{Binding ClearAsyncCommand}"/>
         </StackLayout>
     </StackLayout>
 </ContentPage>

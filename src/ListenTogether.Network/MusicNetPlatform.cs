@@ -20,33 +20,33 @@ public class MusicNetPlatform
         _netEaseSearcher.SetNextHandler(_kuGouSearcher);
     }
 
-    public async Task<List<string>?> GetHotWord()
+    public async Task<List<string>?> GetHotWordAsync()
     {
-        return await MusicProviderFactory.Create(PlatformEnum.KuWo).GetHotWord();
+        return await MusicProviderFactory.Create(PlatformEnum.KuWo).GetHotWordAsync();
     }
 
-    public async Task<List<string>> GetSearchSuggest(string keyword)
+    public async Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
-        return await MusicProviderFactory.Create(PlatformEnum.NetEase).GetSearchSuggest(keyword);
+        return await MusicProviderFactory.Create(PlatformEnum.NetEase).GetSearchSuggestAsync(keyword);
     }
 
-    public async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword)
+    public async Task<List<MusicSearchResult>> SearchAsync(PlatformEnum platform, string keyword)
     {
-        return await _miGuSearcher.Search(platform, keyword);
+        return await _miGuSearcher.SearchAsync(platform, keyword);
     }
 
-    public async Task<Music?> GetMusicDetail(MusicSearchResult music)
+    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult music, MusicFormatTypeEnum musicFormatType)
     {
-        return await MusicProviderFactory.Create(music.Platform).GetMusicDetail(music);
+        return await MusicProviderFactory.Create(music.Platform).GetMusicDetailAsync(music, musicFormatType);
     }
 
-    public async Task<Music?> UpdatePlayUrl(Music music)
+    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
-        return await MusicProviderFactory.Create(music.Platform).UpdatePlayUrl(music);
+        return await MusicProviderFactory.Create(music.Platform).UpdatePlayUrlAsync(music, musicFormatType);
     }
 
-    public Task<string> GetMusicPlayPageUrl(Music music)
+    public Task<string> GetMusicPlayPageUrlAsync(Music music)
     {
-        return MusicProviderFactory.Create(music.Platform).GetMusicShareUrl(music);
+        return MusicProviderFactory.Create(music.Platform).GetMusicShareUrlAsync(music);
     }
 }

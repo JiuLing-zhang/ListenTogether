@@ -41,12 +41,12 @@
                 Margin="0,0,0,5"
                 VerticalOptions="End"
                 IsVisible="{Binding IsLoginSuccess}"
-                Command="{Binding UpdateLogsCommand}"
+                Command="{Binding UpdateLogsAsyncCommand}"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                 TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
         <Button Text="清空日志"
                 VerticalOptions="End"
-                Command="{Binding ClearLogsCommand}"
+                Command="{Binding ClearLogsAsyncCommand}"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                 TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
     </StackLayout>

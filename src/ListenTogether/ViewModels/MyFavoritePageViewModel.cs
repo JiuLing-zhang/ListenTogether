@@ -81,7 +81,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
     private ObservableCollection<MyFavoriteViewModel> _favoriteList;
 
     [RelayCommand]
-    private async void AddMyFavorite()
+    private async void AddMyFavoriteAsync()
     {
         string myFavoriteName = await App.Current.MainPage.DisplayPromptAsync("添加歌单", "请输入歌单名称：", "添加", "取消");
         if (myFavoriteName.IsEmpty())
@@ -92,7 +92,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
         try
         {
             StartLoading("处理中....");
-            if (await _myFavoriteService.NameExist(myFavoriteName))
+            if (await _myFavoriteService.NameExistAsync(myFavoriteName))
             {
                 await ToastService.Show("歌单名称已存在");
                 return;
@@ -124,13 +124,13 @@ public partial class MyFavoritePageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void EnterMyFavoriteDetail(MyFavoriteViewModel selected)
+    private async void EnterMyFavoriteDetailAsync(MyFavoriteViewModel selected)
     {
         await Shell.Current.GoToAsync($"{nameof(MyFavoriteDetailPage)}?{nameof(MyFavoriteDetailPageViewModel.MyFavoriteId)}={selected.Id}", true);
     }
 
     [RelayCommand]
-    private async void PlayAllMusics(MyFavoriteViewModel selected)
+    private async void PlayAllMusicsAsync(MyFavoriteViewModel selected)
     {
         if (selected.MusicCount == 0)
         {
@@ -138,7 +138,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
             return;
         }
 
-        var myFavoriteMusics = await _myFavoriteService.GetMyFavoriteDetail(selected.Id);
+        var myFavoriteMusics = await _myFavoriteService.GetMyFavoriteDetailAsync(selected.Id);
         if (myFavoriteMusics == null)
         {
             await ToastService.Show("播放失败：没有查询到歌单信息~~~");
@@ -161,7 +161,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
                 MusicAlbum = myFavoriteMusic.MusicAlbum
             };
 
-            await _playlistService.AddToPlaylist(playlist);
+            await _playlistService.AddToPlaylistAsync(playlist);
         }
 
         if (myFavoriteMusics.Count > 0)

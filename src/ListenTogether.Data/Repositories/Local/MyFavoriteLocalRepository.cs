@@ -39,7 +39,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         }).ToList();
     }
 
-    public async Task<bool> NameExist(string myFavoriteName)
+    public async Task<bool> NameExistAsync(string myFavoriteName)
     {
         var count = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().CountAsync(x => x.Name == myFavoriteName);
         if (count > 0)
@@ -92,7 +92,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         await DatabaseProvide.DatabaseAsync.DeleteAsync<MyFavoriteEntity>(id);
         return true;
     }
-    public async Task<bool> AddMusicToMyFavorite(int id, Music music)
+    public async Task<bool> AddMusicToMyFavoriteAsync(int id, Music music)
     {
         var favorite = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteEntity>().FirstOrDefaultAsync(x => x.Id == id);
         if (favorite == null)
@@ -143,7 +143,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
         return true;
     }
 
-    public async Task<List<MyFavoriteDetail>?> GetMyFavoriteDetail(int id)
+    public async Task<List<MyFavoriteDetail>?> GetMyFavoriteDetailAsync(int id)
     {
         var detailList = await DatabaseProvide.DatabaseAsync.Table<MyFavoriteDetailEntity>().Where(x => x.MyFavoriteId == id).ToListAsync();
         if (detailList == null)

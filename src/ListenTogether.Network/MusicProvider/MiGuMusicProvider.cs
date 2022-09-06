@@ -42,7 +42,7 @@ public class MiGuMusicProvider : IMusicProvider
     }
 
 
-    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
+    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword)
     {
         string args = MiGuUtils.GetSearchArgs(keyword);
         string url = $"{UrlBase.MiGu.Search}?{args}";
@@ -90,7 +90,7 @@ public class MiGuMusicProvider : IMusicProvider
         return (true, "", musics);
     }
 
-    public async Task<Music?> GetMusicDetail(MusicSearchResult sourceMusic)
+    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
         if (!(sourceMusic.PlatformData is SearchResultExtended platformData))
         {
@@ -121,7 +121,7 @@ public class MiGuMusicProvider : IMusicProvider
             return null;
         }
 
-        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats);
+        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats, musicFormatType);
         if (playUrlPath.IsEmpty())
         {
             return null;
@@ -139,7 +139,7 @@ public class MiGuMusicProvider : IMusicProvider
         string imageUrl = sourceMusic.ImageUrl;
         if (result.resource[0].albumImgs != null && result.resource[0].albumImgs.Count > 0)
         {
-            string tmpImageUrl = result.resource[0].albumImgs.FirstOrDefault(x => x.imgSizeType == "02")?.img;
+            string tmpImageUrl = result.resource[0].albumImgs.FirstOrDefault(x => x.imgSizeType == "02")?.img ?? "";
             if (tmpImageUrl.IsNotEmpty())
             {
                 imageUrl = tmpImageUrl;
@@ -162,22 +162,22 @@ public class MiGuMusicProvider : IMusicProvider
         };
     }
 
-    public Task<Music?> UpdatePlayUrl(Music music)
+    public Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<string>> GetSearchSuggest(string keyword)
+    public Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<string>?> GetHotWord()
+    public Task<List<string>?> GetHotWordAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<string> GetMusicShareUrl(Music music)
+    public Task<string> GetMusicShareUrlAsync(Music music)
     {
         return Task.FromResult($"{UrlBase.MiGu.GetMusicPlayPage}/{music.PlatformInnerId}");
     }

@@ -8,7 +8,7 @@ using ListenTogether.Model.Api.Response;
 namespace ListenTogether.Data.Repositories.Api;
 public class UserApiRepository : IUserApiRepository
 {
-    public async Task<(bool Succeed, string Message)> Register(UserRegister registerUser)
+    public async Task<(bool Succeed, string Message)> RegisterAsync(UserRegister registerUser)
     {
         var mfdc = new MultipartFormDataContent();
         mfdc.Add(new StringContent(registerUser.Username), nameof(registerUser.Username));
@@ -27,7 +27,7 @@ public class UserApiRepository : IUserApiRepository
         return (true, result.Message);
     }
 
-    public async Task<User?> Login(string username, string password)
+    public async Task<User?> LoginAsync(string username, string password)
     {
         var data = new UserRequest()
         {
@@ -54,7 +54,7 @@ public class UserApiRepository : IUserApiRepository
         };
     }
 
-    public async Task<bool> Logout()
+    public async Task<bool> LogoutAsync()
     {
         var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Logout, null);
         var json = await response.Content.ReadAsStringAsync();

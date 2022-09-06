@@ -9,6 +9,7 @@
     {
         public string artist { get; set; }
         public int rid { get; set; }
+        public int duration { get; set; }
         public string album { get; set; }
         public string name { get; set; }
         public Payinfo payInfo { get; set; }

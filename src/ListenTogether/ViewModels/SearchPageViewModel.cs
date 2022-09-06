@@ -30,7 +30,7 @@ public partial class SearchPageViewModel : ObservableObject
     private List<string> _hotWords = new List<string>();
     public async Task InitializeAsync()
     {
-        _hotWords = await _musicNetworkService.GetHotWord();
+        _hotWords = await _musicNetworkService.GetHotWordAsync();
         //TODO 目前搜索栏的TextChanged 事件有bug，暂时屏蔽搜索建议
         foreach (var hotWord in _hotWords)
         {
@@ -38,16 +38,16 @@ public partial class SearchPageViewModel : ObservableObject
         }
         return;
         //TODO End
-        await GetSearchSuggest(Keyword);
+        await GetSearchSuggestAsync(Keyword);
     }
 
     [RelayCommand]
-    public async void GetSearchSuggest(TextChangedEventArgs e)
+    public async void GetSearchSuggestAsync(TextChangedEventArgs e)
     {
-        await GetSearchSuggest(e?.NewTextValue);
+        await GetSearchSuggestAsync(e?.NewTextValue);
     }
 
-    public async Task GetSearchSuggest(string keyword)
+    public async Task GetSearchSuggestAsync(string keyword)
     {
         //TODO 目前搜索栏的TextChanged 事件有bug，暂时屏蔽搜索建议
         return;
@@ -62,7 +62,7 @@ public partial class SearchPageViewModel : ObservableObject
             return;
         }
 
-        var suggests = await _musicNetworkService.GetSearchSuggest(keyword);
+        var suggests = await _musicNetworkService.GetSearchSuggestAsync(keyword);
         if (suggests == null)
         {
             return;
@@ -74,7 +74,7 @@ public partial class SearchPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async void BeginSearch(string keyword)
+    private async void BeginSearchAsync(string keyword)
     {
         await Shell.Current.GoToAsync($"..?Keyword={keyword}", true);
     }

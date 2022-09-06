@@ -8,6 +8,6 @@ internal class ShortMusicFilter : IMusicSearchFilter
             return default;
         }
 
-        return musics.Where(x => x.Duration == 0 || x.Duration >= 60 * 1000).ToList();
+        return musics.Where(x => x.Duration.TotalMilliseconds == 0 || x.Duration.TotalMilliseconds >= 60 * 1000).ToList();
     }
 }

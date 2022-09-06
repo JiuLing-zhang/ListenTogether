@@ -107,5 +107,10 @@ namespace ListenTogether.Model
         /// 歌曲无法播放时自动跳到下一首
         /// </summary>
         public bool IsAutoNextWhenFailed { get; set; }
+
+        /// <summary>
+        /// 音质
+        /// </summary>
+        public MusicFormatTypeEnum MusicFormatType { get; set; }
     }
 }

@@ -25,7 +25,7 @@ public partial class LoginPageViewModel : ViewModelBase
     private string _password;
 
     [RelayCommand]
-    private async void Login()
+    private async void LoginAsync()
     {
         try
         {
@@ -36,7 +36,7 @@ public partial class LoginPageViewModel : ViewModelBase
                 return;
             }
 
-            var user = await _userService.Login(Username, Password);
+            var user = await _userService.LoginAsync(Username, Password);
             if (user == null)
             {
                 await ToastService.Show("登录失败：用户名或密码错误");
@@ -66,7 +66,7 @@ public partial class LoginPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void GoToRegister()
+    private async void GoToRegisterAsync()
     {
         await Shell.Current.GoToAsync($"../{nameof(RegisterPage)}", true);
     }

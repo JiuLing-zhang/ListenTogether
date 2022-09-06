@@ -59,7 +59,7 @@
                            Placeholder="输入歌曲名、歌手名查找..."/>
                 <StackLayout BackgroundColor="Transparent">
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=GoToSearchPageCommand}"
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=GoToSearchPageAsyncCommand}"
                                               CommandParameter="{Binding .}"/>
                     </StackLayout.GestureRecognizers>
                 </StackLayout>
@@ -86,7 +86,7 @@
                                 <On Platform="WinUI, macOS">
                                     <Grid ColumnDefinitions="30,60,40,300,300,*">
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicAsyncCommand}"
                                                           CommandParameter="{Binding .}"
                                                           NumberOfTapsRequired="2"/>
                                         </Grid.GestureRecognizers>
@@ -99,7 +99,7 @@
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"		
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteAsyncCommand}"		
                                                                   CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>
@@ -133,7 +133,7 @@
                                           RowDefinitions="auto,auto,10"
                                           ColumnDefinitions="*,40">
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicCommand}"
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicAsyncCommand}"
                                                           CommandParameter="{Binding .}"/>
                                         </Grid.GestureRecognizers>
 
@@ -169,7 +169,7 @@
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteCommand}"
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteAsyncCommand}"
                                                                   CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>

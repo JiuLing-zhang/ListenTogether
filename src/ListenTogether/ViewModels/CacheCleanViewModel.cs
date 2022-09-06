@@ -17,7 +17,7 @@ public partial class CacheCleanViewModel : ViewModelBase
         {
             StartLoading("");
             SelectedSize = 0;
-            await GetCacheFiles();
+            await GetCacheFilesAsync();
         }
         catch (Exception ex)
         {
@@ -64,21 +64,21 @@ public partial class CacheCleanViewModel : ViewModelBase
         }
     }
 
-    private async Task GetCacheFiles()
+    private async Task GetCacheFilesAsync()
     {
         Caches.Clear();
         AllSize = 0;
-        await EachDirectory(GlobalConfig.MusicCacheDirectory, CalcFilesInfo);
+        await EachDirectoryAsync(GlobalConfig.MusicCacheDirectory, CalcFilesInfo);
     }
 
-    private async Task EachDirectory(string folderPath, Action<List<string>> callbackFilePaths)
+    private async Task EachDirectoryAsync(string folderPath, Action<List<string>> callbackFilePaths)
     {
         try
         {
             Directory.GetDirectories(folderPath).ToList().ForEach(async path =>
             {
                 //继续遍历文件夹内容
-                await EachDirectory(path, callbackFilePaths);
+                await EachDirectoryAsync(path, callbackFilePaths);
             });
 
             callbackFilePaths.Invoke(Directory.GetFiles(folderPath).ToList());
@@ -128,7 +128,7 @@ public partial class CacheCleanViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void Clear()
+    private async void ClearAsync()
     {
         var isOk = await App.Current.MainPage.DisplayAlert("提示", "确定要删除吗？删除后不可恢复。", "确定", "取消");
         if (isOk == false)
@@ -164,7 +164,7 @@ public partial class CacheCleanViewModel : ViewModelBase
             StopLoading();
         }
 
-        await GetCacheFiles();
+        await GetCacheFilesAsync();
         await ToastService.Show("删除完成");
     }
 

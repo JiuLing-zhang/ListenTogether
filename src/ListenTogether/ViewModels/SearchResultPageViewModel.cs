@@ -39,7 +39,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
     {
         Task.Run(async () =>
         {
-            await Search(value);
+            await SearchAsync(value);
         });
     }
 
@@ -56,7 +56,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
     private SearchResultViewModel _musicSelectedResult;
 
     private int _isSearching = 0;
-    private async Task Search(string keyword)
+    private async Task SearchAsync(string keyword)
     {
         if (keyword.IsEmpty())
         {
@@ -71,7 +71,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
         {
             StartLoading("正在搜索....");
             MusicSearchResult.Clear();
-            var musics = await _musicNetworkService.Search(GlobalConfig.MyUserSetting.Search.EnablePlatform, keyword);
+            var musics = await _musicNetworkService.SearchAsync(GlobalConfig.MyUserSetting.Search.EnablePlatform, keyword);
 
             if (GlobalConfig.MyUserSetting.Search.IsMatchSearchKey)
             {
@@ -135,13 +135,13 @@ public partial class SearchResultPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void AddToMyFavorite(SearchResultViewModel searchResult)
+    private async void AddToMyFavoriteAsync(SearchResultViewModel searchResult)
     {
         try
         {
             StartLoading("处理中....");
 
-            var (succeed, message, music) = await SaveMusic(searchResult.SourceData);
+            var (succeed, message, music) = await SaveMusicAsync(searchResult.SourceData);
             if (succeed == false)
             {
                 await ToastService.Show(message);
@@ -178,7 +178,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
                     return;
                 }
 
-                if (await _myFavoriteService.NameExist(myFavoriteName))
+                if (await _myFavoriteService.NameExistAsync(myFavoriteName))
                 {
                     await ToastService.Show("歌单名称已存在");
                     return;
@@ -198,7 +198,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
                 selectedMyFavoriteId = newMyFavorite.Id;
             }
 
-            var result = await _myFavoriteService.AddMusicToMyFavorite(selectedMyFavoriteId, music);
+            var result = await _myFavoriteService.AddMusicToMyFavoriteAsync(selectedMyFavoriteId, music);
             if (result == false)
             {
                 await ToastService.Show("添加失败");
@@ -225,9 +225,9 @@ public partial class SearchResultPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void PlayMusic(SearchResultViewModel selected)
+    private async void PlayMusicAsync(SearchResultViewModel selected)
     {
-        var (succeed, message, music) = await SaveMusic(selected.SourceData);
+        var (succeed, message, music) = await SaveMusicAsync(selected.SourceData);
         if (succeed == false)
         {
             await ToastService.Show(message);
@@ -236,9 +236,9 @@ public partial class SearchResultPageViewModel : ViewModelBase
         await _playerService.PlayAsync(music);
     }
 
-    private async Task<(bool Succeed, string Message, Music MusicDetailResult)> SaveMusic(MusicSearchResult searchResult)
+    private async Task<(bool Succeed, string Message, Music MusicDetailResult)> SaveMusicAsync(MusicSearchResult searchResult)
     {
-        var music = await _musicNetworkService.GetMusicDetail(searchResult);
+        var music = await _musicNetworkService.GetMusicDetailAsync(searchResult, GlobalConfig.MyUserSetting.Play.MusicFormatType);
         if (music == null)
         {
             return (false, "emm没有解析出歌曲信息", null);
@@ -257,13 +257,13 @@ public partial class SearchResultPageViewModel : ViewModelBase
             MusicArtist = music.Artist,
             MusicAlbum = music.Album
         };
-        await _playlistService.AddToPlaylist(playlist);
+        await _playlistService.AddToPlaylistAsync(playlist);
 
         return (true, "", music);
     }
 
     [RelayCommand]
-    private async void GoToSearchPage()
+    private async void GoToSearchPageAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(SearchPage)}?Keyword={Keyword}", true);
         Keyword = "";

@@ -32,14 +32,10 @@
 
             <SearchBar x:Name="TxtSearchBar"                       
                        Text="{Binding Keyword}"
-                       SearchCommand="{Binding BeginSearchCommand}"
+                       SearchCommand="{Binding BeginSearchAsyncCommand}"
                        SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
                        Placeholder="输入歌曲名、歌手名查找..."
                        VerticalOptions="Start">
-                <SearchBar.Behaviors>
-                    <toolkit:EventToCommandBehavior EventName="TextChanged"
-                                                    Command="{Binding SearchBarTextChangedCommand}"/>
-                </SearchBar.Behaviors>
             </SearchBar>
 
             <Border VerticalOptions="FillAndExpand"
@@ -52,7 +48,7 @@
                         <DataTemplate>
                             <StackLayout Margin="{OnPlatform WinUI='0',MacCatalyst='0',Android='0,10,0,0',iOS='0,10,0,0'}">
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=BeginSearchCommand}"
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=BeginSearchAsyncCommand}"
                                                           CommandParameter="{Binding .}"/>
                                 </StackLayout.GestureRecognizers>
                                 <Label Text="{Binding .}"/>

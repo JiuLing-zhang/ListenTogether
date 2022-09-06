@@ -66,7 +66,7 @@ public partial class LogPageViewModel : ViewModelBase
     private List<Log> _updateLogs;
 
     [RelayCommand]
-    private async void UpdateLogs()
+    private async void UpdateLogsAsync()
     {
         if (GlobalConfig.CurrentUser == null)
         {
@@ -110,7 +110,7 @@ public partial class LogPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void ClearLogs()
+    private async void ClearLogsAsync()
     {
         var isOk = await App.Current.MainPage.DisplayAlert("提示", "确定要清空日志吗？", "确定", "取消");
         if (isOk == false)
@@ -118,7 +118,7 @@ public partial class LogPageViewModel : ViewModelBase
             return;
         }
 
-        Logger.RemoveAllAsync();
+        Logger.RemoveAll();
         await InitializeAsync();
     }
 }

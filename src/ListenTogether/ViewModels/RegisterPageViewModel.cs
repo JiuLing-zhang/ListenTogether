@@ -42,7 +42,7 @@ public partial class RegisterPageViewModel : ViewModelBase
     private string _apiMessage;
 
     [RelayCommand]
-    private async void Register()
+    private async void RegisterAsync()
     {
         try
         {
@@ -70,7 +70,7 @@ public partial class RegisterPageViewModel : ViewModelBase
                 Avatar = _userAvatar
             };
 
-            var (succeed, message) = await _userService.Register(user);
+            var (succeed, message) = await _userService.RegisterAsync(user);
             ApiMessage = message;
         }
         catch (Exception ex)
@@ -86,7 +86,7 @@ public partial class RegisterPageViewModel : ViewModelBase
 
 
     [RelayCommand]
-    private async void ChoseImage()
+    private async void ChoseImageAsync()
     {
         try
         {

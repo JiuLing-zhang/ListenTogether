@@ -19,7 +19,7 @@ public class UserController : ApiBaseController
 
     [AllowAnonymous]
     [HttpPost("reg")]
-    public async Task<IActionResult> Register([FromForm] UserRegisterRequest registerUser)
+    public async Task<IActionResult> RegisterAsync([FromForm] UserRegisterRequest registerUser)
     {
         if (Request.Form.Files.Count != 1)
         {
@@ -48,31 +48,31 @@ public class UserController : ApiBaseController
         }
 
         string avatarUrl = $"/{uploadDirectory}/{avatarDirectory}/{fileName}";
-        var response = await _userService.Register(registerUser, avatarUrl);
+        var response = await _userService.RegisterAsync(registerUser, avatarUrl);
         return Ok(response);
     }
 
     [AllowAnonymous]
     [HttpPost("{deviceId}/login")]
-    public async Task<IActionResult> Login(UserRequest user, string deviceId)
+    public async Task<IActionResult> LoginAsync(UserRequest user, string deviceId)
     {
-        var response = await _userService.Login(user, deviceId);
+        var response = await _userService.LoginAsync(user, deviceId);
         return Ok(response);
     }
 
     [AllowAnonymous]
     [HttpPost("{deviceId}/refresh-token")]
-    public async Task<IActionResult> RefreshToken(AuthenticateRequest model, string deviceId)
+    public async Task<IActionResult> RefreshTokenAsync(AuthenticateRequest model, string deviceId)
     {
-        var response = await _userService.RefreshToken(model, deviceId);
+        var response = await _userService.RefreshTokenAsync(model, deviceId);
         return Ok(response);
     }
 
     [Authorize]
     [HttpPost("{deviceId}/logout")]
-    public async Task<IActionResult> Logout(string deviceId)
+    public async Task<IActionResult> LogoutAsync(string deviceId)
     {
-        await _userService.Logout(UserId, deviceId);
+        await _userService.LogoutAsync(UserId, deviceId);
         return Ok("ok");
     }
 }

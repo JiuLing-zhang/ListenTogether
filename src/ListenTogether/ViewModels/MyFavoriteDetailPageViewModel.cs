@@ -31,8 +31,8 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
 
-            await LoadMyFavoriteInfo();
-            await GetMyFavoriteDetail();
+            await LoadMyFavoriteInfoAsync();
+            await GetMyFavoriteDetailAsync();
 
         }
         catch (Exception ex)
@@ -54,10 +54,10 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics;
     public bool IsMyFavoriteMusicsEmpty => MyFavoriteMusics == null || MyFavoriteMusics.Count == 0;
 
-    private async Task GetMyFavoriteDetail()
+    private async Task GetMyFavoriteDetailAsync()
     {
         MyFavoriteMusics.Clear();
-        var myFavoriteDetailList = await _myFavoriteService.GetMyFavoriteDetail(MyFavoriteId);
+        var myFavoriteDetailList = await _myFavoriteService.GetMyFavoriteDetailAsync(MyFavoriteId);
         int seq = 0;
         foreach (var myFavoriteDetail in myFavoriteDetailList)
         {
@@ -74,7 +74,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         }
     }
 
-    private async Task LoadMyFavoriteInfo()
+    private async Task LoadMyFavoriteInfoAsync()
     {
         var myFavorite = await _myFavoriteService.GetOneAsync(MyFavoriteId);
         CurrentMyFavorite = new MyFavoriteViewModel()
@@ -87,7 +87,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void RenameMyFavorite()
+    private async void MyFavoriteRenameAsync()
     {
         string newName = await App.Current.MainPage.DisplayPromptAsync("歌单重命名", "请输入新的歌单名称：", "修改", "取消");
         if (newName.IsEmpty())
@@ -127,7 +127,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void MyFavoriteRemove()
+    private async void MyFavoriteRemoveAsync()
     {
         var isOk = await Shell.Current.DisplayAlert("提示", "确定要删除该歌单吗？", "确定", "取消");
         if (isOk == false)
@@ -157,7 +157,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void PlayMusic(MyFavoriteDetailViewModel selected)
+    private async void PlayMusicAsync(MyFavoriteDetailViewModel selected)
     {
         var music = await _musicService.GetOneAsync(selected.MusicId);
         if (music == null)
@@ -174,14 +174,14 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
             MusicArtist = music.Artist,
             MusicAlbum = music.Album
         };
-        await _playlistService.AddToPlaylist(playlist);
+        await _playlistService.AddToPlaylistAsync(playlist);
         await _playerService.PlayAsync(music);
 
         await Shell.Current.GoToAsync($"..", true);
     }
 
     [RelayCommand]
-    private async void RemoveOne(MyFavoriteDetailViewModel selected)
+    private async void RemoveOneAsync(MyFavoriteDetailViewModel selected)
     {
         var isOk = await Shell.Current.DisplayAlert("提示", $"确定从歌单删除吗？{Environment.NewLine}{selected.MusicName}", "确定", "取消");
         if (isOk == false)

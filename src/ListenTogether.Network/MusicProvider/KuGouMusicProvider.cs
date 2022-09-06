@@ -20,7 +20,7 @@ public class KuGouMusicProvider : IMusicProvider
         _httpClient = new HttpClient(handler);
     }
 
-    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> Search(string keyword)
+    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword)
     {
         string args = KuGouUtils.GetSearchData(keyword);
         string url = $"{UrlBase.KuGou.Search}?{args}";
@@ -70,7 +70,6 @@ public class KuGouMusicProvider : IMusicProvider
         {
             try
             {
-                var ts = TimeSpan.FromSeconds(httpMusic.Duration);
                 var music = new MusicSearchResult()
                 {
                     Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.ID}"),
@@ -80,8 +79,7 @@ public class KuGouMusicProvider : IMusicProvider
                     Alias = "",
                     Artist = KuGouUtils.RemoveSongNameTag(httpMusic.SingerName),
                     Album = httpMusic.AlbumName,
-                    Duration = (int)ts.TotalMilliseconds,
-                    DurationText = $"{ts.Minutes}:{ts.Seconds:D2}",
+                    Duration = TimeSpan.FromSeconds(httpMusic.Duration),
                     Fee = GetFeeFlag(httpMusic.Privilege),
                     PlatformData = new KuGouSearchExtendData()
                     {
@@ -108,7 +106,7 @@ public class KuGouMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public async Task<Music?> GetMusicDetail(MusicSearchResult sourceMusic)
+    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
 
         if (!(sourceMusic.PlatformData is KuGouSearchExtendData extendData))
@@ -162,7 +160,7 @@ public class KuGouMusicProvider : IMusicProvider
         };
     }
 
-    public async Task<Music?> UpdatePlayUrl(Music music)
+    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         var extendDataString = music.ExtendData;
         if (extendDataString.IsEmpty())
@@ -170,7 +168,7 @@ public class KuGouMusicProvider : IMusicProvider
             Logger.Info("更新酷狗播放地址失败，扩展数据不存在");
             return music;
         }
-        KuGouSearchExtendData extendData;
+        KuGouSearchExtendData? extendData;
         try
         {
             extendData = extendDataString.ToObject<KuGouSearchExtendData>();
@@ -219,17 +217,17 @@ public class KuGouMusicProvider : IMusicProvider
         return music;
     }
 
-    public Task<List<string>> GetSearchSuggest(string keyword)
+    public Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<string>?> GetHotWord()
+    public Task<List<string>?> GetHotWordAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<string> GetMusicShareUrl(Music music)
+    public Task<string> GetMusicShareUrlAsync(Music music)
     {
         var obj = music.ExtendData.ToObject<KuGouSearchExtendData>();
         if (obj == null)

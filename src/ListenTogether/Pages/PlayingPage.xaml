@@ -68,7 +68,7 @@
                            Text="{Binding ShareLabelText}"
                            TextColor="{StaticResource PlayingPageText}">
                         <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ShareMusicLinkCommand}"/>
+                            <TapGestureRecognizer Command="{Binding ShareMusicLinkAsyncCommand}"/>
                         </Label.GestureRecognizers>
                     </Label>
 
@@ -130,7 +130,7 @@
                                         SelectionMode="None">
                             <CollectionView.Behaviors>
                                 <toolkit:EventToCommandBehavior EventName="Scrolled"
-                                                                Command="{Binding LyricsScrolledCommand}"/>
+                                                                Command="{Binding LyricsScrolledDoCommand}"/>
 
                             </CollectionView.Behaviors>
                             <CollectionView.ItemTemplate>

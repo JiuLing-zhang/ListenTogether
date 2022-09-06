@@ -59,6 +59,7 @@ public class UserLocalRepository : IUserLocalRepository
         DatabaseProvide.Database.DeleteAll<UserEntity>();
     }
 
+    //TODO 这里review下TokenInfo是否需要为null
     public void UpdateToken(TokenInfo tokenInfo)
     {
         var dbUser = DatabaseProvide.Database.Table<UserEntity>().FirstOrDefault();

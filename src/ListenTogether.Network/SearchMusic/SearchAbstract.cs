@@ -15,22 +15,22 @@ public abstract class SearchAbstract
         _nextHandler = nextHandler;
     }
 
-    public async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword)
+    public async Task<List<MusicSearchResult>> SearchAsync(PlatformEnum platform, string keyword)
     {
-        return await Search(platform, keyword, new List<MusicSearchResult>());
+        return await SearchAsync(platform, keyword, new List<MusicSearchResult>());
     }
 
-    protected async Task<List<MusicSearchResult>> Search(PlatformEnum platform, string keyword, List<MusicSearchResult> allResult)
+    protected async Task<List<MusicSearchResult>> SearchAsync(PlatformEnum platform, string keyword, List<MusicSearchResult> allResult)
     {
         if ((platform & _platform) == _platform)
         {
-            await DoSearch(keyword, allResult);
+            await DoSearchAsync(keyword, allResult);
         }
         if (_nextHandler != null)
         {
-            await _nextHandler.Search(platform, keyword, allResult);
+            await _nextHandler.SearchAsync(platform, keyword, allResult);
         }
         return allResult;
     }
-    public abstract Task<List<MusicSearchResult>> DoSearch(string keyword, List<MusicSearchResult> allResult);
+    public abstract Task<List<MusicSearchResult>> DoSearchAsync(string keyword, List<MusicSearchResult> allResult);
 }

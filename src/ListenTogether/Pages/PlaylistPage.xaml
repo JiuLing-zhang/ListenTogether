@@ -34,7 +34,7 @@
                          VerticalOptions="End"
                          IsVisible="{Binding IsPlaylistNotEmpty}">
                     <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ClearPlaylistCommand}"/>
+                        <TapGestureRecognizer Command="{Binding ClearPlaylistAsyncCommand}"/>
                     </StackLayout.GestureRecognizers>
                     <Image x:Name="ImgRemove"
                        Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
@@ -55,7 +55,7 @@
                                 <On Platform="WinUI, macOS">
                                     <StackLayout Orientation="Horizontal">
                                         <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicAsyncCommand}"
                                                   CommandParameter="{Binding .}"
                                                   NumberOfTapsRequired="2"/>
                                         </StackLayout.GestureRecognizers>
@@ -68,7 +68,7 @@
                                                HeightRequest="15"
                                                VerticalOptions="Center">
                                                 <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteAsyncCommand}"
                                                               CommandParameter="{Binding .}"/>
                                                 </Image.GestureRecognizers>
                                             </Image>
@@ -80,7 +80,7 @@
                                                HeightRequest="15"
                                                VerticalOptions="Center">
                                                 <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
+                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneAsyncCommand}"
                                                                       CommandParameter="{Binding .}">
                                                     </TapGestureRecognizer>
                                                 </Image.GestureRecognizers>
@@ -114,7 +114,7 @@
                                           ColumnDefinitions="50,*,30,30">
 
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicCommand}"
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicAsyncCommand}"
                                                   CommandParameter="{Binding .}"/>
                                         </Grid.GestureRecognizers>
 
@@ -146,7 +146,7 @@
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteCommand}"
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteAsyncCommand}"
                                                        CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>
@@ -159,7 +159,7 @@
                                            VerticalOptions="Center"
                                            HorizontalOptions="Center">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneCommand}"
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneAsyncCommand}"
                                                                       CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>

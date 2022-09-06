@@ -17,51 +17,51 @@ namespace ListenTogether.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             var response = await _myFavoriteService.GetOneAsync(UserId, id);
             return Ok(response);
         }
 
         [HttpGet("list")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
             var response = await _myFavoriteService.GetAllAsync(UserId);
             return Ok(response);
         }
 
         [HttpGet("detail/{id}")]
-        public async Task<IActionResult> GetDetail(int id)
+        public async Task<IActionResult> GetDetailAsync(int id)
         {
-            var response = await _myFavoriteService.GetMyFavoriteDetail(UserId, id);
+            var response = await _myFavoriteService.GetMyFavoriteDetailAsync(UserId, id);
             return Ok(response);
         }
 
         [HttpGet("name-exist/{myFavoriteName}")]
-        public async Task<IActionResult> NameExist(string myFavoriteName)
+        public async Task<IActionResult> NameExistAsync(string myFavoriteName)
         {
-            var response = await _myFavoriteService.NameExist(UserId, myFavoriteName);
+            var response = await _myFavoriteService.NameExistAsync(UserId, myFavoriteName);
             return Ok(response);
         }
 
         [HttpPost()]
-        public async Task<IActionResult> AddOrUpdate(MyFavoriteRequest myFavorite)
+        public async Task<IActionResult> AddOrUpdateAsync(MyFavoriteRequest myFavorite)
         {
             var response = await _myFavoriteService.AddOrUpdateAsync(UserId, myFavorite);
             return Ok(response);
         }
 
         [HttpPost("delete/{id}")]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> RemoveAsync(int id)
         {
             var response = await _myFavoriteService.RemoveAsync(UserId, id);
             return Ok(response);
         }
 
         [HttpPost("add-music/{id}")]
-        public async Task<IActionResult> AddMusicToMyFavorite(int id, MusicRequest music)
+        public async Task<IActionResult> AddMusicToMyFavoriteAsync(int id, MusicRequest music)
         {
-            var response = await _myFavoriteService.AddMusicToMyFavorite(UserId, id, music);
+            var response = await _myFavoriteService.AddMusicToMyFavoriteAsync(UserId, id, music);
             return Ok(response);
         }
 

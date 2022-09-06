@@ -1,15 +1,13 @@
-﻿using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
-using ListenTogether.Api.DbContext;
+﻿using ListenTogether.Api.DbContext;
 using ListenTogether.Api.Entities;
-using ListenTogether.Api.Enums;
 using ListenTogether.Api.ErrorHandler;
 using ListenTogether.Api.Interfaces;
-using ListenTogether.Api.Models;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
 using ListenTogether.Model.Api.Response;
 using ListenTogether.Model.Enums;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace ListenTogether.Api.Services
 {
