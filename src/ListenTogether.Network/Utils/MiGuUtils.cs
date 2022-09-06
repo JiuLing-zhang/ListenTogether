@@ -95,43 +95,59 @@ public class MiGuUtils
 
     public static string GetPlayUrlPath(List<NewRateFormats> playResources, MusicFormatTypeEnum musicFormatType)
     {
-        string ftpHeadPattern = @"^ftp://\d+\.\d+\.\d+\.\d+:\d+";
+        switch (musicFormatType)
+        {
+            case MusicFormatTypeEnum.PQ:
+                return GetPQPlayUrlPath(playResources);
+            case MusicFormatTypeEnum.HQ:
+                return GetHQPlayUrlPath(playResources);
+            case MusicFormatTypeEnum.SQ:
+                return GetSQPlayUrlPath(playResources);
+            case MusicFormatTypeEnum.ZQ:
+                return GetZQPlayUrlPath(playResources);
+            default:
+                throw new ArgumentOutOfRangeException(nameof(musicFormatType), musicFormatType, "不支持的音质配置");
+        }
+    }
 
-        //TODO 实现音质匹配
+    private static readonly string FtpHeadPattern = @"^ftp://\d+\.\d+\.\d+\.\d+:\d+";
+    private static string GetZQPlayUrlPath(List<NewRateFormats> playResources)
+    {
         var zqResource = playResources.FirstOrDefault(x => x.formatType == "ZQ");
-        if (zqResource != null)
+        if (zqResource != null && JiuLing.CommonLibs.Text.RegexUtils.IsMatch(zqResource.iosUrl, FtpHeadPattern))
         {
-            if (JiuLing.CommonLibs.Text.RegexUtils.IsMatch(zqResource.iosUrl, ftpHeadPattern))
-            {
-                return JiuLing.CommonLibs.Text.RegexUtils.Replace(zqResource.iosUrl, ftpHeadPattern, "");
-            }
+            return JiuLing.CommonLibs.Text.RegexUtils.Replace(zqResource.iosUrl, FtpHeadPattern, "");
         }
+        return GetSQPlayUrlPath(playResources);
+    }
 
+    private static string GetSQPlayUrlPath(List<NewRateFormats> playResources)
+    {
         var sqResource = playResources.FirstOrDefault(x => x.formatType == "SQ");
-        if (sqResource != null)
+        if (sqResource != null && JiuLing.CommonLibs.Text.RegexUtils.IsMatch(sqResource.iosUrl, FtpHeadPattern))
         {
-            if (JiuLing.CommonLibs.Text.RegexUtils.IsMatch(sqResource.iosUrl, ftpHeadPattern))
-            {
-                return JiuLing.CommonLibs.Text.RegexUtils.Replace(sqResource.iosUrl, ftpHeadPattern, "");
-            }
+            return JiuLing.CommonLibs.Text.RegexUtils.Replace(sqResource.iosUrl, FtpHeadPattern, "");
         }
+        return GetHQPlayUrlPath(playResources);
+    }
 
+    private static string GetHQPlayUrlPath(List<NewRateFormats> playResources)
+    {
         var hqResource = playResources.FirstOrDefault(x => x.formatType == "HQ");
-        if (hqResource != null)
+        if (hqResource != null && JiuLing.CommonLibs.Text.RegexUtils.IsMatch(hqResource.url, FtpHeadPattern))
         {
-            if (JiuLing.CommonLibs.Text.RegexUtils.IsMatch(hqResource.url, ftpHeadPattern))
-            {
-                return JiuLing.CommonLibs.Text.RegexUtils.Replace(hqResource.url, ftpHeadPattern, "");
-            }
+            return JiuLing.CommonLibs.Text.RegexUtils.Replace(hqResource.url, FtpHeadPattern, "");
         }
 
+        return GetPQPlayUrlPath(playResources);
+    }
+
+    private static string GetPQPlayUrlPath(List<NewRateFormats> playResources)
+    {
         var pqResource = playResources.FirstOrDefault(x => x.formatType == "PQ");
-        if (pqResource != null)
+        if (pqResource != null && JiuLing.CommonLibs.Text.RegexUtils.IsMatch(pqResource.url, FtpHeadPattern))
         {
-            if (JiuLing.CommonLibs.Text.RegexUtils.IsMatch(pqResource.url, ftpHeadPattern))
-            {
-                return JiuLing.CommonLibs.Text.RegexUtils.Replace(pqResource.url, ftpHeadPattern, "");
-            }
+            return JiuLing.CommonLibs.Text.RegexUtils.Replace(pqResource.url, FtpHeadPattern, "");
         }
         return "";
     }

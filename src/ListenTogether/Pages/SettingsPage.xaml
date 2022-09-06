@@ -177,7 +177,7 @@
                             <StackLayout Margin="0,10,0,0"
                                          RadioButtonGroup.GroupName="音质"
                                          RadioButtonGroup.SelectedValue="{Binding MusicFormatType}">
-                                <Label Text="首选音质（无匹配音质时自动使用下一音质）" />
+                                <Label Text="尝试选择音质（仅部分平台可用）" />
                                 <RadioButton Content="普通"
                                              Value="PQ"/>
                                 <RadioButton Content="高品质"
