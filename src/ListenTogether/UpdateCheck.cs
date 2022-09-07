@@ -4,7 +4,7 @@ namespace ListenTogether;
 
 internal class UpdateCheck
 {
-    private readonly static HttpClientHelper _httpClient = new HttpClientHelper();
+    private static readonly HttpClientHelper MyHttpClient = new HttpClientHelper();
 
     /// <summary>
     /// App Key
@@ -46,7 +46,7 @@ internal class UpdateCheck
         {
             try
             {
-                string json = await _httpClient.GetReadString(CheckUpdateUrl);
+                string json = await MyHttpClient.GetReadString(CheckUpdateUrl);
                 var obj = json.ToObject<JiuLing.CommonLibs.Model.AppUpgradeInfo>();
                 if (obj == null)
                 {
@@ -64,29 +64,31 @@ internal class UpdateCheck
                 string version;
                 string minVersion;
 #if ANDROID
-                version = obj.Version.Substring(0, obj.Version.LastIndexOf("."));
-                minVersion = obj.MinVersion.Substring(0, obj.MinVersion.LastIndexOf("."));
+                version = obj.Version[..obj.Version.LastIndexOf(".")];
+                minVersion = obj.MinVersion[..obj.MinVersion.LastIndexOf(".")];
 #else
                 version = obj.Version;
                 minVersion=obj.MinVersion;
 #endif
                 var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, version, minVersion);
-                if (isNeedUpdate == false)
-                {
-                    if (!isBackgroundCheck)
-                    {
-                        await ToastService.Show("当前版本为最新版");
-                    }
-                    return;
-                }
 
-                MainThread.BeginInvokeOnMainThread(async () =>
+                async void CheckUpdateInner()
                 {
+                    if (isNeedUpdate == false)
+                    {
+                        if (!isBackgroundCheck)
+                        {
+                            await ToastService.Show("当前版本为最新版");
+                        }
+                        return;
+                    }
+
                     string message = "";
                     if (isAllowRun == false)
                     {
                         message = $"当前版本已过期！{Environment.NewLine}";
                     }
+
                     message = $"{message}发现新版本 {obj.Version}，确认要下载吗？";
 
                     var isUpdate = await App.Current.MainPage.DisplayAlert("提示", message, "确定", "取消");
@@ -104,7 +106,9 @@ internal class UpdateCheck
                         await ToastService.Show("启动浏览器失败，请重试");
                         Logger.Error("打开链接失败。", ex);
                     }
-                });
+                }
+
+                MainThread.BeginInvokeOnMainThread(CheckUpdateInner);
             }
             catch (Exception ex)
             {
