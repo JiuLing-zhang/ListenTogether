@@ -26,9 +26,6 @@ namespace ListenTogether
             appIconStream.CopyTo(ms);
             GlobalConfig.AppIcon = ms.ToArray();
 #endif
-            using var stream = FileSystem.OpenAppPackageFileAsync("Settings.json").Result;
-            var config = new ConfigurationBuilder().AddJsonStream(stream).Build();
-            builder.Configuration.AddConfiguration(config);
 
             builder
                 .UseMauiApp<App>()

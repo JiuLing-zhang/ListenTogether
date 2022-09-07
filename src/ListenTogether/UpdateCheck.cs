@@ -18,7 +18,7 @@ internal class UpdateCheck
     {
         get
         {
-            if (GlobalConfig.AppSettings.UpdateDomain.IsEmpty())
+            if (GlobalConfig.UpdateDomain.IsEmpty())
             {
                 throw new Exception("更新服务器未配置");
             }
@@ -36,7 +36,7 @@ internal class UpdateCheck
             {
                 throw new ArgumentException("不支持的系统类型");
             }
-            return $"{GlobalConfig.AppSettings.UpdateDomain}/api/app/{AppKey}/{osTag}";
+            return $"{GlobalConfig.UpdateDomain}/api/app/{AppKey}/{osTag}";
         }
     }
 

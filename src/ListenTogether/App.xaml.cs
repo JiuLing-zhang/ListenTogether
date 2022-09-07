@@ -26,12 +26,11 @@ public partial class App : Application
             Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
         };
 
-        GlobalConfig.AppSettings = config.GetRequiredSection("AppSettings").Get<AppSettings>();
-
         GlobalConfig.CurrentVersion = AppInfo.Current.Version;
 
         BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.LocalDatabaseName));
 
+        GlobalConfig.UpdateDomain = Preferences.Get("UpdateDomain", "");
         GlobalConfig.ApiDomain = Preferences.Get("ApiDomain", "");
         if (GlobalConfig.ApiDomain.IsNotEmpty())
         {

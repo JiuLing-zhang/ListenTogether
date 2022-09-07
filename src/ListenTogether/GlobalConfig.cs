@@ -28,8 +28,9 @@ namespace ListenTogether
 
         public static string ApiDomain { get; set; }
 
-        public static EnvironmentSetting MyUserSetting { get; set; }
-        public static AppSettings AppSettings { get; set; }
+        public static string UpdateDomain { get; set; }
+
+        public static EnvironmentSetting MyUserSetting { get; set; } 
 
         /// <summary>
         /// 程序网络版本类型
