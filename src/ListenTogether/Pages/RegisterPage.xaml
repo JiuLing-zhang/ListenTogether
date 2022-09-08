@@ -6,21 +6,28 @@
              Title="注册"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
-    <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
+    <Grid Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
                  MaximumWidthRequest="{OnPlatform  WinUI=500,MacCatalyst=500}">
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
         <controls:Loading
+            Grid.Row="0"
+            Grid.RowSpan="2"
             IsRunning="{Binding IsLoading}"
             Text="{Binding LoadingText}"/>
-        <StackLayout Margin="0,0,0,20"
-                     Orientation="Horizontal"
-                     VerticalOptions="Start">
-            <Label Text="新用户注册"
-                   VerticalTextAlignment="Center"
-                   Style="{StaticResource Title}"/>
-        </StackLayout>
+
+        <Label 
+            Grid.Row="0"
+            Text="新用户注册"
+            VerticalTextAlignment="Center"
+            Style="{StaticResource Title}"/>
 
         <StackLayout
+            Grid.Row="1"
             Style="{StaticResource StackLayoutLoading}">
             <Entry Text="{Binding Username}"
                    Placeholder="请输入用户名"
@@ -62,5 +69,5 @@
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
         </StackLayout>
-    </StackLayout>
+    </Grid>
 </ContentPage>

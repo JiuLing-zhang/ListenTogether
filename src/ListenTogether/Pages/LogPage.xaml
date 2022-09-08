@@ -7,24 +7,32 @@
              Title="日志"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
-    <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+    <Grid Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        
         <controls:Loading
+            Grid.Row="0"
+            Grid.RowSpan="4"
             IsRunning="{Binding IsLoading}"
             Text="{Binding LoadingText}"/>
-        <StackLayout Margin="0,0,0,20"
-                     Orientation="Horizontal"
-                     VerticalOptions="Start">
-            <Label Text="日志"
-                   VerticalTextAlignment="Center"
-                   Style="{StaticResource Title}"/>
-        </StackLayout>
 
-        <CollectionView VerticalOptions="FillAndExpand"
-                        Margin="0,0,0,10"
-                        ItemsSource="{Binding Logs}"
-                        EmptyView="啥日志也没有哦"
-                        SelectionMode="None"  >
+        <Label
+            Grid.Row="0"
+            Text="日志"
+            Style="{StaticResource Title}"/>
+
+        <CollectionView
+            Grid.Row="1"
+            VerticalOptions="FillAndExpand"
+            ItemsSource="{Binding Logs}"
+            EmptyView="啥日志也没有哦"
+            SelectionMode="None"  >
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Margin="0,0,0,10">
@@ -37,17 +45,18 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Text="上传"
-                Margin="0,0,0,5"
+        <Button Grid.Row="2"
+                Text="上传"
                 VerticalOptions="End"
                 IsVisible="{Binding IsLoginSuccess}"
                 Command="{Binding UpdateLogsAsyncCommand}"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                 TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
-        <Button Text="清空日志"
+        <Button Grid.Row="3"
+                Text="清空日志"
                 VerticalOptions="End"
                 Command="{Binding ClearLogsAsyncCommand}"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                 TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
-    </StackLayout>
+    </Grid>
 </ContentPage>

@@ -17,19 +17,26 @@
         </Style>
     </ContentPage.Resources>
 
-    <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+    <Grid Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
         <controls:Loading
+            Grid.Row="0"
+            Grid.RowSpan="3"
             IsRunning="{Binding IsLoading}"
             Text="{Binding LoadingText}"/>
-        <StackLayout Margin="0,0,0,20"
-                     Orientation="Horizontal"
-                     VerticalOptions="Start">
-            <Label Text="缓存清理"
-                   VerticalTextAlignment="Center"
-                   Style="{StaticResource Title}"/>
-        </StackLayout>
 
-        <ScrollView VerticalOptions="FillAndExpand">
+        <Label 
+            Grid.Row="0"
+            Text="缓存清理"
+            Style="{StaticResource Title}"/>
+
+        <ScrollView
+            Grid.Row="1"
+            VerticalOptions="FillAndExpand">
             <CollectionView ItemsSource="{Binding Caches}"
                         EmptyView="没有缓存的歌曲，快去听歌吧"
                         SelectionMode="None">
@@ -45,13 +52,12 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </ScrollView>
-        <Label Margin="0,10,0,5"
-               Text="谨慎清理，小心有些歌曲已经是VIP的咯"
-               VerticalOptions="End"
-               Style="{StaticResource Explain}"/>
 
-        <StackLayout Orientation="Horizontal"
-                     VerticalOptions="End">
+        <StackLayout
+            Grid.Row="2"
+            Orientation="Horizontal"
+            VerticalOptions="End">
+
             <StackLayout Margin="0,0,20,0">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="总大小：" />
@@ -79,5 +85,5 @@
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"
                     Command="{Binding ClearAsyncCommand}"/>
         </StackLayout>
-    </StackLayout>
+    </Grid>
 </ContentPage>

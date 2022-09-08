@@ -7,14 +7,22 @@
              Title="我的歌单详情"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
-    <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+    <Grid Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
         <controls:Loading
+            Grid.Row="0"
+            Grid.RowSpan="2"
             IsRunning="{Binding IsLoading}"
             Text="{Binding LoadingText}"/>
-        <StackLayout Margin="0,0,0,20"
-                     Orientation="Horizontal"
-                     VerticalOptions="Start">
+        <StackLayout 
+            Grid.Row="0"
+            Orientation="Horizontal"
+            VerticalOptions="Start">
 
             <Label Text="{Binding CurrentMyFavorite.Name,StringFormat='{}歌单 - {0}'}"
                    VerticalTextAlignment="Center"
@@ -52,8 +60,10 @@
             </StackLayout>
         </StackLayout>
 
-        <CollectionView VerticalOptions="FillAndExpand"
-                        ItemsSource="{Binding MyFavoriteMusics}">
+        <CollectionView
+            Grid.Row="1"
+            VerticalOptions="FillAndExpand"
+            ItemsSource="{Binding MyFavoriteMusics}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
@@ -195,5 +205,5 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-    </StackLayout>
+    </Grid>
 </ContentPage>
