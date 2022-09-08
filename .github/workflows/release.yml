@@ -18,6 +18,9 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
+      - name: Install MAUI Workloads
+        run: dotnet workload install maui
+        
       - name: Restore dependencies
         run: dotnet restore
 
