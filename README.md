@@ -1,3 +1,6 @@
+![](https://img.shields.io/github/license/JiuLing-zhang/ListenTogether)
+[![](https://img.shields.io/github/v/release/JiuLing-zhang/ListenTogether)](https://github.com/JiuLing-zhang/ListenTogether)   
+
 ![logo](https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/logo.svg)  
 ## 一起听
 基于`.NET MAUI`开发的多平台、极简的在线音乐播放器。  
