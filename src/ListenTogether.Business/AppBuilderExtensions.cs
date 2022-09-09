@@ -24,7 +24,6 @@ public static class AppBuilderExtensions
         builder.Services.AddSingleton<IMusicNetworkService, MusicNetworkService>();
         builder.Services.AddSingleton<IPlaylistService, PlaylistService>();
         builder.Services.AddSingleton<IUserService, UserService>();
-        builder.Services.AddSingleton<IUserLocalService, UserLocalService>();
         builder.Services.AddSingleton<IApiLogService, ApiLogService>();
 
         //数据服务
@@ -34,7 +33,6 @@ public static class AppBuilderExtensions
         builder.Services.AddSingleton<IMyFavoriteRepository, MyFavoriteApiRepository>();
         builder.Services.AddSingleton<IMyFavoriteRepository, MyFavoriteLocalRepository>();
         builder.Services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
-        builder.Services.AddSingleton<IUserLocalRepository, UserLocalRepository>();
         builder.Services.AddSingleton<IUserApiRepository, UserApiRepository>();
         builder.Services.AddSingleton<ILogRepository, LogApiRepository>();
         return builder;

@@ -1,16 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Storage;
 
 namespace ListenTogether.ViewModels;
 
 public partial class LoginPageViewModel : ViewModelBase
 {
     private readonly IUserService _userService;
-    private readonly IUserLocalService _userLocalService;
-    public LoginPageViewModel(IUserService userService, IUserLocalService userLocalService)
+    public LoginPageViewModel(IUserService userService)
     {
         _userService = userService;
-        _userLocalService = userLocalService;
     }
     public void InitializeAsync()
     {
@@ -43,13 +42,12 @@ public partial class LoginPageViewModel : ViewModelBase
                 return;
             }
 
-            if (!_userLocalService.Write(user))
-            {
-                await ToastService.Show("用户信息保存失败，请重试");
-                return;
-            }
+            UserInfoStorage.SetUsername(user.Username);
+            UserInfoStorage.SetNickname(user.Nickname);
+            UserInfoStorage.SetAvatar(user.Avatar);
+            UserInfoStorage.SetToken(user.Token);
+            UserInfoStorage.SetRefreshToken(user.RefreshToken);
 
-            GlobalConfig.CurrentUser = user;
             Username = "";
             Password = "";
             await Shell.Current.GoToAsync($"..", true);

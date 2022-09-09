@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Storage;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -19,7 +20,7 @@ public partial class LogPageViewModel : ViewModelBase
         {
             StartLoading("");
 
-            IsLoginSuccess = GlobalConfig.CurrentUser != null;
+            IsLoginSuccess = UserInfoStorage.GetUsername().IsNotEmpty();
 
             if (Logs.Count > 0)
             {
@@ -68,7 +69,7 @@ public partial class LogPageViewModel : ViewModelBase
     [RelayCommand]
     private async void UpdateLogsAsync()
     {
-        if (GlobalConfig.CurrentUser == null)
+        if (UserInfoStorage.GetUsername().IsEmpty())
         {
             await ToastService.Show("上传失败，用户未登录");
             return;

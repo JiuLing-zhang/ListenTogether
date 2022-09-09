@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ListenTogether.Storage;
 
 namespace ListenTogether.ViewModels;
 public partial class ViewModelBase : ObservableValidator
 {
     public ViewModelBase()
     {
-        MessagingCenter.Instance.Subscribe<PlayerService, bool>(this, "Player buffering", (sender, isBuffering) =>
+        MessagingCenter.Instance.Subscribe<string, bool>(this, "PlayerBuffering", (sender, isBuffering) =>
         {
             if (isBuffering)
             {
@@ -16,6 +17,12 @@ public partial class ViewModelBase : ObservableValidator
                 StopLoading();
             }
         });
+
+        MessagingCenter.Instance.Subscribe<string>(this, "ClearUserInfo", async (sender) =>
+        {
+            await ToastService.Show("登录信息已过期，请重新登录");
+        });
+
     }
 
     [ObservableProperty]

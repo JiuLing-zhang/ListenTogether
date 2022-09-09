@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ListenTogether.Model.Enums;
+using ListenTogether.Storage;
 
 namespace ListenTogether.ViewModels;
 
@@ -8,12 +9,10 @@ public partial class SettingPageViewModel : ViewModelBase
 {
     private readonly IEnvironmentConfigService _configService;
     private readonly IUserService _userService;
-    private readonly IUserLocalService _userLocalService;
-    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, IUserLocalService userLocalService)
+    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService)
     {
         _configService = configService;
         _userService = userService;
-        _userLocalService = userLocalService;
     }
     public async void InitializeAsync()
     {
@@ -275,17 +274,17 @@ public partial class SettingPageViewModel : ViewModelBase
         await _configService.WritePlaySettingAsync(GlobalConfig.MyUserSetting.Play);
     }
 
-    private static UserInfoViewModel GetUserInfo()
+    private UserInfoViewModel GetUserInfo()
     {
-        if (GlobalConfig.CurrentUser == null)
+        if (UserInfoStorage.GetUsername().IsEmpty())
         {
             return null;
         }
         return new UserInfoViewModel()
         {
-            Username = GlobalConfig.CurrentUser.Username,
-            Nickname = GlobalConfig.CurrentUser.Nickname,
-            Avatar = $"{GlobalConfig.ApiDomain}{GlobalConfig.CurrentUser.Avatar}"
+            Username = UserInfoStorage.GetUsername(),
+            Nickname = UserInfoStorage.GetNickname(),
+            Avatar = $"{GlobalConfig.ApiDomain}{UserInfoStorage.GetAvatar()}"
         };
     }
 
@@ -372,8 +371,7 @@ public partial class SettingPageViewModel : ViewModelBase
             //服务端退出失败时不处理，直接本地清除登录信息
             await _userService.LogoutAsync();
 
-            _userLocalService.Remove();
-            GlobalConfig.CurrentUser = null;
+            UserInfoStorage.Clear();
             UserInfo = null;
         }
         catch (Exception ex)

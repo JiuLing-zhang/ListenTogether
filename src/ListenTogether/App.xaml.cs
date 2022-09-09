@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ListenTogether.Storage;
+using Microsoft.Extensions.Configuration;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 namespace ListenTogether;
 public partial class App : Application
 {
-    public App(IConfiguration config, IEnvironmentConfigService configService, IUserLocalService userLocalService)
+    public App(IConfiguration config, IEnvironmentConfigService configService)
     {
         InitializeComponent();
 
@@ -34,20 +35,6 @@ public partial class App : Application
         GlobalConfig.ApiDomain = Preferences.Get("ApiDomain", "");
         if (GlobalConfig.ApiDomain.IsNotEmpty())
         {
-            BusinessConfig.TokenUpdated += (_, tokenInfo) =>
-            {
-                if (tokenInfo == null)
-                {
-                    userLocalService.Remove();
-                    GlobalConfig.CurrentUser = null;
-                }
-                else
-                {
-                    userLocalService.UpdateToken(tokenInfo);
-                }
-                BusinessConfig.UserToken = tokenInfo;
-            };
-
             string deviceId = Preferences.Get("DeviceId", "");
             if (deviceId.IsEmpty())
             {
@@ -56,7 +43,6 @@ public partial class App : Application
             }
 
             BusinessConfig.SetWebApi(GlobalConfig.ApiDomain, deviceId);
-            GlobalConfig.CurrentUser = userLocalService.Read();
         }
 
         var task = Task.Run(configService.ReadAllSettingsAsync);

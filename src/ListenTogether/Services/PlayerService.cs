@@ -158,7 +158,7 @@ public class PlayerService
             return "";
         }
 
-        MessagingCenter.Instance.Send<PlayerService, bool>(this, "Player buffering", true);
+        MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", true);
 
         //缓存文件不存在时重新下载
         //部分平台的播放链接会失效，重新获取
@@ -169,7 +169,7 @@ public class PlayerService
         var data = await _httpClient.GetReadByteArray(music.PlayUrl);
         File.WriteAllBytes(musicPath, data);
 
-        MessagingCenter.Instance.Send<PlayerService, bool>(this, "Player buffering", false);
+        MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);
         return musicPath;
     }
 

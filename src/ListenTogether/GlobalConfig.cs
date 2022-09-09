@@ -30,7 +30,7 @@ namespace ListenTogether
 
         public static string UpdateDomain { get; set; }
 
-        public static EnvironmentSetting MyUserSetting { get; set; } 
+        public static EnvironmentSetting MyUserSetting { get; set; }
 
         /// <summary>
         /// 程序网络版本类型
@@ -44,31 +44,6 @@ namespace ListenTogether
                     return AppNetworkEnum.Standalone;
                 }
                 return AppNetworkEnum.Online;
-            }
-        }
-
-        private static User? _currentUser;
-        /// <summary>
-        /// 当前用户
-        /// </summary>
-        public static User? CurrentUser
-        {
-            get => _currentUser;
-            set
-            {
-                _currentUser = value;
-                if (value == null)
-                {
-                    BusinessConfig.UserToken = null;
-                }
-                else
-                {
-                    BusinessConfig.UserToken = new TokenInfo()
-                    {
-                        Token = value.Token,
-                        RefreshToken = value.RefreshToken
-                    };
-                }
             }
         }
     }
