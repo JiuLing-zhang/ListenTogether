@@ -24,6 +24,12 @@ public partial class MyFavoritePageViewModel : ViewModelBase
     {
         try
         {
+            if (IsNotLogin)
+            {
+                await ToastService.Show("登录信息已过期，请重新登录");
+                return;
+            }
+
             StartLoading("");
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
             _musicService = _services.GetService<IMusicServiceFactory>().Create();

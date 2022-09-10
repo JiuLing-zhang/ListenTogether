@@ -376,7 +376,7 @@ public partial class SettingPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            await ToastService.Show("退出失败，网络出小差了");
+            await ToastService.Show("网络出小差了");
             Logger.Error("退出失败。", ex);
         }
         finally

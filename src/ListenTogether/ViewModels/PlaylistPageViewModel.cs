@@ -25,6 +25,12 @@ public partial class PlaylistPageViewModel : ViewModelBase
     {
         try
         {
+            if (IsNotLogin)
+            {
+                await ToastService.Show("登录信息已过期，请重新登录");
+                return;
+            }
+
             StartLoading("页面加载中....");
             _musicService = _services.GetService<IMusicServiceFactory>().Create();
             _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
@@ -83,9 +89,9 @@ public partial class PlaylistPageViewModel : ViewModelBase
         }
     }
 
-    public bool IsPlaylistEmpty =>  (Playlist == null || Playlist.Count == 0);
+    public bool IsPlaylistEmpty => (Playlist == null || Playlist.Count == 0);
     public bool IsPlaylistNotEmpty => !IsPlaylistEmpty;
-    
+
     /// <summary>
     /// 播放列表
     /// </summary>
