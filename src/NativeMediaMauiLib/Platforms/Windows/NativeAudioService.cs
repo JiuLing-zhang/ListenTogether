@@ -9,10 +9,10 @@ public class NativeAudioService : INativeAudioService
     MediaPlayer mediaPlayer;
 
     public bool IsPlaying => mediaPlayer != null
-        && mediaPlayer.CurrentState == MediaPlayerState.Playing;
+        && mediaPlayer.PlaybackSession.PlaybackState == MediaPlaybackState.Playing;
 
-    public double CurrentPositionMillisecond => mediaPlayer?.Position.TotalMilliseconds ?? 0;
-    public double CurrentDurationMillisecond => mediaPlayer?.NaturalDuration.TotalMilliseconds ?? 0;
+    public double CurrentPositionMillisecond => mediaPlayer?.PlaybackSession.Position.TotalMilliseconds ?? 0;
+    public double CurrentDurationMillisecond => mediaPlayer?.PlaybackSession.NaturalDuration.TotalMilliseconds ?? 0;
     public event EventHandler<bool> IsPlayingChanged;
     public event EventHandler PlayFinished;
     public event EventHandler PlayFailed;
@@ -58,7 +58,7 @@ public class NativeAudioService : INativeAudioService
     {
         if (mediaPlayer != null)
         {
-            mediaPlayer.Position = TimeSpan.FromMilliseconds(positionMillisecond);
+            mediaPlayer.PlaybackSession.Position = TimeSpan.FromMilliseconds(positionMillisecond);
             mediaPlayer.Play();
         }
 
@@ -69,7 +69,7 @@ public class NativeAudioService : INativeAudioService
     {
         if (mediaPlayer != null)
         {
-            mediaPlayer.Position = TimeSpan.FromSeconds(value);
+            mediaPlayer.PlaybackSession.Position = TimeSpan.FromSeconds(value);
         }
 
         return Task.CompletedTask;
