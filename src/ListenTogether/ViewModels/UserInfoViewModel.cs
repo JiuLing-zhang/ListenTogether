@@ -5,11 +5,11 @@ namespace ListenTogether.ViewModels;
 public partial class UserInfoViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _username;
+    private string _username = null!;
 
     [ObservableProperty]
-    private string _nickname;
+    private string _nickname = null!;
 
     [ObservableProperty]
-    private string _avatar;
+    private string _avatar = null!;
 }

@@ -14,17 +14,18 @@ public partial class RegisterPageViewModel : ViewModelBase
 
     [ObservableProperty]
     [Required(ErrorMessage = "请填写用户名")]
-    private string _username;
+    private string _username = null!;
 
     [ObservableProperty]
     [Required(ErrorMessage = "请填写昵称")]
-    private string _nickname;
+    private string _nickname = null!;
 
     [ObservableProperty]
     [Required(ErrorMessage = "请填写密码")]
-    private string _password;
+    private string _password = null!;
 
-    private string _password2;
+
+    private string _password2 = null!;
     [Required(ErrorMessage = "请填写确认密码")]
     [Compare(otherProperty: nameof(Password), ErrorMessage = "两次密码不一致")]
     public string Password2
@@ -34,12 +35,12 @@ public partial class RegisterPageViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private ImageSource _myImage;
+    private ImageSource? _myImage;
 
-    private UserAvatar _userAvatar;
+    private UserAvatar? _userAvatar;
 
     [ObservableProperty]
-    private string _apiMessage;
+    private string _apiMessage = null!;
 
     [RelayCommand]
     private async void RegisterAsync()
@@ -52,7 +53,7 @@ public partial class RegisterPageViewModel : ViewModelBase
             ValidateAllProperties();
             if (HasErrors)
             {
-                ApiMessage = GetErrors().First().ErrorMessage;
+                ApiMessage = GetErrors().First().ErrorMessage ?? "";
                 return;
             }
 

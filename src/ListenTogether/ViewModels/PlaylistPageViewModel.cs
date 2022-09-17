@@ -6,11 +6,11 @@ namespace ListenTogether.ViewModels;
 
 public partial class PlaylistPageViewModel : ViewModelBase
 {
-    private IMusicService _musicService;
-    private IMyFavoriteService _myFavoriteService;
-    private readonly IServiceProvider _services;
-    private readonly IPlaylistService _playlistService;
-    private readonly PlayerService _playerService;
+    private IMusicService _musicService = null!;
+    private IMyFavoriteService _myFavoriteService = null!;
+    private readonly IServiceProvider _services = null!;
+    private readonly IPlaylistService _playlistService = null!;
+    private readonly PlayerService _playerService = null!;
 
     public PlaylistPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
@@ -32,8 +32,8 @@ public partial class PlaylistPageViewModel : ViewModelBase
             }
 
             StartLoading("页面加载中....");
-            _musicService = _services.GetService<IMusicServiceFactory>().Create();
-            _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
+            _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
+            _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();
             await GetPlaylistAsync();
         }
         catch (Exception ex)
@@ -98,7 +98,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsPlaylistEmpty))]
     [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
-    private ObservableCollection<PlaylistViewModel> _playlist;
+    private ObservableCollection<PlaylistViewModel> _playlist = null!;
 
     [RelayCommand]
     private async void PlayMusicAsync(PlaylistViewModel selected)
@@ -128,7 +128,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
             }
 
             //构造待选择的歌单项
-            string[] myFavoriteButtons = null;
+            string[]? myFavoriteButtons = null;
             var myFavoriteList = await _myFavoriteService.GetAllAsync();
             if (myFavoriteList != null)
             {
@@ -142,7 +142,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
                 return;
             }
 
-            if (myFavoriteItem != "创建一个新歌单")
+            if (myFavoriteItem != "创建一个新歌单" && myFavoriteList != null)
             {
                 //使用已有歌单
                 selectedMyFavoriteId = myFavoriteList.First(x => x.Name == myFavoriteItem).Id;

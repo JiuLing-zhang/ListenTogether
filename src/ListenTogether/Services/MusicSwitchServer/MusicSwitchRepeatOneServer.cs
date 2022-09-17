@@ -2,13 +2,13 @@
 
 public class MusicSwitchRepeatOneServer : IMusicSwitchServer
 {
-    public async Task<Music> GetPreviousAsync(Music currentMusic)
-    { 
-        return currentMusic;
+    public Task<Music> GetPreviousAsync(Music currentMusic)
+    {
+        return Task.FromResult(currentMusic);
     }
 
-    public async Task<Music> GetNextAsync(Music currentMusic)
+    public Task<Music> GetNextAsync(Music currentMusic)
     {
-        return currentMusic;
+        return Task.FromResult(currentMusic);
     }
 }

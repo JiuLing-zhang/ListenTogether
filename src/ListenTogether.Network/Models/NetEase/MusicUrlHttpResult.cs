@@ -2,6 +2,6 @@
 {
     public class MusicUrlHttpResult
     {
-        public string url { get; set; }
+        public string url { get; set; } = null!;
     }
 }

@@ -17,8 +17,8 @@ public partial class Player : ContentView
         set { SetValue(IsPlayingPageProperty, value); }
     }
 
-    private PlayerService _playerService;
-    private IEnvironmentConfigService _configService;
+    private PlayerService _playerService = null!;
+    private IEnvironmentConfigService _configService = null!;
     public Player()
     {
         InitializeComponent();
@@ -31,12 +31,12 @@ public partial class Player : ContentView
 
         if (_playerService == null)
         {
-            _playerService = this.Handler.MauiContext.Services.GetService<PlayerService>();
+            _playerService = this.Handler.MauiContext.Services.GetRequiredService<PlayerService>();
             InitPlayer();
         }
         if (_configService == null)
         {
-            _configService = this.Handler.MauiContext.Services.GetService<IEnvironmentConfigService>();
+            _configService = this.Handler.MauiContext.Services.GetRequiredService<IEnvironmentConfigService>();
         }
 
         if (Config.Desktop)
@@ -71,8 +71,8 @@ public partial class Player : ContentView
         UpdateRepeatModel();
         if (Config.Desktop)
         {
-            UpdateSoundOnOff();
-            Updatevolume();
+            UpdateSoundOnOff().Wait();
+            Updatevolume().Wait();
         }
         if (!IsPlayingPage && !Config.IsDarkTheme)
         {
@@ -107,7 +107,7 @@ public partial class Player : ContentView
         }
     }
 
-    private void PlayerService_IsPlayingChanged(object sender, EventArgs e)
+    private void PlayerService_IsPlayingChanged(object? sender, EventArgs e)
     {
         IsPlayingChangedDo(_playerService.IsPlaying);
     }
@@ -129,14 +129,14 @@ public partial class Player : ContentView
         });
     }
 
-    private void playerService_NewMusicAdded(object sender, EventArgs e)
+    private async void playerService_NewMusicAdded(object? sender, EventArgs e)
     {
         NewMusicAddedDo(_playerService.CurrentMusic);
         if (Config.Desktop)
         {
             //TODO 首次播放音乐时，无法设置声音，所以先在这里临时实现
-            UpdateSoundOnOff();
-            Updatevolume();
+            await UpdateSoundOnOff();
+            await Updatevolume();
         }
     }
 
@@ -154,7 +154,7 @@ public partial class Player : ContentView
         });
     }
 
-    private void _playerService_PositionChanged(object sender, EventArgs e)
+    private void _playerService_PositionChanged(object? sender, EventArgs e)
     {
         PositionChangedDo(_playerService.CurrentPosition);
     }
@@ -187,8 +187,8 @@ public partial class Player : ContentView
 
     private async void ImgSoundOff_Tapped(object sender, EventArgs e)
     {
-        SetSoundOnOff();
-        UpdateSoundOnOff();
+        await SetSoundOnOff();
+        await UpdateSoundOnOff();
         await WritePlayerSettingAsync();
     }
 
@@ -198,8 +198,6 @@ public partial class Player : ContentView
         {
             return;
         }
-
-
 
         var music = new Music()
         {
@@ -214,11 +212,12 @@ public partial class Player : ContentView
         IsPlayingChangedDo(_playerService.IsPlaying);
     }
 
-    private void SetSoundOnOff()
+    private Task SetSoundOnOff()
     {
         GlobalConfig.MyUserSetting.Player.IsSoundOff = !GlobalConfig.MyUserSetting.Player.IsSoundOff;
+        return Task.CompletedTask;
     }
-    private void UpdateSoundOnOff()
+    private async Task UpdateSoundOnOff()
     {
         string imagePath;
         if (!IsPlayingPage && !Config.IsDarkTheme)
@@ -231,12 +230,12 @@ public partial class Player : ContentView
         }
 
         ImgSoundOff.Source = imagePath;
-        _playerService.SetMuted(GlobalConfig.MyUserSetting.Player.IsSoundOff);
+        await _playerService.SetMuted(GlobalConfig.MyUserSetting.Player.IsSoundOff);
     }
-    private void Updatevolume()
+    private async Task Updatevolume()
     {
         SliderVolume.Value = GlobalConfig.MyUserSetting.Player.Volume;
-        _playerService.SetVolume((int)GlobalConfig.MyUserSetting.Player.Volume);
+        await _playerService.SetVolume((int)GlobalConfig.MyUserSetting.Player.Volume);
     }
 
     private async void ImgRepeat_Tapped(object sender, EventArgs e)
@@ -341,8 +340,8 @@ public partial class Player : ContentView
 
         if (GlobalConfig.MyUserSetting.Player.IsSoundOff)
         {
-            SetSoundOnOff();
-            UpdateSoundOnOff();
+            await SetSoundOnOff();
+            await UpdateSoundOnOff();
         }
 
         await WritePlayerSettingAsync();
@@ -358,8 +357,11 @@ public partial class Player : ContentView
         if (_playerService.CurrentMusic != null)
         {
             var sliderPlayProgress = sender as Slider;
-            var positionMillisecond = _playerService.CurrentPosition.Duration.TotalMilliseconds * sliderPlayProgress.Value;
-            await _playerService.SetPlayPosition(positionMillisecond);
+            if (sliderPlayProgress != null)
+            {
+                var positionMillisecond = _playerService.CurrentPosition.Duration.TotalMilliseconds * sliderPlayProgress.Value;
+                await _playerService.SetPlayPosition(positionMillisecond);
+            }
         }
         _isPlayProgressDragging = false;
     }

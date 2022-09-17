@@ -5,11 +5,11 @@ using System.Collections.ObjectModel;
 namespace ListenTogether.ViewModels;
 public partial class MyFavoritePageViewModel : ViewModelBase
 {
-    private readonly PlayerService _playerService;
-    private readonly IServiceProvider _services;
-    private readonly IPlaylistService _playlistService;
-    private IMyFavoriteService _myFavoriteService;
-    private IMusicService _musicService;
+    private readonly PlayerService _playerService = null!;
+    private readonly IServiceProvider _services = null!;
+    private readonly IPlaylistService _playlistService = null!;
+    private IMyFavoriteService _myFavoriteService = null!;
+    private IMusicService _musicService = null!;
 
     public string Title => "我的歌单";
     public MyFavoritePageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
@@ -31,8 +31,8 @@ public partial class MyFavoritePageViewModel : ViewModelBase
             }
 
             StartLoading("");
-            _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
-            _musicService = _services.GetService<IMusicServiceFactory>().Create();
+            _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();
+            _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
 
             var myFavoriteList = await _myFavoriteService.GetAllAsync();
             if (myFavoriteList == null || myFavoriteList.Count == 0)
@@ -84,7 +84,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private ObservableCollection<MyFavoriteViewModel> _favoriteList;
+    private ObservableCollection<MyFavoriteViewModel> _favoriteList = null!;
 
     [RelayCommand]
     private async void AddMyFavoriteAsync()
@@ -173,6 +173,11 @@ public partial class MyFavoritePageViewModel : ViewModelBase
         if (myFavoriteMusics.Count > 0)
         {
             var music = await _musicService.GetOneAsync(myFavoriteMusics[0].MusicId);
+            if (music == null)
+            {
+                await ToastService.Show("歌曲信息加载失败");
+                return;
+            }
             await _playerService.PlayAsync(music);
         }
     }

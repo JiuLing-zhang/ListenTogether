@@ -28,9 +28,9 @@ public class MusicNetworkService : IMusicNetworkService
         return await _musicNetPlatform.GetMusicDetailAsync(musicSearchResult, musicFormatType);
     }
 
-    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
-        return await _musicNetPlatform.UpdatePlayUrlAsync(music, musicFormatType);
+        return await _musicNetPlatform.GetMusicPlayUrlAsync(music, musicFormatType);
     }
 
     public Task<string> GetMusicPlayPageUrlAsync(Music music)

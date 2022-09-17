@@ -254,7 +254,7 @@ public class NetEaseMusicProvider : IMusicProvider
         };
     }
 
-    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
         var postData = NetEaseUtils.GetPostDataForMusicUrl(music.PlatformInnerId);
@@ -288,14 +288,7 @@ public class NetEaseMusicProvider : IMusicProvider
             return null;
         }
 
-        string playUrl = httpResult.data[0].url;
-        if (playUrl.IsEmpty())
-        {
-            return null;
-        }
-
-        music.PlayUrl = playUrl;
-        return music;
+        return httpResult.data[0].url;
     }
 
     public Task<List<string>?> GetHotWordAsync()

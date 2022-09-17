@@ -7,11 +7,11 @@ public partial class MyFavoriteViewModel : ObservableObject
     private int _id;
 
     [ObservableProperty]
-    private string _name;
+    private string _name = null!;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ImageByteArray))]
-    private string _imageUrl;
+    private string _imageUrl = null!;
 
     public byte[] ImageByteArray => ImageUrl.IsEmpty() ? GlobalConfig.AppIcon : ImageCacheUtils.GetByteArrayUsingCache(ImageUrl);
 

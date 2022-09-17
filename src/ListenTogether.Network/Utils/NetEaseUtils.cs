@@ -143,7 +143,7 @@ public class AESHelper
         byte[] encrypted;
         // Create a RijndaelManaged object  
         // with the specified key and IV.  
-        using (var rijAlg = new RijndaelManaged())
+        using (var rijAlg = Aes.Create())
         {
             rijAlg.Mode = CipherMode.CBC;
             rijAlg.Padding = PaddingMode.PKCS7;

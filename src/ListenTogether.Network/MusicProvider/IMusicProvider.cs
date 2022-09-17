@@ -8,6 +8,6 @@ public interface IMusicProvider
     Task<List<string>?> GetSearchSuggestAsync(string keyword);
     Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword);
     Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType);
-    Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType);
+    Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType);
     Task<string> GetMusicShareUrlAsync(Music music);
 }

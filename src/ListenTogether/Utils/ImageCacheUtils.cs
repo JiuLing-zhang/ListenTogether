@@ -10,7 +10,7 @@ internal class ImageCacheUtils
     {
         return _cache.GetOrCreate(url, (x) =>
         {
-            var task = Task.Run(Task<byte[]> () =>
+            var task = Task.Run(Task<byte[]>? () =>
             {
                 return _httpClient.GetReadByteArray(url);
             });

@@ -8,12 +8,12 @@ namespace ListenTogether.ViewModels;
 [QueryProperty(nameof(Keyword), nameof(Keyword))]
 public partial class SearchResultPageViewModel : ViewModelBase
 {
-    private readonly IServiceProvider _services;
-    private readonly IMusicNetworkService _musicNetworkService;
-    private readonly IPlaylistService _playlistService;
-    private readonly PlayerService _playerService;
-    private IMusicService _musicService;
-    private IMyFavoriteService _myFavoriteService;
+    private readonly PlayerService _playerService = null!;
+    private readonly IServiceProvider _services = null!;
+    private readonly IMusicNetworkService _musicNetworkService = null!;
+    private readonly IPlaylistService _playlistService = null!;
+    private IMusicService _musicService = null!;
+    private IMyFavoriteService _myFavoriteService = null!;
 
     public SearchResultPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
@@ -24,17 +24,18 @@ public partial class SearchResultPageViewModel : ViewModelBase
         _playlistService = playlistService;
     }
 
-    public async Task InitializeAsync()
+    public Task InitializeAsync()
     {
-        _musicService = _services.GetService<IMusicServiceFactory>().Create();
-        _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
+        _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
+        _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();
+        return Task.CompletedTask;
     }
 
     /// <summary>
     /// 搜索关键字
     /// </summary>
     [ObservableProperty]
-    private string _keyword;
+    private string _keyword = null!;
     partial void OnKeywordChanged(string value)
     {
         Task.Run(async () =>
@@ -47,13 +48,13 @@ public partial class SearchResultPageViewModel : ViewModelBase
     /// 搜索到的结果列表
     /// </summary>
     [ObservableProperty]
-    private ObservableCollection<SearchResultGroupViewModel> _musicSearchResult;
+    private ObservableCollection<SearchResultGroupViewModel> _musicSearchResult = null!;
 
     /// <summary>
     /// 选择的结果集
     /// </summary>
     [ObservableProperty]
-    private SearchResultViewModel _musicSelectedResult;
+    private SearchResultViewModel _musicSelectedResult = null!;
 
     private int _isSearching = 0;
     private async Task SearchAsync(string keyword)
@@ -149,7 +150,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
             }
 
             //构造待选择的歌单项
-            string[] myFavoriteButtons = null;
+            string[]? myFavoriteButtons = null;
             var myFavoriteList = await _myFavoriteService.GetAllAsync();
             if (myFavoriteList != null)
             {
@@ -163,7 +164,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
                 return;
             }
 
-            if (myFavoriteItem != "创建一个新歌单")
+            if (myFavoriteItem != "创建一个新歌单" && myFavoriteList != null)
             {
                 //使用已有歌单
                 selectedMyFavoriteId = myFavoriteList.First(x => x.Name == myFavoriteItem).Id;

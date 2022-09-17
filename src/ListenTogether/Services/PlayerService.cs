@@ -20,13 +20,13 @@ public class PlayerService
     /// </summary>
     public bool IsPlaying { get; set; }
 
-    public Music CurrentMusic { get; set; }
+    public Music CurrentMusic { get; set; } = null!;
 
     public MusicPosition CurrentPosition { get; set; } = new MusicPosition();
 
-    public event EventHandler NewMusicAdded;
-    public event EventHandler IsPlayingChanged;
-    public event EventHandler PositionChanged;
+    public event EventHandler? NewMusicAdded;
+    public event EventHandler? IsPlayingChanged;
+    public event EventHandler? PositionChanged;
 
     public PlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, WifiOptionsService wifiOptionsService)
     {
@@ -53,7 +53,7 @@ public class PlayerService
         _timerPlayProgress.Start();
     }
 
-    private void _timerPlayProgress_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+    private void _timerPlayProgress_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         if (!IsPlaying)
         {
@@ -164,7 +164,12 @@ public class PlayerService
         //部分平台的播放链接会失效，重新获取
         if (music.Platform == PlatformEnum.NetEase || music.Platform == PlatformEnum.KuGou || music.Platform == PlatformEnum.KuWo)
         {
-            music = await _musicNetworkService.UpdatePlayUrlAsync(music, GlobalConfig.MyUserSetting.Play.MusicFormatType);
+            var playUrl = await _musicNetworkService.GetMusicPlayUrlAsync(music, GlobalConfig.MyUserSetting.Play.MusicFormatType);
+            if (playUrl == null)
+            {
+                return "";
+            }
+            music.PlayUrl = playUrl;
         }
         var data = await _httpClient.GetReadByteArray(music.PlayUrl);
         File.WriteAllBytes(musicPath, data);

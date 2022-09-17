@@ -9,11 +9,11 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 {
     public int MyFavoriteId { get; set; }
 
-    private readonly PlayerService _playerService;
-    private readonly IServiceProvider _services;
-    private readonly IPlaylistService _playlistService;
-    private IMyFavoriteService _myFavoriteService;
-    private IMusicService _musicService;
+    private readonly PlayerService _playerService = null!;
+    private readonly IServiceProvider _services = null!;
+    private readonly IPlaylistService _playlistService = null!;
+    private IMyFavoriteService _myFavoriteService = null!;
+    private IMusicService _musicService = null!;
     public MyFavoriteDetailPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
     {
         MyFavoriteMusics = new ObservableCollection<MyFavoriteDetailViewModel>();
@@ -34,8 +34,8 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
             }
 
             StartLoading("");
-            _myFavoriteService = _services.GetService<IMyFavoriteServiceFactory>().Create();
-            _musicService = _services.GetService<IMusicServiceFactory>().Create();
+            _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();
+            _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
 
             await LoadMyFavoriteInfoAsync();
             await GetMyFavoriteDetailAsync();
@@ -53,17 +53,21 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private MyFavoriteViewModel _currentMyFavorite;
+    private MyFavoriteViewModel _currentMyFavorite = null!;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsMyFavoriteMusicsEmpty))]
-    private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics;
+    private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics = null!;
     public bool IsMyFavoriteMusicsEmpty => MyFavoriteMusics == null || MyFavoriteMusics.Count == 0;
 
     private async Task GetMyFavoriteDetailAsync()
     {
         MyFavoriteMusics.Clear();
         var myFavoriteDetailList = await _myFavoriteService.GetMyFavoriteDetailAsync(MyFavoriteId);
+        if (myFavoriteDetailList == null)
+        {
+            return;
+        }
         int seq = 0;
         foreach (var myFavoriteDetail in myFavoriteDetailList)
         {
@@ -83,6 +87,10 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     private async Task LoadMyFavoriteInfoAsync()
     {
         var myFavorite = await _myFavoriteService.GetOneAsync(MyFavoriteId);
+        if (myFavorite == null)
+        {
+            return;
+        }
         CurrentMyFavorite = new MyFavoriteViewModel()
         {
             Id = myFavorite.Id,

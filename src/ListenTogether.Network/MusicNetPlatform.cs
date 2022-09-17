@@ -40,9 +40,9 @@ public class MusicNetPlatform
         return await MusicProviderFactory.Create(music.Platform).GetMusicDetailAsync(music, musicFormatType);
     }
 
-    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
-        return await MusicProviderFactory.Create(music.Platform).UpdatePlayUrlAsync(music, musicFormatType);
+        return await MusicProviderFactory.Create(music.Platform).GetMusicPlayUrlAsync(music, musicFormatType);
     }
 
     public Task<string> GetMusicPlayPageUrlAsync(Music music)

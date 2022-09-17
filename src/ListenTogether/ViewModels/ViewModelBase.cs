@@ -29,7 +29,7 @@ public partial class ViewModelBase : ObservableValidator
     private bool _isLoading;
 
     [ObservableProperty]
-    private string _loadingText;
+    private string _loadingText = null!;
 
     internal void StartLoading(string loadingText)
     {

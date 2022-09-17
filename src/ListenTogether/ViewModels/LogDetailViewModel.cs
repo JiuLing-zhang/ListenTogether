@@ -5,8 +5,8 @@ namespace ListenTogether.ViewModels;
 public partial class LogDetailViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _time;
+    private string _time = null!;
 
     [ObservableProperty]
-    private string _message;
+    private string _message = null!;
 }

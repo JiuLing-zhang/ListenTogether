@@ -226,7 +226,7 @@ internal class KuWoMusicProvider : IMusicProvider
             ExtendData = ""
         };
     }
-    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         string musicId = music.PlatformInnerId;
         //换播放地址
@@ -249,21 +249,20 @@ internal class KuWoMusicProvider : IMusicProvider
             if (playUrl.IsEmpty())
             {
                 Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回空，ID:{musicId}"));
-                return music;
+                return null;
             }
             if (!JiuLing.CommonLibs.Text.RegexUtils.IsMatch(playUrl, "http\\S*\\.mp3"))
             {
                 Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回：{playUrl}，ID:{musicId}"));
-                return music;
+                return null;
             }
         }
         catch (Exception ex)
         {
             Logger.Error("更新酷我播放地址失败。", ex);
-            return music;
+            return null;
         }
-        music.PlayUrl = playUrl;
-        return music;
+        return playUrl;
     }
 
     public async Task<List<string>?> GetHotWordAsync()

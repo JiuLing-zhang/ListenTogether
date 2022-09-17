@@ -8,10 +8,11 @@ public partial class PlayingPageViewModel : ViewModelBase
 {
     //控制手动滚动歌词时，系统暂停歌词滚动
     private DateTime _lastScrollToTime = DateTime.Now;
-    private readonly IDispatcherTimer _timerLyricsUpdate;
-    private readonly PlayerService _playerService;
-    private readonly IMusicNetworkService _musicNetworkService;
-    public EventHandler<LyricViewModel> ScrollToLyric { get; set; }
+
+    private readonly PlayerService _playerService = null!;
+    private readonly IDispatcherTimer _timerLyricsUpdate = null!;
+    private readonly IMusicNetworkService _musicNetworkService = null!;
+    public EventHandler<LyricViewModel> ScrollToLyric { get; set; } = null!;
 
     public PlayingPageViewModel(PlayerService playerService, IMusicNetworkService musicNetworkService)
     {
@@ -48,13 +49,13 @@ public partial class PlayingPageViewModel : ViewModelBase
     /// 当前播放的歌曲
     /// </summary>
     [ObservableProperty]
-    private Music _currentMusic;
+    private Music _currentMusic = null!;
 
     /// <summary>
     /// 每行的歌词
     /// </summary>
     [ObservableProperty]
-    private ObservableCollection<LyricViewModel> _lyrics;
+    private ObservableCollection<LyricViewModel> _lyrics = null!;
 
 
     /// <summary>

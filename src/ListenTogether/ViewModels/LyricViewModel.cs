@@ -16,7 +16,7 @@ public partial class LyricViewModel : ObservableObject
     /// 歌词
     /// </summary>
     [ObservableProperty]
-    private string _info;
+    private string _info = null!;
 
     /// <summary>
     /// 是否高亮显示

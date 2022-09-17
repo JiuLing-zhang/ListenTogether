@@ -162,7 +162,7 @@ public class MiGuMusicProvider : IMusicProvider
         };
     }
 
-    public Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         throw new NotImplementedException();
     }

@@ -160,13 +160,13 @@ public class KuGouMusicProvider : IMusicProvider
         };
     }
 
-    public async Task<Music?> UpdatePlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         var extendDataString = music.ExtendData;
         if (extendDataString.IsEmpty())
         {
             Logger.Info("更新酷狗播放地址失败，扩展数据不存在");
-            return music;
+            return null;
         }
         KuGouSearchExtendData? extendData;
         try
@@ -175,13 +175,13 @@ public class KuGouMusicProvider : IMusicProvider
             if (extendData == null)
             {
                 Logger.Info("更新酷狗播放地址失败，扩展数据格式错误");
-                return music;
+                return null;
             }
         }
         catch (Exception ex)
         {
             Logger.Error("更新酷狗播放地址失败。", ex);
-            return music;
+            return null;
         }
 
         string args = KuGouUtils.GetMusicUrlData(extendData.Hash, extendData.AlbumId);
@@ -200,21 +200,20 @@ public class KuGouMusicProvider : IMusicProvider
         if (json.IsEmpty())
         {
             Logger.Info("更新酷狗播放地址失败，服务器返回空。");
-            return music;
+            return null;
         }
         var httpResult = json.ToObject<HttpResultBase<MusicDetailHttpResult>>();
         if (httpResult == null)
         {
             Logger.Info("更新酷狗播放地址失败，服务器数据格式不正确。");
-            return music;
+            return null;
         }
         if (httpResult.status != 1 || httpResult.error_code != 0)
         {
             Logger.Info("更新酷狗播放地址失败，服务器返回错误。");
-            return music;
+            return null;
         }
-        music.PlayUrl = httpResult.data.play_url;
-        return music;
+        return httpResult.data.play_url;
     }
 
     public Task<List<string>?> GetSearchSuggestAsync(string keyword)

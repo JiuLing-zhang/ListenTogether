@@ -11,14 +11,14 @@ public class MusicSwitchShuffleServer : IMusicSwitchServer
     public async Task<Music> GetPreviousAsync(Music currentMusic)
     {
         var playlist = await _playlistService.GetAllAsync();
-        if (playlist.Count == 0)
+        if (playlist == null || playlist.Count == 0)
         {
             return currentMusic;
         }
-        var musicService = _services.GetService<IMusicServiceFactory>().Create();
+        var musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
         if (playlist.Count == 1)
         {
-            return await musicService.GetOneAsync(playlist[0].MusicId);
+            return await musicService.GetOneAsync(playlist[0].MusicId) ?? throw new Exception("歌曲信息读取失败");
         }
 
         string randomMusicId;
@@ -26,19 +26,19 @@ public class MusicSwitchShuffleServer : IMusicSwitchServer
         {
             randomMusicId = JiuLing.CommonLibs.Random.RandomUtils.GetOneFromList<Playlist>(playlist).MusicId;
         } while (randomMusicId == currentMusic.Id);
-        return await musicService.GetOneAsync(randomMusicId);
+        return await musicService.GetOneAsync(randomMusicId) ?? throw new Exception("歌曲信息读取失败");
     }
     public async Task<Music> GetNextAsync(Music currentMusic)
     {
         var playlist = await _playlistService.GetAllAsync();
-        if (playlist.Count == 0)
+        if (playlist == null || playlist.Count == 0)
         {
             return currentMusic;
         }
-        var musicService = _services.GetService<IMusicServiceFactory>().Create();
+        var musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
         if (playlist.Count == 1)
         {
-            return await musicService.GetOneAsync(playlist[0].MusicId);
+            return await musicService.GetOneAsync(playlist[0].MusicId) ?? throw new Exception("歌曲信息读取失败");
         }
 
         string randomMusicId;
@@ -46,6 +46,6 @@ public class MusicSwitchShuffleServer : IMusicSwitchServer
         {
             randomMusicId = JiuLing.CommonLibs.Random.RandomUtils.GetOneFromList<Playlist>(playlist).MusicId;
         } while (randomMusicId == currentMusic.Id);
-        return await musicService.GetOneAsync(randomMusicId);
+        return await musicService.GetOneAsync(randomMusicId) ?? throw new Exception("歌曲信息读取失败");
     }
 }

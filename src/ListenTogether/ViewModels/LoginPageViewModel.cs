@@ -18,10 +18,10 @@ public partial class LoginPageViewModel : ViewModelBase
     }
 
     [ObservableProperty]
-    private string _username;
+    private string _username = null!;
 
     [ObservableProperty]
-    private string _password;
+    private string _password = null!;
 
     [RelayCommand]
     private async void LoginAsync()

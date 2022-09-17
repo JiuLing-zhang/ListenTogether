@@ -8,19 +8,19 @@ public partial class PlaylistViewModel : ObservableObject
     private int _id;
 
     [ObservableProperty]
-    private string _platformName;
+    private string _platformName = null!;
 
     [ObservableProperty]
-    private string _musicId;
+    private string _musicId = null!;
 
     [ObservableProperty]
-    private string _musicName;
+    private string _musicName = null!;
 
     [ObservableProperty]
-    private string _musicArtist;
+    private string _musicArtist = null!;
 
     [ObservableProperty]
-    private string _musicAlbum;
+    private string _musicAlbum = null!;
 
     public DateTime EditTime { get; set; }
 }

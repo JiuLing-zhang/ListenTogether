@@ -33,7 +33,7 @@ public class KuGouUtils
         MD5 md5 = MD5.Create();
         byte[] buffer = Encoding.Default.GetBytes(input);
         byte[] md5Buffer = md5.ComputeHash(buffer);
-        string str = null;
+        string str = "";
         foreach (byte b in md5Buffer)
         {
             str += b.ToString("x2");

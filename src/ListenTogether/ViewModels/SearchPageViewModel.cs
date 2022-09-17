@@ -7,7 +7,7 @@ namespace ListenTogether.ViewModels;
 [QueryProperty(nameof(Keyword), nameof(Keyword))]
 public partial class SearchPageViewModel : ObservableObject
 {
-    private readonly IMusicNetworkService _musicNetworkService;
+    private readonly IMusicNetworkService _musicNetworkService = null!;
 
     public SearchPageViewModel(IMusicNetworkService musicNetworkService)
     {
@@ -19,14 +19,14 @@ public partial class SearchPageViewModel : ObservableObject
     /// 搜索关键字
     /// </summary>
     [ObservableProperty]
-    private string _keyword;
+    private string _keyword = null!;
 
     /// <summary>
     /// 搜索建议
     /// </summary>
     [ObservableProperty]
-    private ObservableCollection<string> _searchSuggest;
-      
+    private ObservableCollection<string> _searchSuggest = null!;
+
     private List<string> _hotWords = new List<string>();
     public async Task InitializeAsync()
     {

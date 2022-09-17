@@ -62,9 +62,9 @@ public partial class LogPageViewModel : ViewModelBase
     private bool _isLoginSuccess;
 
     [ObservableProperty]
-    private ObservableCollection<LogDetailViewModel> _logs;
+    private ObservableCollection<LogDetailViewModel> _logs = null!;
 
-    private List<Log> _updateLogs;
+    private List<Log> _updateLogs = null!;
 
     [RelayCommand]
     private async void UpdateLogsAsync()

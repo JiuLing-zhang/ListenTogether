@@ -47,5 +47,5 @@ public class ObservableCollectionEx<T> : ObservableCollection<T> where T : INoti
     private void ItemOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         => ItemChanged?.Invoke(sender, e);
 
-    public event PropertyChangedEventHandler ItemChanged;
+    public event PropertyChangedEventHandler ItemChanged = null!;
 }

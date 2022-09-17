@@ -42,7 +42,7 @@ public partial class CacheCleanViewModel : ViewModelBase
     public string SelectedSizeString => SizeToString(SelectedSize);
 
     [ObservableProperty]
-    private ObservableCollectionEx<MusicFileViewModel> _caches;
+    private ObservableCollectionEx<MusicFileViewModel> _caches = null!;
 
     private void Caches_ItemChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {

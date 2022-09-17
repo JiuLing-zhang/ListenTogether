@@ -7,8 +7,8 @@ namespace ListenTogether.ViewModels;
 
 public partial class SettingPageViewModel : ViewModelBase
 {
-    private readonly IEnvironmentConfigService _configService;
-    private readonly IUserService _userService;
+    private readonly IEnvironmentConfigService _configService = null!;
+    private readonly IUserService _userService = null!;
     public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService)
     {
         _configService = configService;
@@ -37,17 +37,17 @@ public partial class SettingPageViewModel : ViewModelBase
     /// 用户信息
     /// </summary>
     [ObservableProperty]
-    private UserInfoViewModel _userInfo;
+    private UserInfoViewModel? _userInfo;
 
 
     [ObservableProperty]
     private bool _isOnlineApp;
 
     [ObservableProperty]
-    private string _loginUsername;
+    private string _loginUsername = null!;
 
     [ObservableProperty]
-    private string _loginPassword;
+    private string _loginPassword = null!;
 
 
     /// <summary>
@@ -60,10 +60,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isAutoCheckUpdate = GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate;
-    partial void OnIsAutoCheckUpdateChanged(bool value)
+    async partial void OnIsAutoCheckUpdateChanged(bool value)
     {
         GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate = value;
-        WriteGeneralConfigAsync();
+        await WriteGeneralConfigAsync();
     }
 
     /// <summary>
@@ -71,11 +71,11 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isDarkMode = App.Current.UserAppTheme == AppTheme.Dark;
-    partial void OnIsDarkModeChanged(bool value)
+    async partial void OnIsDarkModeChanged(bool value)
     {
         App.Current.UserAppTheme = value ? AppTheme.Dark : AppTheme.Light;
         GlobalConfig.MyUserSetting.General.IsDarkMode = value;
-        WriteGeneralConfigAsync();
+        await WriteGeneralConfigAsync();
     }
 
     /// <summary>
@@ -147,10 +147,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isHideShortMusic = GlobalConfig.MyUserSetting.Search.IsHideShortMusic;
-    partial void OnIsHideShortMusicChanged(bool value)
+    async partial void OnIsHideShortMusicChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Search.IsHideShortMusic = value;
-        WriteSearchConfigAsync();
+        await WriteSearchConfigAsync();
     }
 
     /// <summary>
@@ -158,10 +158,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isMatchSearchKey = GlobalConfig.MyUserSetting.Search.IsMatchSearchKey;
-    partial void OnIsMatchSearchKeyChanged(bool value)
+    async partial void OnIsMatchSearchKeyChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Search.IsMatchSearchKey = value;
-        WriteSearchConfigAsync();
+        await WriteSearchConfigAsync();
     }
 
     /// <summary>
@@ -169,10 +169,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isHideVipMusic = GlobalConfig.MyUserSetting.Search.IsHideVipMusic;
-    partial void OnIsHideVipMusicChanged(bool value)
+    async partial void OnIsHideVipMusicChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Search.IsHideVipMusic = value;
-        WriteSearchConfigAsync();
+        await WriteSearchConfigAsync();
     }
 
     /// <summary>
@@ -180,10 +180,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isWifiPlayOnly = GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly;
-    partial void OnIsWifiPlayOnlyChanged(bool value)
+    async partial void OnIsWifiPlayOnlyChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Play.IsWifiPlayOnly = value;
-        WritePlayConfigAsync();
+        await WritePlayConfigAsync();
     }
 
     /// <summary>
@@ -191,10 +191,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isPlayingPageKeepScreenOn = GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn;
-    partial void OnIsPlayingPageKeepScreenOnChanged(bool value)
+    async partial void OnIsPlayingPageKeepScreenOnChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn = value;
-        WritePlayConfigAsync();
+        await WritePlayConfigAsync();
     }
 
     /// <summary>
@@ -202,10 +202,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isPlayWhenAddToFavorite = GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite;
-    partial void OnIsPlayWhenAddToFavoriteChanged(bool value)
+    async partial void OnIsPlayWhenAddToFavoriteChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite = value;
-        WritePlayConfigAsync();
+        await WritePlayConfigAsync();
     }
 
     /// <summary>
@@ -216,7 +216,7 @@ public partial class SettingPageViewModel : ViewModelBase
     partial void OnIsAutoNextWhenFailedChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed = value;
-        WritePlayConfigAsync();
+        WritePlayConfigAsync().Wait();
     }
 
     /// <summary>
@@ -224,10 +224,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isCleanPlaylistWhenPlayMyFavorite = GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite;
-    partial void OnIsCleanPlaylistWhenPlayMyFavoriteChanged(bool value)
+    async partial void OnIsCleanPlaylistWhenPlayMyFavoriteChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite = value;
-        WritePlayConfigAsync();
+        await WritePlayConfigAsync();
     }
 
     /// <summary>
@@ -235,10 +235,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private string _musicFormatType = GlobalConfig.MyUserSetting.Play.MusicFormatType.ToString();
-    partial void OnMusicFormatTypeChanged(string value)
+    async partial void OnMusicFormatTypeChanged(string value)
     {
         GlobalConfig.MyUserSetting.Play.MusicFormatType = (MusicFormatTypeEnum)Enum.Parse(typeof(MusicFormatTypeEnum), value);
-        WritePlayConfigAsync();
+        await WritePlayConfigAsync();
     }
 
     /// <summary>
@@ -274,7 +274,7 @@ public partial class SettingPageViewModel : ViewModelBase
         await _configService.WritePlaySettingAsync(GlobalConfig.MyUserSetting.Play);
     }
 
-    private UserInfoViewModel GetUserInfo()
+    private UserInfoViewModel? GetUserInfo()
     {
         if (UserInfoStorage.GetUsername().IsEmpty())
         {

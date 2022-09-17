@@ -4,10 +4,10 @@ namespace ListenTogether.ViewModels;
 internal partial class ShellViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _title;
+    private string _title = null!;
 
     [ObservableProperty]
-    private string _icon;
+    private string _icon = null!;
 
     public AppSection SearchResult { get; set; }
     public AppSection Playlist { get; set; }
