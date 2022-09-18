@@ -229,7 +229,11 @@ public partial class Player : ContentView
             imagePath = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off_dark.png" : "sound_on_dark.png";
         }
 
-        ImgSoundOff.Source = imagePath;
+        //TODO 切换新歌曲时会有个跨线程调用，临时处理
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            ImgSoundOff.Source = imagePath;
+        });
         await _playerService.SetMuted(GlobalConfig.MyUserSetting.Player.IsSoundOff);
     }
     private async Task Updatevolume()
