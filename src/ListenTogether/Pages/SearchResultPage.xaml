@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.SearchResultPage"
              Title="搜索">
 
@@ -50,7 +49,7 @@
                        VerticalTextAlignment="Center"
                        Style="{StaticResource Title}"/>
 
-             
+
             </StackLayout>
 
             <Grid VerticalOptions="Start">

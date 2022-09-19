@@ -8,9 +8,9 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        vm.InitializeAsync();
+        await vm.InitializeAsync();
     }
 }

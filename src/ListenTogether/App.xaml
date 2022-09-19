@@ -2,7 +2,7 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ListenTogether"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -10,12 +10,12 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <toolkit:IsEqualConverter x:Key="IsEqualConverter" />
-            <toolkit:IsNotEqualConverter x:Key="IsNotEqualConverter" />
-            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
-            <toolkit:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
-            <toolkit:IsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
-            <toolkit:EnumToIntConverter x:Key="EnumToIntConverter" />
+            <mct:IsEqualConverter x:Key="IsEqualConverter" />
+            <mct:IsNotEqualConverter x:Key="IsNotEqualConverter" />
+            <mct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <mct:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+            <mct:IsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
+            <mct:EnumToIntConverter x:Key="EnumToIntConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

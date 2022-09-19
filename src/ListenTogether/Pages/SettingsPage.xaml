@@ -214,10 +214,10 @@
                         <!--其它模块-->
                         <StackLayout Margin="0,20,0,0">
                             <Button Text="日志管理"
-                                Command="{Binding GoToLogCommand}"/>
+                                Command="{Binding GoToLogAsyncCommand}"/>
                             <Button Text="歌曲缓存"
                                 Margin="0,5,0,0"
-                                Command="{Binding GoToCacheCleanCommand}"/>
+                                Command="{Binding GoToCacheCleanAsyncCommand}"/>
                             <Button Text="退出账号"
                                 Margin="0,5,0,0"
                                 IsVisible="{Binding UserInfo, Converter={StaticResource IsNotEqualConverter}}"
@@ -239,7 +239,7 @@
                                    Style="{StaticResource Explain}"
                                    HorizontalOptions="CenterAndExpand">
                                     <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding CheckUpdateCommand}"/>
+                                        <TapGestureRecognizer Command="{Binding CheckUpdateAsyncCommand}"/>
                                     </Label.GestureRecognizers>
                                 </Label>
                                 <Label Margin="0,15,0,0"
@@ -255,8 +255,8 @@
                                    Text="GitHub"
                                    TextColor="{AppThemeBinding Dark={StaticResource DarkLink},Light={StaticResource LightLink}}">
                                     <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding OpenUrlCommand}"
-                                                          CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
+                                        <TapGestureRecognizer Command="{Binding OpenUrlAsyncCommand}"
+                                                              CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
                                     </Label.GestureRecognizers>
                                 </Label>
                             </StackLayout>

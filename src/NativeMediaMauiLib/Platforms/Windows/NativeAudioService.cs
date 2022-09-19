@@ -22,30 +22,28 @@ public class NativeAudioService : INativeAudioService
     public event EventHandler SkipToNext;
     public event EventHandler SkipToPrevious;
 
-    public Task SetAppIcon(byte[] appIcon)
+    public NativeAudioService()
     {
-        throw new NotImplementedException();
-    }
-
-    public async Task InitializeAsync(string audioURI, AudioMetadata audioMetadata)
-    {
-        _uri = audioURI;
-
         if (mediaPlayer == null)
         {
             mediaPlayer = new MediaPlayer
             {
-                Source = MediaSource.CreateFromUri(new Uri(_uri)),
                 AudioCategory = MediaPlayerAudioCategory.Media
             };
             mediaPlayer.MediaEnded += (_, _) => PlayFinished?.Invoke(this, EventArgs.Empty);
             mediaPlayer.MediaFailed += (_, _) => PlayFailed?.Invoke(this, EventArgs.Empty);
         }
-        if (mediaPlayer != null)
-        {
-            await PauseAsync();
-            mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(_uri));
-        }
+    }
+
+    public Task SetAppIcon(byte[] appIcon)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task InitializeAsync(string audioURI, AudioMetadata audioMetadata)
+    {
+        mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(audioURI));
+        return Task.CompletedTask;
     }
 
     public Task PauseAsync()

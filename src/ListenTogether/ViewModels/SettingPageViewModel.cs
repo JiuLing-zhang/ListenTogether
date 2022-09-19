@@ -14,7 +14,7 @@ public partial class SettingPageViewModel : ViewModelBase
         _configService = configService;
         _userService = userService;
     }
-    public async void InitializeAsync()
+    public async Task InitializeAsync()
     {
         try
         {
@@ -338,13 +338,13 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void GoToCacheClean()
+    private async void GoToCacheCleanAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(CacheCleanPage)}", true);
     }
 
     [RelayCommand]
-    private async void GoToLog()
+    private async void GoToLogAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(LogPage)}", true);
     }
@@ -386,24 +386,21 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void OpenUrl(string url)
+    private async void OpenUrlAsync(string url)
     {
-        Task.Run(async () =>
+        try
         {
-            try
-            {
-                await Browser.Default.OpenAsync(url.ToUri(), BrowserLaunchMode.SystemPreferred);
-            }
-            catch (Exception ex)
-            {
-                await ToastService.Show("启动浏览器失败，请重试");
-                Logger.Error("打开链接失败。", ex);
-            }
-        });
+            await Browser.Default.OpenAsync(url.ToUri(), BrowserLaunchMode.SystemPreferred);
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("启动浏览器失败，请重试");
+            Logger.Error("打开链接失败。", ex);
+        }
     }
 
     [RelayCommand]
-    private async void CheckUpdate()
+    private async void CheckUpdateAsync()
     {
         try
         {

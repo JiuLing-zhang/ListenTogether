@@ -2,7 +2,6 @@ using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Controls;
 
-//TODO 发现一个bug:播放组件静音后，切换页面，静音取消
 public partial class Player : ContentView
 {
     public static readonly BindableProperty IsPlayingPageProperty =
@@ -72,7 +71,7 @@ public partial class Player : ContentView
         if (Config.Desktop)
         {
             UpdateSoundOnOff().Wait();
-            Updatevolume().Wait();
+            UpdateVolume().Wait();
         }
         if (!IsPlayingPage && !Config.IsDarkTheme)
         {
@@ -80,7 +79,7 @@ public partial class Player : ContentView
             ImgNext.Source = "next.png";
             ImgOther.Source = "puzzled.png";
 
-            //目前 MAUI 无法正确读取资源文件，所以临时使用16进制颜色解决
+            //TODO 目前 MAUI 无法正确读取资源文件，所以临时使用16进制颜色解决
             //var lightText = (Color)Application.Current.Resources["LightText"];
             //var lightTextSecond = (Color)Application.Current.Resources["LightTextSecond"];            
             LblMusicName.TextColor = Color.FromArgb("#262626");
@@ -96,6 +95,7 @@ public partial class Player : ContentView
             ImgNext.Source = "next_dark.png";
             ImgOther.Source = "puzzled_dark.png";
 
+            //TODO 目前 MAUI 无法正确读取资源文件，所以临时使用16进制颜色解决
             //var darkText = (Color)Application.Current.Resources["DarkText"]; 
             //var darkTextSecond = (Color)Application.Current.Resources["DarkTextSecond"];
             LblMusicName.TextColor = Color.FromArgb("#FCF2F7");
@@ -129,15 +129,9 @@ public partial class Player : ContentView
         });
     }
 
-    private async void playerService_NewMusicAdded(object? sender, EventArgs e)
+    private void playerService_NewMusicAdded(object? sender, EventArgs e)
     {
         NewMusicAddedDo(_playerService.CurrentMusic);
-        if (Config.Desktop)
-        {
-            //TODO 首次播放音乐时，无法设置声音，所以先在这里临时实现
-            await UpdateSoundOnOff();
-            await Updatevolume();
-        }
     }
 
     private void NewMusicAddedDo(Music music)
@@ -187,9 +181,9 @@ public partial class Player : ContentView
 
     private async void ImgSoundOff_Tapped(object sender, EventArgs e)
     {
-        await SetSoundOnOff();
-        await UpdateSoundOnOff();
+        GlobalConfig.MyUserSetting.Player.IsSoundOff = !GlobalConfig.MyUserSetting.Player.IsSoundOff;
         await WritePlayerSettingAsync();
+        await UpdateSoundOnOff();
     }
 
     private void UpdateCurrentMusic()
@@ -212,11 +206,6 @@ public partial class Player : ContentView
         IsPlayingChangedDo(_playerService.IsPlaying);
     }
 
-    private Task SetSoundOnOff()
-    {
-        GlobalConfig.MyUserSetting.Player.IsSoundOff = !GlobalConfig.MyUserSetting.Player.IsSoundOff;
-        return Task.CompletedTask;
-    }
     private async Task UpdateSoundOnOff()
     {
         string imagePath;
@@ -229,14 +218,10 @@ public partial class Player : ContentView
             imagePath = GlobalConfig.MyUserSetting.Player.IsSoundOff ? "sound_off_dark.png" : "sound_on_dark.png";
         }
 
-        //TODO 切换新歌曲时会有个跨线程调用，临时处理
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            ImgSoundOff.Source = imagePath;
-        });
+        ImgSoundOff.Source = imagePath;
         await _playerService.SetMuted(GlobalConfig.MyUserSetting.Player.IsSoundOff);
     }
-    private async Task Updatevolume()
+    private async Task UpdateVolume()
     {
         SliderVolume.Value = GlobalConfig.MyUserSetting.Player.Volume;
         await _playerService.SetVolume((int)GlobalConfig.MyUserSetting.Player.Volume);
@@ -337,17 +322,9 @@ public partial class Player : ContentView
 
     private async void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
-
         int volume = (int)e.NewValue;
         await _playerService.SetVolume(volume);
         GlobalConfig.MyUserSetting.Player.Volume = volume;
-
-        if (GlobalConfig.MyUserSetting.Player.IsSoundOff)
-        {
-            await SetSoundOnOff();
-            await UpdateSoundOnOff();
-        }
-
         await WritePlayerSettingAsync();
     }
 

@@ -11,10 +11,11 @@ public partial class LoginPageViewModel : ViewModelBase
     {
         _userService = userService;
     }
-    public void InitializeAsync()
+    public Task InitializeAsync()
     {
         Username = "";
         Password = "";
+        return Task.CompletedTask;
     }
 
     [ObservableProperty]
