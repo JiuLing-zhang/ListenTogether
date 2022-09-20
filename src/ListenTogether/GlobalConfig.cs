@@ -16,11 +16,19 @@ namespace ListenTogether
         /// App Data文件夹路径
         /// </summary>
         public static readonly string AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppName);
+
+        /// <summary>
+        /// 缓存路径
+        /// </summary>
+        public static readonly string CacheDirectory = Path.Combine(AppDataDirectory, "cache");
         /// <summary>
         /// 歌曲缓存路径
         /// </summary>
-        public static readonly string MusicCacheDirectory = Path.Combine(AppDataDirectory, "musics");
-
+        public static readonly string MusicCacheDirectory = Path.Combine(CacheDirectory, "musics");
+        /// <summary>                                                                     
+        /// 歌词缓存路径                                                                    
+        /// </summary>                                                                    
+        public static readonly string LyricCacheDirectory = Path.Combine(CacheDirectory, "lyrics");
         public static byte[] AppIcon { get; set; }
 
         public static Version CurrentVersion { get; set; }

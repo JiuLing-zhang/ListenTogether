@@ -68,7 +68,7 @@ public partial class CacheCleanViewModel : ViewModelBase
     {
         Caches.Clear();
         AllSize = 0;
-        await EachDirectoryAsync(GlobalConfig.MusicCacheDirectory, CalcFilesInfo);
+        await EachDirectoryAsync(GlobalConfig.CacheDirectory, CalcFilesInfo);
     }
 
     private async Task EachDirectoryAsync(string folderPath, Action<List<string>> callbackFilePaths)

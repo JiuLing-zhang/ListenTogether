@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Model;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -88,7 +89,7 @@ public partial class PlayingPageViewModel : ViewModelBase
             return;
         }
 
-        string lyric = await _musicNetworkService.GetLyricAsync(CurrentMusic);
+        string lyric = await GetLyric();
         if (lyric.IsEmpty())
         {
             return;
@@ -113,6 +114,19 @@ public partial class PlayingPageViewModel : ViewModelBase
             var info = result["lyric"];
             Lyrics.Add(new LyricViewModel() { PositionMillisecond = totalMillisecond, Info = info });
         }
+    }
+
+    private async Task<string> GetLyric()
+    {
+        string lyricPath = Path.Combine(GlobalConfig.LyricCacheDirectory, CurrentMusic.CacheLyricFileName);
+        if (File.Exists(lyricPath))
+        {
+            return await File.ReadAllTextAsync(lyricPath);
+        }
+
+        string lyric = await _musicNetworkService.GetLyricAsync(CurrentMusic);
+        await File.WriteAllTextAsync(lyricPath, lyric);
+        return lyric;
     }
 
     [RelayCommand]

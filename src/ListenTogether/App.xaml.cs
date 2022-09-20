@@ -20,6 +20,10 @@ public partial class App : Application
         {
             Directory.CreateDirectory(GlobalConfig.MusicCacheDirectory);
         }
+        if (!Directory.Exists(GlobalConfig.LyricCacheDirectory))
+        {
+            Directory.CreateDirectory(GlobalConfig.LyricCacheDirectory);
+        }        
 
         JsonExtension.DefaultOptions = new System.Text.Json.JsonSerializerOptions()
         {
