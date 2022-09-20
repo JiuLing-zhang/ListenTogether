@@ -123,46 +123,13 @@ internal class KuWoMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
+    public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
         string musicId = sourceMusic.PlatformInnerId;
-        //换播放地址
-        string url = $"{UrlBase.KuWo.GetMusicUrl}?format=mp3&rid={musicId}&response=url&type=convert_url";
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-
-        string playUrl;
-        try
-        {
-            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            playUrl = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (playUrl.IsEmpty())
-            {
-                Logger.Error("酷我播放地址获取失败。", new Exception($"服务器返回空，ID:{musicId}"));
-                return null;
-            }
-            if (!JiuLing.CommonLibs.Text.RegexUtils.IsMatch(playUrl, "http\\S*\\.mp3"))
-            {
-                Logger.Error("酷我播放地址获取失败。", new Exception($"服务器返回：{playUrl}，ID:{musicId}"));
-                return null;
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("酷我歌曲播放地址获取失败。", ex);
-            return null;
-        }
 
         //获取歌曲详情
-        url = $"{UrlBase.KuWo.GetMusicDetail}?musicId={musicId}";
-        request = new HttpRequestMessage()
+        var url = $"{UrlBase.KuWo.GetMusicDetail}?musicId={musicId}";
+        var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
             Method = HttpMethod.Get
@@ -221,12 +188,11 @@ internal class KuWoMusicProvider : IMusicProvider
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = httpResult.data.songinfo.pic,
-            PlayUrl = playUrl,
             Lyric = sbLyrics.ToString(),
             ExtendData = ""
         };
     }
-    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         string musicId = music.PlatformInnerId;
         //换播放地址

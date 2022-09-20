@@ -8,7 +8,6 @@ public class MusicLocalRepository : IMusicRepository
 {
     public async Task<Music?> GetOneAsync(string id)
     {
-
         var music = await DatabaseProvide.DatabaseAsync.Table<MusicEntity>().FirstOrDefaultAsync(x => x.Id == id);
         if (music == null)
         {
@@ -27,7 +26,6 @@ public class MusicLocalRepository : IMusicRepository
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
-            PlayUrl = music.PlayUrl,
             ExtendData = music.ExtendData,
         };
     }
@@ -49,7 +47,6 @@ public class MusicLocalRepository : IMusicRepository
                 Artist = music.Artist,
                 ImageUrl = music.ImageUrl,
                 Lyric = music.Lyric,
-                PlayUrl = music.PlayUrl,
                 ExtendData = music.ExtendData
             };
             count = await DatabaseProvide.DatabaseAsync.InsertAsync(myMusic);
@@ -65,7 +62,6 @@ public class MusicLocalRepository : IMusicRepository
             myMusic.Artist = music.Artist;
             myMusic.ImageUrl = music.ImageUrl;
             myMusic.Lyric = music.Lyric;
-            myMusic.PlayUrl = music.PlayUrl;
             myMusic.ExtendData = music.ExtendData;
             count = await DatabaseProvide.DatabaseAsync.UpdateAsync(myMusic);
         }

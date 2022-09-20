@@ -164,52 +164,14 @@ public class NetEaseMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
+    public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
-        string url = $"{UrlBase.NetEase.GetMusic}";
-        var postData = NetEaseUtils.GetPostDataForMusicUrl(sourceMusic.PlatformInnerId);
+        //获取歌词
+        var url = $"{UrlBase.NetEase.Lyric}";
+        var postData = NetEaseUtils.GetPostDataForLyric(sourceMusic.PlatformInnerId);
         var form = new FormUrlEncodedContent(postData);
 
         var request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        request.Headers.Add("Accept", "*/*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        var httpResult = json.ToObject<ResultBase<MusicUrlHttpResult>>();
-        if (httpResult == null)
-        {
-            return null;
-        }
-        if (httpResult.code != 200)
-        {
-            return null;
-        }
-
-        if (httpResult.data.Count == 0)
-        {
-            return null;
-        }
-
-        string playUrl = httpResult.data[0].url;
-        if (playUrl.IsEmpty())
-        {
-            return null;
-        }
-
-        //获取歌词
-        url = $"{UrlBase.NetEase.Lyric}";
-        postData = NetEaseUtils.GetPostDataForLyric(sourceMusic.PlatformInnerId);
-        form = new FormUrlEncodedContent(postData);
-
-        request = new HttpRequestMessage()
         {
             Method = HttpMethod.Post,
             RequestUri = new Uri(url),
@@ -219,8 +181,8 @@ public class NetEaseMusicProvider : IMusicProvider
         request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
         request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
         request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var lyricResult = json.ToObject<MusicLyricHttpResult>();
         if (lyricResult == null)
@@ -248,13 +210,12 @@ public class NetEaseMusicProvider : IMusicProvider
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = sourceMusic.ImageUrl,
-            PlayUrl = playUrl,
             Lyric = lyricResult.lrc.lyric,
             ExtendData = ""
         };
     }
 
-    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
         var postData = NetEaseUtils.GetPostDataForMusicUrl(music.PlatformInnerId);

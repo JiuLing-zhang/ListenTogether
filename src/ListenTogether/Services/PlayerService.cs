@@ -158,20 +158,15 @@ public class PlayerService
             return "";
         }
 
+        //重新获取播放链接
         MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", true);
-
-        //缓存文件不存在时重新下载
-        //部分平台的播放链接会失效，重新获取
-        if (music.Platform == PlatformEnum.NetEase || music.Platform == PlatformEnum.KuGou || music.Platform == PlatformEnum.KuWo)
+        var playUrl = await _musicNetworkService.GetPlayUrlAsync(music, GlobalConfig.MyUserSetting.Play.MusicFormatType);
+        if (playUrl == null)
         {
-            var playUrl = await _musicNetworkService.GetMusicPlayUrlAsync(music, GlobalConfig.MyUserSetting.Play.MusicFormatType);
-            if (playUrl == null)
-            {
-                return "";
-            }
-            music.PlayUrl = playUrl;
+            return "";
         }
-        var data = await _httpClient.GetReadByteArray(music.PlayUrl);
+
+        var data = await _httpClient.GetReadByteArray(playUrl);
         File.WriteAllBytes(musicPath, data);
 
         MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);

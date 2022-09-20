@@ -23,14 +23,14 @@ public class MusicNetworkService : IMusicNetworkService
         return await _musicNetPlatform.SearchAsync(platform, keyword);
     }
 
-    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult musicSearchResult, MusicFormatTypeEnum musicFormatType)
+    public async Task<Music?> GetDetailAsync(MusicSearchResult musicSearchResult, MusicFormatTypeEnum musicFormatType)
     {
-        return await _musicNetPlatform.GetMusicDetailAsync(musicSearchResult, musicFormatType);
+        return await _musicNetPlatform.GetDetailAsync(musicSearchResult, musicFormatType);
     }
 
-    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
-        return await _musicNetPlatform.GetMusicPlayUrlAsync(music, musicFormatType);
+        return await _musicNetPlatform.GetPlayUrlAsync(music, musicFormatType);
     }
 
     public Task<string> GetMusicPlayPageUrlAsync(Music music)

@@ -116,7 +116,6 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
             Lyric = music.Lyric,
-            PlayUrl = music.PlayUrl
         };
 
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id);

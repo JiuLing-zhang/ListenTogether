@@ -38,7 +38,6 @@ namespace ListenTogether.Api.Services
                 Artist = music.Artist,
                 ImageUrl = music.ImageUrl,
                 Lyric = music.Lyric,
-                PlayUrl = music.PlayUrl,
                 ExtendData = music.ExtendData,
             });
         }
@@ -59,7 +58,6 @@ namespace ListenTogether.Api.Services
                     Artist = music.Artist,
                     ImageUrl = music.ImageUrl,
                     Lyric = music.Lyric,
-                    PlayUrl = music.PlayUrl,
                     ExtendData = music.ExtendData ?? ""
                 };
                 _context.Musics.Add(myMusic);
@@ -75,7 +73,6 @@ namespace ListenTogether.Api.Services
                 myMusic.Artist = music.Artist;
                 myMusic.ImageUrl = music.ImageUrl;
                 myMusic.Lyric = music.Lyric;
-                myMusic.PlayUrl = music.PlayUrl;
                 myMusic.ExtendData = music.ExtendData ?? "";
                 _context.Musics.Update(myMusic);
             }

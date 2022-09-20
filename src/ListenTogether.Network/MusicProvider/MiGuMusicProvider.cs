@@ -81,22 +81,13 @@ public class MiGuMusicProvider : IMusicProvider
                 Album = htmlMusic.album,
                 ImageUrl = htmlMusic.imgUrl,
                 Fee = FeeEnum.Free,
-                PlatformData = new SearchResultExtended()
-                {
-                    // MusicPageUrl = htmlMusic.MusicPageUrl
-                }
             });
         }
         return (true, "", musics);
     }
 
-    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
+    public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
-        if (!(sourceMusic.PlatformData is SearchResultExtended platformData))
-        {
-            throw new ArgumentException("平台数据初始化异常");
-        }
-
         string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={sourceMusic.PlatformInnerId}&resourceType=2";
         var request = new HttpRequestMessage()
         {
@@ -156,15 +147,43 @@ public class MiGuMusicProvider : IMusicProvider
             Artist = sourceMusic.Artist,
             Album = result.resource[0].album,
             ImageUrl = imageUrl,
-            PlayUrl = playUrl,
             Lyric = lyric,
             ExtendData = ""
         };
     }
 
-    public Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
-        throw new NotImplementedException();
+        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={music.PlatformInnerId}&resourceType=2";
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        request.Headers.Add("Accept", "application/json, text/plain, */*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        var result = json.ToObject<HttpMusicDetailResult>();
+        if (result == null || result.resource == null || result.resource.Length == 0)
+        {
+            return null;
+        }
+
+        if (result.resource[0].newRateFormats == null || result.resource[0].newRateFormats.Count == 0)
+        {
+            return null;
+        }
+
+        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats, musicFormatType);
+        if (playUrlPath.IsEmpty())
+        {
+            return null;
+        }
+        return $"{UrlBase.MiGu.PlayUrlDomain}{playUrlPath}";
     }
 
     public Task<List<string>?> GetSearchSuggestAsync(string keyword)

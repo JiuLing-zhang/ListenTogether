@@ -106,7 +106,7 @@ public class KuGouMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
+    public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
 
         if (!(sourceMusic.PlatformData is KuGouSearchExtendData extendData))
@@ -154,13 +154,12 @@ public class KuGouMusicProvider : IMusicProvider
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = httpResult.data.img,
-            PlayUrl = httpResult.data.play_url,
             Lyric = httpResult.data.lyrics,
             ExtendData = extendDataString
         };
     }
 
-    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
         var extendDataString = music.ExtendData;
         if (extendDataString.IsEmpty())

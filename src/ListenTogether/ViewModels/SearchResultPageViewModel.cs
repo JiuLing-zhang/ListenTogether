@@ -239,7 +239,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
 
     private async Task<(bool Succeed, string Message, Music MusicDetailResult)> SaveMusicAsync(MusicSearchResult searchResult)
     {
-        var music = await _musicNetworkService.GetMusicDetailAsync(searchResult, GlobalConfig.MyUserSetting.Play.MusicFormatType);
+        var music = await _musicNetworkService.GetDetailAsync(searchResult, GlobalConfig.MyUserSetting.Play.MusicFormatType);
         if (music == null)
         {
             return (false, "emm没有解析出歌曲信息", null);

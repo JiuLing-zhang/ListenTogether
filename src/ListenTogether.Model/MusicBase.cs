@@ -25,10 +25,6 @@
         /// </summary>
         public string ImageUrl { get; set; } = null!;
         /// <summary>
-        /// 播放地址
-        /// </summary>
-        public string PlayUrl { get; set; } = null!;
-        /// <summary>
         /// 歌词
         /// </summary>
         public string Lyric { get; set; } = null!;

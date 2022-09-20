@@ -35,14 +35,14 @@ public class MusicNetPlatform
         return await _miGuSearcher.SearchAsync(platform, keyword);
     }
 
-    public async Task<Music?> GetMusicDetailAsync(MusicSearchResult music, MusicFormatTypeEnum musicFormatType)
+    public async Task<Music?> GetDetailAsync(MusicSearchResult music, MusicFormatTypeEnum musicFormatType)
     {
-        return await MusicProviderFactory.Create(music.Platform).GetMusicDetailAsync(music, musicFormatType);
+        return await MusicProviderFactory.Create(music.Platform).GetDetailAsync(music, musicFormatType);
     }
 
-    public async Task<string?> GetMusicPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
     {
-        return await MusicProviderFactory.Create(music.Platform).GetMusicPlayUrlAsync(music, musicFormatType);
+        return await MusicProviderFactory.Create(music.Platform).GetPlayUrlAsync(music, musicFormatType);
     }
 
     public Task<string> GetMusicPlayPageUrlAsync(Music music)
