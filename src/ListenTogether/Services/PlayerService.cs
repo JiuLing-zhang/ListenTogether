@@ -147,7 +147,7 @@ public class PlayerService
 
     private async Task<string> GetMusicCachePathAsync(Music music)
     {
-        string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.CacheFileName);
+        string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.Id);
         if (File.Exists(musicPath))
         {
             return musicPath;

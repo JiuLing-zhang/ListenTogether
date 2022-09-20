@@ -154,7 +154,6 @@ public class KuGouMusicProvider : IMusicProvider
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = httpResult.data.img,
-            Lyric = httpResult.data.lyrics,
             ExtendData = extendDataString
         };
     }
@@ -225,7 +224,7 @@ public class KuGouMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<string> GetMusicShareUrlAsync(Music music)
+    public Task<string> GetShareUrlAsync(Music music)
     {
         var obj = music.ExtendData.ToObject<KuGouSearchExtendData>();
         if (obj == null)
@@ -233,5 +232,43 @@ public class KuGouMusicProvider : IMusicProvider
             return Task.FromResult(UrlBase.KuGou.Index);
         }
         return Task.FromResult($"{UrlBase.KuGou.GetMusicPlayPage}/#hash={obj.Hash}&album_id={obj.AlbumId}&album_audio_id={music.PlatformInnerId}");
+    }
+
+    public async Task<string?> GetLyricAsync(Music music)
+    {
+        var extendData = music.ExtendData.ToObject<KuGouSearchExtendData>();
+        if (extendData == null)
+        {
+            throw new ArgumentException("平台数据初始化异常");
+        }
+        string args = KuGouUtils.GetMusicUrlData(extendData.Hash, extendData.AlbumId);
+        string url = $"{UrlBase.KuGou.GetMusic}?{args}";
+
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url)
+        };
+        request.Headers.Add("Accept", "*/*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        if (json.IsEmpty())
+        {
+            return null;
+        }
+        var httpResult = json.ToObject<HttpResultBase<MusicDetailHttpResult>>();
+        if (httpResult == null)
+        {
+            return null;
+        }
+        if (httpResult.status != 1 || httpResult.error_code != 0)
+        {
+            return null;
+        }
+
+        return httpResult.data.lyrics;
     }
 }

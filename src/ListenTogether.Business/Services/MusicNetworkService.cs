@@ -33,9 +33,13 @@ public class MusicNetworkService : IMusicNetworkService
         return await _musicNetPlatform.GetPlayUrlAsync(music, musicFormatType);
     }
 
-    public Task<string> GetMusicPlayPageUrlAsync(Music music)
+    public async Task<string?> GetLyricAsync(Music music)
     {
-        return _musicNetPlatform.GetMusicPlayPageUrlAsync(music);
+        return await _musicNetPlatform.GetLyricAsync(music);
+    }
+    public Task<string> GetPlayPageUrlAsync(Music music)
+    {
+        return _musicNetPlatform.GetPlayPageUrlAsync(music);
     }
 
     public async Task<List<string>?> GetHotWordAsync()

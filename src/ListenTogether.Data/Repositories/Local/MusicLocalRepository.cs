@@ -25,7 +25,6 @@ public class MusicLocalRepository : IMusicRepository
             Alias = music.Alias,
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
-            Lyric = music.Lyric,
             ExtendData = music.ExtendData,
         };
     }
@@ -46,7 +45,6 @@ public class MusicLocalRepository : IMusicRepository
                 Alias = music.Alias,
                 Artist = music.Artist,
                 ImageUrl = music.ImageUrl,
-                Lyric = music.Lyric,
                 ExtendData = music.ExtendData
             };
             count = await DatabaseProvide.DatabaseAsync.InsertAsync(myMusic);
@@ -61,7 +59,6 @@ public class MusicLocalRepository : IMusicRepository
             myMusic.Alias = music.Alias;
             myMusic.Artist = music.Artist;
             myMusic.ImageUrl = music.ImageUrl;
-            myMusic.Lyric = music.Lyric;
             myMusic.ExtendData = music.ExtendData;
             count = await DatabaseProvide.DatabaseAsync.UpdateAsync(myMusic);
         }

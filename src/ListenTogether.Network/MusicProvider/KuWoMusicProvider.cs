@@ -162,21 +162,6 @@ internal class KuWoMusicProvider : IMusicProvider
             return null;
         }
 
-        //处理歌词
-        var sbLyrics = new StringBuilder();
-        if (httpResult.data.lrclist != null && httpResult.data.lrclist.Length > 0)
-        {
-            foreach (var lyricInfo in httpResult.data.lrclist)
-            {
-                var ts = TimeSpan.FromSeconds(Convert.ToDouble(lyricInfo.time));
-                string minutes = ts.Minutes.ToString();
-                string seconds = ts.Seconds.ToString();
-                string milliseconds = ts.Milliseconds.ToString();
-                string time = $"[{minutes.PadLeft(2, '0')}:{seconds.PadLeft(2, '0')}.{milliseconds.PadLeft(3, '0')}]";
-                sbLyrics.AppendLine($"{time}{lyricInfo.lineLyric}");
-            }
-        }
-
         return new Music()
         {
             Id = sourceMusic.Id,
@@ -188,7 +173,6 @@ internal class KuWoMusicProvider : IMusicProvider
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = httpResult.data.songinfo.pic,
-            Lyric = sbLyrics.ToString(),
             ExtendData = ""
         };
     }
@@ -257,8 +241,65 @@ internal class KuWoMusicProvider : IMusicProvider
         }
     }
 
-    public Task<string> GetMusicShareUrlAsync(Music music)
+    public Task<string> GetShareUrlAsync(Music music)
     {
         return Task.FromResult($"{UrlBase.KuWo.GetMusicPlayPage}/{music.PlatformInnerId}");
+    }
+
+    public async Task<string?> GetLyricAsync(Music music)
+    {
+        string musicId = music.PlatformInnerId;
+
+        //获取歌曲详情
+        var url = $"{UrlBase.KuWo.GetMusicDetail}?musicId={musicId}";
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+
+        HttpResultBase<MusicDetailHttpResult>? httpResult;
+        try
+        {
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            httpResult = json.ToObject<HttpResultBase<MusicDetailHttpResult>>();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我歌曲详情获取失败。", ex);
+            return null;
+        }
+        if (httpResult == null)
+        {
+            Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回异常，ID:{musicId}"));
+            return null;
+        }
+        if (httpResult.status != 200)
+        {
+            Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回状态异常：{httpResult.message ?? ""}，ID:{musicId}"));
+            return null;
+        }
+
+        //处理歌词
+        var sbLyrics = new StringBuilder();
+        if (httpResult.data.lrclist != null && httpResult.data.lrclist.Length > 0)
+        {
+            foreach (var lyricInfo in httpResult.data.lrclist)
+            {
+                var ts = TimeSpan.FromSeconds(Convert.ToDouble(lyricInfo.time));
+                string minutes = ts.Minutes.ToString();
+                string seconds = ts.Seconds.ToString();
+                string milliseconds = ts.Milliseconds.ToString();
+                string time = $"[{minutes.PadLeft(2, '0')}:{seconds.PadLeft(2, '0')}.{milliseconds.PadLeft(3, '0')}]";
+                sbLyrics.AppendLine($"{time}{lyricInfo.lineLyric}");
+            }
+        }
+
+        return sbLyrics.ToString();
     }
 }

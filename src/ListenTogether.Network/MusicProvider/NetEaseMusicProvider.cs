@@ -5,6 +5,7 @@ using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.NetEase;
 using ListenTogether.Network.Utils;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace ListenTogether.Network.MusicProvider;
@@ -164,42 +165,9 @@ public class NetEaseMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
+    public Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
     {
-        //获取歌词
-        var url = $"{UrlBase.NetEase.Lyric}";
-        var postData = NetEaseUtils.GetPostDataForLyric(sourceMusic.PlatformInnerId);
-        var form = new FormUrlEncodedContent(postData);
-
-        var request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        request.Headers.Add("Accept", "application/json, */*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        var lyricResult = json.ToObject<MusicLyricHttpResult>();
-        if (lyricResult == null)
-        {
-            return null;
-        }
-        if (lyricResult.code != 200)
-        {
-            return null;
-        }
-
-        if (lyricResult.lrc == null)
-        {
-            return null;
-        }
-
-        return new Music()
+        Music music = new Music()
         {
             Id = sourceMusic.Id,
             Platform = sourceMusic.Platform,
@@ -210,9 +178,12 @@ public class NetEaseMusicProvider : IMusicProvider
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = sourceMusic.ImageUrl,
-            Lyric = lyricResult.lrc.lyric,
             ExtendData = ""
         };
+
+#pragma warning disable CS8619 // 值中的引用类型的为 Null 性与目标类型不匹配。
+        return Task.FromResult(music);
+#pragma warning restore CS8619 // 值中的引用类型的为 Null 性与目标类型不匹配。
     }
 
     public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
@@ -257,8 +228,45 @@ public class NetEaseMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<string> GetMusicShareUrlAsync(Music music)
+    public Task<string> GetShareUrlAsync(Music music)
     {
         return Task.FromResult($"{UrlBase.NetEase.GetMusicPlayPage}?id={music.PlatformInnerId}");
+    }
+
+    public async Task<string?> GetLyricAsync(Music music)
+    {
+        //获取歌词
+        var url = $"{UrlBase.NetEase.Lyric}";
+        var postData = NetEaseUtils.GetPostDataForLyric(music.PlatformInnerId);
+        var form = new FormUrlEncodedContent(postData);
+
+        var request = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(url),
+            Content = form
+        };
+        request.Headers.Add("Accept", "application/json, */*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        var lyricResult = json.ToObject<MusicLyricHttpResult>();
+        if (lyricResult == null)
+        {
+            return null;
+        }
+        if (lyricResult.code != 200)
+        {
+            return null;
+        }
+
+        if (lyricResult.lrc == null)
+        {
+            return null;
+        }
+        return lyricResult.lrc.lyric;
     }
 }

@@ -112,21 +112,6 @@ public class MiGuMusicProvider : IMusicProvider
             return null;
         }
 
-        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats, musicFormatType);
-        if (playUrlPath.IsEmpty())
-        {
-            return null;
-        }
-        string playUrl = $"{UrlBase.MiGu.PlayUrlDomain}{playUrlPath}";
-
-        string lyricUrl = result.resource[0].lrcUrl;
-        if (lyricUrl.IsEmpty())
-        {
-            return null;
-        }
-
-        string lyric = await _httpClient.GetStringAsync(lyricUrl);
-
         string imageUrl = sourceMusic.ImageUrl;
         if (result.resource[0].albumImgs != null && result.resource[0].albumImgs.Count > 0)
         {
@@ -147,7 +132,6 @@ public class MiGuMusicProvider : IMusicProvider
             Artist = sourceMusic.Artist,
             Album = result.resource[0].album,
             ImageUrl = imageUrl,
-            Lyric = lyric,
             ExtendData = ""
         };
     }
@@ -196,8 +180,43 @@ public class MiGuMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<string> GetMusicShareUrlAsync(Music music)
+    public Task<string> GetShareUrlAsync(Music music)
     {
         return Task.FromResult($"{UrlBase.MiGu.GetMusicPlayPage}/{music.PlatformInnerId}");
+    }
+
+    public async Task<string?> GetLyricAsync(Music music)
+    {
+        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={music.PlatformInnerId}&resourceType=2";
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        request.Headers.Add("Accept", "application/json, text/plain, */*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        var result = json.ToObject<HttpMusicDetailResult>();
+        if (result == null || result.resource == null || result.resource.Length == 0)
+        {
+            return null;
+        }
+
+        if (result.resource[0].newRateFormats == null || result.resource[0].newRateFormats.Count == 0)
+        {
+            return null;
+        }
+
+        string lyricUrl = result.resource[0].lrcUrl;
+        if (lyricUrl.IsEmpty())
+        {
+            return null;
+        }
+
+        return await _httpClient.GetStringAsync(lyricUrl);
     }
 }

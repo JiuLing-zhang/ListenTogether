@@ -36,7 +36,7 @@ public partial class PlayingPageViewModel : ViewModelBase
             _playerService.NewMusicAdded += _playerService_NewMusicAdded;
             _timerLyricsUpdate.Tick += _timerLyricsUpdate_Tick;
             _timerLyricsUpdate.Start();
-            NewMusicAddedDo(_playerService.CurrentMusic);
+            NewMusicAddedDo();
         }
         catch (Exception ex)
         {
@@ -66,18 +66,18 @@ public partial class PlayingPageViewModel : ViewModelBase
 
     private void _playerService_NewMusicAdded(object sender, EventArgs e)
     {
-        NewMusicAddedDo(_playerService.CurrentMusic);
+        NewMusicAddedDo();
     }
-    private void NewMusicAddedDo(Music music)
+    private void NewMusicAddedDo()
     {
-        CurrentMusic = music;
+        CurrentMusic = _playerService.CurrentMusic;
         GetLyricDetail();
     }
 
     /// <summary>
     /// 解析歌词
     /// </summary>
-    private void GetLyricDetail()
+    private async void GetLyricDetail()
     {
         if (Lyrics.Count > 0)
         {
@@ -87,13 +87,15 @@ public partial class PlayingPageViewModel : ViewModelBase
         {
             return;
         }
-        if (CurrentMusic.Lyric.IsEmpty())
+
+        string lyric = await _musicNetworkService.GetLyricAsync(CurrentMusic);
+        if (lyric.IsEmpty())
         {
             return;
         }
 
         string pattern = ".*";
-        var lyricRowList = JiuLing.CommonLibs.Text.RegexUtils.GetAll(CurrentMusic.Lyric, pattern);
+        var lyricRowList = JiuLing.CommonLibs.Text.RegexUtils.GetAll(lyric, pattern);
         foreach (var lyricRow in lyricRowList)
         {
             if (lyricRow.IsEmpty())
@@ -123,7 +125,7 @@ public partial class PlayingPageViewModel : ViewModelBase
 
         try
         {
-            string musicUrl = await _musicNetworkService.GetMusicPlayPageUrlAsync(CurrentMusic);
+            string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync(CurrentMusic);
             if (Config.Desktop)
             {
                 await Clipboard.Default.SetTextAsync(musicUrl);

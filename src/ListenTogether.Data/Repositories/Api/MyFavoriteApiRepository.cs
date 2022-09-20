@@ -114,8 +114,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
             Album = music.Album,
             Alias = music.Alias,
             Artist = music.Artist,
-            ImageUrl = music.ImageUrl,
-            Lyric = music.Lyric,
+            ImageUrl = music.ImageUrl
         };
 
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id);

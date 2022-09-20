@@ -1,4 +1,5 @@
 ﻿using ListenTogether.Model.Enums;
+using System.Text.Encodings.Web;
 
 namespace ListenTogether.Model;
 
@@ -21,9 +22,4 @@ public class Music : MusicBase
     /// 扩展数据
     /// </summary>
     public string ExtendData { get; set; } = null!;
-
-    /// <summary>
-    /// 缓存文件名
-    /// </summary>
-    public string CacheFileName => $"{PlatformName}-{Name}-{Artist}";
 }

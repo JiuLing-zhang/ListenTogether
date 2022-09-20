@@ -24,9 +24,5 @@
         /// 图片地址
         /// </summary>
         public string ImageUrl { get; set; } = null!;
-        /// <summary>
-        /// 歌词
-        /// </summary>
-        public string Lyric { get; set; } = null!;
     }
 }

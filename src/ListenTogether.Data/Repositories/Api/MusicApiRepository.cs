@@ -34,7 +34,6 @@ public class MusicApiRepository : IMusicRepository
             Alias = music.Alias,
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
-            Lyric = music.Lyric,
             ExtendData = music.ExtendData,
         };
     }
@@ -51,7 +50,6 @@ public class MusicApiRepository : IMusicRepository
             Alias = music.Alias,
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
-            Lyric = music.Lyric,
             ExtendData = music.ExtendData
         };
         string content = requestMusic.ToJson();

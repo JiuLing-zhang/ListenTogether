@@ -14,6 +14,5 @@ internal class MusicEntity
     public string Artist { get; set; } = null!;
     public string Album { get; set; } = null!;
     public string ImageUrl { get; set; } = null!;
-    public string Lyric { get; set; } = null!;
     public string ExtendData { get; set; } = null!;
 }

@@ -19,8 +19,11 @@ public partial class SettingPageViewModel : ViewModelBase
         try
         {
             StartLoading("");
-            UserInfo = GetUserInfo();
             IsOnlineApp = GlobalConfig.AppNetwork == AppNetworkEnum.Online;
+            if (IsOnlineApp)
+            {
+                UserInfo = GetUserInfo();
+            }
         }
         catch (Exception ex)
         {
