@@ -34,7 +34,7 @@ public partial class DesktopShell
                 var screenHeight = disp.Height / disp.Density;
 
                 var width = screenWidth * 0.6;
-                var height = width * 0.6;
+                var height = width * 0.5625;
 
                 //居中
                 Window.X = (screenWidth - width) / 2;
