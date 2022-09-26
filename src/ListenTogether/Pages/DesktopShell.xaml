@@ -8,8 +8,9 @@
        x:Class="ListenTogether.Pages.DesktopShell"
        FlyoutBehavior="Locked"
        FlyoutBackgroundColor="{AppThemeBinding Dark={StaticResource DarkFlyoutBackgroundColor},Light={StaticResource LightFlyoutBackgroundColor}}"
-       FlyoutWidth="150"        
-       NavBarIsVisible="False">
+       FlyoutWidth="150"
+       NavBarIsVisible="False"
+       Loaded="Shell_Loaded">
 
     <Shell.FlyoutHeader>
         <StackLayout Orientation="Horizontal"
