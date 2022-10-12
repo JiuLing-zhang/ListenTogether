@@ -6,14 +6,14 @@ using NativeMediaMauiLib;
 namespace ListenTogether.Services;
 public class PlayerService
 {
+    private readonly HttpClient _httpClient;
+    private readonly WifiOptionsService _wifiOptionsService;
     private readonly INativeAudioService _audioService;
     private readonly IMusicNetworkService _musicNetworkService;
-    private readonly WifiOptionsService _wifiOptionsService;
     private readonly IMusicSwitchServerFactory _musicSwitchServerFactory;
+    private readonly IMusicCacheService _musicCacheService;
     private System.Timers.Timer _timerPlayProgress;
     private bool _isBuffering = false;
-
-    private static readonly HttpClientHelper _httpClient = new HttpClientHelper();
 
     /// <summary>
     /// 是否正在播放
@@ -28,7 +28,7 @@ public class PlayerService
     public event EventHandler? IsPlayingChanged;
     public event EventHandler? PositionChanged;
 
-    public PlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, WifiOptionsService wifiOptionsService)
+    public PlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IMusicCacheService musicCacheService, WifiOptionsService wifiOptionsService, HttpClient httpClient)
     {
         _audioService = audioService;
         _audioService.PlayFinished += async (_, _) => await Next();
@@ -43,9 +43,11 @@ public class PlayerService
 #if ANDROID
         _audioService.SetAppIcon(GlobalConfig.AppIcon);
 #endif
-        _musicNetworkService = musicNetworkService;
+        _httpClient = httpClient;
         _wifiOptionsService = wifiOptionsService;
+        _musicNetworkService = musicNetworkService;
         _musicSwitchServerFactory = musicSwitchServerFactory;
+        _musicCacheService = musicCacheService;
 
         _timerPlayProgress = new System.Timers.Timer();
         _timerPlayProgress.Interval = 1000;
@@ -118,7 +120,7 @@ public class PlayerService
             await InternalPauseAsync();
         }
 
-        var image = await _httpClient.GetReadByteArray(music.ImageUrl);
+        var image = await _httpClient.GetByteArrayAsync(music.ImageUrl);
         await _audioService.InitializeAsync(musicPath, new AudioMetadata(image, music.Name, music.Artist, music.Album));
         _isBuffering = false;
         await InternalPlayAsync(0);
@@ -147,10 +149,10 @@ public class PlayerService
 
     private async Task<string> GetMusicCachePathAsync(Music music)
     {
-        string musicPath = Path.Combine(GlobalConfig.MusicCacheDirectory, music.CacheFileName);
-        if (File.Exists(musicPath))
+        var cache = await _musicCacheService.GetOneByMuiscIdAsync(music.Id);
+        if (cache != null && File.Exists(cache.FileName))
         {
-            return musicPath;
+            return cache.FileName;
         }
 
         if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
@@ -166,11 +168,28 @@ public class PlayerService
             return "";
         }
 
-        var data = await _httpClient.GetReadByteArray(playUrl);
-        File.WriteAllBytes(musicPath, data);
+        var cacheFileNameOnly = $"{music.Id}.{GetPlayUrlFileExtension(playUrl)}";
+        var cacheFileName = Path.Combine(GlobalConfig.MusicCacheDirectory, music.Id);
+        var data = await _httpClient.GetByteArrayAsync(playUrl);
+        File.WriteAllBytes(cacheFileName, data);
+        await _musicCacheService.AddOrUpdateAsync(music.Id, cacheFileName);
 
         MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);
-        return musicPath;
+        return cacheFileName;
+    }
+
+    private string GetPlayUrlFileExtension(string playUrl)
+    {
+        string pattern = """
+            .+\.(?<Extension>\S+)\??\S*
+            """;
+        var (success, result) = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(playUrl, pattern);
+        if (!success)
+        {
+            Logger.Info($"未能解析出后缀,{playUrl}");
+            return "";
+        }
+        return result;
     }
 
     private async Task InternalPauseAsync()

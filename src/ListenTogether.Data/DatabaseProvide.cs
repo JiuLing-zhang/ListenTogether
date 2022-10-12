@@ -54,5 +54,6 @@ internal class DatabaseProvide
         Database.CreateTable<MyFavoriteDetailEntity>();
         Database.CreateTable<EnvironmentConfigEntity>();
         Database.CreateTable<UserEntity>();
+        Database.CreateTable<MusicCacheEntity>();
     }
 }

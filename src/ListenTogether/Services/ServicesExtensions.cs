@@ -12,6 +12,7 @@ internal static class ServicesExtensions
         builder.Services.AddSingleton<IMusicSwitchServer, MusicSwitchShuffleServer>();
         builder.Services.AddSingleton<IMusicSwitchServerFactory, MusicSwitchServerFactory>();
 
+        builder.Services.AddSingleton<HttpClient>();
         builder.Services.AddTransient<WifiOptionsService>();
         builder.Services.AddSingleton<PlayerService>();
         builder.Services.AddSingleton<HttpClientHelper>();

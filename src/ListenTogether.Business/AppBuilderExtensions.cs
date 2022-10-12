@@ -35,6 +35,7 @@ public static class AppBuilderExtensions
         builder.Services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
         builder.Services.AddSingleton<IUserApiRepository, UserApiRepository>();
         builder.Services.AddSingleton<ILogRepository, LogApiRepository>();
+        builder.Services.AddSingleton<IMusicCacheRepository, MusicCacheRepository>();
         return builder;
     }
 }
