@@ -1,15 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 using JiuLing.Controls.Maui;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 using NativeMediaMauiLib;
-using System.IO;
-
-#if WINDOWS
-using Microsoft.UI;
-using Microsoft.UI.Windowing;
-using Windows.Graphics;
-#endif
 
 namespace ListenTogether
 {
@@ -64,7 +57,9 @@ namespace ListenTogether
                 });
 #endif
             });
-
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
             return builder.Build();
         }
     }
