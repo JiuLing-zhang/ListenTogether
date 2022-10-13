@@ -1,6 +1,4 @@
 ﻿using ListenTogether.Model.Enums;
-using System.Text.Encodings.Web;
-using System.Text.RegularExpressions;
 
 namespace ListenTogether.Model;
 
@@ -24,17 +22,4 @@ public class Music : MusicBase
     /// </summary>
     public string ExtendData { get; set; } = null!;
 
-    /// <summary>
-    /// 缓存歌词文件名
-    /// </summary>
-    public string CacheLyricFileName => FilterPathKeyword($"{PlatformName}-{Name}-{Artist}.lrc");
-
-    /// <summary>
-    /// 过滤路径关键字
-    /// </summary>
-    private string FilterPathKeyword(string input)
-    {
-        string pattern = @"[\:\/\\\*\?\""\<\>\|]";
-        return new Regex(pattern).Replace(input, "-");
-    }
 }

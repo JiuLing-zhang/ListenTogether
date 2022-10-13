@@ -25,10 +25,6 @@ namespace ListenTogether
         /// 歌曲缓存路径
         /// </summary>
         public static readonly string MusicCacheDirectory = Path.Combine(CacheDirectory, "musics");
-        /// <summary>                                                                     
-        /// 歌词缓存路径                                                                    
-        /// </summary>                                                                    
-        public static readonly string LyricCacheDirectory = Path.Combine(CacheDirectory, "lyrics");
         public static byte[] AppIcon { get; set; }
 
         public static Version CurrentVersion { get; set; }

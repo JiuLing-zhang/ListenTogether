@@ -118,15 +118,7 @@ public partial class PlayingPageViewModel : ViewModelBase
 
     private async Task<string> GetLyric()
     {
-        string lyricPath = Path.Combine(GlobalConfig.LyricCacheDirectory, CurrentMusic.CacheLyricFileName);
-        if (File.Exists(lyricPath))
-        {
-            return await File.ReadAllTextAsync(lyricPath);
-        }
-
-        string lyric = await _musicNetworkService.GetLyricAsync(CurrentMusic);
-        await File.WriteAllTextAsync(lyricPath, lyric);
-        return lyric;
+        return await _musicNetworkService.GetLyricAsync(CurrentMusic);
     }
 
     [RelayCommand]
