@@ -5,11 +5,13 @@ namespace ListenTogether.ViewModels;
 
 public partial class CacheCleanViewModel : ViewModelBase
 {
-    public CacheCleanViewModel()
+    private readonly IMusicCacheService _musicCacheService;
+    public CacheCleanViewModel(IMusicCacheService musicCacheService)
     {
         Caches = new ObservableCollectionEx<MusicFileViewModel>();
         Caches.ItemChanged += Caches_ItemChanged;
         Caches.CollectionChanged += Caches_CollectionChanged;
+        _musicCacheService = musicCacheService;
     }
     public async Task InitializeAsync()
     {
@@ -17,7 +19,7 @@ public partial class CacheCleanViewModel : ViewModelBase
         {
             StartLoading("");
             SelectedSize = 0;
-            await GetCacheFilesAsync();
+            await QueryCachesAsync();
         }
         catch (Exception ex)
         {
@@ -64,48 +66,29 @@ public partial class CacheCleanViewModel : ViewModelBase
         }
     }
 
-    private async Task GetCacheFilesAsync()
+    private async Task QueryCachesAsync()
     {
         Caches.Clear();
         AllSize = 0;
-        await EachDirectoryAsync(GlobalConfig.CacheDirectory, CalcFilesInfo);
-    }
-
-    private async Task EachDirectoryAsync(string folderPath, Action<List<string>> callbackFilePaths)
-    {
-        try
+        var caches = await _musicCacheService.GetAllAsync();
+        foreach (var cache in caches)
         {
-            Directory.GetDirectories(folderPath).ToList().ForEach(async path =>
+            long size = 0;
+            if (File.Exists(cache.FileName))
             {
-                //继续遍历文件夹内容
-                await EachDirectoryAsync(path, callbackFilePaths);
-            });
-
-            callbackFilePaths.Invoke(Directory.GetFiles(folderPath).ToList());
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            await ToastService.Show($"没有权限访问文件夹：{folderPath}");
-        }
-    }
-
-    private void CalcFilesInfo(List<string> paths)
-    {
-        //根据路径加载文件信息
-        var files = paths.Select(path => new FileInfo(path)).ToList();
-        files.ForEach(file =>
-        {
-            //符合条件的文件写入队列
+                size = new FileInfo(cache.FileName).Length;
+            }
             var musicFile = new MusicFileViewModel()
             {
-                Name = file.Name,
-                FullName = file.FullName,
-                Size = file.Length,
+                Id = cache.Id,
+                Remark = cache.Remark,
+                FileName = cache.FileName,
+                Size = size,
                 IsChecked = false
             };
             Caches.Add(musicFile);
-            AllSize = AllSize + musicFile.Size;
-        });
+            AllSize = AllSize + size;
+        }
     }
 
     [RelayCommand]
@@ -145,11 +128,15 @@ public partial class CacheCleanViewModel : ViewModelBase
                 {
                     try
                     {
-                        System.IO.File.Delete(cache.FullName);
+                        if (File.Exists(cache.FileName))
+                        {
+                            System.IO.File.Delete(cache.FileName);
+                        }
+                        await _musicCacheService.RemoveAsync(cache.Id);
                     }
                     catch (Exception ex)
                     {
-                        await ToastService.Show($"文件删除失败：{cache.FullName}");
+                        await ToastService.Show($"文件删除失败：{cache.FileName}");
                     }
                 }
             }
@@ -164,7 +151,7 @@ public partial class CacheCleanViewModel : ViewModelBase
             StopLoading();
         }
 
-        await GetCacheFilesAsync();
+        await QueryCachesAsync();
         await ToastService.Show("删除完成");
     }
 

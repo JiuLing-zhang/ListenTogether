@@ -1,5 +1,4 @@
-﻿using JiuLing.CommonLibs.Net;
-using ListenTogether.Services.MusicSwitchServer;
+﻿using ListenTogether.Services.MusicSwitchServer;
 
 namespace ListenTogether.Services;
 
@@ -15,7 +14,6 @@ internal static class ServicesExtensions
         builder.Services.AddSingleton<HttpClient>();
         builder.Services.AddTransient<WifiOptionsService>();
         builder.Services.AddSingleton<PlayerService>();
-        builder.Services.AddSingleton<HttpClientHelper>();
         return builder;
     }
 }

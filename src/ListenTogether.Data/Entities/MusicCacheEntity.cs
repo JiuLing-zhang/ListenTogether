@@ -11,4 +11,6 @@ internal class MusicCacheEntity
     public string MusicId { get; set; } = null!;
     [NotNull]
     public string FileName { get; set; } = null!;
+    [NotNull]
+    public string Remark { get; set; } = null!;
 }

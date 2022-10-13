@@ -43,7 +43,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding Name}"
+                            <Label Text="{Binding Remark}"
                                    LineBreakMode="NoWrap"/>
                             <CheckBox HorizontalOptions="EndAndExpand"
                                       IsChecked="{Binding IsChecked}"/>

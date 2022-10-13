@@ -17,7 +17,8 @@ public class MusicCacheRepository : IMusicCacheRepository
         {
             Id = cache.Id,
             MusicId = cache.MusicId,
-            FileName = cache.FileName
+            FileName = cache.FileName,
+            Remark = cache.Remark
         };
     }
 
@@ -33,22 +34,24 @@ public class MusicCacheRepository : IMusicCacheRepository
         {
             Id = cache.Id,
             MusicId = cache.MusicId,
-            FileName = cache.FileName
+            FileName = cache.FileName,
+            Remark = cache.Remark
         };
     }
 
     public async Task<List<MusicCache>> GetAllAsync()
     {
-        var caches = await DatabaseProvide.DatabaseAsync.Table<MusicCacheEntity>().ToListAsync();
+        var caches = await DatabaseProvide.DatabaseAsync.Table<MusicCacheEntity>().OrderBy(x => x.Remark).ToListAsync();
         return caches.Select(x => new MusicCache()
         {
             Id = x.Id,
             MusicId = x.MusicId,
-            FileName = x.FileName
+            FileName = x.FileName,
+            Remark = x.Remark
         }).ToList();
     }
 
-    public async Task<bool> AddOrUpdateAsync(string musicId, string fileName)
+    public async Task<bool> AddOrUpdateAsync(string musicId, string fileName, string remark)
     {
         var dbCache = await DatabaseProvide.DatabaseAsync.Table<MusicCacheEntity>().FirstOrDefaultAsync(x => x.MusicId == musicId);
         int count;
@@ -59,7 +62,8 @@ public class MusicCacheRepository : IMusicCacheRepository
                 new MusicCacheEntity()
                 {
                     MusicId = musicId,
-                    FileName = fileName
+                    FileName = fileName,
+                    Remark = remark
                 });
         }
         else

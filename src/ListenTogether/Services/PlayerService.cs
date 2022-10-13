@@ -146,7 +146,6 @@ public class PlayerService
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 
-
     private async Task<string> GetMusicCachePathAsync(Music music)
     {
         var cache = await _musicCacheService.GetOneByMuiscIdAsync(music.Id);
@@ -168,11 +167,12 @@ public class PlayerService
             return "";
         }
 
-        var cacheFileNameOnly = $"{music.Id}.{GetPlayUrlFileExtension(playUrl)}";
-        var cacheFileName = Path.Combine(GlobalConfig.MusicCacheDirectory, music.Id);
+        var cacheFileNameOnly = $"{music.Id}{GetPlayUrlFileExtension(playUrl)}";
+        var cacheFileName = Path.Combine(GlobalConfig.MusicCacheDirectory, cacheFileNameOnly);
         var data = await _httpClient.GetByteArrayAsync(playUrl);
         File.WriteAllBytes(cacheFileName, data);
-        await _musicCacheService.AddOrUpdateAsync(music.Id, cacheFileName);
+        string remark = $"{music.Artist}-{music.Name}";
+        await _musicCacheService.AddOrUpdateAsync(music.Id, cacheFileName, remark);
 
         MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);
         return cacheFileName;
@@ -181,7 +181,7 @@ public class PlayerService
     private string GetPlayUrlFileExtension(string playUrl)
     {
         string pattern = """
-            .+\.(?<Extension>\S+)\??\S*
+            .+(?<Extension>\.\S+)\??\S*
             """;
         var (success, result) = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(playUrl, pattern);
         if (!success)

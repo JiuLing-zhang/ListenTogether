@@ -25,11 +25,6 @@ public class Music : MusicBase
     public string ExtendData { get; set; } = null!;
 
     /// <summary>
-    /// 缓存文件名
-    /// </summary>
-    public string CacheFileName => FilterPathKeyword($"{PlatformName}-{Name}-{Artist}.music");
-
-    /// <summary>
     /// 缓存歌词文件名
     /// </summary>
     public string CacheLyricFileName => FilterPathKeyword($"{PlatformName}-{Name}-{Artist}.lrc");

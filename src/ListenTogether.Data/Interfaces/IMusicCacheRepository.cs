@@ -6,6 +6,6 @@ public interface IMusicCacheRepository
     Task<MusicCache?> GetOneAsync(int id);
     Task<MusicCache?> GetOneByMuiscIdAsync(string musicId);
     Task<List<MusicCache>> GetAllAsync();
-    Task<bool> AddOrUpdateAsync(string musicId, string fileName);
+    Task<bool> AddOrUpdateAsync(string musicId, string fileName, string remark);
     Task<bool> RemoveAsync(int id);
 }

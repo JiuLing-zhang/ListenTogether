@@ -23,9 +23,9 @@ public class MusicCacheService : IMusicCacheService
     {
         return await _repository.GetAllAsync();
     }
-    public async Task<bool> AddOrUpdateAsync(string musicId, string fileName)
+    public async Task<bool> AddOrUpdateAsync(string musicId, string fileName, string remark)
     {
-        return await _repository.AddOrUpdateAsync(musicId, fileName);
+        return await _repository.AddOrUpdateAsync(musicId, fileName, remark);
     }
 
     public async Task<bool> RemoveAsync(int id)
