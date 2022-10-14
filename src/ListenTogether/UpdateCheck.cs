@@ -68,8 +68,9 @@ internal class UpdateCheck
                 minVersion = obj.MinVersion[..obj.MinVersion.LastIndexOf(".")];
 #else
                 version = obj.Version;
-                minVersion=obj.MinVersion;
+                minVersion = obj.MinVersion;
 #endif
+
                 var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(GlobalConfig.CurrentVersionString, version, minVersion);
 
                 async void CheckUpdateInner()
@@ -83,28 +84,39 @@ internal class UpdateCheck
                         return;
                     }
 
-                    string message = "";
-                    if (isAllowRun == false)
+                    string message = $"发现新版本 {obj.Version}";
+                    if (isAllowRun)
                     {
-                        message = $"当前版本已过期！{Environment.NewLine}";
+                        bool isDoUpdate = await App.Current.MainPage.DisplayAlert("提示", message, "下载", "忽略");
+                        if (isDoUpdate == true)
+                        {
+                            try
+                            {
+                                await Browser.Default.OpenAsync(obj.DownloadUrl.ToUri(), BrowserLaunchMode.SystemPreferred);
+                            }
+                            catch (Exception ex)
+                            {
+                                await ToastService.Show("启动浏览器失败，请重试");
+                                Logger.Error("打开链接失败。", ex);
+                            }
+                        }
                     }
-
-                    message = $"{message}发现新版本 {obj.Version}，确认要下载吗？";
-
-                    var isUpdate = await App.Current.MainPage.DisplayAlert("提示", message, "确定", "取消");
-                    if (isUpdate == false)
+                    else
                     {
-                        return;
-                    }
-
-                    try
-                    {
-                        await Browser.Default.OpenAsync(obj.DownloadUrl.ToUri(), BrowserLaunchMode.SystemPreferred);
-                    }
-                    catch (Exception ex)
-                    {
-                        await ToastService.Show("启动浏览器失败，请重试");
-                        Logger.Error("打开链接失败。", ex);
+                        bool isDoUpdate = await App.Current.MainPage.DisplayAlert("当前版本已停用", message, "下载并退出", "退出");
+                        if (isDoUpdate == true)
+                        {
+                            try
+                            {
+                                Browser.Default.OpenAsync(obj.DownloadUrl.ToUri(), BrowserLaunchMode.SystemPreferred).Wait();
+                            }
+                            catch (Exception ex)
+                            {
+                                await ToastService.Show("启动浏览器失败，请重试");
+                                Logger.Error("打开链接失败。", ex);
+                            }
+                        }
+                        Application.Current.Quit();
                     }
                 }
 
