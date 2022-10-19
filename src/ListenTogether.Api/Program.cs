@@ -52,8 +52,8 @@ builder.Services.AddSwaggerGen(opt =>
 });
 
 builder.Services.AddDbContext<DataContext>
-    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
-
+    (options => options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection")));
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // configure strongly typed settings object
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
