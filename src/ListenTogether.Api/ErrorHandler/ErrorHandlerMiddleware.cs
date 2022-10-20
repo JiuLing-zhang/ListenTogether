@@ -1,17 +1,19 @@
-using ListenTogether.Api.Interfaces;
+using JiuLing.CommonLibs.Log;
 using ListenTogether.Model.Api;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using ILogger = JiuLing.CommonLibs.Log.ILogger;
 
 namespace ListenTogether.Api.ErrorHandler;
 
 public class ErrorHandlerMiddleware
 {
     private readonly RequestDelegate _next;
-
+    private readonly ILogger _logger;
     public ErrorHandlerMiddleware(RequestDelegate next)
     {
+        _logger = LogManager.GetLogger();
         _next = next;
     }
 
@@ -23,15 +25,25 @@ public class ErrorHandlerMiddleware
         }
         catch (Exception ex)
         {
-            var logService = context.RequestServices.GetService(typeof(ILogService)) as ILogService;
-            if (logService != null)
+            try
             {
-                await logService.WriteAsync(0, new Model.Api.Request.LogRequest()
+                string message = "";
+                message = $"{message}---------------{Environment.NewLine}";
+                message = $"{message}系统内部异常。{Environment.NewLine}";
+                message = $"{message}{ex.Message}。{Environment.NewLine}";
+                message = $"{message}{ex.StackTrace}。{Environment.NewLine}";
+                var innerException = ex.InnerException;
+                if (innerException != null)
                 {
-                    LogType = -1,
-                    Message = $"系统内部异常。{Environment.NewLine}{ex.Message}{Environment.NewLine}{ex.StackTrace}",
-                    Timestamp = JiuLing.CommonLibs.Text.TimestampUtils.GetLen13()
-                });
+                    message = $"{message}↓↓↓↓↓InnerException↓↓↓↓↓{Environment.NewLine}";
+                    message = $"{message}{innerException.Message}。{Environment.NewLine}";
+                    message = $"{message}{innerException.StackTrace}。{Environment.NewLine}";
+                }
+                _logger.Write(message);
+            }
+            catch (Exception)
+            {
+
             }
 
             var response = context.Response;
