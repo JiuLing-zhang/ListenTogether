@@ -56,7 +56,7 @@ internal class UserService : IUserService
 
     public async Task<Result<UserResponse>> LoginAsync(UserRequest user, string deviceId)
     {
-        var userEntity = await _context.Users.SingleOrDefaultAsync(x => x.Username == user.Username && x.IsEnable);
+        var userEntity = await _context.Users.SingleOrDefaultAsync(x => x.Username.ToLower() == user.Username.ToLower() && x.IsEnable);
         if (userEntity == null)
         {
             return new Result<UserResponse>(1, "用户名或密码不正确", null);
