@@ -56,7 +56,8 @@ namespace ListenTogether.Api.Services
                     Alias = music.Alias,
                     Artist = music.Artist,
                     ImageUrl = music.ImageUrl,
-                    ExtendData = music.ExtendData ?? ""
+                    ExtendData = music.ExtendData ?? "",
+                    CreateTime = DateTime.Now
                 };
                 _context.Musics.Add(myMusic);
             }
