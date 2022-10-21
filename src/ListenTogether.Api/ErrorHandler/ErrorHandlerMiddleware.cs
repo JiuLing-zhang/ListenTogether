@@ -55,6 +55,7 @@ public class ErrorHandlerMiddleware
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
             };
             var result = JsonSerializer.Serialize(new Result(-1, "系统内部异常"), jsonOptions);
+            response.StatusCode = StatusCodes.Status500InternalServerError;
             await response.WriteAsync(result);
         }
     }
