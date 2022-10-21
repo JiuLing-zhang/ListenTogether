@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.SearchResultPage"
              Title="搜索">
 
@@ -45,24 +46,22 @@
                 Margin="{OnPlatform WinUI='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
                 Orientation="Horizontal"
                 VerticalOptions="Start">
-                <Label Text="搜索结果"
+                <Label Text="搜索"
                        VerticalTextAlignment="Center"
                        Style="{StaticResource Title}"/>
-
-
             </StackLayout>
 
-            <Grid VerticalOptions="Start">
-                <SearchBar x:Name="TxtSearchBar"
-                           Text="{Binding Keyword}"
-                           Placeholder="输入歌曲名、歌手名查找..."/>
-                <StackLayout BackgroundColor="Transparent">
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=GoToSearchPageAsyncCommand}"
-                                              CommandParameter="{Binding .}"/>
-                    </StackLayout.GestureRecognizers>
-                </StackLayout>
-            </Grid>
+            <SearchBar
+                x:Name="TxtSearchBar"
+                Text="{Binding Keyword}"
+                Placeholder="输入歌曲名、歌手名查找..."
+                VerticalOptions="Start">
+                <SearchBar.Behaviors>
+                    <mct:EventToCommandBehavior
+                        EventName="Focused"
+                        Command="{Binding GoToSearchPageAsyncCommand}"/>
+                </SearchBar.Behaviors>
+            </SearchBar>
 
             <CollectionView VerticalOptions="FillAndExpand"
                         ItemsSource="{Binding MusicSearchResult}"

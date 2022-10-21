@@ -16,6 +16,7 @@
             <mct:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
             <mct:IsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
             <mct:EnumToIntConverter x:Key="EnumToIntConverter" />
+            <mct:EventToCommandBehavior x:Key="EventToCommandBehavior" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

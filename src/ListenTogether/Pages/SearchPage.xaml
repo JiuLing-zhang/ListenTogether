@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.SearchPage"
              Title="搜索">
 
@@ -21,19 +22,13 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
-            <StackLayout Margin="{OnPlatform WinUI='0,0,0,20',MacCatalyst='0,0,0,20',Android='0,0,0,10',iOS='0,0,0,10'}"
-                         Orientation="Horizontal"
-                         VerticalOptions="Start">
-                <Label Text="搜索"
-                       VerticalTextAlignment="Center"
-                       Style="{StaticResource Title}"/>
-            </StackLayout>
 
             <SearchBar x:Name="TxtSearchBar"                       
                        Text="{Binding Keyword}"
                        SearchCommand="{Binding BeginSearchAsyncCommand}"
                        SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
                        Placeholder="输入歌曲名、歌手名查找..."
+                       TextChanged="TxtSearchBar_TextChanged"
                        VerticalOptions="Start">
             </SearchBar>
 

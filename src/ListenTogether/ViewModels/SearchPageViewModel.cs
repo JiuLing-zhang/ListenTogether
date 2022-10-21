@@ -21,6 +21,8 @@ public partial class SearchPageViewModel : ObservableObject
     [ObservableProperty]
     private string _keyword = null!;
 
+    private string _lastSearchKey = "";
+
     /// <summary>
     /// 搜索建议
     /// </summary>
@@ -31,27 +33,18 @@ public partial class SearchPageViewModel : ObservableObject
     public async Task InitializeAsync()
     {
         _hotWords = await _musicNetworkService.GetHotWordAsync();
-        //TODO 目前搜索栏的TextChanged 事件有bug，暂时屏蔽搜索建议
-        foreach (var hotWord in _hotWords)
-        {
-            SearchSuggest.Add(hotWord);
-        }
-        return;
-        //TODO End
         await GetSearchSuggestAsync(Keyword);
-    }
-
-    [RelayCommand]
-    public async void GetSearchSuggestAsync(TextChangedEventArgs e)
-    {
-        await GetSearchSuggestAsync(e?.NewTextValue);
     }
 
     public async Task GetSearchSuggestAsync(string keyword)
     {
-        //TODO 目前搜索栏的TextChanged 事件有bug，暂时屏蔽搜索建议
-        return;
-        //TODO End
+        keyword = keyword.Trim();
+        if (_lastSearchKey == keyword && keyword.IsNotEmpty())
+        {
+            return;
+        }
+        _lastSearchKey = keyword;
+
         SearchSuggest.Clear();
         if (keyword.IsEmpty())
         {
@@ -62,14 +55,21 @@ public partial class SearchPageViewModel : ObservableObject
             return;
         }
 
-        var suggests = await _musicNetworkService.GetSearchSuggestAsync(keyword);
-        if (suggests == null)
+        try
         {
-            return;
+            var suggests = await _musicNetworkService.GetSearchSuggestAsync(keyword);
+            if (suggests == null)
+            {
+                return;
+            }
+            foreach (var suggest in suggests)
+            {
+                SearchSuggest.Add(suggest);
+            }
         }
-        foreach (var suggest in suggests)
+        catch (Exception ex)
         {
-            SearchSuggest.Add(suggest);
+            Logger.Error($"搜索建议加载失败：{keyword}", ex);
         }
     }
 
