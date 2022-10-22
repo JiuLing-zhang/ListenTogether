@@ -8,7 +8,7 @@ public partial class SearchPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-    protected async override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
         await vm.InitializeAsync();
