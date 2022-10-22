@@ -28,7 +28,7 @@ public partial class LogPageViewModel : ViewModelBase
             }
 
             _updateLogs = new List<Log>();
-            var logs = Logger.GetAll();
+            var logs = Logger.GetAll(200);
             foreach (var log in logs)
             {
                 //页面展示
