@@ -1,4 +1,5 @@
 ﻿using JiuLing.CommonLibs.Net;
+using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Services.MusicSwitchServer;
 using NativeMediaMauiLib;
@@ -31,8 +32,18 @@ public class PlayerService
     public PlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, INativeAudioService audioService, IMusicNetworkService musicNetworkService, IMusicServiceFactory musicServiceFactory, IMusicCacheService musicCacheService, WifiOptionsService wifiOptionsService, HttpClient httpClient)
     {
         _audioService = audioService;
-        _audioService.PlayFinished += async (_, _) => await Next();
-        _audioService.PlayFailed += async (_, _) => await MediaFailed();
+        _audioService.PlayFinished += async (_, _) =>
+        {
+            var musicName = CurrentMusic?.Name;
+            Logger.Info($"事件：播放完成->{musicName}");
+            await Next();
+        };
+        _audioService.PlayFailed += async (_, _) =>
+        {
+            var musicName = CurrentMusic?.Name;
+            Logger.Info($"事件：播放失败->{musicName}");
+            await MediaFailed();
+        };
 
         _audioService.Played += async (_, _) => await PlayOnlyAsync();
         _audioService.Paused += async (_, _) => await PauseAsync();
@@ -74,7 +85,9 @@ public class PlayerService
     /// </summary>
     public async Task Previous()
     {
+        Logger.Info($"内部调用：上一首");
         var previousMusic = await _musicSwitchServerFactory.Create(GlobalConfig.MyUserSetting.Player.PlayMode).GetPreviousAsync(CurrentMusic);
+        Logger.Info($"内部调用（上一首）：准备播放->{previousMusic.Name}");
         await PlayAsync(previousMusic);
     }
 
@@ -83,7 +96,9 @@ public class PlayerService
     /// </summary>
     public async Task Next()
     {
+        Logger.Info($"内部调用：下一首");
         var previousMusic = await _musicSwitchServerFactory.Create(GlobalConfig.MyUserSetting.Player.PlayMode).GetNextAsync(CurrentMusic);
+        Logger.Info($"内部调用（下一首）：准备播放->{previousMusic.Name}");
         await PlayAsync(previousMusic);
     }
 
@@ -91,18 +106,22 @@ public class PlayerService
     {
         if (GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed)
         {
+            Logger.Info($"内部调用：播放失败");
             await Next();
         }
     }
 
     public async Task PlayAsync(Music music)
     {
+        Logger.Info($"内部调用：播放");
         if (music == null)
         {
+            Logger.Info($"内部调用：歌曲不存在");
             return;
         }
         if (_isBuffering)
         {
+            Logger.Info($"内部调用：缓冲中");
             return;
         }
         _isBuffering = true;
@@ -110,6 +129,7 @@ public class PlayerService
         var musicPath = await GetMusicCachePathAsync(music);
         if (musicPath.IsEmpty())
         {
+            Logger.Info($"内部调用：歌曲缓存文件不存在");
             _isBuffering = false;
             return;
         }
@@ -156,6 +176,7 @@ public class PlayerService
 
         if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
         {
+            Logger.Info($"内部调用：非WIFI");
             return "";
         }
 
@@ -164,6 +185,7 @@ public class PlayerService
         var playUrl = await _musicNetworkService.GetPlayUrlAsync(music, GlobalConfig.MyUserSetting.Play.MusicFormatType);
         if (playUrl == null)
         {
+            Logger.Info($"内部调用：未获取到播放地址");
             return "";
         }
 
