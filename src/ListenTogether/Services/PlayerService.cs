@@ -1,7 +1,4 @@
-﻿using JiuLing.CommonLibs.Net;
-using ListenTogether.Model;
-using ListenTogether.Model.Enums;
-using ListenTogether.Services.MusicSwitchServer;
+﻿using ListenTogether.Services.MusicSwitchServer;
 using NativeMediaMauiLib;
 
 namespace ListenTogether.Services;
@@ -45,9 +42,8 @@ public class PlayerService
             await MediaFailed();
         };
 
-        _audioService.Played += async (_, _) => await PlayOnlyAsync();
-        _audioService.Paused += async (_, _) => await PauseAsync();
-        _audioService.Stopped += async (_, _) => await PauseAsync();
+        _audioService.Played += async (_, _) => await PlayAsync(CurrentMusic);
+        _audioService.Paused += async (_, _) => await PlayAsync(CurrentMusic);
         _audioService.SkipToNext += async (_, _) => await Next();
         _audioService.SkipToPrevious += async (_, _) => await Previous();
 
@@ -111,7 +107,16 @@ public class PlayerService
         }
     }
 
-    public async Task PlayAsync(Music music)
+    public Task PlayAsync(Music music)
+    {
+        var isOtherMusic = CurrentMusic?.Id != music.Id;
+        var isPlaying = isOtherMusic || !_audioService.IsPlaying;
+        var position = isOtherMusic ? 0 : CurrentPosition.position.TotalMilliseconds;
+
+        return PlayAsync(music, isPlaying, position);
+    }
+
+    public async Task PlayAsync(Music music, bool isPlaying, double position = 0)
     {
         Logger.Info($"内部调用：播放");
         if (music == null)
@@ -126,44 +131,50 @@ public class PlayerService
         }
         _isBuffering = true;
 
-        var musicPath = await GetMusicCachePathAsync(music);
-        if (musicPath.IsEmpty())
+        var isOtherMusic = CurrentMusic?.Id != music.Id;
+        if (isOtherMusic)
         {
-            Logger.Info($"内部调用：歌曲缓存文件不存在");
-            _isBuffering = false;
-            return;
-        }
-        CurrentMusic = music;
+            Logger.Info($"内部调用：暂停-->播放中");
+            var musicPath = await GetMusicCachePathAsync(music);
+            if (musicPath.IsEmpty())
+            {
+                Logger.Info($"内部调用：歌曲缓存文件不存在");
+                _isBuffering = false;
+                return;
+            }
+            CurrentMusic = music;
 
-        if (_audioService.IsPlaying)
+            if (_audioService.IsPlaying)
+            {
+                await InternalPauseAsync();
+            }
+
+            var image = await _httpClient.GetByteArrayAsync(music.ImageUrl);
+            await _audioService.InitializeAsync(musicPath, new AudioMetadata(image, music.Name, music.Artist, music.Album));
+
+            await InternalPlayPauseAsync(isPlaying, position);
+
+            NewMusicAdded?.Invoke(this, EventArgs.Empty);
+        }
+        else
         {
-            await InternalPauseAsync();
+            Logger.Info($"内部调用：播放中-->暂停");
+            await InternalPlayPauseAsync(isPlaying, position);
         }
-
-        var image = await _httpClient.GetByteArrayAsync(music.ImageUrl);
-        await _audioService.InitializeAsync(musicPath, new AudioMetadata(image, music.Name, music.Artist, music.Album));
         _isBuffering = false;
-        await InternalPlayAsync(0);
-
-        NewMusicAdded?.Invoke(this, EventArgs.Empty);
         IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public async Task PlayOnlyAsync()
+    private async Task InternalPlayPauseAsync(bool isPlaying, double position)
     {
-        if (!_audioService.IsPlaying)
+        if (isPlaying)
         {
-            await InternalPlayAsync(CurrentPosition.position.TotalMilliseconds);
+            await InternalPlayAsync(position);
         }
-        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
-    }
-    public async Task PauseAsync()
-    {
-        if (_audioService.IsPlaying)
+        else
         {
             await InternalPauseAsync();
         }
-        IsPlayingChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private async Task<string> GetMusicCachePathAsync(Music music)

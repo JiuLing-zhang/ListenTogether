@@ -42,36 +42,18 @@ namespace NativeMediaMauiLib.Platforms.Android
                 var activity = CurrentActivity.CrossCurrentActivity.Current;
                 instance = activity.Activity as IAudioActivity;
 
-                instance.Binder.GetMediaPlayerService().Played += (_, _) => Played?.Invoke(this, EventArgs.Empty);
-                instance.Binder.GetMediaPlayerService().Paused += (_, _) => Paused?.Invoke(this, EventArgs.Empty);
-                instance.Binder.GetMediaPlayerService().Stopped += (_, _) => Stopped?.Invoke(this, EventArgs.Empty);
-                instance.Binder.GetMediaPlayerService().SkipToNext += (_, _) => SkipToNext?.Invoke(this, EventArgs.Empty);
-                instance.Binder.GetMediaPlayerService().SkipToPrevious += (_, _) => SkipToPrevious?.Invoke(this, EventArgs.Empty);
-
-                instance.Binder.GetMediaPlayerService().Error += (_, _) => PlayFailed?.Invoke(this, EventArgs.Empty);
-                instance.Binder.GetMediaPlayerService().Completion += (_, _) => PlayFinished?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().OnPlayerPlay += (_, _) => Played?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().OnPlayerPause += (_, _) => Paused?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().OnPlayerSkipToNext += (_, _) => SkipToNext?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().OnPlayerSkipToPrevious += (_, _) => SkipToPrevious?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().OnPlayerError += (_, _) => PlayFailed?.Invoke(this, EventArgs.Empty);
+                instance.Binder.GetMediaPlayerService().OnPlayerCompletion += (_, _) => PlayFinished?.Invoke(this, EventArgs.Empty);
             }
             else
             {
                 instance.Binder.GetMediaPlayerService().isCurrentEpisode = false;
                 instance.Binder.GetMediaPlayerService().UpdatePlaybackStateStopped();
             }
-
-            this.instance.Binder.GetMediaPlayerService().PlayingChanged += (object sender, bool e) =>
-            {
-                Task.Run(async () =>
-                {
-                    if (e)
-                    {
-                        await this.PlayAsync();
-                    }
-                    else
-                    {
-                        await this.PauseAsync();
-                    }
-                });
-                IsPlayingChanged?.Invoke(this, e);
-            };
 
             instance.Binder.GetMediaPlayerService().AudioUrl = audioURI;
             instance.Binder.GetMediaPlayerService().NotificationInfo = new NotificationInfo(
