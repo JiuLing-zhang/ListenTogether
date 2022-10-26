@@ -7,146 +7,133 @@
         <ContentView x:Name="MainBlock">
             <OnPlatform x:TypeArguments="View">
                 <On Platform="WinUI, macOS">
-                    <Grid ColumnDefinitions="50*,400,50*"
-                          ColumnSpacing="20"
-                          VerticalOptions="Center">
-                        <!-- <Line Grid.Column="0" -->
-                        <!--       Stroke="{StaticResource PlayingPageLine}" -->
-                        <!--       X2="4000" /> -->
-                        <HorizontalStackLayout Grid.Column="0"
-                                               Spacing="10">
-                            <Image x:Name="ImgCurrentMusic"
-                                   HorizontalOptions="Start"
-                                   WidthRequest="60">
+                    <HorizontalStackLayout
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Spacing="10">
+
+                        <Image 
+                            x:Name="ImgBack"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Aspect="AspectFill">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Previous_Tapped"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <Image 
+                            x:Name="ImgPlay"
+                            WidthRequest="50"
+                            HeightRequest="50"
+                            Aspect="AspectFill">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <Image 
+                            x:Name="ImgNext"
+                            WidthRequest="40"
+                            HeightRequest="40"
+                            Aspect="AspectFill">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Next_Tapped"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <Grid RowDefinitions="50*,50*"
+                              ColumnDefinitions="80,280,100"
+                              Margin="0,0,40,0">
+                            <Image
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.RowSpan="2"
+                                WidthRequest="60"
+                                HeightRequest="60"
+                                x:Name="ImgCurrentMusic"
+                                Aspect="AspectFill">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="GoToPlayingPage_Tapped"/>
                                 </Image.GestureRecognizers>
                             </Image>
-                            <VerticalStackLayout
-                                Spacing="10"
-                                HorizontalOptions="FillAndExpand">
-                                <Label x:Name="LblMusicName"
-                                       VerticalOptions="Start"
-                                       LineBreakMode="TailTruncation"/>
-                                <Label x:Name="LblMusicArtistAndAlbum"
-                                       VerticalOptions="EndAndExpand"
-                                       Style="{StaticResource ExplainFontSize}"
-                                       LineBreakMode="TailTruncation"/>
-                                <Label x:Name="LblMusicArtist"
-                                       IsVisible="False"/>
-                            </VerticalStackLayout>
-                        </HorizontalStackLayout>
-                        <VerticalStackLayout Grid.Column="1">
-                            <!--播放按钮-->
+
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                x:Name="LblMusicInfo"
+                                Style="{StaticResource Explain}"
+                                VerticalTextAlignment="Center"
+                                LineBreakMode="TailTruncation">
+                            </Label>
+
                             <HorizontalStackLayout
-                                HorizontalOptions="Center"
-                                Spacing="28" >
-
-                                <Image x:Name="ImgRepeat"
-                                       WidthRequest="20"
-                                       HeightRequest="20"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="ImgRepeat_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Image x:Name="ImgBack"
-                                       WidthRequest="20"
-                                       HeightRequest="20"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="Previous_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Image x:Name="ImgPlay"
-                                               WidthRequest="40"
-                                               HeightRequest="40"
-                                               VerticalOptions="Center"
-                                               HorizontalOptions="Center"
-                                               Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Image x:Name="ImgNext"
-                                       WidthRequest="20"
-                                       HeightRequest="20"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="Next_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-
-                                <Image x:Name="ImgOther"
-                                       WidthRequest="20"
-                                       HeightRequest="20"
-                                       VerticalOptions="Center"
-                                       HorizontalOptions="Center"
-                                       Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="Puzzled_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </HorizontalStackLayout>
-
-                            <!--进度条-->
-                            <HorizontalStackLayout
-                                    HeightRequest="30">
-                                <Label x:Name="LblPosition"
-                                       TextColor="{Binding TextColor, Source={x:Reference LblMusicName}}"
-                                       HorizontalOptions="Start"
-                                       VerticalTextAlignment="Center"/>
-                                <Slider 
-                                    x:Name="SliderPlayProgress"
-                                    HorizontalOptions="FillAndExpand"
-                                    VerticalOptions="Center"
-                                    Minimum="0"
-                                    Maximum="1"
-                                    Margin="10,0,10,0"
-                                    DragStarted="SliderPlayProgress_DragStarted"
-                                    DragCompleted="SliderPlayProgress_DragCompleted">
-                                </Slider>
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                HorizontalOptions="End">
+                                <Label 
+                                    x:Name="LblPosition"
+                                    Style="{StaticResource Explain}"
+                                    VerticalTextAlignment="Center"/>
+                                <Label
+                                    Margin="5,0,5,0"
+                                    Text="/"
+                                    Style="{StaticResource Explain}"
+                                    VerticalTextAlignment="Center"/>
                                 <Label 
                                     x:Name="LblDuration"
-                                    TextColor="{Binding TextColor, Source={x:Reference LblMusicName}}"
-                                    HorizontalOptions="End"
+                                    Style="{StaticResource Explain}"
                                     VerticalTextAlignment="Center"/>
                             </HorizontalStackLayout>
-                        </VerticalStackLayout>
-                        <HorizontalStackLayout Grid.Column="2">
-                            <Image x:Name="ImgSoundOff"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="EndAndExpand"
-                                   HeightRequest="20"
-                                   WidthRequest="20"
-                                   Aspect="AspectFill">
+
+                            <Slider
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2"
+                                x:Name="SliderPlayProgress"
+                                HorizontalOptions="Fill"
+                                Minimum="0"
+                                Maximum="1"
+                                DragStarted="SliderPlayProgress_DragStarted"
+                                DragCompleted="SliderPlayProgress_DragCompleted">
+                            </Slider>
+                        </Grid>
+
+                        <Image 
+                            x:Name="ImgRepeat"
+                            WidthRequest="20"
+                            HeightRequest="20"
+                            Aspect="AspectFill">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ImgRepeat_Tapped"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <HorizontalStackLayout 
+                            Grid.Column="2"
+                            Spacing="10">
+                            <Image 
+                                x:Name="ImgSoundOff"
+                                HeightRequest="20"
+                                WidthRequest="20"
+                                Aspect="AspectFill">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="ImgSoundOff_Tapped"/>
                                 </Image.GestureRecognizers>
                             </Image>
 
-                            <Slider x:Name="SliderVolume"
-                                    Margin="10,0,20,0"
-                                    WidthRequest="90"
-                                    HorizontalOptions="End"
-                                    VerticalOptions="Center"
-                                    Minimum="0"
-                                    Maximum="100"
-                                    MinimumTrackColor="{Binding MinimumTrackColor, Source={x:Reference SliderPlayProgress}}"
-                                    MaximumTrackColor="{Binding MaximumTrackColor, Source={x:Reference SliderPlayProgress}}"
-                                    ThumbColor="{Binding ThumbColor, Source={x:Reference SliderPlayProgress}}"
-                                    ValueChanged="SliderVolume_ValueChanged"/>
+                            <Slider 
+                                x:Name="SliderVolume"
+                                WidthRequest="90"
+                                VerticalOptions="Center"
+                                Minimum="0"
+                                Maximum="100"
+                                MinimumTrackColor="{Binding MinimumTrackColor, Source={x:Reference SliderPlayProgress}}"
+                                MaximumTrackColor="{Binding MaximumTrackColor, Source={x:Reference SliderPlayProgress}}"
+                                ThumbColor="{Binding ThumbColor, Source={x:Reference SliderPlayProgress}}"
+                                ValueChanged="SliderVolume_ValueChanged"/>
                         </HorizontalStackLayout>
-                    </Grid>
+                    </HorizontalStackLayout>
                 </On>
                 <On Platform="Android,iOS">
                     <StackLayout Margin="10,5,10,5">
@@ -166,14 +153,11 @@
 
                             <Label 
                                 Margin="5,0,0,0"
-                                TextColor="{Binding TextColor, Source={x:Reference LblMusicName}}"
+                                TextColor="{Binding TextColor, Source={x:Reference LblMusicInfo}}"
                                 HorizontalOptions="StartAndExpand"
                                 VerticalTextAlignment="Center"
+                                Text="{Binding Text,Source={x:Reference LblMusicInfo}}"
                                 LineBreakMode="TailTruncation">
-                                <MultiBinding StringFormat="{}{0} - {1}">
-                                    <Binding Path="Text" Source="{x:Reference LblMusicName}"/>
-                                    <Binding Path="Text" Source="{x:Reference LblMusicArtist}"/>
-                                </MultiBinding>
                             </Label>
 
                             <Image 
@@ -194,7 +178,7 @@
                             <StackLayout Orientation="Horizontal">
                                 <Label 
                                     Text="{Binding Text, Source={x:Reference LblPosition}}"
-                                    TextColor="{Binding TextColor, Source={x:Reference LblMusicName}}"
+                                    TextColor="{Binding TextColor, Source={x:Reference LblMusicInfo}}"
                                     HorizontalOptions="Start"                                    
                                     VerticalTextAlignment="Center"/>
                                 <Slider 
@@ -212,7 +196,7 @@
                                 </Slider>
                                 <Label 
                                     Text="{Binding Text, Source={x:Reference LblDuration}}"
-                                    TextColor="{Binding TextColor, Source={x:Reference LblMusicName}}"
+                                    TextColor="{Binding TextColor, Source={x:Reference LblMusicInfo}}"
                                     HorizontalOptions="End"
                                     VerticalTextAlignment="Center"/>
                             </StackLayout>
@@ -268,7 +252,7 @@
                                     </Image.GestureRecognizers>
                                 </Image>
 
-                                <Image Source="{Binding Source, Source={x:Reference ImgOther}}"
+                                <Image x:Name="ImgOther"
                                            Grid.Column="4"
                                            WidthRequest="30"
                                            HeightRequest="30"

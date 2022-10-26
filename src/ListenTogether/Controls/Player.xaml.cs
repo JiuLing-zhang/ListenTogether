@@ -82,8 +82,7 @@ public partial class Player : ContentView
             //TODO 目前 MAUI 无法正确读取资源文件，所以临时使用16进制颜色解决
             //var lightText = (Color)Application.Current.Resources["LightText"];
             //var lightTextSecond = (Color)Application.Current.Resources["LightTextSecond"];            
-            LblMusicName.TextColor = Color.FromArgb("#262626");
-            LblMusicArtistAndAlbum.TextColor = Color.FromArgb("#717171");
+            LblMusicInfo.TextColor = Color.FromArgb("#262626");
 
             SliderPlayProgress.MinimumTrackColor = Color.FromArgb("#262626");
             SliderPlayProgress.MaximumTrackColor = Color.FromArgb("#717171");
@@ -98,8 +97,7 @@ public partial class Player : ContentView
             //TODO 目前 MAUI 无法正确读取资源文件，所以临时使用16进制颜色解决
             //var darkText = (Color)Application.Current.Resources["DarkText"]; 
             //var darkTextSecond = (Color)Application.Current.Resources["DarkTextSecond"];
-            LblMusicName.TextColor = Color.FromArgb("#FCF2F7");
-            LblMusicArtistAndAlbum.TextColor = Color.FromArgb("#9D9D9D");
+            LblMusicInfo.TextColor = Color.FromArgb("#FCF2F7");
 
             SliderPlayProgress.MinimumTrackColor = Color.FromArgb("#FFFFFF");
             SliderPlayProgress.MaximumTrackColor = Color.FromArgb("#FCF2F7");
@@ -142,9 +140,7 @@ public partial class Player : ContentView
                 () => new MemoryStream(ImageCacheUtils.GetByteArrayUsingCache(music.ImageUrl))
             );
 
-            LblMusicName.Text = music.Name;
-            LblMusicArtistAndAlbum.Text = $"{music.Artist} - {music.Album}";
-            LblMusicArtist.Text = music.Artist;
+            LblMusicInfo.Text = $"{music.Name} - {music.Artist}";
         });
     }
 
