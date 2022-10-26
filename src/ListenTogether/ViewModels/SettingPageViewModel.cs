@@ -216,10 +216,10 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private bool _isAutoNextWhenFailed = GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed;
-    partial void OnIsAutoNextWhenFailedChanged(bool value)
+    async partial void OnIsAutoNextWhenFailedChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed = value;
-        WritePlayConfigAsync().Wait();
+        await WritePlayConfigAsync();
     }
 
     /// <summary>
