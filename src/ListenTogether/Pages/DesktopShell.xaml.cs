@@ -27,6 +27,11 @@ public partial class DesktopShell
         var screenHeight = disp.Height / disp.Density;
 
         var width = screenWidth * 0.6;
+        //设置窗口的最小宽度
+        if (width < 1000)
+        {
+            width = 1000;
+        }
         var height = width * 0.5625;
 
         //居中
