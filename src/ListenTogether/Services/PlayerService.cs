@@ -84,6 +84,7 @@ public class PlayerService
         Logger.Info($"内部调用：上一首");
         var previousMusic = await _musicSwitchServerFactory.Create(GlobalConfig.MyUserSetting.Player.PlayMode).GetPreviousAsync(CurrentMusic);
         Logger.Info($"内部调用（上一首）：准备播放->{previousMusic.Name}");
+        CurrentMusic = null;
         await PlayAsync(previousMusic);
     }
 
@@ -95,6 +96,7 @@ public class PlayerService
         Logger.Info($"内部调用：下一首");
         var previousMusic = await _musicSwitchServerFactory.Create(GlobalConfig.MyUserSetting.Player.PlayMode).GetNextAsync(CurrentMusic);
         Logger.Info($"内部调用（下一首）：准备播放->{previousMusic.Name}");
+        CurrentMusic = null;
         await PlayAsync(previousMusic);
     }
 
