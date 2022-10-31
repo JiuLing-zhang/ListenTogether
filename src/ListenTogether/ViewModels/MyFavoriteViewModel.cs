@@ -13,7 +13,7 @@ public partial class MyFavoriteViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(ImageByteArray))]
     private string _imageUrl = null!;
 
-    public byte[] ImageByteArray => ImageUrl.IsEmpty() ? GlobalConfig.AppIcon : ImageCacheUtils.GetByteArrayUsingCache(ImageUrl);
+    public byte[] ImageByteArray => ImageUrl.IsEmpty() ? null : ImageCacheUtils.GetByteArrayUsingCache(ImageUrl);
 
     [ObservableProperty]
     private int _musicCount;

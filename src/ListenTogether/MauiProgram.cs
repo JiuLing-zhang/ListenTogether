@@ -12,14 +12,6 @@ namespace ListenTogether
         {
             var builder = MauiApp.CreateBuilder();
 
-#if ANDROID
-            using var appIconStream = FileSystem.OpenAppPackageFileAsync("appicon.png").Result;
-            using StreamReader reader = new StreamReader(appIconStream);
-            var ms = new MemoryStream();
-            appIconStream.CopyTo(ms);
-            GlobalConfig.AppIcon = ms.ToArray();
-#endif
-
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()

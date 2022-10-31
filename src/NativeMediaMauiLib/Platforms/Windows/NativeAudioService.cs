@@ -35,11 +35,6 @@ public class NativeAudioService : INativeAudioService
         }
     }
 
-    public Task SetAppIcon(byte[] appIcon)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task InitializeAsync(string audioURI, AudioMetadata audioMetadata)
     {
         mediaPlayer.Source = MediaSource.CreateFromUri(new Uri(audioURI));

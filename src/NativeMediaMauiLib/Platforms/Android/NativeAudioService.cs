@@ -28,13 +28,6 @@ namespace NativeMediaMauiLib.Platforms.Android
         public event EventHandler SkipToNext;
         public event EventHandler SkipToPrevious;
 
-        private byte[] _appIcon;
-        public Task SetAppIcon(byte[] appIcon)
-        {
-            _appIcon = appIcon;
-            return Task.CompletedTask;
-        }
-
         public Task InitializeAsync(string audioURI, AudioMetadata audioMetadata)
         {
             if (instance == null)
@@ -57,7 +50,6 @@ namespace NativeMediaMauiLib.Platforms.Android
 
             instance.Binder.GetMediaPlayerService().AudioUrl = audioURI;
             instance.Binder.GetMediaPlayerService().NotificationInfo = new NotificationInfo(
-               BitmapFactory.DecodeByteArray(_appIcon, 0, _appIcon.Length),
                BitmapFactory.DecodeByteArray(audioMetadata.Image, 0, audioMetadata.Image.Length),
                audioMetadata.Name,
                audioMetadata.Artist,

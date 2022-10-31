@@ -83,7 +83,7 @@ public static class NotificationHelper
             .SetContentTitle(notificationInfo.ContentTitle)
             .SetContentText(notificationInfo.ContentText)
             .SetSubText(notificationInfo.SubText)
-            .SetSmallIcon(Icon.CreateWithBitmap(notificationInfo.SmallIcon))
+            .SetSmallIcon(Icon.CreateWithBitmap(BitmapFactory.DecodeByteArray(RawResources.Icon, 0, RawResources.Icon.Length)))
             .SetLargeIcon(notificationInfo.LargeIcon)
             .SetContentIntent(pendingIntent)
             .SetShowWhen(false)
