@@ -108,7 +108,7 @@ internal class UpdateCheck
                         {
                             try
                             {
-                                Browser.Default.OpenAsync(obj.DownloadUrl.ToUri(), BrowserLaunchMode.SystemPreferred).Wait();
+                                await Browser.Default.OpenAsync(obj.DownloadUrl.ToUri(), BrowserLaunchMode.External);
                             }
                             catch (Exception ex)
                             {
