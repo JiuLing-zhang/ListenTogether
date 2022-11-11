@@ -15,9 +15,4 @@ public partial class SearchPage : ContentPage
         await Task.Delay(300);
         TxtSearchBar.Focus();
     }
-
-    private async void TxtSearchBar_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        await vm.GetSearchSuggestAsync(e?.NewTextValue);
-    }
 }

@@ -1,18 +1,29 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Storage;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-[QueryProperty(nameof(Keyword), nameof(Keyword))]
-public partial class SearchPageViewModel : ObservableObject
+[QueryProperty(nameof(QueryKeyword), "Keyword")]
+public partial class SearchPageViewModel : ViewModelBase
 {
     private readonly IMusicNetworkService _musicNetworkService = null!;
 
     public SearchPageViewModel(IMusicNetworkService musicNetworkService)
     {
+        SearchHistories = new ObservableCollection<string>();
+        HotWords = new ObservableCollection<string>();
         SearchSuggest = new ObservableCollection<string>();
         _musicNetworkService = musicNetworkService;
+    }
+
+    public string QueryKeyword
+    {
+        set
+        {
+            Keyword = value;
+        }
     }
 
     /// <summary>
@@ -20,8 +31,24 @@ public partial class SearchPageViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private string _keyword = null!;
+    async partial void OnKeywordChanged(string value)
+    {
+        await GetSearchSuggestAsync(value);
+    }
 
     private string _lastSearchKey = "";
+
+    /// <summary>
+    /// 历史搜索记录
+    /// </summary>
+    [ObservableProperty]
+    private ObservableCollection<string> _searchHistories;
+
+    /// <summary>
+    /// 热门搜索
+    /// </summary>
+    [ObservableProperty]
+    private ObservableCollection<string> _hotWords;
 
     /// <summary>
     /// 搜索建议
@@ -29,32 +56,58 @@ public partial class SearchPageViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<string> _searchSuggest = null!;
 
-    private List<string> _hotWords = new List<string>();
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotSearchingForSuggest))]
+    private bool _isSearchingForSuggest = false;
+    public bool IsNotSearchingForSuggest => !_isSearchingForSuggest;
+
     public async Task InitializeAsync()
     {
-        _hotWords = await _musicNetworkService.GetHotWordAsync();
-        await GetSearchSuggestAsync(Keyword);
+        await GetGetHistoriesAsync();
+        await GetHotWords();
+    }
+    private Task GetGetHistoriesAsync()
+    {
+        SearchHistories.Clear();
+        var searchHistories = SearchHistoryStorage.GetHistories();
+        foreach (var searchHistory in searchHistories)
+        {
+            SearchHistories.Add(searchHistory);
+        }
+        return Task.CompletedTask;
     }
 
-    public async Task GetSearchSuggestAsync(string keyword)
+    private async Task GetHotWords()
+    {
+        HotWords.Clear();
+        var hotWords = await _musicNetworkService.GetHotWordAsync();
+        if (hotWords != null)
+        {
+            foreach (var hotWord in hotWords)
+            {
+                HotWords.Add(hotWord);
+            }
+        }
+    }
+
+    private async Task GetSearchSuggestAsync(string keyword)
     {
         keyword = keyword.Trim();
-        if (_lastSearchKey == keyword && keyword.IsNotEmpty())
+
+        if (_lastSearchKey == keyword)
+        {
+            return;
+        }
+
+        IsSearchingForSuggest = false;
+        SearchSuggest.Clear();
+        if (keyword.IsEmpty())
         {
             return;
         }
         _lastSearchKey = keyword;
-
-        SearchSuggest.Clear();
-        if (keyword.IsEmpty())
-        {
-            foreach (var hotWord in _hotWords)
-            {
-                SearchSuggest.Add(hotWord);
-            }
-            return;
-        }
-
+        IsSearchingForSuggest = true;
         try
         {
             var suggests = await _musicNetworkService.GetSearchSuggestAsync(keyword);
@@ -74,8 +127,37 @@ public partial class SearchPageViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async void RemoveSearchHistoriesAsync()
+    {
+        var isOk = await Shell.Current.DisplayAlert("提示", "确定要删除全部搜索历史吗？", "确定", "取消");
+        if (isOk == false)
+        {
+            return;
+        }
+        SearchHistoryStorage.Clear();
+        SearchHistories.Clear();
+    }
+
+    [RelayCommand]
     private async void BeginSearchAsync(string keyword)
     {
+        await DoSearchAsync(keyword);
+    }
+
+    [RelayCommand]
+    private async void HistoriyWordClickedAsync(string historiyWord)
+    {
+        await DoSearchAsync(historiyWord);
+    }
+
+    [RelayCommand]
+    private async void HotWordClickedAsync(string hotWord)
+    {
+        await DoSearchAsync(hotWord);
+    }
+    private async Task DoSearchAsync(string keyword)
+    {
+        SearchHistoryStorage.Add(keyword);
         await Shell.Current.GoToAsync($"..?Keyword={keyword}", true);
     }
 }

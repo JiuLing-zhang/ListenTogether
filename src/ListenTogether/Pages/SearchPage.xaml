@@ -5,57 +5,157 @@
              xmlns:controls="clr-namespace:ListenTogether.Controls"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.SearchPage"
-             Title="搜索">
+             Title="搜索"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
-    <ContentPage.Resources>
-        <Style x:Key="FeeType" TargetType="Label">
-            <Setter Property="TextColor"
-                    Value="{AppThemeBinding Dark={StaticResource DarkFeeText},Light={StaticResource LightFeeText}}"/>
-            <Setter Property="IsVisible"
-                    Value="false"/>
-        </Style>
-    </ContentPage.Resources>
-
-    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
+    <Grid
+        Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
+        MaximumWidthRequest="{OnPlatform  WinUI=500,MacCatalyst=500}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <StackLayout Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
+        <SearchBar
+            Grid.Row="0"
+            x:Name="TxtSearchBar"
+            Text="{Binding Keyword}"
+            SearchCommand="{Binding BeginSearchAsyncCommand}"
+            SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
+            Placeholder="输入歌曲名、歌手名查找..."
+            VerticalOptions="Start">
+        </SearchBar>
+        <!--搜索历史 & 热门搜索-->
+        <FlexLayout
+            Grid.Row="1"
+            Direction="Column"
+            IsVisible="{Binding IsNotSearchingForSuggest}">
+            <FlexLayout
+                Margin="0,0,0,20"
+                Direction="Column"
+                FlexLayout.Basis="150">
+                <StackLayout
+                    Orientation="Horizontal">
+                    <Label
+                        Text="搜索历史"
+                        Style="{StaticResource Explain}"/>
 
-            <SearchBar x:Name="TxtSearchBar"                       
-                       Text="{Binding Keyword}"
-                       SearchCommand="{Binding BeginSearchAsyncCommand}"
-                       SearchCommandParameter="{Binding Text, Source={x:Reference TxtSearchBar}}"
-                       Placeholder="输入歌曲名、歌手名查找..."
-                       TextChanged="TxtSearchBar_TextChanged"
-                       VerticalOptions="Start">
-            </SearchBar>
-
-            <Border VerticalOptions="FillAndExpand"
-                    HorizontalOptions="FillAndExpand"
-                    Padding="1"
-                    StrokeThickness="1">
-                <CollectionView Margin="{OnPlatform WinUI='5,0,5,0',MacCatalyst='5,0,5,0',Android='50,0,50,0',iOS='50,0,50,0'}"
-                                ItemsSource="{Binding SearchSuggest}">
-                    <CollectionView.ItemTemplate>
+                    <Image
+                        Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
+                        HorizontalOptions="EndAndExpand"
+                        HeightRequest="16"
+                        WidthRequest="16">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding RemoveSearchHistoriesAsyncCommand}"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                </StackLayout>
+                <FlexLayout
+                    FlexLayout.Grow="1"
+                    Wrap="Wrap"
+                    AlignContent="Start"
+                    JustifyContent="Start"
+                    BindableLayout.ItemsSource="{Binding SearchHistories}">
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <StackLayout Margin="{OnPlatform WinUI='0',MacCatalyst='0',Android='0,10,0,0',iOS='0,10,0,0'}">
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=BeginSearchAsyncCommand}"
-                                                          CommandParameter="{Binding .}"/>
-                                </StackLayout.GestureRecognizers>
-                                <Label Text="{Binding .}"/>
-                                <Label HeightRequest="1"
-                                       Margin="0,10,0,0"
-                                       VerticalTextAlignment="Center"
-                                       VerticalOptions="EndAndExpand"
-                                       BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"/>
-                            </StackLayout>
+                            <Border
+                                Margin="2,5,2,5"
+                                HeightRequest="28"
+                                Stroke="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"
+                                StrokeThickness="0.1"
+                                StrokeShape="RoundRectangle 15"
+                                Background="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+                                Padding="15,2,15,2">
+                                <Label
+                                    Text="{Binding .}"
+                                    FontSize="12"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    TextColor="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"/>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=HistoriyWordClickedAsyncCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                            </Border>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Border>
-        </StackLayout>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </FlexLayout>
+
+            <FlexLayout
+                Direction="Column"
+                FlexLayout.Grow="1">
+                <Label
+                    Text="热门搜索"
+                    Style="{StaticResource Explain}"/>
+
+                <FlexLayout
+                    FlexLayout.Grow="1"
+                    Wrap="Wrap"
+                    AlignContent="Start"
+                    JustifyContent="Start"
+                    BindableLayout.ItemsSource="{Binding HotWords}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                                Margin="2,5,2,5"
+                                HeightRequest="28"
+                                Stroke="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"
+                                StrokeThickness="0.1"
+                                StrokeShape="RoundRectangle 15"
+                                Background="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+                                Padding="15,2,15,2">
+                                <Label
+                                    Text="{Binding .}"
+                                    FontSize="12"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"/>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=HotWordClickedAsyncCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </FlexLayout>
+        </FlexLayout>
+
+        <!--搜索建议-->
+        <Border
+            Grid.Row="1"
+            ZIndex="2"
+            Padding="1"
+            StrokeThickness="1"
+            IsVisible="{Binding IsSearchingForSuggest}">
+            <CollectionView
+                Margin="{OnPlatform WinUI='5,0,5,0',MacCatalyst='5,0,5,0',Android='50,0,50,0',iOS='50,0,50,0'}"
+                ItemsSource="{Binding SearchSuggest}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout
+                            Margin="{OnPlatform WinUI='0',MacCatalyst='0',Android='0,10,0,0',iOS='0,10,0,0'}">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=BeginSearchAsyncCommand}"
+                                    CommandParameter="{Binding .}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label
+                               Text="{Binding .}"/>
+                            <Label
+                                HeightRequest="1"
+                                Margin="0,10,0,0"
+                                VerticalTextAlignment="Center"
+                                VerticalOptions="EndAndExpand"
+                                BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Border>
     </Grid>
 </ContentPage>
