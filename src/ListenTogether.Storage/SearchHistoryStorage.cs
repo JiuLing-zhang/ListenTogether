@@ -3,6 +3,10 @@
 namespace ListenTogether.Storage;
 public class SearchHistoryStorage
 {
+    /// <summary>
+    /// 历史记录列表的最大数量
+    /// </summary>
+    public static int ListMaxCount { get; set; } = 12;
     public static void Add(string key)
     {
         key = key.ToLower();
@@ -17,6 +21,12 @@ public class SearchHistoryStorage
             histories.Remove(key);
             return;
         }
+
+        if (histories.Count == ListMaxCount)
+        {
+            histories.RemoveAt(ListMaxCount - 1);
+        }
+
         histories.Insert(0, key);
         SetHistories(JsonSerializer.Serialize(histories));
     }
