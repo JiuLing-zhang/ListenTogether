@@ -19,7 +19,6 @@ public class SearchHistoryStorage
         if (histories.Contains(key))
         {
             histories.Remove(key);
-            return;
         }
 
         if (histories.Count == ListMaxCount)
