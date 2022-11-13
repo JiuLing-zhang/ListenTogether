@@ -66,6 +66,11 @@ public partial class SearchPageViewModel : ViewModelBase
     {
         await GetGetHistoriesAsync();
         await GetHotWords();
+#if WINDOWS
+        //TODO 搜索栏有个BUG，如果初始化时指定Text，点击删除时则不会出发TextChanged事件
+        //所以页面显示时，暂时屏蔽掉搜索建议栏的展示
+        IsSearchingForSuggest = false;
+#endif
     }
     private Task GetGetHistoriesAsync()
     {
