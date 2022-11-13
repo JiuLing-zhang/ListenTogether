@@ -57,6 +57,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
     private SearchResultViewModel _musicSelectedResult = null!;
 
     private int _isSearching = 0;
+    private string _lastSearchKey;
     private async Task SearchAsync(string keyword)
     {
         if (keyword.IsEmpty())
@@ -70,6 +71,11 @@ public partial class SearchResultPageViewModel : ViewModelBase
 
         try
         {
+            if (_lastSearchKey == keyword)
+            {
+                return;
+            }
+
             StartLoading("正在搜索....");
             MusicSearchResult.Clear();
             var musics = await _musicNetworkService.SearchAsync(GlobalConfig.MyUserSetting.Search.EnablePlatform, keyword);
@@ -130,6 +136,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
         }
         finally
         {
+            _lastSearchKey = keyword;
             StopLoading();
             Interlocked.Exchange(ref _isSearching, 0);
         }
