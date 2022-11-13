@@ -14,10 +14,10 @@ public class SearchHistoryStorage
         var histories = GetHistories();
         if (histories.Contains(key))
         {
+            histories.Remove(key);
             return;
         }
-
-        histories.Add(key);
+        histories.Insert(0, key);
         SetHistories(JsonSerializer.Serialize(histories));
     }
 
