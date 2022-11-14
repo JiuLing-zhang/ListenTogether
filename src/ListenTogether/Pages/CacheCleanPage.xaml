@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              x:Class="ListenTogether.Pages.CacheCleanPage"
              Title="缓存清理"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
@@ -42,11 +43,17 @@
                         SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding Remark}"
+                        <StackLayout
+                            Orientation="Horizontal"
+                            BackgroundColor="Transparent">
+                            <Label Text="{Binding Remark}"                                   
                                    LineBreakMode="NoWrap"/>
                             <CheckBox HorizontalOptions="EndAndExpand"
                                       IsChecked="{Binding IsChecked}"/>
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CacheCleanViewModel}}, Path=RowClickedAsyncCommand}"
+                                                      CommandParameter="{Binding .}"/>
+                            </StackLayout.GestureRecognizers>
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

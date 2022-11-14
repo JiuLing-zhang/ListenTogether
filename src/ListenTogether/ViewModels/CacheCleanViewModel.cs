@@ -111,6 +111,12 @@ public partial class CacheCleanViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void RowClickedAsync(MusicFileViewModel selected)
+    {
+        selected.IsChecked = !selected.IsChecked;
+    }
+
+    [RelayCommand]
     private async void ClearAsync()
     {
         var isOk = await App.Current.MainPage.DisplayAlert("提示", "确定要删除吗？删除后不可恢复。", "确定", "取消");
