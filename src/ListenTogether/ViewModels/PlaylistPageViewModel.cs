@@ -55,6 +55,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
             {
                 Playlist.Clear();
             }
+            IsPlaylistEmpty = !Playlist.Any();
             return;
         }
 
@@ -87,17 +88,19 @@ public partial class PlaylistPageViewModel : ViewModelBase
                 EditTime = item.EditTime
             });
         }
+
+        IsPlaylistEmpty = !Playlist.Any();
     }
 
-    public bool IsPlaylistEmpty => (Playlist == null || Playlist.Count == 0);
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
+    private bool _isPlaylistEmpty;
     public bool IsPlaylistNotEmpty => !IsPlaylistEmpty;
 
     /// <summary>
     /// 播放列表
     /// </summary>
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsPlaylistEmpty))]
-    [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
     private ObservableCollection<PlaylistViewModel> _playlist = null!;
 
     [RelayCommand]
