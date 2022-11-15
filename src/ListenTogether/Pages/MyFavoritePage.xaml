@@ -47,65 +47,67 @@
                         ItemsSource="{Binding FavoriteList}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-
                         <StackLayout>
                             <OnPlatform x:TypeArguments="View">
                                 <On Platform="WinUI, macOS">
-                                    <Grid Margin="0,0,0,20"
-                                      RowDefinitions="auto,auto"
-                                      ColumnDefinitions="35,65,*">
+                                    <Grid
+                                        RowDefinitions="35,35"
+                                        ColumnDefinitions="35,55,*">
                                         <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailAsyncCommand}"
-                                                              CommandParameter="{Binding .}">
-                                            </TapGestureRecognizer>
+                                            <TapGestureRecognizer                                                
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailAsyncCommand}"
+                                                CommandParameter="{Binding .}"/>
                                         </Grid.GestureRecognizers>
 
-                                        <Image Grid.Row="0"
-                                           Grid.RowSpan="2"
-                                           Grid.Column="0"
-                                           x:Name="ImgPlayAll"
-                                           Source="{AppThemeBinding Dark='play_dark.png',Light='play.png'}"
-                                           Aspect="AspectFill"
-                                           WidthRequest="28"
-                                           HeightRequest="28"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center">
+                                        <Image
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="0"
+                                            x:Name="ImgPlayAll"
+                                            Source="{AppThemeBinding Dark='play_dark.png',Light='play.png'}"
+                                            Aspect="AspectFill"
+                                            WidthRequest="28"
+                                            HeightRequest="28"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="Center">
                                             <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsAsyncCommand}"
-                                                                  CommandParameter="{Binding .}"/>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsAsyncCommand}"
+                                                    CommandParameter="{Binding .}"/>
                                             </Image.GestureRecognizers>
                                         </Image>
 
-                                        <Frame Grid.Row="0"
-                                           Grid.RowSpan="2"
-                                           Grid.Column="1"
-                                           BorderColor="Transparent"
-                                           CornerRadius="8"
-                                           HeightRequest="48"
-                                           WidthRequest="48"
-                                           IsClippedToBounds="True"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center">
-                                            <Image Aspect="AspectFill"
-                                                   Margin="-20"
-                                                   HeightRequest="48"
-                                                   WidthRequest="48"
-                                                   Source="{Binding ImageByteArray, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"/>
-                                        </Frame>
+                                        <Border
+                                            Grid.Row="0"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="1"
+                                            HeightRequest="48"
+                                            WidthRequest="48"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            StrokeThickness="0.1"
+                                            StrokeShape="RoundRectangle 5">
+                                            <Image
+                                                Aspect="AspectFill"
+                                                Source="{Binding ImageByteArray, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"/>
+                                        </Border>
 
-                                        <Label Grid.Row="0"
-                                           Grid.Column="2"
-                                           Text="{Binding Name}"
-                                           LineBreakMode="TailTruncation"/>
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            VerticalOptions="Start"
+                                            Margin="0,12,0,0"
+                                            Text="{Binding Name}"
+                                            LineBreakMode="TailTruncation"/>
 
-                                        <Label Grid.Row="1"
-                                           Grid.Column="2"
-                                           Style="{StaticResource Explain}"
-                                           LineBreakMode="TailTruncation">
-                                            <MultiBinding StringFormat="共 {0} 首歌">
-                                                <Binding Path="MusicCount"></Binding>
-                                            </MultiBinding>
-                                        </Label>
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            VerticalOptions="End"
+                                            Margin="0,0,0,12"
+                                            Style="{StaticResource Explain}"
+                                            Text="{Binding MusicCount,StringFormat='共 {0} 首歌'}"
+                                            LineBreakMode="TailTruncation"/>
                                     </Grid>
                                 </On>
 
