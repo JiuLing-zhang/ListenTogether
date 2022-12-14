@@ -2,7 +2,8 @@
 internal class SearchKeyFilter : IMusicSearchFilter
 {
     private string _searchKey;
-    public SearchKeyFilter(string searchKey)      {
+    public SearchKeyFilter(string searchKey)
+    {
         _searchKey = searchKey;
     }
     public List<MusicSearchResult> Filter(List<MusicSearchResult> musics)

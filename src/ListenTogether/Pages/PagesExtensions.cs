@@ -4,7 +4,7 @@ public static class PagesExtensions
 {
     public static MauiAppBuilder ConfigurePages(this MauiAppBuilder builder)
     {
-        builder.Services.AddTransient<MyFavoritePage>();    
+        builder.Services.AddTransient<MyFavoritePage>();
         builder.Services.AddSingleton<PlaylistPage>();
         builder.Services.AddTransient<SearchResultPage>();
         builder.Services.AddSingleton<SettingsPage>();

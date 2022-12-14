@@ -9,154 +9,154 @@ using AndroidApp = Android.App;
 
 namespace NativeMediaMauiLib.Platforms.Android.CurrentActivity
 {
-	/// <summary>
-	/// Implementation for Feature
-	/// </summary>
-	[Preserve(AllMembers = true)]
-	public class CurrentActivityImplementation : ICurrentActivity
-	{
+    /// <summary>
+    /// Implementation for Feature
+    /// </summary>
+    [Preserve(AllMembers = true)]
+    public class CurrentActivityImplementation : ICurrentActivity
+    {
 
-		/// <summary>
-		/// Gets or sets the activity.
-		/// </summary>
-		/// <value>The activity.</value>
-		public Activity Activity
-		{
-			get => lifecycleListener?.Activity;
-			set
-			{
-				if (lifecycleListener == null)
-					Init(value, null);
-			}
-		}
+        /// <summary>
+        /// Gets or sets the activity.
+        /// </summary>
+        /// <value>The activity.</value>
+        public Activity Activity
+        {
+            get => lifecycleListener?.Activity;
+            set
+            {
+                if (lifecycleListener == null)
+                    Init(value, null);
+            }
+        }
 
-		/// <summary>
-		/// Activity state changed event handler
-		/// </summary>
-		public event EventHandler<ActivityEventArgs> ActivityStateChanged;
-
-
-		/// <summary>
-		/// Waits for an activity to be ready
-		/// </summary>
-		/// <returns></returns>
-		public async Task<Activity> WaitForActivityAsync(CancellationToken cancelToken = default)
-		{
-			if (Activity != null)
-				return Activity;
-
-			var tcs = new TaskCompletionSource<Activity>();
-			var handler = new EventHandler<ActivityEventArgs>((sender, args) =>
-			{
-				if (args.Event == ActivityEvent.Created || args.Event == ActivityEvent.Resumed)
-					tcs.TrySetResult(args.Activity);
-			});
-
-			try
-			{
-				using (cancelToken.Register(() => tcs.TrySetCanceled()))
-				{
-					ActivityStateChanged += handler;
-					return await tcs.Task.ConfigureAwait(false);
-				}
-			}
-			finally
-			{
-				ActivityStateChanged -= handler;
-			}
-		}
+        /// <summary>
+        /// Activity state changed event handler
+        /// </summary>
+        public event EventHandler<ActivityEventArgs> ActivityStateChanged;
 
 
-		internal void RaiseStateChanged(Activity activity, ActivityEvent ev)
-			=> ActivityStateChanged?.Invoke(this, new ActivityEventArgs(activity, ev));
+        /// <summary>
+        /// Waits for an activity to be ready
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Activity> WaitForActivityAsync(CancellationToken cancelToken = default)
+        {
+            if (Activity != null)
+                return Activity;
+
+            var tcs = new TaskCompletionSource<Activity>();
+            var handler = new EventHandler<ActivityEventArgs>((sender, args) =>
+            {
+                if (args.Event == ActivityEvent.Created || args.Event == ActivityEvent.Resumed)
+                    tcs.TrySetResult(args.Activity);
+            });
+
+            try
+            {
+                using (cancelToken.Register(() => tcs.TrySetCanceled()))
+                {
+                    ActivityStateChanged += handler;
+                    return await tcs.Task.ConfigureAwait(false);
+                }
+            }
+            finally
+            {
+                ActivityStateChanged -= handler;
+            }
+        }
 
 
-		ActivityLifecycleContextListener lifecycleListener;
+        internal void RaiseStateChanged(Activity activity, ActivityEvent ev)
+            => ActivityStateChanged?.Invoke(this, new ActivityEventArgs(activity, ev));
 
-		/// <summary>
-		/// Gets the current application context
-		/// </summary>
-		public Context AppContext =>
-			AndroidApp.Application.Context;
 
-		/// <summary>
-		/// Initialize current activity with application
-		/// </summary>
-		/// <param name="application">The main application</param>
-		public void Init(AndroidApp.Application application)
-		{
-			if (lifecycleListener != null)
-				return;
+        ActivityLifecycleContextListener lifecycleListener;
 
-			lifecycleListener = new ActivityLifecycleContextListener();
-			application.RegisterActivityLifecycleCallbacks(lifecycleListener);
-		}
+        /// <summary>
+        /// Gets the current application context
+        /// </summary>
+        public Context AppContext =>
+            AndroidApp.Application.Context;
 
-		/// <summary>
-		/// Initialize current activity with activity!
-		/// </summary>
-		/// <param name="activity">The main activity</param>
-		/// <param name="bundle">Bundle for activity </param>
-		public void Init(Activity activity, Bundle bundle)
-		{
-			Init(activity.Application);
-			lifecycleListener.Activity = activity;
-		}
-	}
+        /// <summary>
+        /// Initialize current activity with application
+        /// </summary>
+        /// <param name="application">The main application</param>
+        public void Init(AndroidApp.Application application)
+        {
+            if (lifecycleListener != null)
+                return;
 
-	[Preserve(AllMembers = true)]
-	class ActivityLifecycleContextListener : Java.Lang.Object, AndroidApp.Application.IActivityLifecycleCallbacks
-	{
-		WeakReference<Activity> currentActivity = new WeakReference<Activity>(null);
+            lifecycleListener = new ActivityLifecycleContextListener();
+            application.RegisterActivityLifecycleCallbacks(lifecycleListener);
+        }
 
-		public Context Context =>
-			Activity ?? AndroidApp.Application.Context;
+        /// <summary>
+        /// Initialize current activity with activity!
+        /// </summary>
+        /// <param name="activity">The main activity</param>
+        /// <param name="bundle">Bundle for activity </param>
+        public void Init(Activity activity, Bundle bundle)
+        {
+            Init(activity.Application);
+            lifecycleListener.Activity = activity;
+        }
+    }
 
-		public Activity Activity
-		{
-			get => currentActivity.TryGetTarget(out var a) ? a : null;
-			set => currentActivity.SetTarget(value);
-		}
+    [Preserve(AllMembers = true)]
+    class ActivityLifecycleContextListener : Java.Lang.Object, AndroidApp.Application.IActivityLifecycleCallbacks
+    {
+        WeakReference<Activity> currentActivity = new WeakReference<Activity>(null);
 
-		CurrentActivityImplementation Current =>
-			(CurrentActivityImplementation)(CrossCurrentActivity.Current);
+        public Context Context =>
+            Activity ?? AndroidApp.Application.Context;
 
-		public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
-		{
-			Activity = activity;
-			Current.RaiseStateChanged(activity, ActivityEvent.Created);
-		}
+        public Activity Activity
+        {
+            get => currentActivity.TryGetTarget(out var a) ? a : null;
+            set => currentActivity.SetTarget(value);
+        }
 
-		public void OnActivityDestroyed(Activity activity)
-		{
-			Current.RaiseStateChanged(activity, ActivityEvent.Destroyed);
-		}
+        CurrentActivityImplementation Current =>
+            (CurrentActivityImplementation)(CrossCurrentActivity.Current);
 
-		public void OnActivityPaused(Activity activity)
-		{
-			Activity = activity;
-			Current.RaiseStateChanged(activity, ActivityEvent.Paused);
-		}
+        public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
+        {
+            Activity = activity;
+            Current.RaiseStateChanged(activity, ActivityEvent.Created);
+        }
 
-		public void OnActivityResumed(Activity activity)
-		{
-			Activity = activity;
-			Current.RaiseStateChanged(activity, ActivityEvent.Resumed);
-		}
+        public void OnActivityDestroyed(Activity activity)
+        {
+            Current.RaiseStateChanged(activity, ActivityEvent.Destroyed);
+        }
 
-		public void OnActivitySaveInstanceState(Activity activity, Bundle outState)
-		{
-			Current.RaiseStateChanged(activity, ActivityEvent.SaveInstanceState);
-		}
+        public void OnActivityPaused(Activity activity)
+        {
+            Activity = activity;
+            Current.RaiseStateChanged(activity, ActivityEvent.Paused);
+        }
 
-		public void OnActivityStarted(Activity activity)
-		{
-			Current.RaiseStateChanged(activity, ActivityEvent.Started);
-		}
+        public void OnActivityResumed(Activity activity)
+        {
+            Activity = activity;
+            Current.RaiseStateChanged(activity, ActivityEvent.Resumed);
+        }
 
-		public void OnActivityStopped(Activity activity)
-		{
-			Current.RaiseStateChanged(activity, ActivityEvent.Stopped);
-		}
-	}
+        public void OnActivitySaveInstanceState(Activity activity, Bundle outState)
+        {
+            Current.RaiseStateChanged(activity, ActivityEvent.SaveInstanceState);
+        }
+
+        public void OnActivityStarted(Activity activity)
+        {
+            Current.RaiseStateChanged(activity, ActivityEvent.Started);
+        }
+
+        public void OnActivityStopped(Activity activity)
+        {
+            Current.RaiseStateChanged(activity, ActivityEvent.Stopped);
+        }
+    }
 }

@@ -12,7 +12,7 @@ internal class EnvironmentConfigEntity
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    
+
 
     [Column("PlayerSetting")]
     public string PlayerSettingJson { get; set; } = null!;
