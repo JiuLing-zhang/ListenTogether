@@ -1,17 +1,17 @@
-name: Autoformat code
+name: Format check on push
 on: push
-
-# This action only need a single permission in order to autoformat the code.
-permissions:
-  contents: read
-  
 jobs:
-  autoformat-code:
-    name: Autoformat code
+  dotnet-format:
     runs-on: ubuntu-latest
-
     steps:
-    - name: 'Autoformat'
-      uses: rolfbjarne/autoformat@v0.2
-      with:
-        projects: "ListenTogether.sln"
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Add dotnet-format problem matcher
+        uses: xt0rted/dotnet-format-problem-matcher@v1
+
+      - name: Restore dotnet tools
+        uses: xt0rted/dotnet-tool-restore@v1
+
+      - name: Run dotnet format
+        uses: xt0rted/dotnet-format@v1
