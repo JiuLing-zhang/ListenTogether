@@ -2,16 +2,16 @@ namespace ListenTogether.Pages;
 
 public partial class MyFavoriteDetailPage : ContentPage
 {
-	MyFavoriteDetailPageViewModel vm => BindingContext as MyFavoriteDetailPageViewModel;
-	public MyFavoriteDetailPage(MyFavoriteDetailPageViewModel vm)
-	{
-		InitializeComponent();
-		BindingContext = vm;
-	}
+    MyFavoriteDetailPageViewModel vm => BindingContext as MyFavoriteDetailPageViewModel;
+    public MyFavoriteDetailPage(MyFavoriteDetailPageViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = vm;
+    }
 
-	protected override async void OnAppearing()
-	{
-		base.OnAppearing();
-		await vm.InitializeAsync();
-	}
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await vm.InitializeAsync();
+    }
 }
