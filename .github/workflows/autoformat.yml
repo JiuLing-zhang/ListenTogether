@@ -1,5 +1,5 @@
 name: Autoformat code
-on: pull_request
+on: push
 
 # This action only need a single permission in order to autoformat the code.
 permissions:
