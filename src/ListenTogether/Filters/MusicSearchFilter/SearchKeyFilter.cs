@@ -1,7 +1,7 @@
 ﻿namespace ListenTogether.Filters.MusicSearchFilter;
 internal class SearchKeyFilter : IMusicSearchFilter
 {
-        private string _searchKey;
+    private string _searchKey;
     public SearchKeyFilter(string searchKey)
     {
         _searchKey = searchKey;
