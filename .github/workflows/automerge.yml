@@ -8,8 +8,11 @@ permissions:
 jobs:
   automerge:
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
     steps:
+      - name: test console
+        run: echo "console log?"
+      - name: test console 2
+        run: echo github.actor
       - uses: peter-evans/enable-pull-request-automerge@v2
         with:
           pull-request-number: ${{ github.event.pull_request.number }}
