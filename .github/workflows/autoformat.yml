@@ -26,6 +26,7 @@ jobs:
           git commit -a -m 'Automated dotnet-format update'
 
       - name: Create Pull Request
+        id: cpr
         if: steps.format.outputs.has-changes == 'true'
         uses: peter-evans/create-pull-request@v3
         with:
