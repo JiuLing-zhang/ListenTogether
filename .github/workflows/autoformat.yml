@@ -5,7 +5,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install dotnet-format
         run: dotnet tool install -g dotnet-format
@@ -37,3 +37,10 @@ jobs:
           assignees: JiuLing-zhang
           reviewers: JiuLing-zhang
           branch: bot/fix-codeformatting
+
+      - name: Enable Pull Request Automerge
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        uses: peter-evans/enable-pull-request-automerge@v2
+        with:
+          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+          merge-method: squash
