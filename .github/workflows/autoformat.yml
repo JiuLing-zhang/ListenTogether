@@ -26,7 +26,6 @@ jobs:
           git commit -a -m 'Automated dotnet-format update'
 
       - name: Create Pull Request
-        id: cpr
         if: steps.format.outputs.has-changes == 'true'
         uses: peter-evans/create-pull-request@v3
         with:
@@ -38,10 +37,3 @@ jobs:
           assignees: JiuLing-zhang
           reviewers: JiuLing-zhang
           branch: bot/fix-codeformatting
-
-      - name: Enable Pull Request Automerge
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        uses: peter-evans/enable-pull-request-automerge@v2
-        with:
-          pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
-          merge-method: squash
