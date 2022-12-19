@@ -22,8 +22,6 @@
                     Value="CenterAndExpand"/>
             <Setter Property="VerticalOptions"
                     Value="CenterAndExpand"/>
-            <Setter Property="LineBreakMode"
-                    Value="TailTruncation"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsHighlight}"
                              Value="True"
@@ -47,7 +45,7 @@
             IsRunning="{Binding IsLoading}"
             Text="{Binding LoadingText}"/>
         <Grid
-            RowDefinitions="{OnPlatform WinUI='*,90',Android='400,*,110',iOS='400,*,110'}"
+            RowDefinitions="{OnPlatform WinUI='*,90',Android='300,*,130',iOS='300,*,130'}"
             ColumnDefinitions="{OnPlatform WinUI='*,*',Android='*',iOS='*'}"
             Style="{StaticResource StackLayoutLoading}"
             VerticalOptions="FillAndExpand"            >
@@ -58,7 +56,7 @@
                 <Image
                     HorizontalOptions="Center"
                     Aspect="AspectFit"
-                    WidthRequest="{OnPlatform WinUI=250,Android=350,iOS=350}">
+                    WidthRequest="250">
                     <Image.Source>
                         <UriImageSource
                             Uri="{Binding CurrentMusic.ImageUrl}"
@@ -81,7 +79,7 @@
             <StackLayout
                 Grid.Row="{OnPlatform WinUI='0',Android='1',iOS='1'}"
                 Grid.Column="{OnPlatform WinUI='1',Android='0',iOS='0'}"
-                Margin="{OnPlatform WinUI='10,80,20,80',Android='20,20,10,0',iOS='20,20,20,0'}">
+                Margin="{OnPlatform WinUI='10,80,20,80',Android='20,10,10,0',iOS='20,10,20,0'}">
                 <Label
                     Text="当前未播放歌曲"
                     TextColor="{StaticResource PlayingPageText}"
@@ -164,7 +162,8 @@
             <StackLayout
                 Grid.Row="{OnPlatform WinUI='1',Android='2',iOS='2'}"
                 Grid.Column="0"
-                Grid.ColumnSpan="{OnPlatform WinUI='2',Android='1',iOS='1'}">
+                Grid.ColumnSpan="{OnPlatform WinUI='2',Android='1',iOS='1'}"
+                Margin="{OnPlatform WinUI='0,0,0,0',Android='0,20,0,0',iOS='0,20,0,0'}">
                 <controls:Player x:Name="player"
                                  IsPlayingPage="True"/>
             </StackLayout>
