@@ -9,7 +9,7 @@ public static class PagesExtensions
         builder.Services.AddTransient<SearchResultPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
-        builder.Services.AddSingleton<PlayingPage>();
+        builder.Services.AddTransient<PlayingPage>();
         builder.Services.AddTransient<MyFavoriteDetailPage>();
         builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<RegisterPage>();

@@ -1,5 +1,4 @@
-﻿using ListenTogether.Storage;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
@@ -66,21 +65,5 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
         Routing.RegisterRoute(nameof(CacheCleanPage), typeof(CacheCleanPage));
         Routing.RegisterRoute(nameof(LogPage), typeof(LogPage));
-
-        Shell.Current.Navigating += Current_Navigating;
-    }
-
-    private async void Current_Navigating(object sender, ShellNavigatingEventArgs e)
-    {
-        if (e.Source != ShellNavigationSource.Push)
-        {
-            var target = e.Target.Location.OriginalString;
-            if (target.IndexOf("PlayingPage") > 0)
-            {
-                e.Cancel();
-                target = target.Replace("/PlayingPage", "");
-                await Shell.Current.GoToAsync(target);
-            }
-        }
     }
 }

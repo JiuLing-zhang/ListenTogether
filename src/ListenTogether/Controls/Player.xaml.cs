@@ -341,14 +341,12 @@ public partial class Player : ContentView
         _playerService.IsPlayingChanged -= PlayerService_IsPlayingChanged;
         _playerService.NewMusicAdded -= playerService_NewMusicAdded;
         _playerService.PositionChanged -= _playerService_PositionChanged;
+        Navigation.PopAsync(true);
     }
 
     private async void GoToPlayingPage_Tapped(object sender, EventArgs e)
     {
-        if (Shell.Current.CurrentPage.GetType() == typeof(PlayingPage))
-        {
-            return;
-        }
-        await Shell.Current.GoToAsync($"{nameof(PlayingPage)}", true);
+        var vm = this.Handler.MauiContext.Services.GetRequiredService<PlayingPageViewModel>();
+        await Navigation.PushAsync(new PlayingPage(vm), true);
     }
 }
