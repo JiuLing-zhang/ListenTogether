@@ -1,10 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
-             xmlns:services="clr-namespace:ListenTogether.Services"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
-             xmlns:JiuLing="clr-namespace:JiuLing.Controls.Maui.Handlers.GaussianImage;assembly=JiuLing.Controls.Maui"
+             xmlns:jiuling="clr-namespace:JiuLing.Controls.Maui.Handlers.GaussianImage;assembly=JiuLing.Controls.Maui"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.PlayingPage"
              Title="正在播放">
@@ -36,7 +34,7 @@
     </ContentPage.Resources>
 
     <Grid BackgroundColor="{StaticResource PlayingPageBackgroundColor}">
-        <JiuLing:GaussianImage Url="{Binding CurrentMusic.ImageUrl}"
+        <jiuling:GaussianImage Url="{Binding CurrentMusic.ImageUrl}"
                                BackgroundColor="#000"
                                Opacity="0.6"
                                HorizontalOptions="FillAndExpand"
@@ -47,8 +45,8 @@
         <Grid
             RowDefinitions="{OnPlatform WinUI='*,90',Android='300,*,130',iOS='300,*,130'}"
             ColumnDefinitions="{OnPlatform WinUI='*,*',Android='*',iOS='*'}"
-            Style="{StaticResource StackLayoutLoading}"
-            VerticalOptions="FillAndExpand"            >
+            Style="{StaticResource GridLoading}"
+            VerticalOptions="FillAndExpand">
             <StackLayout
                 Grid.Row="0"
                 Grid.Column="0"
