@@ -5,7 +5,6 @@ using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.NetEase;
 using ListenTogether.Network.Utils;
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace ListenTogether.Network.MusicProvider;
@@ -134,7 +133,7 @@ public class NetEaseMusicProvider : IMusicProvider
                     Alias = alia,
                     Artist = artistName,
                     Album = song.al.name,
-                    ImageUrl = song.al.picUrl,
+                    ImageUrl = $"{song.al.picUrl}?param=250y250",
                     Duration = TimeSpan.FromMilliseconds(song.dt),
                     Fee = GetFeeFlag(song.privilege)
                 };
