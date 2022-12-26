@@ -83,6 +83,9 @@ public partial class Player : ContentView
             //var lightText = (Color)Application.Current.Resources["LightText"];
             //var lightTextSecond = (Color)Application.Current.Resources["LightTextSecond"];            
             LblMusicInfo.TextColor = Color.FromArgb("#262626");
+            LblPosition.TextColor = Color.FromArgb("#262626");
+            LblProgressSplit.TextColor = Color.FromArgb("#262626");
+            LblDuration.TextColor = Color.FromArgb("#262626");
 
             SliderPlayProgress.MinimumTrackColor = Color.FromArgb("#262626");
             SliderPlayProgress.MaximumTrackColor = Color.FromArgb("#717171");
@@ -98,6 +101,9 @@ public partial class Player : ContentView
             //var darkText = (Color)Application.Current.Resources["DarkText"]; 
             //var darkTextSecond = (Color)Application.Current.Resources["DarkTextSecond"];
             LblMusicInfo.TextColor = Color.FromArgb("#FCF2F7");
+            LblPosition.TextColor = Color.FromArgb("#FCF2F7");
+            LblProgressSplit.TextColor = Color.FromArgb("#FCF2F7");
+            LblDuration.TextColor = Color.FromArgb("#FCF2F7");
 
             SliderPlayProgress.MinimumTrackColor = Color.FromArgb("#FFFFFF");
             SliderPlayProgress.MaximumTrackColor = Color.FromArgb("#FCF2F7");
