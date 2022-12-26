@@ -92,16 +92,19 @@
                         Orientation="Horizontal"
                         HorizontalOptions="CenterAndExpand">
 
-                        <Border Padding="4,0,4,0"
-                                    StrokeThickness="1"
-                                    VerticalOptions="Center"
-                                    HorizontalOptions="Center">
+                        <Border
+                            Padding="4,0,4,0"
+                            Stroke="{StaticResource PlayingPageText}"
+                            StrokeThickness="1"
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="5" />
                             </Border.StrokeShape>
-                            <Label Text="{Binding CurrentMusic.PlatformName}"
-                                       FontSize="16"
-                                       Style="{StaticResource Explain}"/>
+                            <Label
+                                Text="{Binding CurrentMusic.PlatformName}"
+                                FontSize="16"
+                                TextColor="{StaticResource PlayingPageText}"/>
                         </Border>
 
                         <Label
