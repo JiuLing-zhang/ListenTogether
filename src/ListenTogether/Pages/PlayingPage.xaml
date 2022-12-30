@@ -2,8 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
-             xmlns:jiuling="clr-namespace:JiuLing.Controls.Maui.Handlers.GaussianImage;assembly=JiuLing.Controls.Maui"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:gaussianImage="clr-namespace:ListenTogether.Handlers.GaussianImage"
              x:Class="ListenTogether.Pages.PlayingPage"
              Title="正在播放">
     <ContentPage.Resources>
@@ -34,11 +34,12 @@
     </ContentPage.Resources>
 
     <Grid BackgroundColor="{StaticResource PlayingPageBackgroundColor}">
-        <jiuling:GaussianImage Url="{Binding CurrentMusic.ImageUrl}"
-                               BackgroundColor="#000"
-                               Opacity="0.6"
-                               HorizontalOptions="FillAndExpand"
-                               VerticalOptions="FillAndExpand"/>
+        <gaussianImage:GaussianImage
+            SourceByteArray="{Binding CurrentMusicImageByteArray}"
+            BackgroundColor="#000"
+            Opacity="0.6"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"/>
         <controls:Loading
             IsRunning="{Binding IsLoading}"
             Text="{Binding LoadingText}"/>
@@ -54,13 +55,8 @@
                 <Image
                     HorizontalOptions="Center"
                     Aspect="AspectFit"
-                    WidthRequest="250">
-                    <Image.Source>
-                        <UriImageSource
-                            Uri="{Binding CurrentMusic.ImageUrl}"
-                            CacheValidity="30" />
-                    </Image.Source>
-                </Image>
+                    WidthRequest="250"
+                    Source="{Binding CurrentMusicImageByteArray, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"/>
 
                 <Label
                     Margin="0,10,0,0"
@@ -96,6 +92,7 @@
                             Padding="4,0,4,0"
                             Stroke="{StaticResource PlayingPageText}"
                             StrokeThickness="1"
+                            BackgroundColor="Transparent"
                             VerticalOptions="Center"
                             HorizontalOptions="Center">
                             <Border.StrokeShape>

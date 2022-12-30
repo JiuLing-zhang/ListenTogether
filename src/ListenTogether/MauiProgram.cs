@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Maui;
-using JiuLing.Controls.Maui;
+using ListenTogether.Handlers.GaussianImage;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 using NativeMediaMauiLib;
@@ -15,7 +15,6 @@ namespace ListenTogether
             builder
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkit()
-                .UseJiuLingControls()
                 .UseNativeMedia()
                 .UseBusiness()
                 .ConfigureServices()
@@ -27,7 +26,10 @@ namespace ListenTogether
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
-
+            builder.ConfigureMauiHandlers(handler =>
+            {
+                handler.AddHandler(typeof(GaussianImage), typeof(GaussianImageHandler));
+            });
             builder.ConfigureLifecycleEvents(events =>
             {
 #if ANDROID

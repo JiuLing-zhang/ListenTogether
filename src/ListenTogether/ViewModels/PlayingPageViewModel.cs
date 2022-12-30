@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ListenTogether.Model;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -9,7 +8,7 @@ public partial class PlayingPageViewModel : ViewModelBase
 {
     //控制手动滚动歌词时，系统暂停歌词滚动
     private DateTime _lastScrollToTime = DateTime.Now;
-
+    private static readonly HttpClient MyHttpClient = new HttpClient();
     private readonly PlayerService _playerService = null!;
     private readonly IDispatcherTimer _timerLyricsUpdate = null!;
     private readonly IMusicNetworkService _musicNetworkService = null!;
@@ -37,7 +36,7 @@ public partial class PlayingPageViewModel : ViewModelBase
             _playerService.NewMusicAdded += _playerService_NewMusicAdded;
             _timerLyricsUpdate.Tick += _timerLyricsUpdate_Tick;
             _timerLyricsUpdate.Start();
-            NewMusicAddedDo();
+            await NewMusicAddedDoAsync();
         }
         catch (Exception ex)
         {
@@ -53,6 +52,12 @@ public partial class PlayingPageViewModel : ViewModelBase
     private Music _currentMusic = null!;
 
     /// <summary>
+    /// 当前播放的歌曲图片
+    /// </summary>
+    [ObservableProperty]
+    private byte[] _currentMusicImageByteArray = null!;
+
+    /// <summary>
     /// 每行的歌词
     /// </summary>
     [ObservableProperty]
@@ -65,20 +70,21 @@ public partial class PlayingPageViewModel : ViewModelBase
     [ObservableProperty]
     private string _shareLabelText = Config.Desktop ? "复制歌曲链接" : "分享歌曲链接";
 
-    private void _playerService_NewMusicAdded(object sender, EventArgs e)
+    private async void _playerService_NewMusicAdded(object sender, EventArgs e)
     {
-        NewMusicAddedDo();
+        await NewMusicAddedDoAsync();
     }
-    private void NewMusicAddedDo()
+    private async Task NewMusicAddedDoAsync()
     {
         CurrentMusic = _playerService.CurrentMusic;
-        GetLyricDetail();
+        CurrentMusicImageByteArray = await MyHttpClient.GetByteArrayAsync(CurrentMusic.ImageUrl);
+        await GetLyricDetailAsync();
     }
 
     /// <summary>
     /// 解析歌词
     /// </summary>
-    private async void GetLyricDetail()
+    private async Task GetLyricDetailAsync()
     {
         if (Lyrics.Count > 0)
         {

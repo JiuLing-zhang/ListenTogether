@@ -77,7 +77,10 @@
 		<ProjectReference Include="..\ListenTogether.Storage\ListenTogether.Storage.csproj" />
 		<ProjectReference Include="..\NativeMediaMauiLib\NativeMediaMauiLib.csproj" />
 	</ItemGroup>
-
+	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<MauiXaml Update="Controls\SwitchEx.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -92,5 +95,4 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
-
 </Project>
