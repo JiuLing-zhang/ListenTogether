@@ -36,11 +36,16 @@ src
 尊贵的`Windows`安装包需要签名，所以打包的时候进行了自签名，首次安装时需要信任证书。
 戳这里看教程👉👉👉[`微软官方教程`](https://docs.microsoft.com/zh-cn/dotnet/maui/windows/deployment/overview#installing-the-app)  
 
-## 4、服务器配置
-### &nbsp;4.1、同步歌单
-&nbsp;&nbsp;需要同步歌单时，可以通过发布`ListenTogether.Api`项目（用`.NET 6`写的），然后在程序设置页面配置下歌单服务器地址即可（例如：`http://xxx.xxx`）。  
-### &nbsp;~~4.2、自动更新~~
-&nbsp;&nbsp;~~仓库不做打包和分发，因此无法使用该功能。~~  
+## 4、服务配置
+
+通过资源文件 `\ListenTogether\Resources\Raw\NetConfig.json` 设置**同步歌单**、**自动更新**服务。  
+> 同步歌单时，发布`ListenTogether.Api`项目即可。  
+```json
+{
+  "UpdateDomain": "自动更新地址",
+  "ApiDomain": "歌单服务地址",
+}
+```
 
 ## 5、来几张图片
 
