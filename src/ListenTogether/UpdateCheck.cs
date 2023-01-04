@@ -7,11 +7,6 @@ internal class UpdateCheck
     private static readonly HttpClientHelper MyHttpClient = new HttpClientHelper();
 
     /// <summary>
-    /// App Key
-    /// </summary>
-    private const string AppKey = "listen-together";
-
-    /// <summary>
     /// 自动更新地址
     /// </summary>
     private static string CheckUpdateUrl
@@ -36,7 +31,7 @@ internal class UpdateCheck
             {
                 throw new ArgumentException("不支持的系统类型");
             }
-            return $"{GlobalConfig.UpdateDomain}/api/app/{AppKey}/{osTag}";
+            return $"{GlobalConfig.UpdateDomain}/{osTag}";
         }
     }
 
