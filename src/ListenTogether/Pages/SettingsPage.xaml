@@ -88,51 +88,7 @@
 
                             <jiuLing:TextSwitch Text="深色主题（可能需要重启）"
                                                 IsToggled="{Binding IsDarkMode}"/>
-
-                            <StackLayout Margin="0,10,0,0"
-                                         Orientation="Horizontal">
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding SetApiDomainAsyncCommand}"/>
-                                </StackLayout.GestureRecognizers>
-                                <Label Text="歌单服务器地址"
-                                       VerticalTextAlignment="Center"/>
-
-                                <Label Style="{StaticResource Explain}"
-                                       Text="{Binding ApiDomain}"
-                                       Margin="{OnPlatform WinUI='50,0,0,0',MacCatalyst='50,0,0,0'}"
-                                       HorizontalOptions="{OnPlatform Android=EndAndExpand, iOS=EndAndExpand }"
-                                       VerticalOptions="Center"
-                                       VerticalTextAlignment="Center"/>
-                                <Label Style="{StaticResource Explain}"
-                                       FontSize="16"
-                                       Margin="{OnPlatform Android='10,0,0,0',iOS='10,0,0,0'}"
-                                       HorizontalOptions="{OnPlatform Android=End, iOS=End,WinUI=EndAndExpand,MacCatalyst=EndAndExpand }"
-                                       VerticalTextAlignment="Center"
-                                       Text="〉"></Label>
-                            </StackLayout>
-
-                            <StackLayout Margin="0,10,0,0"
-                                         Orientation="Horizontal">
-                                <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding SetUpdateDomainAsyncCommand}"/>
-                                </StackLayout.GestureRecognizers>
-                                <Label Text="更新服务器地址"
-                                       VerticalTextAlignment="Center"/>
-
-                                <Label Style="{StaticResource Explain}"
-                                       Text="{Binding UpdateDomain}"
-                                       Margin="{OnPlatform WinUI='50,0,0,0',MacCatalyst='50,0,0,0'}"
-                                       HorizontalOptions="{OnPlatform Android=EndAndExpand, iOS=EndAndExpand }"
-                                       VerticalOptions="Center"
-                                       VerticalTextAlignment="Center"/>
-                                <Label Style="{StaticResource Explain}"
-                                       FontSize="16"
-                                       Margin="{OnPlatform Android='10,0,0,0',iOS='10,0,0,0'}"
-                                       HorizontalOptions="{OnPlatform Android=End, iOS=End,WinUI=EndAndExpand,MacCatalyst=EndAndExpand }"
-                                       VerticalTextAlignment="Center"
-                                       Text="〉"></Label>
-                            </StackLayout>
-
+                            
                             <!-- 搜索设置 -->
                             <Label 
                                 Margin="0,40,0,0"

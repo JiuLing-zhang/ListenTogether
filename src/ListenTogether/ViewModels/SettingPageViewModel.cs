@@ -82,18 +82,6 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// 歌单服务器地址
-    /// </summary>
-    [ObservableProperty]
-    private string _apiDomain = GlobalConfig.ApiDomain.IsEmpty() ? "未设置" : GlobalConfig.ApiDomain;
-
-    /// <summary>
-    /// 自动更新服务器地址
-    /// </summary>
-    [ObservableProperty]
-    private string _updateDomain = GlobalConfig.UpdateDomain.IsEmpty() ? "未设置" : GlobalConfig.UpdateDomain;
-
-    /// <summary>
     /// 网易云
     /// </summary>
     [ObservableProperty]
@@ -314,30 +302,6 @@ public partial class SettingPageViewModel : ViewModelBase
     private async Task WriteSearchConfigAsync()
     {
         await _configService.WriteSearchSettingAsync(GlobalConfig.MyUserSetting.Search);
-    }
-
-    [RelayCommand]
-    private async void SetApiDomainAsync()
-    {
-        string result = await App.Current.MainPage.DisplayPromptAsync("歌单服务器地址", "请输入要设置的地址（重启后生效）");
-        if (result == null)
-        {
-            return;
-        }
-        ApiDomain = result;
-        Preferences.Set("ApiDomain", result);
-    }
-
-    [RelayCommand]
-    private async void SetUpdateDomainAsync()
-    {
-        string result = await App.Current.MainPage.DisplayPromptAsync("更新服务器地址", "请输入要设置的地址（重启后生效）");
-        if (result == null)
-        {
-            return;
-        }
-        UpdateDomain = result;
-        Preferences.Set("UpdateDomain", result);
     }
 
     [RelayCommand]

@@ -30,8 +30,13 @@ public partial class App : Application
 
         BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.LocalDatabaseName));
 
-        GlobalConfig.UpdateDomain = Preferences.Get("UpdateDomain", "");
-        GlobalConfig.ApiDomain = Preferences.Get("ApiDomain", "");
+        using var stream = FileSystem.OpenAppPackageFileAsync("NetConfig.json").Result;
+        using var reader = new StreamReader(stream);
+        var json = reader.ReadToEnd();
+        var netConfig = json.ToObject<NetConfig>();
+
+        GlobalConfig.UpdateDomain = netConfig?.UpdateDomain;
+        GlobalConfig.ApiDomain = netConfig?.ApiDomain;
         if (GlobalConfig.ApiDomain.IsNotEmpty())
         {
             string deviceId = Preferences.Get("DeviceId", "");
