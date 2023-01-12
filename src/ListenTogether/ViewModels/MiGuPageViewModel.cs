@@ -56,5 +56,5 @@ public partial class MiGuPageViewModel : ViewModelBase
     {
 
     }
-    
+
 }
