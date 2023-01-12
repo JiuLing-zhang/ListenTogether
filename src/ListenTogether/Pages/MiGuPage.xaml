@@ -10,27 +10,17 @@
                 <Frame FlexLayout.Grow="0">
                     <FlexLayout Direction="Row"
                                 Wrap="Wrap"
-                                AlignContent="Start">
-                        <Button HeightRequest="30" Text="test1"/>
-                        <Button HeightRequest="30" Text="test2"/>
-                        <Button HeightRequest="30" Text="test3"/>
-                        <Button HeightRequest="30" Text="test4"/>
-                        <Button HeightRequest="30" Text="test5"/>
-                        <Button HeightRequest="30" Text="test1"/>
-                        <Button HeightRequest="30" Text="test2"/>
-                        <Button HeightRequest="30" Text="test3"/>
-                        <Button HeightRequest="30" Text="test4"/>
-                        <Button HeightRequest="30" Text="test5"/>
-                        <Button HeightRequest="30" Text="test1"/>
-                        <Button HeightRequest="30" Text="test2"/>
-                        <Button HeightRequest="30" Text="test3"/>
-                        <Button HeightRequest="30" Text="test4"/>
-                        <Button HeightRequest="30" Text="test5"/>
-                        <Button HeightRequest="30" Text="test1"/>
-                        <Button HeightRequest="30" Text="test2"/>
-                        <Button HeightRequest="30" Text="test3"/>
-                        <Button HeightRequest="30" Text="test4"/>
-                        <Button HeightRequest="30" Text="test5"/>
+                                AlignContent="Start"
+                                BindableLayout.ItemsSource="{Binding HotTags}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Button
+                                    HeightRequest="30"
+                                    BackgroundColor="{Binding BackgroundColor}"
+                                    Text="{Binding Name}"
+                                    Command="{Binding GetTagDetailAsyncCommand}"/>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
                     </FlexLayout>
                 </Frame>
                 <Frame FlexLayout.Grow="1">
@@ -58,9 +48,9 @@
                         <Button HeightRequest="40" Text="xxxxx4"/>
                         <Button HeightRequest="40" Text="xxxxx5"/>
                     </FlexLayout>
-                </Frame>                
+                </Frame>
             </FlexLayout>
-        </ScrollView> 
-    </Grid>  
+        </ScrollView>
+    </Grid>
 
 </ContentPage>
