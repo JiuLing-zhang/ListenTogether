@@ -89,6 +89,12 @@
 		<MauiXaml Update="Pages\CacheCleanPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Pages\MiGuPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Pages\HomeNetEase.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Pages\LoginPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

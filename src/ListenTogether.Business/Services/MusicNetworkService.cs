@@ -46,4 +46,9 @@ public class MusicNetworkService : IMusicNetworkService
     {
         return await _musicNetPlatform.GetHotWordAsync();
     }
+
+    public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync(PlatformEnum platform)
+    {
+        return await _musicNetPlatform.GetMusicTagsAsync(platform);
+    }
 }

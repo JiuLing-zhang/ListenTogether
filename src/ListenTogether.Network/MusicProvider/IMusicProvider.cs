@@ -4,6 +4,11 @@ using ListenTogether.Model.Enums;
 namespace ListenTogether.Network.MusicProvider;
 public interface IMusicProvider
 {
+    /// <summary>
+    /// 获取音乐标签分类
+    /// </summary>
+    /// <returns></returns>
+    Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync();
     Task<List<string>?> GetHotWordAsync();
     Task<List<string>?> GetSearchSuggestAsync(string keyword);
     Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword);

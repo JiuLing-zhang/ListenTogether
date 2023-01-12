@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ListenTogether.Pages.MiGuPage"
+             Title="MiGuPage">
+
+    <Grid>
+        <ScrollView>
+            <FlexLayout Direction="Column">
+                <Frame FlexLayout.Grow="0">
+                    <FlexLayout Direction="Row"
+                                Wrap="Wrap"
+                                AlignContent="Start">
+                        <Button HeightRequest="30" Text="test1"/>
+                        <Button HeightRequest="30" Text="test2"/>
+                        <Button HeightRequest="30" Text="test3"/>
+                        <Button HeightRequest="30" Text="test4"/>
+                        <Button HeightRequest="30" Text="test5"/>
+                        <Button HeightRequest="30" Text="test1"/>
+                        <Button HeightRequest="30" Text="test2"/>
+                        <Button HeightRequest="30" Text="test3"/>
+                        <Button HeightRequest="30" Text="test4"/>
+                        <Button HeightRequest="30" Text="test5"/>
+                        <Button HeightRequest="30" Text="test1"/>
+                        <Button HeightRequest="30" Text="test2"/>
+                        <Button HeightRequest="30" Text="test3"/>
+                        <Button HeightRequest="30" Text="test4"/>
+                        <Button HeightRequest="30" Text="test5"/>
+                        <Button HeightRequest="30" Text="test1"/>
+                        <Button HeightRequest="30" Text="test2"/>
+                        <Button HeightRequest="30" Text="test3"/>
+                        <Button HeightRequest="30" Text="test4"/>
+                        <Button HeightRequest="30" Text="test5"/>
+                    </FlexLayout>
+                </Frame>
+                <Frame FlexLayout.Grow="1">
+                    <FlexLayout Direction="Row"
+                                Wrap="Wrap"
+                                AlignContent="Start">
+                        <Button HeightRequest="40" Text="xxxxx1"/>
+                        <Button HeightRequest="40" Text="xxxxx2"/>
+                        <Button HeightRequest="40" Text="xxxxx3"/>
+                        <Button HeightRequest="40" Text="xxxxx4"/>
+                        <Button HeightRequest="40" Text="xxxxx5"/>
+                        <Button HeightRequest="40" Text="xxxxx1"/>
+                        <Button HeightRequest="40" Text="xxxxx2"/>
+                        <Button HeightRequest="40" Text="xxxxx3"/>
+                        <Button HeightRequest="40" Text="xxxxx4"/>
+                        <Button HeightRequest="40" Text="xxxxx5"/>
+                        <Button HeightRequest="40" Text="xxxxx1"/>
+                        <Button HeightRequest="40" Text="xxxxx2"/>
+                        <Button HeightRequest="40" Text="xxxxx3"/>
+                        <Button HeightRequest="40" Text="xxxxx4"/>
+                        <Button HeightRequest="40" Text="xxxxx5"/>
+                        <Button HeightRequest="40" Text="xxxxx1"/>
+                        <Button HeightRequest="40" Text="xxxxx2"/>
+                        <Button HeightRequest="40" Text="xxxxx3"/>
+                        <Button HeightRequest="40" Text="xxxxx4"/>
+                        <Button HeightRequest="40" Text="xxxxx5"/>
+                    </FlexLayout>
+                </Frame>                
+            </FlexLayout>
+        </ScrollView> 
+    </Grid>  
+
+</ContentPage>

@@ -11,4 +11,5 @@ public interface IMusicNetworkService
     Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType);
     Task<string?> GetLyricAsync(Music music);
     Task<string> GetPlayPageUrlAsync(Music music);
+    Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync(PlatformEnum platform);
 }

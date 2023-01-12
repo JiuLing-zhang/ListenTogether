@@ -268,4 +268,9 @@ public class NetEaseMusicProvider : IMusicProvider
         }
         return lyricResult.lrc.lyric;
     }
+
+    public Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

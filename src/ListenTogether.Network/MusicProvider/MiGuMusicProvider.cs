@@ -219,4 +219,11 @@ public class MiGuMusicProvider : IMusicProvider
 
         return await _httpClient.GetStringAsync(lyricUrl);
     }
+
+    public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    {
+        string url = $"{UrlBase.MiGu.GetTagsUrl}";
+        var html = await _httpClient.GetStringAsync(url);
+        return MiGuUtils.TryGetTags(html);
+    }
 }

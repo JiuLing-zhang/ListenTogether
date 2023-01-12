@@ -271,4 +271,9 @@ public class KuGouMusicProvider : IMusicProvider
 
         return httpResult.data.lyrics;
     }
+
+    public Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -16,6 +16,8 @@ public static class PagesExtensions
         builder.Services.AddSingleton<CacheCleanPage>();
         builder.Services.AddSingleton<LogPage>();
         builder.Services.AddSingleton<SearchPage>();
+
+        builder.Services.AddSingleton<MiGuPage>();
         return builder;
     }
 }

@@ -3,6 +3,9 @@ using ListenTogether.Network.Models.MiGu;
 using System.Web;
 using JiuLing.CommonLibs.ExtensionMethods;
 using ListenTogether.Model.Enums;
+using ListenTogether.Model;
+using JiuLing.CommonLibs.Text;
+using System.Text.RegularExpressions;
 
 namespace ListenTogether.Network.Utils;
 public class MiGuUtils
@@ -148,5 +151,68 @@ public class MiGuUtils
             return JiuLing.CommonLibs.Text.RegexUtils.Replace(pqResource.url, FtpHeadPattern, "");
         }
         return "";
+    }
+
+    public static (List<MusicTag> HotTags, List<MusicTypeTag> AllTypes) TryGetTags(string html)
+    {
+        List<MusicTag>? hotTags = new List<MusicTag>();
+        List<MusicTypeTag> allTypes = new List<MusicTypeTag>();
+
+        string hotPattern = """
+                            class=\"hottag\"><a\shref=\"(\S+)tagId=(?<Id>\d+)">(?<Name>\S+?)<
+                            """;
+
+        MatchCollection mc = Regex.Matches(html, hotPattern);
+        if (mc.Count > 0)
+        {
+            for (int i = 0; i < mc.Count - 1; i++)
+            {
+                hotTags.Add(new MusicTag()
+                {
+                    Id = mc[i].Groups["Id"].Value,
+                    Name = mc[i].Groups["Name"].Value
+                });
+            }
+        }
+
+        string allPattern = """
+                            class="tag-name">(?<TypeName>\S+)</div>[\s\S]*?class="tag-list"(?<TypeList>[\s\S]*?)ul>
+                            """;
+        mc = Regex.Matches(html, allPattern);
+        if (mc.Count > 0)
+        {
+            for (int i = 0; i < mc.Count - 1; i++)
+            {
+                string typeName = mc[i].Groups["TypeName"].Value;
+                string typeList = mc[i].Groups["TypeList"].Value;
+
+                string typePattern = """
+                            <a\shref=\"(\S+)tagId=(?<Id>\d+)">(?<Name>\S+?)<
+                            """;
+                MatchCollection mcType = Regex.Matches(typeList, typePattern);
+
+                if (mcType.Count == 0)
+                {
+                    continue;
+                }
+
+                var tags = new List<MusicTag>();
+                for (int j = 0; j < mcType.Count - 1; j++)
+                {
+                    tags.Add(new MusicTag()
+                    {
+                        Id = mcType[j].Groups["Id"].Value,
+                        Name = mcType[j].Groups["Name"].Value
+                    });
+                }
+
+                allTypes.Add(new MusicTypeTag()
+                {
+                    TypeName = typeName,
+                    Tags = tags
+                });
+            }
+        }
+        return (hotTags, allTypes);
     }
 }

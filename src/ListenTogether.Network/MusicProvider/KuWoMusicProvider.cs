@@ -302,4 +302,9 @@ internal class KuWoMusicProvider : IMusicProvider
 
         return sbLyrics.ToString();
     }
+
+    public Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    {
+        throw new NotImplementedException();
+    }
 }
