@@ -22,6 +22,7 @@ public class UrlBase
     {
         public const string Index = "https://music.migu.cn/v3";
         public const string GetTagsUrl = "https://music.migu.cn/v3/music/playlist";
+        public const string GetMusicTagPlayUrl = "https://music.migu.cn/v3/music/playlist";
         public const string Search = "https://music.migu.cn/v3/search";
         public const string GetMusicDetailUrl = "https://c.musicapp.migu.cn/MIGUM2.0/v1.0/content/resourceinfo.do";
         public const string GetMusicPlayUrl = "https://h5.nf.migu.cn/app/providers/api/v2/song.listen.ask";

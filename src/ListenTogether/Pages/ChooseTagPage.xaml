@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+             x:Class="ListenTogether.Pages.ChooseTagPage"
+             Title="ChooseTagPage">
+    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
+        <ScrollView>
+            <FlexLayout
+                Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
+                Direction="Column"
+                BindableLayout.ItemsSource="{Binding AllTypes}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout
+                            Margin="0,5,0,5"
+                            Spacing="5">
+                            <Label
+                                Text="{Binding TypeName}"/>
+                            <FlexLayout
+                                Direction="Row"
+                                Wrap="Wrap"
+                                AlignContent="Start"
+                                BindableLayout.ItemsSource="{Binding Tags}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button
+                                            HeightRequest="30"
+                                            BackgroundColor="Transparent"
+                                            Text="{Binding Name}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ChooseTagPageViewModel}}, Path=TagSelectedAsyncCommand}"
+                                            CommandParameter="{Binding Id}"/>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </FlexLayout>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

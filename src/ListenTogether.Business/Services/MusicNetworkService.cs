@@ -51,4 +51,9 @@ public class MusicNetworkService : IMusicNetworkService
     {
         return await _musicNetPlatform.GetMusicTagsAsync(platform);
     }
+
+    public async Task<List<MusicTagPlaylist>> GetMusicTagPlaylistAsync(PlatformEnum platform, string musicTagId)
+    {
+        return await _musicNetPlatform.GetMusicTagPlaylistAsync(platform, musicTagId);
+    }
 }

@@ -10,5 +10,5 @@ public partial class MusicTagViewModel : ObservableObject
     private string _name = null!;
 
     [ObservableProperty]
-    private string _backgroundColor = null!;
+    private Color _backgroundColor = null!;
 }

@@ -9,6 +9,13 @@ public interface IMusicProvider
     /// </summary>
     /// <returns></returns>
     Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync();
+
+    /// <summary>
+    /// 获取音乐标签对应的歌单
+    /// </summary>
+    /// <returns></returns>
+    Task<List<MusicTagPlaylist>> GetMusicTagPlaylistAsync(string musicTagId);
+
     Task<List<string>?> GetHotWordAsync();
     Task<List<string>?> GetSearchSuggestAsync(string keyword);
     Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword);

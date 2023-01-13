@@ -1,56 +1,66 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              x:Class="ListenTogether.Pages.MiGuPage"
              Title="MiGuPage">
 
-    <Grid>
-        <ScrollView>
-            <FlexLayout Direction="Column">
-                <Frame FlexLayout.Grow="0">
-                    <FlexLayout Direction="Row"
-                                Wrap="Wrap"
-                                AlignContent="Start"
-                                BindableLayout.ItemsSource="{Binding HotTags}">
-                        <BindableLayout.ItemTemplate>
-                            <DataTemplate>
-                                <Button
-                                    HeightRequest="30"
-                                    BackgroundColor="{Binding BackgroundColor}"
-                                    Text="{Binding Name}"
-                                    Command="{Binding GetTagDetailAsyncCommand}"/>
-                            </DataTemplate>
-                        </BindableLayout.ItemTemplate>
-                    </FlexLayout>
-                </Frame>
-                <Frame FlexLayout.Grow="1">
-                    <FlexLayout Direction="Row"
-                                Wrap="Wrap"
-                                AlignContent="Start">
-                        <Button HeightRequest="40" Text="xxxxx1"/>
-                        <Button HeightRequest="40" Text="xxxxx2"/>
-                        <Button HeightRequest="40" Text="xxxxx3"/>
-                        <Button HeightRequest="40" Text="xxxxx4"/>
-                        <Button HeightRequest="40" Text="xxxxx5"/>
-                        <Button HeightRequest="40" Text="xxxxx1"/>
-                        <Button HeightRequest="40" Text="xxxxx2"/>
-                        <Button HeightRequest="40" Text="xxxxx3"/>
-                        <Button HeightRequest="40" Text="xxxxx4"/>
-                        <Button HeightRequest="40" Text="xxxxx5"/>
-                        <Button HeightRequest="40" Text="xxxxx1"/>
-                        <Button HeightRequest="40" Text="xxxxx2"/>
-                        <Button HeightRequest="40" Text="xxxxx3"/>
-                        <Button HeightRequest="40" Text="xxxxx4"/>
-                        <Button HeightRequest="40" Text="xxxxx5"/>
-                        <Button HeightRequest="40" Text="xxxxx1"/>
-                        <Button HeightRequest="40" Text="xxxxx2"/>
-                        <Button HeightRequest="40" Text="xxxxx3"/>
-                        <Button HeightRequest="40" Text="xxxxx4"/>
-                        <Button HeightRequest="40" Text="xxxxx5"/>
-                    </FlexLayout>
-                </Frame>
+    <Grid
+        RowDefinitions="Auto,*"
+        RowSpacing="10"
+        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
+
+        <Border
+            Grid.Row="0"
+            Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
+            StrokeThickness="0">
+            <FlexLayout
+                FlexLayout.Grow="0"
+                Direction="Row"
+                Wrap="Wrap"
+                AlignContent="Start"
+                BindableLayout.ItemsSource="{Binding HotTags}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Button
+                            HeightRequest="30"
+                            BackgroundColor="{Binding BackgroundColor}"
+                            Text="{Binding Name}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MiGuPageViewModel}}, Path=GetTagDetailAsyncCommand}"
+                            CommandParameter="{Binding Id}"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
             </FlexLayout>
+        </Border>
+
+        <ScrollView
+            Grid.Row="1"
+            VerticalOptions="FillAndExpand">
+            <Border
+                StrokeThickness="0">
+                <FlexLayout
+                    Direction="Row"
+                    Wrap="Wrap"
+                    AlignContent="Start"
+                    BindableLayout.ItemsSource="{Binding Playlists}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout
+                                Margin="10,0,10,0"
+                                Spacing="10"
+                                WidthRequest="140"
+                                HeightRequest="200">
+                                <Image
+                                    Source="{Binding ImageUrl}"/>
+                                <Label
+                                    Text="{Binding Name}"
+                                    Style="{StaticResource Explain}"
+                                    LineBreakMode="TailTruncation"/>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </Border>
         </ScrollView>
     </Grid>
-
 </ContentPage>

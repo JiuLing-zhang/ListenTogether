@@ -6,6 +6,7 @@ using ListenTogether.Model.Enums;
 using ListenTogether.Model;
 using JiuLing.CommonLibs.Text;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ListenTogether.Network.Utils;
 public class MiGuUtils
@@ -153,7 +154,7 @@ public class MiGuUtils
         return "";
     }
 
-    public static (List<MusicTag> HotTags, List<MusicTypeTag> AllTypes) TryGetTags(string html)
+    public static (List<MusicTag> HotTags, List<MusicTypeTag> AllTypes) GetTags(string html)
     {
         List<MusicTag>? hotTags = new List<MusicTag>();
         List<MusicTypeTag> allTypes = new List<MusicTypeTag>();
@@ -165,7 +166,7 @@ public class MiGuUtils
         MatchCollection mc = Regex.Matches(html, hotPattern);
         if (mc.Count > 0)
         {
-            for (int i = 0; i < mc.Count - 1; i++)
+            for (int i = 0; i < mc.Count; i++)
             {
                 hotTags.Add(new MusicTag()
                 {
@@ -181,7 +182,7 @@ public class MiGuUtils
         mc = Regex.Matches(html, allPattern);
         if (mc.Count > 0)
         {
-            for (int i = 0; i < mc.Count - 1; i++)
+            for (int i = 0; i < mc.Count; i++)
             {
                 string typeName = mc[i].Groups["TypeName"].Value;
                 string typeList = mc[i].Groups["TypeList"].Value;
@@ -197,7 +198,7 @@ public class MiGuUtils
                 }
 
                 var tags = new List<MusicTag>();
-                for (int j = 0; j < mcType.Count - 1; j++)
+                for (int j = 0; j < mcType.Count; j++)
                 {
                     tags.Add(new MusicTag()
                     {
@@ -214,5 +215,48 @@ public class MiGuUtils
             }
         }
         return (hotTags, allTypes);
+    }
+
+    public static List<MusicTagPlaylist> GetMusicTagPlaylist(string html)
+    {
+        var playlists = new List<MusicTagPlaylist>();
+        string playlistsPattern = """
+                                class="song-list-all container"[\s\S]+class="page"
+                                """;
+
+        MatchCollection mc = Regex.Matches(html, playlistsPattern);
+        if (mc.Count != 1)
+        {
+            return playlists;
+        }
+
+        string playlistPattern = """
+                                data-share='(?<Data>[\s\S]+?)'>
+                                """;
+
+        var playlistsJson = RegexUtils.GetOneGroupAllMatch(mc[0].Value, playlistPattern);
+        foreach (var json in playlistsJson)
+        {
+            try
+            {
+                var obj = json.ToObject<HttpPlaylistResult>();
+                if (obj == null)
+                {
+                    continue;
+                }
+                playlists.Add(new MusicTagPlaylist()
+                {
+                    ImageUrl = $"https:{obj.imgUrl}",
+                    LinkUrl = obj.linkUrl,
+                    Name = obj.title
+                });
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+
+        }
+        return playlists;
     }
 }

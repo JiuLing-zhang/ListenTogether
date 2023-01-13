@@ -70,5 +70,6 @@ public partial class App : Application
         Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
         Routing.RegisterRoute(nameof(CacheCleanPage), typeof(CacheCleanPage));
         Routing.RegisterRoute(nameof(LogPage), typeof(LogPage));
+        Routing.RegisterRoute(nameof(ChooseTagPage), typeof(ChooseTagPage));
     }
 }
