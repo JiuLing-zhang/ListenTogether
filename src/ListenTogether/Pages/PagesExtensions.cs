@@ -18,7 +18,7 @@ public static class PagesExtensions
         builder.Services.AddSingleton<SearchPage>();
 
         builder.Services.AddSingleton<MiGuPage>();
-        builder.Services.AddSingleton<ChooseTagPage>();        
+        builder.Services.AddSingleton<ChooseTagPage>();
         return builder;
     }
 }
