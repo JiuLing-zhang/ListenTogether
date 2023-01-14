@@ -215,6 +215,11 @@ internal class KuWoMusicProvider : IMusicProvider
         return playUrl;
     }
 
+    public Task<List<SongMenu>> GetSongMenusFromTop()
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<List<string>?> GetHotWordAsync()
     {
         string url = UrlBase.KuWo.HotWord;

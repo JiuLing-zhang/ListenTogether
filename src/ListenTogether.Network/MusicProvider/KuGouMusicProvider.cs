@@ -219,6 +219,11 @@ public class KuGouMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
+    public Task<List<SongMenu>> GetSongMenusFromTop()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<List<string>?> GetHotWordAsync()
     {
         throw new NotImplementedException();

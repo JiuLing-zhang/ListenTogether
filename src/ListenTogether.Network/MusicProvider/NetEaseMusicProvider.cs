@@ -222,6 +222,11 @@ public class NetEaseMusicProvider : IMusicProvider
         return httpResult.data[0].url;
     }
 
+    public Task<List<SongMenu>> GetSongMenusFromTop()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<List<string>?> GetHotWordAsync()
     {
         throw new NotImplementedException();

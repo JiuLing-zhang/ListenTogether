@@ -56,4 +56,9 @@ public class MusicNetworkService : IMusicNetworkService
     {
         return await _musicNetPlatform.GetSongMenusFromTagAsync(platform, id);
     }
+
+    public Task<List<SongMenu>> GetSongMenusFromTop(PlatformEnum platform)
+    {
+        return _musicNetPlatform.GetSongMenusFromTop(platform);
+    }
 }

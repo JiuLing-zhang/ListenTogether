@@ -24,6 +24,7 @@
                     <DataTemplate>
                         <Button
                             HeightRequest="30"
+                            BorderWidth="0"
                             BackgroundColor="{Binding BackgroundColor}"
                             Text="{Binding Name}"
                             Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MiGuPageViewModel}}, Path=GetTagDetailAsyncCommand}"
@@ -49,7 +50,8 @@
                                 Margin="10,0,10,0"
                                 Spacing="10"
                                 WidthRequest="140"
-                                HeightRequest="200">
+                                HeightRequest="200"
+                                ToolTipProperties.Text="{Binding Name}">
                                 <Image
                                     Source="{Binding ImageUrl}"/>
                                 <Label

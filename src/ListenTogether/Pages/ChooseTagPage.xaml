@@ -25,6 +25,7 @@
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
                                         <Button
+                                            BorderWidth="0"
                                             HeightRequest="30"
                                             BackgroundColor="Transparent"
                                             Text="{Binding Name}"

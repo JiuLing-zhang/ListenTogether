@@ -233,4 +233,8 @@ public class MiGuMusicProvider : IMusicProvider
         var html = await _httpClient.GetStringAsync(url);
         return MiGuUtils.GetSongMenusFromTag(html);
     }
+    public Task<List<SongMenu>> GetSongMenusFromTop()
+    {
+        return Task.FromResult(MiGuUtils.GetSongMenusFromTop());
+    }
 }

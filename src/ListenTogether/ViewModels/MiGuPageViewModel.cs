@@ -84,21 +84,36 @@ public partial class MiGuPageViewModel : ViewModelBase
         switch (tagId)
         {
             case "榜单":
+                await GetSongMenusFromTop();
                 break;
             case "选择分类":
                 await Shell.Current.GoToAsync($"ChooseTagPage?AllTypesJson={_allTypesJson}");
                 break;
             default:
-                await GetTagPlaylistAsync(tagId);
+                await GetSongMenusFromTagAsync(tagId);
                 break;
         }
     }
-
-    private async Task GetTagPlaylistAsync(string tagId)
+    private Task GetSongMenusFromTop()
+    {
+        SongMenus.Clear();
+        var songMenus = _musicNetworkService.GetSongMenusFromTop(PlatformEnum.MiGu).Result;
+        foreach (var songMenu in songMenus)
+        {
+            SongMenus.Add(new SongMenuViewModel()
+            {
+                Name = songMenu.Name,
+                ImageUrl = songMenu.ImageUrl,
+                LinkUrl = songMenu.LinkUrl
+            });
+        }
+        return Task.CompletedTask;
+    }
+    private async Task GetSongMenusFromTagAsync(string id)
     {
         SongMenus.Clear();
 
-        var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(PlatformEnum.MiGu, tagId);
+        var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(PlatformEnum.MiGu, id);
         foreach (var songMenu in songMenus)
         {
             SongMenus.Add(new SongMenuViewModel()

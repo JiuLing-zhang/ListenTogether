@@ -29,13 +29,12 @@
 
     <FlyoutItem Title="发现"
                 Icon="{AppThemeBinding Light=home.png, Dark=home_dark.png}">
-        <Tab Title="网易云音乐">
-            <ShellContent  ContentTemplate="{DataTemplate pages:NetEasePage}" />
-        </Tab>
         <Tab Title="咪咕音乐">
             <ShellContent  ContentTemplate="{DataTemplate pages:MiGuPage}" />
         </Tab>
-        
+        <Tab Title="网易云音乐">
+            <ShellContent  ContentTemplate="{DataTemplate pages:NetEasePage}" />
+        </Tab>
     </FlyoutItem>
 
     <FlyoutItem Title="{Binding SearchResult.Title}"
