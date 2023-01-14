@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ListenTogether.ViewModels;
-public partial class MusicTagPlaylistViewModel : ObservableObject
+public partial class SongMenuViewModel : ObservableObject
 {
     [ObservableProperty]
     private string _name = null!;

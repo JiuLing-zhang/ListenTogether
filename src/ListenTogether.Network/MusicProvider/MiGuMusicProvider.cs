@@ -227,10 +227,10 @@ public class MiGuMusicProvider : IMusicProvider
         return MiGuUtils.GetTags(html);
     }
 
-    public async Task<List<MusicTagPlaylist>> GetMusicTagPlaylistAsync(string musicTagId)
+    public async Task<List<SongMenu>> GetTagSongMenuListAsync(string musicTagId)
     {
         string url = $"{UrlBase.MiGu.GetMusicTagPlayUrl}?tagId={musicTagId}";
         var html = await _httpClient.GetStringAsync(url);
-        return MiGuUtils.GetMusicTagPlaylist(html);
+        return MiGuUtils.GetTagSongMenuList(html);
     }
 }

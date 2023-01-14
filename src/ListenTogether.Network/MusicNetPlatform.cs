@@ -60,8 +60,8 @@ public class MusicNetPlatform
         return await MusicProviderFactory.Create(platform).GetMusicTagsAsync();
     }
 
-    public async Task<List<MusicTagPlaylist>> GetMusicTagPlaylistAsync(PlatformEnum platform, string musicTagId)
+    public async Task<List<SongMenu>> GetTagSongMenuListAsync(PlatformEnum platform, string musicTagId)
     {
-        return await MusicProviderFactory.Create(platform).GetMusicTagPlaylistAsync(musicTagId);
+        return await MusicProviderFactory.Create(platform).GetTagSongMenuListAsync(musicTagId);
     }
 }

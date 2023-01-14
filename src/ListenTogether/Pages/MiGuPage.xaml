@@ -42,7 +42,7 @@
                     Direction="Row"
                     Wrap="Wrap"
                     AlignContent="Start"
-                    BindableLayout.ItemsSource="{Binding Playlists}">
+                    BindableLayout.ItemsSource="{Binding SongMenus}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <VerticalStackLayout

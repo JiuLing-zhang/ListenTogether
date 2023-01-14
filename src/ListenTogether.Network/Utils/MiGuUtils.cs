@@ -217,34 +217,34 @@ public class MiGuUtils
         return (hotTags, allTypes);
     }
 
-    public static List<MusicTagPlaylist> GetMusicTagPlaylist(string html)
+    public static List<SongMenu> GetTagSongMenuList(string html)
     {
-        var playlists = new List<MusicTagPlaylist>();
-        string playlistsPattern = """
+        var songMenus = new List<SongMenu>();
+        string songMenusPattern = """
                                 class="song-list-all container"[\s\S]+class="page"
                                 """;
 
-        MatchCollection mc = Regex.Matches(html, playlistsPattern);
+        MatchCollection mc = Regex.Matches(html, songMenusPattern);
         if (mc.Count != 1)
         {
-            return playlists;
+            return songMenus;
         }
 
-        string playlistPattern = """
+        string songMenuPattern = """
                                 data-share='(?<Data>[\s\S]+?)'>
                                 """;
 
-        var playlistsJson = RegexUtils.GetOneGroupAllMatch(mc[0].Value, playlistPattern);
-        foreach (var json in playlistsJson)
+        var songMenuJson = RegexUtils.GetOneGroupAllMatch(mc[0].Value, songMenuPattern);
+        foreach (var json in songMenuJson)
         {
             try
             {
-                var obj = json.ToObject<HttpPlaylistResult>();
+                var obj = json.ToObject<HttpSongMenuResult>();
                 if (obj == null)
                 {
                     continue;
                 }
-                playlists.Add(new MusicTagPlaylist()
+                songMenus.Add(new SongMenu()
                 {
                     ImageUrl = $"https:{obj.imgUrl}",
                     LinkUrl = obj.linkUrl,
@@ -257,6 +257,6 @@ public class MiGuUtils
             }
 
         }
-        return playlists;
+        return songMenus;
     }
 }

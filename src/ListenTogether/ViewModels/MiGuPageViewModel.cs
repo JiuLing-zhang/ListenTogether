@@ -25,7 +25,7 @@ public partial class MiGuPageViewModel : ViewModelBase
     private ObservableCollection<MusicTagViewModel> _hotTags;
 
     [ObservableProperty]
-    private ObservableCollection<MusicTagPlaylistViewModel> _playlists;
+    private ObservableCollection<SongMenuViewModel> _songMenus;
 
     private readonly IMusicNetworkService _musicNetworkService;
 
@@ -33,8 +33,8 @@ public partial class MiGuPageViewModel : ViewModelBase
     {
         _musicNetworkService = musicNetworkService;
 
-        _hotTags = new ObservableCollection<MusicTagViewModel>();
-        _playlists = new ObservableCollection<MusicTagPlaylistViewModel>();
+        HotTags = new ObservableCollection<MusicTagViewModel>();
+        SongMenus = new ObservableCollection<SongMenuViewModel>();
     }
     public async Task InitializeAsync()
     {
@@ -96,16 +96,16 @@ public partial class MiGuPageViewModel : ViewModelBase
 
     private async Task GetTagPlaylistAsync(string tagId)
     {
-        _playlists.Clear();
+        SongMenus.Clear();
 
-        var playlists = await _musicNetworkService.GetMusicTagPlaylistAsync(PlatformEnum.MiGu, tagId);
-        foreach (var playlist in playlists)
+        var songMenus = await _musicNetworkService.GetTagSongMenuListAsync(PlatformEnum.MiGu, tagId);
+        foreach (var songMenu in songMenus)
         {
-            _playlists.Add(new MusicTagPlaylistViewModel()
+            SongMenus.Add(new SongMenuViewModel()
             {
-                Name = playlist.Name,
-                ImageUrl = playlist.ImageUrl,
-                LinkUrl = playlist.LinkUrl
+                Name = songMenu.Name,
+                ImageUrl = songMenu.ImageUrl,
+                LinkUrl = songMenu.LinkUrl
             });
         }
     }
