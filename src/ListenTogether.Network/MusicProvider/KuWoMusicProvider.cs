@@ -308,7 +308,7 @@ internal class KuWoMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<List<SongMenu>> GetTagSongMenuListAsync(string musicTagId)
+    public Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
     {
         throw new NotImplementedException();
     }

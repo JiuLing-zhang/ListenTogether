@@ -217,7 +217,7 @@ public class MiGuUtils
         return (hotTags, allTypes);
     }
 
-    public static List<SongMenu> GetTagSongMenuList(string html)
+    public static List<SongMenu> GetSongMenusFromTag(string html)
     {
         var songMenus = new List<SongMenu>();
         string songMenusPattern = """

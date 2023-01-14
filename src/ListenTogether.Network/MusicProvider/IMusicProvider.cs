@@ -14,7 +14,7 @@ public interface IMusicProvider
     /// 获取音乐标签对应的歌单
     /// </summary>
     /// <returns></returns>
-    Task<List<SongMenu>> GetTagSongMenuListAsync(string musicTagId);
+    Task<List<SongMenu>> GetSongMenusFromTagAsync(string id);
 
     Task<List<string>?> GetHotWordAsync();
     Task<List<string>?> GetSearchSuggestAsync(string keyword);

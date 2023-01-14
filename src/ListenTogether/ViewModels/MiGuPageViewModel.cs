@@ -98,7 +98,7 @@ public partial class MiGuPageViewModel : ViewModelBase
     {
         SongMenus.Clear();
 
-        var songMenus = await _musicNetworkService.GetTagSongMenuListAsync(PlatformEnum.MiGu, tagId);
+        var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(PlatformEnum.MiGu, tagId);
         foreach (var songMenu in songMenus)
         {
             SongMenus.Add(new SongMenuViewModel()
