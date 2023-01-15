@@ -4,6 +4,9 @@ namespace ListenTogether.ViewModels;
 public partial class SongMenuViewModel : ObservableObject
 {
     [ObservableProperty]
+    private string _id = null!;
+
+    [ObservableProperty]
     private string _name = null!;
 
     [ObservableProperty]

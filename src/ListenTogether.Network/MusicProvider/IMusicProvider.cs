@@ -22,6 +22,12 @@ public interface IMusicProvider
     /// <returns></returns>
     Task<List<SongMenu>> GetSongMenusFromTop();
 
+    /// <summary>
+    /// 获取排行榜歌单详情
+    /// </summary>
+    /// <returns></returns>
+    Task<List<MusicResultShow>> GetTopMusicsAsync(string topId);
+
     Task<List<string>?> GetHotWordAsync();
     Task<List<string>?> GetSearchSuggestAsync(string keyword);
     Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword);

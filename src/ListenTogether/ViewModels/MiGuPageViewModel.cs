@@ -102,6 +102,7 @@ public partial class MiGuPageViewModel : ViewModelBase
         {
             SongMenus.Add(new SongMenuViewModel()
             {
+                Id = songMenu.Id,
                 Name = songMenu.Name,
                 ImageUrl = songMenu.ImageUrl,
                 LinkUrl = songMenu.LinkUrl
@@ -118,6 +119,7 @@ public partial class MiGuPageViewModel : ViewModelBase
         {
             SongMenus.Add(new SongMenuViewModel()
             {
+                Id = songMenu.Id,
                 Name = songMenu.Name,
                 ImageUrl = songMenu.ImageUrl,
                 LinkUrl = songMenu.LinkUrl
@@ -128,6 +130,6 @@ public partial class MiGuPageViewModel : ViewModelBase
     [RelayCommand]
     private async void GotoSongMenuPageAsync(SongMenuViewModel songMenu)
     {
-        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={songMenu.ToJson()}");
+        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={songMenu.ToJson()}&PlatformString={PlatformEnum.MiGu}");
     }
 }

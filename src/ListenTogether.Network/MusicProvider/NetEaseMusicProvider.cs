@@ -227,6 +227,11 @@ public class NetEaseMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
+    public Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<List<string>?> GetHotWordAsync()
     {
         throw new NotImplementedException();

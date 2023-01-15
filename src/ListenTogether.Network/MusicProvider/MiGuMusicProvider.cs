@@ -5,6 +5,7 @@ using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.MiGu;
 using ListenTogether.Network.Utils;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ListenTogether.Network.MusicProvider;
 public class MiGuMusicProvider : IMusicProvider
@@ -236,5 +237,43 @@ public class MiGuMusicProvider : IMusicProvider
     public Task<List<SongMenu>> GetSongMenusFromTop()
     {
         return Task.FromResult(MiGuUtils.GetSongMenusFromTop());
+    }
+
+    public async Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
+    {
+        var musics = new List<MusicResultShow>();
+        string url = $"{UrlBase.MiGu.GetTopMusicsUrl}{topId}";
+        var html = await _httpClient.GetStringAsync(url);
+
+        //HttpMusicTopSongItemResult
+        var songs = MiGuUtils.GetTopMusics(html);
+        foreach (var song in songs)
+        {
+            var artist = "";
+            if (song.singers != null)
+            {
+                artist = string.Join("、", song.singers.Select(x => x.name));
+            }
+
+            var album = "";
+            if (song.album != null)
+            {
+                album = $"https:{song.album.albumName}";
+            }
+
+            musics.Add(new MusicResultShow()
+            {
+                Id = MD5Utils.GetStringValueToLower($"{Platform}-{song.id}"),
+                Platform = Platform,
+                PlatformInnerId = song.id,
+                Name = song.name,
+                Alias = "",
+                Artist = artist,
+                Album = album,
+                ImageUrl = song.mediumPic,
+                Fee = FeeEnum.Free,
+            });
+        }
+        return musics;
     }
 }

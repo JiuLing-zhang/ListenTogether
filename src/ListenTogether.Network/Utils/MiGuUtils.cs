@@ -244,10 +244,18 @@ public class MiGuUtils
                 {
                     continue;
                 }
+
+                var id = "";
+                var linkUrl = obj.linkUrl;
+                if (linkUrl.IndexOf("origin=") > 0)
+                {
+                    id = linkUrl.Substring(linkUrl.IndexOf("origin=") + "origin=".Length);
+                }
                 songMenus.Add(new SongMenu()
                 {
+                    Id = id,
                     ImageUrl = $"https:{obj.imgUrl}",
-                    LinkUrl = obj.linkUrl,
+                    LinkUrl = linkUrl,
                     Name = obj.title.Replace("&amp;", "&")
                 });
             }
@@ -266,60 +274,70 @@ public class MiGuUtils
         {
              new()
              {
+                 Id="jianjiao_newsong",
                  Name="尖叫新歌榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/02/36/20020512065402_360x360_2997.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/jianjiao_newsong"
              },
              new()
              {
+                 Id="jianjiao_hotsong",
                  Name="尖叫热歌榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/04/99/200408163640868_360x360_6587.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/jianjiao_hotsong"
              },
              new()
              {
+                 Id="jianjiao_original",
                  Name="尖叫原创榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/04/99/200408163702795_360x360_1614.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/jianjiao_original"
              },
              new()
              {
+                 Id="movies",
                  Name="影视榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/05/136/200515161848938_360x360_673.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/movies"
              },
              new()
              {
+                 Id="mainland",
                  Name="内地榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/08/231/200818095104122_327x327_4971.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/mainland"
              },
              new()
              {
+                 Id="hktw",
                  Name="港台榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/08/231/200818095125191_327x327_2382.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/hktw"
              },
              new()
              {
+                 Id="eur_usa",
                  Name="欧美榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/08/231/200818095229556_327x327_1383.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/eur_usa"
              },
              new()
              {
+                 Id = "jpn_kor",
                  Name="日韩榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/08/231/200818095259569_327x327_4628.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/jpn_kor"
              },
              new()
              {
+                 Id = "ktv",
                  Name="KTV榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/08/231/200818095414420_327x327_4992.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/ktv"
              },
              new()
              {
+                 Id = "network",
                  Name="网络榜",
                  ImageUrl="https://cdnmusic.migu.cn/tycms_picture/20/08/231/200818095442606_327x327_1298.png",
                  LinkUrl="https://music.migu.cn/v3/music/top/network"
@@ -327,5 +345,39 @@ public class MiGuUtils
         };
 
         return songMenus;
+    }
+
+    public static List<HttpMusicTopSongItemResult> GetTopMusics(string html)
+    {
+        var musics = new List<HttpMusicTopSongItemResult>();
+        string listDataPattern = """
+                                var\s+listData\s+=\s+(?<ListData>.+)
+                                """;
+        var (success, result) = RegexUtils.GetOneGroupInFirstMatch(html, listDataPattern);
+        if (!success)
+        {
+            return musics;
+        }
+        var musicsJson = result;
+        if (musicsJson.IndexOf("}") <= 0)
+        {
+            return musics;
+        }
+
+        musicsJson = musicsJson.Substring(0, musicsJson.LastIndexOf("}") + 1);
+
+        try
+        {
+            var topDetail = musicsJson.ToObject<HttpMusicTopResult>();
+            if (topDetail == null || topDetail.songs == null || topDetail.songs.items == null)
+            {
+                return musics;
+            }
+            return topDetail.songs.items;
+        }
+        catch (Exception)
+        {
+            return musics;
+        }
     }
 }

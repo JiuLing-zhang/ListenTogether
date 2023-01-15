@@ -68,4 +68,9 @@ public class MusicNetPlatform
     {
         return MusicProviderFactory.Create(platform).GetSongMenusFromTop();
     }
+
+    public async Task<List<MusicResultShow>> GetTopMusicsAsync(PlatformEnum platform, string topId)
+    {
+        return await MusicProviderFactory.Create(platform).GetTopMusicsAsync(topId);
+    }
 }

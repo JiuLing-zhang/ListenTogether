@@ -220,6 +220,11 @@ internal class KuWoMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
+    public Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<List<string>?> GetHotWordAsync()
     {
         string url = UrlBase.KuWo.HotWord;
