@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<VerticalStackLayout xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+                     x:Class="ListenTogether.Controls.MusicResultView">
+    <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <CollectionView VerticalOptions="FillAndExpand"
+                        ItemsSource="{Binding MusicSearchResult}"
+                        IsGrouped="True">
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <Label Text="{Binding Name}"
+                               TextColor="{StaticResource Main}"
+                               Margin="0,20,0,10"
+                               Padding="5,0,5,0"
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <OnPlatform x:TypeArguments="View">
+                            <On Platform="WinUI, macOS">
+                                <Grid ColumnDefinitions="30,60,40,300,300,*">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicAsyncCommand}"
+                                                          CommandParameter="{Binding .}"
+                                                          NumberOfTapsRequired="2"/>
+                                    </Grid.GestureRecognizers>
+                                    <Image Grid.Column="0"
+                                           x:Name="ImgHeart"
+                                           Source="{AppThemeBinding Dark='heart_dark.png',Light='heart.png'}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="15"
+                                           HeightRequest="15"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteAsyncCommand}"		
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Duration}"
+                                           VerticalOptions="Center"
+                                           LineBreakMode="TailTruncation"/>
+                                    <Label Grid.Column="2"
+                                           Text="{Binding Fee}"
+                                           Style="{DynamicResource FeeType}"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"/>
+                                    <Label Grid.Column="3"
+                                           Text="{Binding Name}"
+                                           VerticalOptions="Center"
+                                           LineBreakMode="TailTruncation"/>
+                                    <Label Grid.Column="4"
+                                           Text="{Binding Artist}"
+                                           VerticalOptions="Center"
+                                           LineBreakMode="TailTruncation"/>
+                                    <Label Grid.Column="5"
+                                           Text="{Binding Album}"
+                                           VerticalOptions="Center"
+                                           LineBreakMode="TailTruncation"/>
+                                </Grid>
+                            </On>
+
+                            <On Platform="Android,iOS">
+                                <Grid Margin="0,10,0,0" 
+                                          RowDefinitions="auto,auto,10"
+                                          ColumnDefinitions="*,40">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=PlayMusicAsyncCommand}"
+                                                          CommandParameter="{Binding .}"/>
+                                    </Grid.GestureRecognizers>
+
+                                    <HorizontalStackLayout Grid.Row="0"
+                                                           Grid.Column="0">
+                                        <Label Text="{Binding Fee}"
+                                               Style="{DynamicResource FeeType}"
+                                               VerticalOptions="Center"/>
+                                        <Label Text="{Binding Name}"
+                                               Margin="5,0,0,0"
+                                               VerticalOptions="Center"
+                                               LineBreakMode="TailTruncation"/>
+                                    </HorizontalStackLayout>
+
+                                    <Label Grid.Row="1"
+                                           Grid.Column="0"
+                                           Style="{StaticResource Explain}"
+                                           VerticalOptions="Center"
+                                           LineBreakMode="TailTruncation">
+                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                            <Binding Path="Artist" />
+                                            <Binding Path="Album" />
+                                        </MultiBinding>
+                                    </Label>
+
+                                    <Image Grid.Row="0"
+                                           Grid.Column="1"
+                                           Grid.RowSpan="2"
+                                           Source="{Binding Source, Source={x:Reference ImgHeart}}"
+                                           Aspect="AspectFill"
+                                           WidthRequest="15"
+                                           HeightRequest="15"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchResultPageViewModel}}, Path=AddToMyFavoriteAsyncCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+
+                                    <Label Grid.Row="2" 
+                                               Grid.ColumnSpan="2"
+                                               Margin="0,9,0,0"
+                                               BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"></Label>
+                                </Grid>
+                            </On>
+                        </OnPlatform>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</VerticalStackLayout>
