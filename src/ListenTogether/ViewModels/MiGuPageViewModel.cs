@@ -87,7 +87,7 @@ public partial class MiGuPageViewModel : ViewModelBase
                 await GetSongMenusFromTop();
                 break;
             case "选择分类":
-                await Shell.Current.GoToAsync($"ChooseTagPage?AllTypesJson={_allTypesJson}");
+                await Shell.Current.GoToAsync($"{nameof(ChooseTagPage)}?Json={_allTypesJson}");
                 break;
             default:
                 await GetSongMenusFromTagAsync(tagId);
@@ -123,5 +123,11 @@ public partial class MiGuPageViewModel : ViewModelBase
                 LinkUrl = songMenu.LinkUrl
             });
         }
+    }
+
+    [RelayCommand]
+    private async void GotoSongMenuPageAsync(SongMenuViewModel songMenu)
+    {
+        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={songMenu.ToJson()}");
     }
 }

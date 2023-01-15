@@ -1,9 +1,9 @@
 namespace ListenTogether.Pages;
 
-public partial class ChooseTagPage : ContentPage
+public partial class SongMenuPage : ContentPage
 {
-    private ChooseTagPageViewModel ViewModel => BindingContext as ChooseTagPageViewModel;
-    public ChooseTagPage(ChooseTagPageViewModel viewModel)
+    private SongMenuPageViewModel ViewModel => BindingContext as SongMenuPageViewModel;
+    public SongMenuPage(SongMenuPageViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

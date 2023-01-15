@@ -19,6 +19,7 @@ public static class PagesExtensions
 
         builder.Services.AddSingleton<MiGuPage>();
         builder.Services.AddSingleton<ChooseTagPage>();
+        builder.Services.AddSingleton<SongMenuPage>();
         return builder;
     }
 }

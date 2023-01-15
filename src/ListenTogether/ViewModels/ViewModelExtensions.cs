@@ -20,7 +20,7 @@ public static class ViewModelExtensions
         builder.Services.AddSingleton<LogPageViewModel>();
         builder.Services.AddSingleton<MiGuPageViewModel>();
         builder.Services.AddSingleton<ChooseTagPageViewModel>();
-
+        builder.Services.AddSingleton<SongMenuPageViewModel>();
         return builder;
     }
 }

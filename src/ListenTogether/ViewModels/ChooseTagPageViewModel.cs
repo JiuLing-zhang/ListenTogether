@@ -4,10 +4,10 @@ using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-[QueryProperty(nameof(AllTypesJson), nameof(AllTypesJson))]
+[QueryProperty(nameof(Json), nameof(Json))]
 public partial class ChooseTagPageViewModel : ViewModelBase
 {
-    public string AllTypesJson { get; set; }
+    public string Json { get; set; }
 
     [ObservableProperty]
     private ObservableCollection<MusicTypeTagViewModel> _allTypes;
@@ -20,7 +20,7 @@ public partial class ChooseTagPageViewModel : ViewModelBase
     {
         AllTypes = new ObservableCollection<MusicTypeTagViewModel>();
 
-        var allTypes = AllTypesJson.ToObject<List<MusicTypeTag>>();
+        var allTypes = Json.ToObject<List<MusicTypeTag>>();
 
         foreach (var types in allTypes)
         {
