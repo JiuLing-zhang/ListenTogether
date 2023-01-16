@@ -255,10 +255,24 @@ public class MiGuMusicProvider : IMusicProvider
                 artist = string.Join("、", song.singers.Select(x => x.name));
             }
 
-            var album = "";
-            if (song.album != null)
+            var imageUrl = "";
+            if (song.mediumPic != null)
             {
-                album = $"https:{song.album.albumName}";
+                imageUrl = $"https:{song.mediumPic}";
+            }
+
+            //时长 时:分:秒
+            TimeSpan duration = TimeSpan.Zero;
+            var durationArray = song.duration.Split(":");
+            if (durationArray.Length == 3)
+            {
+                int HH = Convert.ToInt32(durationArray[0]);
+                int mm = Convert.ToInt32(durationArray[1]);
+                int ss = Convert.ToInt32(durationArray[2]);
+
+                duration = TimeSpan.FromHours(HH);
+                duration = duration.Add(TimeSpan.FromMinutes(mm));
+                duration = duration.Add(TimeSpan.FromSeconds(ss));
             }
 
             musics.Add(new MusicResultShow()
@@ -269,8 +283,40 @@ public class MiGuMusicProvider : IMusicProvider
                 Name = song.name,
                 Alias = "",
                 Artist = artist,
-                Album = album,
-                ImageUrl = song.mediumPic,
+                Album = song.album?.albumName ?? "",
+                ImageUrl = imageUrl,
+                Duration = duration,
+                Fee = FeeEnum.Free,
+            });
+        }
+        return musics;
+    }
+
+    public async Task<List<MusicResultShow>> GetTagMusicsAsync(string tagId)
+    {
+        var musics = new List<MusicResultShow>();
+        string url = $"{UrlBase.MiGu.GetTagMusicsUrl}{tagId}";
+        var html = await _httpClient.GetStringAsync(url);
+
+        var songs = MiGuUtils.GetTagMusics(html);
+        foreach (var song in songs)
+        {
+            var songId = song.linkUrl;
+            if (songId.IsEmpty() || songId.IndexOf("/") < 0)
+            {
+                continue;
+            }
+            songId = songId.Substring(0, songId.IndexOf("/") + 1);
+
+            musics.Add(new MusicResultShow()
+            {
+                Id = MD5Utils.GetStringValueToLower($"{Platform}-{songId}"),
+                Platform = Platform,
+                PlatformInnerId = songId,
+                Name = song.title,
+                Alias = "",
+                Artist = song.singer,
+                Album = song.album,
                 Fee = FeeEnum.Free,
             });
         }

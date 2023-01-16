@@ -15,6 +15,7 @@
         public string id { get; set; }
         public string name { get; set; }
         public string mediumPic { get; set; }
+        public string duration { get; set; }
         public List<HttpMusicTopSongSingerResult>? singers { get; set; }
         public HttpMusicTopSongAlbumResult? album { get; set; }
     }

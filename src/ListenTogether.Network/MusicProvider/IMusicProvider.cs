@@ -17,6 +17,12 @@ public interface IMusicProvider
     Task<List<SongMenu>> GetSongMenusFromTagAsync(string id);
 
     /// <summary>
+    /// 获取标签歌单详情
+    /// </summary>
+    /// <returns></returns>
+    Task<List<MusicResultShow>> GetTagMusicsAsync(string tagId);
+
+    /// <summary>
     /// 获取排行榜歌单
     /// </summary>
     /// <returns></returns>

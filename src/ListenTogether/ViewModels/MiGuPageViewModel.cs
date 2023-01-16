@@ -1,7 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using ListenTogether.Model.Enums;
+using System.Collections.ObjectModel;
+using System.Web;
 
 namespace ListenTogether.ViewModels;
 
@@ -102,6 +103,7 @@ public partial class MiGuPageViewModel : ViewModelBase
         {
             SongMenus.Add(new SongMenuViewModel()
             {
+                SongMenuType = SongMenuEnum.Top,
                 Id = songMenu.Id,
                 Name = songMenu.Name,
                 ImageUrl = songMenu.ImageUrl,
@@ -113,23 +115,24 @@ public partial class MiGuPageViewModel : ViewModelBase
     private async Task GetSongMenusFromTagAsync(string id)
     {
         SongMenus.Clear();
-
         var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(PlatformEnum.MiGu, id);
         foreach (var songMenu in songMenus)
         {
             SongMenus.Add(new SongMenuViewModel()
             {
+                SongMenuType = SongMenuEnum.Tag,
                 Id = songMenu.Id,
                 Name = songMenu.Name,
                 ImageUrl = songMenu.ImageUrl,
                 LinkUrl = songMenu.LinkUrl
-            });
+            }); ;
         }
     }
 
     [RelayCommand]
     private async void GotoSongMenuPageAsync(SongMenuViewModel songMenu)
     {
-        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={songMenu.ToJson()}&PlatformString={PlatformEnum.MiGu}");
+        string json = HttpUtility.UrlEncode(songMenu.ToJson());
+        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={PlatformEnum.MiGu}");
     }
 }

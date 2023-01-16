@@ -73,4 +73,9 @@ public class MusicNetPlatform
     {
         return await MusicProviderFactory.Create(platform).GetTopMusicsAsync(topId);
     }
+
+    public async Task<List<MusicResultShow>> GetTagMusicsAsync(PlatformEnum platform, string tagId)
+    {
+        return await MusicProviderFactory.Create(platform).GetTagMusicsAsync(tagId);
+    }
 }

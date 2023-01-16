@@ -247,10 +247,16 @@ public class MiGuUtils
 
                 var id = "";
                 var linkUrl = obj.linkUrl;
-                if (linkUrl.IndexOf("origin=") > 0)
+                if (linkUrl.IndexOf("/") >= 0)
                 {
-                    id = linkUrl.Substring(linkUrl.IndexOf("origin=") + "origin=".Length);
+                    linkUrl = linkUrl.Substring(linkUrl.LastIndexOf("/") + 1);
+                    if (linkUrl.IndexOf("?") > 0)
+                    {
+                        linkUrl = linkUrl.Substring(0, linkUrl.IndexOf("?"));
+                    }
+                    id = linkUrl;
                 }
+
                 songMenus.Add(new SongMenu()
                 {
                     Id = id,
@@ -379,5 +385,30 @@ public class MiGuUtils
         {
             return musics;
         }
+    }
+
+    public static List<HttpMusicTagResult> GetTagMusics(string html)
+    {
+        var musics = new List<HttpMusicTagResult>();
+        string listDataPattern = """
+                                class="J-btn-share"[\s\S]+?data-share='(?<Data>[\s\S]+?)'
+                                """;
+        var songs = RegexUtils.GetOneGroupAllMatch(html, listDataPattern);
+        foreach (var song in songs)
+        {
+            try
+            {
+                var music = song.ToObject<HttpMusicTagResult>();
+                if (music == null)
+                {
+                    continue;
+                }
+                musics.Add(music);
+            }
+            catch (Exception)
+            {
+            }
+        }
+        return musics;
     }
 }

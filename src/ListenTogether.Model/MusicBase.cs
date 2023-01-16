@@ -8,6 +8,8 @@
         /// 歌曲名称
         /// </summary>
         public string Name { get; set; } = null!;
+
+        //TODO 删除别名字段
         /// <summary>
         /// 别名
         /// </summary>
