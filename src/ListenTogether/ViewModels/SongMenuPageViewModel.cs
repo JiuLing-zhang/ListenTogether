@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ListenTogether.Model.Enums;
 using System.Collections.ObjectModel;
-using System.Web;
 
 namespace ListenTogether.ViewModels;
 
@@ -14,6 +14,8 @@ public partial class SongMenuPageViewModel : ViewModelBase
     private PlatformEnum Platform => (PlatformEnum)Enum.Parse(typeof(PlatformEnum), PlatformString);
 
     private readonly IMusicNetworkService _musicNetworkService;
+    private readonly IPlaylistService _playlistService = null!;
+    private readonly MusicPlayerService _musicPlayerService;
 
     [ObservableProperty]
     private SongMenuViewModel _songMenu;
@@ -21,10 +23,12 @@ public partial class SongMenuPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultGroupViewModel> _musicResultCollection = null!;
 
-    public SongMenuPageViewModel(IMusicNetworkService musicNetworkService)
+    public SongMenuPageViewModel(IMusicNetworkService musicNetworkService, IPlaylistService playlistService, MusicPlayerService musicPlayerService)
     {
-        _musicNetworkService = musicNetworkService;
         MusicResultCollection = new ObservableCollection<MusicResultGroupViewModel>();
+        _musicNetworkService = musicNetworkService;
+        _playlistService = playlistService;
+        _musicPlayerService = musicPlayerService;
     }
     public async Task InitializeAsync()
     {
@@ -47,13 +51,50 @@ public partial class SongMenuPageViewModel : ViewModelBase
         var platformMusics = musics.Select(
               x => new MusicResultShowViewModel()
               {
-                  Platform = x.Platform.GetDescription(),
+                  Id = x.Id,
+                  Platform = x.Platform,
+                  IdOnPlatform = x.PlatformInnerId,
                   Name = x.Name,
                   Artist = x.Artist,
                   Album = x.Album,
                   Duration = x.DurationText,
+                  ImageUrl = x.ImageUrl,
                   Fee = x.Fee.GetDescription()
               }).ToList();
         MusicResultCollection.Add(new MusicResultGroupViewModel(Platform.GetDescription(), platformMusics));
+    }
+
+    [RelayCommand]
+    public async void PlayAsync(MusicResultShowViewModel musicResult)
+    {
+        await AddToPlaylistAsync(musicResult);
+        await PlayMusicAsync(musicResult);
+    }
+
+    private async Task AddToPlaylistAsync(MusicResultShowViewModel musicResult)
+    {
+        var playlist = new Playlist()
+        {
+            MusicId = musicResult.Id,
+            MusicIdOnPlatform = musicResult.IdOnPlatform,
+            Platform = musicResult.Platform,
+            MusicName = musicResult.Name,
+            MusicArtist = musicResult.Artist,
+            MusicAlbum = musicResult.Album,
+            MusicImageUrl = musicResult.ImageUrl,
+            EditTime = DateTime.Now
+        };
+        await _playlistService.AddToPlaylistAsync(playlist);
+    }
+
+    private async Task PlayMusicAsync(MusicResultShowViewModel musicResult)
+    {
+        await _musicPlayerService.PlayAsync(musicResult.Id);
+    }
+
+    [RelayCommand]
+    public async void AddToFavoriteAsync(MusicResultShowViewModel id)
+    {
+        throw new NotImplementedException("添加到收藏");
     }
 }

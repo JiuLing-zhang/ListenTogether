@@ -1,19 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Model
 {
     public class Playlist
     {
-        public int Id { get; set; }
-        public string PlatformName { get; set; } = null!;
         /// <summary>
         /// 歌曲ID
         /// </summary>
         public string MusicId { get; set; } = null!;
+
+        /// <summary>
+        /// 平台
+        /// </summary>
+        public PlatformEnum Platform { get; set; }
+        /// <summary>
+        /// 歌曲在平台的ID
+        /// </summary>
+        public string MusicIdOnPlatform { get; set; } = null!;
+
         /// <summary>
         /// 歌曲名称
         /// </summary>
@@ -23,6 +27,8 @@ namespace ListenTogether.Model
         /// </summary>
         public string MusicArtist { get; set; } = null!;
         public string MusicAlbum { get; set; } = null!;
+
+        public string MusicImageUrl { get; set; } = null!;
         public DateTime EditTime { get; set; }
     }
 }

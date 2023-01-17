@@ -1,6 +1,6 @@
 ﻿namespace ListenTogether.Services.MusicSwitchServer;
 public interface IMusicSwitchServer
 {
-    public Task<Music> GetPreviousAsync(Music currentMusic);
-    public Task<Music> GetNextAsync(Music currentMusic);
+    public Task<Playlist?> GetPreviousAsync(string currentMusicId);
+    public Task<Playlist?> GetNextAsync(string currentMusicId);
 }

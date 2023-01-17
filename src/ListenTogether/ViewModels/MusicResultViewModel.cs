@@ -1,19 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
 namespace ListenTogether.ViewModels;
+//TODO 删除
 public partial class MusicResultViewModel : ViewModelBase
 {
-
-    [RelayCommand]
-    public async void PlayMusicAsync(string id)
-    {
-        throw new NotImplementedException("播放");
-    }
-
-    [RelayCommand]
-    public async void AddToMyFavoriteAsync(string id)
-    {
-        throw new NotImplementedException("添加到收藏");
-    }
 
 }

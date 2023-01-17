@@ -1,16 +1,26 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ListenTogether.Model.Enums;
 
 namespace ListenTogether.ViewModels;
 public partial class MusicViewModel : ObservableObject
 {
+    /// <summary>
+    /// 歌曲Id
+    /// </summary>
     [ObservableProperty]
     private string _id = null!;
+
+    /// <summary>
+    /// 平台Id
+    /// </summary>
+    [ObservableProperty]
+    private string _idOnPlatform = null!;
 
     /// <summary>
     /// 平台
     /// </summary>
     [ObservableProperty]
-    private string _platform = null!;
+    private PlatformEnum _platform;
 
     /// <summary>
     /// 歌曲名称
@@ -29,4 +39,11 @@ public partial class MusicViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private string _album = null!;
+
+    /// <summary>
+    /// 图片
+    /// </summary>
+    [ObservableProperty]
+    private string _imageUrl = null!;
+
 }

@@ -8,14 +8,14 @@ namespace ListenTogether.ViewModels;
 [QueryProperty(nameof(Keyword), nameof(Keyword))]
 public partial class SearchResultPageViewModel : ViewModelBase
 {
-    private readonly PlayerService _playerService = null!;
+    private readonly MusicPlayerService _playerService = null!;
     private readonly IServiceProvider _services = null!;
     private readonly IMusicNetworkService _musicNetworkService = null!;
     private readonly IPlaylistService _playlistService = null!;
     private IMusicService _musicService = null!;
     private IMyFavoriteService _myFavoriteService = null!;
 
-    public SearchResultPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService, IMusicNetworkService musicNetworkService)
+    public SearchResultPageViewModel(IServiceProvider services, IPlaylistService playlistService, MusicPlayerService playerService, IMusicNetworkService musicNetworkService)
     {
         MusicSearchResult = new ObservableCollection<SearchResultGroupViewModel>();
         _services = services;
@@ -214,7 +214,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
             }
             if (GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite)
             {
-                await _playerService.PlayAsync(music);
+                await _playerService.PlayAsync(music.Id);
             }
             else
             {
@@ -241,7 +241,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
             await ToastService.Show(message);
             return;
         }
-        await _playerService.PlayAsync(music);
+        await _playerService.PlayAsync(music.Id);
     }
 
     private async Task<(bool Succeed, string Message, Music MusicDetailResult)> SaveMusicAsync(MusicSearchResult searchResult)
@@ -259,7 +259,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
 
         var playlist = new Playlist()
         {
-            PlatformName = music.PlatformName,
+            Platform = music.Platform,
             MusicId = music.Id,
             MusicName = music.Name,
             MusicArtist = music.Artist,

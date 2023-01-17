@@ -1,31 +1,29 @@
 ﻿namespace ListenTogether.Services.MusicSwitchServer;
 public class MusicSwitchRepeatListServer : IMusicSwitchServer
 {
-    private IServiceProvider _services;
     private readonly IPlaylistService _playlistService;
-    public MusicSwitchRepeatListServer(IServiceProvider services, IPlaylistService playlistService)
+    public MusicSwitchRepeatListServer(IPlaylistService playlistService)
     {
-        _services = services;
         _playlistService = playlistService;
     }
-    public async Task<Music> GetPreviousAsync(Music currentMusic)
+
+    public async Task<Playlist?> GetPreviousAsync(string currentMusicId)
     {
         var playlist = await _playlistService.GetAllAsync();
         if (playlist == null || playlist.Count == 0)
         {
-            return currentMusic;
+            return default;
         }
 
-        var musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
         if (playlist.Count == 1)
         {
-            return await musicService.GetOneAsync(playlist[0].MusicId) ?? throw new Exception("歌曲信息读取失败");
+            return playlist[0];
         }
 
         int nextId = 0;
         for (int i = 0; i < playlist.Count; i++)
         {
-            if (playlist[i].MusicId == currentMusic.Id)
+            if (playlist[i].MusicId == currentMusicId)
             {
                 nextId = i - 1;
                 break;
@@ -36,27 +34,25 @@ public class MusicSwitchRepeatListServer : IMusicSwitchServer
         {
             nextId = playlist.Count - 1;
         }
-        return await musicService.GetOneAsync(playlist[nextId].MusicId) ?? throw new Exception("歌曲信息读取失败");
+        return playlist[nextId];
     }
-    public async Task<Music> GetNextAsync(Music currentMusic)
+    public async Task<Playlist?> GetNextAsync(string currentMusicId)
     {
-
         var playlist = await _playlistService.GetAllAsync();
         if (playlist == null || playlist.Count == 0)
         {
-            return currentMusic;
+            return default;
         }
 
-        var musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
         if (playlist.Count == 1)
         {
-            return await musicService.GetOneAsync(playlist[0].MusicId) ?? throw new Exception("歌曲信息读取失败");
+            return playlist[0];
         }
 
         int nextId = 0;
         for (int i = 0; i < playlist.Count; i++)
         {
-            if (playlist[i].MusicId == currentMusic.Id)
+            if (playlist[i].MusicId == currentMusicId)
             {
                 nextId = i + 1;
                 break;
@@ -67,7 +63,6 @@ public class MusicSwitchRepeatListServer : IMusicSwitchServer
         {
             nextId = 0;
         }
-
-        return await musicService.GetOneAsync(playlist[nextId].MusicId) ?? throw new Exception("歌曲信息读取失败");
+        return playlist[nextId];
     }
 }

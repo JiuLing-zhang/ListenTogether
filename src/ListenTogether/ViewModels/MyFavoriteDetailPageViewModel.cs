@@ -9,12 +9,12 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 {
     public int MyFavoriteId { get; set; }
 
-    private readonly PlayerService _playerService = null!;
+    private readonly MusicPlayerService _playerService = null!;
     private readonly IServiceProvider _services = null!;
     private readonly IPlaylistService _playlistService = null!;
     private IMyFavoriteService _myFavoriteService = null!;
     private IMusicService _musicService = null!;
-    public MyFavoriteDetailPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
+    public MyFavoriteDetailPageViewModel(IServiceProvider services, IPlaylistService playlistService, MusicPlayerService playerService)
     {
         MyFavoriteMusics = new ObservableCollection<MyFavoriteDetailViewModel>();
 
@@ -182,14 +182,14 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 
         var playlist = new Playlist()
         {
-            PlatformName = music.PlatformName,
+            Platform = music.Platform,
             MusicId = music.Id,
             MusicName = music.Name,
             MusicArtist = music.Artist,
             MusicAlbum = music.Album
         };
         await _playlistService.AddToPlaylistAsync(playlist);
-        await _playerService.PlayAsync(music);
+        await _playerService.PlayAsync(music.Id);
 
         await Shell.Current.GoToAsync($"..", true);
     }

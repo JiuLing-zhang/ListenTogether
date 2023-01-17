@@ -15,8 +15,12 @@ public class PlaylistService : IPlaylistService
     {
         return await _repository.AddOrUpdateAsync(playlist);
     }
+    public async Task<Playlist?> GetOneAsync(string musicId)
+    {
+        return await _repository.GetOneAsync(musicId);
+    }
 
-    public async Task<List<Playlist>?> GetAllAsync()
+    public async Task<List<Playlist>> GetAllAsync()
     {
         return await _repository.GetAllAsync();
     }
@@ -30,4 +34,5 @@ public class PlaylistService : IPlaylistService
     {
         return await _repository.RemoveAllAsync();
     }
+
 }

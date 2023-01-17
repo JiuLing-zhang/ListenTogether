@@ -5,14 +5,14 @@ using System.Collections.ObjectModel;
 namespace ListenTogether.ViewModels;
 public partial class MyFavoritePageViewModel : ViewModelBase
 {
-    private readonly PlayerService _playerService = null!;
+    private readonly MusicPlayerService _playerService = null!;
     private readonly IServiceProvider _services = null!;
     private readonly IPlaylistService _playlistService = null!;
     private IMyFavoriteService _myFavoriteService = null!;
     private IMusicService _musicService = null!;
 
     public string Title => "我的歌单";
-    public MyFavoritePageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
+    public MyFavoritePageViewModel(IServiceProvider services, IPlaylistService playlistService, MusicPlayerService playerService)
     {
         FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
         _services = services;
@@ -158,9 +158,10 @@ public partial class MyFavoritePageViewModel : ViewModelBase
 
         foreach (var myFavoriteMusic in myFavoriteMusics)
         {
+            //TODO 属性赋值
             var playlist = new Playlist()
             {
-                PlatformName = myFavoriteMusic.PlatformName,
+                //Platform = myFavoriteMusic.PlatformName,
                 MusicId = myFavoriteMusic.MusicId,
                 MusicName = myFavoriteMusic.MusicName,
                 MusicArtist = myFavoriteMusic.MusicArtist,
@@ -178,7 +179,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
                 await ToastService.Show("歌曲信息加载失败");
                 return;
             }
-            await _playerService.PlayAsync(music);
+            await _playerService.PlayAsync(music.Id);
         }
     }
 }

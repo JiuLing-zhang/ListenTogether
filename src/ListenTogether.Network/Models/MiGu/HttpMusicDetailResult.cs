@@ -23,12 +23,12 @@
     public class NewRateFormats
     {
         public string formatType { get; set; } = null!;
-        public string url { get; set; } = null!;
+        public string? url { get; set; } = null!;
         public string size { get; set; } = null!;
         public int SizeInt => JiuLing.CommonLibs.Text.RegexUtils.IsMatch(size, "^[0-9]*$") ? Convert.ToInt32(size) : 0;
 
 
-        public string iosUrl { get; set; } = null!;
+        public string? iosUrl { get; set; } = null!;
         public string iosSize { get; set; } = null!;
         public int IosSizeInt => JiuLing.CommonLibs.Text.RegexUtils.IsMatch(iosSize, "^[0-9]*$") ? Convert.ToInt32(iosSize) : 0;
 

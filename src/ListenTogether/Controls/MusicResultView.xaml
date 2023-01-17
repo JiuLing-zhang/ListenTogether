@@ -38,7 +38,7 @@
             </Style.Triggers>
         </Style>
     </CollectionView.Resources>
-    
+
     <CollectionView.GroupHeaderTemplate>
         <DataTemplate>
             <Label
@@ -59,8 +59,8 @@
                         <Grid ColumnDefinitions="30,60,40,300,300,*">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MusicResultViewModel}}, Path=PlayMusicAsyncCommand}"
-                                    CommandParameter="{Binding .}"
+                                    Command="{Binding PlayCommand, Source={x:Reference self}}"
+                                    CommandParameter="{Binding}"
                                     NumberOfTapsRequired="2"/>
                             </Grid.GestureRecognizers>
                             <Image
@@ -74,8 +74,8 @@
                                 HorizontalOptions="Center">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MusicResultViewModel}}, Path=AddToMyFavoriteAsyncCommand}"
-                                        CommandParameter="{Binding .}"/>
+                                        Command="{Binding AddToFavoriteCommand, Source={x:Reference self}}"
+                                        CommandParameter="{Binding}"/>
                                 </Image.GestureRecognizers>
                             </Image>
 
@@ -115,8 +115,8 @@
                             ColumnDefinitions="*,40">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MusicResultViewModel}}, Path=PlayMusicAsyncCommand}"
-                                    CommandParameter="{Binding .}"/>
+                                    Command="{Binding PlayCommand, Source={x:Reference self}}"
+                                    CommandParameter="{Binding}"/>
                             </Grid.GestureRecognizers>
 
                             <HorizontalStackLayout
@@ -157,8 +157,8 @@
                                 HorizontalOptions="Center">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MusicResultViewModel}}, Path=AddToMyFavoriteAsyncCommand}"
-                                        CommandParameter="{Binding .}"/>
+                                        Command="{Binding AddToFavoriteCommand, Source={x:Reference self}}"
+                                        CommandParameter="{Binding}"/>
                                 </Image.GestureRecognizers>
                             </Image>
 

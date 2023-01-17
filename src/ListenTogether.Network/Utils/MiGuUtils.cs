@@ -31,7 +31,7 @@ public class MiGuUtils
         var c = _channelId;
         var f = "html";
         var k = CookieId;
-        var s = JiuLing.CommonLibs.Text.TimestampUtils.GetLen10();
+        var s = TimestampUtils.GetLen10();
         var u = $"{userAgent}/{_sourceId}";
         var v = _appVersion;
 
@@ -45,7 +45,7 @@ public class MiGuUtils
         musics = new List<HttpMusicSearchResult>();
 
         string pattern = @"data-share='(?<MusicInfo>[\s\S]*?)'";
-        var htmlMusics = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupAllMatch(html, pattern);
+        var htmlMusics = RegexUtils.GetOneGroupAllMatch(html, pattern);
         if (htmlMusics == null || htmlMusics.Count == 0)
         {
             return false;
@@ -78,7 +78,7 @@ public class MiGuUtils
     public static (bool success, string id, string type) GetMusicRealArgs(string url)
     {
         string pattern = @"id=(?<id>\d*)&type=(?<type>\d*)";
-        var resultGroup = JiuLing.CommonLibs.Text.RegexUtils.GetMultiGroupInFirstMatch(url, pattern);
+        var resultGroup = RegexUtils.GetMultiGroupInFirstMatch(url, pattern);
 
         if (resultGroup.success == false)
         {
@@ -90,8 +90,8 @@ public class MiGuUtils
     public static string GetPlayUrlData(string id, string copyrightId)
     {
         var time = DateTime.Now;
-        Int64 timestampLast = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToLen13(time.AddSeconds(-1));
-        Int64 timestamp = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToLen13(time);
+        Int64 timestampLast = TimestampUtils.ConvertToLen13(time.AddSeconds(-1));
+        Int64 timestamp = TimestampUtils.ConvertToLen13(time);
         return $"id={id}&copyrightId={copyrightId}&resourceType=2&_={timestampLast}&v={timestamp}";
     }
 
@@ -116,9 +116,9 @@ public class MiGuUtils
     private static string GetZQPlayUrlPath(List<NewRateFormats> playResources)
     {
         var zqResource = playResources.FirstOrDefault(x => x.formatType == "ZQ");
-        if (zqResource != null && JiuLing.CommonLibs.Text.RegexUtils.IsMatch(zqResource.iosUrl, FtpHeadPattern))
+        if (zqResource != null && RegexUtils.IsMatch(zqResource.iosUrl ?? "", FtpHeadPattern))
         {
-            return JiuLing.CommonLibs.Text.RegexUtils.Replace(zqResource.iosUrl, FtpHeadPattern, "");
+            return RegexUtils.Replace(zqResource.iosUrl ?? "", FtpHeadPattern, "");
         }
         return GetSQPlayUrlPath(playResources);
     }
@@ -126,9 +126,9 @@ public class MiGuUtils
     private static string GetSQPlayUrlPath(List<NewRateFormats> playResources)
     {
         var sqResource = playResources.FirstOrDefault(x => x.formatType == "SQ");
-        if (sqResource != null && JiuLing.CommonLibs.Text.RegexUtils.IsMatch(sqResource.iosUrl, FtpHeadPattern))
+        if (sqResource != null && RegexUtils.IsMatch(sqResource.iosUrl ?? "", FtpHeadPattern))
         {
-            return JiuLing.CommonLibs.Text.RegexUtils.Replace(sqResource.iosUrl, FtpHeadPattern, "");
+            return RegexUtils.Replace(sqResource.iosUrl ?? "", FtpHeadPattern, "");
         }
         return GetHQPlayUrlPath(playResources);
     }
@@ -136,9 +136,9 @@ public class MiGuUtils
     private static string GetHQPlayUrlPath(List<NewRateFormats> playResources)
     {
         var hqResource = playResources.FirstOrDefault(x => x.formatType == "HQ");
-        if (hqResource != null && JiuLing.CommonLibs.Text.RegexUtils.IsMatch(hqResource.url, FtpHeadPattern))
+        if (hqResource != null && RegexUtils.IsMatch(hqResource.url ?? "", FtpHeadPattern))
         {
-            return JiuLing.CommonLibs.Text.RegexUtils.Replace(hqResource.url, FtpHeadPattern, "");
+            return RegexUtils.Replace(hqResource.url ?? "", FtpHeadPattern, "");
         }
 
         return GetPQPlayUrlPath(playResources);
@@ -147,9 +147,9 @@ public class MiGuUtils
     private static string GetPQPlayUrlPath(List<NewRateFormats> playResources)
     {
         var pqResource = playResources.FirstOrDefault(x => x.formatType == "PQ");
-        if (pqResource != null && JiuLing.CommonLibs.Text.RegexUtils.IsMatch(pqResource.url, FtpHeadPattern))
+        if (pqResource != null && RegexUtils.IsMatch(pqResource.url ?? "", FtpHeadPattern))
         {
-            return JiuLing.CommonLibs.Text.RegexUtils.Replace(pqResource.url, FtpHeadPattern, "");
+            return RegexUtils.Replace(pqResource.url ?? "", FtpHeadPattern, "");
         }
         return "";
     }

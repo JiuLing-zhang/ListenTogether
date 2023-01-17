@@ -14,6 +14,7 @@ internal static class ServicesExtensions
         builder.Services.AddSingleton<HttpClient>();
         builder.Services.AddTransient<WifiOptionsService>();
         builder.Services.AddSingleton<PlayerService>();
+        builder.Services.AddSingleton<MusicPlayerService>();
         return builder;
     }
 }

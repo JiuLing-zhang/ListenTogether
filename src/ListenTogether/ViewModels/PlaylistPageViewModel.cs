@@ -10,9 +10,9 @@ public partial class PlaylistPageViewModel : ViewModelBase
     private IMyFavoriteService _myFavoriteService = null!;
     private readonly IServiceProvider _services = null!;
     private readonly IPlaylistService _playlistService = null!;
-    private readonly PlayerService _playerService = null!;
+    private readonly MusicPlayerService _playerService = null!;
 
-    public PlaylistPageViewModel(IServiceProvider services, IPlaylistService playlistService, PlayerService playerService)
+    public PlaylistPageViewModel(IServiceProvider services, IPlaylistService playlistService, MusicPlayerService playerService)
     {
         Playlist = new ObservableCollection<PlaylistViewModel>();
 
@@ -79,8 +79,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
         {
             Playlist.Add(new PlaylistViewModel()
             {
-                Id = item.Id,
-                PlatformName = item.PlatformName,
+                PlatformName = item.Platform.GetDescription(),
                 MusicId = item.MusicId,
                 MusicName = item.MusicName,
                 MusicArtist = item.MusicArtist,
@@ -113,7 +112,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
             return;
         }
 
-        await _playerService.PlayAsync(music);
+        await _playerService.PlayAsync(music.Id);
     }
 
     [RelayCommand]
@@ -188,7 +187,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
 
             if (GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite)
             {
-                await _playerService.PlayAsync(music);
+                await _playerService.PlayAsync(music.Id);
             }
             else
             {

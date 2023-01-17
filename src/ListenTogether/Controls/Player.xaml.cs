@@ -16,7 +16,7 @@ public partial class Player : ContentView
         set { SetValue(IsPlayingPageProperty, value); }
     }
 
-    private PlayerService _playerService = null!;
+    private MusicPlayerService _playerService = null!;
     private IEnvironmentConfigService _configService = null!;
     public Player()
     {
@@ -30,7 +30,7 @@ public partial class Player : ContentView
 
         if (_playerService == null)
         {
-            _playerService = this.Handler.MauiContext.Services.GetRequiredService<PlayerService>();
+            _playerService = this.Handler.MauiContext.Services.GetRequiredService<MusicPlayerService>();
             InitPlayer();
         }
         if (_configService == null)
@@ -135,18 +135,18 @@ public partial class Player : ContentView
 
     private void playerService_NewMusicAdded(object? sender, EventArgs e)
     {
-        NewMusicAddedDo(_playerService.CurrentMusic);
+        NewMusicAddedDo(_playerService.Metadata);
     }
 
-    private void NewMusicAddedDo(Music music)
+    private void NewMusicAddedDo(MusicMetadata metadata)
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
             ImgCurrentMusic.Source = ImageSource.FromStream(
-                () => new MemoryStream(ImageCacheUtils.GetByteArrayUsingCache(music.ImageUrl))
+                () => new MemoryStream(metadata.Image)
             );
 
-            LblMusicInfo.Text = $"{music.Name} - {music.Artist}";
+            LblMusicInfo.Text = $"{metadata.Name} - {metadata.Artist}";
         });
     }
 
@@ -171,7 +171,7 @@ public partial class Player : ContentView
 
     private async void ImgPlay_Tapped(object sender, EventArgs e)
     {
-        await _playerService.PlayAsync(_playerService.CurrentMusic);
+        await _playerService.PlayAsync(_playerService.Metadata.Id);
     }
 
     private async void ImgSoundOff_Tapped(object sender, EventArgs e)
@@ -183,21 +183,13 @@ public partial class Player : ContentView
 
     private void UpdateCurrentMusic()
     {
-        if (_playerService.CurrentMusic == null)
+        if (_playerService.Metadata == null)
         {
             return;
         }
 
-        var music = new Music()
-        {
-            Name = _playerService.CurrentMusic.Name,
-            Artist = _playerService.CurrentMusic.Artist,
-            Album = _playerService.CurrentMusic.Album,
-            ImageUrl = _playerService.CurrentMusic.ImageUrl
-        };
-        NewMusicAddedDo(music);
+        NewMusicAddedDo(_playerService.Metadata);
         PositionChangedDo(_playerService.CurrentPosition);
-
         IsPlayingChangedDo(_playerService.IsPlaying);
     }
 
@@ -330,7 +322,7 @@ public partial class Player : ContentView
     }
     private async void SliderPlayProgress_DragCompleted(object sender, EventArgs e)
     {
-        if (_playerService.CurrentMusic != null)
+        if (_playerService.Metadata != null)
         {
             var sliderPlayProgress = sender as Slider;
             if (sliderPlayProgress != null)

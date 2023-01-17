@@ -11,32 +11,8 @@ public class MusicResultGroupViewModel : List<MusicResultShowViewModel>
         Name = name;
     }
 }
-public partial class MusicResultShowViewModel : ObservableObject
+public partial class MusicResultShowViewModel : MusicViewModel
 {
-    /// <summary>
-    /// 平台名称
-    /// </summary>
-    [ObservableProperty]
-    private string _platform = null!;
-
-    /// <summary>
-    /// 歌曲名称
-    /// </summary>
-    [ObservableProperty]
-    private string _name = null!;
-
-    /// <summary>
-    /// 歌手名称
-    /// </summary>
-    [ObservableProperty]
-    private string _artist = null!;
-
-    /// <summary>
-    /// 专辑名称
-    /// </summary>
-    [ObservableProperty]
-    private string _album = null!;
-
     /// <summary>
     /// 时长
     /// </summary>

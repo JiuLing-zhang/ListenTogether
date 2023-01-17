@@ -35,6 +35,11 @@ public class MusicNetPlatform
         return await _miGuSearcher.SearchAsync(platform, keyword);
     }
 
+    public async Task<string> GetPlayUrlAsync(PlatformEnum platform, string id, object? extendData = null)
+    {
+        return await MusicProviderFactory.Create(platform).GetPlayUrlAsync(id, extendData);
+    }
+
     public async Task<Music?> GetDetailAsync(MusicSearchResult music, MusicFormatTypeEnum musicFormatType)
     {
         return await MusicProviderFactory.Create(music.Platform).GetDetailAsync(music, musicFormatType);

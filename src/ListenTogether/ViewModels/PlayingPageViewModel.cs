@@ -9,12 +9,12 @@ public partial class PlayingPageViewModel : ViewModelBase
     //控制手动滚动歌词时，系统暂停歌词滚动
     private DateTime _lastScrollToTime = DateTime.Now;
     private static readonly HttpClient MyHttpClient = new HttpClient();
-    private readonly PlayerService _playerService = null!;
+    private readonly MusicPlayerService _playerService = null!;
     private readonly IDispatcherTimer _timerLyricsUpdate = null!;
     private readonly IMusicNetworkService _musicNetworkService = null!;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; } = null!;
 
-    public PlayingPageViewModel(PlayerService playerService, IMusicNetworkService musicNetworkService)
+    public PlayingPageViewModel(MusicPlayerService playerService, IMusicNetworkService musicNetworkService)
     {
         _musicNetworkService = musicNetworkService;
         _playerService = playerService;
@@ -76,7 +76,8 @@ public partial class PlayingPageViewModel : ViewModelBase
     }
     private async Task NewMusicAddedDoAsync()
     {
-        CurrentMusic = _playerService.CurrentMusic;
+        //TODO 设置CurrentMusic
+        //CurrentMusic = _playerService.;
         CurrentMusicImageByteArray = await MyHttpClient.GetByteArrayAsync(CurrentMusic.ImageUrl);
         await GetLyricDetailAsync();
     }

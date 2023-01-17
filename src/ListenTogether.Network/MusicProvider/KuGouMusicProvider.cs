@@ -296,4 +296,9 @@ public class KuGouMusicProvider : IMusicProvider
     {
         throw new NotImplementedException();
     }
+
+    public Task<string> GetPlayUrlAsync(string id, object? extendData = null)
+    {
+        throw new NotImplementedException();
+    }
 }

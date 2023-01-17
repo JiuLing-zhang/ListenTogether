@@ -5,7 +5,6 @@ using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.MiGu;
 using ListenTogether.Network.Utils;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 
 namespace ListenTogether.Network.MusicProvider;
 public class MiGuMusicProvider : IMusicProvider
@@ -85,6 +84,40 @@ public class MiGuMusicProvider : IMusicProvider
             });
         }
         return (true, "", musics);
+    }
+
+    public async Task<string> GetPlayUrlAsync(string id, object? extendData = null)
+    {
+        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={id}&resourceType=2";
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        request.Headers.Add("Accept", "application/json, text/plain, */*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+        var result = json.ToObject<HttpMusicDetailResult>();
+        if (result == null || result.resource == null || result.resource.Length == 0)
+        {
+            return null;
+        }
+
+        if (result.resource[0].newRateFormats == null || result.resource[0].newRateFormats.Count == 0)
+        {
+            return null;
+        }
+
+        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats, MusicFormatTypeEnum.SQ);
+        if (playUrlPath.IsEmpty())
+        {
+            return null;
+        }
+        return $"{UrlBase.MiGu.PlayUrlDomain}{playUrlPath}";
     }
 
     public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
@@ -255,12 +288,6 @@ public class MiGuMusicProvider : IMusicProvider
                 artist = string.Join("、", song.singers.Select(x => x.name));
             }
 
-            var imageUrl = "";
-            if (song.mediumPic != null)
-            {
-                imageUrl = $"https:{song.mediumPic}";
-            }
-
             //时长 时:分:秒
             TimeSpan duration = TimeSpan.Zero;
             var durationArray = song.duration.Split(":");
@@ -277,14 +304,14 @@ public class MiGuMusicProvider : IMusicProvider
 
             musics.Add(new MusicResultShow()
             {
-                Id = MD5Utils.GetStringValueToLower($"{Platform}-{song.id}"),
+                Id = MD5Utils.GetStringValueToLower($"{Platform}-{song.copyrightId}"),
                 Platform = Platform,
-                PlatformInnerId = song.id,
+                PlatformInnerId = song.copyrightId,
                 Name = song.name,
                 Alias = "",
                 Artist = artist,
                 Album = song.album?.albumName ?? "",
-                ImageUrl = imageUrl,
+                ImageUrl = song.ImageUrl,
                 Duration = duration,
                 Fee = FeeEnum.Free,
             });
@@ -317,9 +344,11 @@ public class MiGuMusicProvider : IMusicProvider
                 Alias = "",
                 Artist = song.singer,
                 Album = song.album,
+                ImageUrl = song.ImageUrl,
                 Fee = FeeEnum.Free,
             });
         }
         return musics;
     }
+
 }

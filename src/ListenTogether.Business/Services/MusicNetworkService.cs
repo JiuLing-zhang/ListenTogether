@@ -23,6 +23,11 @@ public class MusicNetworkService : IMusicNetworkService
         return await _musicNetPlatform.SearchAsync(platform, keyword);
     }
 
+    public async Task<string> GetPlayUrlAsync(PlatformEnum platform, string id, object? extendData = null)
+    {
+        return await _musicNetPlatform.GetPlayUrlAsync(platform, id, extendData);
+    }
+
     public async Task<Music?> GetDetailAsync(MusicSearchResult musicSearchResult, MusicFormatTypeEnum musicFormatType)
     {
         return await _musicNetPlatform.GetDetailAsync(musicSearchResult, musicFormatType);
@@ -71,4 +76,5 @@ public class MusicNetworkService : IMusicNetworkService
     {
         return await _musicNetPlatform.GetTagMusicsAsync(platform, tagId);
     }
+
 }
