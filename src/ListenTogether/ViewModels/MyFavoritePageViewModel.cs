@@ -5,19 +5,20 @@ using System.Collections.ObjectModel;
 namespace ListenTogether.ViewModels;
 public partial class MyFavoritePageViewModel : ViewModelBase
 {
-    private readonly MusicPlayerService _playerService = null!;
-    private readonly IServiceProvider _services = null!;
-    private readonly IPlaylistService _playlistService = null!;
-    private IMyFavoriteService _myFavoriteService = null!;
-    private IMusicService _musicService = null!;
+    private readonly MusicPlayerService _playerService;
+    private readonly IPlaylistService _playlistService;
+    private readonly IMyFavoriteService _myFavoriteService;
+    private readonly IMusicService _musicService;
 
     public string Title => "我的歌单";
-    public MyFavoritePageViewModel(IServiceProvider services, IPlaylistService playlistService, MusicPlayerService playerService)
+    public MyFavoritePageViewModel(IPlaylistService playlistService, MusicPlayerService playerService, IMyFavoriteService myFavoriteService, IMusicService musicService)
     {
         FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
-        _services = services;
+
         _playerService = playerService;
         _playlistService = playlistService;
+        _myFavoriteService = myFavoriteService;
+        _musicService = musicService;
     }
 
     public async Task InitializeAsync()
@@ -31,8 +32,6 @@ public partial class MyFavoritePageViewModel : ViewModelBase
             }
 
             StartLoading("");
-            _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();
-            _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
 
             var myFavoriteList = await _myFavoriteService.GetAllAsync();
             if (myFavoriteList == null || myFavoriteList.Count == 0)

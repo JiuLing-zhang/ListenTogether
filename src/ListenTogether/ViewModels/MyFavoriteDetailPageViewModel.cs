@@ -9,18 +9,18 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 {
     public int MyFavoriteId { get; set; }
 
-    private readonly MusicPlayerService _playerService = null!;
-    private readonly IServiceProvider _services = null!;
-    private readonly IPlaylistService _playlistService = null!;
-    private IMyFavoriteService _myFavoriteService = null!;
-    private IMusicService _musicService = null!;
-    public MyFavoriteDetailPageViewModel(IServiceProvider services, IPlaylistService playlistService, MusicPlayerService playerService)
+    private readonly MusicPlayerService _playerService;
+    private readonly IPlaylistService _playlistService;
+    private readonly IMyFavoriteService _myFavoriteService;
+    private readonly IMusicService _musicService;
+    public MyFavoriteDetailPageViewModel(IPlaylistService playlistService, MusicPlayerService playerService, IMyFavoriteService myFavoriteService, IMusicService musicService)
     {
         MyFavoriteMusics = new ObservableCollection<MyFavoriteDetailViewModel>();
 
-        _services = services;
         _playerService = playerService;
         _playlistService = playlistService;
+        _myFavoriteService = myFavoriteService;
+        _musicService = musicService;
     }
 
     public async Task InitializeAsync()
@@ -34,8 +34,6 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
             }
 
             StartLoading("");
-            _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();
-            _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
 
             await LoadMyFavoriteInfoAsync();
             await GetMyFavoriteDetailAsync();

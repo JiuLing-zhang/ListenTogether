@@ -27,12 +27,6 @@ public partial class SearchResultPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultGroupViewModel> _musicSearchResult = null!;
 
-    /// <summary>
-    /// 选择的结果集
-    /// </summary>
-    [ObservableProperty]
-    private SearchResultViewModel _musicSelectedResult = null!;
-
     private int _isSearching = 0;
     private string _lastSearchKey;
 

@@ -2,15 +2,15 @@
 public class MusicResultService
 {
     private readonly MusicPlayerService _musicPlayerService;
-    private readonly IServiceProvider _services;
     private readonly IPlaylistService _playlistService;
-    private IMyFavoriteService _myFavoriteService;
-    private IMusicService _musicService;
-    public MusicResultService(IServiceProvider services, IPlaylistService playlistService, MusicPlayerService musicPlayerService)
+    private readonly IMyFavoriteService _myFavoriteService;
+    private readonly IMusicService _musicService;
+    public MusicResultService(IPlaylistService playlistService, MusicPlayerService musicPlayerService, IMyFavoriteService myFavoriteService, IMusicService musicService)
     {
-        _services = services;
         _playlistService = playlistService;
         _musicPlayerService = musicPlayerService;
+        _myFavoriteService = myFavoriteService;
+        _musicService = musicService;
     }
 
     public async Task PlayAllAsync(List<MusicResultShowViewModel> musicResultList)
@@ -66,9 +66,6 @@ public class MusicResultService
 
     public async Task AddToFavoriteAsync(MusicResultShowViewModel musicResult)
     {
-        _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();
-        _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
-
         var music = new Music()
         {
             Id = musicResult.Id,

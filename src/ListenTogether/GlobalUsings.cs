@@ -1,6 +1,5 @@
 ﻿global using ListenTogether.Model;
 global using ListenTogether.Business;
-global using ListenTogether.Business.Factories;
 global using ListenTogether.Business.Interfaces;
 global using ListenTogether.Services;
 global using ListenTogether.ViewModels;

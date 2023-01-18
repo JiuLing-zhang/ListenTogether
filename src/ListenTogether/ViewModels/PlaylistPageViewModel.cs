@@ -6,19 +6,19 @@ namespace ListenTogether.ViewModels;
 
 public partial class PlaylistPageViewModel : ViewModelBase
 {
-    private IMusicService _musicService = null!;
-    private IMyFavoriteService _myFavoriteService = null!;
-    private readonly IServiceProvider _services = null!;
-    private readonly IPlaylistService _playlistService = null!;
-    private readonly MusicPlayerService _playerService = null!;
+    private readonly IMusicService _musicService;
+    private readonly IMyFavoriteService _myFavoriteService;
+    private readonly IPlaylistService _playlistService;
+    private readonly MusicPlayerService _playerService;
 
-    public PlaylistPageViewModel(IServiceProvider services, IPlaylistService playlistService, MusicPlayerService playerService)
+    public PlaylistPageViewModel(IPlaylistService playlistService, MusicPlayerService playerService, IMusicService musicService, IMyFavoriteService myFavoriteService)
     {
         Playlist = new ObservableCollection<PlaylistViewModel>();
 
-        _services = services;
         _playerService = playerService;
         _playlistService = playlistService;
+        _musicService = musicService;
+        _myFavoriteService = myFavoriteService;
     }
 
     public async Task InitializeAsync()
@@ -26,8 +26,6 @@ public partial class PlaylistPageViewModel : ViewModelBase
         try
         {
             StartLoading("页面加载中....");
-            _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
-            _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();
             await GetPlaylistAsync();
         }
         catch (Exception ex)
