@@ -36,7 +36,7 @@ public interface IMusicProvider
 
     Task<List<string>?> GetHotWordAsync();
     Task<List<string>?> GetSearchSuggestAsync(string keyword);
-    Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword);
+    Task<List<MusicResultShow>> SearchAsync(string keyword);
     Task<string> GetPlayUrlAsync(string id, object? extendData = null);
     Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType);
     Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType);

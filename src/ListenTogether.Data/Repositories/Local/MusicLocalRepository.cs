@@ -19,10 +19,9 @@ public class MusicLocalRepository : IMusicRepository
             Id = id,
             Platform = (PlatformEnum)music.Platform,
             PlatformInnerId = music.PlatformInnerId,
-            PlatformName = ((PlatformEnum)music.Platform).GetDescription(),
+            //PlatformName = ((PlatformEnum)music.Platform).GetDescription(),
             Name = music.Name,
             Album = music.Album,
-            Alias = music.Alias,
             Artist = music.Artist,
             ImageUrl = music.ImageUrl,
             ExtendData = music.ExtendData,
@@ -42,7 +41,6 @@ public class MusicLocalRepository : IMusicRepository
                 PlatformInnerId = music.PlatformInnerId,
                 Name = music.Name,
                 Album = music.Album,
-                Alias = music.Alias,
                 Artist = music.Artist,
                 ImageUrl = music.ImageUrl,
                 ExtendData = music.ExtendData
@@ -56,7 +54,6 @@ public class MusicLocalRepository : IMusicRepository
             myMusic.PlatformInnerId = music.PlatformInnerId;
             myMusic.Name = music.Name;
             myMusic.Album = music.Album;
-            myMusic.Alias = music.Alias;
             myMusic.Artist = music.Artist;
             myMusic.ImageUrl = music.ImageUrl;
             myMusic.ExtendData = music.ExtendData;

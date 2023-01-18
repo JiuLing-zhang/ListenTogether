@@ -20,8 +20,10 @@ public class KuGouMusicProvider : IMusicProvider
         _httpClient = new HttpClient(handler);
     }
 
-    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword)
+    public async Task<List<MusicResultShow>> SearchAsync(string keyword)
     {
+        var musics = new List<MusicResultShow>();
+
         string args = KuGouUtils.GetSearchData(keyword);
         string url = $"{UrlBase.KuGou.Search}?{args}";
 
@@ -39,7 +41,7 @@ public class KuGouMusicProvider : IMusicProvider
         json = KuGouUtils.RemoveHttpResultHead(json);
         if (json.IsEmpty())
         {
-            return (false, "服务器响应异常", null);
+            return musics;
         }
 
         HttpResultBase<HttpMusicSearchResult>? httpResult;
@@ -50,42 +52,33 @@ public class KuGouMusicProvider : IMusicProvider
         catch (Exception ex)
         {
             Logger.Error("解析酷狗搜索结果失败。", ex);
-            return (false, "解析数据失败", null);
+            return musics;
         }
-        if (httpResult == null)
+        if (httpResult == null || httpResult.status != 1 || httpResult.error_code != 0)
         {
-            return (false, "请求服务器失败", null);
-        }
-        if (httpResult.status != 1 || httpResult.error_code != 0)
-        {
-            return (false, httpResult.error_msg, null);
+            return musics;
         }
 
-        var musics = new List<MusicSearchResult>();
-        if (httpResult.data.lists.Length == 0)
-        {
-            return (true, "", new List<MusicSearchResult>());
-        }
         foreach (var httpMusic in httpResult.data.lists)
         {
             try
             {
-                var music = new MusicSearchResult()
+                var ExtendDataJson = (new KuGouSearchExtendData()
+                {
+                    Hash = httpMusic.FileHash,
+                    AlbumId = httpMusic.AlbumID
+                }).ToJson();
+                var music = new MusicResultShow()
                 {
                     Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.ID}"),
                     Platform = Platform,
                     PlatformInnerId = httpMusic.ID,
                     Name = KuGouUtils.RemoveSongNameTag(httpMusic.SongName),
-                    Alias = "",
                     Artist = KuGouUtils.RemoveSongNameTag(httpMusic.SingerName),
                     Album = httpMusic.AlbumName,
                     Duration = TimeSpan.FromSeconds(httpMusic.Duration),
                     Fee = GetFeeFlag(httpMusic.Privilege),
-                    PlatformData = new KuGouSearchExtendData()
-                    {
-                        Hash = httpMusic.FileHash,
-                        AlbumId = httpMusic.AlbumID
-                    }
+                    ExtendDataJson = ExtendDataJson
                 };
                 musics.Add(music);
             }
@@ -94,7 +87,7 @@ public class KuGouMusicProvider : IMusicProvider
                 Logger.Error("构建酷狗搜索结果失败。", ex);
             }
         }
-        return (true, "", musics);
+        return musics;
     }
 
     private FeeEnum GetFeeFlag(int Privilege)
@@ -147,10 +140,9 @@ public class KuGouMusicProvider : IMusicProvider
         {
             Id = sourceMusic.Id,
             Platform = sourceMusic.Platform,
-            PlatformName = sourceMusic.Platform.GetDescription(),
+            //PlatformName = sourceMusic.Platform.GetDescription(),
             PlatformInnerId = sourceMusic.PlatformInnerId,
             Name = sourceMusic.Name,
-            Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = httpResult.data.img,

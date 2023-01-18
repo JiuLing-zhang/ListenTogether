@@ -23,17 +23,18 @@
                     FontSize="20"
                     Text="{Binding SongMenu.Name}"/>
                 <Button
-                    Text="播放全部"/>
+                    Text="播放全部"
+                    Command="{Binding PlayAllAsyncCommand}"/>
             </VerticalStackLayout>
         </HorizontalStackLayout>
         <Border
             Grid.Row="1"
             StrokeThickness="0">
             <controls:MusicResultView
-                Musics="{Binding MusicResultCollection, Source={RelativeSource AncestorType={x:Type viewmodels:SongMenuPageViewModel}}}"
+                Musics="{Binding MusicResultCollection}"
                 PlayCommand="{Binding PlayAsyncCommand}"
                 PlayCommandParameter="{Binding .}"
-                AddToFavoriteCommand="{Binding AddToFavoriteAsync, Source={RelativeSource AncestorType={x:Type viewmodels:MusicResultViewModel}}}"
+                AddToFavoriteCommand="{Binding AddToFavoriteAsyncCommand}"
                 AddToFavoriteCommandParameter="{Binding .}"/>
         </Border>
     </Grid>

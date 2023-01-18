@@ -64,8 +64,10 @@ public class NetEaseMusicProvider : IMusicProvider
         return result.result.songs.Select(x => x.name).Distinct().ToList();
     }
 
-    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword)
+    public async Task<List<MusicResultShow>> SearchAsync(string keyword)
     {
+        var musics = new List<MusicResultShow>();
+
         string url = $"{UrlBase.NetEase.Search}";
 
         var postData = NetEaseUtils.GetPostDataForSearch(keyword);
@@ -92,45 +94,29 @@ public class NetEaseMusicProvider : IMusicProvider
         catch (Exception ex)
         {
             Logger.Error("解析网易搜索结果失败。", ex);
-            return (false, "解析数据失败", null);
+            return musics;
         }
 
-        if (result == null)
+        if (result == null || result.code != 200)
         {
-            return (false, "请求服务器失败", null);
-        }
-        if (result.code != 200)
-        {
-            return (false, result.msg, null);
+            return musics;
         }
 
-        var musics = new List<MusicSearchResult>();
-        if (result.result.songCount == 0)
-        {
-            return (true, "", new List<MusicSearchResult>());
-        }
         foreach (var song in result.result.songs)
         {
             try
             {
-                string alia = "";
-                if (song.alia.Length > 0)
-                {
-                    alia = song.alia[0];
-                }
-
                 string artistName = "";
                 if (song.ar.Length > 0)
                 {
                     artistName = string.Join("、", song.ar.Select(x => x.name).ToList());
                 }
-                var music = new MusicSearchResult()
+                var music = new MusicResultShow()
                 {
                     Id = MD5Utils.GetStringValueToLower($"{Platform}-{song.id}"),
                     Platform = Platform,
                     PlatformInnerId = song.id.ToString(),
                     Name = song.name,
-                    Alias = alia,
                     Artist = artistName,
                     Album = song.al.name,
                     ImageUrl = $"{song.al.picUrl}?param=250y250",
@@ -144,7 +130,7 @@ public class NetEaseMusicProvider : IMusicProvider
                 Logger.Error("构建网易搜索结果失败。", ex);
             }
         }
-        return (true, "", musics);
+        return musics;
     }
 
     private FeeEnum GetFeeFlag(Privilege privilege)
@@ -170,10 +156,9 @@ public class NetEaseMusicProvider : IMusicProvider
         {
             Id = sourceMusic.Id,
             Platform = sourceMusic.Platform,
-            PlatformName = sourceMusic.Platform.GetDescription(),
+            //PlatformName = sourceMusic.Platform.GetDescription(),
             PlatformInnerId = sourceMusic.PlatformInnerId,
             Name = sourceMusic.Name,
-            Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = sourceMusic.ImageUrl,
@@ -279,9 +264,42 @@ public class NetEaseMusicProvider : IMusicProvider
         return lyricResult.lrc.lyric;
     }
 
-    public Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
     {
-        throw new NotImplementedException();
+        //热门标签
+        string url = $"{UrlBase.NetEase.GetHotTagsUrl}";
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        var html = System.Text.Encoding.UTF8.GetString(buffer);
+
+        var hotTags = NetEaseUtils.GetHotTags(html);
+
+        //全部标签
+        url = $"{UrlBase.NetEase.GetAllTypesUrl}";
+        request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        html = System.Text.Encoding.UTF8.GetString(buffer);
+        var allTypes = NetEaseUtils.GetAllTypes(html);
+
+        return (hotTags, allTypes);
     }
 
     public Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)

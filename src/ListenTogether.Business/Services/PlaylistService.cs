@@ -15,6 +15,10 @@ public class PlaylistService : IPlaylistService
     {
         return await _repository.AddOrUpdateAsync(playlist);
     }
+    public async Task<bool> AddToPlaylistAsync(List<Playlist> playlists)
+    {
+        return await _repository.AddOrUpdateAsync(playlists);
+    }
     public async Task<Playlist?> GetOneAsync(string musicId)
     {
         return await _repository.GetOneAsync(musicId);

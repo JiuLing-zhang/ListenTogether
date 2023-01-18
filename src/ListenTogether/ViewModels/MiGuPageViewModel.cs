@@ -41,7 +41,7 @@ public partial class MiGuPageViewModel : ViewModelBase
     {
         if (_allTypesJson.IsEmpty())
         {
-            var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(PlatformEnum.MiGu);
+            var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(PlatformEnum.NetEase);
 
             _allTypesJson = allTypes.ToJson();
 

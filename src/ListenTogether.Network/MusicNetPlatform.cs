@@ -30,7 +30,7 @@ public class MusicNetPlatform
         return await MusicProviderFactory.Create(PlatformEnum.NetEase).GetSearchSuggestAsync(keyword);
     }
 
-    public async Task<List<MusicSearchResult>> SearchAsync(PlatformEnum platform, string keyword)
+    public async Task<List<MusicResultShow>> SearchAsync(PlatformEnum platform, string keyword)
     {
         return await _miGuSearcher.SearchAsync(platform, keyword);
     }

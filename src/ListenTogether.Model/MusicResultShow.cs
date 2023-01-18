@@ -20,7 +20,7 @@ public class MusicResultShow : MusicBase
     /// <summary>
     /// 平台特有数据
     /// </summary>
-    public object PlatformData { get; set; } = null!;
+    public string? ExtendDataJson { get; set; }
     /// <summary>
     /// 费用（免费、VIP等）
     /// </summary>

@@ -25,12 +25,6 @@ public partial class PlaylistPageViewModel : ViewModelBase
     {
         try
         {
-            if (IsNotLogin)
-            {
-                await ToastService.Show("登录信息已过期，请重新登录");
-                return;
-            }
-
             StartLoading("页面加载中....");
             _musicService = _services.GetRequiredService<IMusicServiceFactory>().Create();
             _myFavoriteService = _services.GetRequiredService<IMyFavoriteServiceFactory>().Create();

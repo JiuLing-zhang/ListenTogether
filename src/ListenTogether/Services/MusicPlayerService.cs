@@ -57,6 +57,7 @@ public class MusicPlayerService
     {
         if (playlist == null)
         {
+            await ToastService.Show("播放列表加载失败");
             return;
         }
         var cachePath = await GetMusicCachePathAsync(playlist.MusicId);
@@ -72,6 +73,7 @@ public class MusicPlayerService
             var playUrl = await _musicNetworkService.GetPlayUrlAsync(playlist.Platform, playlist.MusicIdOnPlatform);
             if (playUrl.IsEmpty())
             {
+                await ToastService.Show("播放地址获取失败");
                 MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);
                 return;
             }

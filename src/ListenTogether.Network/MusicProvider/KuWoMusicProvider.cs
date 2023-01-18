@@ -32,8 +32,10 @@ internal class KuWoMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword)
+    public async Task<List<MusicResultShow>> SearchAsync(string keyword)
     {
+        var musics = new List<MusicResultShow>();
+
         string url = $"{UrlBase.KuWo.Search}?key={keyword}&pn=1&rn=20";
         var request = new HttpRequestMessage()
         {
@@ -56,7 +58,7 @@ internal class KuWoMusicProvider : IMusicProvider
         if (csrf.IsEmpty())
         {
             Logger.Error("酷我音乐搜索参数构造失败。", new ArgumentNullException("csrf"));
-            return (false, "参数构造失败", null);
+            return musics;
         }
         request.Headers.Add("csrf", csrf);
 
@@ -70,34 +72,23 @@ internal class KuWoMusicProvider : IMusicProvider
         catch (Exception ex)
         {
             Logger.Error("解析酷我音乐搜索结果失败。", ex);
-            return (false, "解析数据失败", null);
+            return musics;
         }
-        if (httpResult == null)
+        if (httpResult == null || httpResult.code != 200)
         {
-            return (false, "请求服务器失败", null);
-        }
-        if (httpResult.code != 200)
-        {
-            return (false, httpResult.message, null);
-        }
-
-        var musics = new List<MusicSearchResult>();
-        if (httpResult.data.list.Length == 0)
-        {
-            return (true, "", new List<MusicSearchResult>());
+            return musics;
         }
 
         foreach (var httpMusic in httpResult.data.list)
         {
             try
             {
-                var music = new MusicSearchResult()
+                var music = new MusicResultShow()
                 {
                     Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.rid}"),
                     Platform = Platform,
                     PlatformInnerId = httpMusic.rid.ToString(),
                     Name = httpMusic.name.Replace("&nbsp;", " "),
-                    Alias = "",
                     Artist = httpMusic.artist.Replace("&nbsp;", " "),
                     Album = httpMusic.album.Replace("&nbsp;", " "),
                     Fee = GetFeeFlag(httpMusic.payInfo.listen_fragment),
@@ -110,7 +101,7 @@ internal class KuWoMusicProvider : IMusicProvider
                 Logger.Error("构建酷狗搜索结果失败。", ex);
             }
         }
-        return (true, "", musics);
+        return musics;
     }
 
     private FeeEnum GetFeeFlag(string listenFragment)
@@ -166,10 +157,9 @@ internal class KuWoMusicProvider : IMusicProvider
         {
             Id = sourceMusic.Id,
             Platform = sourceMusic.Platform,
-            PlatformName = sourceMusic.Platform.GetDescription(),
+         //   PlatformName = sourceMusic.Platform.GetDescription(),
             PlatformInnerId = sourceMusic.PlatformInnerId,
             Name = sourceMusic.Name,
-            Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,
             Album = sourceMusic.Album,
             ImageUrl = httpResult.data.songinfo.pic,

@@ -27,7 +27,17 @@ public class MiGuMusicProvider : IMusicProvider
 
     private async Task InitCommonArgs()
     {
-        var html = await _httpClient.GetStringAsync("https://music.migu.cn/v3").ConfigureAwait(false);
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(UrlBase.MiGu.Index),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         string pattern = @"SOURCE_ID\s*:\s*'(?<SOURCE_ID>\d+)'\s*,";
         var (_, sourceId) = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(html, pattern);
@@ -42,8 +52,10 @@ public class MiGuMusicProvider : IMusicProvider
     }
 
 
-    public async Task<(bool IsSucceed, string ErrMsg, List<MusicSearchResult>? musics)> SearchAsync(string keyword)
+    public async Task<List<MusicResultShow>> SearchAsync(string keyword)
     {
+        var musics = new List<MusicResultShow>();
+
         string args = MiGuUtils.GetSearchArgs(keyword);
         string url = $"{UrlBase.MiGu.Search}?{args}";
         var request = new HttpRequestMessage()
@@ -64,26 +76,24 @@ public class MiGuMusicProvider : IMusicProvider
 
         if (!MiGuUtils.TryScanSearchResult(html, out var htmlMusics))
         {
-            return (false, "数据解析失败", null);
+            return musics;
         }
 
-        var musics = new List<MusicSearchResult>();
         foreach (var htmlMusic in htmlMusics)
         {
-            musics.Add(new MusicSearchResult()
+            musics.Add(new MusicResultShow()
             {
                 Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.id}"),
                 Platform = Platform,
                 PlatformInnerId = htmlMusic.id,
                 Name = htmlMusic.title,
-                Alias = "",
                 Artist = htmlMusic.singer,
                 Album = htmlMusic.album,
                 ImageUrl = htmlMusic.imgUrl,
                 Fee = FeeEnum.Free,
             });
         }
-        return (true, "", musics);
+        return musics;
     }
 
     public async Task<string> GetPlayUrlAsync(string id, object? extendData = null)
@@ -159,10 +169,9 @@ public class MiGuMusicProvider : IMusicProvider
         {
             Id = sourceMusic.Id,
             Platform = sourceMusic.Platform,
-            PlatformName = sourceMusic.Platform.GetDescription(),
+            //   PlatformName = sourceMusic.Platform.GetDescription(),
             PlatformInnerId = sourceMusic.PlatformInnerId,
             Name = sourceMusic.Name,
-            Alias = sourceMusic.Alias,
             Artist = sourceMusic.Artist,
             Album = result.resource[0].album,
             ImageUrl = imageUrl,
@@ -257,14 +266,34 @@ public class MiGuMusicProvider : IMusicProvider
     public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
     {
         string url = $"{UrlBase.MiGu.GetTagsUrl}";
-        var html = await _httpClient.GetStringAsync(url);
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         return MiGuUtils.GetTags(html);
     }
 
     public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
     {
         string url = $"{UrlBase.MiGu.GetMusicTagPlayUrl}?tagId={id}";
-        var html = await _httpClient.GetStringAsync(url);
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
         return MiGuUtils.GetSongMenusFromTag(html);
     }
     public Task<List<SongMenu>> GetSongMenusFromTop()
@@ -276,7 +305,17 @@ public class MiGuMusicProvider : IMusicProvider
     {
         var musics = new List<MusicResultShow>();
         string url = $"{UrlBase.MiGu.GetTopMusicsUrl}{topId}";
-        var html = await _httpClient.GetStringAsync(url);
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         //HttpMusicTopSongItemResult
         var songs = MiGuUtils.GetTopMusics(html);
@@ -308,7 +347,6 @@ public class MiGuMusicProvider : IMusicProvider
                 Platform = Platform,
                 PlatformInnerId = song.copyrightId,
                 Name = song.name,
-                Alias = "",
                 Artist = artist,
                 Album = song.album?.albumName ?? "",
                 ImageUrl = song.ImageUrl,
@@ -323,7 +361,17 @@ public class MiGuMusicProvider : IMusicProvider
     {
         var musics = new List<MusicResultShow>();
         string url = $"{UrlBase.MiGu.GetTagMusicsUrl}{tagId}";
-        var html = await _httpClient.GetStringAsync(url);
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var songs = MiGuUtils.GetTagMusics(html);
         foreach (var song in songs)
@@ -341,7 +389,6 @@ public class MiGuMusicProvider : IMusicProvider
                 Platform = Platform,
                 PlatformInnerId = songId,
                 Name = song.title,
-                Alias = "",
                 Artist = song.singer,
                 Album = song.album,
                 ImageUrl = song.ImageUrl,

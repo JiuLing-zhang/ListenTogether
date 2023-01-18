@@ -1,6 +1,8 @@
-﻿using System.Numerics;
+﻿using ListenTogether.Model;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ListenTogether.Network.Utils;
 public class NetEaseUtils
@@ -120,6 +122,70 @@ public class NetEaseUtils
     private static string GetLyricRequest(string musicId)
     {
         return "{\"id\":" + musicId + ",\"lv\":-1,\"tv\":-1,\"csrf_token\":\"\"}";
+    }
+
+    public static List<MusicTag> GetHotTags(string html)
+    {
+        html = html.Replace("&amp;", "&");
+        List<MusicTag> hotTags = new List<MusicTag>();
+
+        string hotPattern = """
+                            "/discover/playlist/\?cat=(?<Id>.+?)".+?>(?<Name>.+?)<
+                            """;
+
+        MatchCollection mc = Regex.Matches(html, hotPattern);
+        if (mc.Count > 0)
+        {
+            for (int i = 0; i < mc.Count; i++)
+            {
+                hotTags.Add(new MusicTag()
+                {
+                    Id = mc[i].Groups["Id"].Value,
+                    Name = mc[i].Groups["Name"].Value
+                });
+            }
+        }
+        return hotTags;
+    }
+
+    public static List<MusicTypeTag> GetAllTypes(string html)
+    {
+        html = html.Replace("&amp;", "&");
+        List<MusicTypeTag> allTypes = new List<MusicTypeTag>();
+
+        string pattern = """
+                            <dl class="f-cb">[\s\S]*?</i>(?<TypeName>.+?)</dt>(?<TypeList>[\s\S]*?)</dl>
+                            """;
+
+        MatchCollection mc = Regex.Matches(html, pattern);
+        for (int i = 0; i < mc.Count; i++)
+        {
+            string typeName = mc[i].Groups["TypeName"].Value;
+            string typeList = mc[i].Groups["TypeList"].Value;
+
+            string typePattern = """
+                            "/discover/playlist/\?cat=(?<Id>[\s\S]*?)"[\s\S]*?>(?<Name>.+?)<
+                            """;
+            MatchCollection mcType = Regex.Matches(typeList, typePattern);
+
+
+            var tags = new List<MusicTag>();
+            for (int j = 0; j < mcType.Count; j++)
+            {
+                tags.Add(new MusicTag()
+                {
+                    Id = mcType[j].Groups["Id"].Value,
+                    Name = mcType[j].Groups["Name"].Value
+                });
+            }
+
+            allTypes.Add(new MusicTypeTag()
+            {
+                TypeName = typeName,
+                Tags = tags
+            });
+        }
+        return allTypes;
     }
 }
 

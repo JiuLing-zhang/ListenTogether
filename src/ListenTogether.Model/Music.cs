@@ -10,10 +10,6 @@ public class Music : MusicBase
     public PlatformEnum Platform { get; set; }
 
     /// <summary>
-    /// 平台名称
-    /// </summary>
-    public string PlatformName { get; set; } = null!;
-    /// <summary>
     /// 对应平台的ID
     /// </summary>
     public string PlatformInnerId { get; set; } = null!;

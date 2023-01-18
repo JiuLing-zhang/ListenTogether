@@ -2,5 +2,5 @@
 
 internal interface IMusicSearchFilter
 {
-    public List<MusicSearchResult> Filter(List<MusicSearchResult> musics);
+    public List<MusicResultShow> Filter(List<MusicResultShow> musics);
 }

@@ -24,5 +24,8 @@ public partial class MusicResultShowViewModel : MusicViewModel
     /// </summary>
     [ObservableProperty]
     private string _fee = null!;
-
+    /// <summary>
+    /// 扩展数据
+    /// </summary>
+    public string ExtendDataJson { get; set; }
 }

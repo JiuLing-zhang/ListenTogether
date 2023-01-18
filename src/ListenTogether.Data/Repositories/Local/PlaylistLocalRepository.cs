@@ -40,7 +40,41 @@ public class PlaylistLocalRepository : IPlaylistRepository
 
         return true;
     }
-
+    public async Task<bool> AddOrUpdateAsync(List<Playlist> playlists)
+    {
+        await DatabaseProvide.DatabaseAsync.RunInTransactionAsync(async tran =>
+        {
+            foreach (var playlist in playlists)
+            {
+                var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.MusicId == playlist.MusicId);
+                if (playlistEntity == null)
+                {
+                    playlistEntity = new PlaylistEntity()
+                    {
+                        Platform = playlist.Platform,
+                        MusicId = playlist.MusicId,
+                        MusicIdOnPlatform = playlist.MusicIdOnPlatform,
+                        MusicArtist = playlist.MusicArtist,
+                        MusicName = playlist.MusicName,
+                        MusicAlbum = playlist.MusicAlbum,
+                        MusicImageUrl = playlist.MusicImageUrl,
+                        EditTime = DateTime.Now
+                    };
+                    tran.Insert(playlistEntity);
+                }
+                else
+                {
+                    playlistEntity.MusicArtist = playlist.MusicArtist;
+                    playlistEntity.MusicName = playlist.MusicName;
+                    playlistEntity.MusicAlbum = playlist.MusicAlbum;
+                    playlistEntity.MusicImageUrl = playlist.MusicImageUrl;
+                    playlistEntity.EditTime = DateTime.Now;
+                    tran.Update(playlistEntity);
+                }
+            }
+        });
+        return true;
+    }
     public async Task<Playlist?> GetOneAsync(string musicId)
     {
         var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.MusicId == musicId);

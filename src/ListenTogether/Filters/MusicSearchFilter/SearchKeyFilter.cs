@@ -6,7 +6,7 @@ internal class SearchKeyFilter : IMusicSearchFilter
     {
         _searchKey = searchKey;
     }
-    public List<MusicSearchResult> Filter(List<MusicSearchResult> musics)
+    public List<MusicResultShow> Filter(List<MusicResultShow> musics)
     {
         return musics.Where(x => x.Name.IndexOf(_searchKey) >= 0 || x.Artist.IndexOf(_searchKey) >= 0).ToList();
     }

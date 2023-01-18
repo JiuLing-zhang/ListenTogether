@@ -112,7 +112,6 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
             Platform = (int)music.Platform,
             PlatformInnerId = music.PlatformInnerId,
             Album = music.Album,
-            Alias = music.Alias,
             Artist = music.Artist,
             ImageUrl = music.ImageUrl
         };

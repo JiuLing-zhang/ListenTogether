@@ -7,14 +7,11 @@
              x:Class="ListenTogether.Pages.SearchPage"
              Title="搜索"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
-
     <Grid
+        RowDefinitions="40,20,Auto,20,*"
+        RowSpacing="10"
         Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
         MaximumWidthRequest="{OnPlatform  WinUI=500,MacCatalyst=500}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
         <SearchBar
             Grid.Row="0"
             x:Name="TxtSearchBar"
@@ -24,41 +21,39 @@
             Placeholder="输入歌曲名、歌手名查找..."
             VerticalOptions="Start">
         </SearchBar>
-        <!--搜索历史 & 热门搜索-->
-        <FlexLayout
+
+        <HorizontalStackLayout
             Grid.Row="1"
-            Direction="Column"
+            IsVisible="{Binding IsNotSearchingForSuggest}">
+            <Label
+                Text="搜索历史"
+                Style="{StaticResource Explain}"/>
+
+            <Image
+                Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
+                HorizontalOptions="EndAndExpand"
+                HeightRequest="16"
+                WidthRequest="16">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer 
+                                Command="{Binding RemoveSearchHistoriesAsyncCommand}"/>
+                </Image.GestureRecognizers>
+            </Image>
+        </HorizontalStackLayout>
+
+        <!--搜索历史-->
+        <Border
+            Grid.Row="2"
+            StrokeThickness="0"
             IsVisible="{Binding IsNotSearchingForSuggest}">
             <FlexLayout
-                Margin="0,0,0,20"
-                Direction="Column"
-                FlexLayout.Basis="150">
-                <StackLayout
-                    Orientation="Horizontal">
-                    <Label
-                        Text="搜索历史"
-                        Style="{StaticResource Explain}"/>
-
-                    <Image
-                        Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
-                        HorizontalOptions="EndAndExpand"
-                        HeightRequest="16"
-                        WidthRequest="16">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer 
-                                Command="{Binding RemoveSearchHistoriesAsyncCommand}"/>
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
-                <FlexLayout
-                    FlexLayout.Grow="1"
                     Wrap="Wrap"
                     AlignContent="Start"
                     JustifyContent="Start"
                     BindableLayout.ItemsSource="{Binding SearchHistories}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Border
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border
                                 Margin="2,5,2,5"
                                 HeightRequest="28"
                                 Stroke="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"
@@ -66,39 +61,43 @@
                                 StrokeShape="RoundRectangle 15"
                                 Background="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
                                 Padding="15,2,15,2">
-                                <Label
+                            <Label
                                     Text="{Binding .}"
                                     FontSize="12"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
                                     TextColor="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"/>
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=HistoriyWordClickedAsyncCommand}"
                                         CommandParameter="{Binding .}"/>
-                                </Border.GestureRecognizers>
-                            </Border>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
             </FlexLayout>
+        </Border>
 
+        <!--热门搜索-->
+        <Label
+            Grid.Row="3"
+            Text="热门搜索"
+            IsVisible="{Binding IsNotSearchingForSuggest}"
+            Style="{StaticResource Explain}"/>
+
+        <Border
+            Grid.Row="4"
+            StrokeThickness="0"
+            IsVisible="{Binding IsNotSearchingForSuggest}">
             <FlexLayout
-                Direction="Column"
-                FlexLayout.Grow="1">
-                <Label
-                    Text="热门搜索"
-                    Style="{StaticResource Explain}"/>
-
-                <FlexLayout
                     FlexLayout.Grow="1"
                     Wrap="Wrap"
                     AlignContent="Start"
                     JustifyContent="Start"
                     BindableLayout.ItemsSource="{Binding HotWords}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <Border
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border
                                 Margin="2,5,2,5"
                                 HeightRequest="28"
                                 Stroke="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"
@@ -106,28 +105,28 @@
                                 StrokeShape="RoundRectangle 15"
                                 Background="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
                                 Padding="15,2,15,2">
-                                <Label
+                            <Label
                                     Text="{Binding .}"
                                     FontSize="12"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
                                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
                                     TextColor="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"/>
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=HotWordClickedAsyncCommand}"
                                         CommandParameter="{Binding .}"/>
-                                </Border.GestureRecognizers>
-                            </Border>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
             </FlexLayout>
-        </FlexLayout>
+        </Border>
 
         <!--搜索建议-->
         <Border
             Grid.Row="1"
+            Grid.RowSpan="4"
             ZIndex="2"
             Padding="1"
             StrokeThickness="1"

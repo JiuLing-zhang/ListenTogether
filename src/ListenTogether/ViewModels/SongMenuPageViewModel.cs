@@ -14,8 +14,7 @@ public partial class SongMenuPageViewModel : ViewModelBase
     private PlatformEnum Platform => (PlatformEnum)Enum.Parse(typeof(PlatformEnum), PlatformString);
 
     private readonly IMusicNetworkService _musicNetworkService;
-    private readonly IPlaylistService _playlistService = null!;
-    private readonly MusicPlayerService _musicPlayerService;
+    private readonly MusicResultService _musicResultService;
 
     [ObservableProperty]
     private SongMenuViewModel _songMenu;
@@ -23,12 +22,11 @@ public partial class SongMenuPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultGroupViewModel> _musicResultCollection = null!;
 
-    public SongMenuPageViewModel(IMusicNetworkService musicNetworkService, IPlaylistService playlistService, MusicPlayerService musicPlayerService)
+    public SongMenuPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService)
     {
         MusicResultCollection = new ObservableCollection<MusicResultGroupViewModel>();
         _musicNetworkService = musicNetworkService;
-        _playlistService = playlistService;
-        _musicPlayerService = musicPlayerService;
+        _musicResultService = musicResultService;
     }
     public async Task InitializeAsync()
     {
@@ -65,36 +63,20 @@ public partial class SongMenuPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public async void PlayAsync(MusicResultShowViewModel musicResult)
+    public async void PlayAllAsync()
     {
-        await AddToPlaylistAsync(musicResult);
-        await PlayMusicAsync(musicResult);
-    }
-
-    private async Task AddToPlaylistAsync(MusicResultShowViewModel musicResult)
-    {
-        var playlist = new Playlist()
-        {
-            MusicId = musicResult.Id,
-            MusicIdOnPlatform = musicResult.IdOnPlatform,
-            Platform = musicResult.Platform,
-            MusicName = musicResult.Name,
-            MusicArtist = musicResult.Artist,
-            MusicAlbum = musicResult.Album,
-            MusicImageUrl = musicResult.ImageUrl,
-            EditTime = DateTime.Now
-        };
-        await _playlistService.AddToPlaylistAsync(playlist);
-    }
-
-    private async Task PlayMusicAsync(MusicResultShowViewModel musicResult)
-    {
-        await _musicPlayerService.PlayAsync(musicResult.Id);
+        await _musicResultService.PlayAllAsync(MusicResultCollection[0]);
     }
 
     [RelayCommand]
-    public async void AddToFavoriteAsync(MusicResultShowViewModel id)
+    public async void PlayAsync(MusicResultShowViewModel musicResult)
     {
-        throw new NotImplementedException("添加到收藏");
+        await _musicResultService.PlayAsync(musicResult);
+    }
+
+    [RelayCommand]
+    public async void AddToFavoriteAsync(MusicResultShowViewModel musicResult)
+    {
+        await _musicResultService.AddToFavoriteAsync(musicResult);
     }
 }

@@ -109,7 +109,7 @@ public class MyFavoriteLocalRepository : IMyFavoriteRepository
                    {
                        favoriteDetail = new MyFavoriteDetailEntity()
                        {
-                           PlatformName = music.PlatformName,
+                           //PlatformName = music.PlatformName,
                            MyFavoriteId = id,
                            MusicName = music.Name,
                            MusicId = music.Id,

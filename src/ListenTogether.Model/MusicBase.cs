@@ -2,18 +2,12 @@
 {
     public class MusicBase
     {
-
         public string Id { get; set; } = null!;
         /// <summary>
         /// 歌曲名称
         /// </summary>
         public string Name { get; set; } = null!;
 
-        //TODO 删除别名字段
-        /// <summary>
-        /// 别名
-        /// </summary>
-        public string Alias { get; set; } = null!;
         /// <summary>
         /// 歌手名称
         /// </summary>

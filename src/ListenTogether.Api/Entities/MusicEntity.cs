@@ -13,7 +13,6 @@ namespace ListenTogether.Api.Entities
         public int Platform { get; set; }
         public string PlatformInnerId { get; set; } = null!;
         public string Name { get; set; } = null!;
-        public string Alias { get; set; } = null!;
         public string Artist { get; set; } = null!;
         public string Album { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;

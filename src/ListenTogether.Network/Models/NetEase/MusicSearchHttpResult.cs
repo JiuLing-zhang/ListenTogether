@@ -10,7 +10,6 @@
     {
         public int id { get; set; }
         public string name { get; set; } = null!;
-        public string[] alia { get; set; } = null!;
         /// <summary>
         /// 艺人信息
         /// </summary>

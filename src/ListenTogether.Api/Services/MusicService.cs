@@ -34,7 +34,6 @@ namespace ListenTogether.Api.Services
                 PlatformName = ((PlatformEnum)music.Platform).GetDescription(),
                 Name = music.Name,
                 Album = music.Album,
-                Alias = music.Alias,
                 Artist = music.Artist,
                 ImageUrl = music.ImageUrl,
                 ExtendData = music.ExtendData,
@@ -53,7 +52,6 @@ namespace ListenTogether.Api.Services
                     PlatformInnerId = music.PlatformInnerId,
                     Name = music.Name,
                     Album = music.Album,
-                    Alias = music.Alias,
                     Artist = music.Artist,
                     ImageUrl = music.ImageUrl,
                     ExtendData = music.ExtendData ?? "",
@@ -68,7 +66,6 @@ namespace ListenTogether.Api.Services
                 myMusic.PlatformInnerId = music.PlatformInnerId;
                 myMusic.Name = music.Name;
                 myMusic.Album = music.Album;
-                myMusic.Alias = music.Alias;
                 myMusic.Artist = music.Artist;
                 myMusic.ImageUrl = music.ImageUrl;
                 myMusic.ExtendData = music.ExtendData ?? "";
