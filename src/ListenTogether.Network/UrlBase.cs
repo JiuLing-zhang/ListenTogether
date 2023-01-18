@@ -5,7 +5,7 @@ public class UrlBase
     {
         public const string Index = "https://music.163.com";
         public const string GetHotTagsUrl = "https://music.163.com/discover";
-        public const string GetAllTypesUrl = "https://music.163.com/discover/playlist";        
+        public const string GetAllTypesUrl = "https://music.163.com/discover/playlist";
         public const string Suggest = "https://music.163.com/weapi/search/suggest/web?csrf_token=";
         public const string Search = "https://music.163.com/weapi/cloudsearch/get/web?csrf_token=";
         public const string GetMusic = "https://music.163.com/weapi/song/enhance/player/url/v1?csrf_token=";
