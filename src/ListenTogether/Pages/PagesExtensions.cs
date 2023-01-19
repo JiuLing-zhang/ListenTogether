@@ -19,8 +19,8 @@ public static class PagesExtensions
 
         builder.Services.AddSingleton<ChooseTagPage>();
         builder.Services.AddSingleton<SongMenuPage>();
-        builder.Services.AddSingleton<DiscoverPage>();
-
+        builder.Services.AddSingleton<MiGuPage>();
+        builder.Services.AddSingleton<NetEasePage>();
         return builder;
     }
 }

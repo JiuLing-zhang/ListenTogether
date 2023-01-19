@@ -2,10 +2,10 @@ using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Pages;
 
-public partial class NetEasePage : ContentPage
+public partial class MiGuPage : ContentPage
 {
     DiscoverViewModel vm => BindingContext as DiscoverViewModel;
-    public NetEasePage(DiscoverViewModel vm)
+    public MiGuPage(DiscoverViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
@@ -13,10 +13,11 @@ public partial class NetEasePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await vm.InitializeAsync(PlatformEnum.NetEase);
+        await vm.InitializeAsync(PlatformEnum.MiGu);
     }
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
     }
+
 }

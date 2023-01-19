@@ -11,7 +11,7 @@ public partial class DiscoverViewModel : ViewModelBase
 {
     private string _allTypesJson;
 
-    public PlatformEnum Platform { get; set; }
+    private PlatformEnum _platform;
 
     [ObservableProperty]
     private string _tagId = null!;
@@ -39,9 +39,10 @@ public partial class DiscoverViewModel : ViewModelBase
         HotTags = new ObservableCollection<MusicTagViewModel>();
         SongMenus = new ObservableCollection<SongMenuViewModel>();
     }
-    public async Task InitializeAsync()
+    public async Task InitializeAsync(PlatformEnum platform)
     {
-        var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(Platform);
+        _platform = platform;
+        var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(_platform);
 
         _allTypesJson = allTypes.ToJson();
 
@@ -97,7 +98,7 @@ public partial class DiscoverViewModel : ViewModelBase
     private Task GetSongMenusFromTop()
     {
         SongMenus.Clear();
-        var songMenus = _musicNetworkService.GetSongMenusFromTop(Platform).Result;
+        var songMenus = _musicNetworkService.GetSongMenusFromTop(_platform).Result;
         foreach (var songMenu in songMenus)
         {
             SongMenus.Add(new SongMenuViewModel()
@@ -114,7 +115,7 @@ public partial class DiscoverViewModel : ViewModelBase
     private async Task GetSongMenusFromTagAsync(string id)
     {
         SongMenus.Clear();
-        var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, id);
+        var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(_platform, id);
         foreach (var songMenu in songMenus)
         {
             SongMenus.Add(new SongMenuViewModel()
@@ -132,6 +133,6 @@ public partial class DiscoverViewModel : ViewModelBase
     private async void GotoSongMenuPageAsync(SongMenuViewModel songMenu)
     {
         string json = HttpUtility.UrlEncode(songMenu.ToJson());
-        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={Platform}");
+        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={_platform}");
     }
 }

@@ -20,6 +20,8 @@ public static class AppBuilderExtensions
         builder.Services.AddSingleton<IUserService, UserService>();
         builder.Services.AddSingleton<IApiLogService, ApiLogService>();
         builder.Services.AddSingleton<IMusicCacheService, MusicCacheService>();
+        builder.Services.AddSingleton<IMyFavoriteService, MyFavoriteService>();
+        builder.Services.AddSingleton<IMusicService, MusicService>();
 
         //数据服务
         builder.Services.AddSingleton<IEnvironmentConfigRepository, EnvironmentConfigLocalRepository>();

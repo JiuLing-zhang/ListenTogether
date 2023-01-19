@@ -212,11 +212,6 @@ public class NetEaseMusicProvider : IMusicProvider
         return Task.FromResult(NetEaseUtils.GetSongMenusFromTop());
     }
 
-    public Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<List<string>?> GetHotWordAsync()
     {
         throw new NotImplementedException();
@@ -302,12 +297,96 @@ public class NetEaseMusicProvider : IMusicProvider
         return (hotTags, allTypes);
     }
 
-    public Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
+    public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
     {
-        throw new NotImplementedException();
+        string url = $"{UrlBase.NetEase.GetSongMenusFromTagUrl}?cat={id}";
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        var html = System.Text.Encoding.UTF8.GetString(buffer);
+
+        return NetEaseUtils.GetSongMenusFromTag(html);
     }
 
-    public Task<List<MusicResultShow>> GetTagMusicsAsync(string tagId)
+    public async Task<List<MusicResultShow>> GetTagMusicsAsync(string tagId)
+    {
+        var musics = new List<MusicResultShow>();
+        string url = $"{UrlBase.NetEase.GetTagMusicsUrl}";
+
+        var postData = NetEaseUtils.GetPostDataForTagMusics(tagId);
+        var form = new FormUrlEncodedContent(postData);
+
+        var request = new HttpRequestMessage()
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri(url),
+            Content = form
+        };
+        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+        {
+            request.Headers.Add(header.Key, header.Value);
+        }
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        TagMusicHttpResult? result;
+        try
+        {
+            result = json.ToObject<TagMusicHttpResult>();
+        }
+        catch (Exception)
+        {
+            return musics;
+        }
+
+        if (result == null || result.code != 200 || result.playlist == null || result.playlist.tracks == null)
+        {
+            return musics;
+        }
+
+        foreach (var track in result.playlist.tracks)
+        {
+
+            string artist = "";
+            if (track.ar != null && track.ar.Count >= 1)
+            {
+                artist = track.ar[0].name ?? "";
+            }
+
+            string album = "";
+            string imageUrl = "";
+            if (track.al != null)
+            {
+                album = track.al.name ?? "";
+                imageUrl = track.al.picUrl ?? "";
+            }
+
+            var music = new MusicResultShow()
+            {
+                Id = MD5Utils.GetStringValueToLower($"{Platform}-{track.id}"),
+                Platform = Platform,
+                PlatformInnerId = track.id.ToString(),
+                Name = track.name ?? "",
+                Artist = artist,
+                Album = album,
+                ImageUrl = imageUrl,
+                Duration = TimeSpan.FromMilliseconds(track.dt),
+                Fee = FeeEnum.Free,
+            };
+
+            musics.Add(music);
+        }
+
+        return musics;
+    }
+    public Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
     {
         throw new NotImplementedException();
     }

@@ -1,4 +1,7 @@
-﻿using ListenTogether.Model;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
+using JiuLing.CommonLibs.Text;
+using ListenTogether.Model;
+using ListenTogether.Network.Models.MiGu;
 using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
@@ -168,7 +171,6 @@ public class NetEaseUtils
                             """;
             MatchCollection mcType = Regex.Matches(typeList, typePattern);
 
-
             var tags = new List<MusicTag>();
             for (int j = 0; j < mcType.Count; j++)
             {
@@ -286,6 +288,103 @@ public class NetEaseUtils
         };
 
         return songMenus;
+    }
+
+    public static List<SongMenu> GetSongMenusFromTag(string html)
+    {
+        var songMenus = new List<SongMenu>();
+        string songMenusPattern = """
+                                <ul class="m-cvrlst f-cb"[\s\S]*?</ul>
+                                """;
+
+        MatchCollection mc = Regex.Matches(html, songMenusPattern);
+        if (mc.Count != 1)
+        {
+            return songMenus;
+        }
+
+        string songMenuListPattern = """
+                                <li>[\s\S]*?</li>
+                                """;
+
+        var songMenuHtmlList = RegexUtils.GetAll(mc[0].Value, songMenuListPattern);
+        foreach (var songMenuHtml in songMenuHtmlList)
+        {
+            try
+            {
+                string songMenuPattern = """
+                                <img[\s\S]*?src="(?<ImageUrl>[\s\S]*?)"[\s\S]*?title="(?<Name>[\s\S]*?)"[\s\S]*?href="(?<Href>[\s\S]*?)"
+                                """;
+
+                var (success, songMenuResult) = RegexUtils.GetMultiGroupInFirstMatch(songMenuHtml, songMenuPattern);
+                if (!success)
+                {
+                    continue;
+                }
+                var href = songMenuResult["Href"] ?? "";
+                if (href.IndexOf("?id=") == -1)
+                {
+                    continue;
+                }
+                var id = href.Substring(href.IndexOf("?id=") + "?id=".Length);
+
+                var songMenu = new SongMenu()
+                {
+                    Id = id,
+                    Name = songMenuResult["Name"] ?? "",
+                    ImageUrl = songMenuResult["ImageUrl"] ?? "",
+                    LinkUrl = $"https://music.163.com{href}"
+                };
+
+                songMenus.Add(songMenu);
+            }
+            catch (Exception)
+            {
+                continue;
+            }
+        }
+        return songMenus;
+    }
+
+    public static IEnumerable<KeyValuePair<string, string>> GetPostDataForTagMusics(string id)
+    {
+        string requestString = GetTagMusicsRequest(id);
+        string num = GetRandom();
+        string encText = CalcAES(requestString, SearchAESKey);
+        encText = CalcAES(encText, num);
+        string encSecKey = GetEncSecKey(num);
+        var data = new Dictionary<string, string> { { "params", encText }, { "encSecKey", encSecKey } };
+        return data;
+    }
+
+    private static string GetTagMusicsRequest(string id)
+    {
+        var data = new { id, offset = 0, total = true, limit = 50, n = 50, csrf_token = "" };
+        return data.ToJson();
+    }
+    public static List<HttpMusicTagResult> GetTagMusics(string html)
+    {
+        var musics = new List<HttpMusicTagResult>();
+        string listDataPattern = """
+                                class="J-btn-share"[\s\S]+?data-share='(?<Data>[\s\S]+?)'
+                                """;
+        var songs = RegexUtils.GetOneGroupAllMatch(html, listDataPattern);
+        foreach (var song in songs)
+        {
+            try
+            {
+                var music = song.ToObject<HttpMusicTagResult>();
+                if (music == null)
+                {
+                    continue;
+                }
+                musics.Add(music);
+            }
+            catch (Exception)
+            {
+            }
+        }
+        return musics;
     }
 }
 
