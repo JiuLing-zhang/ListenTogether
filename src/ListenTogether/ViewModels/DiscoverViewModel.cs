@@ -7,9 +7,11 @@ using System.Web;
 namespace ListenTogether.ViewModels;
 
 [QueryProperty(nameof(TagId), nameof(TagId))]
-public partial class MiGuPageViewModel : ViewModelBase
+public partial class DiscoverViewModel : ViewModelBase
 {
     private string _allTypesJson;
+
+    public PlatformEnum Platform { get; set; }
 
     [ObservableProperty]
     private string _tagId = null!;
@@ -30,7 +32,7 @@ public partial class MiGuPageViewModel : ViewModelBase
 
     private readonly IMusicNetworkService _musicNetworkService;
 
-    public MiGuPageViewModel(IMusicNetworkService musicNetworkService)
+    public DiscoverViewModel(IMusicNetworkService musicNetworkService)
     {
         _musicNetworkService = musicNetworkService;
 
@@ -39,34 +41,31 @@ public partial class MiGuPageViewModel : ViewModelBase
     }
     public async Task InitializeAsync()
     {
-        if (_allTypesJson.IsEmpty())
+        var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(Platform);
+
+        _allTypesJson = allTypes.ToJson();
+
+        HotTags = new ObservableCollection<MusicTagViewModel>();
+        HotTags.Add(new MusicTagViewModel()
         {
-            var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(PlatformEnum.NetEase);
-
-            _allTypesJson = allTypes.ToJson();
-
-            HotTags = new ObservableCollection<MusicTagViewModel>();
+            Id = "榜单",
+            Name = "榜单"
+        });
+        foreach (var hotTag in hotTags)
+        {
             HotTags.Add(new MusicTagViewModel()
             {
-                Id = "榜单",
-                Name = "榜单"
+                Id = hotTag.Id,
+                Name = hotTag.Name,
             });
-            foreach (var hotTag in hotTags)
-            {
-                HotTags.Add(new MusicTagViewModel()
-                {
-                    Id = hotTag.Id,
-                    Name = hotTag.Name,
-                });
-            }
-            HotTags.Add(new MusicTagViewModel()
-            {
-                Id = "选择分类",
-                Name = "选择分类"
-            });
-
-            await GetTagDetailInnerAsync("榜单");
         }
+        HotTags.Add(new MusicTagViewModel()
+        {
+            Id = "选择分类",
+            Name = "选择分类"
+        });
+
+        await GetTagDetailInnerAsync("榜单");
     }
 
     [RelayCommand]
@@ -98,7 +97,7 @@ public partial class MiGuPageViewModel : ViewModelBase
     private Task GetSongMenusFromTop()
     {
         SongMenus.Clear();
-        var songMenus = _musicNetworkService.GetSongMenusFromTop(PlatformEnum.MiGu).Result;
+        var songMenus = _musicNetworkService.GetSongMenusFromTop(Platform).Result;
         foreach (var songMenu in songMenus)
         {
             SongMenus.Add(new SongMenuViewModel()
@@ -115,7 +114,7 @@ public partial class MiGuPageViewModel : ViewModelBase
     private async Task GetSongMenusFromTagAsync(string id)
     {
         SongMenus.Clear();
-        var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(PlatformEnum.MiGu, id);
+        var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, id);
         foreach (var songMenu in songMenus)
         {
             SongMenus.Add(new SongMenuViewModel()
@@ -133,6 +132,6 @@ public partial class MiGuPageViewModel : ViewModelBase
     private async void GotoSongMenuPageAsync(SongMenuViewModel songMenu)
     {
         string json = HttpUtility.UrlEncode(songMenu.ToJson());
-        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={PlatformEnum.MiGu}");
+        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={Platform}");
     }
 }

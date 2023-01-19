@@ -17,9 +17,10 @@ public static class PagesExtensions
         builder.Services.AddSingleton<LogPage>();
         builder.Services.AddSingleton<SearchPage>();
 
-        builder.Services.AddSingleton<MiGuPage>();
         builder.Services.AddSingleton<ChooseTagPage>();
         builder.Services.AddSingleton<SongMenuPage>();
+        builder.Services.AddSingleton<DiscoverPage>();
+
         return builder;
     }
 }

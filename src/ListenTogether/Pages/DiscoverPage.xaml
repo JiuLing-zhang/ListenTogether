@@ -2,9 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
-             x:Class="ListenTogether.Pages.MiGuPage"
-             Title="MiGuPage">
-
+             x:Class="ListenTogether.Pages.DiscoverPage"
+             Title="DiscoverPage">
     <Grid
         RowDefinitions="Auto,*"
         RowSpacing="10"
@@ -27,7 +26,7 @@
                             BorderWidth="0"
                             BackgroundColor="{Binding BackgroundColor}"
                             Text="{Binding Name}"
-                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MiGuPageViewModel}}, Path=GetTagDetailAsyncCommand}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}, Path=GetTagDetailAsyncCommand}"
                             CommandParameter="{Binding Id}"/>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
@@ -54,7 +53,7 @@
                                 ToolTipProperties.Text="{Binding Name}">
                                 <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MiGuPageViewModel}}, Path=GotoSongMenuPageAsyncCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}, Path=GotoSongMenuPageAsyncCommand}"
                                         CommandParameter="{Binding .}"/>
                                 </VerticalStackLayout.GestureRecognizers>
                                 <Image

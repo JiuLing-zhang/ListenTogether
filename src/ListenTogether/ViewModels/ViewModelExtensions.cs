@@ -17,9 +17,10 @@ public static class ViewModelExtensions
         builder.Services.AddSingleton<RegisterPageViewModel>();
         builder.Services.AddSingleton<CacheCleanViewModel>();
         builder.Services.AddSingleton<LogPageViewModel>();
-        builder.Services.AddSingleton<MiGuPageViewModel>();
         builder.Services.AddSingleton<ChooseTagPageViewModel>();
         builder.Services.AddSingleton<SongMenuPageViewModel>();
+        builder.Services.AddSingleton<DiscoverViewModel>();
+
         return builder;
     }
 }

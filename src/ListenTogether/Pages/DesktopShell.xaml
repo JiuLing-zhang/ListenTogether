@@ -30,10 +30,10 @@
     <FlyoutItem Title="发现"
                 Icon="{AppThemeBinding Light=home.png, Dark=home_dark.png}">
         <Tab Title="咪咕音乐">
-            <ShellContent  ContentTemplate="{DataTemplate pages:MiGuPage}" />
+            <ShellContent ContentTemplate="{DataTemplate pages:DiscoverPage}" Route="discover/MiGu"/>
         </Tab>
         <Tab Title="网易云音乐">
-            <ShellContent  ContentTemplate="{DataTemplate pages:NetEasePage}" />
+            <ShellContent ContentTemplate="{DataTemplate pages:DiscoverPage}" Route="discover/NetEase" />
         </Tab>
     </FlyoutItem>
 
