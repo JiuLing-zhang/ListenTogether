@@ -209,7 +209,7 @@ public class NetEaseMusicProvider : IMusicProvider
 
     public Task<List<SongMenu>> GetSongMenusFromTop()
     {
-        throw new NotImplementedException();
+        return Task.FromResult(NetEaseUtils.GetSongMenusFromTop());
     }
 
     public Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)

@@ -187,6 +187,106 @@ public class NetEaseUtils
         }
         return allTypes;
     }
+
+    public static List<SongMenu> GetSongMenusFromTop()
+    {
+        var songMenus = new List<SongMenu>()
+        {
+             new()
+             {
+                 Id="19723756",
+                 Name="飙升榜",
+                 ImageUrl="http://p2.music.126.net/pcYHpMkdC69VVvWiynNklA==/109951166952713766.jpg?param=150y150",
+                 LinkUrl="https://music.163.com//discover/toplist?id=19723756"
+             },
+             new()
+             {
+                 Id="3779629",
+                 Name="新歌榜",
+                 ImageUrl="http://p2.music.126.net/wVmyNS6b_0Nn-y6AX8UbpQ==/109951166952686384.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=3779629"
+             },
+             new()
+             {
+                 Id="2884035",
+                 Name="原创榜",
+                 ImageUrl="http://p2.music.126.net/iFZ_nw2V86IFk90dc50kdQ==/109951166961388699.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=2884035"
+             },
+             new()
+             {
+                 Id="3778678",
+                 Name="热歌榜",
+                 ImageUrl="http://p2.music.126.net/ZyUjc7K_GDpD8MO1-GQkmA==/109951166952706664.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=3778678"
+             },
+             new()
+             {
+                 Id="5453912201",
+                 Name="黑胶VIP爱听榜",
+                 ImageUrl="http://p2.music.126.net/-4Dy9H4RQyN7sS7OQplC8g==/109951168129993341.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=5453912201"
+             },
+             new()
+             {
+                 Id="7785123708",
+                 Name="黑胶VIP新歌榜",
+                 ImageUrl="http://p2.music.126.net/z1GrCMAt8FT-UDQh6Cjsug==/109951168129988440.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=7785123708"
+             },
+             new()
+             {
+                 Id="7785066739",
+                 Name="黑胶VIP热歌榜",
+                 ImageUrl="http://p2.music.126.net/4UWJ-6pdnIrnMxsXsXSuWQ==/109951168129994225.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=7785066739"
+             },
+             new()
+             {
+                 Id="7785091694",
+                 Name="黑胶VIP爱搜榜",
+                 ImageUrl="http://p2.music.126.net/ADzz0_8ZiSkbwFDI8Dw0jg==/109951168129999516.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=7785091694"
+             },
+             new()
+             {
+                 Id="991319590",
+                 Name="云音乐说唱榜",
+                 ImageUrl="http://p2.music.126.net/xNnQzUODQs50SJ2Sm4IVVA==/109951167976981051.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=991319590"
+             },
+             new()
+             {
+                 Id="71384707",
+                 Name="云音乐古典榜",
+                 ImageUrl="http://p2.music.126.net/urByD_AmfBDBrs7fA9-O8A==/109951167976973225.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=71384707"
+             },
+             new()
+             {
+                 Id="1978921795",
+                 Name="云音乐电音榜",
+                 ImageUrl="http://p2.music.126.net/lH6L0YhKTofSmnrEAtN9CA==/109951168204710928.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=1978921795"
+             },
+             new()
+             {
+                 Id="5059633707",
+                 Name="云音乐摇滚榜",
+                 ImageUrl="http://p2.music.126.net/UsoWOvtgwBgrofCCfS61Fw==/109951167976981586.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=5059633707"
+             },
+             new()
+             {
+                 Id="6723173524",
+                 Name="网络热歌榜",
+                 ImageUrl="http://p2.music.126.net/iwhTcAbujlsvhSNWYkBC8Q==/109951167430851785.jpg?param=150y150",
+                 LinkUrl="https://music.163.com/discover/toplist?id=6723173524"
+             }
+        };
+
+        return songMenus;
+    }
 }
 
 public class AESHelper
