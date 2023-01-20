@@ -7,5 +7,5 @@ namespace ListenTogether.Model;
 /// </summary>
 public class MusicResultShow : LocalMusic
 {
- 
+
 }
