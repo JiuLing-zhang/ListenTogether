@@ -170,7 +170,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
                 selectedMyFavoriteId = newMyFavorite.Id;
             }
 
-            var result = await _myFavoriteService.AddMusicToMyFavoriteAsync(selectedMyFavoriteId, music);
+            var result = await _myFavoriteService.AddMusicToMyFavoriteAsync(selectedMyFavoriteId, music.Id);
             if (result == false)
             {
                 await ToastService.Show("添加失败");

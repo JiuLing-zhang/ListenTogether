@@ -27,9 +27,9 @@ public partial class MusicResultView
     public static readonly BindableProperty PlayCommandParameterProperty =
         BindableProperty.Create(
             nameof(PlayCommandParameter),
-            typeof(SongMenuPageViewModel),
+            typeof(MusicResultShowViewModel),
             typeof(MusicResultView),
-            default(SongMenuPageViewModel));
+            default(MusicResultShowViewModel));
 
     public ICommand PlayCommand
     {
@@ -37,9 +37,9 @@ public partial class MusicResultView
         set { SetValue(PlayCommandProperty, value); }
     }
 
-    public SongMenuPageViewModel PlayCommandParameter
+    public MusicResultShowViewModel PlayCommandParameter
     {
-        get { return (SongMenuPageViewModel)GetValue(PlayCommandParameterProperty); }
+        get { return (MusicResultShowViewModel)GetValue(PlayCommandParameterProperty); }
         set { SetValue(PlayCommandParameterProperty, value); }
     }
 
@@ -53,9 +53,9 @@ public partial class MusicResultView
     public static readonly BindableProperty AddToFavoriteCommandParameterProperty =
         BindableProperty.Create(
             nameof(AddToFavoriteCommandParameter),
-            typeof(MusicResultShowViewModel),
+            typeof(MusicResultGroupViewModel),
             typeof(MusicResultView),
-            default(MusicResultShowViewModel));
+            default(MusicResultGroupViewModel));
 
     public ICommand AddToFavoriteCommand
     {
@@ -63,9 +63,9 @@ public partial class MusicResultView
         set { SetValue(AddToFavoriteCommandProperty, value); }
     }
 
-    public MusicResultShowViewModel AddToFavoriteCommandParameter
+    public MusicResultGroupViewModel AddToFavoriteCommandParameter
     {
-        get { return (MusicResultShowViewModel)GetValue(AddToFavoriteCommandParameterProperty); }
+        get { return (MusicResultGroupViewModel)GetValue(AddToFavoriteCommandParameterProperty); }
         set { SetValue(AddToFavoriteCommandParameterProperty, value); }
     }
     public MusicResultView()

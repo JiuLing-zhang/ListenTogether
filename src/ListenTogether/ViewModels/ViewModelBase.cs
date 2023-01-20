@@ -43,6 +43,6 @@ public partial class ViewModelBase : ObservableValidator
         LoadingText = "";
     }
 
-    internal bool IsLogin => GlobalConfig.AppNetwork == Model.Enums.AppNetworkEnum.Standalone || UserInfoStorage.GetUsername().IsNotEmpty();
+    internal bool IsLogin => UserInfoStorage.GetUsername().IsNotEmpty();
     internal bool IsNotLogin => !IsLogin;
 }

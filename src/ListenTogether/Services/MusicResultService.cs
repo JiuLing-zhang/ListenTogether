@@ -1,4 +1,6 @@
-﻿namespace ListenTogether.Services;
+﻿using ListenTogether.Storage;
+
+namespace ListenTogether.Services;
 public class MusicResultService
 {
     private readonly MusicPlayerService _musicPlayerService;
@@ -67,6 +69,12 @@ public class MusicResultService
 
     public async Task AddToFavoriteAsync(MusicResultShowViewModel musicResult)
     {
+        if (UserInfoStorage.GetUsername().IsEmpty())
+        {
+            await ToastService.Show("用户未登录");
+            return;
+        }
+
         var music = new LocalMusic()
         {
             Id = musicResult.Id,
@@ -137,7 +145,7 @@ public class MusicResultService
                 selectedMyFavoriteId = newMyFavorite.Id;
             }
 
-            var result = await _myFavoriteService.AddMusicToMyFavoriteAsync(selectedMyFavoriteId, music);
+            var result = await _myFavoriteService.AddMusicToMyFavoriteAsync(selectedMyFavoriteId, music.Id);
             if (result == false)
             {
                 await ToastService.Show("添加失败");

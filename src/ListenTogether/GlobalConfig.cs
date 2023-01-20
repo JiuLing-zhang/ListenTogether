@@ -34,20 +34,5 @@ namespace ListenTogether
         public static string UpdateDomain { get; set; }
 
         public static EnvironmentSetting MyUserSetting { get; set; }
-
-        /// <summary>
-        /// 程序网络版本类型
-        /// </summary>
-        internal static AppNetworkEnum AppNetwork
-        {
-            get
-            {
-                if (ApiDomain.IsEmpty())
-                {
-                    return AppNetworkEnum.Standalone;
-                }
-                return AppNetworkEnum.Online;
-            }
-        }
     }
 }

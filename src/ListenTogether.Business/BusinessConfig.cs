@@ -1,17 +1,10 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 using ListenTogether.Data;
-using ListenTogether.Model;
-using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Business;
 
 public class BusinessConfig
 {
-    /// <summary>
-    /// 程序网络版本类型
-    /// </summary>
-    internal static AppNetworkEnum AppNetwork = AppNetworkEnum.Standalone;
-
     public static void SetDataBaseConnection(string path)
     {
         if (path.IsEmpty())
@@ -27,6 +20,5 @@ public class BusinessConfig
             throw new ArgumentException("Web API配置参数错误");
         }
         DataConfig.SetWebApi(apiBaseUrl, deviceId);
-        AppNetwork = AppNetworkEnum.Online;
     }
 }

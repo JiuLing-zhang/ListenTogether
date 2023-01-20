@@ -33,9 +33,9 @@
             StrokeThickness="0">
             <controls:MusicResultView
                 Musics="{Binding MusicResultCollection}"
-                PlayCommand="{Binding PlayAsyncCommand}"
+                PlayCommand="{Binding PlayAsyncCommand, Source={RelativeSource AncestorType={x:Type viewmodels:MusicResultShowViewModel}}}"
                 PlayCommandParameter="{Binding .}"
-                AddToFavoriteCommand="{Binding AddToFavoriteAsyncCommand}"
+                AddToFavoriteCommand="{Binding AddToFavoriteAsyncCommand, Source={RelativeSource AncestorType={x:Type viewmodels:MusicResultShowViewModel}}}"
                 AddToFavoriteCommandParameter="{Binding .}"/>
         </Border>
 

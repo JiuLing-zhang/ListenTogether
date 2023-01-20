@@ -25,12 +25,6 @@ public partial class SearchResultPage : ContentPage
             //确保主线程加载完成
             await Task.Delay(5000);
 
-            //判断单机版和网络版
-            if (GlobalConfig.ApiDomain.IsEmpty())
-            {
-                await ToastService.Show("温馨提示：当前程序为【单机版】");
-            }
-
             //自动更新
             await UpdateCheck.Do(true);
         }

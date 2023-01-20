@@ -46,17 +46,18 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         };
     }
 
-    public async Task<List<MyFavorite>?> GetAllAsync()
+    public async Task<List<MyFavorite>> GetAllAsync()
     {
+        var myFavoriteList = new List<MyFavorite>();
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(DataConfig.ApiSetting.MyFavorite.GetAll);
         var obj = json.ToObject<List<MyFavoriteResponse>>();
 
         if (obj == null)
         {
-            return default;
+            return myFavoriteList;
         }
 
-        return obj.Select(x => new MyFavorite()
+        myFavoriteList = obj.Select(x => new MyFavorite()
         {
             Id = x.Id,
             ImageUrl = x.ImageUrl,
@@ -64,6 +65,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
             Name = x.Name,
             EditTime = x.EditTime
         }).ToList();
+        return myFavoriteList;
     }
 
     public async Task<MyFavorite?> GetOneAsync(int id)
@@ -103,24 +105,10 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         return true;
     }
 
-    public async Task<bool> AddMusicToMyFavoriteAsync(int id, LocalMusic music)
+    public async Task<bool> AddMusicToMyFavoriteAsync(int id, string musicId)
     {
-        var requestMusic = new MusicRequest()
-        {
-            Id = music.Id,
-            Name = music.Name,
-            Platform = music.Platform,
-            IdOnPlatform = music.IdOnPlatform,
-            Album = music.Album,
-            Artist = music.Artist,
-            ImageUrl = music.ImageUrl
-        };
-
-        var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id);
-
-        string content = requestMusic.ToJson();
-        StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var response = await DataConfig.HttpClientWithToken.PostAsync(url, sc);
+        var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id, musicId);
+        var response = await DataConfig.HttpClientWithToken.PostAsync(url, null);
         var json = await response.Content.ReadAsStringAsync();
 
         var obj = json.ToObject<Result>();
@@ -131,18 +119,19 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         return true;
     }
 
-    public async Task<List<MyFavoriteDetail>?> GetMyFavoriteDetailAsync(int id)
+    public async Task<List<MyFavoriteDetail>> GetMyFavoriteDetailAsync(int id)
     {
+        var myMyFavoriteDetailList = new List<MyFavoriteDetail>();
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.GetDetail, id);
         var json = await DataConfig.HttpClientWithToken.GetStringAsync(url);
         var obj = json.ToObject<List<MyFavoriteDetailResponse>>();
 
         if (obj == null)
         {
-            return default;
+            return myMyFavoriteDetailList;
         }
 
-        return obj.Select(x => new MyFavoriteDetail()
+        myMyFavoriteDetailList = obj.Select(x => new MyFavoriteDetail()
         {
             Id = x.Id,
             MusicId = x.MusicId,
@@ -152,6 +141,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
             MusicAlbum = x.MusicAlbum,
             MusicArtist = x.MusicArtist,
         }).ToList();
+        return myMyFavoriteDetailList;
     }
     public async Task<bool> RemoveDetailAsync(int id)
     {

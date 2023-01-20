@@ -27,7 +27,7 @@ public class MyFavoriteService : IMyFavoriteService
         return await _repository.GetOneAsync(id);
     }
 
-    public async Task<List<MyFavorite>?> GetAllAsync()
+    public async Task<List<MyFavorite>> GetAllAsync()
     {
         return await _repository.GetAllAsync();
     }
@@ -51,12 +51,12 @@ public class MyFavoriteService : IMyFavoriteService
         return await _repository.RemoveAsync(id);
     }
 
-    public async Task<bool> AddMusicToMyFavoriteAsync(int id, LocalMusic music)
+    public async Task<bool> AddMusicToMyFavoriteAsync(int id, string musicId)
     {
-        return await _repository.AddMusicToMyFavoriteAsync(id, music);
+        return await _repository.AddMusicToMyFavoriteAsync(id, musicId);
     }
 
-    public async Task<List<MyFavoriteDetail>?> GetMyFavoriteDetailAsync(int id)
+    public async Task<List<MyFavoriteDetail>> GetMyFavoriteDetailAsync(int id)
     {
         return await _repository.GetMyFavoriteDetailAsync(id);
     }
