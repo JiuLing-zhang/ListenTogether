@@ -51,7 +51,7 @@ public partial class SongMenuPageViewModel : ViewModelBase
               {
                   Id = x.Id,
                   Platform = x.Platform,
-                  IdOnPlatform = x.PlatformInnerId,
+                  IdOnPlatform = x.IdOnPlatform,
                   Name = x.Name,
                   Artist = x.Artist,
                   Album = x.Album,

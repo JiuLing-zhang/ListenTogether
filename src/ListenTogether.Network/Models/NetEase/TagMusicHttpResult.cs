@@ -8,13 +8,23 @@
 
     public class TagMusicPlaylistHttpResult
     {
-        public List<TagMusicTrack>? tracks { get; set; }
+        public List<TagMusicTrackIdsHttpResult>? trackIds { get; set; }
     }
 
-    public class TagMusicTrack
+    public class TagMusicTrackIdsHttpResult
+    {
+        public long id { get; set; }
+    }
+
+    public class TagMusicSongsHttpResult
+    {
+        public List<TagMusicSongs> songs { get; set; }
+    }
+
+    public class TagMusicSongs
     {
         public string name { get; set; }
-        public int id { get; set; }
+        public long id { get; set; }
         public List<TagMusicAr>? ar { get; set; }
         public TagMusicAl? al { get; set; }
         public long dt { get; set; }

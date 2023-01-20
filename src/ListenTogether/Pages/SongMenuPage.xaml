@@ -7,7 +7,7 @@
              Title="SongMenuPage">
     <Grid
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-        RowDefinitions="150,*">
+        RowDefinitions="150,*,Auto">
         <HorizontalStackLayout
             Grid.Row="0"
             Margin="20,20,20,0"
@@ -24,6 +24,7 @@
                     Text="{Binding SongMenu.Name}"/>
                 <Button
                     Text="播放全部"
+                    HorizontalOptions="Start"
                     Command="{Binding PlayAllAsyncCommand}"/>
             </VerticalStackLayout>
         </HorizontalStackLayout>
@@ -37,5 +38,10 @@
                 AddToFavoriteCommand="{Binding AddToFavoriteAsyncCommand}"
                 AddToFavoriteCommandParameter="{Binding .}"/>
         </Border>
+
+        <controls:Player
+            Grid.Row="2"
+            x:Name="player"
+            IsPlayingPage="False"/>
     </Grid>
 </ContentPage>

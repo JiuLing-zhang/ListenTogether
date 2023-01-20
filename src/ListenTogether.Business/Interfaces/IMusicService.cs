@@ -3,6 +3,6 @@
 namespace ListenTogether.Business.Interfaces;
 public interface IMusicService
 {
-    Task<Music?> GetOneAsync(string id);
-    Task<bool> AddOrUpdateAsync(Music music);
+    Task<LocalMusic?> GetOneAsync(string id);
+    Task<bool> AddOrUpdateAsync(LocalMusic music);
 }

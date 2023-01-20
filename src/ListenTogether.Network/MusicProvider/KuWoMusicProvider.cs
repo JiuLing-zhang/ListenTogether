@@ -87,7 +87,7 @@ internal class KuWoMusicProvider : IMusicProvider
                 {
                     Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.rid}"),
                     Platform = Platform,
-                    PlatformInnerId = httpMusic.rid.ToString(),
+                    IdOnPlatform = httpMusic.rid.ToString(),
                     Name = httpMusic.name.Replace("&nbsp;", " "),
                     Artist = httpMusic.artist.Replace("&nbsp;", " "),
                     Album = httpMusic.album.Replace("&nbsp;", " "),
@@ -112,97 +112,6 @@ internal class KuWoMusicProvider : IMusicProvider
         }
 
         return FeeEnum.Free;
-    }
-
-    public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
-    {
-        string musicId = sourceMusic.PlatformInnerId;
-
-        //获取歌曲详情
-        var url = $"{UrlBase.KuWo.GetMusicDetail}?musicId={musicId}";
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-
-        HttpResultBase<MusicDetailHttpResult>? httpResult;
-        try
-        {
-            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            httpResult = json.ToObject<HttpResultBase<MusicDetailHttpResult>>();
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("酷我歌曲详情获取失败。", ex);
-            return null;
-        }
-        if (httpResult == null)
-        {
-            Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回异常，ID:{musicId}"));
-            return null;
-        }
-        if (httpResult.status != 200)
-        {
-            Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回状态异常：{httpResult.message ?? ""}，ID:{musicId}"));
-            return null;
-        }
-
-        return new Music()
-        {
-            Id = sourceMusic.Id,
-            Platform = sourceMusic.Platform,
-            //   PlatformName = sourceMusic.Platform.GetDescription(),
-            PlatformInnerId = sourceMusic.PlatformInnerId,
-            Name = sourceMusic.Name,
-            Artist = sourceMusic.Artist,
-            Album = sourceMusic.Album,
-            ImageUrl = httpResult.data.songinfo.pic,
-            ExtendData = ""
-        };
-    }
-    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
-    {
-        string musicId = music.PlatformInnerId;
-        //换播放地址
-        string url = $"{UrlBase.KuWo.GetMusicUrl}?format=mp3&rid={musicId}&response=url&type=convert_url";
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-
-        string playUrl;
-        try
-        {
-            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            playUrl = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (playUrl.IsEmpty())
-            {
-                Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回空，ID:{musicId}"));
-                return null;
-            }
-            if (!JiuLing.CommonLibs.Text.RegexUtils.IsMatch(playUrl, "http\\S*\\.mp3"))
-            {
-                Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回：{playUrl}，ID:{musicId}"));
-                return null;
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("更新酷我播放地址失败。", ex);
-            return null;
-        }
-        return playUrl;
     }
 
     public Task<List<SongMenu>> GetSongMenusFromTop()
@@ -241,17 +150,15 @@ internal class KuWoMusicProvider : IMusicProvider
         }
     }
 
-    public Task<string> GetShareUrlAsync(Music music)
+    public Task<string> GetShareUrlAsync(string id, object? extendData = null)
     {
-        return Task.FromResult($"{UrlBase.KuWo.GetMusicPlayPage}/{music.PlatformInnerId}");
+        return Task.FromResult($"{UrlBase.KuWo.GetMusicPlayPage}/{id}");
     }
 
-    public async Task<string?> GetLyricAsync(Music music)
+    public async Task<string> GetLyricAsync(string id, object? extendData = null)
     {
-        string musicId = music.PlatformInnerId;
-
         //获取歌曲详情
-        var url = $"{UrlBase.KuWo.GetMusicDetail}?musicId={musicId}";
+        var url = $"{UrlBase.KuWo.GetMusicDetail}?musicId={id}";
         var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
@@ -276,12 +183,12 @@ internal class KuWoMusicProvider : IMusicProvider
         }
         if (httpResult == null)
         {
-            Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回异常，ID:{musicId}"));
+            Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回异常，ID:{id}"));
             return null;
         }
         if (httpResult.status != 200)
         {
-            Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回状态异常：{httpResult.message ?? ""}，ID:{musicId}"));
+            Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回状态异常：{httpResult.message ?? ""}，ID:{id}"));
             return null;
         }
 

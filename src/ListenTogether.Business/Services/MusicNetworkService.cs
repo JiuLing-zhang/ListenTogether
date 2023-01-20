@@ -27,24 +27,13 @@ public class MusicNetworkService : IMusicNetworkService
     {
         return await _musicNetPlatform.GetPlayUrlAsync(platform, id, extendData);
     }
-
-    public async Task<Music?> GetDetailAsync(MusicSearchResult musicSearchResult, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetLyricAsync(PlatformEnum platform, string id, object? extendData = null)
     {
-        return await _musicNetPlatform.GetDetailAsync(musicSearchResult, musicFormatType);
+        return await _musicNetPlatform.GetLyricAsync(platform, id, extendData);
     }
-
-    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public Task<string> GetPlayPageUrlAsync(PlatformEnum platform, string id, object? extendData = null)
     {
-        return await _musicNetPlatform.GetPlayUrlAsync(music, musicFormatType);
-    }
-
-    public async Task<string?> GetLyricAsync(Music music)
-    {
-        return await _musicNetPlatform.GetLyricAsync(music);
-    }
-    public Task<string> GetPlayPageUrlAsync(Music music)
-    {
-        return _musicNetPlatform.GetPlayPageUrlAsync(music);
+        return _musicNetPlatform.GetPlayPageUrlAsync(platform, id, extendData);
     }
 
     public async Task<List<string>?> GetHotWordAsync()

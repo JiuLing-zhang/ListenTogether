@@ -51,7 +51,7 @@ public class MyFavoriteService : IMyFavoriteService
         return await _repository.RemoveAsync(id);
     }
 
-    public async Task<bool> AddMusicToMyFavoriteAsync(int id, Music music)
+    public async Task<bool> AddMusicToMyFavoriteAsync(int id, LocalMusic music)
     {
         return await _repository.AddMusicToMyFavoriteAsync(id, music);
     }

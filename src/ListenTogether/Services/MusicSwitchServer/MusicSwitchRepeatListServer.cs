@@ -23,7 +23,7 @@ public class MusicSwitchRepeatListServer : IMusicSwitchServer
         int nextId = 0;
         for (int i = 0; i < playlist.Count; i++)
         {
-            if (playlist[i].MusicId == currentMusicId)
+            if (playlist[i].Id == currentMusicId)
             {
                 nextId = i - 1;
                 break;
@@ -52,7 +52,7 @@ public class MusicSwitchRepeatListServer : IMusicSwitchServer
         int nextId = 0;
         for (int i = 0; i < playlist.Count; i++)
         {
-            if (playlist[i].MusicId == currentMusicId)
+            if (playlist[i].Id == currentMusicId)
             {
                 nextId = i + 1;
                 break;

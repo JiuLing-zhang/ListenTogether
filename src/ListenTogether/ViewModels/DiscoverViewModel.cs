@@ -9,19 +9,21 @@ namespace ListenTogether.ViewModels;
 [QueryProperty(nameof(TagId), nameof(TagId))]
 public partial class DiscoverViewModel : ViewModelBase
 {
-    private string _allTypesJson;
-
     private PlatformEnum _platform;
+    private static Dictionary<PlatformEnum, DiscoverTag> _platformTag;
 
     [ObservableProperty]
     private string _tagId = null!;
-    async partial void OnTagIdChanged(string value)
+    partial void OnTagIdChanged(string value)
     {
         if (value.IsEmpty())
         {
             return;
         }
-        await GetTagDetailInnerAsync(value);
+        if (_platformTag.ContainsKey(_platform))
+        {
+            _platformTag[_platform].CurrentTag = value;
+        }
     }
 
     [ObservableProperty]
@@ -38,15 +40,26 @@ public partial class DiscoverViewModel : ViewModelBase
 
         HotTags = new ObservableCollection<MusicTagViewModel>();
         SongMenus = new ObservableCollection<SongMenuViewModel>();
+        _platformTag = new Dictionary<PlatformEnum, DiscoverTag>();
     }
     public async Task InitializeAsync(PlatformEnum platform)
     {
+        SongMenus.Clear();
+        HotTags.Clear();
+
+        if (!_platformTag.ContainsKey(platform))
+        {
+            var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(platform);
+            _platformTag.Add(platform, new DiscoverTag("榜单", hotTags, allTypes));
+        }
         _platform = platform;
-        var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(_platform);
+        CreateHotTags(_platformTag[platform].HotTags);
+        await GetTagDetailInnerAsync(_platformTag[platform].CurrentTag);
+    }
 
-        _allTypesJson = allTypes.ToJson();
-
-        HotTags = new ObservableCollection<MusicTagViewModel>();
+    private void CreateHotTags(List<MusicTag> hotTags)
+    {
+        HotTags.Clear();
         HotTags.Add(new MusicTagViewModel()
         {
             Id = "榜单",
@@ -65,14 +78,16 @@ public partial class DiscoverViewModel : ViewModelBase
             Id = "选择分类",
             Name = "选择分类"
         });
-
-        await GetTagDetailInnerAsync("榜单");
     }
 
     [RelayCommand]
-    private async void GetTagDetailAsync(string Id)
+    private async void GetTagDetailAsync(string id)
     {
-        await GetTagDetailInnerAsync(Id);
+        if (_platformTag.ContainsKey(_platform))
+        {
+            _platformTag[_platform].CurrentTag = id;
+        }
+        await GetTagDetailInnerAsync(id);
     }
 
     private async Task GetTagDetailInnerAsync(string tagId)
@@ -88,7 +103,13 @@ public partial class DiscoverViewModel : ViewModelBase
                 await GetSongMenusFromTop();
                 break;
             case "选择分类":
-                await Shell.Current.GoToAsync($"{nameof(ChooseTagPage)}?Json={_allTypesJson}");
+                if (!_platformTag.ContainsKey(_platform))
+                {
+                    await ToastService.Show("平台信息未初始化完成");
+                    return;
+                }
+                var json = _platformTag[_platform].AllTypes.ToJson();
+                await Shell.Current.GoToAsync($"{nameof(ChooseTagPage)}?Json={json}");
                 break;
             default:
                 await GetSongMenusFromTagAsync(tagId);

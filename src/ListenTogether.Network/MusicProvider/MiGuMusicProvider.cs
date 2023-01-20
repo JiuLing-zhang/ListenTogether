@@ -85,7 +85,7 @@ public class MiGuMusicProvider : IMusicProvider
             {
                 Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.id}"),
                 Platform = Platform,
-                PlatformInnerId = htmlMusic.id,
+                IdOnPlatform = htmlMusic.id,
                 Name = htmlMusic.title,
                 Artist = htmlMusic.singer,
                 Album = htmlMusic.album,
@@ -130,89 +130,6 @@ public class MiGuMusicProvider : IMusicProvider
         return $"{UrlBase.MiGu.PlayUrlDomain}{playUrlPath}";
     }
 
-    public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
-    {
-        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={sourceMusic.PlatformInnerId}&resourceType=2";
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        request.Headers.Add("Accept", "application/json, text/plain, */*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        var result = json.ToObject<HttpMusicDetailResult>();
-        if (result == null || result.resource == null || result.resource.Length == 0)
-        {
-            return null;
-        }
-
-        if (result.resource[0].newRateFormats == null || result.resource[0].newRateFormats.Count == 0)
-        {
-            return null;
-        }
-
-        string imageUrl = sourceMusic.ImageUrl;
-        if (result.resource[0].albumImgs != null && result.resource[0].albumImgs.Count > 0)
-        {
-            string tmpImageUrl = result.resource[0].albumImgs.FirstOrDefault(x => x.imgSizeType == "02")?.img ?? "";
-            if (tmpImageUrl.IsNotEmpty())
-            {
-                imageUrl = tmpImageUrl;
-            }
-        }
-        return new Music()
-        {
-            Id = sourceMusic.Id,
-            Platform = sourceMusic.Platform,
-            //   PlatformName = sourceMusic.Platform.GetDescription(),
-            PlatformInnerId = sourceMusic.PlatformInnerId,
-            Name = sourceMusic.Name,
-            Artist = sourceMusic.Artist,
-            Album = result.resource[0].album,
-            ImageUrl = imageUrl,
-            ExtendData = ""
-        };
-    }
-
-    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
-    {
-        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={music.PlatformInnerId}&resourceType=2";
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        request.Headers.Add("Accept", "application/json, text/plain, */*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        var result = json.ToObject<HttpMusicDetailResult>();
-        if (result == null || result.resource == null || result.resource.Length == 0)
-        {
-            return null;
-        }
-
-        if (result.resource[0].newRateFormats == null || result.resource[0].newRateFormats.Count == 0)
-        {
-            return null;
-        }
-
-        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats, musicFormatType);
-        if (playUrlPath.IsEmpty())
-        {
-            return null;
-        }
-        return $"{UrlBase.MiGu.PlayUrlDomain}{playUrlPath}";
-    }
-
     public Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
         throw new NotImplementedException();
@@ -223,14 +140,14 @@ public class MiGuMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<string> GetShareUrlAsync(Music music)
+    public Task<string> GetShareUrlAsync(string id, object? extendData = null)
     {
-        return Task.FromResult($"{UrlBase.MiGu.GetMusicPlayPage}/{music.PlatformInnerId}");
+        return Task.FromResult($"{UrlBase.MiGu.GetMusicPlayPage}/{id}");
     }
 
-    public async Task<string?> GetLyricAsync(Music music)
+    public async Task<string> GetLyricAsync(string id, object? extendData = null)
     {
-        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={music.PlatformInnerId}&resourceType=2";
+        string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={id}&resourceType=2";
         var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
@@ -345,7 +262,7 @@ public class MiGuMusicProvider : IMusicProvider
             {
                 Id = MD5Utils.GetStringValueToLower($"{Platform}-{song.copyrightId}"),
                 Platform = Platform,
-                PlatformInnerId = song.copyrightId,
+                IdOnPlatform = song.copyrightId,
                 Name = song.name,
                 Artist = artist,
                 Album = song.album?.albumName ?? "",
@@ -387,7 +304,7 @@ public class MiGuMusicProvider : IMusicProvider
             {
                 Id = MD5Utils.GetStringValueToLower($"{Platform}-{songId}"),
                 Platform = Platform,
-                PlatformInnerId = songId,
+                IdOnPlatform = songId,
                 Name = song.title,
                 Artist = song.singer,
                 Album = song.album,

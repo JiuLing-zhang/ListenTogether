@@ -24,7 +24,7 @@ public class MusicSwitchShuffleServer : IMusicSwitchServer
         do
         {
             randomPlaylist = RandomUtils.GetOneFromList<Playlist>(playlist);
-        } while (randomPlaylist.MusicId == currentMusicId);
+        } while (randomPlaylist.Id == currentMusicId);
         return randomPlaylist;
     }
     public async Task<Playlist?> GetNextAsync(string currentMusicId)
@@ -43,7 +43,7 @@ public class MusicSwitchShuffleServer : IMusicSwitchServer
         do
         {
             randomPlaylist = RandomUtils.GetOneFromList<Playlist>(playlist);
-        } while (randomPlaylist.MusicId == currentMusicId);
+        } while (randomPlaylist.Id == currentMusicId);
         return randomPlaylist;
     }
 }

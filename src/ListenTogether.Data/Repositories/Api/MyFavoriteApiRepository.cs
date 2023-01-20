@@ -103,14 +103,14 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         return true;
     }
 
-    public async Task<bool> AddMusicToMyFavoriteAsync(int id, Music music)
+    public async Task<bool> AddMusicToMyFavoriteAsync(int id, LocalMusic music)
     {
         var requestMusic = new MusicRequest()
         {
             Id = music.Id,
             Name = music.Name,
-            Platform = (int)music.Platform,
-            PlatformInnerId = music.PlatformInnerId,
+            Platform = music.Platform,
+            IdOnPlatform = music.IdOnPlatform,
             Album = music.Album,
             Artist = music.Artist,
             ImageUrl = music.ImageUrl

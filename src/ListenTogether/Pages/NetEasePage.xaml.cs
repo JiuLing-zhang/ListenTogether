@@ -13,10 +13,12 @@ public partial class NetEasePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        player.OnAppearing();
         await vm.InitializeAsync(PlatformEnum.NetEase);
     }
     protected override void OnDisappearing()
     {
+        player.OnDisappearing();
         base.OnDisappearing();
     }
 }

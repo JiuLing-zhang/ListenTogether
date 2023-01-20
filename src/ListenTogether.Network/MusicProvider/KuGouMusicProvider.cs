@@ -72,7 +72,7 @@ public class KuGouMusicProvider : IMusicProvider
                 {
                     Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.ID}"),
                     Platform = Platform,
-                    PlatformInnerId = httpMusic.ID,
+                    IdOnPlatform = httpMusic.ID,
                     Name = KuGouUtils.RemoveSongNameTag(httpMusic.SongName),
                     Artist = KuGouUtils.RemoveSongNameTag(httpMusic.SingerName),
                     Album = httpMusic.AlbumName,
@@ -99,113 +99,6 @@ public class KuGouMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public async Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType)
-    {
-
-        if (!(sourceMusic.PlatformData is KuGouSearchExtendData extendData))
-        {
-            throw new ArgumentException("平台数据初始化异常");
-        }
-        string args = KuGouUtils.GetMusicUrlData(extendData.Hash, extendData.AlbumId);
-        string url = $"{UrlBase.KuGou.GetMusic}?{args}";
-
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url)
-        };
-        request.Headers.Add("Accept", "*/*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        if (json.IsEmpty())
-        {
-            return null;
-        }
-        var httpResult = json.ToObject<HttpResultBase<MusicDetailHttpResult>>();
-        if (httpResult == null)
-        {
-            return null;
-        }
-        if (httpResult.status != 1 || httpResult.error_code != 0)
-        {
-            return null;
-        }
-
-        string extendDataString = extendData.ToJson();
-
-        return new Music()
-        {
-            Id = sourceMusic.Id,
-            Platform = sourceMusic.Platform,
-            //PlatformName = sourceMusic.Platform.GetDescription(),
-            PlatformInnerId = sourceMusic.PlatformInnerId,
-            Name = sourceMusic.Name,
-            Artist = sourceMusic.Artist,
-            Album = sourceMusic.Album,
-            ImageUrl = httpResult.data.img,
-            ExtendData = extendDataString
-        };
-    }
-
-    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
-    {
-        var extendDataString = music.ExtendData;
-        if (extendDataString.IsEmpty())
-        {
-            Logger.Info("更新酷狗播放地址失败，扩展数据不存在");
-            return null;
-        }
-        KuGouSearchExtendData? extendData;
-        try
-        {
-            extendData = extendDataString.ToObject<KuGouSearchExtendData>();
-            if (extendData == null)
-            {
-                Logger.Info("更新酷狗播放地址失败，扩展数据格式错误");
-                return null;
-            }
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("更新酷狗播放地址失败。", ex);
-            return null;
-        }
-
-        string args = KuGouUtils.GetMusicUrlData(extendData.Hash, extendData.AlbumId);
-        string url = $"{UrlBase.KuGou.GetMusic}?{args}";
-
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url)
-        };
-        request.Headers.Add("Accept", "*/*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        if (json.IsEmpty())
-        {
-            Logger.Info("更新酷狗播放地址失败，服务器返回空。");
-            return null;
-        }
-        var httpResult = json.ToObject<HttpResultBase<MusicDetailHttpResult>>();
-        if (httpResult == null)
-        {
-            Logger.Info("更新酷狗播放地址失败，服务器数据格式不正确。");
-            return null;
-        }
-        if (httpResult.status != 1 || httpResult.error_code != 0)
-        {
-            Logger.Info("更新酷狗播放地址失败，服务器返回错误。");
-            return null;
-        }
-        return httpResult.data.play_url;
-    }
-
     public Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
         throw new NotImplementedException();
@@ -226,24 +119,24 @@ public class KuGouMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<string> GetShareUrlAsync(Music music)
+    public Task<string> GetShareUrlAsync(string id, object? extendData = null)
     {
-        var obj = music.ExtendData.ToObject<KuGouSearchExtendData>();
+        var obj = extendData as KuGouSearchExtendData;
         if (obj == null)
         {
             return Task.FromResult(UrlBase.KuGou.Index);
         }
-        return Task.FromResult($"{UrlBase.KuGou.GetMusicPlayPage}/#hash={obj.Hash}&album_id={obj.AlbumId}&album_audio_id={music.PlatformInnerId}");
+        return Task.FromResult($"{UrlBase.KuGou.GetMusicPlayPage}/#hash={obj.Hash}&album_id={obj.AlbumId}&album_audio_id={id}");
     }
 
-    public async Task<string?> GetLyricAsync(Music music)
+    public async Task<string> GetLyricAsync(string id, object? extendData = null)
     {
-        var extendData = music.ExtendData.ToObject<KuGouSearchExtendData>();
-        if (extendData == null)
+        var data = extendData as KuGouSearchExtendData;
+        if (data == null)
         {
             throw new ArgumentException("平台数据初始化异常");
         }
-        string args = KuGouUtils.GetMusicUrlData(extendData.Hash, extendData.AlbumId);
+        string args = KuGouUtils.GetMusicUrlData(data.Hash, data.AlbumId);
         string url = $"{UrlBase.KuGou.GetMusic}?{args}";
 
         var request = new HttpRequestMessage()

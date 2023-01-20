@@ -13,10 +13,12 @@ public partial class MiGuPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        player.OnAppearing();
         await vm.InitializeAsync(PlatformEnum.MiGu);
     }
     protected override void OnDisappearing()
     {
+        player.OnDisappearing();
         base.OnDisappearing();
     }
 

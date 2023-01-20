@@ -98,7 +98,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
                         .Select(x => new MusicResultShowViewModel()
                         {
                             Id = x.Id,
-                            IdOnPlatform = x.PlatformInnerId,
+                            IdOnPlatform = x.IdOnPlatform,
                             Platform = x.Platform,
                             Name = x.Name,
                             Artist = x.Artist,

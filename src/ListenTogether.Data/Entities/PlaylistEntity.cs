@@ -7,12 +7,14 @@ namespace ListenTogether.Data.Entities;
 internal class PlaylistEntity
 {
     [PrimaryKey]
-    public string MusicId { get; set; } = null!;
+    public string Id { get; set; } = null!;
     public PlatformEnum Platform { get; set; }
-    public string MusicIdOnPlatform { get; set; } = null!;
-    public string MusicName { get; set; } = null!;
-    public string MusicArtist { get; set; } = null!;
-    public string MusicAlbum { get; set; } = null!;
-    public string MusicImageUrl { get; set; } = null!;
+    public string IdOnPlatform { get; set; } = null!;
+    public string Name { get; set; } = null!;
+    public string Artist { get; set; } = null!;
+    public string Album { get; set; } = null!;
+    public string ImageUrl { get; set; } = null!;
+    public int DurationMillisecond { get; set; }
+    public string ExtendDataJson { get; set; } = null!;
     public DateTime EditTime { get; set; }
 }

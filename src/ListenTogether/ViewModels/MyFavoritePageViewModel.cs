@@ -161,10 +161,10 @@ public partial class MyFavoritePageViewModel : ViewModelBase
             var playlist = new Playlist()
             {
                 //Platform = myFavoriteMusic.PlatformName,
-                MusicId = myFavoriteMusic.MusicId,
-                MusicName = myFavoriteMusic.MusicName,
-                MusicArtist = myFavoriteMusic.MusicArtist,
-                MusicAlbum = myFavoriteMusic.MusicAlbum
+                Id = myFavoriteMusic.MusicId,
+                Name = myFavoriteMusic.MusicName,
+                Artist = myFavoriteMusic.MusicArtist,
+                Album = myFavoriteMusic.MusicAlbum
             };
 
             await _playlistService.AddToPlaylistAsync(playlist);

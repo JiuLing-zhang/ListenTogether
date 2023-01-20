@@ -81,7 +81,6 @@ internal class ApiSettings
         }
         public string Get => $"{_baseUrl}/api/music/{{0}}";
         public string AddOrUpdate => $"{_baseUrl}/api/music";
-        public string UpdateCache => $"{_baseUrl}/api/music/update-cache/{{0}}/{{1}}";
     }
 
     public string WriteLog => $"{BaseUrl}/api/log/write-all";

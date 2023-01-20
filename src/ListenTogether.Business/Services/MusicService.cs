@@ -12,12 +12,12 @@ public class MusicService : IMusicService
         _repository = repository;
     }
 
-    public async Task<Music?> GetOneAsync(string id)
+    public async Task<LocalMusic?> GetOneAsync(string id)
     {
         return await _repository.GetOneAsync(id);
     }
 
-    public async Task<bool> AddOrUpdateAsync(Music music)
+    public async Task<bool> AddOrUpdateAsync(LocalMusic music)
     {
         return await _repository.AddOrUpdateAsync(music);
     }

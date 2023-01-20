@@ -37,9 +37,8 @@ public interface IMusicProvider
     Task<List<string>?> GetHotWordAsync();
     Task<List<string>?> GetSearchSuggestAsync(string keyword);
     Task<List<MusicResultShow>> SearchAsync(string keyword);
+    //TODO 音质选择
     Task<string> GetPlayUrlAsync(string id, object? extendData = null);
-    Task<Music?> GetDetailAsync(MusicSearchResult sourceMusic, MusicFormatTypeEnum musicFormatType);
-    Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType);
-    Task<string?> GetLyricAsync(Music music);
-    Task<string> GetShareUrlAsync(Music music);
+    Task<string> GetLyricAsync(string id, object? extendData = null);
+    Task<string> GetShareUrlAsync(string id, object? extendData = null);
 }

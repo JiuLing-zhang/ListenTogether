@@ -362,6 +362,24 @@ public class NetEaseUtils
         var data = new { id, offset = 0, total = true, limit = 50, n = 50, csrf_token = "" };
         return data.ToJson();
     }
+
+    public static IEnumerable<KeyValuePair<string, string>> GetSongDetailPostData(List<long> tracksId)
+    {
+        string requestString = GetSongDetailRequest(tracksId);
+        string num = GetRandom();
+        string encText = CalcAES(requestString, SearchAESKey);
+        encText = CalcAES(encText, num);
+        string encSecKey = GetEncSecKey(num);
+        var data = new Dictionary<string, string> { { "params", encText }, { "encSecKey", encSecKey } };
+        return data;
+    }
+    private static string GetSongDetailRequest(List<long> tracksId)
+    {
+        var c = tracksId.Select(x => new { id = x }).ToList();
+        var data = new { c = c.ToJson(), ids = tracksId };
+        return data.ToJson();
+    }
+
     public static List<HttpMusicTagResult> GetTagMusics(string html)
     {
         var musics = new List<HttpMusicTagResult>();

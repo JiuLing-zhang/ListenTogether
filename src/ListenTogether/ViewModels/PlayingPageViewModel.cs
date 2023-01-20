@@ -49,7 +49,7 @@ public partial class PlayingPageViewModel : ViewModelBase
     /// 当前播放的歌曲
     /// </summary>
     [ObservableProperty]
-    private Music _currentMusic = null!;
+    private MusicMetadata _currentMusic = null!;
 
     /// <summary>
     /// 当前播放的歌曲图片
@@ -76,9 +76,8 @@ public partial class PlayingPageViewModel : ViewModelBase
     }
     private async Task NewMusicAddedDoAsync()
     {
-        //TODO 设置CurrentMusic
-        //CurrentMusic = _playerService.;
-        CurrentMusicImageByteArray = await MyHttpClient.GetByteArrayAsync(CurrentMusic.ImageUrl);
+        CurrentMusic = _playerService.Metadata;
+        CurrentMusicImageByteArray = CurrentMusic.Image;
         await GetLyricDetailAsync();
     }
 
@@ -125,7 +124,8 @@ public partial class PlayingPageViewModel : ViewModelBase
 
     private async Task<string> GetLyric()
     {
-        return await _musicNetworkService.GetLyricAsync(CurrentMusic);
+        //TODO 获取歌词
+        return await _musicNetworkService.GetLyricAsync(Model.Enums.PlatformEnum.MiGu, "");
     }
 
     [RelayCommand]
@@ -138,7 +138,8 @@ public partial class PlayingPageViewModel : ViewModelBase
 
         try
         {
-            string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync(CurrentMusic);
+            //TODO 获取歌曲地址
+            string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync(Model.Enums.PlatformEnum.NetEase, "");
             if (Config.Desktop)
             {
                 await Clipboard.Default.SetTextAsync(musicUrl);

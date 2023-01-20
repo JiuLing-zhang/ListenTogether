@@ -39,25 +39,14 @@ public class MusicNetPlatform
     {
         return await MusicProviderFactory.Create(platform).GetPlayUrlAsync(id, extendData);
     }
-
-    public async Task<Music?> GetDetailAsync(MusicSearchResult music, MusicFormatTypeEnum musicFormatType)
+    public async Task<string?> GetLyricAsync(PlatformEnum platform, string id, object? extendData = null)
     {
-        return await MusicProviderFactory.Create(music.Platform).GetDetailAsync(music, musicFormatType);
+        return await MusicProviderFactory.Create(platform).GetLyricAsync(id, extendData);
     }
 
-    public async Task<string?> GetPlayUrlAsync(Music music, MusicFormatTypeEnum musicFormatType)
+    public Task<string> GetPlayPageUrlAsync(PlatformEnum platform, string id, object? extendData = null)
     {
-        return await MusicProviderFactory.Create(music.Platform).GetPlayUrlAsync(music, musicFormatType);
-    }
-
-    public async Task<string?> GetLyricAsync(Music music)
-    {
-        return await MusicProviderFactory.Create(music.Platform).GetLyricAsync(music);
-    }
-
-    public Task<string> GetPlayPageUrlAsync(Music music)
-    {
-        return MusicProviderFactory.Create(music.Platform).GetShareUrlAsync(music);
+        return MusicProviderFactory.Create(platform).GetShareUrlAsync(id, extendData);
     }
 
     public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync(PlatformEnum platform)

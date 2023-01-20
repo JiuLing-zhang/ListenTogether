@@ -29,13 +29,13 @@ public class MusicResultService
     {
         var playlist = new Playlist()
         {
-            MusicId = musicResult.Id,
-            MusicIdOnPlatform = musicResult.IdOnPlatform,
+            Id = musicResult.Id,
+            IdOnPlatform = musicResult.IdOnPlatform,
             Platform = musicResult.Platform,
-            MusicName = musicResult.Name,
-            MusicArtist = musicResult.Artist,
-            MusicAlbum = musicResult.Album,
-            MusicImageUrl = musicResult.ImageUrl,
+            Name = musicResult.Name,
+            Artist = musicResult.Artist,
+            Album = musicResult.Album,
+            ImageUrl = musicResult.ImageUrl,
             EditTime = DateTime.Now
         };
         await _playlistService.AddToPlaylistAsync(playlist);
@@ -46,13 +46,14 @@ public class MusicResultService
         var playlists = musicResultList.Select(
             x => new Playlist()
             {
-                MusicId = x.Id,
-                MusicIdOnPlatform = x.IdOnPlatform,
+                Id = x.Id,
+                IdOnPlatform = x.IdOnPlatform,
                 Platform = x.Platform,
-                MusicName = x.Name,
-                MusicArtist = x.Artist,
-                MusicAlbum = x.Album,
-                MusicImageUrl = x.ImageUrl,
+                Name = x.Name,
+                Artist = x.Artist,
+                Album = x.Album,
+                ImageUrl = x.ImageUrl,
+                ExtendDataJson = x.ExtendDataJson,
                 EditTime = DateTime.Now
             }).ToList();
 
@@ -66,16 +67,16 @@ public class MusicResultService
 
     public async Task AddToFavoriteAsync(MusicResultShowViewModel musicResult)
     {
-        var music = new Music()
+        var music = new LocalMusic()
         {
             Id = musicResult.Id,
             Platform = musicResult.Platform,
-            PlatformInnerId = musicResult.IdOnPlatform,
+            IdOnPlatform = musicResult.IdOnPlatform,
             Album = musicResult.Album,
             Artist = musicResult.Artist,
             ImageUrl = musicResult.ImageUrl,
             Name = musicResult.Name,
-            ExtendData = musicResult.ExtendDataJson
+            ExtendDataJson = musicResult.ExtendDataJson
         };
         var isMusicOk = await _musicService.AddOrUpdateAsync(music);
 

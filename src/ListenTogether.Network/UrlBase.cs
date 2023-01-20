@@ -8,6 +8,7 @@ public class UrlBase
         public const string GetAllTypesUrl = "https://music.163.com/discover/playlist";
         public const string GetSongMenusFromTagUrl = "https://music.163.com/discover/playlist/";
         public const string GetTagMusicsUrl = "https://music.163.com/weapi/v3/playlist/detail";
+        public const string GetSongDetailUrl = "https://music.163.com/weapi/v3/song/detail";
         public const string Suggest = "https://music.163.com/weapi/search/suggest/web?csrf_token=";
         public const string Search = "https://music.163.com/weapi/cloudsearch/get/web?csrf_token=";
         public const string GetMusic = "https://music.163.com/weapi/song/enhance/player/url/v1?csrf_token=";

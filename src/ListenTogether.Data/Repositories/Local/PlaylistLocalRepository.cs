@@ -8,31 +8,27 @@ public class PlaylistLocalRepository : IPlaylistRepository
     public async Task<bool> AddOrUpdateAsync(Playlist playlist)
     {
         int count;
-        var playlists = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.MusicId == playlist.MusicId);
-        if (playlists == null)
+        var playlists = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.Id == playlist.Id);
+        if (playlists != null)
         {
-            playlists = new PlaylistEntity()
-            {
-                Platform = playlist.Platform,
-                MusicId = playlist.MusicId,
-                MusicIdOnPlatform = playlist.MusicIdOnPlatform,
-                MusicArtist = playlist.MusicArtist,
-                MusicName = playlist.MusicName,
-                MusicAlbum = playlist.MusicAlbum,
-                MusicImageUrl = playlist.MusicImageUrl,
-                EditTime = DateTime.Now
-            };
-            count = await DatabaseProvide.DatabaseAsync.InsertAsync(playlists);
+            return true;
         }
-        else
+
+        playlists = new PlaylistEntity()
         {
-            playlists.MusicArtist = playlist.MusicArtist;
-            playlists.MusicName = playlist.MusicName;
-            playlists.MusicAlbum = playlist.MusicAlbum;
-            playlists.MusicImageUrl = playlist.MusicImageUrl;
-            playlists.EditTime = DateTime.Now;
-            count = await DatabaseProvide.DatabaseAsync.UpdateAsync(playlists);
-        }
+            Platform = playlist.Platform,
+            Id = playlist.Id,
+            IdOnPlatform = playlist.IdOnPlatform,
+            Artist = playlist.Artist,
+            Name = playlist.Name,
+            Album = playlist.Album,
+            ImageUrl = playlist.ImageUrl,
+            DurationMillisecond = (int)playlist.Duration.TotalMilliseconds,
+            ExtendDataJson = playlist.ExtendDataJson ?? "",
+            EditTime = DateTime.Now
+        };
+        count = await DatabaseProvide.DatabaseAsync.InsertAsync(playlists);
+
         if (count == 0)
         {
             return false;
@@ -46,51 +42,47 @@ public class PlaylistLocalRepository : IPlaylistRepository
         {
             foreach (var playlist in playlists)
             {
-                var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.MusicId == playlist.MusicId);
-                if (playlistEntity == null)
+                var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.Id == playlist.Id);
+                if (playlistEntity != null)
                 {
-                    playlistEntity = new PlaylistEntity()
-                    {
-                        Platform = playlist.Platform,
-                        MusicId = playlist.MusicId,
-                        MusicIdOnPlatform = playlist.MusicIdOnPlatform,
-                        MusicArtist = playlist.MusicArtist,
-                        MusicName = playlist.MusicName,
-                        MusicAlbum = playlist.MusicAlbum,
-                        MusicImageUrl = playlist.MusicImageUrl,
-                        EditTime = DateTime.Now
-                    };
-                    tran.Insert(playlistEntity);
+                    continue;
                 }
-                else
+                playlistEntity = new PlaylistEntity()
                 {
-                    playlistEntity.MusicArtist = playlist.MusicArtist;
-                    playlistEntity.MusicName = playlist.MusicName;
-                    playlistEntity.MusicAlbum = playlist.MusicAlbum;
-                    playlistEntity.MusicImageUrl = playlist.MusicImageUrl;
-                    playlistEntity.EditTime = DateTime.Now;
-                    tran.Update(playlistEntity);
-                }
+                    Platform = playlist.Platform,
+                    Id = playlist.Id,
+                    IdOnPlatform = playlist.IdOnPlatform,
+                    Artist = playlist.Artist,
+                    Name = playlist.Name,
+                    Album = playlist.Album,
+                    ImageUrl = playlist.ImageUrl,
+                    ExtendDataJson = playlist.ExtendDataJson ?? "",
+                    DurationMillisecond = (int)playlist.Duration.TotalMilliseconds,
+                    EditTime = DateTime.Now
+                };
+                tran.Insert(playlistEntity);
             }
         });
         return true;
     }
     public async Task<Playlist?> GetOneAsync(string musicId)
     {
-        var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.MusicId == musicId);
+        var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.Id == musicId);
         if (playlistEntity == null)
         {
             return default;
         }
         return new Playlist()
         {
-            MusicId = musicId,
-            MusicName = playlistEntity.MusicName,
-            MusicAlbum = playlistEntity.MusicAlbum,
-            MusicArtist = playlistEntity.MusicArtist,
-            MusicIdOnPlatform = playlistEntity.MusicIdOnPlatform,
+            Id = musicId,
+            Name = playlistEntity.Name,
+            Album = playlistEntity.Album,
+            Artist = playlistEntity.Artist,
+            IdOnPlatform = playlistEntity.IdOnPlatform,
             Platform = playlistEntity.Platform,
-            MusicImageUrl = playlistEntity.MusicImageUrl,
+            ImageUrl = playlistEntity.ImageUrl,
+            ExtendDataJson = playlistEntity.ExtendDataJson,
+            Duration = TimeSpan.FromMilliseconds(playlistEntity.DurationMillisecond),
             EditTime = playlistEntity.EditTime
         };
     }
@@ -100,12 +92,14 @@ public class PlaylistLocalRepository : IPlaylistRepository
         return playlists.Select(x => new Playlist()
         {
             Platform = x.Platform,
-            MusicIdOnPlatform = x.MusicIdOnPlatform,
-            MusicId = x.MusicId,
-            MusicName = x.MusicName,
-            MusicArtist = x.MusicArtist,
-            MusicAlbum = x.MusicAlbum,
-            MusicImageUrl = x.MusicImageUrl,
+            IdOnPlatform = x.IdOnPlatform,
+            Id = x.Id,
+            Name = x.Name,
+            Artist = x.Artist,
+            Album = x.Album,
+            ImageUrl = x.ImageUrl,
+            Duration = TimeSpan.FromMilliseconds(x.DurationMillisecond),
+            ExtendDataJson = x.ExtendDataJson,
             EditTime = x.EditTime
         }).ToList();
     }

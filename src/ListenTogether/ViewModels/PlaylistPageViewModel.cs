@@ -72,10 +72,10 @@ public partial class PlaylistPageViewModel : ViewModelBase
             Playlist.Add(new PlaylistViewModel()
             {
                 PlatformName = item.Platform.GetDescription(),
-                MusicId = item.MusicId,
-                MusicName = item.MusicName,
-                MusicArtist = item.MusicArtist,
-                MusicAlbum = item.MusicAlbum,
+                MusicId = item.Id,
+                MusicName = item.Name,
+                MusicArtist = item.Artist,
+                MusicAlbum = item.Album,
                 EditTime = item.EditTime
             });
         }

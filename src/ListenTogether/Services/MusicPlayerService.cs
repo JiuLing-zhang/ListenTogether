@@ -10,10 +10,6 @@ public class MusicPlayerService
     public event EventHandler? NewMusicAdded;
     public event EventHandler? IsPlayingChanged;
     public event EventHandler? PositionChanged;
-    public event EventHandler? PlayFinished;
-    public event EventHandler? PlayFailed;
-    public event EventHandler? PlayNext;
-    public event EventHandler? PlayPrevious;
 
     private readonly HttpClient _httpClient;
     private readonly WifiOptionsService _wifiOptionsService;
@@ -30,13 +26,13 @@ public class MusicPlayerService
         _musicCacheService = musicCacheService;
         _wifiOptionsService = wifiOptionsService;
 
-        _playerService.NewMusicAdded += NewMusicAdded;
-        _playerService.IsPlayingChanged += IsPlayingChanged;
-        _playerService.PositionChanged += PositionChanged;
-        _playerService.PlayFinished += PlayFinished;
-        _playerService.PlayFailed += PlayFailed;
-        _playerService.PlayNext += PlayNext;
-        _playerService.PlayPrevious += PlayPrevious;
+        _playerService.NewMusicAdded += (_, _) => NewMusicAdded?.Invoke(this, EventArgs.Empty);
+        _playerService.IsPlayingChanged += (_, _) => IsPlayingChanged?.Invoke(this, EventArgs.Empty);
+        _playerService.PositionChanged += (_, _) => PositionChanged?.Invoke(this, EventArgs.Empty);
+        _playerService.PlayFinished += async (_, _) => await Next();
+        _playerService.PlayFailed += async (_, _) => await MediaFailed();
+        _playerService.PlayNext += async (_, _) => await Next();
+        _playerService.PlayPrevious += async (_, _) => await Previous();
         _musicNetworkService = musicNetworkService;
         _httpClient = httpClient;
         _playlistService = playlistService;
@@ -45,8 +41,6 @@ public class MusicPlayerService
     /// <summary>
     /// 播放
     /// </summary>
-    /// <param name="music"></param>
-    /// <returns></returns>
     public async Task PlayAsync(string musicId)
     {
         var playlist = await _playlistService.GetOneAsync(musicId);
@@ -60,7 +54,7 @@ public class MusicPlayerService
             await ToastService.Show("播放列表加载失败");
             return;
         }
-        var cachePath = await GetMusicCachePathAsync(playlist.MusicId);
+        var cachePath = await GetMusicCachePathAsync(playlist.Id);
         if (cachePath.IsEmpty())
         {
             if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
@@ -70,7 +64,7 @@ public class MusicPlayerService
 
             //重新获取播放链接
             MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", true);
-            var playUrl = await _musicNetworkService.GetPlayUrlAsync(playlist.Platform, playlist.MusicIdOnPlatform);
+            var playUrl = await _musicNetworkService.GetPlayUrlAsync(playlist.Platform, playlist.IdOnPlatform);
             if (playUrl.IsEmpty())
             {
                 await ToastService.Show("播放地址获取失败");
@@ -78,23 +72,23 @@ public class MusicPlayerService
                 return;
             }
 
-            var cacheFileNameOnly = $"{playlist.MusicId}{GetPlayUrlFileExtension(playUrl)}";
+            var cacheFileNameOnly = $"{playlist.Id}{GetPlayUrlFileExtension(playUrl)}";
             cachePath = Path.Combine(GlobalConfig.MusicCacheDirectory, cacheFileNameOnly);
             var data = await _httpClient.GetByteArrayAsync(playUrl);
             await File.WriteAllBytesAsync(cachePath, data);
-            string remark = $"{playlist.MusicArtist}-{playlist.MusicName}";
-            await _musicCacheService.AddOrUpdateAsync(playlist.MusicId, cachePath, remark);
+            string remark = $"{playlist.Artist}-{playlist.Name}";
+            await _musicCacheService.AddOrUpdateAsync(playlist.Id, cachePath, remark);
 
             MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);
         }
 
-        var image = await _httpClient.GetByteArrayAsync(playlist.MusicImageUrl);
+        var image = await _httpClient.GetByteArrayAsync(playlist.ImageUrl);
         await _playerService.PlayAsync(
             new MusicMetadata(
-                playlist.MusicId,
-                playlist.MusicName,
-                playlist.MusicArtist,
-                playlist.MusicAlbum,
+                playlist.Id,
+                playlist.Name,
+                playlist.Artist,
+                playlist.Album,
                 image,
                 cachePath)
             );
@@ -145,7 +139,6 @@ public class MusicPlayerService
     {
         if (GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed)
         {
-            Logger.Info($"内部调用：播放失败");
             await Next();
         }
     }

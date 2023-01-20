@@ -2,10 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+             xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.NetEasePage"
              Title="NetEasePage">
     <Grid
-        RowDefinitions="Auto,*"
+        RowDefinitions="Auto,*,Auto"
         RowSpacing="10"
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
@@ -68,5 +69,10 @@
                 </FlexLayout>
             </Border>
         </ScrollView>
+        
+        <controls:Player
+            Grid.Row="2"
+            x:Name="player"
+            IsPlayingPage="False"/>
     </Grid>
 </ContentPage>
