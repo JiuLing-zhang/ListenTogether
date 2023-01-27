@@ -52,7 +52,8 @@
             </StackLayout>
             <CollectionView
                 VerticalOptions="FillAndExpand"
-                ItemsSource="{Binding Playlist}">
+                ItemsSource="{Binding Playlist}"
+                EmptyView="列表是空的">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout>
