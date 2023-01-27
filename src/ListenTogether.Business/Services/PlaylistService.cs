@@ -29,9 +29,9 @@ public class PlaylistService : IPlaylistService
         return await _repository.GetAllAsync();
     }
 
-    public async Task<bool> RemoveAsync(int id)
+    public async Task<bool> RemoveAsync(string musicId)
     {
-        return await _repository.RemoveAsync(id);
+        return await _repository.RemoveAsync(musicId);
     }
 
     public async Task<bool> RemoveAllAsync()

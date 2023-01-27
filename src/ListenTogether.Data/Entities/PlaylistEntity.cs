@@ -7,7 +7,7 @@ namespace ListenTogether.Data.Entities;
 internal class PlaylistEntity
 {
     [PrimaryKey]
-    public string Id { get; set; } = null!;
+    public string MusicId { get; set; } = null!;
     public PlatformEnum Platform { get; set; }
     public string IdOnPlatform { get; set; } = null!;
     public string Name { get; set; } = null!;

@@ -1,7 +1,6 @@
 ﻿using ListenTogether.Data.Entities;
 using ListenTogether.Data.Interfaces;
 using ListenTogether.Model;
-using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Data.Repositories.Local;
 public class PlaylistLocalRepository : IPlaylistRepository
@@ -9,7 +8,7 @@ public class PlaylistLocalRepository : IPlaylistRepository
     public async Task<bool> AddOrUpdateAsync(Playlist playlist)
     {
         int count;
-        var playlists = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.Id == playlist.Id);
+        var playlists = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.MusicId == playlist.Id);
         if (playlists != null)
         {
             return true;
@@ -18,7 +17,7 @@ public class PlaylistLocalRepository : IPlaylistRepository
         playlists = new PlaylistEntity()
         {
             Platform = playlist.Platform,
-            Id = playlist.Id,
+            MusicId = playlist.Id,
             IdOnPlatform = playlist.IdOnPlatform,
             Artist = playlist.Artist,
             Name = playlist.Name,
@@ -46,7 +45,7 @@ public class PlaylistLocalRepository : IPlaylistRepository
                 var playlistEntity = new PlaylistEntity()
                 {
                     Platform = playlist.Platform,
-                    Id = playlist.Id,
+                    MusicId = playlist.Id,
                     IdOnPlatform = playlist.IdOnPlatform,
                     Artist = playlist.Artist,
                     Name = playlist.Name,
@@ -64,7 +63,7 @@ public class PlaylistLocalRepository : IPlaylistRepository
     }
     public async Task<Playlist?> GetOneAsync(string musicId)
     {
-        var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.Id == musicId);
+        var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.MusicId == musicId);
         if (playlistEntity == null)
         {
             return default;
@@ -90,7 +89,7 @@ public class PlaylistLocalRepository : IPlaylistRepository
         {
             Platform = x.Platform,
             IdOnPlatform = x.IdOnPlatform,
-            Id = x.Id,
+            Id = x.MusicId,
             Name = x.Name,
             Artist = x.Artist,
             Album = x.Album,
@@ -101,7 +100,7 @@ public class PlaylistLocalRepository : IPlaylistRepository
         }).ToList();
     }
 
-    public async Task<bool> RemoveAsync(int musicId)
+    public async Task<bool> RemoveAsync(string musicId)
     {
         await DatabaseProvide.DatabaseAsync.DeleteAsync<PlaylistEntity>(musicId);
         return true;

@@ -7,6 +7,6 @@ public interface IPlaylistService
     Task<bool> AddToPlaylistAsync(List<Playlist> playlists);
     Task<Playlist?> GetOneAsync(string musicId);
     Task<List<Playlist>> GetAllAsync();
-    Task<bool> RemoveAsync(int id);
+    Task<bool> RemoveAsync(string musicId);
     Task<bool> RemoveAllAsync();
 }

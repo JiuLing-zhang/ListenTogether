@@ -7,6 +7,6 @@ public interface IPlaylistRepository
     Task<bool> AddOrUpdateAsync(List<Playlist> playlists);
     Task<Playlist?> GetOneAsync(string musicId);
     Task<List<Playlist>> GetAllAsync();
-    Task<bool> RemoveAsync(int musicId);
+    Task<bool> RemoveAsync(string musicId);
     Task<bool> RemoveAllAsync();
 }

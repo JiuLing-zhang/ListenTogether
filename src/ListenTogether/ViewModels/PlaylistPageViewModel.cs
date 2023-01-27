@@ -6,19 +6,26 @@ namespace ListenTogether.ViewModels;
 
 public partial class PlaylistPageViewModel : ViewModelBase
 {
-    private readonly IMusicService _musicService;
-    private readonly IMyFavoriteService _myFavoriteService;
     private readonly IPlaylistService _playlistService;
-    private readonly MusicPlayerService _playerService;
+    private readonly MusicResultService _musicResultService;
 
-    public PlaylistPageViewModel(IPlaylistService playlistService, MusicPlayerService playerService, IMusicService musicService, IMyFavoriteService myFavoriteService)
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
+    private bool _isPlaylistEmpty;
+    public bool IsPlaylistNotEmpty => !IsPlaylistEmpty;
+
+    /// <summary>
+    /// 播放列表
+    /// </summary>
+    [ObservableProperty]
+    private ObservableCollection<MusicResultShowViewModel> _playlist;
+
+    public PlaylistPageViewModel(IPlaylistService playlistService, MusicResultService musicResultService)
     {
-        Playlist = new ObservableCollection<PlaylistViewModel>();
+        Playlist = new ObservableCollection<MusicResultShowViewModel>();
 
-        _playerService = playerService;
         _playlistService = playlistService;
-        _musicService = musicService;
-        _myFavoriteService = myFavoriteService;
+        _musicResultService = musicResultService;
     }
 
     public async Task InitializeAsync()
@@ -41,7 +48,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     private async Task GetPlaylistAsync()
     {
         var playlist = await _playlistService.GetAllAsync();
-        if (playlist == null || playlist.Count == 0)
+        if (playlist.Count == 0)
         {
             if (Playlist.Count > 0)
             {
@@ -51,154 +58,39 @@ public partial class PlaylistPageViewModel : ViewModelBase
             return;
         }
 
-        if (playlist.Count == Playlist.Count)
-        {
-            //数据未发生变更时不更新列表
-            var dbLastEditTime = playlist.OrderByDescending(x => x.EditTime).First().EditTime;
-            var pageLast = Playlist.OrderByDescending(x => x.EditTime).FirstOrDefault();
-
-            if (pageLast != null && pageLast.EditTime.Subtract(dbLastEditTime).TotalDays >= 0)
-            {
-                return;
-            }
-        }
-
         if (Playlist.Count > 0)
         {
             Playlist.Clear();
         }
         foreach (var item in playlist)
         {
-            Playlist.Add(new PlaylistViewModel()
+            Playlist.Add(new MusicResultShowViewModel()
             {
-                PlatformName = item.Platform.GetDescription(),
-                MusicId = item.Id,
-                MusicName = item.Name,
-                MusicArtist = item.Artist,
-                MusicAlbum = item.Album,
-                EditTime = item.EditTime
+                Platform = item.Platform,
+                Id = item.Id,
+                Name = item.Name,
+                Artist = item.Artist,
+                Album = item.Album,
             });
         }
 
         IsPlaylistEmpty = !Playlist.Any();
     }
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
-    private bool _isPlaylistEmpty;
-    public bool IsPlaylistNotEmpty => !IsPlaylistEmpty;
-
-    /// <summary>
-    /// 播放列表
-    /// </summary>
-    [ObservableProperty]
-    private ObservableCollection<PlaylistViewModel> _playlist = null!;
-
     [RelayCommand]
-    private async void PlayMusicAsync(PlaylistViewModel selected)
+    private async void PlayMusicAsync(MusicResultShowViewModel selected)
     {
-        var music = await _musicService.GetOneAsync(selected.MusicId);
-        if (music == null)
-        {
-            await ToastService.Show("获取歌曲信息失败");
-            return;
-        }
-
-        await _playerService.PlayAsync(music.Id);
+        await _musicResultService.PlayAsync(selected);
     }
 
     [RelayCommand]
-    private async void AddToMyFavoriteAsync(PlaylistViewModel selected)
+    private async void AddToMyFavoriteAsync(MusicResultShowViewModel selected)
     {
-        try
-        {
-            StartLoading("处理中....");
-
-            var music = await _musicService.GetOneAsync(selected.MusicId);
-            if (music == null)
-            {
-                await ToastService.Show("歌曲不存在");
-                return;
-            }
-
-            //构造待选择的歌单项
-            string[]? myFavoriteButtons = null;
-            var myFavoriteList = await _myFavoriteService.GetAllAsync();
-            if (myFavoriteList != null)
-            {
-                myFavoriteButtons = myFavoriteList.Select(x => x.Name).ToArray();
-            }
-
-            int selectedMyFavoriteId;
-            string myFavoriteItem = await App.Current.MainPage.DisplayActionSheet("请选择要加入的歌单", "取消", "创建一个新歌单", myFavoriteButtons);
-            if (myFavoriteItem.IsEmpty() || myFavoriteItem == "取消")
-            {
-                return;
-            }
-
-            if (myFavoriteItem != "创建一个新歌单" && myFavoriteList != null)
-            {
-                //使用已有歌单
-                selectedMyFavoriteId = myFavoriteList.First(x => x.Name == myFavoriteItem).Id;
-            }
-            else
-            {
-                //新增歌单
-                string myFavoriteName = await App.Current.MainPage.DisplayPromptAsync("添加歌单", "请输入歌单名称：", "添加", "取消");
-                if (myFavoriteName.IsEmpty())
-                {
-                    return;
-                }
-
-                if (await _myFavoriteService.NameExistAsync(myFavoriteName))
-                {
-                    await ToastService.Show("歌单名称已存在");
-                    return;
-                }
-
-                var myFavorite = new MyFavorite()
-                {
-                    Name = myFavoriteName,
-                    MusicCount = 0
-                };
-                var newMyFavorite = await _myFavoriteService.AddOrUpdateAsync(myFavorite);
-                if (newMyFavorite == null)
-                {
-                    await ToastService.Show("添加失败");
-                    return;
-                }
-                selectedMyFavoriteId = newMyFavorite.Id;
-            }
-
-            var result = await _myFavoriteService.AddMusicToMyFavoriteAsync(selectedMyFavoriteId, music.Id);
-            if (result == false)
-            {
-                await ToastService.Show("添加失败");
-                return;
-            }
-
-            if (GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite)
-            {
-                await _playerService.PlayAsync(music.Id);
-            }
-            else
-            {
-                await ToastService.Show("添加成功");
-            }
-        }
-        catch (Exception ex)
-        {
-            await ToastService.Show("添加失败，网络出小差了");
-            Logger.Error("播放列表添加到我的歌单失败。", ex);
-        }
-        finally
-        {
-            StopLoading();
-        }
+        await _musicResultService.AddToFavoriteAsync(selected);
     }
 
     [RelayCommand]
-    private async void RemoveOneAsync(PlaylistViewModel selected)
+    private async void RemoveOneAsync(MusicResultShowViewModel selected)
     {
         try
         {

@@ -31,7 +31,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
     private string _lastSearchKey;
 
     private readonly MusicResultService _musicResultService;
-    private readonly IMusicNetworkService _musicNetworkService = null!;
+    private readonly IMusicNetworkService _musicNetworkService;
 
     public SearchResultPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService)
     {

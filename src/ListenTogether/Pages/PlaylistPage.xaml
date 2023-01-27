@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Pages.PlaylistPage"
              Title="播放列表">
-    
+
     <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -86,22 +86,12 @@
                                             </Image>
                                         </StackLayout>
 
-                                        <Border Padding="4,0,4,3"
-                                    StrokeThickness="1"
-                                    HorizontalOptions="Center">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="5" />
-                                            </Border.StrokeShape>
-                                            <Label Text="{Binding PlatformName}"
-                                       Style="{StaticResource Explain}"/>
-                                        </Border>
-
                                         <Label Margin="5,0,0,0"
-                                   VerticalTextAlignment="Center"
-                                   LineBreakMode="TailTruncation">
+                                               VerticalTextAlignment="Center"
+                                               LineBreakMode="TailTruncation">
                                             <MultiBinding StringFormat="{}{0} - {1}">
-                                                <Binding Path="MusicName" />
-                                                <Binding Path="MusicArtist" />
+                                                <Binding Path="Name" />
+                                                <Binding Path="Artist" />
                                             </MultiBinding>
                                         </Label>
                                     </StackLayout>
@@ -117,23 +107,12 @@
                                                   CommandParameter="{Binding .}"/>
                                         </Grid.GestureRecognizers>
 
-                                        <Border Grid.Column="0"
-                                            Padding="4,0,4,3"
-                                            HorizontalOptions="Start"
-                                            StrokeThickness="1">
-                                            <Border.StrokeShape>
-                                                <RoundRectangle CornerRadius="5" />
-                                            </Border.StrokeShape>
-                                            <Label Text="{Binding PlatformName}"
-                                                       Style="{StaticResource Explain}"/>
-                                        </Border>
-
                                         <Label Grid.Column="1"                                           
-                                           VerticalTextAlignment="Center"
-                                           LineBreakMode="TailTruncation">
+                                               VerticalTextAlignment="Center"
+                                               LineBreakMode="TailTruncation">
                                             <MultiBinding StringFormat="{}{0} - {1}">
-                                                <Binding Path="MusicName" />
-                                                <Binding Path="MusicArtist" />
+                                                <Binding Path="Name" />
+                                                <Binding Path="Artist" />
                                             </MultiBinding>
                                         </Label>
 
