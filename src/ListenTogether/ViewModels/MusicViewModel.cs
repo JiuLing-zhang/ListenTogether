@@ -23,6 +23,12 @@ public partial class MusicViewModel : ObservableObject
     private PlatformEnum _platform;
 
     /// <summary>
+    /// 平台名称
+    /// </summary>
+    [ObservableProperty]
+    private string _platformName;
+
+    /// <summary>
     /// 歌曲名称
     /// </summary>
     [ObservableProperty]

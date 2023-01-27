@@ -6,15 +6,40 @@ namespace ListenTogether.ViewModels;
 
 public partial class PlayingPageViewModel : ViewModelBase
 {
+    private static readonly HttpClient MyHttpClient = new HttpClient();
     //控制手动滚动歌词时，系统暂停歌词滚动
     private DateTime _lastScrollToTime = DateTime.Now;
-    private static readonly HttpClient MyHttpClient = new HttpClient();
-    private readonly MusicPlayerService _playerService = null!;
-    private readonly IDispatcherTimer _timerLyricsUpdate = null!;
-    private readonly IMusicNetworkService _musicNetworkService = null!;
+    private readonly MusicPlayerService _playerService;
+    private readonly IDispatcherTimer _timerLyricsUpdate;
+    private readonly IMusicNetworkService _musicNetworkService;
+    private readonly IPlaylistService _playlistService;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; } = null!;
 
-    public PlayingPageViewModel(MusicPlayerService playerService, IMusicNetworkService musicNetworkService)
+    /// <summary>
+    /// 当前播放的歌曲
+    /// </summary>
+    [ObservableProperty]
+    private MusicResultShowViewModel? _currentMusic;
+
+    /// <summary>
+    /// 当前播放的歌曲图片
+    /// </summary>
+    [ObservableProperty]
+    private byte[]? _currentMusicImageByteArray;
+
+    /// <summary>
+    /// 每行的歌词
+    /// </summary>
+    [ObservableProperty]
+    private ObservableCollection<LyricViewModel> _lyrics = null!;
+
+    /// <summary>
+    /// 分享按钮的文本
+    /// </summary>
+    [ObservableProperty]
+    private string _shareLabelText = Config.Desktop ? "复制歌曲链接" : "分享歌曲链接";
+
+    public PlayingPageViewModel(MusicPlayerService playerService, IMusicNetworkService musicNetworkService, IPlaylistService playlistService)
     {
         _musicNetworkService = musicNetworkService;
         _playerService = playerService;
@@ -22,6 +47,7 @@ public partial class PlayingPageViewModel : ViewModelBase
 
         _timerLyricsUpdate = App.Current.Dispatcher.CreateTimer();
         _timerLyricsUpdate.Interval = TimeSpan.FromMilliseconds(300);
+        _playlistService = playlistService;
     }
 
     public async Task InitializeAsync()
@@ -45,39 +71,36 @@ public partial class PlayingPageViewModel : ViewModelBase
         }
     }
 
-    /// <summary>
-    /// 当前播放的歌曲
-    /// </summary>
-    [ObservableProperty]
-    private MusicMetadata _currentMusic = null!;
-
-    /// <summary>
-    /// 当前播放的歌曲图片
-    /// </summary>
-    [ObservableProperty]
-    private byte[] _currentMusicImageByteArray = null!;
-
-    /// <summary>
-    /// 每行的歌词
-    /// </summary>
-    [ObservableProperty]
-    private ObservableCollection<LyricViewModel> _lyrics = null!;
-
-
-    /// <summary>
-    /// 分享按钮的文本
-    /// </summary>
-    [ObservableProperty]
-    private string _shareLabelText = Config.Desktop ? "复制歌曲链接" : "分享歌曲链接";
-
     private async void _playerService_NewMusicAdded(object sender, EventArgs e)
     {
         await NewMusicAddedDoAsync();
     }
     private async Task NewMusicAddedDoAsync()
     {
-        CurrentMusic = _playerService.Metadata;
-        CurrentMusicImageByteArray = CurrentMusic.Image;
+        if (_playerService.Metadata == null)
+        {
+            return;
+        }
+        var playlist = await _playlistService.GetOneAsync(_playerService.Metadata.Id);
+        if (playlist == null)
+        {
+            await ToastService.Show("歌曲信息不存在");
+            return;
+        }
+
+        CurrentMusic = new MusicResultShowViewModel()
+        {
+            Id = playlist.Id,
+            IdOnPlatform = playlist.IdOnPlatform,
+            Platform = playlist.Platform,
+            PlatformName = playlist.Platform.GetDescription(),
+            Name = playlist.Name,
+            Artist = playlist.Artist,
+            Album = playlist.Album,
+            ImageUrl = playlist.ImageUrl,
+            ExtendDataJson = playlist.ExtendDataJson,
+        };
+        CurrentMusicImageByteArray = await MyHttpClient.GetByteArrayAsync(CurrentMusic.ImageUrl);
         await GetLyricDetailAsync();
     }
 
@@ -124,8 +147,11 @@ public partial class PlayingPageViewModel : ViewModelBase
 
     private async Task<string> GetLyric()
     {
-        //TODO 获取歌词
-        return await _musicNetworkService.GetLyricAsync(Model.Enums.PlatformEnum.MiGu, "");
+        if (CurrentMusic == null)
+        {
+            return default;
+        }
+        return await _musicNetworkService.GetLyricAsync(CurrentMusic.Platform, CurrentMusic.IdOnPlatform, CurrentMusic.ExtendDataJson);
     }
 
     [RelayCommand]
@@ -138,8 +164,7 @@ public partial class PlayingPageViewModel : ViewModelBase
 
         try
         {
-            //TODO 获取歌曲地址
-            string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync(Model.Enums.PlatformEnum.NetEase, "");
+            string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync(CurrentMusic.Platform, CurrentMusic.IdOnPlatform);
             if (Config.Desktop)
             {
                 await Clipboard.Default.SetTextAsync(musicUrl);

@@ -4,7 +4,7 @@ namespace ListenTogether.Services;
 public class MusicPlayerService
 {
     public bool IsPlaying => _playerService.IsPlaying;
-    public MusicMetadata Metadata => _playerService.CurrentMetadata;
+    public MusicMetadata? Metadata => _playerService.CurrentMetadata;
     public MusicPosition CurrentPosition => _playerService.CurrentPosition;
 
     public event EventHandler? NewMusicAdded;
