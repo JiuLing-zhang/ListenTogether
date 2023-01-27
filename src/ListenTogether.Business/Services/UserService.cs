@@ -22,8 +22,8 @@ public class UserService : IUserService
         return await _repository.LoginAsync(username, password);
     }
 
-    public async Task<bool> LogoutAsync()
+    public async Task LogoutAsync()
     {
-        return await _repository.LogoutAsync();
+        await _repository.LogoutAsync();
     }
 }

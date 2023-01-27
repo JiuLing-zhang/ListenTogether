@@ -1,6 +1,7 @@
 ﻿using ListenTogether.Data.Entities;
 using ListenTogether.Data.Interfaces;
 using ListenTogether.Model;
+using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Data.Repositories.Local;
 public class PlaylistLocalRepository : IPlaylistRepository
@@ -38,16 +39,11 @@ public class PlaylistLocalRepository : IPlaylistRepository
     }
     public async Task<bool> AddOrUpdateAsync(List<Playlist> playlists)
     {
-        await DatabaseProvide.DatabaseAsync.RunInTransactionAsync(async tran =>
+        await DatabaseProvide.DatabaseAsync.RunInTransactionAsync(tran =>
         {
             foreach (var playlist in playlists)
             {
-                var playlistEntity = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.Id == playlist.Id);
-                if (playlistEntity != null)
-                {
-                    continue;
-                }
-                playlistEntity = new PlaylistEntity()
+                var playlistEntity = new PlaylistEntity()
                 {
                     Platform = playlist.Platform,
                     Id = playlist.Id,
@@ -60,8 +56,9 @@ public class PlaylistLocalRepository : IPlaylistRepository
                     DurationMillisecond = (int)playlist.Duration.TotalMilliseconds,
                     EditTime = DateTime.Now
                 };
-                tran.Insert(playlistEntity);
+                tran.InsertOrReplace(playlistEntity);
             }
+            tran.Commit();
         });
         return true;
     }

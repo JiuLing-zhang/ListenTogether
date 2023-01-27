@@ -5,5 +5,5 @@ public interface IUserService
 {
     public Task<(bool Succeed, string Message)> RegisterAsync(UserRegister registerUser);
     public Task<User?> LoginAsync(string username, string password);
-    public Task<bool> LogoutAsync();
+    public Task LogoutAsync();
 }

@@ -15,10 +15,6 @@ public class BusinessConfig
     }
     public static void SetWebApi(string apiBaseUrl, string deviceId)
     {
-        if (apiBaseUrl.IsEmpty() || deviceId.IsEmpty())
-        {
-            throw new ArgumentException("Web API配置参数错误");
-        }
         DataConfig.SetWebApi(apiBaseUrl, deviceId);
     }
 }
