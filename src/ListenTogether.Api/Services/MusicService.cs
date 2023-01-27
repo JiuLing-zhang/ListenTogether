@@ -29,14 +29,14 @@ namespace ListenTogether.Api.Services
             return new Result<MusicResponse>(0, "查询成功", new MusicResponse()
             {
                 Id = id,
-                Platform = music.Platform,
-                PlatformInnerId = music.PlatformInnerId,
+                Platform = (PlatformEnum)music.Platform,
+                IdOnPlatform = music.IdOnPlatform,
                 PlatformName = ((PlatformEnum)music.Platform).GetDescription(),
                 Name = music.Name,
                 Album = music.Album,
                 Artist = music.Artist,
                 ImageUrl = music.ImageUrl,
-                ExtendData = music.ExtendData,
+                ExtendDataJson = music.ExtendDataJson,
             });
         }
 
@@ -48,13 +48,13 @@ namespace ListenTogether.Api.Services
                 myMusic = new MusicEntity()
                 {
                     Id = music.Id,
-                    Platform = music.Platform,
-                    PlatformInnerId = music.PlatformInnerId,
+                    Platform = (int)music.Platform,
+                    IdOnPlatform = music.IdOnPlatform,
                     Name = music.Name,
                     Album = music.Album,
                     Artist = music.Artist,
                     ImageUrl = music.ImageUrl,
-                    ExtendData = music.ExtendData ?? "",
+                    ExtendDataJson = music.ExtendDataJson ?? "",
                     CreateTime = DateTime.Now
                 };
                 _context.Musics.Add(myMusic);
@@ -62,13 +62,13 @@ namespace ListenTogether.Api.Services
             else
             {
                 myMusic.Id = music.Id;
-                myMusic.Platform = music.Platform;
-                myMusic.PlatformInnerId = music.PlatformInnerId;
+                myMusic.Platform = (int)music.Platform;
+                myMusic.IdOnPlatform = music.IdOnPlatform;
                 myMusic.Name = music.Name;
                 myMusic.Album = music.Album;
                 myMusic.Artist = music.Artist;
                 myMusic.ImageUrl = music.ImageUrl;
-                myMusic.ExtendData = music.ExtendData ?? "";
+                myMusic.ExtendDataJson = music.ExtendDataJson ?? "";
                 _context.Musics.Update(myMusic);
             }
 
