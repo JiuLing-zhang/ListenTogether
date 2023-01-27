@@ -3,6 +3,7 @@ using ListenTogether.Model;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
 using ListenTogether.Model.Api.Response;
+using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Data.Repositories.Api;
 public class MyFavoriteApiRepository : IMyFavoriteRepository
@@ -135,7 +136,7 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         {
             Id = x.Id,
             MusicId = x.MusicId,
-            PlatformName = x.PlatformName,
+            Platform = (PlatformEnum)x.PlatformInt,
             MusicName = x.MusicName,
             MyFavoriteId = x.MyFavoriteId,
             MusicAlbum = x.MusicAlbum,

@@ -7,7 +7,7 @@
     {
         public int Id { get; set; }
         public int MyFavoriteId { get; set; }
-        public string PlatformName { get; set; } = null!;
+        public int PlatformInt { get; set; }
         public string MusicId { get; set; } = null!;
         /// <summary>
         /// 歌曲名称

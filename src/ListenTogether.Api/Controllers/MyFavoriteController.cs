@@ -58,10 +58,10 @@ namespace ListenTogether.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPost("add-music/{id}")]
-        public async Task<IActionResult> AddMusicToMyFavoriteAsync(int id, MusicRequest music)
+        [HttpPost("add-music/{id}/{musicId}")]
+        public async Task<IActionResult> AddMusicToMyFavoriteAsync(int id, string musicId)
         {
-            var response = await _myFavoriteService.AddMusicToMyFavoriteAsync(UserId, id, music);
+            var response = await _myFavoriteService.AddMusicToMyFavoriteAsync(UserId, id, musicId);
             return Ok(response);
         }
 

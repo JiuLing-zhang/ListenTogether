@@ -73,7 +73,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
             {
                 Seq = ++seq,
                 Id = myFavoriteDetail.Id,
-                PlatformName = myFavoriteDetail.PlatformName,
+                PlatformName = myFavoriteDetail.Platform.GetDescription(),
                 MusicId = myFavoriteDetail.MusicId,
                 MusicArtist = myFavoriteDetail.MusicArtist,
                 MusicAlbum = myFavoriteDetail.MusicAlbum,

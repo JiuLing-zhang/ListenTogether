@@ -117,7 +117,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         return new Result(0, "删除成功");
     }
-    public async Task<Result> AddMusicToMyFavoriteAsync(int userId, int id, MusicRequest music)
+    public async Task<Result> AddMusicToMyFavoriteAsync(int userId, int id, string musicId)
     {
         var favorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.UserBaseId == userId && x.Id == id);
         if (favorite == null)
@@ -125,32 +125,22 @@ public class MyFavoriteService : IMyFavoriteService
             return new Result(1, "添加失败：我的收藏不存在");
         }
 
-        var favoriteDetail = favorite.Details.SingleOrDefault(x => x.MyFavoriteId == id && x.MusicId == music.Id);
+        var favoriteDetail = favorite.Details.SingleOrDefault(x => x.MyFavoriteId == id && x.MusicId == musicId);
         if (favoriteDetail == null)
         {
             favoriteDetail = new MyFavoriteDetailEntity()
             {
-                PlatformName = ((PlatformEnum)Enum.ToObject(typeof(PlatformEnum), music.Platform)).GetDescription(),
                 MyFavoriteId = id,
-                MusicName = music.Name,
-                MusicId = music.Id,
-                MusicAlbum = music.Album,
-                MusicArtist = music.Artist
+                MusicId = musicId,
             };
             favorite.Details.Add(favoriteDetail);
         }
-        else
-        {
-            favoriteDetail.MusicId = music.Id;
-            favoriteDetail.MusicName = music.Name;
-            favoriteDetail.MusicArtist = music.Artist;
-            favoriteDetail.MusicAlbum = music.Album;
-        }
 
         //更新歌单图标，歌单可以前置添加，所以有可能会没有图标
-        if (favorite.ImageUrl.IsEmpty() && music.ImageUrl.IsNotEmpty())
+        if (favorite.ImageUrl.IsEmpty())
         {
-            favorite.ImageUrl = music.ImageUrl;
+            var imageUrl = _context.Musics.First(x => x.Id == musicId).ImageUrl;
+            favorite.ImageUrl = imageUrl;
         }
         favorite.EditTime = DateTime.Now;
 
@@ -158,7 +148,7 @@ public class MyFavoriteService : IMyFavoriteService
         var count = await _context.SaveChangesAsync();
         if (count == 0)
         {
-            return new Result(3, "添加失败");
+            return new Result(2, "添加失败");
         }
         return new Result(0, "添加成功");
 
@@ -172,17 +162,20 @@ public class MyFavoriteService : IMyFavoriteService
             return default;
         }
 
-        var detail = myFavorite.Details.Select(x => new MyFavoriteDetailResponse()
-        {
-            Id = x.Id,
-            MyFavoriteId = x.MyFavoriteId,
-            PlatformName = x.PlatformName,
-            MusicId = x.MusicId,
-            MusicName = x.MusicName,
-            MusicAlbum = x.MusicAlbum,
-            MusicArtist = x.MusicArtist,
-        }).ToList();
-        return detail;
+        var data = from mfd in myFavorite.Details
+                   join m in _context.Musics on mfd.MusicId equals m.Id
+                   select new MyFavoriteDetailResponse
+                   {
+                       Id = mfd.Id,
+                       MyFavoriteId = mfd.MyFavoriteId,
+                       PlatformInt = m.Platform,
+                       MusicId = m.Id,
+                       MusicName = m.Name,
+                       MusicAlbum = m.Album,
+                       MusicArtist = m.Artist,
+                   };
+
+        return data.ToList();
     }
 
     public async Task<Result> RemoveDetailAsync(int userId, int id)
