@@ -36,7 +36,7 @@ src
 直接下载安装就行。  
 
 尊贵的`Windows`安装包需要签名，所以打包的时候进行了自签名，首次安装时需要信任证书。
-戳这里看教程👉👉👉[`微软官方教程`](https://docs.microsoft.com/zh-cn/dotnet/maui/windows/deployment/overview#installing-the-app)  
+戳这里看教程👉👉👉[`微软官方教程`](https://learn.microsoft.com/zh-cn/dotnet/maui/windows/deployment/publish-cli?view=net-maui-7.0#installing-the-app)  
 
 ## 4、服务配置
 
