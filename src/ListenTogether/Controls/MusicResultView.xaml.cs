@@ -21,15 +21,13 @@ public partial class MusicResultView
         BindableProperty.Create(
             nameof(PlayCommand),
             typeof(ICommand),
-            typeof(MusicResultView),
-            default(string));
+            typeof(MusicResultView));
 
     public static readonly BindableProperty PlayCommandParameterProperty =
         BindableProperty.Create(
             nameof(PlayCommandParameter),
             typeof(MusicResultShowViewModel),
-            typeof(MusicResultView),
-            default(MusicResultShowViewModel));
+            typeof(MusicResultView));
 
     public ICommand PlayCommand
     {
@@ -47,15 +45,13 @@ public partial class MusicResultView
       BindableProperty.Create(
           nameof(AddToFavoriteCommand),
           typeof(ICommand),
-          typeof(MusicResultView),
-          default(string));
+          typeof(MusicResultView));
 
     public static readonly BindableProperty AddToFavoriteCommandParameterProperty =
         BindableProperty.Create(
             nameof(AddToFavoriteCommandParameter),
-            typeof(MusicResultGroupViewModel),
-            typeof(MusicResultView),
-            default(MusicResultGroupViewModel));
+            typeof(MusicResultShowViewModel),
+            typeof(MusicResultView));
 
     public ICommand AddToFavoriteCommand
     {
@@ -63,9 +59,9 @@ public partial class MusicResultView
         set { SetValue(AddToFavoriteCommandProperty, value); }
     }
 
-    public MusicResultGroupViewModel AddToFavoriteCommandParameter
+    public MusicResultShowViewModel AddToFavoriteCommandParameter
     {
-        get { return (MusicResultGroupViewModel)GetValue(AddToFavoriteCommandParameterProperty); }
+        get { return (MusicResultShowViewModel)GetValue(AddToFavoriteCommandParameterProperty); }
         set { SetValue(AddToFavoriteCommandParameterProperty, value); }
     }
     public MusicResultView()
