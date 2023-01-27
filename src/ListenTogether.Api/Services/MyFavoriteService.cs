@@ -35,7 +35,7 @@ public class MyFavoriteService : IMyFavoriteService
         });
     }
 
-    public async Task<List<MyFavoriteResponse>?> GetAllAsync(int userId)
+    public async Task<List<MyFavoriteResponse>> GetAllAsync(int userId)
     {
         var myFavorites = await _context.MyFavorites
             .Where(x => x.UserBaseId == userId)
@@ -154,12 +154,13 @@ public class MyFavoriteService : IMyFavoriteService
 
     }
 
-    public async Task<List<MyFavoriteDetailResponse>?> GetMyFavoriteDetailAsync(int userId, int id)
+    public async Task<List<MyFavoriteDetailResponse>> GetMyFavoriteDetailAsync(int userId, int id)
     {
+        var result = new List<MyFavoriteDetailResponse>();
         var myFavorite = await _context.MyFavorites.SingleOrDefaultAsync(x => x.UserBaseId == userId && x.Id == id);
         if (myFavorite == null)
         {
-            return default;
+            return result;
         }
 
         var data = from mfd in myFavorite.Details
@@ -175,7 +176,8 @@ public class MyFavoriteService : IMyFavoriteService
                        MusicArtist = m.Artist,
                    };
 
-        return data.ToList();
+        result = data.ToList();
+        return result;
     }
 
     public async Task<Result> RemoveDetailAsync(int userId, int id)

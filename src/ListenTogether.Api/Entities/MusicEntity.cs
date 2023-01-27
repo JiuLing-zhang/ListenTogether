@@ -16,7 +16,7 @@ namespace ListenTogether.Api.Entities
         public string Artist { get; set; } = null!;
         public string Album { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
-        public string ExtendDataJson { get; set; } = null!;
+        public string ExtendData { get; set; } = null!;
         public DateTime CreateTime { get; set; }
     }
 }
