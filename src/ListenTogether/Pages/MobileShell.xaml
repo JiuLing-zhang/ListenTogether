@@ -13,7 +13,7 @@
        >
     <TabBar>
         <Tab Title="发现"
-             Icon="{AppThemeBinding Light=discover.png, Dark=discover.png}">
+             Icon="{AppThemeBinding Light=discover.png, Dark=discover_dark.png}">
             <ShellContent Title="咪咕音乐" ContentTemplate="{DataTemplate pages:MiGuPage}"/>
             <ShellContent Title="网易云音乐" ContentTemplate="{DataTemplate pages:NetEasePage}"/>
         </Tab>
