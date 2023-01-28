@@ -17,12 +17,6 @@ public partial class ViewModelBase : ObservableValidator
                 StopLoading();
             }
         });
-
-        MessagingCenter.Instance.Subscribe<string>(this, "ClearUserInfo", async (sender) =>
-        {
-            await ToastService.Show("登录信息已过期，请重新登录");
-        });
-
     }
 
     [ObservableProperty]

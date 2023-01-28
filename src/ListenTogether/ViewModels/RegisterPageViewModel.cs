@@ -39,30 +39,33 @@ public partial class RegisterPageViewModel : ViewModelBase
 
     private UserAvatar? _userAvatar;
 
-    [ObservableProperty]
-    private string _apiMessage = null!;
-
     [RelayCommand]
     private async void RegisterAsync()
     {
         try
         {
             StartLoading("正在注册....");
-            ApiMessage = "";
 
             ValidateAllProperties();
             if (HasErrors)
             {
-                ApiMessage = GetErrors().First().ErrorMessage ?? "";
+                await ToastService.Show(GetErrors().First().ErrorMessage ?? "");
                 return;
             }
 
             if (_userAvatar == null)
             {
-                ApiMessage = "请选择头像";
+                await ToastService.Show("请选择头像");
                 return;
             }
 
+            if (_userAvatar.File.Length >= 500 * 1024)
+            {
+                await ToastService.Show("头像最大允许 500KB");
+                return;
+            }
+
+            var aaa = _userAvatar.File.Length;
             var user = new UserRegister()
             {
                 Username = Username,
@@ -72,7 +75,7 @@ public partial class RegisterPageViewModel : ViewModelBase
             };
 
             var (succeed, message) = await _userService.RegisterAsync(user);
-            ApiMessage = message;
+            await ToastService.Show(message);
         }
         catch (Exception ex)
         {
@@ -113,7 +116,7 @@ public partial class RegisterPageViewModel : ViewModelBase
             var stream = await result.OpenReadAsync();
             using (MemoryStream ms = new MemoryStream())
             {
-                stream.CopyTo(ms);
+                await stream.CopyToAsync(ms);
                 _userAvatar.File = ms.ToArray();
             }
 

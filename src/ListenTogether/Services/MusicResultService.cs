@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Maui.Views;
-using ListenTogether.Storage;
+﻿using ListenTogether.Storage;
 
 namespace ListenTogether.Services;
 public class MusicResultService
@@ -80,8 +79,6 @@ public class MusicResultService
             return;
         }
 
-        var popup = new ChooseMyFavoritePage();
-        var res = await App.Current.MainPage.ShowPopupAsync(popup);
         music = await UpdateMusicDetail(music);
         try
         {

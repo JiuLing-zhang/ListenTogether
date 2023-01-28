@@ -2,12 +2,20 @@
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="ListenTogether.Controls.MessageDialog"
-               CanBeDismissedByTappingOutsideOfPopup="False">
+               CanBeDismissedByTappingOutsideOfPopup="False"
+               Size="300,150">
 
-    <VerticalStackLayout>
-        <Label x:Name="LblMessage"/>
+    <Grid
+        RowDefinitions="*,Auto"
+        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+        Padding="20">
+        <Label
+            Grid.Row="0"
+            x:Name="LblMessage"
+            HorizontalOptions="CenterAndExpand"/>
         <Button
+            Grid.Row="1"
             Text="确定"
             Clicked="BtnClose_Clicked"/>
-    </VerticalStackLayout>
+    </Grid>
 </toolkit:Popup>

@@ -9,7 +9,6 @@ internal class ToastService
 {
     public static async Task Show(string message, ToastDuration duration = ToastDuration.Short, double textSize = 14.0)
     {
-#if WINDOWS
         Page page = Application.Current?.MainPage;
         if (page != null)
         {
@@ -19,17 +18,18 @@ internal class ToastService
             }
             catch (Exception)
             {
-
+                await ShowUseToast(message, duration, textSize);
             }
         }
         else
         {
-            var windowsToast = Toast.Make(message, duration, textSize);
-            await windowsToast.Show();
+            await ShowUseToast(message, duration, textSize);
         }
-#else
-        var toast = Toast.Make(message, duration, textSize);
-        await toast.Show();
-#endif
+    }
+
+    private static async Task ShowUseToast(string message, ToastDuration duration = ToastDuration.Short, double textSize = 14.0)
+    {
+        var windowsToast = Toast.Make(message, duration, textSize);
+        await windowsToast.Show();
     }
 }

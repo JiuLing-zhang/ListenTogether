@@ -52,6 +52,5 @@ public class UserInfoStorage
         SetAvatar("");
         SetToken("");
         SetRefreshToken("");
-        MessagingCenter.Instance.Send<string>("ListenTogether", "ClearUserInfo");
     }
 }
