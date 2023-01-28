@@ -4,10 +4,10 @@ namespace ListenTogether.Pages;
 
 public partial class ChooseMyFavoritePage : Popup
 {
-	public ChooseMyFavoritePage()
-	{
-		InitializeComponent();
-	}
+    public ChooseMyFavoritePage()
+    {
+        InitializeComponent();
+    }
 
     void OnYesButtonClicked(object? sender, EventArgs e) => Close(true);
 
