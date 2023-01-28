@@ -64,7 +64,7 @@ public class MusicPlayerService
 
             //重新获取播放链接
             MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", true);
-            var playUrl = await _musicNetworkService.GetPlayUrlAsync(playlist.Platform, playlist.IdOnPlatform);
+            var playUrl = await _musicNetworkService.GetPlayUrlAsync(playlist.Platform, playlist.IdOnPlatform, playlist.ExtendDataJson);
             if (playUrl.IsEmpty())
             {
                 await ToastService.Show("播放地址获取失败");

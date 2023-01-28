@@ -80,13 +80,13 @@ public partial class PlaylistPageViewModel : ViewModelBase
     [RelayCommand]
     private async void PlayMusicAsync(MusicResultShowViewModel selected)
     {
-        await _musicResultService.PlayAsync(selected);
+        await _musicResultService.PlayAsync(selected.ToLocalMusic());
     }
 
     [RelayCommand]
     private async void AddToMyFavoriteAsync(MusicResultShowViewModel selected)
     {
-        await _musicResultService.AddToFavoriteAsync(selected);
+        await _musicResultService.AddToFavoriteAsync(selected.ToLocalMusic());
     }
 
     [RelayCommand]

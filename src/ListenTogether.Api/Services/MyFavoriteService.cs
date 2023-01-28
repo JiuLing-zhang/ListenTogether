@@ -169,11 +169,17 @@ public class MyFavoriteService : IMyFavoriteService
                    {
                        Id = mfd.Id,
                        MyFavoriteId = mfd.MyFavoriteId,
-                       PlatformInt = m.Platform,
-                       MusicId = m.Id,
-                       MusicName = m.Name,
-                       MusicAlbum = m.Album,
-                       MusicArtist = m.Artist,
+                       Music = new Model.LocalMusic()
+                       {
+                           Platform = (PlatformEnum)m.Platform,
+                           Id = m.Id,
+                           IdOnPlatform = m.IdOnPlatform,
+                           ImageUrl = m.ImageUrl,
+                           ExtendDataJson = m.ExtendData,
+                           Name = m.Name,
+                           Album = m.Album,
+                           Artist = m.Artist
+                       }
                    };
 
         result = data.ToList();

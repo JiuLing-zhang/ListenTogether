@@ -9,18 +9,23 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 {
     public int MyFavoriteId { get; set; }
 
-    private readonly MusicPlayerService _playerService;
-    private readonly IPlaylistService _playlistService;
+    private readonly MusicResultService _musicResultService;
     private readonly IMyFavoriteService _myFavoriteService;
-    private readonly IMusicService _musicService;
-    public MyFavoriteDetailPageViewModel(IPlaylistService playlistService, MusicPlayerService playerService, IMyFavoriteService myFavoriteService, IMusicService musicService)
+
+    [ObservableProperty]
+    private MyFavoriteViewModel _currentMyFavorite = null!;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsMyFavoriteMusicsEmpty))]
+    private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics = null!;
+    public bool IsMyFavoriteMusicsEmpty => MyFavoriteMusics == null || MyFavoriteMusics.Count == 0;
+
+    public MyFavoriteDetailPageViewModel(MusicResultService musicResultService, IMyFavoriteService myFavoriteService)
     {
         MyFavoriteMusics = new ObservableCollection<MyFavoriteDetailViewModel>();
 
-        _playerService = playerService;
-        _playlistService = playlistService;
+        _musicResultService = musicResultService;
         _myFavoriteService = myFavoriteService;
-        _musicService = musicService;
     }
 
     public async Task InitializeAsync()
@@ -49,15 +54,6 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
             StopLoading();
         }
     }
-
-    [ObservableProperty]
-    private MyFavoriteViewModel _currentMyFavorite = null!;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsMyFavoriteMusicsEmpty))]
-    private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics = null!;
-    public bool IsMyFavoriteMusicsEmpty => MyFavoriteMusics == null || MyFavoriteMusics.Count == 0;
-
     private async Task GetMyFavoriteDetailAsync()
     {
         MyFavoriteMusics.Clear();
@@ -73,11 +69,14 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
             {
                 Seq = ++seq,
                 Id = myFavoriteDetail.Id,
-                PlatformName = myFavoriteDetail.Platform.GetDescription(),
-                MusicId = myFavoriteDetail.MusicId,
-                MusicArtist = myFavoriteDetail.MusicArtist,
-                MusicAlbum = myFavoriteDetail.MusicAlbum,
-                MusicName = myFavoriteDetail.MusicName
+                Music = new MusicResultShowViewModel()
+                {
+                    Id = myFavoriteDetail.Music.Id,
+                    PlatformName = myFavoriteDetail.Music.Platform.GetDescription(),
+                    Artist = myFavoriteDetail.Music.Artist,
+                    Album = myFavoriteDetail.Music.Album,
+                    Name = myFavoriteDetail.Music.Name
+                }
             });
         }
     }
@@ -171,31 +170,14 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     [RelayCommand]
     private async void PlayMusicAsync(MyFavoriteDetailViewModel selected)
     {
-        var music = await _musicService.GetOneAsync(selected.MusicId);
-        if (music == null)
-        {
-            await ToastService.Show("获取歌曲信息失败");
-            return;
-        }
-
-        var playlist = new Playlist()
-        {
-            Platform = music.Platform,
-            Id = music.Id,
-            Name = music.Name,
-            Artist = music.Artist,
-            Album = music.Album
-        };
-        await _playlistService.AddToPlaylistAsync(playlist);
-        await _playerService.PlayAsync(music.Id);
-
+        await _musicResultService.PlayAsync(selected.Music.ToLocalMusic());
         await Shell.Current.GoToAsync($"..", true);
     }
 
     [RelayCommand]
     private async void RemoveOneAsync(MyFavoriteDetailViewModel selected)
     {
-        var isOk = await Shell.Current.DisplayAlert("提示", $"确定从歌单删除吗？{Environment.NewLine}{selected.MusicName}", "确定", "取消");
+        var isOk = await Shell.Current.DisplayAlert("提示", $"确定从歌单删除吗？{Environment.NewLine}{selected.Music.Name}", "确定", "取消");
         if (isOk == false)
         {
             return;
@@ -210,6 +192,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
                 await ToastService.Show("删除失败，网络出小差了");
                 return;
             };
+
             await InitializeAsync();
         }
         catch (Exception ex)

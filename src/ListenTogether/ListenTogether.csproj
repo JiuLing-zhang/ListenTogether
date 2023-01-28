@@ -81,5 +81,13 @@
 	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
 		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 	</ItemGroup>
+	<ItemGroup>
+	  <MauiXaml Update="Controls\MessageDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ChooseMyFavoritePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
 
 </Project>

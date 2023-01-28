@@ -43,35 +43,25 @@ namespace ListenTogether.Api.Services
         public async Task<Result> AddOrUpdateAsync(MusicRequest music)
         {
             var myMusic = await _context.Musics.SingleOrDefaultAsync(x => x.Id == music.Id);
-            if (myMusic == null)
+            if (myMusic != null)
             {
-                myMusic = new MusicEntity()
-                {
-                    Id = music.Id,
-                    Platform = (int)music.Platform,
-                    IdOnPlatform = music.IdOnPlatform,
-                    Name = music.Name,
-                    Album = music.Album,
-                    Artist = music.Artist,
-                    ImageUrl = music.ImageUrl,
-                    ExtendData = music.ExtendDataJson ?? "",
-                    CreateTime = DateTime.Now
-                };
-                _context.Musics.Add(myMusic);
-            }
-            else
-            {
-                myMusic.Id = music.Id;
-                myMusic.Platform = (int)music.Platform;
-                myMusic.IdOnPlatform = music.IdOnPlatform;
-                myMusic.Name = music.Name;
-                myMusic.Album = music.Album;
-                myMusic.Artist = music.Artist;
-                myMusic.ImageUrl = music.ImageUrl;
-                myMusic.ExtendData = music.ExtendDataJson ?? "";
-                _context.Musics.Update(myMusic);
+                return new Result(0, "保存成功");
+
             }
 
+            myMusic = new MusicEntity()
+            {
+                Id = music.Id,
+                Platform = (int)music.Platform,
+                IdOnPlatform = music.IdOnPlatform,
+                Name = music.Name,
+                Album = music.Album,
+                Artist = music.Artist,
+                ImageUrl = music.ImageUrl,
+                ExtendData = music.ExtendDataJson ?? "",
+                CreateTime = DateTime.Now
+            };
+            _context.Musics.Add(myMusic);
             var count = await _context.SaveChangesAsync();
             if (count == 0)
             {

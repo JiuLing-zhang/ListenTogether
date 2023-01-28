@@ -1,4 +1,5 @@
-﻿using ListenTogether.Storage;
+﻿using CommunityToolkit.Maui.Views;
+using ListenTogether.Storage;
 
 namespace ListenTogether.Services;
 public class MusicResultService
@@ -7,45 +8,49 @@ public class MusicResultService
     private readonly IPlaylistService _playlistService;
     private readonly IMyFavoriteService _myFavoriteService;
     private readonly IMusicService _musicService;
-    public MusicResultService(IPlaylistService playlistService, MusicPlayerService musicPlayerService, IMyFavoriteService myFavoriteService, IMusicService musicService)
+    private readonly IMusicNetworkService _musicNetworkService;
+    public MusicResultService(IPlaylistService playlistService, MusicPlayerService musicPlayerService, IMyFavoriteService myFavoriteService, IMusicService musicService, IMusicNetworkService musicNetworkService)
     {
         _playlistService = playlistService;
         _musicPlayerService = musicPlayerService;
         _myFavoriteService = myFavoriteService;
         _musicService = musicService;
+        _musicNetworkService = musicNetworkService;
     }
 
-    public async Task PlayAllAsync(List<MusicResultShowViewModel> musicResultList)
+    public async Task PlayAllAsync(List<LocalMusic> musics)
     {
-        await AddToPlaylistAsync(musicResultList);
-        await PlayMusicAsync(musicResultList.First());
+        musics = await UpdateMusicDetail(musics);
+        await AddToPlaylistAsync(musics);
+        await PlayMusicAsync(musics.First());
     }
 
-    public async Task PlayAsync(MusicResultShowViewModel musicResult)
+    public async Task PlayAsync(LocalMusic music)
     {
-        await AddToPlaylistAsync(musicResult);
-        await PlayMusicAsync(musicResult);
+        music = await UpdateMusicDetail(music);
+        await AddToPlaylistAsync(music);
+        await PlayMusicAsync(music);
     }
 
-    private async Task AddToPlaylistAsync(MusicResultShowViewModel musicResult)
+    private async Task AddToPlaylistAsync(LocalMusic music)
     {
         var playlist = new Playlist()
         {
-            Id = musicResult.Id,
-            IdOnPlatform = musicResult.IdOnPlatform,
-            Platform = musicResult.Platform,
-            Name = musicResult.Name,
-            Artist = musicResult.Artist,
-            Album = musicResult.Album,
-            ImageUrl = musicResult.ImageUrl,
+            Id = music.Id,
+            IdOnPlatform = music.IdOnPlatform,
+            Platform = music.Platform,
+            Name = music.Name,
+            Artist = music.Artist,
+            Album = music.Album,
+            ImageUrl = music.ImageUrl,
             EditTime = DateTime.Now
         };
         await _playlistService.AddToPlaylistAsync(playlist);
     }
 
-    private async Task AddToPlaylistAsync(List<MusicResultShowViewModel> musicResultList)
+    private async Task AddToPlaylistAsync(List<LocalMusic> musics)
     {
-        var playlists = musicResultList.Select(
+        var playlists = musics.Select(
             x => new Playlist()
             {
                 Id = x.Id,
@@ -62,12 +67,12 @@ public class MusicResultService
         await _playlistService.AddToPlaylistAsync(playlists);
     }
 
-    private async Task PlayMusicAsync(MusicResultShowViewModel musicResult)
+    private async Task PlayMusicAsync(LocalMusic music)
     {
-        await _musicPlayerService.PlayAsync(musicResult.Id);
+        await _musicPlayerService.PlayAsync(music.Id);
     }
 
-    public async Task AddToFavoriteAsync(MusicResultShowViewModel musicResult)
+    public async Task AddToFavoriteAsync(LocalMusic music)
     {
         if (UserInfoStorage.GetUsername().IsEmpty())
         {
@@ -75,24 +80,9 @@ public class MusicResultService
             return;
         }
 
-        var music = new LocalMusic()
-        {
-            Id = musicResult.Id,
-            Platform = musicResult.Platform,
-            IdOnPlatform = musicResult.IdOnPlatform,
-            Album = musicResult.Album,
-            Artist = musicResult.Artist,
-            ImageUrl = musicResult.ImageUrl,
-            Name = musicResult.Name,
-            ExtendDataJson = musicResult.ExtendDataJson
-        };
-        var isMusicOk = await _musicService.AddOrUpdateAsync(music);
-
-        if (!isMusicOk)
-        {
-            await ToastService.Show("歌曲信息保存失败");
-            return;
-        }
+        var popup = new ChooseMyFavoritePage();
+        var res = await App.Current.MainPage.ShowPopupAsync(popup);
+        music = await UpdateMusicDetail(music);
         try
         {
             //构造待选择的歌单项
@@ -145,6 +135,13 @@ public class MusicResultService
                 selectedMyFavoriteId = newMyFavorite.Id;
             }
 
+            var isMusicOk = await _musicService.AddOrUpdateAsync(music);
+            if (!isMusicOk)
+            {
+                await ToastService.Show("歌曲信息保存失败");
+                return;
+            }
+
             var result = await _myFavoriteService.AddMusicToMyFavoriteAsync(selectedMyFavoriteId, music.Id);
             if (result == false)
             {
@@ -153,7 +150,7 @@ public class MusicResultService
             }
             if (GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite)
             {
-                await PlayMusicAsync(musicResult);
+                await PlayMusicAsync(music);
             }
             else
             {
@@ -165,5 +162,31 @@ public class MusicResultService
             await ToastService.Show("添加失败，网络出小差了");
             Logger.Error("搜索结果添加到我的歌单失败。", ex);
         }
+    }
+
+    /// <summary>
+    /// 更新歌曲信息
+    /// </summary>
+    private async Task<LocalMusic> UpdateMusicDetail(LocalMusic music)
+    {
+        var myMusic = music;
+        if (myMusic.ImageUrl.IsEmpty() && myMusic.Platform == Model.Enums.PlatformEnum.KuGou)
+        {
+            myMusic.ImageUrl = await _musicNetworkService.GetImageUrlAsync(myMusic.Platform, myMusic.IdOnPlatform, myMusic.ExtendDataJson);
+        }
+        return myMusic;
+    }
+
+    /// <summary>
+    /// 更新歌曲信息
+    /// </summary>
+    private async Task<List<LocalMusic>> UpdateMusicDetail(List<LocalMusic> musics)
+    {
+        var myMusics = musics;
+        for (int i = 0; i < myMusics.Count; i++)
+        {
+            myMusics[i] = await UpdateMusicDetail(myMusics[i]);
+        }
+        return myMusics;
     }
 }

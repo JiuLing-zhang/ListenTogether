@@ -11,17 +11,5 @@ public partial class MyFavoriteDetailViewModel : ObservableObject
     private int _seq;
 
     [ObservableProperty]
-    private string _platformName = null!;
-
-    [ObservableProperty]
-    private string _musicId = null!;
-
-    [ObservableProperty]
-    private string _musicName = null!;
-
-    [ObservableProperty]
-    private string _musicArtist = null!;
-
-    [ObservableProperty]
-    private string _musicAlbum = null!;
+    private MusicResultShowViewModel _music;
 }

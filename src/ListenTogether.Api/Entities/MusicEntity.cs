@@ -7,8 +7,6 @@ namespace ListenTogether.Api.Entities
     public class MusicEntity
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int InnerId { get; set; }
         public string Id { get; set; } = null!;
         public int Platform { get; set; }
         public string IdOnPlatform { get; set; } = null!;

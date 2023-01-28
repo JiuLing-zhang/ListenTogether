@@ -105,8 +105,8 @@ public partial class SearchResultPageViewModel : ViewModelBase
                             Album = x.Album,
                             Duration = x.DurationText,
                             Fee = x.Fee.GetDescription(),
-                            ImageUrl = x.ImageUrl
-                            //SourceData = x
+                            ImageUrl = x.ImageUrl,
+                            ExtendDataJson = x.ExtendDataJson
                         }).ToList();
 
                     MusicSearchResult.Add(new MusicResultGroupViewModel(platformName, onePlatformMusics));
@@ -134,13 +134,13 @@ public partial class SearchResultPageViewModel : ViewModelBase
     [RelayCommand]
     public async void PlayAsync(MusicResultShowViewModel musicResult)
     {
-        await _musicResultService.PlayAsync(musicResult);
+        await _musicResultService.PlayAsync(musicResult.ToLocalMusic());
     }
 
     [RelayCommand]
     public async void AddToFavoriteAsync(MusicResultShowViewModel musicResult)
     {
-        await _musicResultService.AddToFavoriteAsync(musicResult);
+        await _musicResultService.AddToFavoriteAsync(musicResult.ToLocalMusic());
     }
 
     [RelayCommand]

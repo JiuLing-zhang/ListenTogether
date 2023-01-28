@@ -160,12 +160,12 @@ public class NetEaseMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<string> GetShareUrlAsync(string id, object? extendData = null)
+    public Task<string> GetShareUrlAsync(string id, string extendDataJson = "")
     {
         return Task.FromResult($"{UrlBase.NetEase.GetMusicPlayPage}?id={id}");
     }
 
-    public async Task<string> GetLyricAsync(string id, object? extendData = null)
+    public async Task<string> GetLyricAsync(string id, string extendDataJson = "")
     {
         //获取歌词
         var url = $"{UrlBase.NetEase.Lyric}";
@@ -460,7 +460,7 @@ public class NetEaseMusicProvider : IMusicProvider
         return musics;
     }
 
-    public async Task<string> GetPlayUrlAsync(string id, object? extendData = null)
+    public async Task<string> GetPlayUrlAsync(string id, string extendDataJson = "")
     {
         string url = $"{UrlBase.NetEase.GetMusic}";
         var postData = NetEaseUtils.GetPostDataForMusicUrl(id);
@@ -495,5 +495,10 @@ public class NetEaseMusicProvider : IMusicProvider
         }
 
         return httpResult.data[0].url;
+    }
+
+    public Task<string> GetImageUrlAsync(string id, string extendDataJson = "")
+    {
+        throw new NotImplementedException();
     }
 }

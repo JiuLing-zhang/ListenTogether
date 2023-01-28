@@ -24,39 +24,46 @@
             Orientation="Horizontal"
             VerticalOptions="Start">
 
-            <Label Text="{Binding CurrentMyFavorite.Name,StringFormat='{}歌单 - {0}'}"
-                   VerticalTextAlignment="Center"
-                   Style="{StaticResource Title}"/>
+            <Label
+                Text="{Binding CurrentMyFavorite.Name,StringFormat='{}歌单 - {0}'}"
+                VerticalTextAlignment="Center"
+                Style="{StaticResource Title}"/>
 
-            <StackLayout Margin="10,0,0,0"
-                         Orientation="Horizontal"
-                         HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
-                         VerticalOptions="End">
+            <StackLayout
+                Margin="10,0,0,0"
+                Orientation="Horizontal"
+                HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
+                VerticalOptions="End">
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding MyFavoriteRenameAsyncCommand}"/>
                 </StackLayout.GestureRecognizers>
-                <Image Source="{AppThemeBinding Dark='edit_dark.png',Light='edit.png'}"
-                       HeightRequest="20"
-                       WidthRequest="20">
+                <Image
+                    Source="{AppThemeBinding Dark='edit_dark.png',Light='edit.png'}"
+                    HeightRequest="20"
+                    WidthRequest="20">
                 </Image>
-                <Label Text="重命名"
-                       VerticalTextAlignment="Center"/>
+                <Label
+                    Text="重命名"
+                    VerticalTextAlignment="Center"/>
             </StackLayout>
 
-            <StackLayout Margin="{OnPlatform WinUI='20,0,0,0',MacCatalyst='20,0,0,0',Android='5,0,0,0',iOS='5,0,0,0'}"
-                         Orientation="Horizontal"
-                         HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"
-                         VerticalOptions="End">
+            <StackLayout
+                Margin="{OnPlatform WinUI='20,0,0,0',MacCatalyst='20,0,0,0',Android='5,0,0,0',iOS='5,0,0,0'}"
+                Orientation="Horizontal"
+                HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"
+                VerticalOptions="End">
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding MyFavoriteRemoveAsyncCommand}"/>
                 </StackLayout.GestureRecognizers>
-                <Image x:Name="ImgRemove"
-                       Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
-                       HeightRequest="20"
-                       WidthRequest="20">
+                <Image
+                    x:Name="ImgRemove"
+                    Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
+                    HeightRequest="20"
+                    WidthRequest="20">
                 </Image>
-                <Label Text="删除歌单"
-                       VerticalTextAlignment="Center"/>
+                <Label
+                    Text="删除歌单"
+                    VerticalTextAlignment="Center"/>
             </StackLayout>
         </StackLayout>
 
@@ -69,134 +76,155 @@
                     <StackLayout>
                         <OnPlatform x:TypeArguments="View">
                             <On Platform="WinUI, macOS">
-                                <Grid Margin="0,0,0,20"
-                                      RowDefinitions="auto,auto"
-                                      ColumnDefinitions="30,40,*">
+                                <Grid
+                                    Margin="0,0,0,20"
+                                    RowDefinitions="auto,auto"
+                                    ColumnDefinitions="30,40,*">
                                     <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicAsyncCommand}"
-                                                              CommandParameter="{Binding .}"
-                                                              NumberOfTapsRequired="2">
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicAsyncCommand}"
+                                            CommandParameter="{Binding .}"
+                                            NumberOfTapsRequired="2">
                                         </TapGestureRecognizer>
                                     </Grid.GestureRecognizers>
 
-                                    <Image Grid.Row="0"
-                                           Grid.RowSpan="2"
-                                           Grid.Column="0"
-                                           Source="{Binding Source, Source={x:Reference ImgRemove}}"
-                                           Aspect="AspectFill"
-                                           WidthRequest="15"
-                                           HeightRequest="15"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center">
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Source="{Binding Source, Source={x:Reference ImgRemove}}"
+                                        Aspect="AspectFill"
+                                        WidthRequest="15"
+                                        HeightRequest="15"
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Center">
                                         <Image.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneAsyncCommand}"
-                                                                  CommandParameter="{Binding .}"/>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneAsyncCommand}"
+                                                CommandParameter="{Binding .}"/>
                                         </Image.GestureRecognizers>
                                     </Image>
 
-                                    <Label Grid.Row="0"
-                                           Grid.RowSpan="2"
-                                           Grid.Column="1"
-                                           Text="{Binding Seq}"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalTextAlignment="Center"/>
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="1"
+                                        Text="{Binding Seq}"
+                                        HorizontalTextAlignment="Center"
+                                        VerticalTextAlignment="Center"/>
 
-                                    <StackLayout Grid.Row="0"
-                                                 Grid.Column="2"
-                                                 Orientation="Horizontal">
-                                        <Border Padding="4,0,4,3"
-                                                StrokeThickness="1"
-                                                HorizontalOptions="Center">
+                                    <StackLayout
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Orientation="Horizontal">
+                                        <Border
+                                            Padding="4,0,4,3"
+                                            StrokeThickness="1"
+                                            HorizontalOptions="Center">
                                             <Border.StrokeShape>
                                                 <RoundRectangle CornerRadius="5" />
                                             </Border.StrokeShape>
-                                            <Label Text="{Binding PlatformName}"
-                                                   VerticalTextAlignment="Center"
-                                                   Style="{StaticResource Explain}"/>
+                                            <Label
+                                                Text="{Binding Music.PlatformName}"
+                                                VerticalTextAlignment="Center"
+                                                Style="{StaticResource Explain}"/>
                                         </Border>
-                                        <Label Text="{Binding MusicName}"
-                                               Margin="5,0,0,0"
-                                               VerticalTextAlignment="Center"
-                                               LineBreakMode="TailTruncation"/>
+                                        <Label
+                                            Text="{Binding Music.Name}"
+                                            Margin="5,0,0,0"
+                                            VerticalTextAlignment="Center"
+                                            LineBreakMode="TailTruncation"/>
                                     </StackLayout>
 
-                                    <Label Grid.Row="1"
-                                           Grid.Column="2"
-                                           VerticalTextAlignment="Center"
-                                           LineBreakMode="TailTruncation"
-                                           Style="{StaticResource Explain}">
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        VerticalTextAlignment="Center"
+                                        LineBreakMode="TailTruncation"
+                                        Style="{StaticResource Explain}">
                                         <MultiBinding StringFormat="{}{0} - {1}">
-                                            <Binding Path="MusicArtist" />
-                                            <Binding Path="MusicAlbum" />
+                                            <Binding Path="Music.Artist" />
+                                            <Binding Path="Music.Album" />
                                         </MultiBinding>
                                     </Label>
                                 </Grid>
                             </On>
                             <On Platform="Android,iOS">
-                                <Grid Margin="0,10,0,0"
-                                      RowDefinitions="auto,auto,10"
-                                      ColumnDefinitions="40,*,30">
+                                <Grid
+                                    Margin="0,10,0,0"
+                                    RowDefinitions="auto,auto,10"
+                                    ColumnDefinitions="40,*,30">
                                     <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicAsyncCommand}"
-                                                              CommandParameter="{Binding .}">
+                                        <TapGestureRecognizer
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=PlayMusicAsyncCommand}"
+                                            CommandParameter="{Binding .}">
                                         </TapGestureRecognizer>
                                     </Grid.GestureRecognizers>
 
-                                    <Label Grid.Row="0"
-                                           Grid.RowSpan="2"
-                                           Grid.Column="0"
-                                           Text="{Binding Seq}"
-                                           HorizontalTextAlignment="Center"
-                                           VerticalTextAlignment="Center"/>
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Text="{Binding Seq}"
+                                        HorizontalTextAlignment="Center"
+                                        VerticalTextAlignment="Center"/>
 
-                                    <StackLayout Grid.Row="0"
-                                                 Grid.Column="1"
-                                                 Orientation="Horizontal">
-                                        <Border Padding="4,0,4,3"
-                                                StrokeThickness="1"
-                                                HorizontalOptions="Center">
+                                    <StackLayout
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Orientation="Horizontal">
+                                        <Border
+                                            Padding="4,0,4,3"
+                                            StrokeThickness="1"
+                                            HorizontalOptions="Center">
                                             <Border.StrokeShape>
                                                 <RoundRectangle CornerRadius="5" />
                                             </Border.StrokeShape>
-                                            <Label Text="{Binding PlatformName}"
-                                                   VerticalTextAlignment="Center"
-                                                   Style="{StaticResource Explain}"/>
+                                            <Label
+                                                Text="{Binding Music.PlatformName}"
+                                                VerticalTextAlignment="Center"
+                                                Style="{StaticResource Explain}"/>
                                         </Border>
-                                        <Label Text="{Binding MusicName}"
-                                               Margin="5,0,0,0"
-                                               VerticalTextAlignment="Center"
-                                               LineBreakMode="TailTruncation"/>
+                                        <Label
+                                            Text="{Binding Music.Name}"
+                                            Margin="5,0,0,0"
+                                            VerticalTextAlignment="Center"
+                                            LineBreakMode="TailTruncation"/>
                                     </StackLayout>
 
-                                    <Label Grid.Row="1"
-                                           Grid.Column="1"
-                                           VerticalTextAlignment="Center"
-                                           LineBreakMode="TailTruncation"
-                                           Style="{StaticResource Explain}">
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        VerticalTextAlignment="Center"
+                                        LineBreakMode="TailTruncation"
+                                        Style="{StaticResource Explain}">
                                         <MultiBinding StringFormat="{}{0} - {1}">
-                                            <Binding Path="MusicArtist" />
-                                            <Binding Path="MusicAlbum" />
+                                            <Binding Path="Music.Artist" />
+                                            <Binding Path="Music.Album" />
                                         </MultiBinding>
                                     </Label>
 
-                                    <Image Grid.Row="0"
-                                           Grid.RowSpan="2"
-                                           Grid.Column="2"
-                                           Source="{Binding Source, Source={x:Reference ImgRemove}}"
-                                           Aspect="AspectFill"
-                                           WidthRequest="15"
-                                           HeightRequest="15"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center">
+                                    <Image
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="2"
+                                        Source="{Binding Source, Source={x:Reference ImgRemove}}"
+                                        Aspect="AspectFill"
+                                        WidthRequest="15"
+                                        HeightRequest="15"
+                                        VerticalOptions="Center"
+                                        HorizontalOptions="Center">
                                         <Image.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneAsyncCommand}"
-                                                                  CommandParameter="{Binding .}"/>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneAsyncCommand}"
+                                                CommandParameter="{Binding .}"/>
                                         </Image.GestureRecognizers>
                                     </Image>
-                                    <Label Grid.Row="2"
-											   Grid.ColumnSpan="3"
-                                               Margin="0,9,0,0"
-                                               BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"></Label>
+                                    <Label
+                                        Grid.Row="2"
+                                        Grid.ColumnSpan="3"
+                                        Margin="0,9,0,0"
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"></Label>
 
                                 </Grid>
                             </On>

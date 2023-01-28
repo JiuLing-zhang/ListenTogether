@@ -7,12 +7,15 @@ namespace ListenTogether.ViewModels;
 
 public partial class SettingPageViewModel : ViewModelBase
 {
-    private readonly IEnvironmentConfigService _configService = null!;
-    private readonly IUserService _userService = null!;
-    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService)
+    private readonly IEnvironmentConfigService _configService;
+    private readonly IUserService _userService;
+    private readonly IMusicNetworkService _musicNetworkService;
+
+    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, IMusicNetworkService musicNetworkService)
     {
         _configService = configService;
         _userService = userService;
+        _musicNetworkService = musicNetworkService;
     }
     public async Task InitializeAsync()
     {
@@ -43,7 +46,6 @@ public partial class SettingPageViewModel : ViewModelBase
 
     [ObservableProperty]
     private string _loginPassword = null!;
-
 
     /// <summary>
     /// 页面标题
@@ -221,6 +223,7 @@ public partial class SettingPageViewModel : ViewModelBase
     async partial void OnMusicFormatTypeChanged(string value)
     {
         GlobalConfig.MyUserSetting.Play.MusicFormatType = (MusicFormatTypeEnum)Enum.Parse(typeof(MusicFormatTypeEnum), value);
+        _musicNetworkService.SetMusicFormatType(GlobalConfig.MyUserSetting.Play.MusicFormatType);
         await WritePlayConfigAsync();
     }
 
@@ -229,7 +232,6 @@ public partial class SettingPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private string _versionString = GlobalConfig.CurrentVersionString;
-
 
     private static bool CheckEnablePlatform(PlatformEnum platform)
     {

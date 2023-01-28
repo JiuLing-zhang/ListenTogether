@@ -13,6 +13,11 @@ public class MusicNetworkService : IMusicNetworkService
         _musicNetPlatform = musicNetPlatform;
     }
 
+    public void SetMusicFormatType(MusicFormatTypeEnum musicFormatType)
+    {
+        _musicNetPlatform.SetMusicFormatType(musicFormatType);
+    }
+
     public async Task<List<string>?> GetSearchSuggestAsync(string keyword)
     {
         return await _musicNetPlatform.GetSearchSuggestAsync(keyword);
@@ -23,17 +28,23 @@ public class MusicNetworkService : IMusicNetworkService
         return await _musicNetPlatform.SearchAsync(platform, keyword);
     }
 
-    public async Task<string> GetPlayUrlAsync(PlatformEnum platform, string id, object? extendData = null)
+    public async Task<string> GetPlayUrlAsync(PlatformEnum platform, string id, string extendDataJson = "")
     {
-        return await _musicNetPlatform.GetPlayUrlAsync(platform, id, extendData);
+        return await _musicNetPlatform.GetPlayUrlAsync(platform, id, extendDataJson);
     }
-    public async Task<string?> GetLyricAsync(PlatformEnum platform, string id, object? extendData = null)
+
+    public async Task<string> GetImageUrlAsync(PlatformEnum platform, string id, string extendDataJson = "")
     {
-        return await _musicNetPlatform.GetLyricAsync(platform, id, extendData);
+        return await _musicNetPlatform.GetImageUrlAsync(platform, id, extendDataJson);
     }
-    public Task<string> GetPlayPageUrlAsync(PlatformEnum platform, string id, object? extendData = null)
+
+    public async Task<string?> GetLyricAsync(PlatformEnum platform, string id, string extendDataJson = "")
     {
-        return _musicNetPlatform.GetPlayPageUrlAsync(platform, id, extendData);
+        return await _musicNetPlatform.GetLyricAsync(platform, id, extendDataJson);
+    }
+    public Task<string> GetPlayPageUrlAsync(PlatformEnum platform, string id, string extendDataJson = "")
+    {
+        return _musicNetPlatform.GetPlayPageUrlAsync(platform, id, extendDataJson);
     }
 
     public async Task<List<string>?> GetHotWordAsync()

@@ -9,3 +9,4 @@ global using ListenTogether.Pages;
 global using JiuLing.CommonLibs.ExtensionMethods;
 global using ListenTogether.EasyLog;
 global using System.Linq;
+global using ListenTogether.Extensions;

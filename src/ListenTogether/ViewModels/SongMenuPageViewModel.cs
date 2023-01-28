@@ -65,18 +65,18 @@ public partial class SongMenuPageViewModel : ViewModelBase
     [RelayCommand]
     public async void PlayAllAsync()
     {
-        await _musicResultService.PlayAllAsync(MusicResultCollection[0]);
+        await _musicResultService.PlayAllAsync(MusicResultCollection[0].ToLocalMusics());
     }
 
     [RelayCommand]
     public async void PlayAsync(MusicResultShowViewModel musicResult)
     {
-        await _musicResultService.PlayAsync(musicResult);
+        await _musicResultService.PlayAsync(musicResult.ToLocalMusic());
     }
 
     [RelayCommand]
     public async void AddToFavoriteAsync(MusicResultShowViewModel musicResult)
     {
-        await _musicResultService.AddToFavoriteAsync(musicResult);
+        await _musicResultService.AddToFavoriteAsync(musicResult.ToLocalMusic());
     }
 }

@@ -135,12 +135,8 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         myMyFavoriteDetailList = obj.Select(x => new MyFavoriteDetail()
         {
             Id = x.Id,
-            MusicId = x.MusicId,
-            Platform = (PlatformEnum)x.PlatformInt,
-            MusicName = x.MusicName,
             MyFavoriteId = x.MyFavoriteId,
-            MusicAlbum = x.MusicAlbum,
-            MusicArtist = x.MusicArtist,
+            Music = x.Music
         }).ToList();
         return myMyFavoriteDetailList;
     }

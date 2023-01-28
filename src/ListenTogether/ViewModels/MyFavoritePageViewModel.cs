@@ -5,20 +5,18 @@ using System.Collections.ObjectModel;
 namespace ListenTogether.ViewModels;
 public partial class MyFavoritePageViewModel : ViewModelBase
 {
-    private readonly MusicPlayerService _playerService;
+    private readonly MusicResultService _musicResultService;
     private readonly IPlaylistService _playlistService;
     private readonly IMyFavoriteService _myFavoriteService;
-    private readonly IMusicService _musicService;
 
     public string Title => "我的歌单";
-    public MyFavoritePageViewModel(IPlaylistService playlistService, MusicPlayerService playerService, IMyFavoriteService myFavoriteService, IMusicService musicService)
+    public MyFavoritePageViewModel(IPlaylistService playlistService, MusicResultService musicResultService, IMyFavoriteService myFavoriteService)
     {
         FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
 
-        _playerService = playerService;
+        _musicResultService = musicResultService;
         _playlistService = playlistService;
         _myFavoriteService = myFavoriteService;
-        _musicService = musicService;
     }
 
     public async Task InitializeAsync()
@@ -143,8 +141,8 @@ public partial class MyFavoritePageViewModel : ViewModelBase
             return;
         }
 
-        var myFavoriteMusics = await _myFavoriteService.GetMyFavoriteDetailAsync(selected.Id);
-        if (myFavoriteMusics == null)
+        var myFavoriteDetail = await _myFavoriteService.GetMyFavoriteDetailAsync(selected.Id);
+        if (myFavoriteDetail == null)
         {
             await ToastService.Show("播放失败：没有查询到歌单信息~~~");
             return;
@@ -152,33 +150,14 @@ public partial class MyFavoritePageViewModel : ViewModelBase
 
         if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite)
         {
-            await _playlistService.RemoveAllAsync();
-        }
-
-        foreach (var myFavoriteMusic in myFavoriteMusics)
-        {
-            //TODO 属性赋值
-            var playlist = new Playlist()
+            if (!await _playlistService.RemoveAllAsync())
             {
-                //Platform = myFavoriteMusic.PlatformName,
-                Id = myFavoriteMusic.MusicId,
-                Name = myFavoriteMusic.MusicName,
-                Artist = myFavoriteMusic.MusicArtist,
-                Album = myFavoriteMusic.MusicAlbum
-            };
-
-            await _playlistService.AddToPlaylistAsync(playlist);
-        }
-
-        if (myFavoriteMusics.Count > 0)
-        {
-            var music = await _musicService.GetOneAsync(myFavoriteMusics[0].MusicId);
-            if (music == null)
-            {
-                await ToastService.Show("歌曲信息加载失败");
+                await ToastService.Show("播放列表清空失败");
                 return;
             }
-            await _playerService.PlayAsync(music.Id);
         }
+
+        var localMusics = myFavoriteDetail.Select(x => x.Music).ToList();
+        await _musicResultService.PlayAllAsync(localMusics);
     }
 }

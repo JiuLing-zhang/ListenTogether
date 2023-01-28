@@ -5,7 +5,7 @@ using System.Text.Unicode;
 namespace ListenTogether;
 public partial class App : Application
 {
-    public App(IConfiguration config, IEnvironmentConfigService configService)
+    public App(IConfiguration config, IEnvironmentConfigService configService, IMusicNetworkService musicNetworkService)
     {
         InitializeComponent();
 
@@ -47,6 +47,8 @@ public partial class App : Application
 
         var task = Task.Run(configService.ReadAllSettingsAsync);
         GlobalConfig.MyUserSetting = task.Result;
+
+        musicNetworkService.SetMusicFormatType(GlobalConfig.MyUserSetting.Play.MusicFormatType);
 
         App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
 

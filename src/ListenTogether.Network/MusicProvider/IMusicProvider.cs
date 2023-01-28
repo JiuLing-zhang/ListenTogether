@@ -1,5 +1,4 @@
 ﻿using ListenTogether.Model;
-using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Network.MusicProvider;
 public interface IMusicProvider
@@ -38,7 +37,8 @@ public interface IMusicProvider
     Task<List<string>?> GetSearchSuggestAsync(string keyword);
     Task<List<MusicResultShow>> SearchAsync(string keyword);
     //TODO 音质选择
-    Task<string> GetPlayUrlAsync(string id, object? extendData = null);
-    Task<string> GetLyricAsync(string id, object? extendData = null);
-    Task<string> GetShareUrlAsync(string id, object? extendData = null);
+    Task<string> GetPlayUrlAsync(string id, string extendDataJson = "");
+    Task<string> GetImageUrlAsync(string id, string extendDataJson = "");
+    Task<string> GetLyricAsync(string id, string extendDataJson = "");
+    Task<string> GetShareUrlAsync(string id, string extendDataJson = "");
 }

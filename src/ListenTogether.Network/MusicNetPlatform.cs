@@ -20,6 +20,11 @@ public class MusicNetPlatform
         _netEaseSearcher.SetNextHandler(_kuGouSearcher);
     }
 
+    public void SetMusicFormatType(MusicFormatTypeEnum musicFormatType)
+    {
+        MusicProviderSetting.MusicFormatType = musicFormatType;
+    }
+
     public async Task<List<string>?> GetHotWordAsync()
     {
         return await MusicProviderFactory.Create(PlatformEnum.KuWo).GetHotWordAsync();
@@ -35,18 +40,23 @@ public class MusicNetPlatform
         return await _miGuSearcher.SearchAsync(platform, keyword);
     }
 
-    public async Task<string> GetPlayUrlAsync(PlatformEnum platform, string id, object? extendData = null)
+    public async Task<string> GetPlayUrlAsync(PlatformEnum platform, string id, string extendDataJson = "")
     {
-        return await MusicProviderFactory.Create(platform).GetPlayUrlAsync(id, extendData);
+        return await MusicProviderFactory.Create(platform).GetPlayUrlAsync(id, extendDataJson);
     }
-    public async Task<string?> GetLyricAsync(PlatformEnum platform, string id, object? extendData = null)
+    public async Task<string> GetImageUrlAsync(PlatformEnum platform, string id, string extendDataJson = "")
     {
-        return await MusicProviderFactory.Create(platform).GetLyricAsync(id, extendData);
+        return await MusicProviderFactory.Create(platform).GetImageUrlAsync(id, extendDataJson);
     }
 
-    public Task<string> GetPlayPageUrlAsync(PlatformEnum platform, string id, object? extendData = null)
+    public async Task<string?> GetLyricAsync(PlatformEnum platform, string id, string extendDataJson = "")
     {
-        return MusicProviderFactory.Create(platform).GetShareUrlAsync(id, extendData);
+        return await MusicProviderFactory.Create(platform).GetLyricAsync(id, extendDataJson);
+    }
+
+    public Task<string> GetPlayPageUrlAsync(PlatformEnum platform, string id, string extendDataJson = "")
+    {
+        return MusicProviderFactory.Create(platform).GetShareUrlAsync(id, extendDataJson);
     }
 
     public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync(PlatformEnum platform)

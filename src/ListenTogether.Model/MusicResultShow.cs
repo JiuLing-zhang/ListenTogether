@@ -1,6 +1,4 @@
-﻿using ListenTogether.Model.Enums;
-
-namespace ListenTogether.Model;
+﻿namespace ListenTogether.Model;
 
 /// <summary>
 /// 音乐结果展示

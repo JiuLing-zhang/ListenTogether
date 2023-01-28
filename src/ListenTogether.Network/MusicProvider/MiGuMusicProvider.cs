@@ -96,7 +96,7 @@ public class MiGuMusicProvider : IMusicProvider
         return musics;
     }
 
-    public async Task<string> GetPlayUrlAsync(string id, object? extendData = null)
+    public async Task<string> GetPlayUrlAsync(string id, string extendDataJson = "")
     {
         string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={id}&resourceType=2";
         var request = new HttpRequestMessage()
@@ -114,18 +114,18 @@ public class MiGuMusicProvider : IMusicProvider
         var result = json.ToObject<HttpMusicDetailResult>();
         if (result == null || result.resource == null || result.resource.Length == 0)
         {
-            return null;
+            return "";
         }
 
         if (result.resource[0].newRateFormats == null || result.resource[0].newRateFormats.Count == 0)
         {
-            return null;
+            return "";
         }
 
-        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats, MusicFormatTypeEnum.SQ);
+        string playUrlPath = MiGuUtils.GetPlayUrlPath(result.resource[0].newRateFormats, MusicProviderSetting.MusicFormatType);
         if (playUrlPath.IsEmpty())
         {
-            return null;
+            return "";
         }
         return $"{UrlBase.MiGu.PlayUrlDomain}{playUrlPath}";
     }
@@ -140,12 +140,12 @@ public class MiGuMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<string> GetShareUrlAsync(string id, object? extendData = null)
+    public Task<string> GetShareUrlAsync(string id, string extendDataJson = "")
     {
         return Task.FromResult($"{UrlBase.MiGu.GetMusicPlayPage}/{id}");
     }
 
-    public async Task<string> GetLyricAsync(string id, object? extendData = null)
+    public async Task<string> GetLyricAsync(string id, string extendDataJson = "")
     {
         string url = $"{UrlBase.MiGu.GetMusicDetailUrl}?copyrightId={id}&resourceType=2";
         var request = new HttpRequestMessage()
@@ -315,4 +315,8 @@ public class MiGuMusicProvider : IMusicProvider
         return musics;
     }
 
+    public Task<string> GetImageUrlAsync(string id, string extendDataJson = "")
+    {
+        throw new NotImplementedException();
+    }
 }
