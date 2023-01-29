@@ -2,6 +2,7 @@
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="ListenTogether.Pages.ChooseMyFavoritePage"
+               x:Name="self"
                CanBeDismissedByTappingOutsideOfPopup="False">
 
     <Grid
@@ -10,15 +11,16 @@
         Padding="20">
         <HorizontalStackLayout
             Grid.Row="0">
-            <Label Text="请选择要加入的歌单"/>
+            <Label
+                HorizontalOptions="Start"
+                Text="请选择要加入的歌单"/>
 
-            <StackLayout
-                Orientation="Horizontal"
+            <HorizontalStackLayout
                 HorizontalOptions="EndAndExpand"
                 VerticalOptions="End">
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding AddMyFavoriteAsyncCommand}"/>
-                </StackLayout.GestureRecognizers>
+                <HorizontalStackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="AddMyFavorite_Tapped"/>
+                </HorizontalStackLayout.GestureRecognizers>
                 <Image
                     Source="{AppThemeBinding Dark='plus_dark.png',Light='plus.png'}"
                     HeightRequest="20"                    
@@ -28,17 +30,19 @@
                     Text="新建歌单"
                     IsVisible="{OnPlatform WinUI=True,MacCatalyst=True,Android=False,iOS=False}"
                     VerticalTextAlignment="Center"/>
-            </StackLayout>
+            </HorizontalStackLayout>
         </HorizontalStackLayout>
 
         <CollectionView
             Grid.Row="1"
             VerticalOptions="FillAndExpand"
-            ItemsSource="{Binding MyFavoriteName, Source={x:Reference self}}">
+            ItemsSource="{Binding MyFavoriteCollection, Source={x:Reference self}}"
+            SelectionMode="Single"
+            SelectionChanged="MyFavorite_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout>
-                        <Label Text="12"/>
+                        <Label Text="{Binding Name}"/>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

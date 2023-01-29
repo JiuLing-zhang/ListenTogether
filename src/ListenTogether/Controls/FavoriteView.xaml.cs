@@ -66,7 +66,17 @@ public partial class FavoriteView : ContentView
     private async void Favorite_Tapped(object sender, TappedEventArgs e)
     {
         var popup = new ChooseMyFavoritePage(_myFavoriteService);
-        await popup.BuildFavoriteListAsync();
         var result = await App.Current.MainPage.ShowPopupAsync(popup);
+        if (result == null)
+        {
+            return;
+        }
+
+        if (!int.TryParse(result.ToString(), out var myFavoriteId))
+        {
+            await ToastService.Show("添加失败");
+            return;
+        }
+        //TODO
     }
 }
