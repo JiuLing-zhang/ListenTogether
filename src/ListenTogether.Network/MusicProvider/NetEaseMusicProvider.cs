@@ -349,7 +349,7 @@ public class NetEaseMusicProvider : IMusicProvider
                 Name = track.name ?? "",
                 Artist = artist,
                 Album = album,
-                ImageUrl = imageUrl,
+                ImageUrl = $"{imageUrl}?param=250y250",
                 Duration = TimeSpan.FromMilliseconds(track.dt),
                 Fee = FeeEnum.Free,
             };
@@ -449,7 +449,7 @@ public class NetEaseMusicProvider : IMusicProvider
                 Name = track.name ?? "",
                 Artist = artist,
                 Album = album,
-                ImageUrl = imageUrl,
+                ImageUrl = $"{imageUrl}?param=250y250",
                 Duration = TimeSpan.FromMilliseconds(track.dt),
                 Fee = FeeEnum.Free,
             };

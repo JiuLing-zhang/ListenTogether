@@ -3,7 +3,6 @@ using ListenTogether.Model;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
 using ListenTogether.Model.Api.Response;
-using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Data.Repositories.Api;
 public class MyFavoriteApiRepository : IMyFavoriteRepository
@@ -151,5 +150,16 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
             return false;
         }
         return true;
+    }
+
+    public async Task<List<string>> GetAllMusicIdAsync()
+    {
+        var json = await DataConfig.HttpClientWithToken.GetStringAsync(DataConfig.ApiSetting.MyFavorite.GetAllMusicId);
+        var jsonResult = json.ToObject<List<string>>();
+        if (jsonResult == null)
+        {
+            return new List<string>();
+        }
+        return jsonResult;
     }
 }

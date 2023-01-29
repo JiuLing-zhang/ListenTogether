@@ -42,6 +42,7 @@ public class MusicResultService
             Artist = music.Artist,
             Album = music.Album,
             ImageUrl = music.ImageUrl,
+            ExtendDataJson = music.ExtendDataJson,
             EditTime = DateTime.Now
         };
         await _playlistService.AddToPlaylistAsync(playlist);

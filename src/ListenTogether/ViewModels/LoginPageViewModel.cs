@@ -6,10 +6,12 @@ namespace ListenTogether.ViewModels;
 
 public partial class LoginPageViewModel : ViewModelBase
 {
+    private readonly UserFavoriteService _userFavoriteService;
     private readonly IUserService _userService;
-    public LoginPageViewModel(IUserService userService)
+    public LoginPageViewModel(IUserService userService, UserFavoriteService userFavoriteService)
     {
         _userService = userService;
+        _userFavoriteService = userFavoriteService;
     }
     public Task InitializeAsync()
     {
@@ -51,6 +53,9 @@ public partial class LoginPageViewModel : ViewModelBase
 
             Username = "";
             Password = "";
+
+            await _userFavoriteService.LoadMusicsIdAsync();
+
             await Shell.Current.GoToAsync($"..", true);
         }
         catch (Exception ex)

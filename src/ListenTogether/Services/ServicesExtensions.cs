@@ -1,4 +1,5 @@
-﻿using ListenTogether.Services.MusicSwitchServer;
+﻿using ListenTogether.Business.Services;
+using ListenTogether.Services.MusicSwitchServer;
 
 namespace ListenTogether.Services;
 
@@ -15,7 +16,8 @@ internal static class ServicesExtensions
         builder.Services.AddTransient<WifiOptionsService>();
         builder.Services.AddSingleton<PlayerService>();
         builder.Services.AddSingleton<MusicPlayerService>();
-        builder.Services.AddSingleton<MusicResultService>();
+        builder.Services.AddSingleton<MusicResultService>(); 
+        builder.Services.AddSingleton<UserFavoriteService>();
         return builder;
     }
 }

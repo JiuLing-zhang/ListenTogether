@@ -1,0 +1,51 @@
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="ListenTogether.Pages.ChooseMyFavoritePage"
+               CanBeDismissedByTappingOutsideOfPopup="False">
+
+    <Grid
+        RowDefinitions="20,*,40"
+        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+        Padding="20">
+        <HorizontalStackLayout
+            Grid.Row="0">
+            <Label Text="请选择要加入的歌单"/>
+
+            <StackLayout
+                Orientation="Horizontal"
+                HorizontalOptions="EndAndExpand"
+                VerticalOptions="End">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding AddMyFavoriteAsyncCommand}"/>
+                </StackLayout.GestureRecognizers>
+                <Image
+                    Source="{AppThemeBinding Dark='plus_dark.png',Light='plus.png'}"
+                    HeightRequest="20"                    
+                    WidthRequest="20">
+                </Image>
+                <Label
+                    Text="新建歌单"
+                    IsVisible="{OnPlatform WinUI=True,MacCatalyst=True,Android=False,iOS=False}"
+                    VerticalTextAlignment="Center"/>
+            </StackLayout>
+        </HorizontalStackLayout>
+
+        <CollectionView
+            Grid.Row="1"
+            VerticalOptions="FillAndExpand"
+            ItemsSource="{Binding MyFavoriteName, Source={x:Reference self}}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="12"/>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button
+            Grid.Row="2"
+            Text="关闭"
+            Clicked="BtnClose_Clicked"/>
+    </Grid>
+</toolkit:Popup>

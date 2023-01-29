@@ -17,6 +17,8 @@ public partial class Player : ContentView
     }
 
     private MusicPlayerService _playerService = null!;
+    private MusicResultService _musicResultService = null!;
+    private IPlaylistService _playlistService = null!;
     private IEnvironmentConfigService _configService = null!;
     public Player()
     {
@@ -32,6 +34,14 @@ public partial class Player : ContentView
         {
             _playerService = this.Handler.MauiContext.Services.GetRequiredService<MusicPlayerService>();
             InitPlayer();
+        }
+        if (_musicResultService == null)
+        {
+            _musicResultService = this.Handler.MauiContext.Services.GetRequiredService<MusicResultService>();
+        }
+        if (_playlistService == null)
+        {
+            _playlistService = this.Handler.MauiContext.Services.GetRequiredService<IPlaylistService>();
         }
         if (_configService == null)
         {
@@ -140,8 +150,19 @@ public partial class Player : ContentView
 
     private void NewMusicAddedDo(MusicMetadata metadata)
     {
+        string favoriteImagePath;
+        if (Config.IsDarkTheme)
+        {
+            favoriteImagePath = "favorite.png";
+        }
+        else
+        {
+            favoriteImagePath = "favorite.png";
+        }
+
         MainThread.BeginInvokeOnMainThread(() =>
         {
+            ImgFavorite.Source = favoriteImagePath;
             ImgCurrentMusic.Source = ImageSource.FromStream(
                 () => new MemoryStream(metadata.Image)
             );
@@ -346,5 +367,36 @@ public partial class Player : ContentView
     {
         var vm = this.Handler.MauiContext.Services.GetRequiredService<PlayingPageViewModel>();
         await Navigation.PushAsync(new PlayingPage(vm), true);
+    }
+
+    private async void Favorite_Tapped(object sender, TappedEventArgs e)
+    {
+        try
+        {
+            if (_playerService == null || _playerService.Metadata == null || _playlistService == null || _musicResultService == null)
+            {
+                await ToastService.Show("系统错误");
+                return;
+            }
+
+            var playlist = await _playlistService.GetOneAsync(_playerService.Metadata.Id);
+            var localMusic = new LocalMusic()
+            {
+                Id = playlist.Id,
+                IdOnPlatform = playlist.IdOnPlatform,
+                Platform = playlist.Platform,
+                Name = playlist.Name,
+                Artist = playlist.Artist,
+                Album = playlist.Album,
+                ImageUrl = playlist.ImageUrl,
+                ExtendDataJson = playlist.ExtendDataJson
+            };
+            await _musicResultService.AddToFavoriteAsync(localMusic);
+        }
+        catch (Exception ex)
+        {
+            await ToastService.Show("操作失败");
+            Logger.Error("播放组件调用收藏失败", ex);
+        }
     }
 }

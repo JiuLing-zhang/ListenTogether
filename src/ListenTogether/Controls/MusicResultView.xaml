@@ -2,6 +2,7 @@
 <CollectionView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+                xmlns:controls="clr-namespace:ListenTogether.Controls"
                 x:Class="ListenTogether.Controls.MusicResultView"
                 x:Name="self"
                 VerticalOptions="FillAndExpand"
@@ -63,22 +64,12 @@
                                     CommandParameter="{Binding}"
                                     NumberOfTapsRequired="2"/>
                             </Grid.GestureRecognizers>
-                            <Image
+                            <controls:FavoriteView
                                 Grid.Column="0"
-                                x:Name="ImgHeart"
-                                Source="{AppThemeBinding Dark='heart_dark.png',Light='heart.png'}"
-                                Aspect="AspectFill"
                                 WidthRequest="15"
                                 HeightRequest="15"
                                 VerticalOptions="Center"
-                                HorizontalOptions="Center">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding AddToFavoriteCommand, Source={x:Reference self}}"
-                                        CommandParameter="{Binding}"/>
-                                </Image.GestureRecognizers>
-                            </Image>
-
+                                MusicId="{Binding Id}"/>
                             <Label
                                 Grid.Column="1"
                                 Text="{Binding Duration}"
@@ -145,22 +136,14 @@
                                 </MultiBinding>
                             </Label>
 
-                            <Image
+                            <controls:FavoriteView
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Grid.RowSpan="2"
-                                Source="{Binding Source, Source={x:Reference ImgHeart}}"
-                                Aspect="AspectFill"
                                 WidthRequest="15"
                                 HeightRequest="15"
                                 VerticalOptions="Center"
-                                HorizontalOptions="Center">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding AddToFavoriteCommand, Source={x:Reference self}}"
-                                        CommandParameter="{Binding}"/>
-                                </Image.GestureRecognizers>
-                            </Image>
+                                MusicId="{Binding Id}"/>
 
                             <Label
                                 Grid.Row="2"

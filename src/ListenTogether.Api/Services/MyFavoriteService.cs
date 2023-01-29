@@ -206,4 +206,15 @@ public class MyFavoriteService : IMyFavoriteService
         }
         return new Result(0, "删除成功");
     }
+
+    public async Task<List<string>> GetAllMusicIdAsync(int userId)
+    {
+        var musicIdList = new List<string>();
+        var myFavorites = await _context.MyFavorites.Where(x => x.UserBaseId == userId).ToListAsync();
+        foreach (var myFavorite in myFavorites)
+        {
+            musicIdList.AddRange(myFavorite.Details.Select(x => x.MusicId).ToList());
+        }
+        return musicIdList.Distinct().ToList();
+    }
 }

@@ -65,4 +65,9 @@ public class MyFavoriteService : IMyFavoriteService
     {
         return await _repository.RemoveDetailAsync(id);
     }
+
+    public async Task<List<string>> GetAllMusicIdAsync()
+    {
+        return await _repository.GetAllMusicIdAsync();
+    }
 }

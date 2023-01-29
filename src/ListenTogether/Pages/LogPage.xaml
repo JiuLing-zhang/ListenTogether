@@ -12,9 +12,8 @@
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
             <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
         </Grid.RowDefinitions>
-        
+
         <controls:Loading
             Grid.Row="0"
             Grid.RowSpan="4"
@@ -45,13 +44,6 @@
         </CollectionView>
 
         <Button Grid.Row="2"
-                Text="上传"
-                VerticalOptions="End"
-                IsVisible="{Binding IsLoginSuccess}"
-                Command="{Binding UpdateLogsAsyncCommand}"
-                BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
-                TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
-        <Button Grid.Row="3"
                 Text="清空日志"
                 VerticalOptions="End"
                 Command="{Binding ClearLogsAsyncCommand}"

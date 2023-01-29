@@ -68,19 +68,11 @@
                                         </StackLayout.GestureRecognizers>
                                         <StackLayout WidthRequest="60"
                                          Orientation="Horizontal">
-                                            <Image
-                                                x:Name="ImgHeart"
-                                                Source="{AppThemeBinding Dark='heart_dark.png',Light='heart.png'}"
-                                                Aspect="AspectFill"
+                                            <controls:FavoriteView
                                                 WidthRequest="15"
                                                 HeightRequest="15"
-                                                VerticalOptions="Center">
-                                                <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer
-                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteAsyncCommand}"
-                                                        CommandParameter="{Binding .}"/>
-                                                </Image.GestureRecognizers>
-                                            </Image>
+                                                VerticalOptions="Center"
+                                                MusicId="{Binding Id}"/>
 
                                             <Image
                                                 Source="{Binding Source, Source={x:Reference ImgRemove}}"
@@ -132,21 +124,13 @@
                                             </MultiBinding>
                                         </Label>
 
-                                        <Image
+                                        <controls:FavoriteView
                                             Grid.Column="2"
-                                            Source="{Binding Source, Source={x:Reference ImgHeart}}"
-                                            Aspect="AspectFill"
                                             WidthRequest="15"
                                             HeightRequest="15"
                                             VerticalOptions="Center"
-                                            HorizontalOptions="Center">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=AddToMyFavoriteAsyncCommand}"
-                                                    CommandParameter="{Binding .}"/>
-                                            </Image.GestureRecognizers>
-                                        </Image>
-
+                                            MusicId="{Binding Id}"/>
+                                        
                                         <Image
                                             Grid.Column="3"
                                             Source="{Binding Source, Source={x:Reference ImgRemove}}"

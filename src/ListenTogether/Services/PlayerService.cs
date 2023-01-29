@@ -25,13 +25,13 @@ public class PlayerService
     public PlayerService(INativeAudioService audioService)
     {
         _audioService = audioService;
-        _audioService.PlayFinished += PlayFinished;
-        _audioService.PlayFailed += PlayFailed;
+        _audioService.PlayFinished += (_, _) => PlayFinished?.Invoke(this, EventArgs.Empty);
+        _audioService.PlayFailed += (_, _) => PlayFailed?.Invoke(this, EventArgs.Empty);
 
         _audioService.Played += async (_, _) => await PlayAsync(CurrentMetadata);
         _audioService.Paused += async (_, _) => await PlayAsync(CurrentMetadata);
-        _audioService.SkipToNext += PlayNext;
-        _audioService.SkipToPrevious += PlayPrevious;
+        _audioService.SkipToNext += (_, _) => PlayNext?.Invoke(this, EventArgs.Empty);
+        _audioService.SkipToPrevious += (_, _) => PlayPrevious?.Invoke(this, EventArgs.Empty);
 
         _timerPlayProgress = new System.Timers.Timer();
         _timerPlayProgress.Interval = 1000;
@@ -64,11 +64,8 @@ public class PlayerService
 
     public async Task PlayAsync(MusicMetadata metadata, bool isPlaying, double position = 0)
     {
-        Logger.Info($"内部调用：播放");
-
         if (_isBuffering)
         {
-            Logger.Info($"内部调用：缓冲中");
             return;
         }
         _isBuffering = true;
@@ -91,7 +88,6 @@ public class PlayerService
         }
         else
         {
-            Logger.Info($"内部调用：播放中-->暂停");
             await InternalPlayPauseAsync(isPlaying, position);
         }
         _isBuffering = false;

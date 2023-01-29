@@ -65,6 +65,10 @@ public partial class SongMenuPageViewModel : ViewModelBase
     [RelayCommand]
     public async void PlayAllAsync()
     {
+        if (MusicResultCollection.Count == 0)
+        {
+            return;
+        }
         await _musicResultService.PlayAllAsync(MusicResultCollection[0].ToLocalMusics());
     }
 

@@ -1,6 +1,4 @@
-﻿using ListenTogether.Model.Enums;
-
-namespace ListenTogether
+﻿namespace ListenTogether
 {
     internal class GlobalConfig
     {

@@ -43,7 +43,7 @@
                         </Image>
 
                         <Grid RowDefinitions="50*,50*"
-                              ColumnDefinitions="80,280,100"
+                              ColumnDefinitions="80,20,260,100"
                               Margin="0,0,40,0">
                             <Image
                                 Grid.Row="0"
@@ -58,9 +58,20 @@
                                 </Image.GestureRecognizers>
                             </Image>
 
-                            <Label
+                            <Image
                                 Grid.Row="0"
                                 Grid.Column="1"
+                                x:Name="ImgFavorite"
+                                WidthRequest="16"
+                                HeightRequest="16"
+                                Aspect="AspectFill">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="Favorite_Tapped"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="2"
                                 x:Name="LblMusicInfo"
                                 Style="{StaticResource Explain}"
                                 VerticalTextAlignment="Center"
@@ -69,7 +80,7 @@
 
                             <HorizontalStackLayout
                                 Grid.Row="0"
-                                Grid.Column="2"
+                                Grid.Column="3"
                                 HorizontalOptions="End">
                                 <Label 
                                     x:Name="LblPosition"
@@ -90,7 +101,7 @@
                             <Slider
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Grid.ColumnSpan="2"
+                                Grid.ColumnSpan="3"
                                 x:Name="SliderPlayProgress"
                                 HorizontalOptions="Fill"
                                 Minimum="0"

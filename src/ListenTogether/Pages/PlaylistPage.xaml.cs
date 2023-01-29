@@ -13,7 +13,7 @@ public partial class PlaylistPage : ContentPage
     {
         base.OnAppearing();
         player.OnAppearing();
-        await vm.InitializeAsync();
+        await vm.InitializeAsync(this);
     }
     protected override void OnDisappearing()
     {

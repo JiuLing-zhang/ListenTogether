@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="ListenTogether.Controls.FavoriteView"
+    x:Name="self">
+    <Image
+        x:Name="ImgFavorite"
+        IsVisible="{Binding IsLogin, Source={x:Reference self}}"
+        Source="favorite.png"
+        Aspect="AspectFill">
+        <Image.GestureRecognizers>
+            <TapGestureRecognizer Tapped="Favorite_Tapped"/>
+        </Image.GestureRecognizers>
+    </Image>
+</ContentView>

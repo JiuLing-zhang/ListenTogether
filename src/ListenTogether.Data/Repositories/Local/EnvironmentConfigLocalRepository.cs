@@ -93,7 +93,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
                 IsCleanPlaylistWhenPlayMyFavorite = true,
                 IsWifiPlayOnly = true,
                 IsPlayWhenAddToFavorite = false,
-                MusicFormatType = MusicFormatTypeEnum.HQ
+                MusicFormatType = MusicFormatTypeEnum.PQ
             }).ToJson()
         };
 

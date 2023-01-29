@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ListenTogether.Storage;
+using Microsoft.Extensions.Configuration;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 namespace ListenTogether;
 public partial class App : Application
 {
-    public App(IConfiguration config, IEnvironmentConfigService configService, IMusicNetworkService musicNetworkService)
+    public App(IConfiguration config, IEnvironmentConfigService configService, IMusicNetworkService musicNetworkService, UserFavoriteService userFavoriteService)
     {
         InitializeComponent();
 
@@ -51,6 +52,11 @@ public partial class App : Application
         musicNetworkService.SetMusicFormatType(GlobalConfig.MyUserSetting.Play.MusicFormatType);
 
         App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
+
+        if (UserInfoStorage.GetUsername().IsNotEmpty())
+        {
+            Task.Run(userFavoriteService.LoadMusicsIdAsync);
+        }
 
         if (Config.Desktop)
         {

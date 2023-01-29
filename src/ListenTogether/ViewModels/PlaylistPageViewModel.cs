@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
@@ -6,6 +7,7 @@ namespace ListenTogether.ViewModels;
 
 public partial class PlaylistPageViewModel : ViewModelBase
 {
+    private ContentPage _page;
     private readonly IPlaylistService _playlistService;
     private readonly MusicResultService _musicResultService;
 
@@ -28,11 +30,12 @@ public partial class PlaylistPageViewModel : ViewModelBase
         _musicResultService = musicResultService;
     }
 
-    public async Task InitializeAsync()
+    public async Task InitializeAsync(ContentPage page)
     {
         try
         {
             StartLoading("页面加载中....");
+            _page = page;
             await GetPlaylistAsync();
         }
         catch (Exception ex)
@@ -86,6 +89,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     [RelayCommand]
     private async void AddToMyFavoriteAsync(MusicResultShowViewModel selected)
     {
+        var result = await _page.ShowPopupAsync(new ChooseMyFavoritePage(null));
         await _musicResultService.AddToFavoriteAsync(selected.ToLocalMusic());
     }
 
@@ -126,6 +130,6 @@ public partial class PlaylistPageViewModel : ViewModelBase
             await ToastService.Show("删除失败");
             return;
         }
-        await InitializeAsync();
+        await GetPlaylistAsync();
     }
 }

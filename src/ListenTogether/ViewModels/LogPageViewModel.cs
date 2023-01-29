@@ -19,9 +19,6 @@ public partial class LogPageViewModel : ViewModelBase
         try
         {
             StartLoading("");
-
-            IsLoginSuccess = UserInfoStorage.GetUsername().IsNotEmpty();
-
             if (Logs.Count > 0)
             {
                 Logs.Clear();
@@ -57,9 +54,6 @@ public partial class LogPageViewModel : ViewModelBase
             StopLoading();
         }
     }
-
-    [ObservableProperty]
-    private bool _isLoginSuccess;
 
     [ObservableProperty]
     private ObservableCollection<LogDetailViewModel> _logs = null!;

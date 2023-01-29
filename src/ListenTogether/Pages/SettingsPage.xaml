@@ -161,8 +161,7 @@
                                 <RadioButton Content="超高 30M/首"
                                              Value="SQ" />
                                 <RadioButton Content="极致 70M/首"
-                                             Value="ZQ"
-                                             IsEnabled="False"/>
+                                             Value="ZQ"/>
                             </StackLayout>
                         </StackLayout>
 
@@ -220,8 +219,9 @@
                 </ScrollView>
             </StackLayout>
         </StackLayout>
-        <controls:Player Grid.Row="1" 
-                         x:Name="player"
-                         IsPlayingPage="False"/>
+        <controls:Player
+            Grid.Row="1"
+            x:Name="player"
+            IsPlayingPage="False"/>
     </Grid>
 </ContentPage>
