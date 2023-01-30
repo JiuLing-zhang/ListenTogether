@@ -139,10 +139,6 @@
                                 IsToggled="{Binding IsPlayingPageKeepScreenOn}"/>
 
                             <jiuLing:TextSwitch 
-                                Text="添加到歌单时自动播放"
-                                IsToggled="{Binding IsPlayWhenAddToFavorite}"/>
-
-                            <jiuLing:TextSwitch 
                                 Text="播放失败时自动跳到下一首"
                                 IsToggled="{Binding IsAutoNextWhenFailed}"/>
 

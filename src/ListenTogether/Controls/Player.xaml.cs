@@ -87,7 +87,6 @@ public partial class Player : ContentView
         {
             ImgBack.Source = "back.png";
             ImgNext.Source = "next.png";
-            ImgOther.Source = "puzzled.png";
 
             //TODO 目前 MAUI 无法正确读取资源文件，所以临时使用16进制颜色解决
             //var lightText = (Color)Application.Current.Resources["LightText"];
@@ -105,7 +104,6 @@ public partial class Player : ContentView
         {
             ImgBack.Source = "back_dark.png";
             ImgNext.Source = "next_dark.png";
-            ImgOther.Source = "puzzled_dark.png";
 
             //TODO 目前 MAUI 无法正确读取资源文件，所以临时使用16进制颜色解决
             //var darkText = (Color)Application.Current.Resources["DarkText"]; 
@@ -150,19 +148,9 @@ public partial class Player : ContentView
 
     private void NewMusicAddedDo(MusicMetadata metadata)
     {
-        string favoriteImagePath;
-        if (Config.IsDarkTheme)
-        {
-            favoriteImagePath = "favorite.png";
-        }
-        else
-        {
-            favoriteImagePath = "favorite.png";
-        }
-
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            ImgFavorite.Source = favoriteImagePath;
+            FavoriteView.MusicId = metadata.Id;
             ImgCurrentMusic.Source = ImageSource.FromStream(
                 () => new MemoryStream(metadata.Image)
             );
@@ -323,11 +311,6 @@ public partial class Player : ContentView
         await _playerService.Next();
     }
 
-    private async void Puzzled_Tapped(object sender, EventArgs e)
-    {
-        await ToastService.Show("别点了，小的就是个占位的~~~");
-    }
-
     private async void SliderVolume_ValueChanged(object sender, ValueChangedEventArgs e)
     {
         int volume = (int)e.NewValue;
@@ -367,36 +350,5 @@ public partial class Player : ContentView
     {
         var vm = this.Handler.MauiContext.Services.GetRequiredService<PlayingPageViewModel>();
         await Navigation.PushAsync(new PlayingPage(vm), true);
-    }
-
-    private async void Favorite_Tapped(object sender, TappedEventArgs e)
-    {
-        try
-        {
-            if (_playerService == null || _playerService.Metadata == null || _playlistService == null || _musicResultService == null)
-            {
-                await ToastService.Show("系统错误");
-                return;
-            }
-
-            var playlist = await _playlistService.GetOneAsync(_playerService.Metadata.Id);
-            var localMusic = new LocalMusic()
-            {
-                Id = playlist.Id,
-                IdOnPlatform = playlist.IdOnPlatform,
-                Platform = playlist.Platform,
-                Name = playlist.Name,
-                Artist = playlist.Artist,
-                Album = playlist.Album,
-                ImageUrl = playlist.ImageUrl,
-                ExtendDataJson = playlist.ExtendDataJson
-            };
-            await _musicResultService.AddToFavoriteAsync(localMusic);
-        }
-        catch (Exception ex)
-        {
-            await ToastService.Show("操作失败");
-            Logger.Error("播放组件调用收藏失败", ex);
-        }
     }
 }

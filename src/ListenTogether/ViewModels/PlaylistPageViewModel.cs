@@ -87,13 +87,6 @@ public partial class PlaylistPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async void AddToMyFavoriteAsync(MusicResultShowViewModel selected)
-    {
-        var result = await _page.ShowPopupAsync(new ChooseMyFavoritePage(null));
-        await _musicResultService.AddToFavoriteAsync(selected.ToLocalMusic());
-    }
-
-    [RelayCommand]
     private async void RemoveOneAsync(MusicResultShowViewModel selected)
     {
         try

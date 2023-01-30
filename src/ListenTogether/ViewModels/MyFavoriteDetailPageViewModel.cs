@@ -75,7 +75,11 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
                     PlatformName = myFavoriteDetail.Music.Platform.GetDescription(),
                     Artist = myFavoriteDetail.Music.Artist,
                     Album = myFavoriteDetail.Music.Album,
-                    Name = myFavoriteDetail.Music.Name
+                    Name = myFavoriteDetail.Music.Name,
+                    IdOnPlatform = myFavoriteDetail.Music.Id,
+                    ImageUrl = myFavoriteDetail.Music.ImageUrl,
+                    Platform = myFavoriteDetail.Music.Platform,
+                    ExtendDataJson = myFavoriteDetail.Music.ExtendDataJson
                 }
             });
         }

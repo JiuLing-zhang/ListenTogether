@@ -71,12 +71,5 @@ namespace ListenTogether.Api.Controllers
             var response = await _myFavoriteService.RemoveDetailAsync(UserId, id);
             return Ok(response);
         }
-
-        [HttpGet("music-id-list")]
-        public async Task<IActionResult> GetAllMusicIdAsync()
-        {
-            var response = await _myFavoriteService.GetAllMusicIdAsync(UserId);
-            return Ok(response);
-        }
     }
 }

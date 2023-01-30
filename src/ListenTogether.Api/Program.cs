@@ -79,10 +79,8 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 // configure DI for application services
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserConfigService, UserConfigService>();
 builder.Services.AddScoped<IMusicService, MusicService>();
 builder.Services.AddScoped<IMyFavoriteService, MyFavoriteService>();
-builder.Services.AddScoped<ILogService, LogService>();
 
 var app = builder.Build();
 

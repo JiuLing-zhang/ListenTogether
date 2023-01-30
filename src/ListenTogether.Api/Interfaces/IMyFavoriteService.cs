@@ -15,6 +15,5 @@ namespace ListenTogether.Api.Interfaces
         Task<Result> AddMusicToMyFavoriteAsync(int userId, int id, string musicId);
         Task<List<MyFavoriteDetailResponse>> GetMyFavoriteDetailAsync(int userId, int id);
         Task<Result> RemoveDetailAsync(int userId, int id);
-        Task<List<string>> GetAllMusicIdAsync(int userId);
     }
 }

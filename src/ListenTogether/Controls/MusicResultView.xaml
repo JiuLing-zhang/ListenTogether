@@ -54,7 +54,8 @@
     </CollectionView.GroupHeaderTemplate>
     <CollectionView.ItemTemplate>
         <DataTemplate>
-            <StackLayout>
+            <StackLayout
+                Style="{StaticResource DataRowEnter}">
                 <OnPlatform x:TypeArguments="View">
                     <On Platform="WinUI, macOS">
                         <Grid ColumnDefinitions="30,60,40,300,300,*">
@@ -102,7 +103,7 @@
                     <On Platform="Android,iOS">
                         <Grid
                             Margin="0,10,0,0"
-                            RowDefinitions="auto,auto,10"
+                            RowDefinitions="auto,auto"
                             ColumnDefinitions="*,40">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer
@@ -144,12 +145,6 @@
                                 HeightRequest="15"
                                 VerticalOptions="Center"
                                 MusicId="{Binding Id}"/>
-
-                            <Label
-                                Grid.Row="2"
-                                Grid.ColumnSpan="2"
-                                Margin="0,9,0,0"
-                                BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"></Label>
                         </Grid>
                     </On>
                 </OnPlatform>

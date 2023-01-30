@@ -6,7 +6,7 @@ using System.Text.Unicode;
 namespace ListenTogether;
 public partial class App : Application
 {
-    public App(IConfiguration config, IEnvironmentConfigService configService, IMusicNetworkService musicNetworkService, UserFavoriteService userFavoriteService)
+    public App(IConfiguration config, IEnvironmentConfigService configService, IMusicNetworkService musicNetworkService)
     {
         InitializeComponent();
 
@@ -52,11 +52,6 @@ public partial class App : Application
         musicNetworkService.SetMusicFormatType(GlobalConfig.MyUserSetting.Play.MusicFormatType);
 
         App.Current.UserAppTheme = GlobalConfig.MyUserSetting.General.IsDarkMode ? AppTheme.Dark : AppTheme.Light;
-
-        if (UserInfoStorage.GetUsername().IsNotEmpty())
-        {
-            Task.Run(userFavoriteService.LoadMusicsIdAsync);
-        }
 
         if (Config.Desktop)
         {

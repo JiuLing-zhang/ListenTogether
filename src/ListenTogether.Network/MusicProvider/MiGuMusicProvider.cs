@@ -1,5 +1,6 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 using JiuLing.CommonLibs.Security;
+using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 using ListenTogether.Network.Models.MiGu;
@@ -18,7 +19,7 @@ public class MiGuMusicProvider : IMusicProvider
         handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
         handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         _httpClient = new HttpClient(handler);
-
+        _httpClient.Timeout = TimeSpan.FromSeconds(5);
         Task.Run(async () =>
         {
             await InitCommonArgs();
@@ -55,44 +56,51 @@ public class MiGuMusicProvider : IMusicProvider
     public async Task<List<MusicResultShow>> SearchAsync(string keyword)
     {
         var musics = new List<MusicResultShow>();
-
-        string args = MiGuUtils.GetSearchArgs(keyword);
-        string url = $"{UrlBase.MiGu.Search}?{args}";
-        var request = new HttpRequestMessage()
+        try
         {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-        request.Headers.Add("Cookie", $"migu_cookie_id={MiGuUtils.CookieId}");
-        request.Headers.Add("Host", "music.migu.cn");
-        request.Headers.Add("Referer", UrlBase.MiGu.Index);
-
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        if (!MiGuUtils.TryScanSearchResult(html, out var htmlMusics))
-        {
-            return musics;
-        }
-
-        foreach (var htmlMusic in htmlMusics)
-        {
-            musics.Add(new MusicResultShow()
+            string args = MiGuUtils.GetSearchArgs(keyword);
+            string url = $"{UrlBase.MiGu.Search}?{args}";
+            var request = new HttpRequestMessage()
             {
-                Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.id}"),
-                Platform = Platform,
-                IdOnPlatform = htmlMusic.id,
-                Name = htmlMusic.title,
-                Artist = htmlMusic.singer,
-                Album = htmlMusic.album,
-                ImageUrl = htmlMusic.imgUrl,
-                Fee = FeeEnum.Free,
-            });
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+            {
+                request.Headers.Add(header.Key, header.Value);
+            }
+            request.Headers.Add("Cookie", $"migu_cookie_id={MiGuUtils.CookieId}");
+            request.Headers.Add("Host", "music.migu.cn");
+            request.Headers.Add("Referer", UrlBase.MiGu.Index);
+
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!MiGuUtils.TryScanSearchResult(html, out var htmlMusics))
+            {
+                return musics;
+            }
+
+            foreach (var htmlMusic in htmlMusics)
+            {
+                musics.Add(new MusicResultShow()
+                {
+                    Id = MD5Utils.GetStringValueToLower($"{Platform}-{htmlMusic.id}"),
+                    Platform = Platform,
+                    IdOnPlatform = htmlMusic.id,
+                    Name = htmlMusic.title,
+                    Artist = htmlMusic.singer,
+                    Album = htmlMusic.album,
+                    ImageUrl = htmlMusic.imgUrl,
+                    Fee = FeeEnum.Free,
+                });
+            }
         }
+        catch (Exception ex)
+        {
+            Logger.Error("咪咕搜索失败。", ex);
+        }
+
         return musics;
     }
 

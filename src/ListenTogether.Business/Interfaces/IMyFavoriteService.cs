@@ -11,6 +11,4 @@ public interface IMyFavoriteService
     Task<bool> AddMusicToMyFavoriteAsync(int id, string musicId);
     Task<List<MyFavoriteDetail>> GetMyFavoriteDetailAsync(int id);
     Task<bool> RemoveDetailAsync(int id);
-
-    Task<List<string>> GetAllMusicIdAsync();
 }

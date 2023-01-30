@@ -40,10 +40,10 @@ public class Logger
     /// <summary>
     /// 获取所有日志
     /// </summary>
-    public static List<(long CreateTime, int LogType, string Message)> GetAll(int maxCount = 30)
+    public static List<(long CreateTime, int LogType, string Message)> GetAll(int count = int.MaxValue)
     {
         var result = new List<(long CreateTime, int LogType, string Message)>();
-        var logs = DatabaseProvide.Database.Table<LogEntity>().OrderByDescending(x => x.CreateTime).Take(maxCount).ToList();
+        var logs = DatabaseProvide.Database.Table<LogEntity>().OrderByDescending(x => x.CreateTime).Take(count).ToList();
         foreach (var log in logs)
         {
             result.Add((log.CreateTime, log.LogType, log.Message));

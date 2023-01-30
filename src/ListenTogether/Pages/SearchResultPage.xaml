@@ -66,9 +66,7 @@
             <controls:MusicResultView
                 Musics="{Binding MusicSearchResult}"
                 PlayCommand="{Binding PlayAsyncCommand}"
-                PlayCommandParameter="{Binding .}"
-                AddToFavoriteCommand="{Binding AddToFavoriteAsyncCommand}"
-                AddToFavoriteCommandParameter="{Binding .}"/>
+                PlayCommandParameter="{Binding .}"/>
         </StackLayout>
         <controls:Player Grid.Row="1" 
                          x:Name="player"

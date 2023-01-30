@@ -6,9 +6,9 @@
     x:Name="self">
     <Image
         x:Name="ImgFavorite"
-        IsVisible="{Binding IsLogin, Source={x:Reference self}}"
-        Source="favorite.png"
-        Aspect="AspectFill">
+        Source="{AppThemeBinding Light=add_to_favorite.png,Dark=add_to_favorite_dark.png}"
+        Aspect="AspectFill"
+        ToolTipProperties.Text="添加到我的歌单">
         <Image.GestureRecognizers>
             <TapGestureRecognizer Tapped="Favorite_Tapped"/>
         </Image.GestureRecognizers>

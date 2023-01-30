@@ -18,6 +18,7 @@ public class NetEaseMusicProvider : IMusicProvider
         var handler = new HttpClientHandler();
         handler.AutomaticDecompression = DecompressionMethods.All;
         _httpClient = new HttpClient(handler);
+        _httpClient.Timeout = TimeSpan.FromSeconds(5);
     }
 
     public async Task<List<string>?> GetSearchSuggestAsync(string keyword)
@@ -68,67 +69,74 @@ public class NetEaseMusicProvider : IMusicProvider
     {
         var musics = new List<MusicResultShow>();
 
-        string url = $"{UrlBase.NetEase.Search}";
-
-        var postData = NetEaseUtils.GetPostDataForSearch(keyword);
-        var form = new FormUrlEncodedContent(postData);
-
-        var request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        request.Headers.Add("Accept", "*/*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-
-        ResultBase<MusicSearchHttpResult>? result;
         try
         {
-            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            result = json.ToObject<ResultBase<MusicSearchHttpResult>>();
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("解析网易搜索结果失败。", ex);
-            return musics;
-        }
+            string url = $"{UrlBase.NetEase.Search}";
 
-        if (result == null || result.code != 200)
-        {
-            return musics;
-        }
+            var postData = NetEaseUtils.GetPostDataForSearch(keyword);
+            var form = new FormUrlEncodedContent(postData);
 
-        foreach (var song in result.result.songs)
-        {
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = form
+            };
+            request.Headers.Add("Accept", "*/*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+
+            ResultBase<MusicSearchHttpResult>? result;
             try
             {
-                string artistName = "";
-                if (song.ar.Length > 0)
-                {
-                    artistName = string.Join("、", song.ar.Select(x => x.name).ToList());
-                }
-                var music = new MusicResultShow()
-                {
-                    Id = MD5Utils.GetStringValueToLower($"{Platform}-{song.id}"),
-                    Platform = Platform,
-                    IdOnPlatform = song.id.ToString(),
-                    Name = song.name,
-                    Artist = artistName,
-                    Album = song.al.name,
-                    ImageUrl = $"{song.al.picUrl}?param=250y250",
-                    Duration = TimeSpan.FromMilliseconds(song.dt),
-                    Fee = GetFeeFlag(song.privilege)
-                };
-                musics.Add(music);
+                var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+                var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                result = json.ToObject<ResultBase<MusicSearchHttpResult>>();
             }
             catch (Exception ex)
             {
-                Logger.Error("构建网易搜索结果失败。", ex);
+                Logger.Error("解析网易搜索结果失败。", ex);
+                return musics;
             }
+
+            if (result == null || result.code != 200)
+            {
+                return musics;
+            }
+
+            foreach (var song in result.result.songs)
+            {
+                try
+                {
+                    string artistName = "";
+                    if (song.ar.Length > 0)
+                    {
+                        artistName = string.Join("、", song.ar.Select(x => x.name).ToList());
+                    }
+                    var music = new MusicResultShow()
+                    {
+                        Id = MD5Utils.GetStringValueToLower($"{Platform}-{song.id}"),
+                        Platform = Platform,
+                        IdOnPlatform = song.id.ToString(),
+                        Name = song.name,
+                        Artist = artistName,
+                        Album = song.al.name,
+                        ImageUrl = $"{song.al.picUrl}?param=250y250",
+                        Duration = TimeSpan.FromMilliseconds(song.dt),
+                        Fee = GetFeeFlag(song.privilege)
+                    };
+                    musics.Add(music);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("构建网易搜索结果失败。", ex);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("网易搜索失败。", ex);
         }
         return musics;
     }

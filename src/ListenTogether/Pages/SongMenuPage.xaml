@@ -34,9 +34,7 @@
             <controls:MusicResultView
                 Musics="{Binding MusicResultCollection}"
                 PlayCommand="{Binding PlayAsyncCommand}"
-                PlayCommandParameter="{Binding .}"
-                AddToFavoriteCommand="{Binding AddToFavoriteAsyncCommand}"
-                AddToFavoriteCommandParameter="{Binding .}"/>
+                PlayCommandParameter="{Binding .}"/>
         </Border>
 
         <controls:Player

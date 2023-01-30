@@ -183,17 +183,6 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// 添加到歌单时自动播放
-    /// </summary>
-    [ObservableProperty]
-    private bool _isPlayWhenAddToFavorite = GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite;
-    async partial void OnIsPlayWhenAddToFavoriteChanged(bool value)
-    {
-        GlobalConfig.MyUserSetting.Play.IsPlayWhenAddToFavorite = value;
-        await WritePlayConfigAsync();
-    }
-
-    /// <summary>
     /// 播放失败时自动跳到下一首
     /// </summary>
     [ObservableProperty]

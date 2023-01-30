@@ -20,6 +20,7 @@ internal class KuWoMusicProvider : IMusicProvider
         handler.CookieContainer = _cookieContainer;
         handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         _httpClient = new HttpClient(handler);
+        _httpClient.Timeout = TimeSpan.FromSeconds(5);
     }
 
     private async Task InitCookie()
@@ -36,71 +37,79 @@ internal class KuWoMusicProvider : IMusicProvider
     {
         var musics = new List<MusicResultShow>();
 
-        string url = $"{UrlBase.KuWo.Search}?key={keyword}&pn=1&rn=20";
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        request.Headers.Add("Accept", "application/json, text/plain, */*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        request.Headers.Add("Referer", "http://www.kuwo.cn/");
-        request.Headers.Add("Host", "kuwo.cn");
-
-        if (_cookieContainer.Count == 0)
-        {
-            await InitCookie();
-        }
-
-        var csrf = _cookieContainer.GetCookies(new Uri("http://www.kuwo.cn"))["kw_token"]?.Value;
-        if (csrf.IsEmpty())
-        {
-            Logger.Error("酷我音乐搜索参数构造失败。", new ArgumentNullException("csrf"));
-            return musics;
-        }
-        request.Headers.Add("csrf", csrf);
-
-        HttpResultBase<HttpMusicSearchResult>? httpResult;
         try
         {
-            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            httpResult = json.ToObject<HttpResultBase<HttpMusicSearchResult>>();
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("解析酷我音乐搜索结果失败。", ex);
-            return musics;
-        }
-        if (httpResult == null || httpResult.code != 200)
-        {
-            return musics;
-        }
+            string url = $"{UrlBase.KuWo.Search}?key={keyword}&pn=1&rn=20";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            request.Headers.Add("Accept", "application/json, text/plain, */*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            request.Headers.Add("Referer", "http://www.kuwo.cn/");
+            request.Headers.Add("Host", "kuwo.cn");
 
-        foreach (var httpMusic in httpResult.data.list)
-        {
+            if (_cookieContainer.Count == 0)
+            {
+                await InitCookie();
+            }
+
+            var csrf = _cookieContainer.GetCookies(new Uri("http://www.kuwo.cn"))["kw_token"]?.Value;
+            if (csrf.IsEmpty())
+            {
+                Logger.Error("酷我音乐搜索参数构造失败。", new ArgumentNullException("csrf"));
+                return musics;
+            }
+            request.Headers.Add("csrf", csrf);
+
+            HttpResultBase<HttpMusicSearchResult>? httpResult;
             try
             {
-                var music = new MusicResultShow()
-                {
-                    Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.rid}"),
-                    Platform = Platform,
-                    IdOnPlatform = httpMusic.rid.ToString(),
-                    Name = httpMusic.name.Replace("&nbsp;", " "),
-                    Artist = httpMusic.artist.Replace("&nbsp;", " "),
-                    Album = httpMusic.album.Replace("&nbsp;", " "),
-                    Fee = GetFeeFlag(httpMusic.payInfo.listen_fragment),
-                    Duration = TimeSpan.FromSeconds(httpMusic.duration)
-                };
-                musics.Add(music);
+                var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+                string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                httpResult = json.ToObject<HttpResultBase<HttpMusicSearchResult>>();
             }
             catch (Exception ex)
             {
-                Logger.Error("构建酷狗搜索结果失败。", ex);
+                Logger.Error("解析酷我音乐搜索结果失败。", ex);
+                return musics;
+            }
+            if (httpResult == null || httpResult.code != 200)
+            {
+                return musics;
+            }
+
+            foreach (var httpMusic in httpResult.data.list)
+            {
+                try
+                {
+                    var music = new MusicResultShow()
+                    {
+                        Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.rid}"),
+                        Platform = Platform,
+                        IdOnPlatform = httpMusic.rid.ToString(),
+                        Name = httpMusic.name.Replace("&nbsp;", " "),
+                        Artist = httpMusic.artist.Replace("&nbsp;", " "),
+                        Album = httpMusic.album.Replace("&nbsp;", " "),
+                        Fee = GetFeeFlag(httpMusic.payInfo.listen_fragment),
+                        Duration = TimeSpan.FromSeconds(httpMusic.duration)
+                    };
+                    musics.Add(music);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("构建酷狗搜索结果失败。", ex);
+                }
             }
         }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我搜索失败。", ex);
+        }
+
         return musics;
     }
 

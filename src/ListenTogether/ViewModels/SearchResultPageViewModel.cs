@@ -138,12 +138,6 @@ public partial class SearchResultPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    public async void AddToFavoriteAsync(MusicResultShowViewModel musicResult)
-    {
-        await _musicResultService.AddToFavoriteAsync(musicResult.ToLocalMusic());
-    }
-
-    [RelayCommand]
     private async void GoToSearchPageAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(SearchPage)}?Keyword={Keyword}", true);

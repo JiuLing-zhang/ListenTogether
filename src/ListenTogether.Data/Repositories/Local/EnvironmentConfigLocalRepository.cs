@@ -41,7 +41,6 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             IsAutoNextWhenFailed = playConfig.IsAutoNextWhenFailed,
             IsCleanPlaylistWhenPlayMyFavorite = playConfig.IsCleanPlaylistWhenPlayMyFavorite,
             IsWifiPlayOnly = playConfig.IsWifiPlayOnly,
-            IsPlayWhenAddToFavorite = playConfig.IsPlayWhenAddToFavorite,
             MusicFormatType = playConfig.MusicFormatType
         };
 
@@ -92,7 +91,6 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
                 IsAutoNextWhenFailed = true,
                 IsCleanPlaylistWhenPlayMyFavorite = true,
                 IsWifiPlayOnly = true,
-                IsPlayWhenAddToFavorite = false,
                 MusicFormatType = MusicFormatTypeEnum.PQ
             }).ToJson()
         };

@@ -94,11 +94,6 @@ namespace ListenTogether.Model
         public bool IsPlayingPageKeepScreenOn { get; set; }
 
         /// <summary>
-        /// 添加到歌单时自动播放
-        /// </summary>
-        public bool IsPlayWhenAddToFavorite { get; set; }
-
-        /// <summary>
         /// 播放我的歌单前清空播放列表
         /// </summary>
         public bool IsCleanPlaylistWhenPlayMyFavorite { get; set; }

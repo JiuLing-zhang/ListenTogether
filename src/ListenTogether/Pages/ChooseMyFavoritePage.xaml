@@ -10,14 +10,14 @@
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
         Padding="20">
         <HorizontalStackLayout
+            HorizontalOptions="FillAndExpand"
             Grid.Row="0">
             <Label
                 HorizontalOptions="Start"
                 Text="请选择要加入的歌单"/>
 
             <HorizontalStackLayout
-                HorizontalOptions="EndAndExpand"
-                VerticalOptions="End">
+                HorizontalOptions="EndAndExpand">
                 <HorizontalStackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="AddMyFavorite_Tapped"/>
                 </HorizontalStackLayout.GestureRecognizers>
@@ -27,7 +27,7 @@
                     WidthRequest="20">
                 </Image>
                 <Label
-                    Text="新建歌单"
+                    Text="新增歌单"
                     IsVisible="{OnPlatform WinUI=True,MacCatalyst=True,Android=False,iOS=False}"
                     VerticalTextAlignment="Center"/>
             </HorizontalStackLayout>

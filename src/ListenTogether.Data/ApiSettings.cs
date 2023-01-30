@@ -69,7 +69,6 @@ internal class ApiSettings
         public string Remove => $"{_baseUrl}/api/my-favorite/delete/{{0}}";
         public string AddMusic => $"{_baseUrl}/api/my-favorite/add-music/{{0}}/{{1}}";
         public string RemoveDetail => $"{_baseUrl}/api/my-favorite/remove-detail/{{0}}";
-        public string GetAllMusicId => $"{_baseUrl}/api/my-favorite/music-id-list";
     }
 
     public MusicUrl Music => new(BaseUrl);

@@ -151,15 +151,4 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         }
         return true;
     }
-
-    public async Task<List<string>> GetAllMusicIdAsync()
-    {
-        var json = await DataConfig.HttpClientWithToken.GetStringAsync(DataConfig.ApiSetting.MyFavorite.GetAllMusicId);
-        var jsonResult = json.ToObject<List<string>>();
-        if (jsonResult == null)
-        {
-            return new List<string>();
-        }
-        return jsonResult;
-    }
 }

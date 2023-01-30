@@ -18,75 +18,82 @@ public class KuGouMusicProvider : IMusicProvider
         var handler = new HttpClientHandler();
         handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         _httpClient = new HttpClient(handler);
+        _httpClient.Timeout = TimeSpan.FromSeconds(5);
     }
     public async Task<List<MusicResultShow>> SearchAsync(string keyword)
     {
         var musics = new List<MusicResultShow>();
-
-        string args = KuGouUtils.GetSearchData(keyword);
-        string url = $"{UrlBase.KuGou.Search}?{args}";
-
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url)
-        };
-        request.Headers.Add("Accept", "*/*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        json = KuGouUtils.RemoveHttpResultHead(json);
-        if (json.IsEmpty())
-        {
-            return musics;
-        }
-
-        HttpResultBase<HttpMusicSearchResult>? httpResult;
         try
         {
-            httpResult = json.ToObject<HttpResultBase<HttpMusicSearchResult>>();
-        }
-        catch (Exception ex)
-        {
-            Logger.Error("解析酷狗搜索结果失败。", ex);
-            return musics;
-        }
-        if (httpResult == null || httpResult.status != 1 || httpResult.error_code != 0)
-        {
-            return musics;
-        }
+            string args = KuGouUtils.GetSearchData(keyword);
+            string url = $"{UrlBase.KuGou.Search}?{args}";
 
-        foreach (var httpMusic in httpResult.data.lists)
-        {
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url)
+            };
+            request.Headers.Add("Accept", "*/*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            json = KuGouUtils.RemoveHttpResultHead(json);
+            if (json.IsEmpty())
+            {
+                return musics;
+            }
+
+            HttpResultBase<HttpMusicSearchResult>? httpResult;
             try
             {
-                var ExtendDataJson = (new KuGouSearchExtendData()
-                {
-                    Hash = httpMusic.FileHash,
-                    AlbumId = httpMusic.AlbumID
-                }).ToJson();
-
-                var music = new MusicResultShow()
-                {
-                    Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.ID}"),
-                    Platform = Platform,
-                    IdOnPlatform = httpMusic.ID,
-                    Name = KuGouUtils.RemoveSongNameTag(httpMusic.SongName),
-                    Artist = KuGouUtils.RemoveSongNameTag(httpMusic.SingerName),
-                    Album = httpMusic.AlbumName,
-                    ImageUrl = "",
-                    Duration = TimeSpan.FromSeconds(httpMusic.Duration),
-                    Fee = GetFeeFlag(httpMusic.Privilege),
-                    ExtendDataJson = ExtendDataJson
-                };
-                musics.Add(music);
+                httpResult = json.ToObject<HttpResultBase<HttpMusicSearchResult>>();
             }
             catch (Exception ex)
             {
-                Logger.Error("构建酷狗搜索结果失败。", ex);
+                Logger.Error("解析酷狗搜索结果失败。", ex);
+                return musics;
             }
+            if (httpResult == null || httpResult.status != 1 || httpResult.error_code != 0)
+            {
+                return musics;
+            }
+
+            foreach (var httpMusic in httpResult.data.lists)
+            {
+                try
+                {
+                    var ExtendDataJson = (new KuGouSearchExtendData()
+                    {
+                        Hash = httpMusic.FileHash,
+                        AlbumId = httpMusic.AlbumID
+                    }).ToJson();
+
+                    var music = new MusicResultShow()
+                    {
+                        Id = MD5Utils.GetStringValueToLower($"{Platform}-{httpMusic.ID}"),
+                        Platform = Platform,
+                        IdOnPlatform = httpMusic.ID,
+                        Name = KuGouUtils.RemoveSongNameTag(httpMusic.SongName),
+                        Artist = KuGouUtils.RemoveSongNameTag(httpMusic.SingerName),
+                        Album = httpMusic.AlbumName,
+                        ImageUrl = "",
+                        Duration = TimeSpan.FromSeconds(httpMusic.Duration),
+                        Fee = GetFeeFlag(httpMusic.Privilege),
+                        ExtendDataJson = ExtendDataJson
+                    };
+                    musics.Add(music);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("构建酷狗搜索结果失败。", ex);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷狗搜索失败。", ex);
         }
         return musics;
     }

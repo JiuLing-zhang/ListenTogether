@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ListenTogether.Controls"
              x:Class="ListenTogether.Controls.Player">
 
     <ContentView.Content>
@@ -43,7 +44,7 @@
                         </Image>
 
                         <Grid RowDefinitions="50*,50*"
-                              ColumnDefinitions="80,20,260,100"
+                              ColumnDefinitions="80,280,100"
                               Margin="0,0,40,0">
                             <Image
                                 Grid.Row="0"
@@ -58,29 +59,17 @@
                                 </Image.GestureRecognizers>
                             </Image>
 
-                            <Image
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                x:Name="ImgFavorite"
-                                WidthRequest="16"
-                                HeightRequest="16"
-                                Aspect="AspectFill">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="Favorite_Tapped"/>
-                                </Image.GestureRecognizers>
-                            </Image>
                             <Label
                                 Grid.Row="0"
-                                Grid.Column="2"
+                                Grid.Column="1"
                                 x:Name="LblMusicInfo"
                                 Style="{StaticResource Explain}"
                                 VerticalTextAlignment="Center"
-                                LineBreakMode="TailTruncation">
-                            </Label>
+                                LineBreakMode="TailTruncation"/>
 
                             <HorizontalStackLayout
                                 Grid.Row="0"
-                                Grid.Column="3"
+                                Grid.Column="2"
                                 HorizontalOptions="End">
                                 <Label 
                                     x:Name="LblPosition"
@@ -101,7 +90,7 @@
                             <Slider
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Grid.ColumnSpan="3"
+                                Grid.ColumnSpan="2"
                                 x:Name="SliderPlayProgress"
                                 HorizontalOptions="Fill"
                                 Minimum="0"
@@ -124,6 +113,11 @@
                         <HorizontalStackLayout 
                             Grid.Column="2"
                             Spacing="10">
+                            <controls:FavoriteView
+                                x:Name="FavoriteView"
+                                WidthRequest="20"
+                                HeightRequest="20"
+                                VerticalOptions="Center"/>
                             <Image 
                                 x:Name="ImgSoundOff"
                                 HeightRequest="20"
@@ -214,67 +208,68 @@
                             </StackLayout>
 
                             <!-- 播放按钮 -->
-                            <Grid ColumnDefinitions="*,*,*,*,*"
-                                  Margin="0,5,0,10">
-                                <Image Source="{Binding Source, Source={x:Reference ImgRepeat}}"
-                                           Grid.Column="0"
-                                           WidthRequest="30"
-                                           HeightRequest="30"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center"
-                                           Aspect="AspectFill">
+                            <Grid
+                                ColumnDefinitions="*,*,*,*,*"
+                                Margin="0,5,0,10">
+                                <Image
+                                    Source="{Binding Source, Source={x:Reference ImgRepeat}}"
+                                    Grid.Column="0"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    Aspect="AspectFill">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="ImgRepeat_Tapped"/>
                                     </Image.GestureRecognizers>
                                 </Image>
 
-                                <Image Source="{Binding Source, Source={x:Reference ImgBack}}"
-                                           Grid.Column="1"
-                                           WidthRequest="30"
-                                           HeightRequest="30"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center"
-                                           Aspect="AspectFill">
+                                <Image
+                                    Source="{Binding Source, Source={x:Reference ImgBack}}"
+                                    Grid.Column="1"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    Aspect="AspectFill">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="Previous_Tapped"/>
                                     </Image.GestureRecognizers>
                                 </Image>
 
-                                <Image Source="{Binding Source, Source={x:Reference ImgPlay}}"
-                                           Grid.Column="2"
-                                           WidthRequest="50"
-                                           HeightRequest="50"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center"
-                                           Aspect="AspectFill">
+                                <Image
+                                    Source="{Binding Source, Source={x:Reference ImgPlay}}"
+                                    Grid.Column="2"
+                                    WidthRequest="50"
+                                    HeightRequest="50"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    Aspect="AspectFill">
                                     <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
+                                        <TapGestureRecognizer Tapped="ImgPlay_Tapped"/>
                                     </Image.GestureRecognizers>
                                 </Image>
 
-                                <Image Source="{Binding Source, Source={x:Reference ImgNext}}"
-                                           Grid.Column="3"
-                                           WidthRequest="30"
-                                           HeightRequest="30"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center"
-                                           Aspect="AspectFill">
+                                <Image
+                                    Source="{Binding Source, Source={x:Reference ImgNext}}"
+                                    Grid.Column="3"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"
+                                    Aspect="AspectFill">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="Next_Tapped"/>
                                     </Image.GestureRecognizers>
                                 </Image>
 
-                                <Image x:Name="ImgOther"
-                                           Grid.Column="4"
-                                           WidthRequest="30"
-                                           HeightRequest="30"
-                                           VerticalOptions="Center"
-                                           HorizontalOptions="Center"
-                                           Aspect="AspectFill">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="Puzzled_Tapped"/>
-                                    </Image.GestureRecognizers>
-                                </Image>
+                                <controls:FavoriteView
+                                    MusicId="{Binding MusicId, Source={x:Reference FavoriteView}}"
+                                    Grid.Column="4"
+                                    WidthRequest="30"
+                                    HeightRequest="30"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Center"/>
                             </Grid>
                         </StackLayout>
                     </StackLayout>

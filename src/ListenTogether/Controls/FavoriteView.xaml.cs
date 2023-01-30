@@ -5,8 +5,7 @@ namespace ListenTogether.Controls;
 
 public partial class FavoriteView : ContentView
 {
-    public bool IsLogin => UserInfoStorage.GetUsername().IsNotEmpty();
-
+    private bool _isLogin => UserInfoStorage.GetUsername().IsNotEmpty();
     public static readonly BindableProperty MusicIdProperty =
         BindableProperty.Create(
             nameof(MusicId),
@@ -18,8 +17,11 @@ public partial class FavoriteView : ContentView
         set { SetValue(MusicIdProperty, value); }
     }
 
-    private UserFavoriteService? _userFavoriteService;
     private IMyFavoriteService? _myFavoriteService;
+    private IMusicNetworkService? _musicNetworkService;
+    private IPlaylistService? _playlistService;
+    private IMusicService? _musicService;
+
     public FavoriteView()
     {
         InitializeComponent();
@@ -28,43 +30,46 @@ public partial class FavoriteView : ContentView
     protected override void OnHandlerChanged()
     {
         base.OnHandlerChanged();
-        if (!IsLogin)
-        {
-            return;
-        }
+
         if (_myFavoriteService == null)
         {
             _myFavoriteService = this.Handler.MauiContext.Services.GetRequiredService<IMyFavoriteService>();
         }
-        if (_userFavoriteService == null)
+        if (_musicNetworkService == null)
         {
-            _userFavoriteService = this.Handler.MauiContext.Services.GetRequiredService<UserFavoriteService>();
+            _musicNetworkService = this.Handler.MauiContext.Services.GetRequiredService<IMusicNetworkService>();
         }
-        SetFavoriteImage();
+        if (_playlistService == null)
+        {
+            _playlistService = this.Handler.MauiContext.Services.GetRequiredService<IPlaylistService>();
+        }
+        if (_musicService == null)
+        {
+            _musicService = this.Handler.MauiContext.Services.GetRequiredService<IMusicService>();
+        }
+        ImgFavorite.IsVisible = _isLogin;
     }
-
-    private void SetFavoriteImage()
-    {
-        var isExist = _userFavoriteService.GetMusicsId().Contains(MusicId);
-        if (isExist)
-        {
-            ImgFavorite.Source = "favorite.png";
-        }
-        else
-        {
-            if (Config.IsDarkTheme)
-            {
-                ImgFavorite.Source = "un_favorite_dark.png";
-            }
-            else
-            {
-                ImgFavorite.Source = "un_favorite.png";
-            }
-        }
-    }
-
     private async void Favorite_Tapped(object sender, TappedEventArgs e)
     {
+        if (!_isLogin)
+        {
+            await ToastService.Show("用户未登录");
+            ImgFavorite.IsVisible = _isLogin;
+            return;
+        }
+
+        var playlist = await _playlistService.GetOneAsync(MusicId);
+        if (playlist == null)
+        {
+            await ToastService.Show("无法加载歌曲信息");
+            return;
+        }
+
+        if (playlist.ImageUrl.IsEmpty() && playlist.Platform == Model.Enums.PlatformEnum.KuGou)
+        {
+            playlist.ImageUrl = await _musicNetworkService.GetImageUrlAsync(playlist.Platform, playlist.IdOnPlatform, playlist.ExtendDataJson);
+        }
+
         var popup = new ChooseMyFavoritePage(_myFavoriteService);
         var result = await App.Current.MainPage.ShowPopupAsync(popup);
         if (result == null)
@@ -77,6 +82,31 @@ public partial class FavoriteView : ContentView
             await ToastService.Show("添加失败");
             return;
         }
-        //TODO
+
+        var localMusic = new LocalMusic()
+        {
+            Id = playlist.Id,
+            IdOnPlatform = playlist.IdOnPlatform,
+            Platform = playlist.Platform,
+            Name = playlist.Name,
+            Album = playlist.Album,
+            Artist = playlist.Artist,
+            ExtendDataJson = playlist.ExtendDataJson,
+            ImageUrl = playlist.ImageUrl
+        };
+
+        var isMusicOk = await _musicService.AddOrUpdateAsync(localMusic);
+        if (!isMusicOk)
+        {
+            await ToastService.Show("歌曲信息保存失败");
+            return;
+        }
+
+        var isAddOk = await _myFavoriteService.AddMusicToMyFavoriteAsync(myFavoriteId, localMusic.Id);
+        if (isAddOk == false)
+        {
+            await ToastService.Show("添加失败");
+            return;
+        }
     }
 }

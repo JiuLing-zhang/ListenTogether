@@ -1,5 +1,4 @@
-﻿using ListenTogether.Business.Services;
-using ListenTogether.Services.MusicSwitchServer;
+﻿using ListenTogether.Services.MusicSwitchServer;
 
 namespace ListenTogether.Services;
 
@@ -17,7 +16,6 @@ internal static class ServicesExtensions
         builder.Services.AddSingleton<PlayerService>();
         builder.Services.AddSingleton<MusicPlayerService>();
         builder.Services.AddSingleton<MusicResultService>();
-        builder.Services.AddSingleton<UserFavoriteService>();
         return builder;
     }
 }
