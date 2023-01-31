@@ -67,8 +67,9 @@ public class MusicPlayerService
             var playUrl = await _musicNetworkService.GetPlayUrlAsync(playlist.Platform, playlist.IdOnPlatform, playlist.ExtendDataJson);
             if (playUrl.IsEmpty())
             {
-                await ToastService.Show("播放地址获取失败");
                 MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);
+                Logger.Info($"播放地址获取失败。{playlist.IdOnPlatform}-{playlist.IdOnPlatform}-{playlist.Name}");
+                await Next();
                 return;
             }
 
@@ -137,10 +138,7 @@ public class MusicPlayerService
 
     private async Task MediaFailed()
     {
-        if (GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed)
-        {
-            await Next();
-        }
+        await Next();
     }
 
     public async Task SetPlayPosition(double positionMillisecond)

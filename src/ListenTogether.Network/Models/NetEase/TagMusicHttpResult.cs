@@ -19,6 +19,7 @@
     public class TagMusicSongsHttpResult
     {
         public List<TagMusicSongs> songs { get; set; }
+        public List<TagMusicPrivileges> privileges { get; set; }
     }
 
     public class TagMusicSongs
@@ -41,4 +42,10 @@
         public string name { get; set; }
     }
 
+
+    public class TagMusicPrivileges
+    {
+        public long id { get; set; }
+        public int fee { get; set; }
+    }
 }

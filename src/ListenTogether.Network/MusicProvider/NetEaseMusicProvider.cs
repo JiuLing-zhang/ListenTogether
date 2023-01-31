@@ -349,6 +349,19 @@ public class NetEaseMusicProvider : IMusicProvider
                 imageUrl = track.al.picUrl ?? "";
             }
 
+            FeeEnum fee = FeeEnum.Free;
+            if (songResult.privileges != null)
+            {
+                var privilege = songResult.privileges.FirstOrDefault(x => x.id == track.id);
+                if (privilege != null)
+                {
+                    if (privilege.fee == 1)
+                    {
+                        fee = FeeEnum.Vip;
+                    }
+                }
+            }
+
             var music = new MusicResultShow()
             {
                 Id = MD5Utils.GetStringValueToLower($"{Platform}-{track.id}"),
@@ -359,7 +372,7 @@ public class NetEaseMusicProvider : IMusicProvider
                 Album = album,
                 ImageUrl = $"{imageUrl}?param=250y250",
                 Duration = TimeSpan.FromMilliseconds(track.dt),
-                Fee = FeeEnum.Free,
+                Fee = fee,
             };
 
             musics.Add(music);
@@ -449,6 +462,19 @@ public class NetEaseMusicProvider : IMusicProvider
                 imageUrl = track.al.picUrl ?? "";
             }
 
+            FeeEnum fee = FeeEnum.Free;
+            if (songResult.privileges != null)
+            {
+                var privilege = songResult.privileges.FirstOrDefault(x => x.id == track.id);
+                if (privilege != null)
+                {
+                    if (privilege.fee == 1)
+                    {
+                        fee = FeeEnum.Vip;
+                    }
+                }
+            }
+
             var music = new MusicResultShow()
             {
                 Id = MD5Utils.GetStringValueToLower($"{Platform}-{track.id}"),
@@ -459,7 +485,7 @@ public class NetEaseMusicProvider : IMusicProvider
                 Album = album,
                 ImageUrl = $"{imageUrl}?param=250y250",
                 Duration = TimeSpan.FromMilliseconds(track.dt),
-                Fee = FeeEnum.Free,
+                Fee = fee,
             };
 
             musics.Add(music);
@@ -490,16 +516,16 @@ public class NetEaseMusicProvider : IMusicProvider
         var httpResult = json.ToObject<ResultBase<MusicUrlHttpResult>>();
         if (httpResult == null)
         {
-            return null;
+            return "";
         }
         if (httpResult.code != 200)
         {
-            return null;
+            return "";
         }
 
         if (httpResult.data.Count == 0)
         {
-            return null;
+            return "";
         }
 
         return httpResult.data[0].url;

@@ -74,11 +74,6 @@ namespace ListenTogether.Model
         /// 歌曲名或歌手名必须包含搜索词
         /// </summary>
         public bool IsMatchSearchKey { get; set; }
-
-        /// <summary>
-        /// 隐藏收费歌曲
-        /// </summary>
-        public bool IsHideVipMusic { get; set; }
     }
 
     public class PlaySetting
@@ -97,11 +92,6 @@ namespace ListenTogether.Model
         /// 播放我的歌单前清空播放列表
         /// </summary>
         public bool IsCleanPlaylistWhenPlayMyFavorite { get; set; }
-
-        /// <summary>
-        /// 歌曲无法播放时自动跳到下一首
-        /// </summary>
-        public bool IsAutoNextWhenFailed { get; set; }
 
         /// <summary>
         /// 音质

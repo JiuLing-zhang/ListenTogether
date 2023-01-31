@@ -87,7 +87,7 @@
 
                             <jiuLing:TextSwitch Text="深色主题（可能需要重启）"
                                                 IsToggled="{Binding IsDarkMode}"/>
-                            
+
                             <!-- 搜索设置 -->
                             <Label 
                                 Margin="0,40,0,0"
@@ -115,10 +115,6 @@
                                 IsToggled="{Binding IsHideShortMusic}"/>
 
                             <jiuLing:TextSwitch 
-                                Text="隐藏收费歌曲"
-                                IsToggled="{Binding IsHideVipMusic}"/>
-
-                            <jiuLing:TextSwitch 
                                 Text="歌曲名或歌手名必须包含搜索词"
                                 IsToggled="{Binding IsMatchSearchKey}"/>
 
@@ -137,10 +133,6 @@
                                 Text="播放页面禁止屏幕关闭"
                                 IsVisible="{OnIdiom Default=false,Phone=true}"
                                 IsToggled="{Binding IsPlayingPageKeepScreenOn}"/>
-
-                            <jiuLing:TextSwitch 
-                                Text="播放失败时自动跳到下一首"
-                                IsToggled="{Binding IsAutoNextWhenFailed}"/>
 
                             <jiuLing:TextSwitch 
                                 Text="播放我的歌单前清空播放列表"

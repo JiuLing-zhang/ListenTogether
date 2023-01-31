@@ -38,7 +38,6 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         result.Play = new PlaySetting()
         {
             IsPlayingPageKeepScreenOn = playConfig.IsPlayingPageKeepScreenOn,
-            IsAutoNextWhenFailed = playConfig.IsAutoNextWhenFailed,
             IsCleanPlaylistWhenPlayMyFavorite = playConfig.IsCleanPlaylistWhenPlayMyFavorite,
             IsWifiPlayOnly = playConfig.IsWifiPlayOnly,
             MusicFormatType = playConfig.MusicFormatType
@@ -50,8 +49,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         {
             EnablePlatform = searchConfig.EnablePlatform,
             IsHideShortMusic = searchConfig.IsHideShortMusic,
-            IsMatchSearchKey = searchConfig.IsMatchSearchKey,
-            IsHideVipMusic = searchConfig.IsHideVipMusic
+            IsMatchSearchKey = searchConfig.IsMatchSearchKey
         };
 
         return result;
@@ -82,13 +80,11 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             {
                 EnablePlatform = PlatformEnum.NetEase | PlatformEnum.KuGou | PlatformEnum.MiGu | PlatformEnum.KuWo,
                 IsHideShortMusic = true,
-                IsMatchSearchKey = false,
-                IsHideVipMusic = true
+                IsMatchSearchKey = false
             }).ToJson(),
             PlaySettingJson = (new PlaySetting()
             {
                 IsPlayingPageKeepScreenOn = true,
-                IsAutoNextWhenFailed = true,
                 IsCleanPlaylistWhenPlayMyFavorite = true,
                 IsWifiPlayOnly = true,
                 MusicFormatType = MusicFormatTypeEnum.PQ

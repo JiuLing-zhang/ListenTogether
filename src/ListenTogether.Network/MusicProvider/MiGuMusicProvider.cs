@@ -306,7 +306,7 @@ public class MiGuMusicProvider : IMusicProvider
             {
                 continue;
             }
-            songId = songId.Substring(0, songId.IndexOf("/") + 1);
+            songId = songId.Substring(songId.LastIndexOf("/") + 1);
 
             musics.Add(new MusicResultShow()
             {

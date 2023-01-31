@@ -7,29 +7,6 @@
              x:Class="ListenTogether.Pages.SearchResultPage"
              Title="搜索">
 
-    <ContentPage.Resources>
-        <Style x:Key="FeeType" TargetType="Label">
-            <Setter Property="TextColor"
-                    Value="{AppThemeBinding Dark={StaticResource DarkFeeText},Light={StaticResource LightFeeText}}"/>
-            <Setter Property="IsVisible"
-                    Value="false"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Fee}"
-                             Value="VIP"
-                             TargetType="Label">
-                    <Setter Property="IsVisible"
-                            Value="true"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Fee}"
-                             Value="试听"
-                             TargetType="Label">
-                    <Setter Property="IsVisible"
-                            Value="true"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </ContentPage.Resources>
-
     <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -68,8 +45,9 @@
                 PlayCommand="{Binding PlayAsyncCommand}"
                 PlayCommandParameter="{Binding .}"/>
         </StackLayout>
-        <controls:Player Grid.Row="1" 
-                         x:Name="player"
-                         IsPlayingPage="False"/>
+        <controls:Player
+            Grid.Row="1"
+            x:Name="player"
+            IsPlayingPage="False"/>
     </Grid>
 </ContentPage>

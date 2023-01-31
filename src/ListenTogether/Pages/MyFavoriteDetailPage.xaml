@@ -73,7 +73,7 @@
             ItemsSource="{Binding MyFavoriteMusics}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout>
+                    <StackLayout Style="{StaticResource DataRowEnter}">
                         <OnPlatform x:TypeArguments="View">
                             <On Platform="WinUI, macOS">
                                 <Grid

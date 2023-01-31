@@ -69,19 +69,17 @@ public partial class SearchResultPageViewModel : ViewModelBase
 
             if (GlobalConfig.MyUserSetting.Search.IsMatchSearchKey)
             {
-                IMusicSearchFilter filter = new SearchKeyFilter(keyword);
-                musics = filter.Filter(musics);
+                IMusicSearchFilter searchKeyFilter = new SearchKeyFilter(keyword);
+                musics = searchKeyFilter.Filter(musics);
             }
             if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic)
             {
-                IMusicSearchFilter filter = new ShortMusicFilter();
-                musics = filter.Filter(musics);
+                IMusicSearchFilter shortMusicFilter = new ShortMusicFilter();
+                musics = shortMusicFilter.Filter(musics);
             }
-            if (GlobalConfig.MyUserSetting.Search.IsHideVipMusic)
-            {
-                IMusicSearchFilter filter = new VipMusicFilter();
-                musics = filter.Filter(musics);
-            }
+
+            IMusicSearchFilter vipMusicFilter = new VipMusicFilter();
+            musics = vipMusicFilter.Filter(musics);
 
             if (musics.Count == 0)
             {

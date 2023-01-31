@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Filters.MusicSearchFilter;
 using ListenTogether.Model.Enums;
 using System.Collections.ObjectModel;
 
@@ -45,6 +46,9 @@ public partial class SongMenuPageViewModel : ViewModelBase
             default:
                 throw new ArgumentNullException("不支持的歌单类型");
         }
+
+        IMusicSearchFilter vipMusicFilter = new VipMusicFilter();
+        musics = vipMusicFilter.Filter(musics);
 
         var platformMusics = musics.Select(
               x => new MusicResultShowViewModel()

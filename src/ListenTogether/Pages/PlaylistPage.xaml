@@ -56,7 +56,7 @@
                 EmptyView="列表是空的">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout>
+                        <StackLayout Style="{StaticResource DataRowEnter}">
                             <OnPlatform x:TypeArguments="View">
                                 <On Platform="WinUI, macOS">
                                     <StackLayout Orientation="Horizontal">
@@ -130,7 +130,7 @@
                                             HeightRequest="15"
                                             VerticalOptions="Center"
                                             MusicId="{Binding Id}"/>
-                                        
+
                                         <Image
                                             Grid.Column="3"
                                             Source="{Binding Source, Source={x:Reference ImgRemove}}"

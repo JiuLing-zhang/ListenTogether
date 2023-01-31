@@ -150,17 +150,6 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// 隐藏收费歌曲
-    /// </summary>
-    [ObservableProperty]
-    private bool _isHideVipMusic = GlobalConfig.MyUserSetting.Search.IsHideVipMusic;
-    async partial void OnIsHideVipMusicChanged(bool value)
-    {
-        GlobalConfig.MyUserSetting.Search.IsHideVipMusic = value;
-        await WriteSearchConfigAsync();
-    }
-
-    /// <summary>
     /// 仅WIFI下可播放
     /// </summary>
     [ObservableProperty]
@@ -179,17 +168,6 @@ public partial class SettingPageViewModel : ViewModelBase
     async partial void OnIsPlayingPageKeepScreenOnChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn = value;
-        await WritePlayConfigAsync();
-    }
-
-    /// <summary>
-    /// 播放失败时自动跳到下一首
-    /// </summary>
-    [ObservableProperty]
-    private bool _isAutoNextWhenFailed = GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed;
-    async partial void OnIsAutoNextWhenFailedChanged(bool value)
-    {
-        GlobalConfig.MyUserSetting.Play.IsAutoNextWhenFailed = value;
         await WritePlayConfigAsync();
     }
 
