@@ -1,3 +1,4 @@
+using ListenTogether.HandCursorControls;
 using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Pages;
@@ -9,6 +10,11 @@ public partial class NetEasePage : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
+    }
+    protected override void OnHandlerChanged()
+    {
+        base.OnHandlerChanged();
+        HandCursor.Binding();
     }
     protected override async void OnAppearing()
     {

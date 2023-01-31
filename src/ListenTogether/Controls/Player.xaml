@@ -2,6 +2,7 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              x:Class="ListenTogether.Controls.Player">
 
     <ContentView.Content>
@@ -13,17 +14,18 @@
                         VerticalOptions="Center"
                         Spacing="10">
 
-                        <Image 
+                        <hc:HandCursorImage 
                             x:Name="ImgBack"
                             WidthRequest="40"
                             HeightRequest="40"
-                            Aspect="AspectFill">
+                            Aspect="AspectFill"
+                            ToolTipProperties.Text="上一首">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Previous_Tapped"/>
                             </Image.GestureRecognizers>
-                        </Image>
+                        </hc:HandCursorImage>
 
-                        <Image 
+                        <hc:HandCursorImage 
                             x:Name="ImgPlay"
                             WidthRequest="50"
                             HeightRequest="50"
@@ -31,33 +33,35 @@
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="ImgPlay_Tapped"></TapGestureRecognizer>
                             </Image.GestureRecognizers>
-                        </Image>
+                        </hc:HandCursorImage>
 
-                        <Image 
+                        <hc:HandCursorImage 
                             x:Name="ImgNext"
                             WidthRequest="40"
                             HeightRequest="40"
-                            Aspect="AspectFill">
+                            Aspect="AspectFill"
+                            ToolTipProperties.Text="下一首">
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Next_Tapped"/>
                             </Image.GestureRecognizers>
-                        </Image>
+                        </hc:HandCursorImage>
 
                         <Grid RowDefinitions="50*,50*"
                               ColumnDefinitions="80,280,100"
                               Margin="0,0,40,0">
-                            <Image
+                            <hc:HandCursorImage
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Grid.RowSpan="2"
                                 WidthRequest="60"
                                 HeightRequest="60"
                                 x:Name="ImgCurrentMusic"
-                                Aspect="AspectFill">
+                                Aspect="AspectFill"
+                                ToolTipProperties.Text="打开播放页">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="GoToPlayingPage_Tapped"/>
                                 </Image.GestureRecognizers>
-                            </Image>
+                            </hc:HandCursorImage>
 
                             <Label
                                 Grid.Row="0"
@@ -100,7 +104,7 @@
                             </Slider>
                         </Grid>
 
-                        <Image 
+                        <hc:HandCursorImage 
                             x:Name="ImgRepeat"
                             WidthRequest="20"
                             HeightRequest="20"
@@ -108,7 +112,7 @@
                             <Image.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="ImgRepeat_Tapped"/>
                             </Image.GestureRecognizers>
-                        </Image>
+                        </hc:HandCursorImage>
 
                         <HorizontalStackLayout 
                             Grid.Column="2"
@@ -118,15 +122,16 @@
                                 WidthRequest="20"
                                 HeightRequest="20"
                                 VerticalOptions="Center"/>
-                            <Image 
+                            <hc:HandCursorImage
                                 x:Name="ImgSoundOff"
                                 HeightRequest="20"
                                 WidthRequest="20"
-                                Aspect="AspectFill">
+                                Aspect="AspectFill"
+                                ToolTipProperties.Text="音量设置">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="ImgSoundOff_Tapped"/>
                                 </Image.GestureRecognizers>
-                            </Image>
+                            </hc:HandCursorImage>
 
                             <Slider 
                                 x:Name="SliderVolume"

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              x:Class="ListenTogether.Pages.MyFavoriteDetailPage"
              Title="我的歌单详情"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
@@ -29,11 +30,12 @@
                 VerticalTextAlignment="Center"
                 Style="{StaticResource Title}"/>
 
-            <StackLayout
+            <hc:HandCursorStackLayout
                 Margin="10,0,0,0"
                 Orientation="Horizontal"
                 HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
-                VerticalOptions="End">
+                VerticalOptions="End"
+                ToolTipProperties.Text="重命名当前歌单">
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding MyFavoriteRenameAsyncCommand}"/>
                 </StackLayout.GestureRecognizers>
@@ -45,13 +47,14 @@
                 <Label
                     Text="重命名"
                     VerticalTextAlignment="Center"/>
-            </StackLayout>
+            </hc:HandCursorStackLayout>
 
-            <StackLayout
+            <hc:HandCursorStackLayout
                 Margin="{OnPlatform WinUI='20,0,0,0',MacCatalyst='20,0,0,0',Android='5,0,0,0',iOS='5,0,0,0'}"
                 Orientation="Horizontal"
                 HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"
-                VerticalOptions="End">
+                VerticalOptions="End"
+                ToolTipProperties.Text="删除当前歌单">
                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding MyFavoriteRemoveAsyncCommand}"/>
                 </StackLayout.GestureRecognizers>
@@ -64,7 +67,7 @@
                 <Label
                     Text="删除歌单"
                     VerticalTextAlignment="Center"/>
-            </StackLayout>
+            </hc:HandCursorStackLayout>
         </StackLayout>
 
         <CollectionView
@@ -88,7 +91,7 @@
                                         </TapGestureRecognizer>
                                     </Grid.GestureRecognizers>
 
-                                    <Image
+                                    <hc:HandCursorImage
                                         Grid.Row="0"
                                         Grid.RowSpan="2"
                                         Grid.Column="0"
@@ -97,13 +100,14 @@
                                         WidthRequest="15"
                                         HeightRequest="15"
                                         VerticalOptions="Center"
-                                        HorizontalOptions="Center">
+                                        HorizontalOptions="Center"
+                                        ToolTipProperties.Text="从歌单删除该歌曲">
                                         <Image.GestureRecognizers>
                                             <TapGestureRecognizer
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoriteDetailPageViewModel}}, Path=RemoveOneAsyncCommand}"
                                                 CommandParameter="{Binding .}"/>
                                         </Image.GestureRecognizers>
-                                    </Image>
+                                    </hc:HandCursorImage>
 
                                     <Label
                                         Grid.Row="0"

@@ -1,6 +1,7 @@
 <toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
                x:Class="ListenTogether.Pages.ChooseMyFavoritePage"
                x:Name="self"
                CanBeDismissedByTappingOutsideOfPopup="False">
@@ -9,18 +10,20 @@
         RowDefinitions="20,*,40"
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
         Padding="20">
-        <HorizontalStackLayout
+        <StackLayout
+            Orientation="Horizontal"
             HorizontalOptions="FillAndExpand"
             Grid.Row="0">
             <Label
                 HorizontalOptions="Start"
                 Text="请选择要加入的歌单"/>
 
-            <HorizontalStackLayout
+            <hc:HandCursorStackLayout
+                Orientation="Horizontal"
                 HorizontalOptions="EndAndExpand">
-                <HorizontalStackLayout.GestureRecognizers>
+                <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Tapped="AddMyFavorite_Tapped"/>
-                </HorizontalStackLayout.GestureRecognizers>
+                </StackLayout.GestureRecognizers>
                 <Image
                     Source="{AppThemeBinding Dark='plus_dark.png',Light='plus.png'}"
                     HeightRequest="20"                    
@@ -30,8 +33,8 @@
                     Text="新增歌单"
                     IsVisible="{OnPlatform WinUI=True,MacCatalyst=True,Android=False,iOS=False}"
                     VerticalTextAlignment="Center"/>
-            </HorizontalStackLayout>
-        </HorizontalStackLayout>
+            </hc:HandCursorStackLayout>
+        </StackLayout>
 
         <CollectionView
             Grid.Row="1"
@@ -41,13 +44,13 @@
             SelectionChanged="MyFavorite_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout>
+                    <hc:HandCursorStackLayout>
                         <Label Text="{Binding Name}"/>
-                    </StackLayout>
+                    </hc:HandCursorStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <Button
+        <hc:HandCursorButton
             Grid.Row="2"
             Text="关闭"
             Clicked="BtnClose_Clicked"/>

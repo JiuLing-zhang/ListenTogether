@@ -1,12 +1,11 @@
-﻿using ListenTogether.Storage;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 namespace ListenTogether;
 public partial class App : Application
 {
-    public App(IConfiguration config, IEnvironmentConfigService configService, IMusicNetworkService musicNetworkService)
+    public App(IEnvironmentConfigService configService, IMusicNetworkService musicNetworkService)
     {
         InitializeComponent();
 

@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Maui.Views;
+using ListenTogether.HandCursorControls;
 
 namespace ListenTogether.Pages;
 
@@ -24,6 +25,12 @@ public partial class ChooseMyFavoritePage : Popup
         }
 
         InitializeComponent();
+    }
+
+    protected override void OnHandlerChanged()
+    {
+        base.OnHandlerChanged();
+        HandCursor.Binding();
     }
 
     private void BtnClose_Clicked(object sender, EventArgs e)

@@ -1,3 +1,4 @@
+using ListenTogether.HandCursorControls;
 using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Controls;
@@ -29,6 +30,7 @@ public partial class Player : ContentView
     protected override void OnHandlerChanged()
     {
         base.OnHandlerChanged();
+        HandCursor.Binding();
 
         if (_playerService == null)
         {
@@ -134,10 +136,12 @@ public partial class Player : ContentView
         {
             playImagePath = isPlaying ? "pause_dark.png" : "play_dark.png";
         }
+
         MainThread.BeginInvokeOnMainThread(() =>
         {
             this.IsVisible = true;
             ImgPlay.Source = playImagePath;
+            ToolTipProperties.SetText(ImgPlay, isPlaying ? "暂停" : "播放");
         });
     }
 
@@ -254,6 +258,7 @@ public partial class Player : ContentView
     {
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatOne)
         {
+            ToolTipProperties.SetText(ImgRepeat, "单曲循环");
             if (!IsPlayingPage && !Config.IsDarkTheme)
             {
                 ImgRepeat.Source = "repeat_one.png";
@@ -267,6 +272,7 @@ public partial class Player : ContentView
 
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.RepeatList)
         {
+            ToolTipProperties.SetText(ImgRepeat, "列表循环");
             if (!IsPlayingPage && !Config.IsDarkTheme)
             {
                 ImgRepeat.Source = "repeat_list.png";
@@ -280,6 +286,7 @@ public partial class Player : ContentView
 
         if (GlobalConfig.MyUserSetting.Player.PlayMode == PlayModeEnum.Shuffle)
         {
+            ToolTipProperties.SetText(ImgRepeat, "随机播放");
             if (!IsPlayingPage && !Config.IsDarkTheme)
             {
                 ImgRepeat.Source = "shuffle.png";

@@ -1,4 +1,6 @@
-﻿namespace ListenTogether.Pages;
+﻿using ListenTogether.HandCursorControls;
+
+namespace ListenTogether.Pages;
 
 public partial class SearchResultPage : ContentPage
 {
@@ -8,6 +10,11 @@ public partial class SearchResultPage : ContentPage
     {
         InitializeComponent();
         BindingContext = vm;
+    }
+    protected override void OnHandlerChanged()
+    {
+        base.OnHandlerChanged();
+        HandCursor.Binding();
     }
     protected override async void OnAppearing()
     {

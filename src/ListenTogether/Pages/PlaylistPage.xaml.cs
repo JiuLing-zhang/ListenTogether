@@ -1,3 +1,5 @@
+using ListenTogether.HandCursorControls;
+
 namespace ListenTogether.Pages;
 
 public partial class PlaylistPage : ContentPage
@@ -8,7 +10,11 @@ public partial class PlaylistPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-
+    protected override void OnHandlerChanged()
+    {
+        base.OnHandlerChanged();
+        HandCursor.Binding();
+    }
     protected override async void OnAppearing()
     {
         base.OnAppearing();

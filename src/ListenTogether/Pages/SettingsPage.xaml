@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              xmlns:jiuLing="clr-namespace:JiuLing.Controls.Maui.Controls;assembly=JiuLing.Controls.Maui"
              x:Class="ListenTogether.Pages.SettingsPage"
              Title="设置">
@@ -155,52 +156,65 @@
 
                         <!--其它模块-->
                         <StackLayout Margin="0,20,0,0">
-                            <Button Text="日志管理"
+                            <hc:HandCursorButton
+                                Text="日志管理"
                                 Command="{Binding GoToLogAsyncCommand}"/>
-                            <Button Text="歌曲缓存"
+                            <hc:HandCursorButton
+                                Text="歌曲缓存"
                                 Margin="0,5,0,0"
                                 Command="{Binding GoToCacheCleanAsyncCommand}"/>
-                            <Button Text="退出账号"
+                            <hc:HandCursorButton
+                                Text="退出账号"
                                 Margin="0,5,0,0"
                                 IsVisible="{Binding UserInfo, Converter={StaticResource IsNotEqualConverter}}"
                                 Command="{Binding LogoutAsyncCommand}"/>
-                            <BoxView Margin="0,10,0,10"
-                                 HeightRequest="1"/>
+                            <BoxView
+                                Margin="0,10,0,10"
+                                HeightRequest="1"/>
 
                             <!-- 关于 -->
                             <StackLayout>
-                                <Label Text="一起听"
-                                   FontSize="18"
-                                   HorizontalOptions="CenterAndExpand"/>
-                                <Label Margin="0,15,0,0"
-                                   Text="{Binding VersionString, StringFormat='{}版本：{0}'}"
-                                   Style="{StaticResource Explain}"
-                                   HorizontalOptions="CenterAndExpand"/>
-                                <Label Margin="0,5,0,0"
-                                   Text="检查更新"
-                                   Style="{StaticResource Explain}"
-                                   HorizontalOptions="CenterAndExpand">
+                                <Label
+                                    Text="一起听"
+                                    FontSize="18"
+                                    HorizontalOptions="CenterAndExpand"/>
+                                <Label
+                                    Margin="0,15,0,0"
+                                    Text="{Binding VersionString, StringFormat='{}版本：{0}'}"
+                                    Style="{StaticResource Explain}"
+                                    HorizontalOptions="CenterAndExpand"/>
+                                <hc:HandCursorLabel
+                                    Margin="0,5,0,0"
+                                    Text="检查更新"
+                                    ToolTipProperties.Text="检查新版本"
+                                    TextDecorations="Underline"
+                                    Style="{StaticResource Explain}"
+                                    HorizontalOptions="CenterAndExpand">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding CheckUpdateAsyncCommand}"/>
                                     </Label.GestureRecognizers>
-                                </Label>
-                                <Label Margin="0,15,0,0"
-                                   Text="本软件基于GPL-3.0协议，开源、免费"
-                                   Style="{StaticResource Explain}"
-                                   HorizontalOptions="CenterAndExpand"/>
-                                <Label Text="作者：九零"
-                                   Style="{StaticResource Explain}"
-                                   HorizontalOptions="CenterAndExpand"/>
-                                <Label Style="{StaticResource Explain}"
-                                   HorizontalOptions="CenterAndExpand"
-                                   TextDecorations="Underline"
-                                   Text="GitHub"
-                                   TextColor="{AppThemeBinding Dark={StaticResource DarkLink},Light={StaticResource LightLink}}">
+                                </hc:HandCursorLabel>
+                                <Label
+                                    Margin="0,15,0,0"
+                                    Text="本软件基于GPL-3.0协议，开源、免费"
+                                    Style="{StaticResource Explain}"
+                                    HorizontalOptions="CenterAndExpand"/>
+                                <Label
+                                    Text="作者：九零"
+                                    Style="{StaticResource Explain}"
+                                    HorizontalOptions="CenterAndExpand"/>
+                                <hc:HandCursorLabel
+                                    Style="{StaticResource Explain}"
+                                    HorizontalOptions="CenterAndExpand"
+                                    TextDecorations="Underline"
+                                    Text="GitHub"
+                                    TextColor="{AppThemeBinding Dark={StaticResource DarkLink},Light={StaticResource LightLink}}"
+                                    ToolTipProperties.Text="查看源码">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding OpenUrlAsyncCommand}"
                                                               CommandParameter="https://github.com/JiuLing-zhang/ListenTogether" />
                                     </Label.GestureRecognizers>
-                                </Label>
+                                </hc:HandCursorLabel>
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>

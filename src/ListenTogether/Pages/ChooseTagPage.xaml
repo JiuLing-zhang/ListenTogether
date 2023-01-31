@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              x:Class="ListenTogether.Pages.ChooseTagPage"
              Title="ChooseTagPage">
     <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
@@ -24,7 +25,7 @@
                                 BindableLayout.ItemsSource="{Binding Tags}">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
-                                        <Button
+                                        <hc:HandCursorButton
                                             BorderWidth="0"
                                             HeightRequest="30"
                                             BackgroundColor="Transparent"

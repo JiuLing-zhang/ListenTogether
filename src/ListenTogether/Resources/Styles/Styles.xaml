@@ -2,7 +2,8 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:handCursorControls="clr-namespace:ListenTogether.HandCursorControls">
 
     <Style TargetType="Label"
            x:Key="Logo">
@@ -66,6 +67,13 @@
     </Style>
 
     <Style TargetType="Button">
+        <Setter Property="BackgroundColor"
+                Value="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"/>
+        <Setter Property="TextColor"
+                Value="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
+    </Style>
+
+    <Style TargetType="handCursorControls:HandCursorButton">
         <Setter Property="BackgroundColor"
                 Value="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"/>
         <Setter Property="TextColor"

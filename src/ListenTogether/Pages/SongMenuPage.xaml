@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
-             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              x:Class="ListenTogether.Pages.SongMenuPage"
              Title="SongMenuPage">
     <Grid
@@ -22,7 +22,7 @@
                 <Label
                     FontSize="20"
                     Text="{Binding SongMenu.Name}"/>
-                <Button
+                <hc:HandCursorButton
                     Text="播放全部"
                     HorizontalOptions="Start"
                     Command="{Binding PlayAllAsyncCommand}"/>

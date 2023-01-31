@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              x:Class="ListenTogether.Pages.PlaylistPage"
              Title="播放列表">
 
@@ -29,12 +30,13 @@
                     VerticalTextAlignment="Center"
                     Style="{StaticResource Title}"/>
 
-                <StackLayout
+                <hc:HandCursorStackLayout
                     Margin="20,0,0,0"
                     Orientation="Horizontal"
                     HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
                     VerticalOptions="End"
-                    IsVisible="{Binding IsPlaylistNotEmpty}">
+                    IsVisible="{Binding IsPlaylistNotEmpty}"
+                    ToolTipProperties.Text="清空播放列表">
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ClearPlaylistAsyncCommand}"/>
                     </StackLayout.GestureRecognizers>
@@ -48,7 +50,7 @@
                     <Label
                         Text="清空"
                         VerticalTextAlignment="Center"/>
-                </StackLayout>
+                </hc:HandCursorStackLayout>
             </StackLayout>
             <CollectionView
                 VerticalOptions="FillAndExpand"
@@ -74,20 +76,21 @@
                                                 VerticalOptions="Center"
                                                 MusicId="{Binding Id}"/>
 
-                                            <Image
+                                            <hc:HandCursorImage
                                                 Source="{Binding Source, Source={x:Reference ImgRemove}}"
                                                 Margin="15,0,0,0"
                                                 Aspect="AspectFill"
                                                 WidthRequest="15"
                                                 HeightRequest="15"
-                                                VerticalOptions="Center">
+                                                VerticalOptions="Center"
+                                                ToolTipProperties.Text="删除歌曲">
                                                 <Image.GestureRecognizers>
                                                     <TapGestureRecognizer
                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=RemoveOneAsyncCommand}"
                                                         CommandParameter="{Binding .}">
                                                     </TapGestureRecognizer>
                                                 </Image.GestureRecognizers>
-                                            </Image>
+                                            </hc:HandCursorImage>
                                         </StackLayout>
 
                                         <Label

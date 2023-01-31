@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              x:Class="ListenTogether.Pages.NetEasePage"
              Title="NetEasePage">
     <Grid
@@ -22,7 +23,7 @@
                 BindableLayout.ItemsSource="{Binding HotTags}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <Button
+                        <hc:HandCursorButton
                             HeightRequest="30"
                             BorderWidth="0"
                             BackgroundColor="{Binding BackgroundColor}"
@@ -46,24 +47,24 @@
                     BindableLayout.ItemsSource="{Binding SongMenus}">
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <VerticalStackLayout
+                            <hc:HandCursorStackLayout
                                 Margin="10,0,10,0"
                                 Spacing="10"
                                 WidthRequest="140"
                                 HeightRequest="200"
                                 ToolTipProperties.Text="{Binding Name}">
-                                <VerticalStackLayout.GestureRecognizers>
+                                <hc:HandCursorStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverViewModel}}, Path=GotoSongMenuPageAsyncCommand}"
                                         CommandParameter="{Binding .}"/>
-                                </VerticalStackLayout.GestureRecognizers>
+                                </hc:HandCursorStackLayout.GestureRecognizers>
                                 <Image
                                     Source="{Binding ImageUrl}"/>
                                 <Label
                                     Text="{Binding Name}"
                                     Style="{StaticResource Explain}"
                                     LineBreakMode="TailTruncation"/>
-                            </VerticalStackLayout>
+                            </hc:HandCursorStackLayout>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </FlexLayout>

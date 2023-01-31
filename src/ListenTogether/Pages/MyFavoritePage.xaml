@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              x:Class="ListenTogether.Pages.MyFavoritePage"
              Title="我的歌单">
 
@@ -26,33 +27,38 @@
                    VerticalTextAlignment="Center"
                    Style="{StaticResource Title}"/>
 
-                <StackLayout Margin="20,0,0,0"
-                         Orientation="Horizontal"
-                         HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
-                         VerticalOptions="End">
+                <hc:HandCursorStackLayout
+                    Margin="20,0,0,0"
+                    Orientation="Horizontal"
+                    HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
+                    VerticalOptions="End">
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding AddMyFavoriteAsyncCommand}"/>
                     </StackLayout.GestureRecognizers>
-                    <Image Source="{AppThemeBinding Dark='plus_dark.png',Light='plus.png'}"
-                       HeightRequest="20"
-                       WidthRequest="20">
+                    <Image
+                        Source="{AppThemeBinding Dark='plus_dark.png',Light='plus.png'}"
+                        HeightRequest="20"
+                        WidthRequest="20">
                     </Image>
-                    <Label Text="新建歌单"
-                       IsVisible="{OnPlatform WinUI=True,MacCatalyst=True,Android=False,iOS=False}"
-                       VerticalTextAlignment="Center"/>
-                </StackLayout>
+                    <Label
+                        Text="新建歌单"
+                        IsVisible="{OnPlatform WinUI=True,MacCatalyst=True,Android=False,iOS=False}"
+                        VerticalTextAlignment="Center"/>
+                </hc:HandCursorStackLayout>
             </StackLayout>
 
-            <CollectionView VerticalOptions="FillAndExpand"
-                        ItemsSource="{Binding FavoriteList}">
+            <CollectionView
+                VerticalOptions="FillAndExpand"
+                ItemsSource="{Binding FavoriteList}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout Style="{StaticResource DataRowEnter}">
+                        <hc:HandCursorStackLayout Style="{StaticResource DataRowEnter}">
                             <OnPlatform x:TypeArguments="View">
                                 <On Platform="WinUI, macOS">
                                     <Grid
                                         RowDefinitions="35,35"
-                                        ColumnDefinitions="35,55,*">
+                                        ColumnDefinitions="35,55,*"
+                                        ToolTipProperties.Text="查看歌单详情">
                                         <Grid.GestureRecognizers>
                                             <TapGestureRecognizer                                                
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=EnterMyFavoriteDetailAsyncCommand}"
@@ -69,7 +75,8 @@
                                             WidthRequest="28"
                                             HeightRequest="28"
                                             VerticalOptions="Center"
-                                            HorizontalOptions="Center">
+                                            HorizontalOptions="Center"
+                                            ToolTipProperties.Text="播放当前歌单">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:MyFavoritePageViewModel}}, Path=PlayAllMusicsAsyncCommand}"
@@ -175,7 +182,7 @@
                                     </Grid>
                                 </On>
                             </OnPlatform>
-                        </StackLayout>
+                        </hc:HandCursorStackLayout>
 
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <CollectionView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
                 xmlns:controls="clr-namespace:ListenTogether.Controls"
                 x:Class="ListenTogether.Controls.MusicResultView"
                 x:Name="self"
@@ -58,7 +57,7 @@
                 Style="{StaticResource DataRowEnter}">
                 <OnPlatform x:TypeArguments="View">
                     <On Platform="WinUI, macOS">
-                        <Grid ColumnDefinitions="30,60,40,300,300,*">
+                        <Grid ColumnDefinitions="30,40,60,300,300,*">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding PlayCommand, Source={x:Reference self}}"
@@ -73,15 +72,15 @@
                                 MusicId="{Binding Id}"/>
                             <Label
                                 Grid.Column="1"
-                                Text="{Binding Duration}"
-                                VerticalOptions="Center"
-                                LineBreakMode="TailTruncation"/>
-                            <Label
-                                Grid.Column="2"
                                 Text="{Binding Fee}"
                                 Style="{DynamicResource FeeType}"
                                 VerticalOptions="Center"
                                 HorizontalOptions="Center"/>
+                            <Label
+                                Grid.Column="2"
+                                Text="{Binding Duration}"
+                                VerticalOptions="Center"
+                                LineBreakMode="TailTruncation"/>
                             <Label
                                 Grid.Column="3"
                                 Text="{Binding Name}"
