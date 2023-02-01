@@ -152,9 +152,25 @@ public partial class Player : ContentView
 
     private void NewMusicAddedDo(MusicMetadata metadata)
     {
+        var task = Task.Run(async () => await _playlistService.GetOneAsync(metadata.Id));
+        var playlist = task.Result;
         MainThread.BeginInvokeOnMainThread(() =>
         {
-            FavoriteView.MusicId = metadata.Id;
+            if (playlist != null)
+            {
+                FavoriteView.Music = new MusicResultShowViewModel()
+                {
+                    Id = playlist.Id,
+                    IdOnPlatform = playlist.IdOnPlatform,
+                    Platform = playlist.Platform,
+                    Name = playlist.Name,
+                    Album = playlist.Album,
+                    Artist = playlist.Artist,
+                    ExtendDataJson = playlist.ExtendDataJson,
+                    ImageUrl = playlist.ImageUrl
+                };
+            }
+
             ImgCurrentMusic.Source = ImageSource.FromStream(
                 () => new MemoryStream(metadata.Image)
             );

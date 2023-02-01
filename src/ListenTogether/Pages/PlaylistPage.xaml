@@ -74,7 +74,7 @@
                                                 WidthRequest="15"
                                                 HeightRequest="15"
                                                 VerticalOptions="Center"
-                                                MusicId="{Binding Id}"/>
+                                                Music="{Binding .}"/>
 
                                             <hc:HandCursorImage
                                                 Source="{Binding Source, Source={x:Reference ImgRemove}}"
@@ -132,7 +132,7 @@
                                             WidthRequest="15"
                                             HeightRequest="15"
                                             VerticalOptions="Center"
-                                            MusicId="{Binding Id}"/>
+                                            Music="{Binding  .}"/>
 
                                         <Image
                                             Grid.Column="3"

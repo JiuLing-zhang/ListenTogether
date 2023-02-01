@@ -6,15 +6,15 @@ namespace ListenTogether.Controls;
 public partial class FavoriteView : ContentView
 {
     private bool _isLogin => UserInfoStorage.GetUsername().IsNotEmpty();
-    public static readonly BindableProperty MusicIdProperty =
+    public static readonly BindableProperty MusicProperty =
         BindableProperty.Create(
-            nameof(MusicId),
-            typeof(string),
+            nameof(Music),
+            typeof(MusicResultShowViewModel),
             typeof(MusicResultView));
-    public string MusicId
+    public MusicResultShowViewModel Music
     {
-        get { return (string)GetValue(MusicIdProperty); }
-        set { SetValue(MusicIdProperty, value); }
+        get { return (MusicResultShowViewModel)GetValue(MusicProperty); }
+        set { SetValue(MusicProperty, value); }
     }
 
     private IMyFavoriteService? _myFavoriteService;
@@ -58,16 +58,21 @@ public partial class FavoriteView : ContentView
             return;
         }
 
-        var playlist = await _playlistService.GetOneAsync(MusicId);
-        if (playlist == null)
+        var localMusic = new LocalMusic()
         {
-            await ToastService.Show("无法加载歌曲信息");
-            return;
-        }
+            Id = Music.Id,
+            IdOnPlatform = Music.IdOnPlatform,
+            Platform = Music.Platform,
+            Name = Music.Name,
+            Album = Music.Album,
+            Artist = Music.Artist,
+            ExtendDataJson = Music.ExtendDataJson,
+            ImageUrl = Music.ImageUrl
+        };
 
-        if (playlist.ImageUrl.IsEmpty() && playlist.Platform == Model.Enums.PlatformEnum.KuGou)
+        if (localMusic.ImageUrl.IsEmpty() && localMusic.Platform == Model.Enums.PlatformEnum.KuGou)
         {
-            playlist.ImageUrl = await _musicNetworkService.GetImageUrlAsync(playlist.Platform, playlist.IdOnPlatform, playlist.ExtendDataJson);
+            localMusic.ImageUrl = await _musicNetworkService.GetImageUrlAsync(localMusic.Platform, localMusic.IdOnPlatform, localMusic.ExtendDataJson);
         }
 
         var popup = new ChooseMyFavoritePage(_myFavoriteService);
@@ -83,17 +88,7 @@ public partial class FavoriteView : ContentView
             return;
         }
 
-        var localMusic = new LocalMusic()
-        {
-            Id = playlist.Id,
-            IdOnPlatform = playlist.IdOnPlatform,
-            Platform = playlist.Platform,
-            Name = playlist.Name,
-            Album = playlist.Album,
-            Artist = playlist.Artist,
-            ExtendDataJson = playlist.ExtendDataJson,
-            ImageUrl = playlist.ImageUrl
-        };
+
 
         var isMusicOk = await _musicService.AddOrUpdateAsync(localMusic);
         if (!isMusicOk)

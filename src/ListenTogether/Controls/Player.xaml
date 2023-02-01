@@ -269,7 +269,7 @@
                                 </Image>
 
                                 <controls:FavoriteView
-                                    MusicId="{Binding MusicId, Source={x:Reference FavoriteView}}"
+                                    Music="{Binding  ., Source={x:Reference FavoriteView}}"
                                     Grid.Column="4"
                                     WidthRequest="30"
                                     HeightRequest="30"

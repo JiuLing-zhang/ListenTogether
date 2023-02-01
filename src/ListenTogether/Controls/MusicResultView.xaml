@@ -69,7 +69,7 @@
                                 WidthRequest="15"
                                 HeightRequest="15"
                                 VerticalOptions="Center"
-                                MusicId="{Binding Id}"/>
+                                Music="{Binding .}"/>
                             <Label
                                 Grid.Column="1"
                                 Text="{Binding Fee}"
@@ -143,7 +143,7 @@
                                 WidthRequest="15"
                                 HeightRequest="15"
                                 VerticalOptions="Center"
-                                MusicId="{Binding Id}"/>
+                                Music="{Binding  .}"/>
                         </Grid>
                     </On>
                 </OnPlatform>
