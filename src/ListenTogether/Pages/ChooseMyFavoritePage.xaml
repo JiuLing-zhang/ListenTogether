@@ -7,9 +7,10 @@
                CanBeDismissedByTappingOutsideOfPopup="False">
 
     <Grid
-        RowDefinitions="20,*,40"
+        RowDefinitions="30,Auto,50"
+        RowSpacing="10"
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-        Padding="20">
+        Padding="{OnPlatform WinUI=20,MacCatalyst=20,Android='10',iOS='10'}">
         <StackLayout
             Orientation="Horizontal"
             HorizontalOptions="FillAndExpand"
@@ -44,7 +45,8 @@
             SelectionChanged="MyFavorite_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <hc:HandCursorStackLayout>
+                    <hc:HandCursorStackLayout
+                        Padding="{OnPlatform WinUI=0,MacCatalyst=0,Android='10',iOS='10'}">
                         <Label Text="{Binding Name}"/>
                     </hc:HandCursorStackLayout>
                 </DataTemplate>
@@ -52,6 +54,8 @@
         </CollectionView>
         <hc:HandCursorButton
             Grid.Row="2"
+            VerticalOptions="End"
+            HeightRequest="40"
             Text="关闭"
             Clicked="BtnClose_Clicked"/>
     </Grid>

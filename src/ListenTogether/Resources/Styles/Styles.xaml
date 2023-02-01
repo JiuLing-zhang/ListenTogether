@@ -170,7 +170,7 @@
             Value="{AppThemeBinding Light={StaticResource LightTitle}, Dark={StaticResource DarkTitle}}" />
         <Setter
             Property="FontSize"
-            Value="20"/>
+            Value="18"/>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">

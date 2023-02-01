@@ -8,13 +8,13 @@
              Title="DiscoverPage">
 
     <Grid
-        RowDefinitions="50,Auto,*,Auto"
+        RowDefinitions="40,Auto,*,Auto"
         RowSpacing="10"
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
         <HorizontalStackLayout
             Grid.Row="0"
-            Padding="10,10,10,10"
+            Padding="10,8,10,8"
             BindableLayout.ItemsSource="{Binding DiscoverTabs}"
             Spacing="10">
             <BindableLayout.ItemTemplate>
@@ -50,7 +50,8 @@
 
         <Border
             Grid.Row="1"
-            Padding="10,0,10,10"
+            Padding="10,10,10,10"
+            BackgroundColor="Transparent"
             StrokeThickness="0">
             <FlexLayout
                 FlexLayout.Grow="0"
@@ -61,8 +62,8 @@
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
                         <hc:HandCursorStackLayout
-                            Margin="0,0,5,0"
-                            HeightRequest="30"
+                            Margin="0,0,2,0"
+                            HeightRequest="25"
                             Style="{StaticResource DataRowEnter}">
                             <hc:HandCursorStackLayout.GestureRecognizers>
                                 <TapGestureRecognizer
@@ -71,7 +72,7 @@
                             </hc:HandCursorStackLayout.GestureRecognizers>
 
                             <Border
-                                Padding="4,0,4,0"
+                                Padding="4,2,4,2"
                                 StrokeThickness="1"
                                 BackgroundColor="Transparent"
                                 HorizontalOptions="Center">
@@ -100,6 +101,7 @@
             Grid.Row="2"
             VerticalOptions="FillAndExpand">
             <Border
+                BackgroundColor="Transparent"
                 StrokeThickness="0">
                 <FlexLayout
                     Direction="Row"

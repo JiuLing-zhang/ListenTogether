@@ -117,6 +117,18 @@
                                                 CommandParameter="{Binding .}"/>
                                         </Grid.GestureRecognizers>
 
+                                        <Border
+                                            Padding="4,0,4,3"
+                                            StrokeThickness="1"
+                                            HorizontalOptions="Center">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="5" />
+                                            </Border.StrokeShape>
+                                            <Label
+                                                Text="{Binding PlatformName}"
+                                                Style="{StaticResource Explain}"/>
+                                        </Border>
+
                                         <Label
                                             Grid.Column="1"
                                             VerticalTextAlignment="Center"

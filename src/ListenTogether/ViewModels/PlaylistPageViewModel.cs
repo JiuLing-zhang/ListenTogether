@@ -74,6 +74,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
             Playlist.Add(new MusicResultShowViewModel()
             {
                 Platform = item.Platform,
+                PlatformName = item.Platform.GetDescription(),
                 Id = item.Id,
                 Name = item.Name,
                 Artist = item.Artist,

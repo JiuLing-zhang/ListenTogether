@@ -24,6 +24,18 @@ public partial class ChooseMyFavoritePage : Popup
             });
         }
 
+        if (Config.Desktop)
+        {
+            this.Size = new Size(800, 600);
+        }
+        else
+        {
+            var disp = DeviceDisplay.Current.MainDisplayInfo;
+            var screenWidth = disp.Width / disp.Density;
+            var screenHeight = disp.Height / disp.Density;
+            this.Size = new Size(screenWidth, screenHeight);
+        }
+
         InitializeComponent();
     }
 

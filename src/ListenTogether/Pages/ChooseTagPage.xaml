@@ -3,12 +3,11 @@
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
                x:Class="ListenTogether.Pages.ChooseTagPage"
-               x:Name="self"
-               Size="800,600">
+               x:Name="self">
     <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
         <ScrollView>
             <FlexLayout
-                Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
+                Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10',iOS='10'}"
                 Direction="Column"
                 BindableLayout.ItemsSource="{Binding AllTypes, Source={x:Reference self}}">
                 <BindableLayout.ItemTemplate>
@@ -25,8 +24,8 @@
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
                                         <Border
-                                            Margin="0,0,10,0"
-                                            HeightRequest="30"
+                                            Margin="0,0,5,0"
+                                            HeightRequest="20"
                                             StrokeThickness="0"
                                             HorizontalOptions="Center">
                                             <Border.GestureRecognizers>
@@ -34,7 +33,10 @@
                                                     Tapped="TagSelected_Tapped"
                                                     CommandParameter="{Binding Id}"/>
                                             </Border.GestureRecognizers>
-                                            <hc:HandCursorLabel Text="{Binding Name}"/>
+                                            <hc:HandCursorLabel
+                                                VerticalTextAlignment="Center"
+                                                BackgroundColor="Transparent"
+                                                Text="{Binding Name}"/>
                                         </Border>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>

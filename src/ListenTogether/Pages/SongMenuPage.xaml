@@ -7,7 +7,7 @@
              Title="SongMenuPage">
     <Grid
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-        RowDefinitions="170,*,Auto">
+        RowDefinitions="160,*,Auto">
         <VerticalStackLayout
             Grid.Row="0"
             Margin="10">
@@ -35,7 +35,9 @@
         </VerticalStackLayout>
         <Border
             Grid.Row="1"
-            StrokeThickness="0">
+            Padding="5,0,5,0"
+            StrokeThickness="0"
+            BackgroundColor="Transparent">
             <controls:MusicResultView
                 Musics="{Binding MusicResultCollection}"
                 PlayCommand="{Binding PlayAsyncCommand}"
