@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
+             xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
+             x:Class="ListenTogether.Pages.DiscoverPage"
+             Title="DiscoverPage">
+
+    <Grid
+        RowDefinitions="50,Auto,*,Auto"
+        RowSpacing="10"
+        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
+
+        <HorizontalStackLayout
+            Grid.Row="0"
+            Padding="10,10,10,10"
+            BindableLayout.ItemsSource="{Binding DiscoverTabs}"
+            Spacing="10">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout Spacing="3">
+                        <VerticalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=TabChangedAsyncCommand}"
+                                CommandParameter="{Binding Id}"/>
+                        </VerticalStackLayout.GestureRecognizers>
+                        <hc:HandCursorLabel
+                            Text="{Binding Name}"
+                            Style="{StaticResource Tab}">
+                            <hc:HandCursorLabel.Triggers>
+                                <DataTrigger
+                                    TargetType="hc:HandCursorLabel"
+                                    Binding="{Binding IsSelected}"
+                                    Value="true">
+                                    <Setter
+                                        Property="TextColor"
+                                        Value="{StaticResource Main}"/>
+                                </DataTrigger>
+                            </hc:HandCursorLabel.Triggers>
+                        </hc:HandCursorLabel>
+                        <BoxView
+                            HeightRequest="3"
+                            Color="{StaticResource Main}"
+                            IsVisible="{Binding IsSelected}"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </HorizontalStackLayout>
+
+        <Border
+            Grid.Row="1"
+            Padding="10,0,10,10"
+            StrokeThickness="0">
+            <FlexLayout
+                FlexLayout.Grow="0"
+                Direction="Row"
+                Wrap="Wrap"
+                AlignContent="Start"
+                BindableLayout.ItemsSource="{Binding DiscoverTags}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <hc:HandCursorStackLayout
+                            Margin="0,0,5,0"
+                            HeightRequest="30"
+                            Style="{StaticResource DataRowEnter}">
+                            <hc:HandCursorStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=TagChangedAsyncCommand}"
+                                    CommandParameter="{Binding Id}"/>
+                            </hc:HandCursorStackLayout.GestureRecognizers>
+
+                            <Border
+                                Padding="4,0,4,0"
+                                StrokeThickness="1"
+                                BackgroundColor="Transparent"
+                                HorizontalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="5" />
+                                </Border.StrokeShape>
+                                <Border.Triggers>
+                                    <DataTrigger
+                                        TargetType="Border"
+                                        Binding="{Binding IsSelected}"
+                                        Value="true">
+                                        <Setter
+                                            Property="BackgroundColor"
+                                            Value="{StaticResource Main}"/>
+                                    </DataTrigger>
+                                </Border.Triggers>
+                                <Label Text="{Binding Name}"/>
+                            </Border>
+                        </hc:HandCursorStackLayout>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+        </Border>
+
+        <ScrollView
+            Grid.Row="2"
+            VerticalOptions="FillAndExpand">
+            <Border
+                StrokeThickness="0">
+                <FlexLayout
+                    Direction="Row"
+                    Wrap="Wrap"
+                    AlignContent="Start"
+                    BindableLayout.ItemsSource="{Binding SongMenus}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <hc:HandCursorStackLayout
+                                Margin="10,0,10,0"
+                                Spacing="10"
+                                WidthRequest="140"
+                                HeightRequest="200"
+                                ToolTipProperties.Text="{Binding Name}">
+                                <hc:HandCursorStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=GotoSongMenuPageAsyncCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </hc:HandCursorStackLayout.GestureRecognizers>
+                                <Image
+                                    Source="{Binding ImageUrl}"/>
+                                <Label
+                                    Text="{Binding Name}"
+                                    Style="{StaticResource Explain}"
+                                    LineBreakMode="TailTruncation"/>
+                            </hc:HandCursorStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </FlexLayout>
+            </Border>
+        </ScrollView>
+
+        <controls:Player
+            Grid.Row="3"
+            x:Name="player"
+            IsPlayingPage="False"/>
+    </Grid>
+</ContentPage>

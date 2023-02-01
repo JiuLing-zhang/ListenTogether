@@ -7,27 +7,32 @@
              Title="SongMenuPage">
     <Grid
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-        RowDefinitions="150,*,Auto">
-        <HorizontalStackLayout
+        RowDefinitions="170,*,Auto">
+        <VerticalStackLayout
             Grid.Row="0"
-            Margin="20,20,20,0"
-            Spacing="10">
-            <Image
-                WidthRequest="150"
-                HeightRequest="150"
-                VerticalOptions="Start"
-                Source="{Binding SongMenu.ImageUrl}"/>
-            <VerticalStackLayout
-                Spacing="10">
-                <Label
-                    FontSize="20"
-                    Text="{Binding SongMenu.Name}"/>
-                <hc:HandCursorButton
-                    Text="播放全部"
-                    HorizontalOptions="Start"
-                    Command="{Binding PlayAllAsyncCommand}"/>
-            </VerticalStackLayout>
-        </HorizontalStackLayout>
+            Margin="10">
+            <Label
+                Margin="0,0,0,10"
+                FontSize="20"
+                Text="{Binding SongMenu.PlatformName}"
+                TextColor="{StaticResource Main}"/>
+            <HorizontalStackLayout Spacing="10">
+                <Image
+                    WidthRequest="150"
+                    HeightRequest="150"
+                    VerticalOptions="Start"
+                    Source="{Binding SongMenu.ImageUrl}"/>
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        FontSize="20"
+                        Text="{Binding SongMenu.Name}"/>
+                    <hc:HandCursorButton
+                        Text="播放全部"
+                        HorizontalOptions="Start"
+                        Command="{Binding PlayAllAsyncCommand}"/>
+                </VerticalStackLayout>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
         <Border
             Grid.Row="1"
             StrokeThickness="0">

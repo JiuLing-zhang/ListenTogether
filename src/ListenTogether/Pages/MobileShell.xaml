@@ -14,8 +14,7 @@
     <TabBar>
         <Tab Title="发现"
              Icon="{AppThemeBinding Light=discover.png, Dark=discover_dark.png}">
-            <ShellContent Title="咪咕音乐" ContentTemplate="{DataTemplate pages:MiGuPage}"/>
-            <ShellContent Title="网易云音乐" ContentTemplate="{DataTemplate pages:NetEasePage}"/>
+            <ShellContent ContentTemplate="{DataTemplate pages:DiscoverPage}"/>
         </Tab>
         <Tab Title="{Binding SearchResult.Title}"
              Icon="{Binding SearchResult.Icon}">
@@ -24,7 +23,7 @@
         <Tab Title="{Binding Playlist.Title}"
              Icon="{Binding Playlist.Icon}">
             <ShellContent ContentTemplate="{DataTemplate pages:PlaylistPage}" />
-        </Tab>   
+        </Tab>
         <Tab Title="{Binding MyFavorite.Title}"
              Icon="{Binding MyFavorite.Icon}">
             <ShellContent ContentTemplate="{DataTemplate pages:MyFavoritePage}" />

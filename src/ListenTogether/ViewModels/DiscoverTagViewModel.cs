@@ -1,14 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ListenTogether.ViewModels;
-public partial class MusicTagViewModel : ObservableObject
+public partial class DiscoverTagViewModel : ObservableObject
 {
     [ObservableProperty]
-    private string _id = null!;
+    private string _id;
 
     [ObservableProperty]
     private string _name = null!;
 
     [ObservableProperty]
-    private Color _backgroundColor = null!;
+    private bool _isSelected;
 }

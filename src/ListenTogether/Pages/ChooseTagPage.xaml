@@ -1,23 +1,22 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
-             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
-             x:Class="ListenTogether.Pages.ChooseTagPage"
-             Title="ChooseTagPage">
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
+               x:Class="ListenTogether.Pages.ChooseTagPage"
+               x:Name="self"
+               Size="800,600">
     <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
         <ScrollView>
             <FlexLayout
                 Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
                 Direction="Column"
-                BindableLayout.ItemsSource="{Binding AllTypes}">
+                BindableLayout.ItemsSource="{Binding AllTypes, Source={x:Reference self}}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
                         <VerticalStackLayout
-                            Margin="0,5,0,5"
+                            Margin="0,5,0,0"
                             Spacing="5">
-                            <Label
-                                Text="{Binding TypeName}"/>
+                            <Label Text="{Binding TypeName}"/>
                             <FlexLayout
                                 Direction="Row"
                                 Wrap="Wrap"
@@ -25,13 +24,18 @@
                                 BindableLayout.ItemsSource="{Binding Tags}">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
-                                        <hc:HandCursorButton
-                                            BorderWidth="0"
+                                        <Border
+                                            Margin="0,0,10,0"
                                             HeightRequest="30"
-                                            BackgroundColor="Transparent"
-                                            Text="{Binding Name}"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ChooseTagPageViewModel}}, Path=TagSelectedAsyncCommand}"
-                                            CommandParameter="{Binding Id}"/>
+                                            StrokeThickness="0"
+                                            HorizontalOptions="Center">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Tapped="TagSelected_Tapped"
+                                                    CommandParameter="{Binding Id}"/>
+                                            </Border.GestureRecognizers>
+                                            <hc:HandCursorLabel Text="{Binding Name}"/>
+                                        </Border>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </FlexLayout>
@@ -42,4 +46,4 @@
         </ScrollView>
     </Grid>
 
-</ContentPage>
+</toolkit:Popup>

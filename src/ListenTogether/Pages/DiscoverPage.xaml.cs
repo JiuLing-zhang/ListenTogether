@@ -1,12 +1,12 @@
 using ListenTogether.HandCursorControls;
-using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Pages;
 
-public partial class NetEasePage : ContentPage
+public partial class DiscoverPage : ContentPage
 {
-    DiscoverViewModel vm => BindingContext as DiscoverViewModel;
-    public NetEasePage(DiscoverViewModel vm)
+    private bool _isFirstAppearing = true;
+    DiscoverPageViewModel vm => BindingContext as DiscoverPageViewModel;
+    public DiscoverPage(DiscoverPageViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;
@@ -14,17 +14,19 @@ public partial class NetEasePage : ContentPage
     protected override void OnHandlerChanged()
     {
         base.OnHandlerChanged();
-        HandCursor.Binding();
     }
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        player.OnAppearing();
-        await vm.InitializeAsync(PlatformEnum.NetEase);
+        if (_isFirstAppearing)
+        {
+            _isFirstAppearing = false;
+            HandCursor.Binding();
+            await vm.InitializeAsync();
+        }
     }
     protected override void OnDisappearing()
     {
-        player.OnDisappearing();
         base.OnDisappearing();
     }
 }

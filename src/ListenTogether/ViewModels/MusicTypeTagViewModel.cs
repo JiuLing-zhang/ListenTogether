@@ -8,5 +8,5 @@ public partial class MusicTypeTagViewModel : ObservableObject
     private string _typeName = null!;
 
     [ObservableProperty]
-    private ObservableCollection<MusicTagViewModel> _tags;
+    private ObservableCollection<DiscoverTagViewModel> _tags;
 }
