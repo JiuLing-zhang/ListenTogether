@@ -10,6 +10,8 @@ public partial class PlaylistPageViewModel : ViewModelBase
     private ContentPage _page;
     private readonly IPlaylistService _playlistService;
     private readonly MusicResultService _musicResultService;
+    private readonly MusicPlayerService _musicPlayerService;
+
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
@@ -22,12 +24,13 @@ public partial class PlaylistPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultShowViewModel> _playlist;
 
-    public PlaylistPageViewModel(IPlaylistService playlistService, MusicResultService musicResultService)
+    public PlaylistPageViewModel(IPlaylistService playlistService, MusicResultService musicResultService, MusicPlayerService musicPlayerService)
     {
         Playlist = new ObservableCollection<MusicResultShowViewModel>();
 
         _playlistService = playlistService;
         _musicResultService = musicResultService;
+        _musicPlayerService = musicPlayerService;
     }
 
     public async Task InitializeAsync(ContentPage page)
@@ -58,6 +61,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
                 Playlist.Clear();
             }
             IsPlaylistEmpty = !Playlist.Any();
+
             return;
         }
 
@@ -92,11 +96,26 @@ public partial class PlaylistPageViewModel : ViewModelBase
         try
         {
             StartLoading("正在删除....");
+
+            if (_musicPlayerService.IsPlaying)
+            {
+                if (Playlist.Count == 1)
+                {
+                    //播放列表仅剩当前歌曲时，直接暂停播放
+                    await _musicPlayerService.PlayAsync(_musicPlayerService.Metadata.Id);
+                }
+                else if (_musicPlayerService.Metadata.Id == selected.Id)
+                {
+                    await _musicPlayerService.Next();
+                }
+            }
+
             if (!await _playlistService.RemoveAsync(selected.Id))
             {
                 await ToastService.Show("删除失败");
                 return;
             }
+
             await GetPlaylistAsync();
         }
         catch (Exception ex)
@@ -118,6 +137,12 @@ public partial class PlaylistPageViewModel : ViewModelBase
         {
             return;
         }
+
+        if (_musicPlayerService.IsPlaying)
+        {
+            await _musicPlayerService.PlayAsync(_musicPlayerService.Metadata.Id);
+        }
+
         if (!await _playlistService.RemoveAllAsync())
         {
             await ToastService.Show("删除失败");

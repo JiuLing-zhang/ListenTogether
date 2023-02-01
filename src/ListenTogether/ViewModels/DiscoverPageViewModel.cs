@@ -17,27 +17,27 @@ public partial class DiscoverPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<SongMenuViewModel> _songMenus;
 
-    private static readonly object _lockPlatformMusicTags = new object();
-    private static readonly List<PlatformMusicTag> _platformMusicTags = new List<PlatformMusicTag>();
+    private static readonly object LockPlatformMusicTags = new object();
+    private static readonly List<PlatformMusicTag> PlatformMusicTags = new List<PlatformMusicTag>();
 
     private readonly IMusicNetworkService _musicNetworkService;
 
-    private PlatformEnum _platform => (PlatformEnum)DiscoverTabs.First(x => x.IsSelected).Id;
+    private PlatformEnum Platform => (PlatformEnum)DiscoverTabs.First(x => x.IsSelected).Id;
     public DiscoverPageViewModel(IMusicNetworkService musicNetworkService)
     {
         _musicNetworkService = musicNetworkService;
-        DiscoverTabs = new ObservableCollection<DiscoverTabViewModel>()
+        DiscoverTabs = new ObservableCollection<DiscoverTabViewModel>
         {
-            new DiscoverTabViewModel()
+            new()
             {
                 Id=(int)PlatformEnum.MiGu,
-                Name= "Test1",
+                Name=PlatformEnum.MiGu.GetDescription(),
                 IsSelected=true
             },
-            new DiscoverTabViewModel()
+            new()
             {
                 Id=(int)PlatformEnum.NetEase,
-                Name="Test2",
+                Name=PlatformEnum.NetEase.GetDescription(),
                 IsSelected=false
             }
         };
@@ -56,9 +56,9 @@ public partial class DiscoverPageViewModel : ViewModelBase
             tasks[index] = Task.Run(async () =>
             {
                 var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(platform);
-                lock (_lockPlatformMusicTags)
+                lock (LockPlatformMusicTags)
                 {
-                    _platformMusicTags.Add(new PlatformMusicTag(platform, hotTags, allTypes));
+                    PlatformMusicTags.Add(new PlatformMusicTag(platform, hotTags, allTypes));
                 }
             });
         }
@@ -112,7 +112,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
 
     private void InitMusicTags()
     {
-        var hotTags = _platformMusicTags.First(x => x.Platform == _platform).HotTags;
+        var hotTags = PlatformMusicTags.First(x => x.Platform == Platform).HotTags;
 
         DiscoverTags.Clear();
         DiscoverTags.Add(new DiscoverTagViewModel()
@@ -166,12 +166,12 @@ public partial class DiscoverPageViewModel : ViewModelBase
         SongMenuEnum songMenuType;
         if (id == "榜单")
         {
-            songMenus = await _musicNetworkService.GetSongMenusFromTop(_platform);
+            songMenus = await _musicNetworkService.GetSongMenusFromTop(Platform);
             songMenuType = SongMenuEnum.Top;
         }
         else
         {
-            songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(_platform, id);
+            songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, id);
             songMenuType = SongMenuEnum.Tag;
         }
 
@@ -181,7 +181,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
             SongMenus.Add(new SongMenuViewModel()
             {
                 SongMenuType = songMenuType,
-                PlatformName = _platform.GetDescription(),
+                PlatformName = Platform.GetDescription(),
                 Id = songMenu.Id,
                 Name = songMenu.Name,
                 ImageUrl = songMenu.ImageUrl,
@@ -192,7 +192,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
 
     private async Task<string> GetSelectedTagId()
     {
-        var allTypes = _platformMusicTags.First(x => x.Platform == _platform).AllTypes;
+        var allTypes = PlatformMusicTags.First(x => x.Platform == Platform).AllTypes;
         var popup = new ChooseTagPage(allTypes);
         var result = await App.Current.MainPage.ShowPopupAsync(popup);
         if (result == null)
@@ -206,6 +206,6 @@ public partial class DiscoverPageViewModel : ViewModelBase
     private async void GotoSongMenuPageAsync(SongMenuViewModel songMenu)
     {
         string json = HttpUtility.UrlEncode(songMenu.ToJson());
-        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={_platform}");
+        await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={Platform}");
     }
 }

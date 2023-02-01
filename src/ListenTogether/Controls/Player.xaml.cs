@@ -32,11 +32,6 @@ public partial class Player : ContentView
         base.OnHandlerChanged();
         HandCursor.Binding();
 
-        if (_playerService == null)
-        {
-            _playerService = this.Handler.MauiContext.Services.GetRequiredService<MusicPlayerService>();
-            InitPlayer();
-        }
         if (_musicResultService == null)
         {
             _musicResultService = this.Handler.MauiContext.Services.GetRequiredService<MusicResultService>();
@@ -48,6 +43,11 @@ public partial class Player : ContentView
         if (_configService == null)
         {
             _configService = this.Handler.MauiContext.Services.GetRequiredService<IEnvironmentConfigService>();
+        }
+        if (_playerService == null)
+        {
+            _playerService = this.Handler.MauiContext.Services.GetRequiredService<MusicPlayerService>();
+            InitPlayer();
         }
 
         if (Config.Desktop)
