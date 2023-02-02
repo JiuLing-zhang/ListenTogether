@@ -13,13 +13,6 @@
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <controls:Loading
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            IsRunning="{Binding IsLoading}"
-            Text="{Binding LoadingText}"/>
-
         <Label
             Grid.Row="0"
             Text="登录"

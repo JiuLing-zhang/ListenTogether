@@ -7,7 +7,6 @@ namespace ListenTogether.ViewModels;
 
 public partial class PlaylistPageViewModel : ViewModelBase
 {
-    private ContentPage _page;
     private readonly IPlaylistService _playlistService;
     private readonly MusicResultService _musicResultService;
     private readonly MusicPlayerService _musicPlayerService;
@@ -33,12 +32,11 @@ public partial class PlaylistPageViewModel : ViewModelBase
         _musicPlayerService = musicPlayerService;
     }
 
-    public async Task InitializeAsync(ContentPage page)
+    public async Task InitializeAsync()
     {
         try
         {
-            StartLoading("页面加载中....");
-            _page = page;
+            Loading("加载中....");
             await GetPlaylistAsync();
         }
         catch (Exception ex)
@@ -48,7 +46,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
     private async Task GetPlaylistAsync()
@@ -96,7 +94,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     {
         try
         {
-            StartLoading("正在删除....");
+            Loading("正在删除....");
 
             if (_musicPlayerService.IsPlaying)
             {
@@ -126,7 +124,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 

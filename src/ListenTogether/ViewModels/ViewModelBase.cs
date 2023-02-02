@@ -1,42 +1,34 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using ListenTogether.Storage;
 
 namespace ListenTogether.ViewModels;
 public partial class ViewModelBase : ObservableValidator
 {
+    private string _loadingKey = "";
+
+    [ObservableProperty]
+    private bool _isLogin;
     public ViewModelBase()
     {
-        MessagingCenter.Instance.Subscribe<string, bool>(this, "PlayerBuffering", (sender, isBuffering) =>
+
+    }
+
+    internal void Loading(string message)
+    {
+        //同一页面不允许同时 Loading
+        if (_loadingKey.IsNotEmpty())
         {
-            if (isBuffering)
-            {
-                StartLoading("歌曲缓冲中....");
-            }
-            else
-            {
-                StopLoading();
-            }
-        });
+            return;
+        }
+        _loadingKey = JiuLing.CommonLibs.GuidUtils.GetFormatN();
+        LoadingService.Loading(_loadingKey, message);
     }
-
-    [ObservableProperty]
-    private bool _isLoading;
-
-    [ObservableProperty]
-    private string _loadingText = null!;
-
-    internal void StartLoading(string loadingText)
+    internal void LoadComplete()
     {
-        IsLoading = true;
-        LoadingText = loadingText;
+        if (_loadingKey.IsEmpty())
+        {
+            return;
+        }
+        LoadingService.LoadComplete(_loadingKey);
+        _loadingKey = "";
     }
-
-    internal void StopLoading()
-    {
-        IsLoading = false;
-        LoadingText = "";
-    }
-
-    internal bool IsLogin => UserInfoStorage.GetUsername().IsNotEmpty();
-    internal bool IsNotLogin => !IsLogin;
 }

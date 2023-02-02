@@ -44,7 +44,7 @@ public partial class RegisterPageViewModel : ViewModelBase
     {
         try
         {
-            StartLoading("正在注册....");
+            Loading("正在注册....");
 
             ValidateAllProperties();
             if (HasErrors)
@@ -84,7 +84,7 @@ public partial class RegisterPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 
@@ -108,7 +108,7 @@ public partial class RegisterPageViewModel : ViewModelBase
             {
                 return;
             }
-            StartLoading("");
+            Loading("处理中....");
 
             _userAvatar = new UserAvatar();
             _userAvatar.FileName = result.FileName;
@@ -130,7 +130,7 @@ public partial class RegisterPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 }

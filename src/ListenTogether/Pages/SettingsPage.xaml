@@ -13,9 +13,6 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <controls:Loading
-            IsRunning="{Binding IsLoading}"
-            Text="{Binding LoadingText}"/>
         <StackLayout
             Grid.Row="0"
             Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
@@ -143,14 +140,22 @@
                                          RadioButtonGroup.GroupName="音质"
                                          RadioButtonGroup.SelectedValue="{Binding MusicFormatType}">
                                 <Label Text="尝试选择音质（仅部分平台可用）" />
-                                <RadioButton Content="普通 5M/首"
-                                             Value="PQ"/>
-                                <RadioButton Content="高级 10M/首"
-                                             Value="HQ" />
-                                <RadioButton Content="超高 30M/首"
-                                             Value="SQ" />
-                                <RadioButton Content="极致 70M/首"
-                                             Value="ZQ"/>
+                                <RadioButton
+                                    BackgroundColor="Transparent"
+                                    Content="普通 5M/首"
+                                    Value="PQ"/>
+                                <RadioButton
+                                    BackgroundColor="Transparent"
+                                    Content="高级 10M/首"
+                                    Value="HQ" />
+                                <RadioButton
+                                    BackgroundColor="Transparent"
+                                    Content="超高 30M/首"
+                                    Value="SQ" />
+                                <RadioButton
+                                    BackgroundColor="Transparent"
+                                    Content="极致 70M/首"
+                                    Value="ZQ"/>
                             </StackLayout>
                         </StackLayout>
 

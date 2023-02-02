@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Storage;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -23,13 +24,13 @@ public partial class MyFavoritePageViewModel : ViewModelBase
     {
         try
         {
-            if (IsNotLogin)
+            IsLogin = UserInfoStorage.GetUsername().IsNotEmpty();
+            if (!IsLogin)
             {
-                await ToastService.Show("登录信息已过期，请重新登录");
                 return;
             }
 
-            StartLoading("");
+            Loading("加载歌单....");
 
             var myFavoriteList = await _myFavoriteService.GetAllAsync();
             if (myFavoriteList == null || myFavoriteList.Count == 0)
@@ -76,7 +77,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 
@@ -94,7 +95,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
 
         try
         {
-            StartLoading("处理中....");
+            Loading("处理中....");
             if (await _myFavoriteService.NameExistAsync(myFavoriteName))
             {
                 await ToastService.Show("歌单名称已存在");
@@ -122,7 +123,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 

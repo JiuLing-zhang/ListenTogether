@@ -13,9 +13,6 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <controls:Loading
-            IsRunning="{Binding IsLoading}"
-            Text="{Binding LoadingText}"/>
         <StackLayout 
             Grid.Row="0" 
             Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"

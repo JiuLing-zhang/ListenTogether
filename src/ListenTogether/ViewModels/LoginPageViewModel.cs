@@ -29,7 +29,7 @@ public partial class LoginPageViewModel : ViewModelBase
     {
         try
         {
-            StartLoading("正在登录....");
+            Loading("正在登录....");
             if (Username.IsEmpty() || Password.IsEmpty())
             {
                 await ToastService.Show("请输入用户名和密码");
@@ -61,7 +61,7 @@ public partial class LoginPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 

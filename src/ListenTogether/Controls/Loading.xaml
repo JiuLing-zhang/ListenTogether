@@ -1,22 +1,23 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="ListenTogether.Controls.Loading"
-             x:Name="SelfLoading">
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="ListenTogether.Controls.LoadingPage"
+               CanBeDismissedByTappingOutsideOfPopup="False"
+               Size="300,150">
 
-    <StackLayout
-        AbsoluteLayout.LayoutBounds="0,0,1,1"
-        AbsoluteLayout.LayoutFlags="All"
-        VerticalOptions="Center"
-        HorizontalOptions="Center"
-        IsVisible="{Binding IsRunning, Source={x:Reference SelfLoading}}">
+    <Grid
+        RowDefinitions="Auto,Auto"
+        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+        RowSpacing="10"
+        Padding="20">
         <ActivityIndicator
+            Grid.Row="0"
             Color="{StaticResource Main}"
-            IsRunning="True" />
+            IsRunning="True"/>
         <Label
-            Margin="0,10,0,0"
-            TextColor="{StaticResource Main}"
-            Text="{Binding Text, Source={x:Reference SelfLoading}}" />
-    </StackLayout>
-
-</ContentView>
+            Grid.Row="1"
+            x:Name="LblMessage"
+            HorizontalOptions="CenterAndExpand"
+            TextColor="{StaticResource Main}"/>
+    </Grid>
+</toolkit:Popup>

@@ -27,6 +27,7 @@
                                             Margin="0,0,5,0"
                                             HeightRequest="20"
                                             StrokeThickness="0"
+                                            BackgroundColor="Transparent"
                                             HorizontalOptions="Center">
                                             <Border.GestureRecognizers>
                                                 <TapGestureRecognizer
@@ -34,8 +35,7 @@
                                                     CommandParameter="{Binding Id}"/>
                                             </Border.GestureRecognizers>
                                             <hc:HandCursorLabel
-                                                VerticalTextAlignment="Center"
-                                                BackgroundColor="Transparent"
+                                                VerticalTextAlignment="Center"                                                
                                                 Text="{Binding Name}"/>
                                         </Border>
                                     </DataTemplate>

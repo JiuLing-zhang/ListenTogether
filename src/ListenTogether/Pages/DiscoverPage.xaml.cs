@@ -22,7 +22,9 @@ public partial class DiscoverPage : ContentPage
         {
             _isFirstAppearing = false;
             HandCursor.Binding();
+#if DEBUG == false
             await vm.InitializeAsync();
+#endif
         }
     }
     protected override void OnDisappearing()

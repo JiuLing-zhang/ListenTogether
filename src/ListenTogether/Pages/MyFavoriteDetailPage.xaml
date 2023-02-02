@@ -15,11 +15,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <controls:Loading
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            IsRunning="{Binding IsLoading}"
-            Text="{Binding LoadingText}"/>
         <StackLayout 
             Grid.Row="0"
             Orientation="Horizontal"

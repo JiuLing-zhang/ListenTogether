@@ -21,17 +21,12 @@ public partial class SettingPageViewModel : ViewModelBase
     {
         try
         {
-            StartLoading("");
             UserInfo = GetUserInfo();
         }
         catch (Exception ex)
         {
             await ToastService.Show("设置页加载失败");
             Logger.Error("设置页加载失败。", ex);
-        }
-        finally
-        {
-            StopLoading();
         }
     }
 
@@ -294,8 +289,7 @@ public partial class SettingPageViewModel : ViewModelBase
 
         try
         {
-            StartLoading("");
-
+            Loading("请稍候....");
             //服务端退出失败时不处理，直接本地清除登录信息
             await _userService.LogoutAsync();
 
@@ -309,7 +303,7 @@ public partial class SettingPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 
@@ -332,7 +326,7 @@ public partial class SettingPageViewModel : ViewModelBase
     {
         try
         {
-            StartLoading("正在检查更新....");
+            Loading("正在检查更新....");
             await UpdateCheck.Do(false);
         }
         catch (Exception ex)
@@ -342,7 +336,7 @@ public partial class SettingPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 }

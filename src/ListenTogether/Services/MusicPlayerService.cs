@@ -62,12 +62,14 @@ public class MusicPlayerService
                 return;
             }
 
-            //重新获取播放链接
-            MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", true);
+            string key = JiuLing.CommonLibs.GuidUtils.GetFormatN();
+            LoadingService.Loading(key, "歌曲缓冲中....");
+
+            //重新获取播放链接        
             var playUrl = await _musicNetworkService.GetPlayUrlAsync(playlist.Platform, playlist.IdOnPlatform, playlist.ExtendDataJson);
             if (playUrl.IsEmpty())
             {
-                MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);
+                LoadingService.LoadComplete(key);
                 Logger.Info($"播放地址获取失败。{playlist.IdOnPlatform}-{playlist.IdOnPlatform}-{playlist.Name}");
                 await Next();
                 return;
@@ -80,7 +82,7 @@ public class MusicPlayerService
             string remark = $"{playlist.Artist}-{playlist.Name}";
             await _musicCacheService.AddOrUpdateAsync(playlist.Id, cachePath, remark);
 
-            MessagingCenter.Instance.Send<string, bool>("ListenTogether", "PlayerBuffering", false);
+            LoadingService.LoadComplete(key);
         }
 
         var image = await _httpClient.GetByteArrayAsync(playlist.ImageUrl);

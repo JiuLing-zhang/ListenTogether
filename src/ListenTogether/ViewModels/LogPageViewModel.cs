@@ -15,7 +15,7 @@ public partial class LogPageViewModel : ViewModelBase
     {
         try
         {
-            StartLoading("");
+            Loading("日志加载中");
             if (Logs.Count > 0)
             {
                 Logs.Clear();
@@ -48,7 +48,7 @@ public partial class LogPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 

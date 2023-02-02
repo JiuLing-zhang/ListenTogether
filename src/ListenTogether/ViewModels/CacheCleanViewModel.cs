@@ -17,7 +17,7 @@ public partial class CacheCleanViewModel : ViewModelBase
     {
         try
         {
-            StartLoading("");
+            Loading("拼命计算中....");
             SelectedSize = 0;
             await QueryCachesAsync();
         }
@@ -28,7 +28,7 @@ public partial class CacheCleanViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 
@@ -127,7 +127,7 @@ public partial class CacheCleanViewModel : ViewModelBase
 
         try
         {
-            StartLoading("处理中....");
+            Loading("处理中....");
             foreach (var cache in Caches)
             {
                 if (cache.IsChecked == true)
@@ -154,7 +154,7 @@ public partial class CacheCleanViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
 
         await QueryCachesAsync();

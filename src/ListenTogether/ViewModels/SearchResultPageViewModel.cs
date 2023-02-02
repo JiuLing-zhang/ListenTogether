@@ -63,7 +63,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
                 return;
             }
 
-            StartLoading("正在搜索....");
+            Loading("正在搜索....");
             MusicSearchResult.Clear();
             var musics = await _musicNetworkService.SearchAsync(GlobalConfig.MyUserSetting.Search.EnablePlatform, keyword);
 
@@ -124,7 +124,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
         finally
         {
             _lastSearchKey = keyword;
-            StopLoading();
+            LoadComplete();
             Interlocked.Exchange(ref _isSearching, 0);
         }
     }

@@ -32,14 +32,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     {
         try
         {
-            if (IsNotLogin)
-            {
-                await ToastService.Show("登录信息已过期，请重新登录");
-                return;
-            }
-
-            StartLoading("");
-
+            Loading("加载中....");
             await LoadMyFavoriteInfoAsync();
             await GetMyFavoriteDetailAsync();
 
@@ -51,7 +44,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
     private async Task GetMyFavoriteDetailAsync()
@@ -117,7 +110,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 
         try
         {
-            StartLoading("处理中....");
+            Loading("处理中....");
 
             var myFavorite = new MyFavorite()
             {
@@ -137,7 +130,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 
@@ -151,7 +144,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         }
         try
         {
-            StartLoading("处理中....");
+            Loading("处理中....");
             var result = await _myFavoriteService.RemoveAsync(MyFavoriteId);
             if (result == false)
             {
@@ -167,7 +160,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 
@@ -189,7 +182,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 
         try
         {
-            StartLoading("处理中....");
+            Loading("处理中....");
 
             if (!await _myFavoriteService.RemoveDetailAsync(selected.Id))
             {
@@ -206,7 +199,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         }
         finally
         {
-            StopLoading();
+            LoadComplete();
         }
     }
 }

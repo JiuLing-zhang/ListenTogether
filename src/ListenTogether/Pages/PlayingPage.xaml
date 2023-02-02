@@ -40,9 +40,7 @@
             Opacity="0.6"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"/>
-        <controls:Loading
-            IsRunning="{Binding IsLoading}"
-            Text="{Binding LoadingText}"/>
+
         <Grid
             RowDefinitions="{OnPlatform WinUI='*,90',Android='300,*,130',iOS='300,*,130'}"
             ColumnDefinitions="{OnPlatform WinUI='*,*',Android='*',iOS='*'}"
