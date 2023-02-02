@@ -54,6 +54,7 @@
     <CollectionView.ItemTemplate>
         <DataTemplate>
             <StackLayout
+                Margin="{OnPlatform WinUI=0,MacCatalyst=0,Android='20,0,20,10',iOS='20,0,20,10'}"
                 Style="{StaticResource DataRowEnter}">
                 <OnPlatform x:TypeArguments="View">
                     <On Platform="WinUI, macOS">
@@ -101,8 +102,9 @@
 
                     <On Platform="Android,iOS">
                         <Grid
-                            Margin="0,10,0,0"
-                            RowDefinitions="auto,auto"
+                            Padding="3"
+                            RowSpacing="1"
+                            RowDefinitions="20,20"
                             ColumnDefinitions="*,40">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer
@@ -110,38 +112,37 @@
                                     CommandParameter="{Binding}"/>
                             </Grid.GestureRecognizers>
 
-                            <HorizontalStackLayout
+                            <Label
                                 Grid.Row="0"
+                                Grid.Column="0"
+                                Text="{Binding Name}"
+                                VerticalOptions="Center"
+                                LineBreakMode="TailTruncation"/>
+
+                            <HorizontalStackLayout
+                                Grid.Row="1"
                                 Grid.Column="0">
                                 <Label
                                     Text="{Binding Fee}"
                                     Style="{DynamicResource FeeType}"
                                     VerticalOptions="Center"/>
                                 <Label
-                                    Text="{Binding Name}"
-                                    Margin="5,0,0,0"
+                                    Style="{StaticResource Explain}"
                                     VerticalOptions="Center"
-                                    LineBreakMode="TailTruncation"/>
+                                    LineBreakMode="TailTruncation">
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Artist" />
+                                        <Binding Path="Album" />
+                                    </MultiBinding>
+                                </Label>
                             </HorizontalStackLayout>
-
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Style="{StaticResource Explain}"
-                                VerticalOptions="Center"
-                                LineBreakMode="TailTruncation">
-                                <MultiBinding StringFormat="{}{0} - {1}">
-                                    <Binding Path="Artist" />
-                                    <Binding Path="Album" />
-                                </MultiBinding>
-                            </Label>
 
                             <controls:FavoriteView
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Grid.RowSpan="2"
-                                WidthRequest="15"
-                                HeightRequest="15"
+                                WidthRequest="20"
+                                HeightRequest="20"
                                 VerticalOptions="Center"
                                 Music="{Binding  .}"/>
                         </Grid>

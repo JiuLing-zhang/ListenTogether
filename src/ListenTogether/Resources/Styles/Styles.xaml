@@ -26,7 +26,7 @@
     <Style TargetType="Label"
            x:Key="Explain">
         <Setter Property="FontSize"
-                Value="13" />
+                Value="{OnPlatform WinUI=13,MacCatalyst=13,Android=12,iOS=12}" />
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource LightTextSecond}, Dark={StaticResource DarkTextSecond}}" />
     </Style>
@@ -39,7 +39,7 @@
 
     <Style TargetType="Label">
         <Setter Property="FontSize"
-                Value="15" />
+                Value="{OnPlatform WinUI=15,MacCatalyst=15,Android=16,iOS=16}" />
         <Setter Property="TextColor"
                 Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
     </Style>

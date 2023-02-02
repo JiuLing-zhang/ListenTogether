@@ -7,12 +7,12 @@
              Title="SongMenuPage">
     <Grid
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-        RowDefinitions="160,*,Auto">
+        RowDefinitions="Auto,*,Auto">
         <VerticalStackLayout
             Grid.Row="0"
-            Margin="10">
+            Spacing="10"
+            Margin="{OnPlatform WinUI=10,MacCatalyst=10,Android='15,10,15,10',iOS='15,10,15,10'}">
             <Label
-                Margin="0,0,0,10"
                 FontSize="20"
                 Text="{Binding SongMenu.PlatformName}"
                 TextColor="{StaticResource Main}"/>
@@ -35,7 +35,6 @@
         </VerticalStackLayout>
         <Border
             Grid.Row="1"
-            Padding="5,0,5,0"
             StrokeThickness="0"
             BackgroundColor="Transparent">
             <controls:MusicResultView
