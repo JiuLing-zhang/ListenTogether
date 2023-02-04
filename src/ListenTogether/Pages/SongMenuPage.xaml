@@ -10,22 +10,23 @@
         RowDefinitions="Auto,*,Auto">
         <VerticalStackLayout
             Grid.Row="0"
-            Spacing="10"
-            Margin="{OnPlatform WinUI=10,MacCatalyst=10,Android='15,10,15,10',iOS='15,10,15,10'}">
+            Padding="{OnPlatform WinUI='10,10,10,0',MacCatalyst='10,10,10,0',Android='15,10,15,0',iOS='15,10,15,0'}"
+            Spacing="10">
             <Label
-                FontSize="20"
+                FontSize="17"
                 Text="{Binding SongMenu.PlatformName}"
                 TextColor="{StaticResource Main}"/>
             <HorizontalStackLayout Spacing="10">
                 <Image
-                    WidthRequest="150"
-                    HeightRequest="150"
+                    WidthRequest="{OnPlatform WinUI=120,MacCatalyst=120,Android=100,iOS=100}"
+                    HeightRequest="{OnPlatform WinUI=120,MacCatalyst=120,Android=100,iOS=100}"
                     VerticalOptions="Start"
                     Source="{Binding SongMenu.ImageUrl}"/>
                 <VerticalStackLayout Spacing="10">
                     <Label
-                        FontSize="20"
-                        Text="{Binding SongMenu.Name}"/>
+                        FontSize="17"
+                        Text="{Binding SongMenu.Name}"
+                        LineBreakMode="WordWrap"/>
                     <hc:HandCursorButton
                         Text="播放全部"
                         HorizontalOptions="Start"

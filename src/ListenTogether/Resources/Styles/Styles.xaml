@@ -81,6 +81,9 @@
     </Style>
 
     <Style TargetType="Switch">
+        <!--Windows 平台下，开关后面有个 On Off 的文本标识，使用 Margin 强制挤出界面-->
+        <Setter Property="Margin"
+                Value="{OnPlatform WinUI='0,0,-125,0',MacCatalyst='0,0,-125,0',Android='0',iOS='0'}" />
         <Setter Property="OnColor"
                 Value="{AppThemeBinding Dark={StaticResource DarkSwitchOnColor},Light={StaticResource LightSwitchOnColor}}" />
         <Setter Property="VisualStateManager.VisualStateGroups">

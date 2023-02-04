@@ -1,11 +1,15 @@
-﻿using ListenTogether.Model;
-
-namespace ListenTogether.Data;
+﻿namespace ListenTogether.Data;
 
 public class DataConfig
 {
-    internal static readonly HttpClient HttpClientWithNoToken = new();
-    internal static readonly HttpClient HttpClientWithToken = new(new ApiHttpMessageHandler());
+    internal static readonly HttpClient HttpClientWithNoToken = new()
+    {
+        Timeout = TimeSpan.FromSeconds(10)
+    };
+    internal static readonly HttpClient HttpClientWithToken = new(new ApiHttpMessageHandler())
+    {
+        Timeout = TimeSpan.FromSeconds(10)
+    };
 
     /// <summary>
     /// API 的一些配置信息

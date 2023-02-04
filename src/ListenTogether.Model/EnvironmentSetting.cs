@@ -48,9 +48,9 @@ namespace ListenTogether.Model
         public bool IsAutoCheckUpdate { get; set; }
 
         /// <summary>
-        /// 是否深色主题
+        /// 外观
         /// </summary>
-        public bool IsDarkMode { get; set; }
+        public int AppThemeInt { get; set; }
 
         /// <summary>
         /// 关闭时最小化到托盘

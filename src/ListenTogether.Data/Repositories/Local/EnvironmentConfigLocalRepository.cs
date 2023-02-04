@@ -29,7 +29,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         result.General = new GeneralSetting()
         {
             IsAutoCheckUpdate = generalConfig.IsAutoCheckUpdate,
-            IsDarkMode = generalConfig.IsDarkMode,
+            AppThemeInt = generalConfig.AppThemeInt,
             IsHideWindowWhenMinimize = generalConfig.IsHideWindowWhenMinimize,
         };
 
@@ -73,6 +73,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             }).ToJson(),
             GeneralSettingJson = (new GeneralSetting()
             {
+                AppThemeInt = 0,
                 IsAutoCheckUpdate = true,
                 IsHideWindowWhenMinimize = true
             }).ToJson(),

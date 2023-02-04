@@ -31,39 +31,53 @@ public partial class SongMenuPageViewModel : ViewModelBase
     }
     public async Task InitializeAsync()
     {
-        MusicResultCollection.Clear();
-        SongMenu = Json.ToObject<SongMenuViewModel>() ?? throw new ArgumentNullException("歌单信息不存在");
-
-        List<MusicResultShow> musics;
-        switch (SongMenu.SongMenuType)
+        try
         {
-            case SongMenuEnum.Tag:
-                musics = await _musicNetworkService.GetTagMusicsAsync(Platform, SongMenu.Id);
-                break;
-            case SongMenuEnum.Top:
-                musics = await _musicNetworkService.GetTopMusicsAsync(Platform, SongMenu.Id);
-                break;
-            default:
-                throw new ArgumentNullException("不支持的歌单类型");
+            Loading("歌曲加载中....");
+            MusicResultCollection.Clear();
+            SongMenu = Json.ToObject<SongMenuViewModel>() ?? throw new ArgumentNullException("歌单信息不存在");
+
+            List<MusicResultShow> musics;
+            switch (SongMenu.SongMenuType)
+            {
+                case SongMenuEnum.Tag:
+                    musics = await _musicNetworkService.GetTagMusicsAsync(Platform, SongMenu.Id);
+                    break;
+                case SongMenuEnum.Top:
+                    musics = await _musicNetworkService.GetTopMusicsAsync(Platform, SongMenu.Id);
+                    break;
+                default:
+                    throw new ArgumentNullException("不支持的歌单类型");
+            }
+
+            IMusicSearchFilter vipMusicFilter = new VipMusicFilter();
+            musics = vipMusicFilter.Filter(musics);
+
+            int seq = 0;
+            var platformMusics = musics.Select(
+                  x => new MusicResultShowViewModel()
+                  {
+                      Seq = ++seq,
+                      Id = x.Id,
+                      Platform = x.Platform,
+                      IdOnPlatform = x.IdOnPlatform,
+                      Name = x.Name,
+                      Artist = x.Artist,
+                      Album = x.Album,
+                      Duration = x.DurationText,
+                      ImageUrl = x.ImageUrl,
+                      Fee = x.Fee.GetDescription()
+                  }).ToList();
+            MusicResultCollection.Add(new MusicResultGroupViewModel(Platform.GetDescription(), platformMusics));
         }
-
-        IMusicSearchFilter vipMusicFilter = new VipMusicFilter();
-        musics = vipMusicFilter.Filter(musics);
-
-        var platformMusics = musics.Select(
-              x => new MusicResultShowViewModel()
-              {
-                  Id = x.Id,
-                  Platform = x.Platform,
-                  IdOnPlatform = x.IdOnPlatform,
-                  Name = x.Name,
-                  Artist = x.Artist,
-                  Album = x.Album,
-                  Duration = x.DurationText,
-                  ImageUrl = x.ImageUrl,
-                  Fee = x.Fee.GetDescription()
-              }).ToList();
-        MusicResultCollection.Add(new MusicResultGroupViewModel(Platform.GetDescription(), platformMusics));
+        catch (Exception ex)
+        {
+            Logger.Error($"歌曲加载失败：{SongMenu.PlatformName},type={SongMenu.SongMenuType},id={SongMenu.Id}", ex);
+        }
+        finally
+        {
+            LoadComplete();
+        }
     }
 
     [RelayCommand]

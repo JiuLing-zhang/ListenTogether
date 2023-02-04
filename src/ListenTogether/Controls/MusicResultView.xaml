@@ -105,7 +105,7 @@
                             Padding="3"
                             RowSpacing="1"
                             RowDefinitions="20,20"
-                            ColumnDefinitions="*,40">
+                            ColumnDefinitions="30,*,40">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding PlayCommand, Source={x:Reference self}}"
@@ -114,14 +114,22 @@
 
                             <Label
                                 Grid.Row="0"
+                                Grid.RowSpan="2"
                                 Grid.Column="0"
+                                Text="{Binding Seq}"
+                                HorizontalTextAlignment="Start"
+                                VerticalTextAlignment="Center"/>
+                            
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
                                 Text="{Binding Name}"
                                 VerticalOptions="Center"
                                 LineBreakMode="TailTruncation"/>
 
                             <HorizontalStackLayout
                                 Grid.Row="1"
-                                Grid.Column="0">
+                                Grid.Column="1">
                                 <Label
                                     Text="{Binding Fee}"
                                     Style="{DynamicResource FeeType}"
@@ -139,7 +147,7 @@
 
                             <controls:FavoriteView
                                 Grid.Row="0"
-                                Grid.Column="1"
+                                Grid.Column="2"
                                 Grid.RowSpan="2"
                                 WidthRequest="20"
                                 HeightRequest="20"

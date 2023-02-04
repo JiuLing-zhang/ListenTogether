@@ -14,6 +14,12 @@ public class MusicResultGroupViewModel : List<MusicResultShowViewModel>
 public partial class MusicResultShowViewModel : MusicViewModel
 {
     /// <summary>
+    /// 序号
+    /// </summary>
+    [ObservableProperty]
+    private int _seq;
+
+    /// <summary>
     /// 时长
     /// </summary>
     [ObservableProperty]

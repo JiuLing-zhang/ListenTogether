@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
              xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
-             xmlns:jiuLing="clr-namespace:JiuLing.Controls.Maui.Controls;assembly=JiuLing.Controls.Maui"
              x:Class="ListenTogether.Pages.SettingsPage"
              Title="设置">
 
@@ -19,7 +18,7 @@
             Style="{StaticResource StackLayoutLoading}">
 
             <StackLayout VerticalOptions="FillAndExpand"
-                     MaximumWidthRequest="{OnPlatform  WinUI=500,MacCatalyst=500}">
+                     MaximumWidthRequest="{OnPlatform WinUI=380,MacCatalyst=380}">
 
                 <StackLayout Margin="0,0,0,20"
                      Orientation="Horizontal"
@@ -30,7 +29,7 @@
                 </StackLayout>
 
                 <ScrollView VerticalOptions="FillAndExpand">
-                    <StackLayout>
+                    <StackLayout Padding="{OnPlatform WinUI='20,0,20,0',MacCatalyst='20,0,20,0',Android='10,0,10,0',iOS='10,0,10,0'}">
 
                         <!--用户模块-->
                         <StackLayout VerticalOptions="Start">
@@ -76,73 +75,158 @@
                         <!--设置模块-->
                         <StackLayout Margin="0,20,0,0">
                             <!-- 常规设置 -->
-                            <Label Text="常规"
-                                   Margin="0,40,0,0"
-                                   FontAttributes="Bold"/>
+                            <Label
+                                Text="常规"
+                                Margin="0,40,0,0"
+                                FontAttributes="Bold"/>
 
-                            <jiuLing:TextSwitch Text="启动时检查更新"
-                                                IsToggled="{Binding IsAutoCheckUpdate}"/>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="启动时检查更新"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsAutoCheckUpdate}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
 
-                            <jiuLing:TextSwitch Text="深色主题（可能需要重启）"
-                                                IsToggled="{Binding IsDarkMode}"/>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="外观"                                    
+                                    VerticalTextAlignment="Center"/>
+                                <hc:HandCursorLabel
+                                    Style="{StaticResource Explain}"
+                                    HorizontalOptions="EndAndExpand">
+                                    <hc:HandCursorLabel.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChooseAppThemeAsyncCommand}"/>
+                                    </hc:HandCursorLabel.GestureRecognizers>
+                                    <hc:HandCursorLabel.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding AppThemeInt}"
+                                            Value="0"
+                                            TargetType="hc:HandCursorLabel">
+                                            <Setter
+                                                Property="Text"
+                                                Value="跟随系统 >"/>
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding AppThemeInt}"
+                                            Value="1"
+                                            TargetType="hc:HandCursorLabel">
+                                            <Setter
+                                                Property="Text"
+                                                Value="浅色 >"/>
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding AppThemeInt}"
+                                            Value="2"
+                                            TargetType="hc:HandCursorLabel">
+                                            <Setter
+                                                Property="Text"
+                                                Value="深色 >"/>
+                                        </DataTrigger>
+                                    </hc:HandCursorLabel.Triggers>
+
+                                </hc:HandCursorLabel>
+                            </StackLayout>
 
                             <!-- 搜索设置 -->
                             <Label 
                                 Margin="0,40,0,0"
                                 Text="搜索"
                                 FontAttributes="Bold"/>
-                            <jiuLing:TextSwitch 
-                                Text="网易云音乐"
-                                IsToggled="{Binding IsEnableNetEase}"/>
 
-                            <jiuLing:TextSwitch 
-                                Text="酷我音乐"
-                                IsToggled="{Binding IsEnableKuWo}"/>
-
-                            <jiuLing:TextSwitch 
-                                Text="酷狗音乐"
-                                IsToggled="{Binding IsEnableKuGou}"/>
-
-                            <jiuLing:TextSwitch 
-                                Text="咪咕音乐"
-                                IsToggled="{Binding IsEnableMiGu}"/>
-
-                            <jiuLing:TextSwitch
-                                Margin="0,15,0,0"
-                                Text="隐藏小于1分钟的歌曲"
-                                IsToggled="{Binding IsHideShortMusic}"/>
-
-                            <jiuLing:TextSwitch 
-                                Text="歌曲名或歌手名必须包含搜索词"
-                                IsToggled="{Binding IsMatchSearchKey}"/>
-
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="网易云音乐"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsEnableNetEase}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="酷我音乐"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsEnableKuWo}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="酷狗音乐"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsEnableKuGou}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="咪咕音乐"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsEnableMiGu}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="隐藏小于1分钟的歌曲"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsHideShortMusic}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="歌曲名或歌手名必须包含搜索词"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsMatchSearchKey}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
                             <!-- 播放设置 -->
                             <Label
                                 Margin="0,40,0,0"
                                 Text="播放"
                                 FontAttributes="Bold"/>
 
-                            <jiuLing:TextSwitch 
-                                Text="仅在WIFI下播放未缓存的歌曲"
-                                IsVisible="{OnIdiom Default=false,Phone=true}"
-                                IsToggled="{Binding IsWifiPlayOnly}"/>
+                            <StackLayout
+                                Orientation="Horizontal"
+                                IsVisible="{OnIdiom Default=false,Phone=true}">
+                                <Label
+                                    Text="仅在WIFI下播放未缓存的歌曲"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsWifiPlayOnly}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
 
-                            <jiuLing:TextSwitch 
-                                Text="播放页面禁止屏幕关闭"
-                                IsVisible="{OnIdiom Default=false,Phone=true}"
-                                IsToggled="{Binding IsPlayingPageKeepScreenOn}"/>
+                            <StackLayout
+                                Orientation="Horizontal"
+                                IsVisible="{OnIdiom Default=false,Phone=true}">
+                                <Label
+                                    Text="仅在WIFI播放页面禁止屏幕关闭"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsPlayingPageKeepScreenOn}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
 
-                            <jiuLing:TextSwitch 
-                                Text="播放我的歌单前清空播放列表"
-                                IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}"/>
+                            <StackLayout Orientation="Horizontal">
+                                <Label
+                                    Text="播放我的歌单前清空播放列表"
+                                    VerticalTextAlignment="Center"/>
+                                <Switch
+                                    IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}"
+                                    HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
 
                             <StackLayout Margin="0,10,0,0"
                                          RadioButtonGroup.GroupName="音质"
                                          RadioButtonGroup.SelectedValue="{Binding MusicFormatType}">
-                                <Label Text="尝试选择音质（仅部分平台可用）" />
+                                <Label Text="音质选择（不一定有用）" />
                                 <RadioButton
                                     BackgroundColor="Transparent"
-                                    Content="普通 5M/首"
+                                    Content="普通  5M/首"
                                     Value="PQ"/>
                                 <RadioButton
                                     BackgroundColor="Transparent"

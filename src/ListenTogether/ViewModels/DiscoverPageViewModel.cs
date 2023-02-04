@@ -162,31 +162,43 @@ public partial class DiscoverPageViewModel : ViewModelBase
             }
         }
 
-        List<SongMenu> songMenus;
-        SongMenuEnum songMenuType;
-        if (id == "榜单")
-        {
-            songMenus = await _musicNetworkService.GetSongMenusFromTop(Platform);
-            songMenuType = SongMenuEnum.Top;
-        }
-        else
-        {
-            songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, id);
-            songMenuType = SongMenuEnum.Tag;
-        }
-
         SongMenus.Clear();
-        foreach (var songMenu in songMenus)
+        try
         {
-            SongMenus.Add(new SongMenuViewModel()
+            Loading("加载中....");
+            List<SongMenu> songMenus;
+            SongMenuEnum songMenuType;
+            if (id == "榜单")
             {
-                SongMenuType = songMenuType,
-                PlatformName = Platform.GetDescription(),
-                Id = songMenu.Id,
-                Name = songMenu.Name,
-                ImageUrl = songMenu.ImageUrl,
-                LinkUrl = songMenu.LinkUrl
-            });
+                songMenus = await _musicNetworkService.GetSongMenusFromTop(Platform);
+                songMenuType = SongMenuEnum.Top;
+            }
+            else
+            {
+                songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, id);
+                songMenuType = SongMenuEnum.Tag;
+            }
+
+            foreach (var songMenu in songMenus)
+            {
+                SongMenus.Add(new SongMenuViewModel()
+                {
+                    SongMenuType = songMenuType,
+                    PlatformName = Platform.GetDescription(),
+                    Id = songMenu.Id,
+                    Name = songMenu.Name,
+                    ImageUrl = songMenu.ImageUrl,
+                    LinkUrl = songMenu.LinkUrl
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"歌单加载失败：{Platform.GetDescription()},id={id}", ex);
+        }
+        finally
+        {
+            LoadComplete();
         }
     }
 

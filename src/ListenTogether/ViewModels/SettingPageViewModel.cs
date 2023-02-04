@@ -59,15 +59,34 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// 深色主题
+    /// 外观
     /// </summary>
     [ObservableProperty]
-    private bool _isDarkMode = App.Current.UserAppTheme == AppTheme.Dark;
-    async partial void OnIsDarkModeChanged(bool value)
+    private int _appThemeInt = GlobalConfig.MyUserSetting.General.AppThemeInt;
+    async partial void OnAppThemeIntChanged(int value)
     {
-        App.Current.UserAppTheme = value ? AppTheme.Dark : AppTheme.Light;
-        GlobalConfig.MyUserSetting.General.IsDarkMode = value;
+        App.Current.UserAppTheme = (AppTheme)value;
+        GlobalConfig.MyUserSetting.General.AppThemeInt = value;
         await WriteGeneralConfigAsync();
+    }
+    [RelayCommand]
+    private async void ChooseAppThemeAsync()
+    {
+        string result = await Shell.Current.DisplayActionSheet("请选择外观：", null, null, "跟随系统", "浅色", "深色");
+        switch (result)
+        {
+            case "跟随系统":
+                AppThemeInt = 0;
+                break;
+            case "浅色":
+                AppThemeInt = 1;
+                break;
+            case "深色":
+                AppThemeInt = 2;
+                break;
+            default:
+                break;
+        }
     }
 
     /// <summary>

@@ -11,7 +11,7 @@
         RowDefinitions="40,20,Auto,20,*"
         RowSpacing="10"
         Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
-        MaximumWidthRequest="{OnPlatform  WinUI=500,MacCatalyst=500}">
+        MaximumWidthRequest="{OnPlatform WinUI=380,MacCatalyst=380}">
         <SearchBar
             Grid.Row="0"
             x:Name="TxtSearchBar"

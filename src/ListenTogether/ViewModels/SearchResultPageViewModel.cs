@@ -92,9 +92,11 @@ public partial class SearchResultPageViewModel : ViewModelBase
                 string platformName = platform.GetDescription();
                 try
                 {
+                    int seq = 0;
                     var onePlatformMusics = musics.Where(x => x.Platform == platform)
                         .Select(x => new MusicResultShowViewModel()
                         {
+                            Seq = ++seq,
                             Id = x.Id,
                             IdOnPlatform = x.IdOnPlatform,
                             Platform = x.Platform,
