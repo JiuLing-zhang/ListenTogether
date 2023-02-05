@@ -45,6 +45,7 @@
         <Border
             Grid.Row="2"
             StrokeThickness="0"
+            BackgroundColor="Transparent"
             IsVisible="{Binding IsNotSearchingForSuggest}">
             <FlexLayout
                     Wrap="Wrap"
@@ -88,6 +89,7 @@
         <Border
             Grid.Row="4"
             StrokeThickness="0"
+            BackgroundColor="Transparent"
             IsVisible="{Binding IsNotSearchingForSuggest}">
             <FlexLayout
                     FlexLayout.Grow="1"
