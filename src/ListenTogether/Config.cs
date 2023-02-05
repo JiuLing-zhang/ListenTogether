@@ -17,7 +17,7 @@ public static class Config
     {
         get
         {
-            if (App.Current.UserAppTheme== AppTheme.Unspecified)
+            if (App.Current.UserAppTheme == AppTheme.Unspecified)
             {
                 var appTheme = Application.Current.RequestedTheme;
                 return appTheme == AppTheme.Dark;
