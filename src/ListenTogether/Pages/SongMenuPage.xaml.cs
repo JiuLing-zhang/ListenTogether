@@ -18,12 +18,6 @@ public partial class SongMenuPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        player.OnAppearing();
         await ViewModel.InitializeAsync();
-    }
-    protected override void OnDisappearing()
-    {
-        player.OnDisappearing();
-        base.OnDisappearing();
     }
 }

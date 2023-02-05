@@ -7,7 +7,7 @@
              Title="SongMenuPage">
     <Grid
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-        RowDefinitions="Auto,*,Auto">
+        RowDefinitions="Auto,*">
         <VerticalStackLayout
             Grid.Row="0"
             Padding="{OnPlatform WinUI='10,10,10,0',MacCatalyst='10,10,10,0',Android='15,10,15,0',iOS='15,10,15,0'}"
@@ -43,10 +43,5 @@
                 PlayCommand="{Binding PlayAsyncCommand}"
                 PlayCommandParameter="{Binding .}"/>
         </Border>
-
-        <controls:Player
-            Grid.Row="2"
-            x:Name="player"
-            IsPlayingPage="False"/>
     </Grid>
 </ContentPage>
