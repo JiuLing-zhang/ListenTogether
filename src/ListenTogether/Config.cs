@@ -17,11 +17,15 @@ public static class Config
     {
         get
         {
-            if (App.Current.UserAppTheme == AppTheme.Dark)
+            if (App.Current.UserAppTheme== AppTheme.Unspecified)
             {
-                return true;
+                var appTheme = Application.Current.RequestedTheme;
+                return appTheme == AppTheme.Dark;
             }
-            return false;
+            else
+            {
+                return App.Current.UserAppTheme == AppTheme.Dark;
+            }
         }
     }
 }
