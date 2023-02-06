@@ -8,45 +8,91 @@
              Title="DiscoverPage">
 
     <Grid
-        RowDefinitions="40,Auto,*,Auto"
+        RowDefinitions="Auto,Auto,*,Auto"
         RowSpacing="10"
         BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
-        <HorizontalStackLayout
+        <!--
+        移动端单列布局:
+            row1 搜索栏
+            row2 平台
+        
+        桌面端单行布局:
+            col1 平台     col2 搜索栏
+        -->
+        <Grid
             Grid.Row="0"
             Padding="10,8,10,8"
-            BindableLayout.ItemsSource="{Binding DiscoverTabs}"
-            Spacing="10">
-            <BindableLayout.ItemTemplate>
-                <DataTemplate>
-                    <VerticalStackLayout Spacing="3">
-                        <VerticalStackLayout.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=TabChangedAsyncCommand}"
-                                CommandParameter="{Binding Id}"/>
-                        </VerticalStackLayout.GestureRecognizers>
-                        <hc:HandCursorLabel
-                            Text="{Binding Name}"
-                            Style="{StaticResource Tab}">
-                            <hc:HandCursorLabel.Triggers>
-                                <DataTrigger
-                                    TargetType="hc:HandCursorLabel"
-                                    Binding="{Binding IsSelected}"
-                                    Value="true">
-                                    <Setter
-                                        Property="TextColor"
-                                        Value="{StaticResource Main}"/>
-                                </DataTrigger>
-                            </hc:HandCursorLabel.Triggers>
-                        </hc:HandCursorLabel>
-                        <BoxView
-                            HeightRequest="3"
-                            Color="{StaticResource Main}"
-                            IsVisible="{Binding IsSelected}"/>
-                    </VerticalStackLayout>
-                </DataTemplate>
-            </BindableLayout.ItemTemplate>
-        </HorizontalStackLayout>
+            RowDefinitions="{OnPlatform WinUI='40',MacCatalyst='40',Android='40,40',iOS='40,40'}"
+            ColumnDefinitions="{OnPlatform WinUI='*,200',MacCatalyst='*,200',Android='*',iOS='*'}">
+
+            <HorizontalStackLayout
+                Grid.Row="{OnPlatform WinUI=0,MacCatalyst=0,Android=1,iOS=1}"
+                Grid.Column="{OnPlatform WinUI=0,MacCatalyst=0,Android=0,iOS=0}"
+                BindableLayout.ItemsSource="{Binding DiscoverTabs}"
+                Spacing="10">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout Spacing="3">
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=TabChangedAsyncCommand}"
+                                    CommandParameter="{Binding Id}"/>
+                            </VerticalStackLayout.GestureRecognizers>
+                            <hc:HandCursorLabel
+                                Text="{Binding Name}"
+                                Style="{StaticResource Tab}">
+                                <hc:HandCursorLabel.Triggers>
+                                    <DataTrigger
+                                        TargetType="hc:HandCursorLabel"
+                                        Binding="{Binding IsSelected}"
+                                        Value="true">
+                                        <Setter
+                                            Property="TextColor"
+                                            Value="{StaticResource Main}"/>
+                                    </DataTrigger>
+                                </hc:HandCursorLabel.Triggers>
+                            </hc:HandCursorLabel>
+                            <BoxView
+                                HeightRequest="3"
+                                Color="{StaticResource Main}"
+                                IsVisible="{Binding IsSelected}"/>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </HorizontalStackLayout>
+
+            <Border
+                Grid.Row="{OnPlatform WinUI=0,MacCatalyst=0,Android=0,iOS=0}"
+                Grid.Column="{OnPlatform WinUI=1,MacCatalyst=1,Android=0,iOS=0}"
+                HeightRequest="25"
+                VerticalOptions="Start"
+                Padding="5,0,5,0"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource DarkSearchBarBackgroundColor},Light={StaticResource LightSearchBarBackgroundColor}}"
+                StrokeThickness="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="5" />
+                </Border.StrokeShape>
+                <HorizontalStackLayout
+                    Spacing="5"
+                    BackgroundColor="Transparent">
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=GoToSearchPageAsyncCommand}"/>
+                    </HorizontalStackLayout.GestureRecognizers>
+                    <Image
+                        Source="{AppThemeBinding Dark='search_dark.png',Light='search.png'}"
+                        Aspect="AspectFill"
+                        WidthRequest="15"
+                        HeightRequest="15"
+                        VerticalOptions="Center"/>
+                    <Label
+                        VerticalTextAlignment="Center"
+                        TextColor="{AppThemeBinding Dark={StaticResource DarkSearchBarTextColor},Light={StaticResource LightSearchBarTextColor}}"
+                        Style="{StaticResource Explain}"
+                        Text="歌曲搜索"/>
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
 
         <Border
             Grid.Row="1"

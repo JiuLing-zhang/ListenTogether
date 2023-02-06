@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ListenTogether.ViewModels"
              xmlns:controls="clr-namespace:ListenTogether.Controls"
+             xmlns:hc="clr-namespace:ListenTogether.HandCursorControls"
              xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="ListenTogether.Pages.SearchPage"
              Title="搜索"
@@ -24,12 +25,13 @@
 
         <HorizontalStackLayout
             Grid.Row="1"
+            Spacing="5"
             IsVisible="{Binding IsNotSearchingForSuggest}">
             <Label
                 Text="搜索历史"
                 Style="{StaticResource Explain}"/>
 
-            <Image
+            <hc:HandCursorImage
                 Source="{AppThemeBinding Dark='remove_dark.png',Light='remove.png'}"
                 HorizontalOptions="EndAndExpand"
                 HeightRequest="16"
@@ -38,7 +40,7 @@
                     <TapGestureRecognizer 
                                 Command="{Binding RemoveSearchHistoriesAsyncCommand}"/>
                 </Image.GestureRecognizers>
-            </Image>
+            </hc:HandCursorImage>
         </HorizontalStackLayout>
 
         <!--搜索历史-->
@@ -54,26 +56,26 @@
                     BindableLayout.ItemsSource="{Binding SearchHistories}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <Border
-                                Margin="2,5,2,5"
-                                HeightRequest="28"
-                                Stroke="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"
-                                StrokeThickness="0.1"
-                                StrokeShape="RoundRectangle 15"
-                                Background="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-                                Padding="15,2,15,2">
-                            <Label
-                                    Text="{Binding .}"
-                                    FontSize="12"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    TextColor="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"/>
+                        <hc:HandCursorBorder
+                            Margin="2,5,2,5"
+                            HeightRequest="28"
+                            Stroke="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"
+                            StrokeThickness="0.1"
+                            StrokeShape="RoundRectangle 15"
+                            Background="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+                            Padding="15,2,15,2">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=HistoriyWordClickedAsyncCommand}"
                                         CommandParameter="{Binding .}"/>
                             </Border.GestureRecognizers>
-                        </Border>
+                            <Label
+                                Text="{Binding .}"
+                                FontSize="12"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                TextColor="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"/>
+                        </hc:HandCursorBorder>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
@@ -92,34 +94,34 @@
             BackgroundColor="Transparent"
             IsVisible="{Binding IsNotSearchingForSuggest}">
             <FlexLayout
-                    FlexLayout.Grow="1"
-                    Wrap="Wrap"
-                    AlignContent="Start"
-                    JustifyContent="Start"
-                    BindableLayout.ItemsSource="{Binding HotWords}">
+                FlexLayout.Grow="1"
+                Wrap="Wrap"
+                AlignContent="Start"
+                JustifyContent="Start"
+                BindableLayout.ItemsSource="{Binding HotWords}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <Border
-                                Margin="2,5,2,5"
-                                HeightRequest="28"
-                                Stroke="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"
-                                StrokeThickness="0.1"
-                                StrokeShape="RoundRectangle 15"
-                                Background="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-                                Padding="15,2,15,2">
-                            <Label
-                                    Text="{Binding .}"
-                                    FontSize="12"
-                                    VerticalTextAlignment="Center"
-                                    HorizontalTextAlignment="Center"
-                                    BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
-                                    TextColor="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"/>
+                        <hc:HandCursorBorder
+                            Margin="2,5,2,5"
+                            HeightRequest="28"
+                            Stroke="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"
+                            StrokeThickness="0.1"
+                            StrokeShape="RoundRectangle 15"
+                            Background="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+                            Padding="15,2,15,2">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=HotWordClickedAsyncCommand}"
                                         CommandParameter="{Binding .}"/>
                             </Border.GestureRecognizers>
-                        </Border>
+                            <Label
+                                Text="{Binding .}"
+                                FontSize="12"
+                                VerticalTextAlignment="Center"
+                                HorizontalTextAlignment="Center"
+                                BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}"
+                                TextColor="{AppThemeBinding Dark={StaticResource DarkText},Light={StaticResource LightText}}"/>
+                        </hc:HandCursorBorder>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
@@ -138,22 +140,21 @@
                 ItemsSource="{Binding SearchSuggest}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout
+                        <hc:HandCursorStackLayout
                             Margin="{OnPlatform WinUI='0',MacCatalyst='0',Android='0,10,0,0',iOS='0,10,0,0'}">
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SearchPageViewModel}}, Path=BeginSearchAsyncCommand}"
                                     CommandParameter="{Binding .}"/>
                             </StackLayout.GestureRecognizers>
-                            <Label
-                               Text="{Binding .}"/>
+                            <Label Text="{Binding .}"/>
                             <Label
                                 HeightRequest="1"
                                 Margin="0,10,0,0"
                                 VerticalTextAlignment="Center"
                                 VerticalOptions="EndAndExpand"
                                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkListLine},Light={StaticResource LightListLine}}"/>
-                        </StackLayout>
+                        </hc:HandCursorStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

@@ -16,10 +16,6 @@
              Icon="{AppThemeBinding Light=discover.png, Dark=discover_dark.png}">
             <ShellContent ContentTemplate="{DataTemplate pages:DiscoverPage}"/>
         </Tab>
-        <Tab Title="{Binding SearchResult.Title}"
-             Icon="{Binding SearchResult.Icon}">
-            <ShellContent ContentTemplate="{DataTemplate pages:SearchResultPage}" />
-        </Tab>
         <Tab Title="{Binding Playlist.Title}"
              Icon="{Binding Playlist.Icon}">
             <ShellContent ContentTemplate="{DataTemplate pages:PlaylistPage}" />

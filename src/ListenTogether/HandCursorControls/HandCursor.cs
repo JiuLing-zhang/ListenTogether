@@ -15,6 +15,14 @@ internal class HandCursor
     public static void Binding()
     {
 #if WINDOWS
+        Microsoft.Maui.Handlers.BorderHandler.Mapper.AppendToMapping("MyCustomization", (handler, view) =>
+        {
+            if (view is HandCursorBorder)
+            {
+                handler.PlatformView.PointerEntered += (_, __) => handler.PlatformView.SetHandCursor();
+
+            }
+        });
         Microsoft.Maui.Handlers.ButtonHandler.Mapper.AppendToMapping("MyCustomization", (handler, view) =>
         {
             if (view is HandCursorButton)

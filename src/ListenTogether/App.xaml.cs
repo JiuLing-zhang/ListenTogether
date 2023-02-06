@@ -62,6 +62,7 @@ public partial class App : Application
         }
 
         Routing.RegisterRoute(nameof(SearchPage), typeof(SearchPage));
+        Routing.RegisterRoute(nameof(SearchResultPage), typeof(SearchResultPage));
         Routing.RegisterRoute(nameof(PlayingPage), typeof(PlayingPage));
         Routing.RegisterRoute(nameof(MyFavoriteDetailPage), typeof(MyFavoriteDetailPage));
         Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));

@@ -31,7 +31,9 @@
     <Color x:Key="LightSwitchThumbOffColor">#605E5C</Color>
     <Color x:Key="LightGroupBackgroundColor">#F0F0F0</Color>
     <Color x:Key="LightRowEnterColor">#F1F2F3</Color>
-
+    <Color x:Key="LightSearchBarBackgroundColor">#EBEBEB</Color>
+    <Color x:Key="LightSearchBarTextColor">#BEBEBE</Color>
+    
     <Color x:Key="DarkLogo">#C98FFF</Color>
     <Color x:Key="DarkFlyoutBackgroundColor">#3B3B3B</Color>
     <Color x:Key="DarkBackground">#333333</Color>
@@ -57,7 +59,9 @@
     <Color x:Key="DarkSwitchThumbOffColor">#605E5C</Color>
     <Color x:Key="DarkGroupBackgroundColor">#605E5C</Color>
     <Color x:Key="DarkRowEnterColor">#373737</Color>
-
+    <Color x:Key="DarkSearchBarBackgroundColor">#3B3B3B</Color>
+    <Color x:Key="DarkSearchBarTextColor">#5F6568</Color>
+    
     <Color x:Key="PlayingPageLine">#767676</Color>
     <Color x:Key="PlayingPageBackgroundColor">#333333</Color>
     <Color x:Key="PlayingPageText">#FCF2F7</Color>

@@ -140,7 +140,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
     [RelayCommand]
     private async void GoToSearchPageAsync()
     {
-        await Shell.Current.GoToAsync($"{nameof(SearchPage)}?Keyword={Keyword}", true);
+        await Shell.Current.GoToAsync($"..?Keyword={Keyword}", true);
         Keyword = "";
     }
 }

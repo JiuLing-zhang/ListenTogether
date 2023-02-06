@@ -34,13 +34,6 @@
         </Tab>
     </FlyoutItem>
 
-    <FlyoutItem Title="{Binding SearchResult.Title}"
-                Icon="{AppThemeBinding Light=search.png, Dark=search_dark.png}">
-        <Tab>
-            <ShellContent  ContentTemplate="{DataTemplate pages:SearchResultPage}" />
-        </Tab>
-    </FlyoutItem>
-
     <FlyoutItem Title="{Binding Playlist.Title}"
                 Icon="{AppThemeBinding Light=playlist.png, Dark=playlist_dark.png}">
         <Tab>

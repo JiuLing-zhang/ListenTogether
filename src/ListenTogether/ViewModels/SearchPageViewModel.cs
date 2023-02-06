@@ -60,7 +60,7 @@ public partial class SearchPageViewModel : ViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotSearchingForSuggest))]
     private bool _isSearchingForSuggest = false;
-    public bool IsNotSearchingForSuggest => !_isSearchingForSuggest;
+    public bool IsNotSearchingForSuggest => !IsSearchingForSuggest;
 
     public async Task InitializeAsync()
     {
@@ -163,6 +163,6 @@ public partial class SearchPageViewModel : ViewModelBase
     private async Task DoSearchAsync(string keyword)
     {
         SearchHistoryStorage.Add(keyword);
-        await Shell.Current.GoToAsync($"..?Keyword={keyword}", true);
+        await Shell.Current.GoToAsync($"{nameof(SearchResultPage)}?Keyword={keyword}", true);
     }
 }

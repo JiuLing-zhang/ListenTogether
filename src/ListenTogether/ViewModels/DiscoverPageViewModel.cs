@@ -220,4 +220,11 @@ public partial class DiscoverPageViewModel : ViewModelBase
         string json = HttpUtility.UrlEncode(songMenu.ToJson());
         await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={Platform}");
     }
+
+
+    [RelayCommand]
+    private async void GoToSearchPageAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SearchPage)}", true);
+    }
 }

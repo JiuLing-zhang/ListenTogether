@@ -91,7 +91,7 @@ public class MiGuMusicProvider : IMusicProvider
                     Name = htmlMusic.title,
                     Artist = htmlMusic.singer,
                     Album = htmlMusic.album,
-                    ImageUrl = htmlMusic.imgUrl,
+                    ImageUrl = $"http:{htmlMusic.imgUrl}",
                     Fee = FeeEnum.Free,
                 });
             }

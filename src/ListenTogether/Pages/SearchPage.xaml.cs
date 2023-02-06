@@ -1,3 +1,5 @@
+using ListenTogether.HandCursorControls;
+
 namespace ListenTogether.Pages;
 
 public partial class SearchPage : ContentPage
@@ -8,11 +10,16 @@ public partial class SearchPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
+    protected override void OnHandlerChanged()
+    {
+        base.OnHandlerChanged();
+        HandCursor.Binding();
+    }
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await vm.InitializeAsync();
         await Task.Delay(300);
+        await vm.InitializeAsync();
         TxtSearchBar.Focus();
     }
 }
