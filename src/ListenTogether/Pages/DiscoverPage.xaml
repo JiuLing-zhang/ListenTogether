@@ -23,7 +23,7 @@
         <Grid
             Grid.Row="0"
             Padding="10,8,10,8"
-            RowDefinitions="{OnPlatform WinUI='40',MacCatalyst='40',Android='40,40',iOS='40,40'}"
+            RowDefinitions="{OnPlatform WinUI='40',MacCatalyst='40',Android='50,40',iOS='50,40'}"
             ColumnDefinitions="{OnPlatform WinUI='*,200',MacCatalyst='*,200',Android='*',iOS='*'}">
 
             <HorizontalStackLayout
@@ -65,7 +65,7 @@
             <Border
                 Grid.Row="{OnPlatform WinUI=0,MacCatalyst=0,Android=0,iOS=0}"
                 Grid.Column="{OnPlatform WinUI=1,MacCatalyst=1,Android=0,iOS=0}"
-                HeightRequest="25"
+                HeightRequest="30"
                 VerticalOptions="Start"
                 Padding="5,0,5,0"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkSearchBarBackgroundColor},Light={StaticResource LightSearchBarBackgroundColor}}"
@@ -96,7 +96,8 @@
 
         <Border
             Grid.Row="1"
-            Padding="10,10,10,10"
+            Padding="10,0,10,0"
+            Margin="0,-18,0,0"
             BackgroundColor="Transparent"
             StrokeThickness="0">
             <FlexLayout
@@ -109,7 +110,7 @@
                     <DataTemplate>
                         <hc:HandCursorStackLayout
                             Margin="0,0,2,0"
-                            HeightRequest="25"
+                            HeightRequest="28"
                             Style="{StaticResource DataRowEnter}">
                             <hc:HandCursorStackLayout.GestureRecognizers>
                                 <TapGestureRecognizer
