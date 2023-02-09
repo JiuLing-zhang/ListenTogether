@@ -52,7 +52,7 @@ internal class KuWoMusicProvider : IMusicProvider
             request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
             request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
             request.Headers.Add("Referer", "http://www.kuwo.cn/");
-            request.Headers.Add("Host", "kuwo.cn");     
+            request.Headers.Add("Host", "kuwo.cn");
             request.Headers.Add("csrf", _csrf);
 
             HttpResultBase<HttpMusicSearchResult>? httpResult;
