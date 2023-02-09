@@ -34,13 +34,19 @@ public partial class DiscoverPageViewModel : ViewModelBase
             new()
             {
                 Id=(int)PlatformEnum.MiGu,
-                Name="咪咕音乐",
+                Name=PlatformEnum.MiGu.GetDescription(),
                 IsSelected=true
             },
             new()
             {
+                Id=(int)PlatformEnum.KuWo,
+                Name=PlatformEnum.KuWo.GetDescription(),
+                IsSelected=false
+            },
+            new()
+            {
                 Id=(int)PlatformEnum.NetEase,
-                Name="网易云音乐",
+                Name=PlatformEnum.NetEase.GetDescription(),
                 IsSelected=false
             }
         };

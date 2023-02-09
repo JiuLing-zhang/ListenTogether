@@ -115,7 +115,7 @@ internal class KuWoMusicProvider : IMusicProvider
 
     public Task<List<SongMenu>> GetSongMenusFromTop()
     {
-        throw new NotImplementedException();
+        return Task.FromResult(KuWoUtils.GetSongMenusFromTop());
     }
 
     public Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
@@ -209,9 +209,28 @@ internal class KuWoMusicProvider : IMusicProvider
         return sbLyrics.ToString();
     }
 
-    public Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
     {
-        throw new NotImplementedException();
+        string html = await _httpClient.GetStringAsync("http://www.kuwo.cn").ConfigureAwait(false);
+        var hotTags = KuWoUtils.GetHotTags(html);
+
+        string url = $"{UrlBase.KuWo.GetAllTypesUrl}";
+        var request = new HttpRequestMessage()
+        {
+            RequestUri = new Uri(url),
+            Method = HttpMethod.Get
+        };
+        request.Headers.Add("Accept", "application/json, text/plain, */*");
+        request.Headers.Add("Accept-Encoding", "gzip, deflate");
+        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+        request.Headers.Add("Referer", "http://www.kuwo.cn/");
+        request.Headers.Add("Host", "www.kuwo.cn");
+        request.Headers.Add("csrf", _csrf);
+        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var allTypes = KuWoUtils.GetAllTypes(json);
+        return (hotTags, allTypes);
     }
 
     public Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
