@@ -14,6 +14,7 @@ internal class KuWoMusicProvider : IMusicProvider
     private readonly HttpClient _httpClient;
     private readonly CookieContainer _cookieContainer = new CookieContainer();
     private const PlatformEnum Platform = PlatformEnum.KuWo;
+    private string _csrf => _cookieContainer.GetCookies(new Uri("http://www.kuwo.cn"))["kw_token"]?.Value ?? "";
     public KuWoMusicProvider()
     {
         var handler = new HttpClientHandler();
@@ -21,6 +22,7 @@ internal class KuWoMusicProvider : IMusicProvider
         handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         _httpClient = new HttpClient(handler);
         _httpClient.Timeout = TimeSpan.FromSeconds(5);
+        Task.Run(InitCookie);
     }
 
     private async Task InitCookie()
@@ -50,20 +52,8 @@ internal class KuWoMusicProvider : IMusicProvider
             request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
             request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
             request.Headers.Add("Referer", "http://www.kuwo.cn/");
-            request.Headers.Add("Host", "kuwo.cn");
-
-            if (_cookieContainer.Count == 0)
-            {
-                await InitCookie();
-            }
-
-            var csrf = _cookieContainer.GetCookies(new Uri("http://www.kuwo.cn"))["kw_token"]?.Value;
-            if (csrf.IsEmpty())
-            {
-                Logger.Error("酷我音乐搜索参数构造失败。", new ArgumentNullException("csrf"));
-                return musics;
-            }
-            request.Headers.Add("csrf", csrf);
+            request.Headers.Add("Host", "kuwo.cn");     
+            request.Headers.Add("csrf", _csrf);
 
             HttpResultBase<HttpMusicSearchResult>? httpResult;
             try
