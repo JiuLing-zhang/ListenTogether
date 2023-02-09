@@ -5,25 +5,17 @@ using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-[QueryProperty(nameof(QueryKeyword), "Keyword")]
 public partial class SearchPageViewModel : ViewModelBase
 {
     private readonly IMusicNetworkService _musicNetworkService = null!;
-
-    public SearchPageViewModel(IMusicNetworkService musicNetworkService)
+    private readonly SearchResultPage _searchResultPage;
+    public SearchPageViewModel(IMusicNetworkService musicNetworkService, SearchResultPage searchResultPage)
     {
         SearchHistories = new ObservableCollection<string>();
         HotWords = new ObservableCollection<string>();
         SearchSuggest = new ObservableCollection<string>();
         _musicNetworkService = musicNetworkService;
-    }
-
-    public string QueryKeyword
-    {
-        set
-        {
-            Keyword = value;
-        }
+        _searchResultPage = searchResultPage;
     }
 
     /// <summary>
@@ -163,6 +155,7 @@ public partial class SearchPageViewModel : ViewModelBase
     private async Task DoSearchAsync(string keyword)
     {
         SearchHistoryStorage.Add(keyword);
-        await Shell.Current.GoToAsync($"{nameof(SearchResultPage)}?Keyword={keyword}", true);
+        _searchResultPage.SetKeyword(keyword);
+        await App.Current.MainPage.Navigation.PushAsync(_searchResultPage, false);
     }
 }

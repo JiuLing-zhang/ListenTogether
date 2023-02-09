@@ -23,8 +23,11 @@ public partial class DiscoverPageViewModel : ViewModelBase
     private readonly IMusicNetworkService _musicNetworkService;
 
     private PlatformEnum Platform => (PlatformEnum)DiscoverTabs.First(x => x.IsSelected).Id;
-    public DiscoverPageViewModel(IMusicNetworkService musicNetworkService)
+
+    private readonly SearchPage _searchPage;
+    public DiscoverPageViewModel(IMusicNetworkService musicNetworkService, SearchPage searchPage)
     {
+        _searchPage = searchPage;
         _musicNetworkService = musicNetworkService;
         DiscoverTabs = new ObservableCollection<DiscoverTabViewModel>
         {
@@ -221,10 +224,9 @@ public partial class DiscoverPageViewModel : ViewModelBase
         await Shell.Current.GoToAsync($"{nameof(SongMenuPage)}?Json={json}&PlatformString={Platform}");
     }
 
-
     [RelayCommand]
     private async void GoToSearchPageAsync()
     {
-        await Shell.Current.GoToAsync($"{nameof(SearchPage)}", true);
+        await App.Current.MainPage.Navigation.PushAsync(_searchPage, true);
     }
 }

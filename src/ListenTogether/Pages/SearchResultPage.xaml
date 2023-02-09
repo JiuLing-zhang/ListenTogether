@@ -27,25 +27,15 @@
             </StackLayout>
 
             <SearchBar
-                x:Name="TxtSearchBar"
                 Text="{Binding Keyword}"
-                Placeholder="输入歌曲名、歌手名查找..."
-                VerticalOptions="Start">
-                <SearchBar.Behaviors>
-                    <mct:EventToCommandBehavior
-                        EventName="Focused"
-                        Command="{Binding GoToSearchPageAsyncCommand}"/>
-                </SearchBar.Behaviors>
+                VerticalOptions="Start"
+                Focused="TxtSearchBar_Focused">
             </SearchBar>
 
             <controls:MusicResultView
-                Musics="{Binding MusicSearchResult}"
+                Musics="{Binding SearchResult}"
                 PlayCommand="{Binding PlayAsyncCommand}"
                 PlayCommandParameter="{Binding .}"/>
         </StackLayout>
-        <controls:Player
-            Grid.Row="1"
-            x:Name="player"
-            IsPlayingPage="False"/>
     </Grid>
 </ContentPage>

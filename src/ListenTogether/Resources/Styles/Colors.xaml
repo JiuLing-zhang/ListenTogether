@@ -31,7 +31,7 @@
     <Color x:Key="LightSwitchThumbOffColor">#605E5C</Color>
     <Color x:Key="LightGroupBackgroundColor">#F0F0F0</Color>
     <Color x:Key="LightRowEnterColor">#F1F2F3</Color>
-    <Color x:Key="LightSearchBarBackgroundColor">#EBEBEB</Color>
+    <Color x:Key="LightSearchBarBackgroundColor">#FFFFFF</Color>
     <Color x:Key="LightSearchBarTextColor">#BEBEBE</Color>
     
     <Color x:Key="DarkLogo">#C98FFF</Color>

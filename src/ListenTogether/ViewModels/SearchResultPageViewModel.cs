@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
-[QueryProperty(nameof(Keyword), nameof(Keyword))]
 public partial class SearchResultPageViewModel : ViewModelBase
 {
     /// <summary>
@@ -13,41 +12,32 @@ public partial class SearchResultPageViewModel : ViewModelBase
     /// </summary>
     [ObservableProperty]
     private string _keyword = null!;
-    partial void OnKeywordChanged(string value)
-    {
-        Task.Run(async () =>
-        {
-            await SearchAsync(value);
-        });
-    }
 
     /// <summary>
     /// 搜索到的结果列表
     /// </summary>
     [ObservableProperty]
-    private ObservableCollection<MusicResultGroupViewModel> _musicSearchResult = null!;
+    private ObservableCollection<MusicResultGroupViewModel> _searchResult = null!;
 
     private int _isSearching = 0;
-    private string _lastSearchKey;
 
     private readonly MusicResultService _musicResultService;
     private readonly IMusicNetworkService _musicNetworkService;
 
     public SearchResultPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService)
     {
-        MusicSearchResult = new ObservableCollection<MusicResultGroupViewModel>();
+        SearchResult = new ObservableCollection<MusicResultGroupViewModel>();
         _musicNetworkService = musicNetworkService;
         _musicResultService = musicResultService;
     }
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
-        return Task.CompletedTask;
+        await SearchAsync();
     }
-
-    private async Task SearchAsync(string keyword)
+    private async Task SearchAsync()
     {
-        if (keyword.IsEmpty())
+        if (Keyword.IsEmpty())
         {
             return;
         }
@@ -58,18 +48,13 @@ public partial class SearchResultPageViewModel : ViewModelBase
 
         try
         {
-            if (_lastSearchKey == keyword)
-            {
-                return;
-            }
-
             Loading("正在搜索....");
-            MusicSearchResult.Clear();
-            var musics = await _musicNetworkService.SearchAsync(GlobalConfig.MyUserSetting.Search.EnablePlatform, keyword);
+            SearchResult.Clear();
+            var musics = await _musicNetworkService.SearchAsync(GlobalConfig.MyUserSetting.Search.EnablePlatform, Keyword);
 
             if (GlobalConfig.MyUserSetting.Search.IsMatchSearchKey)
             {
-                IMusicSearchFilter searchKeyFilter = new SearchKeyFilter(keyword);
+                IMusicSearchFilter searchKeyFilter = new SearchKeyFilter(Keyword);
                 musics = searchKeyFilter.Filter(musics);
             }
             if (GlobalConfig.MyUserSetting.Search.IsHideShortMusic)
@@ -109,7 +94,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
                             ExtendDataJson = x.ExtendDataJson
                         }).ToList();
 
-                    MusicSearchResult.Add(new MusicResultGroupViewModel(platformName, onePlatformMusics));
+                    SearchResult.Add(new MusicResultGroupViewModel(platformName, onePlatformMusics));
                 }
                 catch (Exception e)
                 {
@@ -125,7 +110,6 @@ public partial class SearchResultPageViewModel : ViewModelBase
         }
         finally
         {
-            _lastSearchKey = keyword;
             LoadComplete();
             Interlocked.Exchange(ref _isSearching, 0);
         }
@@ -135,12 +119,5 @@ public partial class SearchResultPageViewModel : ViewModelBase
     public async void PlayAsync(MusicResultShowViewModel musicResult)
     {
         await _musicResultService.PlayAsync(musicResult.ToLocalMusic());
-    }
-
-    [RelayCommand]
-    private async void GoToSearchPageAsync()
-    {
-        await Shell.Current.GoToAsync($"..?Keyword={Keyword}", true);
-        Keyword = "";
     }
 }

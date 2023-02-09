@@ -65,7 +65,7 @@
             <Border
                 Grid.Row="{OnPlatform WinUI=0,MacCatalyst=0,Android=0,iOS=0}"
                 Grid.Column="{OnPlatform WinUI=1,MacCatalyst=1,Android=0,iOS=0}"
-                HeightRequest="30"
+                HeightRequest="35"
                 VerticalOptions="Start"
                 Padding="5,0,5,0"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource DarkSearchBarBackgroundColor},Light={StaticResource LightSearchBarBackgroundColor}}"
@@ -88,7 +88,7 @@
                     <Label
                         VerticalTextAlignment="Center"
                         TextColor="{AppThemeBinding Dark={StaticResource DarkSearchBarTextColor},Light={StaticResource LightSearchBarTextColor}}"
-                        Style="{StaticResource Explain}"
+                        FontSize="{OnPlatform WinUI=14,MacCatalyst=14,Android=13,iOS=13}"
                         Text="歌曲搜索"/>
                 </HorizontalStackLayout>
             </Border>
