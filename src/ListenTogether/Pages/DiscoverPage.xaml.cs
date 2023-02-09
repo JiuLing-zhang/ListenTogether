@@ -11,10 +11,7 @@ public partial class DiscoverPage : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
-    protected override void OnHandlerChanged()
-    {
-        base.OnHandlerChanged();
-    }
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -25,6 +22,15 @@ public partial class DiscoverPage : ContentPage
 #if DEBUG == false
             await vm.InitializeAsync();
 #endif
+
+            if (GlobalConfig.MyUserSetting.General.IsAutoCheckUpdate)
+            {
+                //确保主线程加载完成
+                await Task.Delay(5000);
+
+                //自动更新
+                await UpdateCheck.Do(true);
+            }
         }
     }
     protected override void OnDisappearing()
