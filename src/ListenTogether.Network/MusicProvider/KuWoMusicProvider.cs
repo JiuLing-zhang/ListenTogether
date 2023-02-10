@@ -14,7 +14,22 @@ internal class KuWoMusicProvider : IMusicProvider
     private readonly HttpClient _httpClient;
     private readonly CookieContainer _cookieContainer = new CookieContainer();
     private const PlatformEnum Platform = PlatformEnum.KuWo;
-    private string _csrf => _cookieContainer.GetCookies(new Uri("http://www.kuwo.cn"))["kw_token"]?.Value ?? "";
+    private readonly string _reqId = JiuLing.CommonLibs.GuidUtils.GetFormatD();
+    public string _csrf
+    {
+        get
+        {
+            var csrf = _cookieContainer.GetCookies(new Uri("http://www.kuwo.cn"))["kw_token"]?.Value ?? "";
+            if (csrf.IsNotEmpty())
+            {
+                return csrf;
+            }
+            var task = Task.Run(InitCookie);
+            task.Wait();
+            csrf = _cookieContainer.GetCookies(new Uri("http://www.kuwo.cn"))["kw_token"]?.Value ?? "";
+            return csrf;
+        }
+    }
     public KuWoMusicProvider()
     {
         var handler = new HttpClientHandler();
@@ -22,12 +37,10 @@ internal class KuWoMusicProvider : IMusicProvider
         handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
         _httpClient = new HttpClient(handler);
         _httpClient.Timeout = TimeSpan.FromSeconds(5);
-        Task.Run(InitCookie);
     }
-
     private async Task InitCookie()
     {
-        await _httpClient.GetStringAsync("http://www.kuwo.cn").ConfigureAwait(false);
+        await _httpClient.GetStringAsync("http://www.kuwo.cn");
     }
 
     public Task<List<string>?> GetSearchSuggestAsync(string keyword)
@@ -41,7 +54,7 @@ internal class KuWoMusicProvider : IMusicProvider
 
         try
         {
-            string url = $"{UrlBase.KuWo.Search}?key={keyword}&pn=1&rn=20";
+            string url = $"{UrlBase.KuWo.Search}?key={keyword}&pn=1&rn=20&httpsStatus=1&reqId={_reqId}";
             var request = new HttpRequestMessage()
             {
                 RequestUri = new Uri(url),
@@ -118,33 +131,82 @@ internal class KuWoMusicProvider : IMusicProvider
         return Task.FromResult(KuWoUtils.GetSongMenusFromTop());
     }
 
-    public Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
+    public async Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
     {
-        throw new NotImplementedException();
+        var musics = new List<MusicResultShow>();
+        try
+        {
+            string url = $"{UrlBase.KuWo.GetTopMusicsUrl}?bangId={topId}&pn=1&rn=20&httpsStatus=1&reqId={_reqId}";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            request.Headers.Add("Accept", "application/json, text/plain, */*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            request.Headers.Add("Referer", "http://www.kuwo.cn/rankList");
+            request.Headers.Add("Host", "www.kuwo.cn");
+            request.Headers.Add("csrf", _csrf);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var bangMusics = KuWoUtils.GetSongMenuMusics(json);
+
+            foreach (var bangMusic in bangMusics)
+            {
+                try
+                {
+                    musics.Add(new MusicResultShow()
+                    {
+                        Id = MD5Utils.GetStringValueToLower($"{Platform}-{bangMusic.rid}"),
+                        Platform = Platform,
+                        IdOnPlatform = bangMusic.rid.ToString(),
+                        Name = bangMusic.name.Replace("&nbsp;", " "),
+                        Artist = bangMusic.artist.Replace("&nbsp;", " "),
+                        Album = bangMusic.album.Replace("&nbsp;", " "),
+                        Fee = GetFeeFlag(bangMusic.payInfo.listen_fragment),
+                        Duration = TimeSpan.FromSeconds(bangMusic.duration),
+                        ImageUrl = bangMusic.pic
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("酷我榜单歌曲添加失败。", ex);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我榜单歌曲获取失败。", ex);
+        }
+        return musics;
     }
 
     public async Task<List<string>?> GetHotWordAsync()
     {
-        string url = UrlBase.KuWo.HotWord;
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url)
-        };
-        request.Headers.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentIphone);
-        request.Headers.Add("Host", "m.kuwo.cn");
-
         try
         {
+            string url = $"{UrlBase.KuWo.HotWord}?key=&httpsStatus=1&reqId={_reqId}";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            request.Headers.Add("Accept", "application/json, text/plain, */*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            request.Headers.Add("Referer", "http://www.kuwo.cn/");
+            request.Headers.Add("Host", "www.kuwo.cn");
+            request.Headers.Add("csrf", _csrf);
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            string html = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return KuWoUtils.GetHotWordFromHtml(html);
+            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return KuWoUtils.GetHotWord(json);
         }
         catch (Exception ex)
         {
-            Logger.Error("酷我歌曲播放地址获取失败。", ex);
+            Logger.Error("酷我热搜词获取失败。", ex);
             return null;
         }
     }
@@ -157,7 +219,7 @@ internal class KuWoMusicProvider : IMusicProvider
     public async Task<string> GetLyricAsync(string id, string extendDataJson = "")
     {
         //获取歌曲详情
-        var url = $"{UrlBase.KuWo.GetMusicDetail}?musicId={id}";
+        var url = $"{UrlBase.KuWo.GetMusicDetail}?musicId={id}&httpsStatus=1&reqId={_reqId}";
         var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
@@ -214,7 +276,7 @@ internal class KuWoMusicProvider : IMusicProvider
         string html = await _httpClient.GetStringAsync("http://www.kuwo.cn").ConfigureAwait(false);
         var hotTags = KuWoUtils.GetHotTags(html);
 
-        string url = $"{UrlBase.KuWo.GetAllTypesUrl}";
+        string url = $"{UrlBase.KuWo.GetAllTypesUrl}?httpsStatus=1&reqId={_reqId}";
         var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
@@ -233,20 +295,110 @@ internal class KuWoMusicProvider : IMusicProvider
         return (hotTags, allTypes);
     }
 
-    public Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
+    public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
     {
-        throw new NotImplementedException();
+        var songMenus = new List<SongMenu>();
+        try
+        {
+            string url = $"{UrlBase.KuWo.GetTagSongMenuUrl}?pn=1&rn=20&id={id}&httpsStatus=1&reqId={_reqId}";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            request.Headers.Add("Accept", "application/json, text/plain, */*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            request.Headers.Add("Referer", "http://www.kuwo.cn/playlists");
+            request.Headers.Add("Host", "www.kuwo.cn");
+            request.Headers.Add("csrf", _csrf);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var tagSongMenus = KuWoUtils.GetTagSongMenus(json);
+
+            foreach (var tagSongMenu in tagSongMenus)
+            {
+                try
+                {
+                    songMenus.Add(new SongMenu()
+                    {
+                        Id = tagSongMenu.id,
+                        ImageUrl = tagSongMenu.img,
+                        Name = tagSongMenu.name,
+                        LinkUrl = ""
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("酷我标签歌单添加失败。", ex);
+                    throw;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我标签歌单获取失败。", ex);
+        }
+        return songMenus;
     }
 
-    public Task<List<MusicResultShow>> GetTagMusicsAsync(string tagId)
+    public async Task<List<MusicResultShow>> GetTagMusicsAsync(string tagId)
     {
-        throw new NotImplementedException();
+        var musics = new List<MusicResultShow>();
+        try
+        {
+            string url = $"{UrlBase.KuWo.GetTagMusicsUrl}?pid={tagId}&pn=1&rn=20&httpsStatus=1&reqId={_reqId}";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            request.Headers.Add("Accept", "application/json, text/plain, */*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            request.Headers.Add("Referer", "http://www.kuwo.cn/playlists");
+            request.Headers.Add("Host", "www.kuwo.cn");
+            request.Headers.Add("csrf", _csrf);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var bangMusics = KuWoUtils.GetSongMenuMusics(json);
+
+            foreach (var bangMusic in bangMusics)
+            {
+                try
+                {
+                    musics.Add(new MusicResultShow()
+                    {
+                        Id = MD5Utils.GetStringValueToLower($"{Platform}-{bangMusic.rid}"),
+                        Platform = Platform,
+                        IdOnPlatform = bangMusic.rid.ToString(),
+                        Name = bangMusic.name.Replace("&nbsp;", " "),
+                        Artist = bangMusic.artist.Replace("&nbsp;", " "),
+                        Album = bangMusic.album.Replace("&nbsp;", " "),
+                        Fee = GetFeeFlag(bangMusic.payInfo.listen_fragment),
+                        Duration = TimeSpan.FromSeconds(bangMusic.duration),
+                        ImageUrl = bangMusic.pic
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("酷我榜单歌曲添加失败。", ex);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我榜单歌曲获取失败。", ex);
+        }
+        return musics;
     }
 
     public async Task<string> GetPlayUrlAsync(string id, string extendDataJson = "")
     {
         //换播放地址
-        string url = $"{UrlBase.KuWo.GetMusicUrl}?format=mp3&rid={id}&response=url&type=convert_url";
+        string url = $"{UrlBase.KuWo.GetMusicUrl}?format=aac|mp3&rid={id}&response=url&type=convert_url";
         var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
@@ -267,7 +419,7 @@ internal class KuWoMusicProvider : IMusicProvider
                 Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回空，ID:{id}"));
                 return "";
             }
-            if (!JiuLing.CommonLibs.Text.RegexUtils.IsMatch(playUrl, "http\\S*\\.mp3"))
+            if (!JiuLing.CommonLibs.Text.RegexUtils.IsMatch(playUrl, @"http\S*?\.aac|mp3"))
             {
                 Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回：{playUrl}，ID:{id}"));
                 return "";

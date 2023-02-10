@@ -1,4 +1,6 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
+using JiuLing.CommonLibs.Security;
+using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Network.Models.KuWo;
 using System.Text.RegularExpressions;
@@ -6,11 +8,15 @@ using System.Text.RegularExpressions;
 namespace ListenTogether.Network.Utils;
 internal class KuWoUtils
 {
-    public static List<string> GetHotWordFromHtml(string input)
+    public static List<string> GetHotWord(string json)
     {
-        string pattern = @"class=""songName wordType""[\s\S]*?>(?<Word>[\s\S]*?)<\/div>";
-        var result = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupAllMatch(input, pattern);
-        return result.Select(x => x.Trim()).ToList();
+        var hotWords = new List<string>();
+        var httpObj = json.ToObject<HttpHotWordResult>();
+        if (httpObj == null || httpObj.code != 200 || httpObj.data == null)
+        {
+            return hotWords;
+        }
+        return httpObj.data;
     }
 
     public static List<MusicTag> GetHotTags(string html)
@@ -100,9 +106,103 @@ internal class KuWoUtils
                  Name="酷我新歌榜",
                  ImageUrl="https://img3.kuwo.cn/star/upload/0/0/1675941789.png",
                  LinkUrl=""
+             },
+             new()
+             {
+                 Id="16",
+                 Name="酷我热歌榜",
+                 ImageUrl="https://img3.kuwo.cn/star/upload/5/5/1675990419.png",
+                 LinkUrl=""
+             },
+             new()
+             {
+                 Id="158",
+                 Name="抖音歌曲榜",
+                 ImageUrl="https://img3.kuwo.cn/star/upload/4/3/1675991042.png",
+                 LinkUrl=""
+             },
+             new()
+             {
+                 Id="242",
+                 Name="极品电音榜",
+                 ImageUrl="https://img3.kuwo.cn/star/upload/8/5/1675990941.png",
+                 LinkUrl=""
+             },
+             new()
+             {
+                 Id="284",
+                 Name="酷我热评榜",
+                 ImageUrl="https://img3.kuwo.cn/star/upload/1/2/1675990946.png",
+                 LinkUrl=""
+             },
+             new()
+             {
+                 Id="187",
+                 Name="流行趋势榜",
+                 ImageUrl="https://img3.kuwo.cn/star/upload/6/9/1675990862.png",
+                 LinkUrl=""
+             },
+             new()
+             {
+                 Id="153",
+                 Name="网红新歌榜",
+                 ImageUrl="https://img3.kuwo.cn/star/upload/2/0/1675990889.png",
+                 LinkUrl=""
+             },
+             new()
+             {
+                 Id="26",
+                 Name="经典怀旧榜",
+                 ImageUrl="https://img3.kuwo.cn/star/upload/8/4/1675990896.png",
+                 LinkUrl=""
+             },
+             new()
+             {
+                 Id="329",
+                 Name="酷我说唱榜",
+                 ImageUrl="https://img3.kuwo.cn/star/upload/1/5/1675990361.png",
+                 LinkUrl=""
              }
         };
 
         return songMenus;
+    }
+
+    public static List<HttpTagSongMenuResultDataDatum> GetTagSongMenus(string json)
+    {
+        List<HttpTagSongMenuResultDataDatum> result = new List<HttpTagSongMenuResultDataDatum>();
+        try
+        {
+            var httpObj = json.ToObject<HttpTagSongMenuResult>();
+            if (httpObj == null || httpObj.code != 200 || httpObj.data == null || httpObj.data.data == null)
+            {
+                return result;
+            }
+            return httpObj.data.data;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我歌单解析失败。", ex);
+        }
+        return result;
+    }
+
+    public static List<HttpSongMenuDataList> GetSongMenuMusics(string json)
+    {
+        List<HttpSongMenuDataList> result = new List<HttpSongMenuDataList>();
+        try
+        {
+            var httpObj = json.ToObject<HttpSongMenuResult>();
+            if (httpObj == null || httpObj.code != 200 || httpObj.data == null || httpObj.data.musicList == null)
+            {
+                return result;
+            }
+            return httpObj.data.musicList;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我歌单歌曲解析失败。", ex);
+        }
+        return result;
     }
 }

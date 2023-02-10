@@ -40,11 +40,14 @@ public class UrlBase
 
     public class KuWo
     {
-        public const string HotWord = "http://m.kuwo.cn/newh5app/search";
+        public const string HotWord = "http://www.kuwo.cn/api/www/search/searchKey";
         public const string GetAllTypesUrl = "http://www.kuwo.cn/api/www/playlist/getTagList";
+        public const string GetTopMusicsUrl = "http://www.kuwo.cn/api/www/bang/bang/musicList";
+        public const string GetTagSongMenuUrl = "http://www.kuwo.cn/api/www/classify/playlist/getTagPlayList";
+        public const string GetTagMusicsUrl = "http://www.kuwo.cn/api/www/playlist/playListInfo";
         public const string Search = "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord";
         public const string GetMusicUrl = "http://antiserver.kuwo.cn/anti.s";
-        public const string GetMusicDetail = "http://www.kuwo.cn/newh5/singles/songinfoandlrc";
+        public const string GetMusicDetail = "http://m.kuwo.cn/newh5/singles/songinfoandlrc";
         public const string GetMusicPlayPage = "https://www.kuwo.cn/play_detail";
     }
 }
