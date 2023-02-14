@@ -77,7 +77,11 @@ public partial class SearchPageViewModel : ViewModelBase
 
     private async Task GetHotWords()
     {
-        HotWords.Clear();
+        //热门搜索只获取一次
+        if (HotWords.Count > 0)
+        {
+            return;
+        }
         var hotWords = await _musicNetworkService.GetHotWordAsync();
         if (hotWords != null)
         {

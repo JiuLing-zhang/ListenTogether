@@ -15,6 +15,7 @@
             <mct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <mct:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
             <mct:IsStringNullOrWhiteSpaceConverter x:Key="IsStringNullOrWhiteSpaceConverter" />
+            <mct:IsStringNotNullOrWhiteSpaceConverter x:Key="IsStringNotNullOrWhiteSpaceConverter" />
             <mct:EnumToIntConverter x:Key="EnumToIntConverter" />
             <mct:EventToCommandBehavior x:Key="EventToCommandBehavior" />
         </ResourceDictionary>

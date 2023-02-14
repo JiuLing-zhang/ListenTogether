@@ -30,7 +30,7 @@ public partial class ChooseTagPage : Popup
 
         if (Config.Desktop)
         {
-            this.Size = new Size(800, 600);
+            this.Size = new Size(650, 480);
         }
         else
         {

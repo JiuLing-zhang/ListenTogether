@@ -120,7 +120,7 @@
                                 Text="{Binding Seq}"
                                 HorizontalTextAlignment="Start"
                                 VerticalTextAlignment="Center"/>
-                            
+
                             <Label
                                 Grid.Row="0"
                                 Grid.Column="1"
@@ -136,14 +136,15 @@
                                     Style="{DynamicResource FeeType}"
                                     VerticalOptions="Center"/>
                                 <Label
+                                    Text="{Binding Artist}"
                                     Style="{StaticResource Explain}"
+                                    VerticalOptions="Center"/>
+                                <Label
+                                    Text="{Binding Album,StringFormat='{} - {0}'}"
+                                    Style="{StaticResource Explain}"
+                                    IsVisible="{Binding Album, Converter={StaticResource IsStringNotNullOrWhiteSpaceConverter}}"
                                     VerticalOptions="Center"
-                                    LineBreakMode="TailTruncation">
-                                    <MultiBinding StringFormat="{}{0} - {1}">
-                                        <Binding Path="Artist" />
-                                        <Binding Path="Album" />
-                                    </MultiBinding>
-                                </Label>
+                                    LineBreakMode="TailTruncation"/>
                             </HorizontalStackLayout>
 
                             <controls:FavoriteView

@@ -23,17 +23,19 @@
         <Grid
             Grid.Row="0"
             Padding="10,8,10,8"
-            RowDefinitions="{OnPlatform WinUI='40',MacCatalyst='40',Android='50,40',iOS='50,40'}"
+            RowDefinitions="{OnPlatform WinUI='45',MacCatalyst='45',Android='50,45',iOS='50,45'}"
             ColumnDefinitions="{OnPlatform WinUI='*,200',MacCatalyst='*,200',Android='*',iOS='*'}">
 
             <HorizontalStackLayout
                 Grid.Row="{OnPlatform WinUI=0,MacCatalyst=0,Android=1,iOS=1}"
                 Grid.Column="{OnPlatform WinUI=0,MacCatalyst=0,Android=0,iOS=0}"
                 BindableLayout.ItemsSource="{Binding DiscoverTabs}"
-                Spacing="10">
+                Spacing="20">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <VerticalStackLayout Spacing="3">
+                        <VerticalStackLayout
+                            Spacing="3"
+                            VerticalOptions="End">
                             <VerticalStackLayout.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=TabChangedAsyncCommand}"
@@ -41,6 +43,7 @@
                             </VerticalStackLayout.GestureRecognizers>
                             <hc:HandCursorLabel
                                 Text="{Binding Name}"
+                                VerticalTextAlignment="End"
                                 Style="{StaticResource Tab}">
                                 <hc:HandCursorLabel.Triggers>
                                     <DataTrigger
@@ -48,15 +51,29 @@
                                         Binding="{Binding IsSelected}"
                                         Value="true">
                                         <Setter
-                                            Property="TextColor"
-                                            Value="{StaticResource Main}"/>
+                                            Property="FontSize"
+                                            Value="18"/>
+                                        <Setter
+                                            Property="FontAttributes"
+                                            Value="Bold"/>
                                     </DataTrigger>
                                 </hc:HandCursorLabel.Triggers>
                             </hc:HandCursorLabel>
                             <BoxView
                                 HeightRequest="3"
-                                Color="{StaticResource Main}"
-                                IsVisible="{Binding IsSelected}"/>
+                                Margin="8,0,8,0"
+                                Color="Transparent">
+                                <BoxView.Triggers>
+                                    <DataTrigger
+                                        TargetType="BoxView"
+                                        Binding="{Binding IsSelected}"
+                                        Value="true">
+                                        <Setter
+                                            Property="Color"
+                                            Value="{StaticResource Main}"/>
+                                    </DataTrigger>
+                                </BoxView.Triggers>
+                            </BoxView>
                         </VerticalStackLayout>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
@@ -97,7 +114,7 @@
         <Border
             Grid.Row="1"
             Padding="10,0,10,0"
-            Margin="0,-18,0,0"
+            Margin="0,-10,0,0"
             BackgroundColor="Transparent"
             StrokeThickness="0">
             <FlexLayout

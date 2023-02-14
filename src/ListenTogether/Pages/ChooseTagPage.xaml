@@ -6,46 +6,49 @@
                x:Name="self">
     <Grid BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
         <ScrollView>
-            <FlexLayout
+            <StackLayout
                 Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10',iOS='10'}"
-                Direction="Column"
                 BindableLayout.ItemsSource="{Binding AllTypes, Source={x:Reference self}}">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <VerticalStackLayout
-                            Margin="0,5,0,0"
-                            Spacing="5">
-                            <Label Text="{Binding TypeName}"/>
-                            <FlexLayout
-                                Direction="Row"
-                                Wrap="Wrap"
-                                AlignContent="Start"
-                                BindableLayout.ItemsSource="{Binding Tags}">
-                                <BindableLayout.ItemTemplate>
+                        <Grid
+                            RowDefinitions="{OnPlatform WinUI='Auto',MacCatalyst='Auto',Android='30,Auto',iOS='30,Auto'}"
+                            ColumnDefinitions="{OnPlatform WinUI='100,*',MacCatalyst='100,*',Android='*',iOS='*'}">
+                            <Label
+                                Grid.Row="{OnPlatform WinUI='0',MacCatalyst='0',Android='0',iOS='0'}"
+                                Grid.Column="{OnPlatform WinUI='0',MacCatalyst='0',Android='0',iOS='0'}"
+                                FontAttributes="Bold"
+                                HorizontalTextAlignment="{OnPlatform WinUI='End',MacCatalyst='End',Android='Start',iOS='Start'}"
+                                Margin="{OnPlatform WinUI='0,13,0,0',MacCatalyst='0,13,0,0',Android='0',iOS='0'}"
+                                Padding="{OnPlatform WinUI='0,0,20,0',MacCatalyst='0,0,20,0',Android='0',iOS='0'}"
+                                Text="{Binding TypeName}"/>
+
+                            <CollectionView
+                                Grid.Row="{OnPlatform WinUI='0',MacCatalyst='0',Android='1',iOS='1'}"
+                                Grid.Column="{OnPlatform WinUI='1',MacCatalyst='1',Android='0',iOS='0'}"
+                                ItemsSource="{Binding Tags}"
+                                ItemsLayout="{OnPlatform WinUI='VerticalGrid, 6',MacCatalyst='VerticalGrid, 6',Android='VerticalGrid, 4',iOS='VerticalGrid, 4'}">
+                                <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Border
-                                            Margin="0,0,5,0"
-                                            HeightRequest="20"
-                                            StrokeThickness="0"
-                                            BackgroundColor="Transparent"
-                                            HorizontalOptions="Center">
-                                            <Border.GestureRecognizers>
-                                                <TapGestureRecognizer
-                                                    Tapped="TagSelected_Tapped"
-                                                    CommandParameter="{Binding Id}"/>
-                                            </Border.GestureRecognizers>
+                                        <Grid>
                                             <hc:HandCursorLabel
-                                                VerticalTextAlignment="Center"                                                
-                                                Text="{Binding Name}"/>
-                                        </Border>
+                                                Text="{Binding Name}"
+                                                HorizontalTextAlignment="Center"
+                                                VerticalTextAlignment="Center">
+                                                <hc:HandCursorLabel.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                        Tapped="TagSelected_Tapped"
+                                                        CommandParameter="{Binding Id}"/>
+                                                </hc:HandCursorLabel.GestureRecognizers>
+                                            </hc:HandCursorLabel>
+                                        </Grid>
                                     </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </FlexLayout>
-                        </VerticalStackLayout>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </Grid>
                     </DataTemplate>
                 </BindableLayout.ItemTemplate>
-            </FlexLayout>
+            </StackLayout>
         </ScrollView>
     </Grid>
-
 </toolkit:Popup>
