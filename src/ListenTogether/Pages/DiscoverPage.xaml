@@ -23,7 +23,7 @@
         <Grid
             Grid.Row="0"
             Padding="10,8,10,8"
-            RowDefinitions="{OnPlatform WinUI='45',MacCatalyst='45',Android='50,45',iOS='50,45'}"
+            RowDefinitions="{OnPlatform WinUI='45',MacCatalyst='45',Android='30,45',iOS='30,45'}"
             ColumnDefinitions="{OnPlatform WinUI='*,200',MacCatalyst='*,200',Android='*',iOS='*'}">
 
             <HorizontalStackLayout
