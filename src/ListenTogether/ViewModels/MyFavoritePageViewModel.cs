@@ -149,7 +149,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
             return;
         }
 
-        if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite)
+        if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlaySongMenu)
         {
             if (!await _playlistService.RemoveAllAsync())
             {

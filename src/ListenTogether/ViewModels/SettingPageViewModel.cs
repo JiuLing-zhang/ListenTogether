@@ -186,13 +186,13 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     /// <summary>
-    /// 播放我的歌单前清空播放列表
+    /// 播放歌单前清空播放列表
     /// </summary>
     [ObservableProperty]
-    private bool _isCleanPlaylistWhenPlayMyFavorite = GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite;
-    async partial void OnIsCleanPlaylistWhenPlayMyFavoriteChanged(bool value)
+    private bool _isCleanPlaylistWhenPlaySongMenu = GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlaySongMenu;
+    async partial void OnIsCleanPlaylistWhenPlaySongMenuChanged(bool value)
     {
-        GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlayMyFavorite = value;
+        GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlaySongMenu = value;
         await WritePlayConfigAsync();
     }
 

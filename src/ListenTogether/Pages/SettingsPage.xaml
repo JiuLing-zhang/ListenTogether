@@ -213,10 +213,10 @@
 
                             <StackLayout Orientation="Horizontal">
                                 <Label
-                                    Text="播放我的歌单前清空播放列表"
+                                    Text="播放歌单前清空播放列表"
                                     VerticalTextAlignment="Center"/>
                                 <Switch
-                                    IsToggled="{Binding IsCleanPlaylistWhenPlayMyFavorite}"
+                                    IsToggled="{Binding IsCleanPlaylistWhenPlaySongMenu}"
                                     HorizontalOptions="EndAndExpand"/>
                             </StackLayout>
 

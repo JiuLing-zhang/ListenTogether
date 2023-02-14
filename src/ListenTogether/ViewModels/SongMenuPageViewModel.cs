@@ -14,6 +14,7 @@ public partial class SongMenuPageViewModel : ViewModelBase
     public string PlatformString { get; set; }
     private PlatformEnum Platform => (PlatformEnum)Enum.Parse(typeof(PlatformEnum), PlatformString);
 
+    private readonly IPlaylistService _playlistService;
     private readonly IMusicNetworkService _musicNetworkService;
     private readonly MusicResultService _musicResultService;
 
@@ -23,11 +24,12 @@ public partial class SongMenuPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultGroupViewModel> _musicResultCollection = null!;
 
-    public SongMenuPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService)
+    public SongMenuPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService)
     {
         MusicResultCollection = new ObservableCollection<MusicResultGroupViewModel>();
         _musicNetworkService = musicNetworkService;
         _musicResultService = musicResultService;
+        _playlistService = playlistService;
     }
     public async Task InitializeAsync()
     {
@@ -86,6 +88,14 @@ public partial class SongMenuPageViewModel : ViewModelBase
         if (MusicResultCollection.Count == 0)
         {
             return;
+        }
+        if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlaySongMenu)
+        {
+            if (!await _playlistService.RemoveAllAsync())
+            {
+                await ToastService.Show("播放列表清空失败");
+                return;
+            }
         }
         await _musicResultService.PlayAllAsync(MusicResultCollection[0].ToLocalMusics());
     }

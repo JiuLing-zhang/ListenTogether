@@ -38,7 +38,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
         result.Play = new PlaySetting()
         {
             IsPlayingPageKeepScreenOn = playConfig.IsPlayingPageKeepScreenOn,
-            IsCleanPlaylistWhenPlayMyFavorite = playConfig.IsCleanPlaylistWhenPlayMyFavorite,
+            IsCleanPlaylistWhenPlaySongMenu = playConfig.IsCleanPlaylistWhenPlaySongMenu,
             IsWifiPlayOnly = playConfig.IsWifiPlayOnly,
             MusicFormatType = playConfig.MusicFormatType
         };
@@ -86,7 +86,7 @@ public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
             PlaySettingJson = (new PlaySetting()
             {
                 IsPlayingPageKeepScreenOn = true,
-                IsCleanPlaylistWhenPlayMyFavorite = true,
+                IsCleanPlaylistWhenPlaySongMenu = true,
                 IsWifiPlayOnly = true,
                 MusicFormatType = MusicFormatTypeEnum.PQ
             }).ToJson()
