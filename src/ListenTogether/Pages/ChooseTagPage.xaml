@@ -8,19 +8,20 @@
         <ScrollView>
             <StackLayout
                 Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10',iOS='10'}"
-                BindableLayout.ItemsSource="{Binding AllTypes, Source={x:Reference self}}">
+                BindableLayout.ItemsSource="{Binding AllTypes, Source={x:Reference self}}"
+                Spacing="30">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
                         <Grid
+                            ColumnSpacing="10"
                             RowDefinitions="{OnPlatform WinUI='Auto',MacCatalyst='Auto',Android='30,Auto',iOS='30,Auto'}"
-                            ColumnDefinitions="{OnPlatform WinUI='100,*',MacCatalyst='100,*',Android='*',iOS='*'}">
+                            ColumnDefinitions="{OnPlatform WinUI='60,*',MacCatalyst='60,*',Android='*',iOS='*'}">
                             <Label
                                 Grid.Row="{OnPlatform WinUI='0',MacCatalyst='0',Android='0',iOS='0'}"
                                 Grid.Column="{OnPlatform WinUI='0',MacCatalyst='0',Android='0',iOS='0'}"
                                 FontAttributes="Bold"
                                 HorizontalTextAlignment="{OnPlatform WinUI='End',MacCatalyst='End',Android='Start',iOS='Start'}"
                                 Margin="{OnPlatform WinUI='0,13,0,0',MacCatalyst='0,13,0,0',Android='0',iOS='0'}"
-                                Padding="{OnPlatform WinUI='0,0,20,0',MacCatalyst='0,0,20,0',Android='0',iOS='0'}"
                                 Text="{Binding TypeName}"/>
 
                             <CollectionView
@@ -30,9 +31,10 @@
                                 ItemsLayout="{OnPlatform WinUI='VerticalGrid, 6',MacCatalyst='VerticalGrid, 6',Android='VerticalGrid, 4',iOS='VerticalGrid, 4'}">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
+                                        <Grid RowDefinitions="40">
                                             <hc:HandCursorLabel
                                                 Text="{Binding Name}"
+                                                FontSize="16"
                                                 HorizontalTextAlignment="Center"
                                                 VerticalTextAlignment="Center">
                                                 <hc:HandCursorLabel.GestureRecognizers>
