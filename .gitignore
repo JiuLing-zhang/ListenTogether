@@ -352,3 +352,4 @@ MigrationBackup/
 keystore/
 deploy/
 docs/resources/images/buttons/
+/src/ListenTogether/Resources/Raw/NetConfig.json
