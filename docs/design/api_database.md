@@ -1,122 +1,87 @@
-```sql
-USE [ListenTogether]
-GO
-/****** Object:  Table [dbo].[LogDetail]    Script Date: 2022/10/13 15:25:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[LogDetail](
-	[Id] [bigint] IDENTITY(1,1) NOT NULL,
-	[UserBaseId] [int] NOT NULL,
-	[LogType] [nvarchar](10) NOT NULL,
-	[Message] [nvarchar](max) NOT NULL,
-	[LogTime] [datetime] NOT NULL,
-	[CreateTime] [datetime] NOT NULL,
- CONSTRAINT [PK_LogDetail] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[Music]    Script Date: 2022/10/13 15:25:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[Music](
-	[InnerId] [int] IDENTITY(1,1) NOT NULL,
-	[Platform] [int] NOT NULL,
-	[PlatformInnerId] [nvarchar](100) NOT NULL,
-	[Id] [nvarchar](50) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
-	[Alias] [nvarchar](50) NOT NULL,
-	[Artist] [nvarchar](50) NOT NULL,
-	[Album] [nvarchar](50) NOT NULL,
-	[ImageUrl] [nvarchar](400) NOT NULL,
-	[ExtendData] [nvarchar](400) NOT NULL,
-	[CreateTime] [datetime] NOT NULL,
- CONSTRAINT [PK_MusicDetail] PRIMARY KEY CLUSTERED 
-(
-	[InnerId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[MyFavorite]    Script Date: 2022/10/13 15:25:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[MyFavorite](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NOT NULL,
-	[UserBaseId] [int] NOT NULL,
-	[ImageUrl] [nvarchar](400) NOT NULL,
-	[EditTime] [datetime] NOT NULL,
- CONSTRAINT [PK_MyFavorite] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[MyFavoriteDetail]    Script Date: 2022/10/13 15:25:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[MyFavoriteDetail](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[MyFavoriteId] [int] NOT NULL,
-	[PlatformName] [nvarchar](20) NOT NULL,
-	[MusicId] [nvarchar](50) NOT NULL,
-	[MusicName] [nvarchar](50) NOT NULL,
-	[MusicArtist] [nvarchar](50) NOT NULL,
-	[MusicAlbum] [nvarchar](50) NOT NULL,
- CONSTRAINT [PK_MyFavoriteDetail] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[RefreshToken]    Script Date: 2022/10/13 15:25:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[RefreshToken](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[UserBaseId] [int] NOT NULL,
-	[DeviceId] [nvarchar](36) NOT NULL,
-	[Token] [nvarchar](200) NOT NULL,
-	[ExpireTime] [datetime] NOT NULL,
-	[CreateTime] [datetime] NOT NULL,
- CONSTRAINT [PK_RefreshToken] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[UserBase]    Script Date: 2022/10/13 15:25:24 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[UserBase](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Username] [nvarchar](50) NOT NULL,
-	[Nickname] [nvarchar](50) NOT NULL,
-	[Avatar] [nvarchar](200) NOT NULL,
-	[Salt] [nvarchar](50) NOT NULL,
-	[Password] [nvarchar](50) NOT NULL,
-	[IsEnable] [bit] NOT NULL,
-	[CreateTime] [datetime] NOT NULL,
- CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[Music] ADD  CONSTRAINT [DF_Music_CreateTime]  DEFAULT (getdate()) FOR [CreateTime]
-GO
+数据库使用 `PostgreSQL`
 
+```sql
+
+-- Table: public.Music 歌曲信息
+
+-- DROP TABLE IF EXISTS public."Music";
+
+CREATE TABLE IF NOT EXISTS public."Music"
+(
+    "Platform" integer NOT NULL,
+    "IdOnPlatform" character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    "Id" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "Name" character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    "Artist" character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    "Album" character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    "ImageUrl" character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    "ExtendData" character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    "CreateTime" timestamp without time zone NOT NULL,
+    CONSTRAINT "Music_pkey" PRIMARY KEY ("Id")
+)
+
+
+
+-- Table: public.MyFavorite  我的歌单
+
+-- DROP TABLE IF EXISTS public."MyFavorite";
+
+CREATE TABLE IF NOT EXISTS public."MyFavorite"
+(
+    "Id" integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT 1 START 12 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    "Name" character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    "UserBaseId" integer NOT NULL,
+    "ImageUrl" character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    "EditTime" timestamp without time zone NOT NULL,
+    CONSTRAINT "MyFavorite_pkey" PRIMARY KEY ("Id")
+)
+
+
+-- Table: public.MyFavoriteDetail  我的歌单明细
+
+-- DROP TABLE IF EXISTS public."MyFavoriteDetail";
+
+CREATE TABLE IF NOT EXISTS public."MyFavoriteDetail"
+(
+    "Id" integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT 1 START 73 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    "MyFavoriteId" integer NOT NULL,
+    "MusicId" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "MyFavoriteDetail_pkey" PRIMARY KEY ("Id")
+)
+
+
+
+-- Table: public.RefreshToken 用户Token
+
+-- DROP TABLE IF EXISTS public."RefreshToken";
+
+CREATE TABLE IF NOT EXISTS public."RefreshToken"
+(
+    "Id" integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    "UserBaseId" integer NOT NULL,
+    "Token" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ExpireTime" timestamp without time zone NOT NULL,
+    "CreateTime" timestamp without time zone NOT NULL,
+    "DeviceId" character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "RefreshToken_pkey" PRIMARY KEY ("Id")
+)
+
+
+
+-- Table: public.UserBase  用户表
+
+-- DROP TABLE IF EXISTS public."UserBase";
+
+CREATE TABLE IF NOT EXISTS public."UserBase"
+(
+    "Id" integer NOT NULL GENERATED BY DEFAULT AS IDENTITY ( INCREMENT 1 START 9 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    "Username" character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    "Nickname" character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    "Avatar" character varying(60) COLLATE pg_catalog."default" NOT NULL,
+    "Salt" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "Password" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    "IsEnable" boolean NOT NULL,
+    "CreateTime" timestamp without time zone NOT NULL,
+    CONSTRAINT "UserBase_pkey" PRIMARY KEY ("Id")
+)
 ```
