@@ -23,12 +23,14 @@ public partial class SearchResultPageViewModel : ViewModelBase
 
     private readonly MusicResultService _musicResultService;
     private readonly IMusicNetworkService _musicNetworkService;
+    private readonly IPlaylistService _playlistService;
 
-    public SearchResultPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService)
+    public SearchResultPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService)
     {
         SearchResult = new ObservableCollection<MusicResultGroupViewModel>();
         _musicNetworkService = musicNetworkService;
         _musicResultService = musicResultService;
+        _playlistService = playlistService;
     }
 
     public async Task InitializeAsync()
@@ -50,6 +52,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
         {
             Loading("正在搜索....");
             SearchResult.Clear();
+            OnPropertyChanged("SearchResult");
             var musics = await _musicNetworkService.SearchAsync(GlobalConfig.MyUserSetting.Search.EnablePlatform, Keyword);
 
             if (GlobalConfig.MyUserSetting.Search.IsMatchSearchKey)
@@ -112,7 +115,31 @@ public partial class SearchResultPageViewModel : ViewModelBase
         {
             LoadComplete();
             Interlocked.Exchange(ref _isSearching, 0);
+            OnPropertyChanged("SearchResult");
         }
+    }
+
+    [RelayCommand]
+    public async void PlayAllAsync()
+    {
+        if (SearchResult.Count == 0)
+        {
+            return;
+        }
+        if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlaySongMenu)
+        {
+            if (!await _playlistService.RemoveAllAsync())
+            {
+                await ToastService.Show("播放列表清空失败");
+                return;
+            }
+        }
+        var musics = new List<LocalMusic>();
+        for (int i = 0; i < SearchResult.Count; i++)
+        {
+            musics.AddRange(SearchResult[i].ToLocalMusics());
+        }
+        await _musicResultService.PlayAllAsync(musics);
     }
 
     [RelayCommand]
