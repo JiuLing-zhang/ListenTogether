@@ -5,6 +5,8 @@ namespace ListenTogether.Pages;
 public partial class DiscoverPage : ContentPage
 {
     private bool _isFirstAppearing = true;
+    //控制每次滚动时，只加载一页数据
+    private DateTime _lastScrollToTime = DateTime.Now;
     DiscoverPageViewModel vm => BindingContext as DiscoverPageViewModel;
     public DiscoverPage(DiscoverPageViewModel vm)
     {
@@ -36,5 +38,31 @@ public partial class DiscoverPage : ContentPage
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
+    }
+
+    private void CollectionView_Scrolled(object sender, ItemsViewScrolledEventArgs e)
+    {
+        //TODO WinUI 中，目前无法触发 RemainingItemsThresholdReachedCommand，因此先自己实现一下
+        if (DeviceInfo.Current.Platform != DevicePlatform.WinUI)
+        {
+            return;
+        }
+        if (_lastScrollToTime.Subtract(DateTime.Now).TotalMilliseconds > 0)
+        {
+            return;
+        }
+        _lastScrollToTime = DateTime.Now.AddSeconds(1);
+
+        if (sender is CollectionView cv && cv is IElementController element)
+        {
+            var count = element.LogicalChildren.Count;
+            if (e.LastVisibleItemIndex + 1 - count + cv.RemainingItemsThreshold >= 0)
+            {
+                if (cv.RemainingItemsThresholdReachedCommand.CanExecute(null))
+                {
+                    cv.RemainingItemsThresholdReachedCommand.Execute(null);
+                }
+            }
+        }
     }
 }

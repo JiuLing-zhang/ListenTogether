@@ -161,83 +161,44 @@
             </FlexLayout>
         </Border>
 
-        <ScrollView
+        <CollectionView
             Grid.Row="2"
-            VerticalOptions="FillAndExpand">
-            <Border
-                BackgroundColor="Transparent"
-                StrokeThickness="0">
-                <OnPlatform x:TypeArguments="View">
-                    <On Platform="WinUI, macOS">
-                        <FlexLayout
-                            Direction="Row"
-                            Wrap="Wrap"
-                            AlignContent="Start"
-                            BindableLayout.ItemsSource="{Binding SongMenus}">
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate>
-                                    <hc:HandCursorStackLayout
-                                        Margin="10,5,10,5"
-                                        Spacing="5"
-                                        WidthRequest="140"
-                                        HeightRequest="200"
-                                        ToolTipProperties.Text="{Binding Name}">
-                                        <hc:HandCursorStackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=GotoSongMenuPageAsyncCommand}"
-                                                CommandParameter="{Binding .}"/>
-                                        </hc:HandCursorStackLayout.GestureRecognizers>
-                                        <Border
-                                            StrokeThickness="0.1"
-                                            StrokeShape="RoundRectangle 10">
-                                            <Image
-                                                Aspect="AspectFill"
-                                                Source="{Binding ImageUrl}"/>
-                                        </Border>
-                                        <Label
-                                            Text="{Binding Name}"
-                                            Style="{StaticResource Explain}"
-                                            LineBreakMode="WordWrap"/>
-                                    </hc:HandCursorStackLayout>
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </FlexLayout>
-                    </On>
-                    <On Platform="Android,iOS">
-                        <CollectionView ItemsSource="{Binding SongMenus}"
-                                        ItemsLayout="VerticalGrid, 3">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid
-                                        Padding="10"
-                                        RowSpacing="5"
-                                        RowDefinitions="Auto,Auto">
-                                        <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=GotoSongMenuPageAsyncCommand}"
-                                                CommandParameter="{Binding .}"/>
-                                        </Grid.GestureRecognizers>
-                                        <Border
-                                            Grid.Row="0"
-                                            StrokeThickness="0.1"
-                                            StrokeShape="RoundRectangle 10">
-                                            <Image
-                                                Aspect="AspectFill"
-                                                Source="{Binding ImageUrl}"/>
-                                        </Border>
-                                        <Label
-                                            Grid.Row="1"
-                                            Text="{Binding Name}"
-                                            Style="{StaticResource Explain}"
-                                            LineBreakMode="WordWrap"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </On>
-                </OnPlatform>
-            </Border>
-        </ScrollView>
+            WidthRequest="{OnPlatform WinUI=800,MacCatalyst=800}"
+            VerticalOptions="FillAndExpand"
+            ItemsSource="{Binding SongMenus}"
+            ItemsLayout="{OnPlatform WinUI='VerticalGrid, 5',MacCatalyst='VerticalGrid, 5',Android='VerticalGrid, 3',iOS='VerticalGrid, 3'}"
+            BackgroundColor="Transparent"
+            RemainingItemsThreshold="{OnPlatform WinUI=5,MacCatalyst=5,Android=3,iOS=3}"
+            RemainingItemsThresholdReachedCommand="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=LoadLastPageTagSongMenusAsyncCommand}"
+            Scrolled="CollectionView_Scrolled">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        Padding="10"
+                        RowSpacing="5"
+                        RowDefinitions="Auto,Auto">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DiscoverPageViewModel}}, Path=GotoSongMenuPageAsyncCommand}"
+                                CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
+                        <Border
+                            Grid.Row="0"
+                            StrokeThickness="0.1"
+                            StrokeShape="RoundRectangle 10">
+                            <Image
+                                Aspect="AspectFill"
+                                Source="{Binding ImageUrl}"/>
+                        </Border>
+                        <Label
+                            Grid.Row="1"
+                            Text="{Binding Name}"
+                            Style="{StaticResource Explain}"
+                            LineBreakMode="WordWrap"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <controls:Player
             Grid.Row="3"

@@ -248,9 +248,11 @@ public class NetEaseMusicProvider : IMusicProvider
         return (hotTags, allTypes);
     }
 
-    public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
+    public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id, int page)
     {
-        string url = $"{UrlBase.NetEase.GetSongMenusFromTagUrl}?cat={id}";
+        var limit = 35;
+        var offset = (page - 1) * limit;
+        string url = $"{UrlBase.NetEase.GetSongMenusFromTagUrl}?order=hot&cat={id}&limit={limit}&offset={offset}";
         var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),

@@ -8,6 +8,15 @@ using System.Web;
 namespace ListenTogether.ViewModels;
 public partial class DiscoverPageViewModel : ViewModelBase
 {
+    /// <summary>
+    /// 当前标签歌单的页码
+    /// </summary>
+    private int _currentPage = 1;
+    /// <summary>
+    /// 当前标签的Id
+    /// </summary>
+    private string _currentTagId = "";
+
     [ObservableProperty]
     private ObservableCollection<DiscoverTabViewModel> _discoverTabs;
 
@@ -172,6 +181,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
         }
 
         SongMenus.Clear();
+        _currentPage = 1;
         try
         {
             Loading("加载中....");
@@ -179,12 +189,14 @@ public partial class DiscoverPageViewModel : ViewModelBase
             SongMenuEnum songMenuType;
             if (id == "榜单")
             {
+                _currentTagId = "";
                 songMenus = await _musicNetworkService.GetSongMenusFromTop(Platform);
                 songMenuType = SongMenuEnum.Top;
             }
             else
             {
-                songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, id);
+                _currentTagId = id;
+                songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, id, _currentPage);
                 songMenuType = SongMenuEnum.Tag;
             }
 
@@ -204,6 +216,43 @@ public partial class DiscoverPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             Logger.Error($"歌单加载失败：{Platform.GetDescription()},id={id}", ex);
+        }
+        finally
+        {
+            LoadComplete();
+        }
+    }
+
+    [RelayCommand]
+    private async void LoadLastPageTagSongMenusAsync()
+    {
+        if (_currentTagId.IsEmpty())
+        {
+            return;
+        }
+
+        try
+        {
+            Loading("加载中....");
+            var page = _currentPage + 1;
+            var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, _currentTagId, page);
+            _currentPage = page;
+            foreach (var songMenu in songMenus)
+            {
+                SongMenus.Add(new SongMenuViewModel()
+                {
+                    SongMenuType = SongMenuEnum.Tag,
+                    PlatformName = Platform.GetDescription(),
+                    Id = songMenu.Id,
+                    Name = songMenu.Name,
+                    ImageUrl = songMenu.ImageUrl,
+                    LinkUrl = songMenu.LinkUrl
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"歌单滚动加载失败：{Platform.GetDescription()},id={_currentTagId}", ex);
         }
         finally
         {

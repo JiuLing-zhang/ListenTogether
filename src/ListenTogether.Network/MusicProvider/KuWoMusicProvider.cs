@@ -295,12 +295,12 @@ internal class KuWoMusicProvider : IMusicProvider
         return (hotTags, allTypes);
     }
 
-    public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
+    public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id, int page)
     {
         var songMenus = new List<SongMenu>();
         try
         {
-            string url = $"{UrlBase.KuWo.GetTagSongMenuUrl}?pn=1&rn=20&id={id}&httpsStatus=1&reqId={_reqId}";
+            string url = $"{UrlBase.KuWo.GetTagSongMenuUrl}?pn={page}&rn=20&id={id}&httpsStatus=1&reqId={_reqId}";
             var request = new HttpRequestMessage()
             {
                 RequestUri = new Uri(url),

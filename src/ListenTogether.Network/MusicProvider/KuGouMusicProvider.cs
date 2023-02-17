@@ -188,7 +188,7 @@ public class KuGouMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
+    public Task<List<SongMenu>> GetSongMenusFromTagAsync(string id, int page)
     {
         throw new NotImplementedException();
     }

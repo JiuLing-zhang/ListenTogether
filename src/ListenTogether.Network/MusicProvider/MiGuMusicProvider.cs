@@ -205,9 +205,9 @@ public class MiGuMusicProvider : IMusicProvider
         return MiGuUtils.GetTags(html);
     }
 
-    public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id)
+    public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id, int page)
     {
-        string url = $"{UrlBase.MiGu.GetMusicTagPlayUrl}?tagId={id}";
+        string url = $"{UrlBase.MiGu.GetMusicTagPlayUrl}?tagId={id}&page={page}";
         var request = new HttpRequestMessage()
         {
             RequestUri = new Uri(url),
