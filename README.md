@@ -24,6 +24,7 @@
 
 <img src="https://github.com/JiuLing-zhang/ListenTogether/raw/main/docs/resources/images/windows_playing.png" width="45%">
 </div>
+
 ## 1、声明  
 该项目仅学习使用，本人也不会打包和分发安装包:warning::warning::warning:  
 该项目牵扯多家平台的协议分析，所以 **禁止`Fork` 禁止`Fork` 禁止`Fork`**。  
