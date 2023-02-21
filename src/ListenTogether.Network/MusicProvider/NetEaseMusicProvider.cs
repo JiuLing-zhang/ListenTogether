@@ -21,8 +21,9 @@ public class NetEaseMusicProvider : IMusicProvider
         _httpClient.Timeout = TimeSpan.FromSeconds(5);
     }
 
-    public async Task<List<string>?> GetSearchSuggestAsync(string keyword)
+    public async Task<List<string>> GetSearchSuggestAsync(string keyword)
     {
+        var searchSuggestList = new List<string>();
         string url = $"{UrlBase.NetEase.Suggest}";
 
         var postData = NetEaseUtils.GetPostDataForSuggest(keyword);
@@ -49,20 +50,21 @@ public class NetEaseMusicProvider : IMusicProvider
         catch (Exception ex)
         {
             Logger.Error("解析网易搜索建议失败。", ex);
-            return null;
+            return searchSuggestList;
         }
 
         if (result == null)
         {
             Logger.Info("解析网易搜索建议失败，服务器返回空。");
-            return null;
+            return searchSuggestList;
         }
         if (result.code != 200 || result.result.songs == null)
         {
             Logger.Info("解析网易搜索建议失败，服务器返回参数异常。");
-            return null;
+            return searchSuggestList;
         }
-        return result.result.songs.Select(x => x.name).Distinct().ToList();
+        searchSuggestList = result.result.songs.Select(x => x.name).Distinct().ToList();
+        return searchSuggestList;
     }
 
     public async Task<List<MusicResultShow>> SearchAsync(string keyword)
@@ -110,7 +112,7 @@ public class NetEaseMusicProvider : IMusicProvider
                 try
                 {
                     string artistName = "";
-                    if (song.ar.Length > 0)
+                    if (song.ar.Count > 0)
                     {
                         artistName = string.Join("、", song.ar.Select(x => x.name).ToList());
                     }
@@ -141,7 +143,7 @@ public class NetEaseMusicProvider : IMusicProvider
         return musics;
     }
 
-    private FeeEnum GetFeeFlag(Privilege privilege)
+    private FeeEnum GetFeeFlag(MusicSearchHttpResultSongPrivilege privilege)
     {
 
         if (privilege == null)
@@ -163,7 +165,7 @@ public class NetEaseMusicProvider : IMusicProvider
         return Task.FromResult(NetEaseUtils.GetSongMenusFromTop());
     }
 
-    public Task<List<string>?> GetHotWordAsync()
+    public Task<List<string>> GetHotWordAsync()
     {
         throw new NotImplementedException();
     }
@@ -196,16 +198,16 @@ public class NetEaseMusicProvider : IMusicProvider
         var lyricResult = json.ToObject<MusicLyricHttpResult>();
         if (lyricResult == null)
         {
-            return null;
+            return "";
         }
         if (lyricResult.code != 200)
         {
-            return null;
+            return "";
         }
 
         if (lyricResult.lrc == null)
         {
-            return null;
+            return "";
         }
         return lyricResult.lrc.lyric;
     }

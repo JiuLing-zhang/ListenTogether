@@ -107,7 +107,7 @@ public class KuGouMusicProvider : IMusicProvider
         return FeeEnum.Free;
     }
 
-    public Task<List<string>?> GetSearchSuggestAsync(string keyword)
+    public Task<List<string>> GetSearchSuggestAsync(string keyword)
     {
         throw new NotImplementedException();
     }
@@ -122,7 +122,7 @@ public class KuGouMusicProvider : IMusicProvider
         throw new NotImplementedException();
     }
 
-    public Task<List<string>?> GetHotWordAsync()
+    public Task<List<string>> GetHotWordAsync()
     {
         throw new NotImplementedException();
     }

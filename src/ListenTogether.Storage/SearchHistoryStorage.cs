@@ -37,7 +37,7 @@ public class SearchHistoryStorage
         {
             return new List<string>();
         }
-        return JsonSerializer.Deserialize<List<string>>(json);
+        return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
     }
 
     public static void Clear()

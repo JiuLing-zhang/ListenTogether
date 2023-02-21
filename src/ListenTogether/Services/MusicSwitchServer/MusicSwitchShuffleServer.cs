@@ -1,6 +1,4 @@
-﻿using JiuLing.CommonLibs.Random;
-
-namespace ListenTogether.Services.MusicSwitchServer;
+﻿namespace ListenTogether.Services.MusicSwitchServer;
 public class MusicSwitchShuffleServer : IMusicSwitchServer
 {
     private readonly IPlaylistService _playlistService;

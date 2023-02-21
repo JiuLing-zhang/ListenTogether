@@ -18,13 +18,13 @@
 
     public class TagMusicSongsHttpResult
     {
-        public List<TagMusicSongs> songs { get; set; }
-        public List<TagMusicPrivileges> privileges { get; set; }
+        public List<TagMusicSongs> songs { get; set; } = null!;
+        public List<TagMusicPrivileges> privileges { get; set; } = null!;
     }
 
     public class TagMusicSongs
     {
-        public string name { get; set; }
+        public string name { get; set; } = null!;
         public long id { get; set; }
         public List<TagMusicAr>? ar { get; set; }
         public TagMusicAl? al { get; set; }
@@ -33,13 +33,13 @@
 
     public class TagMusicAl
     {
-        public string name { get; set; }
-        public string picUrl { get; set; }
+        public string name { get; set; } = null!;
+        public string picUrl { get; set; } = null!;
 
     }
     public class TagMusicAr
     {
-        public string name { get; set; }
+        public string name { get; set; } = null!;
     }
 
 

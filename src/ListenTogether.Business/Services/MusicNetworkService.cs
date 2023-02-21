@@ -18,7 +18,7 @@ public class MusicNetworkService : IMusicNetworkService
         _musicNetPlatform.SetMusicFormatType(musicFormatType);
     }
 
-    public async Task<List<string>?> GetSearchSuggestAsync(string keyword)
+    public async Task<List<string>> GetSearchSuggestAsync(string keyword)
     {
         return await _musicNetPlatform.GetSearchSuggestAsync(keyword);
     }
@@ -38,7 +38,7 @@ public class MusicNetworkService : IMusicNetworkService
         return await _musicNetPlatform.GetImageUrlAsync(platform, id, extendDataJson);
     }
 
-    public async Task<string?> GetLyricAsync(PlatformEnum platform, string id, string extendDataJson = "")
+    public async Task<string> GetLyricAsync(PlatformEnum platform, string id, string extendDataJson = "")
     {
         return await _musicNetPlatform.GetLyricAsync(platform, id, extendDataJson);
     }
@@ -47,7 +47,7 @@ public class MusicNetworkService : IMusicNetworkService
         return _musicNetPlatform.GetPlayPageUrlAsync(platform, id, extendDataJson);
     }
 
-    public async Task<List<string>?> GetHotWordAsync()
+    public async Task<List<string>> GetHotWordAsync()
     {
         return await _musicNetPlatform.GetHotWordAsync();
     }

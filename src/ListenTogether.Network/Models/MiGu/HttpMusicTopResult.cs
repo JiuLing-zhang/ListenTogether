@@ -12,25 +12,22 @@
 
     public class HttpMusicTopSongItemResult
     {
-        public string copyrightId { get; set; }
-        public string name { get; set; }
-        public string mediumPic { get; set; }
+        public string copyrightId { get; set; } = null!;
+        public string name { get; set; } = null!;
+        public string mediumPic { get; set; } = null!;
         public string ImageUrl => $"https:{mediumPic}";
-        public string duration { get; set; }
+        public string duration { get; set; } = null!;
         public List<HttpMusicTopSongSingerResult>? singers { get; set; }
         public HttpMusicTopSongAlbumResult? album { get; set; }
     }
 
     public class HttpMusicTopSongAlbumResult
     {
-        public string albumId { get; set; }
-        public string albumName { get; set; }
-        public int isDigitalAlbum { get; set; }
+        public string albumName { get; set; } = null!;
     }
     public class HttpMusicTopSongSingerResult
     {
-        public string id { get; set; }
-        public string name { get; set; }
+        public string name { get; set; } = null!;
     }
 
 }

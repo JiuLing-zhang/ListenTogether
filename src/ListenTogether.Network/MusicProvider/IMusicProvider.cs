@@ -33,10 +33,9 @@ public interface IMusicProvider
     /// <returns></returns>
     Task<List<MusicResultShow>> GetTopMusicsAsync(string topId);
 
-    Task<List<string>?> GetHotWordAsync();
-    Task<List<string>?> GetSearchSuggestAsync(string keyword);
+    Task<List<string>> GetHotWordAsync();
+    Task<List<string>> GetSearchSuggestAsync(string keyword);
     Task<List<MusicResultShow>> SearchAsync(string keyword);
-    //TODO 音质选择
     Task<string> GetPlayUrlAsync(string id, string extendDataJson = "");
     Task<string> GetImageUrlAsync(string id, string extendDataJson = "");
     Task<string> GetLyricAsync(string id, string extendDataJson = "");

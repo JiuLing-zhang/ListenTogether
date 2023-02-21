@@ -120,7 +120,7 @@ public class MiGuMusicProvider : IMusicProvider
         string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var result = json.ToObject<HttpMusicDetailResult>();
-        if (result == null || result.resource == null || result.resource.Length == 0)
+        if (result == null || result.resource == null || result.resource.Count == 0)
         {
             return "";
         }
@@ -138,12 +138,12 @@ public class MiGuMusicProvider : IMusicProvider
         return $"{UrlBase.MiGu.PlayUrlDomain}{playUrlPath}";
     }
 
-    public Task<List<string>?> GetSearchSuggestAsync(string keyword)
+    public Task<List<string>> GetSearchSuggestAsync(string keyword)
     {
         throw new NotImplementedException();
     }
 
-    public Task<List<string>?> GetHotWordAsync()
+    public Task<List<string>> GetHotWordAsync()
     {
         throw new NotImplementedException();
     }
@@ -169,20 +169,20 @@ public class MiGuMusicProvider : IMusicProvider
         string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
         var result = json.ToObject<HttpMusicDetailResult>();
-        if (result == null || result.resource == null || result.resource.Length == 0)
+        if (result == null || result.resource == null || result.resource.Count == 0)
         {
-            return null;
+            return "";
         }
 
         if (result.resource[0].newRateFormats == null || result.resource[0].newRateFormats.Count == 0)
         {
-            return null;
+            return "";
         }
 
         string lyricUrl = result.resource[0].lrcUrl;
         if (lyricUrl.IsEmpty())
         {
-            return null;
+            return "";
         }
 
         return await _httpClient.GetStringAsync(lyricUrl);

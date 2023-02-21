@@ -2,42 +2,41 @@
 {
     public class MusicSearchHttpResult
     {
-        public Song[] songs { get; set; } = null!;
-        public int songCount { get; set; }
+        public List<MusicSearchHttpResultSong> songs { get; set; } = null!;
     }
 
-    public class Song
+    public class MusicSearchHttpResultSong
     {
         public int id { get; set; }
         public string name { get; set; } = null!;
         /// <summary>
         /// 艺人信息
         /// </summary>
-        public Artist[] ar { get; set; } = null!;
+        public List<MusicSearchHttpResultSongArtist> ar { get; set; } = null!;
         /// <summary>
         /// 专辑
         /// </summary>
-        public Album al { get; set; } = null!;
+        public MusicSearchHttpResultSongAlbum al { get; set; } = null!;
         /// <summary>
         /// 时长
         /// </summary>
         public int dt { get; set; }
 
-        public Privilege privilege { get; set; } = null!;
+        public MusicSearchHttpResultSongPrivilege privilege { get; set; } = null!;
     }
 
-    public class Album
+    public class MusicSearchHttpResultSongAlbum
     {
         public string name { get; set; } = null!;
         public string picUrl { get; set; } = null!;
     }
 
-    public class Artist
+    public class MusicSearchHttpResultSongArtist
     {
         public string name { get; set; } = null!;
     }
 
-    public class Privilege
+    public class MusicSearchHttpResultSongPrivilege
     {
         /// <summary>
         /// 费用类型

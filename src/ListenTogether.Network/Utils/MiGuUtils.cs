@@ -95,7 +95,7 @@ public class MiGuUtils
         return $"id={id}&copyrightId={copyrightId}&resourceType=2&_={timestampLast}&v={timestamp}";
     }
 
-    public static string GetPlayUrlPath(List<NewRateFormats> playResources, MusicFormatTypeEnum musicFormatType)
+    public static string GetPlayUrlPath(List<HttpMusicDetailResourceNewRateFormats> playResources, MusicFormatTypeEnum musicFormatType)
     {
         switch (musicFormatType)
         {
@@ -113,7 +113,7 @@ public class MiGuUtils
     }
 
     private static readonly string FtpHeadPattern = @"^ftp://\d+\.\d+\.\d+\.\d+:\d+";
-    private static string GetZQPlayUrlPath(List<NewRateFormats> playResources)
+    private static string GetZQPlayUrlPath(List<HttpMusicDetailResourceNewRateFormats> playResources)
     {
         var zqResource = playResources.FirstOrDefault(x => x.formatType == "ZQ");
         if (zqResource != null && RegexUtils.IsMatch(zqResource.iosUrl ?? "", FtpHeadPattern))
@@ -123,7 +123,7 @@ public class MiGuUtils
         return GetSQPlayUrlPath(playResources);
     }
 
-    private static string GetSQPlayUrlPath(List<NewRateFormats> playResources)
+    private static string GetSQPlayUrlPath(List<HttpMusicDetailResourceNewRateFormats> playResources)
     {
         var sqResource = playResources.FirstOrDefault(x => x.formatType == "SQ");
         if (sqResource != null && RegexUtils.IsMatch(sqResource.iosUrl ?? "", FtpHeadPattern))
@@ -133,7 +133,7 @@ public class MiGuUtils
         return GetHQPlayUrlPath(playResources);
     }
 
-    private static string GetHQPlayUrlPath(List<NewRateFormats> playResources)
+    private static string GetHQPlayUrlPath(List<HttpMusicDetailResourceNewRateFormats> playResources)
     {
         var hqResource = playResources.FirstOrDefault(x => x.formatType == "HQ");
         if (hqResource != null && RegexUtils.IsMatch(hqResource.url ?? "", FtpHeadPattern))
@@ -144,7 +144,7 @@ public class MiGuUtils
         return GetPQPlayUrlPath(playResources);
     }
 
-    private static string GetPQPlayUrlPath(List<NewRateFormats> playResources)
+    private static string GetPQPlayUrlPath(List<HttpMusicDetailResourceNewRateFormats> playResources)
     {
         var pqResource = playResources.FirstOrDefault(x => x.formatType == "PQ");
         if (pqResource != null && RegexUtils.IsMatch(pqResource.url ?? "", FtpHeadPattern))

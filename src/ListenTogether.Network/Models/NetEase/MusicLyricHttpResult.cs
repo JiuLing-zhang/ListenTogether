@@ -2,11 +2,11 @@
 {
     public class MusicLyricHttpResult
     {
-        public Lrc lrc { get; set; } = null!;
+        public MusicLyricHttpResultLrc? lrc { get; set; }
         public int code { get; set; }
     }
 
-    public class Lrc
+    public class MusicLyricHttpResultLrc
     {
         public string lyric { get; set; } = null!;
     }

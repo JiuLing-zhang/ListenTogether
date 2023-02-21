@@ -2,10 +2,10 @@
 {
     public class HttpMusicSearchResult
     {
-        public List[] lists { get; set; } = null!;
+        public List<HttpMusicSearchResultList> lists { get; set; } = null!;
     }
 
-    public class List
+    public class HttpMusicSearchResultList
     {
         public string SongName { get; set; } = null!;
 

@@ -25,12 +25,12 @@ public class MusicNetPlatform
         MusicProviderSetting.MusicFormatType = musicFormatType;
     }
 
-    public async Task<List<string>?> GetHotWordAsync()
+    public async Task<List<string>> GetHotWordAsync()
     {
         return await MusicProviderFactory.Create(PlatformEnum.KuWo).GetHotWordAsync();
     }
 
-    public async Task<List<string>?> GetSearchSuggestAsync(string keyword)
+    public async Task<List<string>> GetSearchSuggestAsync(string keyword)
     {
         return await MusicProviderFactory.Create(PlatformEnum.NetEase).GetSearchSuggestAsync(keyword);
     }
@@ -49,7 +49,7 @@ public class MusicNetPlatform
         return await MusicProviderFactory.Create(platform).GetImageUrlAsync(id, extendDataJson);
     }
 
-    public async Task<string?> GetLyricAsync(PlatformEnum platform, string id, string extendDataJson = "")
+    public async Task<string> GetLyricAsync(PlatformEnum platform, string id, string extendDataJson = "")
     {
         return await MusicProviderFactory.Create(platform).GetLyricAsync(id, extendDataJson);
     }

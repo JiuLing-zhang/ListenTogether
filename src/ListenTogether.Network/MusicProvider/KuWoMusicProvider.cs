@@ -43,7 +43,7 @@ internal class KuWoMusicProvider : IMusicProvider
         await _httpClient.GetStringAsync("http://www.kuwo.cn");
     }
 
-    public Task<List<string>?> GetSearchSuggestAsync(string keyword)
+    public Task<List<string>> GetSearchSuggestAsync(string keyword)
     {
         throw new NotImplementedException();
     }
@@ -183,8 +183,9 @@ internal class KuWoMusicProvider : IMusicProvider
         return musics;
     }
 
-    public async Task<List<string>?> GetHotWordAsync()
+    public async Task<List<string>> GetHotWordAsync()
     {
+        var reslt = new List<string>();
         try
         {
             string url = $"{UrlBase.KuWo.HotWord}?key=&httpsStatus=1&reqId={_reqId}";
@@ -202,13 +203,13 @@ internal class KuWoMusicProvider : IMusicProvider
             request.Headers.Add("csrf", _csrf);
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
             string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return KuWoUtils.GetHotWord(json);
+            reslt = KuWoUtils.GetHotWord(json);
         }
         catch (Exception ex)
         {
             Logger.Error("酷我热搜词获取失败。", ex);
-            return null;
         }
+        return reslt;
     }
 
     public Task<string> GetShareUrlAsync(string id, string extendDataJson = "")
@@ -240,22 +241,22 @@ internal class KuWoMusicProvider : IMusicProvider
         catch (Exception ex)
         {
             Logger.Error("酷我歌曲详情获取失败。", ex);
-            return null;
+            return "";
         }
         if (httpResult == null)
         {
             Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回异常，ID:{id}"));
-            return null;
+            return "";
         }
         if (httpResult.status != 200)
         {
             Logger.Error("酷我歌曲详情获取失败。", new Exception($"服务器返回状态异常：{httpResult.message ?? ""}，ID:{id}"));
-            return null;
+            return "";
         }
 
         //处理歌词
         var sbLyrics = new StringBuilder();
-        if (httpResult.data.lrclist != null && httpResult.data.lrclist.Length > 0)
+        if (httpResult.data.lrclist != null && httpResult.data.lrclist.Count > 0)
         {
             foreach (var lyricInfo in httpResult.data.lrclist)
             {
