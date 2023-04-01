@@ -25,7 +25,7 @@ internal class UserService : IUserService
 
     public async Task<Result> RegisterAsync(UserRegisterRequest registerUser, string avatarUrl)
     {
-        var isUserExist = await _context.Users.AnyAsync(x => x.Username == registerUser.Username);
+        var isUserExist = await _context.Users.AnyAsync(x => x.Username.ToLower() == registerUser.Username.ToLower());
         if (isUserExist)
         {
             return new Result(1, "用户名已存在");
