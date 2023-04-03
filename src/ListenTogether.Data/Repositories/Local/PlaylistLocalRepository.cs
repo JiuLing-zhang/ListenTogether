@@ -11,6 +11,14 @@ public class PlaylistLocalRepository : IPlaylistRepository
         var playlists = await DatabaseProvide.DatabaseAsync.Table<PlaylistEntity>().FirstOrDefaultAsync(x => x.MusicId == playlist.Id);
         if (playlists != null)
         {
+            if (playlists.ImageUrl.IsEmpty())
+            {
+                playlists.ImageUrl = playlist.ImageUrl;
+                if (await DatabaseProvide.DatabaseAsync.UpdateAsync(playlists) == 0)
+                {
+                    return false;
+                }
+            }
             return true;
         }
 

@@ -12,6 +12,7 @@
         public int duration { get; set; }
         public string album { get; set; } = null!;
         public string name { get; set; } = null!;
+        public string pic { get; set; } = null!;
         public HttpMusicSearchResultListPayinfo payInfo { get; set; } = null!;
     }
 

@@ -98,6 +98,7 @@ internal class KuWoMusicProvider : IMusicProvider
                         Artist = httpMusic.artist.Replace("&nbsp;", " "),
                         Album = httpMusic.album.Replace("&nbsp;", " "),
                         Fee = GetFeeFlag(httpMusic.payInfo.listen_fragment),
+                        ImageUrl = httpMusic.pic,
                         Duration = TimeSpan.FromSeconds(httpMusic.duration)
                     };
                     musics.Add(music);

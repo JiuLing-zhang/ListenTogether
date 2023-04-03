@@ -84,7 +84,7 @@ public class MusicPlayerService
 
             LoadingService.LoadComplete(key);
         }
-        //TODO 酷我从搜索列表播放时，ImageUrl is null
+
         var image = await _httpClient.GetByteArrayAsync(playlist.ImageUrl);
         await _playerService.PlayAsync(
             new MusicMetadata(
