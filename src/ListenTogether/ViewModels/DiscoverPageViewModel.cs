@@ -73,10 +73,17 @@ public partial class DiscoverPageViewModel : ViewModelBase
             var platform = (PlatformEnum)DiscoverTabs[index].Id;
             tasks[index] = Task.Run(async () =>
             {
-                var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(platform);
-                lock (LockPlatformMusicTags)
+                try
                 {
-                    PlatformMusicTags.Add(new PlatformMusicTag(platform, hotTags, allTypes));
+                    var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(platform);
+                    lock (LockPlatformMusicTags)
+                    {
+                        PlatformMusicTags.Add(new PlatformMusicTag(platform, hotTags, allTypes));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"发现页加载失败：{platform.GetDescription()}", ex);
                 }
             });
         }
