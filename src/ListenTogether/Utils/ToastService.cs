@@ -10,7 +10,8 @@ internal class ToastService
     public static async Task Show(string message, ToastDuration duration = ToastDuration.Short, double textSize = 14.0)
     {
         Page page = Application.Current?.MainPage;
-        if (page != null)
+        //TODO Windows 下的弹窗目前会造成死锁，因此先屏蔽掉
+        if (page != null && !Config.Desktop)
         {
             try
             {
