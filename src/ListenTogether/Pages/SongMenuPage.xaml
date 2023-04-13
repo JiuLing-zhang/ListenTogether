@@ -17,11 +17,16 @@
                 Text="{Binding SongMenu.PlatformName}"
                 TextColor="{StaticResource Main}"/>
             <HorizontalStackLayout Spacing="10">
-                <Image
-                    WidthRequest="{OnPlatform WinUI=120,MacCatalyst=120,Android=100,iOS=100}"
-                    HeightRequest="{OnPlatform WinUI=120,MacCatalyst=120,Android=100,iOS=100}"
-                    VerticalOptions="Start"
-                    Source="{Binding SongMenu.ImageUrl}"/>
+                <Border
+                    StrokeThickness="0.1"
+                    StrokeShape="RoundRectangle 10">
+                    <Image
+                        WidthRequest="{OnPlatform WinUI=120,MacCatalyst=120,Android=100,iOS=100}"
+                        HeightRequest="{OnPlatform WinUI=120,MacCatalyst=120,Android=100,iOS=100}"
+                        VerticalOptions="Start"
+                        Source="{Binding SongMenu.ImageUrl}"/>
+                </Border>
+
                 <VerticalStackLayout Spacing="10">
                     <Label
                         FontSize="17"

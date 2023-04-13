@@ -49,7 +49,10 @@
                         <Grid RowDefinitions="50*,50*"
                               ColumnDefinitions="80,280,100"
                               Margin="0,0,40,0">
-                            <hc:HandCursorImage
+                            <Border
+                    StrokeThickness="0.1"
+                    StrokeShape="RoundRectangle 10">
+                                <hc:HandCursorImage
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Grid.RowSpan="2"
@@ -58,10 +61,11 @@
                                 x:Name="ImgCurrentMusic"
                                 Aspect="AspectFill"
                                 ToolTipProperties.Text="打开播放页">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="GoToPlayingPage_Tapped"/>
-                                </Image.GestureRecognizers>
-                            </hc:HandCursorImage>
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="GoToPlayingPage_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </hc:HandCursorImage>
+                            </Border>
 
                             <Label
                                 Grid.Row="0"

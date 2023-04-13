@@ -50,12 +50,15 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Margin="{OnPlatform WinUI='20,80,10,80',Android='20,10,20,0',iOS='20,10,20,0'}">
-                <Image
-                    HorizontalOptions="Center"
-                    Aspect="AspectFit"
+                <Border
+                    StrokeThickness="0.1"
                     WidthRequest="250"
-                    Source="{Binding CurrentMusicImageByteArray, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"/>
-
+                    StrokeShape="RoundRectangle 10">
+                    <Image
+                        HorizontalOptions="Center"
+                        Aspect="AspectFit"                        
+                        Source="{Binding CurrentMusicImageByteArray, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"/>
+                </Border>
                 <Label
                     Margin="0,10,0,0"
                     HorizontalOptions="Center"
