@@ -53,7 +53,7 @@
                 <Border
                     StrokeThickness="0.1"
                     WidthRequest="250"
-                    StrokeShape="RoundRectangle 10">
+                    StrokeShape="RoundRectangle 5">
                     <Image
                         HorizontalOptions="Center"
                         Aspect="AspectFit"                        

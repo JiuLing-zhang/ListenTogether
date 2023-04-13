@@ -50,17 +50,17 @@
                               ColumnDefinitions="80,280,100"
                               Margin="0,0,40,0">
                             <Border
-                    StrokeThickness="0.1"
-                    StrokeShape="RoundRectangle 10">
-                                <hc:HandCursorImage
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Grid.RowSpan="2"
                                 WidthRequest="60"
                                 HeightRequest="60"
-                                x:Name="ImgCurrentMusic"
-                                Aspect="AspectFill"
-                                ToolTipProperties.Text="打开播放页">
+                                StrokeThickness="0.1"
+                                StrokeShape="RoundRectangle 5">
+                                <hc:HandCursorImage
+                                    x:Name="ImgCurrentMusic"
+                                    Aspect="AspectFill"
+                                    ToolTipProperties.Text="打开播放页">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="GoToPlayingPage_Tapped"/>
                                     </Image.GestureRecognizers>
@@ -156,19 +156,23 @@
                         <StackLayout 
                             x:Name="PhoneMiniPlayer"
                             Orientation="Horizontal">
-
-                            <Image 
+                            <Border
                                 WidthRequest="30"
                                 HorizontalOptions="Start"
-                                Source="{Binding Source, Source={x:Reference ImgCurrentMusic}}">
-                                <Image.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="GoToPlayingPage_Tapped"/>
-                                </Image.GestureRecognizers>
-                            </Image>
-
+                                StrokeThickness="0.1"
+                                StrokeShape="RoundRectangle 10">
+                                <Image
+                                    Aspect="AspectFill"
+                                    Source="{Binding Source, Source={x:Reference ImgCurrentMusic}}">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="GoToPlayingPage_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Border>
                             <Label 
                                 Margin="5,0,0,0"
                                 TextColor="{Binding TextColor, Source={x:Reference LblMusicInfo}}"
+                                FontSize="13"
                                 HorizontalOptions="StartAndExpand"
                                 VerticalTextAlignment="Center"
                                 Text="{Binding Text,Source={x:Reference LblMusicInfo}}"
@@ -176,10 +180,11 @@
                             </Label>
 
                             <Image 
-                                WidthRequest="30"
-                                HeightRequest="30"
+                                WidthRequest="25"
+                                HeightRequest="25"
                                 Aspect="AspectFill"
                                 HorizontalOptions="End"
+                                VerticalOptions="CenterAndExpand"
                                 Source="{Binding Source, Source={x:Reference ImgPlay}}">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="ImgPlay_Tapped"/>
