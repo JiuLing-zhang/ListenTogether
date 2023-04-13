@@ -58,7 +58,9 @@
                         <StackLayout Style="{StaticResource DataRowEnter}">
                             <OnPlatform x:TypeArguments="View">
                                 <On Platform="WinUI, macOS">
-                                    <StackLayout Orientation="Horizontal">
+                                    <StackLayout
+                                        Orientation="Horizontal"
+                                        Margin="0,7,0,7">
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:PlaylistPageViewModel}}, Path=PlayMusicAsyncCommand}"
