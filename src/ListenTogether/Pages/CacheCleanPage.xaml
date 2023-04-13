@@ -78,10 +78,11 @@
                     Command="{Binding SelectAllCommand}"
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
+
+            <!--TODO 升级8.0后，Style="{DynamicResource IsEnabledClear}" 这个触发器好像有问题，暂时屏蔽-->
             <Button Text="删除"
                     Margin="5,0,0,0"
-                    HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"
-                    Style="{DynamicResource IsEnabledClear}"
+                    HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"                    
                     BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
                     TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"
                     Command="{Binding ClearAsyncCommand}"/>
