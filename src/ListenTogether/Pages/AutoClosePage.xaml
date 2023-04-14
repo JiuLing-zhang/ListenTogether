@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ListenTogether.Pages.AutoClosePage"
+             Title="AutoClosePage"
+             BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
+    <Grid
+        Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}"
+        MaximumWidthRequest="{OnPlatform WinUI=380,MacCatalyst=380}">
+
+        <StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label
+                    Text="定时关闭"
+                    VerticalTextAlignment="Center"/>
+                <Label
+                    Margin="5,0,0,0"
+                    Text="{Binding RemainingTimeString}"
+                    VerticalTextAlignment="Center"/>
+                <Switch
+                    IsToggled="{Binding IsAutoClose}"
+                    HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
+
+            <StackLayout
+                Margin="0,10,0,0"
+                RadioButtonGroup.GroupName="时间（分钟）"
+                RadioButtonGroup.SelectedValue="{Binding AutoCloseMinute}">
+                <RadioButton
+                    BackgroundColor="Transparent"
+                    Content="10"
+                    IsChecked="{Binding IsDefaultChecked}"
+                    Value="10"/>
+                <RadioButton
+                    BackgroundColor="Transparent"
+                    Content="20"
+                    Value="20" />
+                <RadioButton
+                    BackgroundColor="Transparent"
+                    Content="30"
+                    Value="30" />
+                <RadioButton
+                    BackgroundColor="Transparent"
+                    Content="45"
+                    Value="45" />
+                <RadioButton
+                    BackgroundColor="Transparent"
+                    Content="60"
+                    Value="60" />
+                <RadioButton
+                    BackgroundColor="Transparent"
+                    Content="90"
+                    Value="90" />
+                <RadioButton
+                    BackgroundColor="Transparent"                    
+                    Content="自定义"
+                    IsVisible="false"
+                    IsChecked="{Binding IsCustomChecked}"
+                    Value="0" />
+                <StackLayout Orientation="Horizontal">
+                    <Label
+                        Text="自定义"
+                        VerticalTextAlignment="Center"/>
+                    <Entry
+                        Text="{Binding AutoCloseCustomMinute}"
+                        Keyboard="Numeric"/>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </Grid>
+</ContentPage>

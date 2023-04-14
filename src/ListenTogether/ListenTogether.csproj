@@ -18,8 +18,8 @@
 		<ApplicationIdGuid>E98DF056-A645-4113-A892-4E4FE83BE1CA</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>2.0.6</ApplicationDisplayVersion>
-		<ApplicationVersion>142</ApplicationVersion>
+		<ApplicationDisplayVersion>2.0.8</ApplicationDisplayVersion>
+		<ApplicationVersion>144</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -87,6 +87,9 @@
 		</MauiXaml>
 		<MauiXaml Update="Controls\MessageDialog.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Pages\AutoClosePage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Pages\ChooseMyFavoritePage.xaml">
 			<Generator>MSBuild:Compile</Generator>

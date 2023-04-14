@@ -286,6 +286,12 @@ public partial class SettingPageViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private async void GoToAutoCloseAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(AutoClosePage)}", true);
+    }
+
+    [RelayCommand]
     private async void GoToLogAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(LogPage)}", true);

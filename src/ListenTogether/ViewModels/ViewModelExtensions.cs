@@ -19,6 +19,7 @@ public static class ViewModelExtensions
         builder.Services.AddSingleton<LogPageViewModel>();
         builder.Services.AddSingleton<SongMenuPageViewModel>();
         builder.Services.AddSingleton<DiscoverPageViewModel>();
+        builder.Services.AddSingleton<AutoClosePageViewModel>();        
         return builder;
     }
 }

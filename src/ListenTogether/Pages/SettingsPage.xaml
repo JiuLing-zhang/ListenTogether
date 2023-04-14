@@ -253,6 +253,10 @@
                                 Margin="0,5,0,0"
                                 Command="{Binding GoToCacheCleanAsyncCommand}"/>
                             <hc:HandCursorButton
+                                Text="定时关闭"
+                                Margin="0,5,0,0"
+                                Command="{Binding GoToAutoCloseAsyncCommand}"/>
+                            <hc:HandCursorButton
                                 Text="退出账号"
                                 Margin="0,5,0,0"
                                 IsVisible="{Binding UserInfo, Converter={StaticResource IsNotEqualConverter}}"
