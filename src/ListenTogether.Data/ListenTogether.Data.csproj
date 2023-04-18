@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="JiuLing.CommonLibs" Version="1.5.6" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="JiuLing.CommonLibs" Version="1.5.6" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
-    <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
-    <ProjectReference Include="..\ListenTogether.Storage\ListenTogether.Storage.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
+		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
+		<ProjectReference Include="..\ListenTogether.Storage\ListenTogether.Storage.csproj" />
+	</ItemGroup>
 
 </Project>

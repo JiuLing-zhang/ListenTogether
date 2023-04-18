@@ -58,9 +58,7 @@
                 Style="{StaticResource DataRowEnter}">
                 <OnPlatform x:TypeArguments="View">
                     <On Platform="WinUI, macOS">
-                        <Grid
-                            ColumnDefinitions="30,40,60,300,300,*"
-                            Margin="0,5,0,5">
+                        <Grid ColumnDefinitions="30,40,60,300,300,*">
                             <Grid.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding PlayCommand, Source={x:Reference self}}"

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>ListenTogether</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -18,8 +18,8 @@
 		<ApplicationIdGuid>E98DF056-A645-4113-A892-4E4FE83BE1CA</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>2.0.8</ApplicationDisplayVersion>
-		<ApplicationVersion>144</ApplicationVersion>
+		<ApplicationDisplayVersion>2.0.15</ApplicationDisplayVersion>
+		<ApplicationVersion>151</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -60,15 +60,16 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
+
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="5.0.0" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0-preview2" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
 		<PackageReference Include="JiuLing.CommonLibs" Version="1.5.6" />
 		<PackageReference Include="JiuLing.Controls.Maui" Version="0.0.13" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0-preview.3.23174.8" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0-preview.3.23174.8" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0-preview.3.23174.8" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0-preview.3.23174.8" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -79,7 +80,7 @@
 		<ProjectReference Include="..\NativeMediaMauiLib\NativeMediaMauiLib.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-		<PackageReference Include="System.Drawing.Common" Version="8.0.0-preview.2.23128.3" />
+		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Controls\FavoriteView.xaml">
@@ -89,7 +90,7 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Pages\AutoClosePage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Pages\ChooseMyFavoritePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
