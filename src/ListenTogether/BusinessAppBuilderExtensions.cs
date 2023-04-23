@@ -1,11 +1,10 @@
-﻿using ListenTogether.Business.Interfaces;
-using ListenTogether.Business.Services;
+﻿using ListenTogether.Business.Services;
 using ListenTogether.Data.Interfaces;
 using ListenTogether.Data.Repositories.Api;
 using ListenTogether.Data.Repositories.Local;
 using ListenTogether.Network;
 
-namespace ListenTogether.Business;
+namespace ListenTogether;
 
 public static class AppBuilderExtensions
 {
