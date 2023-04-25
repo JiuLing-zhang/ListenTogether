@@ -8,6 +8,11 @@ using ListenTogether.Model.Api.Response;
 namespace ListenTogether.Data.Repositories.Api;
 public class UserApiRepository : IUserApiRepository
 {
+    private readonly IHttpClientFactory _httpClientFactory = null!;
+    public UserApiRepository(IHttpClientFactory httpClientFactory)
+    {
+        _httpClientFactory = httpClientFactory;
+    }
     public async Task<(bool Succeed, string Message)> RegisterAsync(UserRegister registerUser)
     {
         try
@@ -19,7 +24,7 @@ public class UserApiRepository : IUserApiRepository
             //头像
             mfdc.Add(new StreamContent(new MemoryStream(registerUser.Avatar.File)), "Avatar", registerUser.Avatar.FileName);
 
-            var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Register, mfdc);
+            var response = await _httpClientFactory.CreateClient("WebAPINoToken").PostAsync(DataConfig.ApiSetting.User.Register, mfdc);
             var json = await response.Content.ReadAsStringAsync();
             var result = json.ToObject<Result>();
             if (result == null || result.Code != 0)
@@ -45,7 +50,7 @@ public class UserApiRepository : IUserApiRepository
                 Password = password
             };
             var sc = new StringContent(data.ToJson(), System.Text.Encoding.UTF8, "application/json");
-            var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Login, sc);
+            var response = await _httpClientFactory.CreateClient("WebAPINoToken").PostAsync(DataConfig.ApiSetting.User.Login, sc);
             var json = await response.Content.ReadAsStringAsync();
 
             var result = json.ToObject<Result<UserResponse>>();
@@ -74,7 +79,7 @@ public class UserApiRepository : IUserApiRepository
     {
         try
         {
-            var response = await DataConfig.HttpClientWithNoToken.PostAsync(DataConfig.ApiSetting.User.Logout, null);
+            var response = await _httpClientFactory.CreateClient("WebAPINoToken").PostAsync(DataConfig.ApiSetting.User.Logout, null);
             await response.Content.ReadAsStringAsync();
         }
         catch (Exception ex)

@@ -5,11 +5,7 @@ using ListenTogether.Storage;
 
 namespace ListenTogether.Data;
 public class ApiHttpMessageHandler : DelegatingHandler
-{
-    public ApiHttpMessageHandler()
-    {
-        InnerHandler = new HttpClientHandler();
-    }
+{ 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         request.Headers.Add("Authorization", $"Bearer {UserInfoStorage.GetToken()}");

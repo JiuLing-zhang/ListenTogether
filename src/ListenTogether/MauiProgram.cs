@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Maui;
+using ListenTogether.Data;
 using ListenTogether.Handlers.GaussianImage;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
 using NativeMediaMauiLib;
@@ -10,6 +12,12 @@ namespace ListenTogether
     {
         public static MauiApp CreateMauiApp()
         {
+
+            using var stream = FileSystem.OpenAppPackageFileAsync("NetConfig.json").Result;
+            using var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+            var netConfig = json.ToObject<NetConfig>();
+
             var builder = MauiApp.CreateBuilder();
 
             builder
@@ -54,6 +62,17 @@ namespace ListenTogether
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddHttpClient("WebAPI", httpClient =>
+            {
+                httpClient.BaseAddress = new Uri(netConfig.ApiDomain);
+                httpClient.Timeout = TimeSpan.FromSeconds(15);
+            }).AddHttpMessageHandler(() => { return new ApiHttpMessageHandler(); });
+            builder.Services.AddHttpClient("WebAPINoToken", httpClient =>
+            {
+                httpClient.BaseAddress = new Uri(netConfig.ApiDomain);
+                httpClient.Timeout = TimeSpan.FromSeconds(15);
+            });
             return builder.Build();
         }
     }
