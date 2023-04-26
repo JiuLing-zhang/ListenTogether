@@ -11,8 +11,8 @@ public class DataConfig
         DatabaseProvide.SetConnection(path);
     }
 
-    public static void SetWebApi(string apiBaseUrl, string deviceId)
+    public static void SetWebApi(string deviceId)
     {
-        ApiSetting = new ApiSettings(apiBaseUrl, deviceId);
+        ApiSetting = new ApiSettings(deviceId);
     }
 }

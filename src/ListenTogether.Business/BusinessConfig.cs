@@ -13,8 +13,8 @@ public class BusinessConfig
         }
         DataConfig.SetDataBaseConnection(path);
     }
-    public static void SetWebApi(string apiBaseUrl, string deviceId)
+    public static void SetWebApi(string deviceId)
     {
-        DataConfig.SetWebApi(apiBaseUrl, deviceId);
+        DataConfig.SetWebApi(deviceId);
     }
 }

@@ -43,7 +43,7 @@ public partial class App : Application
 
         GlobalConfig.UpdateDomain = netConfig?.UpdateDomain ?? "";
         GlobalConfig.ApiDomain = netConfig?.ApiDomain ?? "";
-        BusinessConfig.SetWebApi(GlobalConfig.ApiDomain, deviceId);
+        BusinessConfig.SetWebApi(deviceId);
 
         var task = Task.Run(configService.ReadAllSettingsAsync);
         GlobalConfig.MyUserSetting = task.Result;
