@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 using ListenTogether.Data;
 using ListenTogether.Handlers.GaussianImage;
+using ListenTogether.Storages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
@@ -63,11 +64,13 @@ namespace ListenTogether
             builder.Logging.AddDebug();
 #endif
 
+            builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();
+            builder.Services.AddSingleton<ApiHttpMessageHandler>();
             builder.Services.AddHttpClient("WebAPI", httpClient =>
             {
                 httpClient.BaseAddress = new Uri(netConfig.ApiDomain);
                 httpClient.Timeout = TimeSpan.FromSeconds(15);
-            }).AddHttpMessageHandler(() => { return new ApiHttpMessageHandler(); });
+            }).AddHttpMessageHandler<ApiHttpMessageHandler>();
             builder.Services.AddHttpClient("WebAPINoToken", httpClient =>
             {
                 httpClient.BaseAddress = new Uri(netConfig.ApiDomain);

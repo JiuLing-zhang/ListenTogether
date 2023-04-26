@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Data;
 using ListenTogether.Model.Enums;
-using ListenTogether.Storage;
 
 namespace ListenTogether.ViewModels;
 
@@ -10,12 +10,13 @@ public partial class SettingPageViewModel : ViewModelBase
     private readonly IEnvironmentConfigService _configService;
     private readonly IUserService _userService;
     private readonly IMusicNetworkService _musicNetworkService;
-
-    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, IMusicNetworkService musicNetworkService)
+    private readonly ILoginDataStorage _loginDataStorage;
+    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, IMusicNetworkService musicNetworkService, ILoginDataStorage loginDataStorage)
     {
         _configService = configService;
         _userService = userService;
         _musicNetworkService = musicNetworkService;
+        _loginDataStorage = loginDataStorage;
     }
     public async Task InitializeAsync()
     {
@@ -242,15 +243,15 @@ public partial class SettingPageViewModel : ViewModelBase
 
     private UserInfoViewModel? GetUserInfo()
     {
-        if (UserInfoStorage.GetUsername().IsEmpty())
+        if (_loginDataStorage.GetUsername().IsEmpty())
         {
             return null;
         }
         return new UserInfoViewModel()
         {
-            Username = UserInfoStorage.GetUsername(),
-            Nickname = UserInfoStorage.GetNickname(),
-            Avatar = $"{GlobalConfig.ApiDomain}{UserInfoStorage.GetAvatar()}"
+            Username = _loginDataStorage.GetUsername(),
+            Nickname = _loginDataStorage.GetNickname(),
+            Avatar = $"{GlobalConfig.ApiDomain}{_loginDataStorage.GetAvatar()}"
         };
     }
 
@@ -318,7 +319,7 @@ public partial class SettingPageViewModel : ViewModelBase
             //服务端退出失败时不处理，直接本地清除登录信息
             await _userService.LogoutAsync();
 
-            UserInfoStorage.Clear();
+            _loginDataStorage.Clear();
             UserInfo = null;
         }
         catch (Exception ex)

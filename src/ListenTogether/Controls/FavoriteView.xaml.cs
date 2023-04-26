@@ -1,11 +1,10 @@
 using CommunityToolkit.Maui.Views;
-using ListenTogether.Storage;
+using ListenTogether.Data;
 
 namespace ListenTogether.Controls;
 
 public partial class FavoriteView : ContentView
 {
-    private bool _isLogin => UserInfoStorage.GetUsername().IsNotEmpty();
     public static readonly BindableProperty MusicProperty =
         BindableProperty.Create(
             nameof(Music),
@@ -21,7 +20,7 @@ public partial class FavoriteView : ContentView
     private IMusicNetworkService? _musicNetworkService;
     private IPlaylistService? _playlistService;
     private IMusicService? _musicService;
-
+    private ILoginDataStorage? _loginDataStorage;
     public FavoriteView()
     {
         InitializeComponent();
@@ -47,14 +46,26 @@ public partial class FavoriteView : ContentView
         {
             _musicService = this.Handler.MauiContext.Services.GetRequiredService<IMusicService>();
         }
-        ImgFavorite.IsVisible = _isLogin;
+        if (_loginDataStorage == null)
+        {
+            _loginDataStorage = this.Handler.MauiContext.Services.GetRequiredService<ILoginDataStorage>();
+        }
+        ImgFavorite.IsVisible = IsLogin();
+    }
+    private bool IsLogin()
+    {
+        if (_loginDataStorage == null)
+        {
+            return false;
+        }
+        return _loginDataStorage.GetUsername().IsNotEmpty();
     }
     private async void Favorite_Tapped(object sender, TappedEventArgs e)
     {
-        if (!_isLogin)
+        if (!IsLogin())
         {
             await ToastService.Show("用户未登录");
-            ImgFavorite.IsVisible = _isLogin;
+            ImgFavorite.IsVisible = IsLogin();
             return;
         }
 

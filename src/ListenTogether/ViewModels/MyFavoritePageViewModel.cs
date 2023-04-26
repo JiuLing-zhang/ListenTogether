@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ListenTogether.Storage;
+using ListenTogether.Data;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -9,22 +9,23 @@ public partial class MyFavoritePageViewModel : ViewModelBase
     private readonly MusicResultService _musicResultService;
     private readonly IPlaylistService _playlistService;
     private readonly IMyFavoriteService _myFavoriteService;
-
+    private readonly ILoginDataStorage _loginDataStorage;
     public string Title => "我的歌单";
-    public MyFavoritePageViewModel(IPlaylistService playlistService, MusicResultService musicResultService, IMyFavoriteService myFavoriteService)
+    public MyFavoritePageViewModel(IPlaylistService playlistService, MusicResultService musicResultService, IMyFavoriteService myFavoriteService, ILoginDataStorage loginDataStorage)
     {
         FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
 
         _musicResultService = musicResultService;
         _playlistService = playlistService;
         _myFavoriteService = myFavoriteService;
+        _loginDataStorage = loginDataStorage;
     }
 
     public async Task InitializeAsync()
     {
         try
         {
-            IsLogin = UserInfoStorage.GetUsername().IsNotEmpty();
+            IsLogin = _loginDataStorage.GetUsername().IsNotEmpty();
             if (!IsLogin)
             {
                 return;

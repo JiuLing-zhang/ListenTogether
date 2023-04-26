@@ -1,51 +1,53 @@
-﻿namespace ListenTogether.Storage;
-public class UserInfoStorage
+﻿using ListenTogether.Data;
+
+namespace ListenTogether.Storages;
+public class LoginDataStorage : ILoginDataStorage
 {
-    public static string GetUsername()
+    public string GetUsername()
     {
         return Preferences.Get("Username", "");
     }
-    public static void SetUsername(string value)
+    public void SetUsername(string value)
     {
         Preferences.Set("Username", value);
     }
 
-    public static string GetNickname()
+    public string GetNickname()
     {
         return Preferences.Get("Nickname", "");
     }
-    public static void SetNickname(string value)
+    public void SetNickname(string value)
     {
         Preferences.Set("Nickname", value);
     }
 
-    public static string GetAvatar()
+    public string GetAvatar()
     {
         return Preferences.Get("Avatar", "");
     }
-    public static void SetAvatar(string value)
+    public void SetAvatar(string value)
     {
         Preferences.Set("Avatar", value);
     }
 
-    public static string GetToken()
+    public string GetToken()
     {
         return Preferences.Get("Token", "");
     }
-    public static void SetToken(string value)
+    public void SetToken(string value)
     {
         Preferences.Set("Token", value);
     }
-    public static string GetRefreshToken()
+    public string GetRefreshToken()
     {
         return Preferences.Get("RefreshToken", "");
     }
-    public static void SetRefreshToken(string value)
+    public void SetRefreshToken(string value)
     {
         Preferences.Set("RefreshToken", value);
     }
 
-    public static void Clear()
+    public void Clear()
     {
         SetUsername("");
         SetNickname("");

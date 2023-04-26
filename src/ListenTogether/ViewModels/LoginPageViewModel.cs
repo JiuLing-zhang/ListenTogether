@@ -1,15 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ListenTogether.Storage;
+using ListenTogether.Data;
 
 namespace ListenTogether.ViewModels;
 
 public partial class LoginPageViewModel : ViewModelBase
 {
     private readonly IUserService _userService;
-    public LoginPageViewModel(IUserService userService)
+    private readonly ILoginDataStorage _loginDataStorage;
+    public LoginPageViewModel(IUserService userService, ILoginDataStorage loginDataStorage)
     {
         _userService = userService;
+        _loginDataStorage = loginDataStorage;
     }
     public Task InitializeAsync()
     {
@@ -43,11 +45,11 @@ public partial class LoginPageViewModel : ViewModelBase
                 return;
             }
 
-            UserInfoStorage.SetUsername(user.Username);
-            UserInfoStorage.SetNickname(user.Nickname);
-            UserInfoStorage.SetAvatar(user.Avatar);
-            UserInfoStorage.SetToken(user.Token);
-            UserInfoStorage.SetRefreshToken(user.RefreshToken);
+            _loginDataStorage.SetUsername(user.Username);
+            _loginDataStorage.SetNickname(user.Nickname);
+            _loginDataStorage.SetAvatar(user.Avatar);
+            _loginDataStorage.SetToken(user.Token);
+            _loginDataStorage.SetRefreshToken(user.RefreshToken);
 
             Username = "";
             Password = "";

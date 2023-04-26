@@ -1,27 +1,30 @@
-﻿using ListenTogether.Model;
-using ListenTogether.Model.Api;
+﻿using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Response;
-using ListenTogether.Storage;
 
 namespace ListenTogether.Data;
 public class ApiHttpMessageHandler : DelegatingHandler
-{ 
+{
+    private readonly ILoginDataStorage _loginDataStorage;
+    public ApiHttpMessageHandler(ILoginDataStorage loginDataStorage)
+    {
+        _loginDataStorage = loginDataStorage;
+    }
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        request.Headers.Add("Authorization", $"Bearer {UserInfoStorage.GetToken()}");
+        request.Headers.Add("Authorization", $"Bearer {_loginDataStorage.GetToken()}");
         var response = await base.SendAsync(request, cancellationToken);
         if (response.StatusCode != System.Net.HttpStatusCode.Unauthorized)
         {
             return response;
         }
 
-        if (UserInfoStorage.GetRefreshToken().IsEmpty())
+        if (_loginDataStorage.GetRefreshToken().IsEmpty())
         {
-            UserInfoStorage.Clear();
+            _loginDataStorage.Clear();
             throw new Exception("UserToken或RefreshToken不存在。");
         }
 
-        string content = (new { RefreshToken = UserInfoStorage.GetRefreshToken() }).ToJson();
+        string content = (new { RefreshToken = _loginDataStorage.GetRefreshToken() }).ToJson();
         var sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
         var refreshTokenRequest = new HttpRequestMessage(HttpMethod.Post, DataConfig.ApiSetting.User.RefreshToken)
         {
@@ -33,12 +36,12 @@ public class ApiHttpMessageHandler : DelegatingHandler
         var result = json.ToObject<Result<UserResponse>>();
         if (result == null || result.Code != 0 || result.Data == null)
         {
-            UserInfoStorage.Clear();
+            _loginDataStorage.Clear();
             throw new Exception("更新认证信息失败。");
         }
 
-        UserInfoStorage.SetToken(result.Data.Token);
-        UserInfoStorage.SetRefreshToken(result.Data.RefreshToken);
+        _loginDataStorage.SetToken(result.Data.Token);
+        _loginDataStorage.SetRefreshToken(result.Data.RefreshToken);
 
         request.Headers.Remove("Authorization");
         request.Headers.Add("Authorization", $"Bearer {result.Data.Token}");
