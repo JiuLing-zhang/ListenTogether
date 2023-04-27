@@ -63,7 +63,7 @@ namespace ListenTogether
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
+            builder.Services.AddSingleton<ISearchHistoryStorage, SearchHistoryStorage>();
             builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();
             builder.Services.AddSingleton<ApiHttpMessageHandler>();
             builder.Services.AddHttpClient("WebAPI", httpClient =>

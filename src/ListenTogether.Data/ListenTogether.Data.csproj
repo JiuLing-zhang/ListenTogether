@@ -16,7 +16,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
 		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
-		<ProjectReference Include="..\ListenTogether.Storage\ListenTogether.Storage.csproj" />
 	</ItemGroup>
 
 </Project>

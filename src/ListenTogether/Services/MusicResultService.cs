@@ -1,6 +1,4 @@
-﻿using ListenTogether.Storage;
-
-namespace ListenTogether.Services;
+﻿namespace ListenTogether.Services;
 public class MusicResultService
 {
     private readonly MusicPlayerService _musicPlayerService;

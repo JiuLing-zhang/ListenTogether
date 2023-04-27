@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ListenTogether.Storage;
+using ListenTogether.Data;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -9,13 +9,15 @@ public partial class SearchPageViewModel : ViewModelBase
 {
     private readonly IMusicNetworkService _musicNetworkService = null!;
     private readonly SearchResultPage _searchResultPage;
-    public SearchPageViewModel(IMusicNetworkService musicNetworkService, SearchResultPage searchResultPage)
+    private readonly ISearchHistoryStorage _searchHistoryStorage;
+    public SearchPageViewModel(IMusicNetworkService musicNetworkService, SearchResultPage searchResultPage, ISearchHistoryStorage searchHistoryStorage)
     {
         SearchHistories = new ObservableCollection<string>();
         HotWords = new ObservableCollection<string>();
         SearchSuggest = new ObservableCollection<string>();
         _musicNetworkService = musicNetworkService;
         _searchResultPage = searchResultPage;
+        _searchHistoryStorage = searchHistoryStorage;
     }
 
     /// <summary>
@@ -67,7 +69,7 @@ public partial class SearchPageViewModel : ViewModelBase
     private Task GetGetHistoriesAsync()
     {
         SearchHistories.Clear();
-        var searchHistories = SearchHistoryStorage.GetHistories();
+        var searchHistories = _searchHistoryStorage.GetHistories();
         foreach (var searchHistory in searchHistories)
         {
             SearchHistories.Add(searchHistory);
@@ -135,7 +137,7 @@ public partial class SearchPageViewModel : ViewModelBase
         {
             return;
         }
-        SearchHistoryStorage.Clear();
+        _searchHistoryStorage.Clear();
         SearchHistories.Clear();
     }
 
@@ -158,7 +160,7 @@ public partial class SearchPageViewModel : ViewModelBase
     }
     private async Task DoSearchAsync(string keyword)
     {
-        SearchHistoryStorage.Add(keyword);
+        _searchHistoryStorage.Add(keyword);
         _searchResultPage.SetKeyword(keyword);
         await App.Current.MainPage.Navigation.PushAsync(_searchResultPage, false);
     }

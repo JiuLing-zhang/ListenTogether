@@ -77,7 +77,6 @@
 		<ProjectReference Include="..\ListenTogether.Business\ListenTogether.Business.csproj" />
 		<ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
 		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
-		<ProjectReference Include="..\ListenTogether.Storage\ListenTogether.Storage.csproj" />
 		<ProjectReference Include="..\NativeMediaMauiLib\NativeMediaMauiLib.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">

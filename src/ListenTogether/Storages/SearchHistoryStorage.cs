@@ -1,13 +1,14 @@
-﻿using System.Text.Json;
+﻿using ListenTogether.Data;
+using System.Text.Json;
 
-namespace ListenTogether.Storage;
-public class SearchHistoryStorage
+namespace ListenTogether.Storages;
+public class SearchHistoryStorage : ISearchHistoryStorage
 {
     /// <summary>
     /// 历史记录列表的最大数量
     /// </summary>
-    public static int ListMaxCount { get; set; } = 12;
-    public static void Add(string key)
+    public int ListMaxCount { get; set; } = 12;
+    public void Add(string key)
     {
         key = key.ToLower();
         if (string.IsNullOrEmpty(key))
@@ -30,7 +31,7 @@ public class SearchHistoryStorage
         SetHistories(JsonSerializer.Serialize(histories));
     }
 
-    public static IList<string> GetHistories()
+    public List<string> GetHistories()
     {
         string json = Preferences.Get("Histories", "");
         if (string.IsNullOrEmpty(json))
@@ -39,14 +40,26 @@ public class SearchHistoryStorage
         }
         return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
     }
+    public void Remove(string key)
+    {
+        var histories = GetHistories();
+        if (!histories.Contains(key))
+        {
+            return;
+        }
+        histories.Remove(key);
+        SetHistories(JsonSerializer.Serialize(histories));
+    }
 
-    public static void Clear()
+    public void Clear()
     {
         SetHistories(JsonSerializer.Serialize(new List<string>()));
     }
 
-    private static void SetHistories(string histories)
+    private void SetHistories(string histories)
     {
         Preferences.Set("Histories", histories);
     }
+
+
 }
