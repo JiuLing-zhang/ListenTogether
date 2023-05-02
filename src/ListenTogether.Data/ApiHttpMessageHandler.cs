@@ -5,9 +5,11 @@ namespace ListenTogether.Data;
 public class ApiHttpMessageHandler : DelegatingHandler
 {
     private readonly ILoginDataStorage _loginDataStorage;
-    public ApiHttpMessageHandler(ILoginDataStorage loginDataStorage)
+    private readonly IHttpClientFactory _httpClientFactory;
+    public ApiHttpMessageHandler(ILoginDataStorage loginDataStorage, IHttpClientFactory httpClientFactory)
     {
         _loginDataStorage = loginDataStorage;
+        _httpClientFactory = httpClientFactory;
     }
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
@@ -26,12 +28,7 @@ public class ApiHttpMessageHandler : DelegatingHandler
 
         string content = (new { RefreshToken = _loginDataStorage.GetRefreshToken() }).ToJson();
         var sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var refreshTokenRequest = new HttpRequestMessage(HttpMethod.Post, DataConfig.ApiSetting.User.RefreshToken)
-        {
-            Content = sc
-        };
-
-        using var refreshTokenResponse = await base.SendAsync(refreshTokenRequest, cancellationToken);
+        using var refreshTokenResponse = await _httpClientFactory.CreateClient("WebAPINoToken").PostAsync(DataConfig.ApiSetting.User.RefreshToken, sc);
         var json = await refreshTokenResponse.Content.ReadAsStringAsync(cancellationToken);
         var result = json.ToObject<Result<UserResponse>>();
         if (result == null || result.Code != 0 || result.Data == null)
