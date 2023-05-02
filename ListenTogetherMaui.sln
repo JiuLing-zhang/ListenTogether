@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether", "src\ListenTogether\ListenTogether.csproj", "{DB708718-9812-4F7E-B5BB-90C6DD100225}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Api", "src\ListenTogether.Api\ListenTogether.Api.csproj", "{FA85E821-CA49-49F1-8345-DC7B61FF32EB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Business", "src\ListenTogether.Business\ListenTogether.Business.csproj", "{A3161D73-0F5B-49C0-A32F-7C9BCF985481}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Data", "src\ListenTogether.Data\ListenTogether.Data.csproj", "{D346F4A8-6584-4D91-A431-015BC7E17955}"
@@ -31,10 +29,6 @@ Global
 		{DB708718-9812-4F7E-B5BB-90C6DD100225}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB708718-9812-4F7E-B5BB-90C6DD100225}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DB708718-9812-4F7E-B5BB-90C6DD100225}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{FA85E821-CA49-49F1-8345-DC7B61FF32EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA85E821-CA49-49F1-8345-DC7B61FF32EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA85E821-CA49-49F1-8345-DC7B61FF32EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA85E821-CA49-49F1-8345-DC7B61FF32EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A3161D73-0F5B-49C0-A32F-7C9BCF985481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A3161D73-0F5B-49C0-A32F-7C9BCF985481}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3161D73-0F5B-49C0-A32F-7C9BCF985481}.Release|Any CPU.ActiveCfg = Release|Any CPU
