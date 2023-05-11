@@ -353,3 +353,4 @@ keystore/
 deploy/
 docs/resources/images/buttons/
 /src/ListenTogether/Resources/Raw/NetConfig.json
+/src/ListenTogetherMauiBlazor/Resources/Raw/NetConfig.json
