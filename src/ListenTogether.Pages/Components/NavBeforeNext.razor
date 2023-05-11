@@ -1,0 +1,18 @@
+﻿@inject IJSRuntime JSRuntime;
+
+<MudIconButton Icon="@Icons.Material.Filled.NavigateBefore"
+               Size="Size.Small"
+               OnClick="@(()=>NavigateBeforeAsync())"></MudIconButton>
+<MudIconButton Icon="@Icons.Material.Filled.NavigateNext"
+               Size="Size.Small"
+               OnClick="@(()=>NavigateNextAsync())"></MudIconButton>
+@code {
+    private async void NavigateBeforeAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("history.back");
+    }
+    private async void NavigateNextAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("history.forward");
+    }
+}

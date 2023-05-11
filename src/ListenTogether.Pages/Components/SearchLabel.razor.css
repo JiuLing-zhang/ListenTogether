@@ -1,0 +1,7 @@
+.main {
+    height: 30px;
+    padding: 0 15px 0 15px;
+    border-radius: 20px;
+    border-block-color: white;
+    cursor: text;
+}

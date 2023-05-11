@@ -1,0 +1,14 @@
+﻿<MudDialog>
+    <DialogContent>
+        @Content
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="Cancel">确定</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+
+    [Parameter] public string Content { get; set; }
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    void Cancel() => MudDialog.Cancel();
+}

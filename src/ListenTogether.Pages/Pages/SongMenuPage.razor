@@ -1,0 +1,76 @@
+﻿@page "/song-menu/{platform:int}/{songMenuType:int}/{songMenuInfo}"
+@inherits MyComponentBase
+@inject IMusicNetworkService MusicNetworkService
+
+<MudContainer Class="d-flex">
+    <MudImage Src="@_songMenu.ImageUrl"
+              Elevation="25"
+              Width="120"
+              Class="rounded-lg" />
+    <MudText>@_songMenu.Name</MudText>
+    <MudButton Variant="Variant.Filled"
+               StartIcon="@Icons.Material.Filled.Save"
+               IconColor="Color.Primary"
+               Disabled="@(_musics==null || !_musics.Any())"
+               OnClick="PlayAllAsync">保存</MudButton>
+</MudContainer>
+
+<MusicResultView Musics="@_musics" />
+@code {
+
+    [Parameter]
+    public int Platform { get; set; }
+    [Parameter]
+    public int SongMenuType { get; set; }
+    [Parameter]
+    public string SongMenuInfo { get; set; } = null!;
+
+    private PlatformEnum _platform => (PlatformEnum)Platform;
+    private SongMenuEnum _songMenuType => (SongMenuEnum)SongMenuType;
+    private SongMenu _songMenu = null!;
+    private List<MusicResultShow>? _musics;
+    protected override async Task OnInitializedAsync()
+    {
+        var json = JiuLing.CommonLibs.Security.Base64Utils.Base64ToString(SongMenuInfo);
+        _songMenu = json.ToObject<SongMenu>() ?? throw new ArgumentException();
+
+        switch (_songMenuType)
+        {
+            case SongMenuEnum.Top:
+                await GetTopMusicsAsync();
+                break;
+            case SongMenuEnum.Tag:
+                await GetTagMusicsAsync();
+                break;
+            default:
+                throw new ArgumentException();
+        }
+        //IMusicSearchFilter vipMusicFilter = new VipMusicFilter();
+        //_musics = vipMusicFilter.Filter(_musics);
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task GetTopMusicsAsync()
+    {
+        _musics = await MusicNetworkService.GetTopMusicsAsync(_platform, _songMenu.Id);
+    }
+    private async Task GetTagMusicsAsync()
+    {
+        _musics = await MusicNetworkService.GetTagMusicsAsync(_platform, _songMenu.Id);
+    }
+
+    private async Task PlayAllAsync()
+    {
+        //TODO 实现功能
+        //if (GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlaySongMenu)
+        //{
+        //    if (!await _playlistService.RemoveAllAsync())
+        //    {
+        //        await ToastService.Show("播放列表清空失败");
+        //        return;
+        //    }
+        //}
+        //await _musicResultService.PlayAllAsync(MusicResultCollection[0].ToLocalMusics());
+    }
+}

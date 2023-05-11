@@ -1,0 +1,307 @@
+﻿@inherits MyComponentBase
+
+@inject MusicPlayerService _playerService
+@inject IPlaylistService _playlistService
+@inject IEnvironmentConfigService _configService
+@inject IDialogService DialogService
+
+<div class="d-flex align-center justify-center">
+    <div class="d-flex align-center play-control">
+        <MudIconButton Size="Size.Medium" Icon="fas fa-chevron-circle-left"
+                       OnClick="PreviousAsync" />
+        <MudToggleIconButton Size="Size.Large"
+                             Toggled="@_isPlaying"
+                             ToggledChanged="OnToggledChangedAsync"
+                             Icon="@Icons.Material.Filled.PlayCircleOutline"
+                             ToggledSize="Size.Large"
+                             ToggledIcon="@Icons.Material.Filled.PauseCircleOutline" />
+        <MudIconButton Size="Size.Medium" Icon="fas fa-chevron-circle-right"
+                       OnClick="NextAsync" />
+    </div>
+    <div class="d-flex align-center ml-6 mr-6 music-info">
+        @if (OnOpenPlayingPage.HasDelegate)
+        {
+            <div @onclick="OpenPlayingPage" class="music-image">
+                <MudImage Src="@_musicImg"
+                      Height="45"
+                      Width="45"
+                      Elevation="1"
+                      Class="rounded-lg" />
+                <div class="mask">
+                    <MudIcon Size="Size.Large" Icon="@Icons.Material.Filled.KeyboardArrowUp"></MudIcon>
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <MudImage Src="@_musicImg"
+                  Height="45"
+                  Width="45"
+                  Elevation="5"
+                  Class="rounded-lg" />
+        }
+        <div class="ml-2 d-flex flex-column justify-space-between">
+            <div class="d-flex justify-space-between">
+                <div class="music-info">@_musicInfo</div>
+                <div class="time">@_position / @_duration</div>
+            </div>
+            <MudSlider Min="0"
+                       Max="100"
+                       Size="Size.Small"
+                       Value="@_playProgress"
+                       Style="width:400px"
+                       T="double"
+                       @onmousedown="ProgressMouseDown"
+                       @onmouseup="ProgressMouseUp"
+                       ValueChanged="ChangeProgress"
+                       Variant="Variant.Filled" />
+
+        </div>
+    </div>
+    <div class="d-flex align-center other">
+        <MudIconButton Size="Size.Small" Icon="@_repeatIcon" OnClick="ChangeRepeatAsync" />
+
+        @if (IsLogin)
+        {
+            <MudIconButton Size="Size.Small" Icon="fas fa-folder-plus"
+                       OnClick="@(()=>AddToMyFavoriteAsync())" />
+        }
+        <MudIconButton Size="Size.Small" Icon="@_soundIcon" OnClick="ChangeSoundAsync" />
+        <MudSlider Value="@_volume"
+                   Style="width:100px"
+                   ValueLabel="true"
+                   Size="Size.Small"
+                   Variant="Variant.Filled"
+                   T="double"
+                   ValueChanged="ChangeVolumeAsync" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnOpenPlayingPage { get; set; }
+
+    private string _repeatIcon;
+    private string _soundIcon;
+    private bool _isPlaying = false;
+    private string _musicImg;
+    private string _musicInfo;
+    private string _position;
+    private string _duration;
+    private bool _isPlayProgressDragging;
+    private double _playProgress;
+    private double _volume;
+    private MusicResultShow _currentMusic;
+
+    protected override Task OnInitializedAsync()
+    {
+        _playerService.IsPlayingChanged += async (_, __) => await PlayingChangedAsync();
+        _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();
+        _playerService.PositionChanged += async (_, __) => await PositionChangedAsync();
+
+        UpdateCurrentMusic();
+        UpdateRepeatModel();
+
+        UpdateSoundOnOff().Wait();
+        UpdateVolume().Wait();
+        return base.OnInitializedAsync();
+    }
+
+    private async Task OpenPlayingPage()
+    {
+        await OnOpenPlayingPage.InvokeAsync();
+    }
+
+    private async Task PlayingChangedAsync()
+    {
+        _isPlaying = _playerService.IsPlaying;
+        await InvokeAsync(StateHasChanged);
+    }
+    private async Task NewMusicAddedAsync()
+    {
+        var metadata = _playerService.Metadata;
+        var playlist = await _playlistService.GetOneAsync(metadata.Id);
+        if (playlist != null)
+        {
+            _currentMusic = new MusicResultShow()
+                {
+                    Id = playlist.Id,
+                    IdOnPlatform = playlist.IdOnPlatform,
+                    Platform = playlist.Platform,
+                    Name = playlist.Name,
+                    Album = playlist.Album,
+                    Artist = playlist.Artist,
+                    ExtendDataJson = playlist.ExtendDataJson,
+                    ImageUrl = playlist.ImageUrl
+                };
+        }
+        _musicImg = playlist.ImageUrl;
+        _musicInfo = $"{metadata.Name} - {metadata.Artist}";
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task PositionChangedAsync()
+    {
+        var position = _playerService.CurrentPosition;
+        _position = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
+        _duration = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
+
+        if (!_isPlayProgressDragging)
+        {
+            _playProgress = position.PlayProgress * 100;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task OnToggledChangedAsync(bool toggled)
+    {
+        await _playerService.PlayAsync(_playerService.Metadata.Id);
+    }
+
+    private async Task PreviousAsync()
+    {
+        await _playerService.Previous();
+    }
+
+    private async Task NextAsync()
+    {
+        await _playerService.Next();
+    }
+
+
+    private async Task UpdateCurrentMusic()
+    {
+        //TODO read to db
+    }
+
+    private void UpdateRepeatModel()
+    {
+        switch (Settings.Environment.Player.PlayMode)
+        {
+            case PlayModeEnum.RepeatOne:
+                _repeatIcon = Icons.Material.Filled.RepeatOne;
+                break;
+
+            case PlayModeEnum.RepeatList:
+                _repeatIcon = Icons.Material.Filled.Repeat;
+                break;
+
+            case PlayModeEnum.Shuffle:
+                _repeatIcon = Icons.Material.Filled.Shuffle;
+                break;
+            default:
+                _repeatIcon = Icons.Material.Filled.Repeat;
+                break;
+        }
+    }
+
+    private async Task ChangeRepeatAsync()
+    {
+        SetNextRepeatMode();
+        UpdateRepeatModel();
+        await WritePlayerSettingAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void SetNextRepeatMode()
+    {
+        if (Settings.Environment.Player.PlayMode == PlayModeEnum.RepeatOne)
+        {
+            Settings.Environment.Player.PlayMode = PlayModeEnum.RepeatList;
+            return;
+        }
+
+        if (Settings.Environment.Player.PlayMode == PlayModeEnum.RepeatList)
+        {
+            Settings.Environment.Player.PlayMode = PlayModeEnum.Shuffle;
+            return;
+        }
+
+        if (Settings.Environment.Player.PlayMode == PlayModeEnum.Shuffle)
+        {
+            Settings.Environment.Player.PlayMode = PlayModeEnum.RepeatOne;
+            return;
+        }
+    }
+    private async Task WritePlayerSettingAsync()
+    {
+        await _configService.WritePlayerSettingAsync(Settings.Environment.Player);
+    }
+
+    private async Task UpdateSoundOnOff()
+    {
+        if (Settings.Environment.Player.IsSoundOff)
+        {
+            _soundIcon = "fas fa-volume-mute";
+        }
+        else
+        {
+            _soundIcon = "fas fa-volume-down";
+        }
+        await _playerService.SetMuted(Settings.Environment.Player.IsSoundOff);
+    }
+    private async Task UpdateVolume()
+    {
+        _volume = Settings.Environment.Player.Volume;
+        await _playerService.SetVolume((int)Settings.Environment.Player.Volume);
+    }
+
+    private async Task ChangeSoundAsync()
+    {
+        Settings.Environment.Player.IsSoundOff = !Settings.Environment.Player.IsSoundOff;
+        await WritePlayerSettingAsync();
+        await UpdateSoundOnOff();
+    }
+    private async Task ChangeVolumeAsync(double value)
+    {
+        _volume = value;
+        int intVolume = (int)_volume;
+        await _playerService.SetVolume(intVolume);
+        Settings.Environment.Player.Volume = intVolume;
+        await WritePlayerSettingAsync();
+    }
+
+    private void ProgressMouseDown()
+    {
+        _isPlayProgressDragging = true;
+    }
+
+    private void ProgressMouseUp()
+    {
+        _isPlayProgressDragging = false;
+    }
+
+    private async Task ChangeProgress(double value)
+    {
+        _playProgress = value;
+        if (!_isPlayProgressDragging)
+        {
+            return;
+        }
+        if (_playerService.Metadata != null)
+        {
+            var positionMillisecond = _playerService.CurrentPosition.Duration.TotalMilliseconds * _playProgress / 100;
+            await _playerService.SetPlayPosition(positionMillisecond);
+        }
+    }
+
+    private async Task AddToMyFavoriteAsync()
+    {
+        var music = new LocalMusic()
+            {
+                Id = _currentMusic.Id,
+                IdOnPlatform = _currentMusic.IdOnPlatform,
+                Platform = _currentMusic.Platform,
+                Name = _currentMusic.Name,
+                Album = _currentMusic.Album,
+                Artist = _currentMusic.Artist,
+                ExtendDataJson = _currentMusic.ExtendDataJson,
+                ImageUrl = _currentMusic.ImageUrl
+            };
+
+        var parameters = new DialogParameters { ["Music"] = music };
+        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters);
+        await dialog.Result;
+    }
+}

@@ -1,0 +1,46 @@
+@media screen and (min-width: 960px) {
+    .navbar {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .navbar-item {
+        width: 100%;
+        height: 30px;
+        font-size: 17px;
+        margin: 1px 5px 1px 5px;
+    }
+
+    ::deep .navbar-link {
+        display: block;
+    }
+
+    ::deep .navbar-item a:active + * {
+        background-color: yellow;
+    }
+
+
+    ::deep .navbar-item:hover {
+        background-color: #C98FFF40;
+    }
+
+    ::deep a:hover {
+        color: inherit;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .navbar {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    ::deep .navbar-link {
+        display: flex;
+        flex-direction: column;
+    }
+
+        ::deep .navbar-link span {
+            margin: 0 auto;
+        }
+}

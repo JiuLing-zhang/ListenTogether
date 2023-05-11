@@ -1,0 +1,23 @@
+﻿@page "/discover"
+@inherits MyComponentBase
+
+<MudHidden Breakpoint="Breakpoint.SmAndUp">
+    <SearchBar />
+</MudHidden>
+<MudTabs Rounded="true"
+         MinimumTabWidth="150"
+         PanelClass="mt-3">
+    <MudTabPanel Text="@(PlatformEnum.MiGu.GetDescription())">
+        <Discover Platform="PlatformEnum.MiGu" />
+    </MudTabPanel>
+    <MudTabPanel Text="@(PlatformEnum.KuWo.GetDescription())">
+        <Discover Platform="PlatformEnum.KuWo" />
+    </MudTabPanel>
+    <MudTabPanel Text="@(PlatformEnum.NetEase.GetDescription())">
+        <Discover Platform="PlatformEnum.NetEase" />
+    </MudTabPanel>
+</MudTabs>
+
+@code {
+
+}

@@ -1,0 +1,171 @@
+﻿@inject MusicPlayerService _playerService
+@inject IPlaylistService _playlistService
+@inject IMusicNetworkService _musicNetworkService
+
+<div class="page d-flex flex-column">
+    <div class="flex-grow-1 d-flex flex-column music-content">
+        <div class="flex-grow-0 d-flex align-center justify-space-between tool-bar">
+            <MudIconButton Icon="@Icons.Material.Filled.KeyboardArrowDown"
+                           Size="Size.Medium"
+                           Style="color:#FFF"
+                           OnClick="@(()=>ClosePlayingPage())"></MudIconButton>
+
+            <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                <DesktopTitleBar ButtonStyle="color:#FFF" />
+            </MudHidden>
+        </div>
+
+        <div class="flex-grow-1 music-info">
+            <div class="music-image">
+                <MudImage Src="@(_currentMusic.ImageUrl)"
+                          Elevation="5"
+                          Style="width:100%;"
+                          Class="rounded-lg" />
+                <div class="align-self-center mt-2 copy">
+                    复制
+                </div>
+            </div>
+            <div class="music-detail d-flex flex-column">
+                <div class="flex-grow-0 title">
+                    @_currentMusic.Name
+                </div>
+                <div class="flex-grow-0 name">
+                    @_currentMusic.Artist - @_currentMusic.Album
+                </div>
+                <div class="flex-grow-1 lyric">
+                    <ul>
+                        @{
+                            var index = 1;
+                        }
+                        @foreach (var lyriy in _lyrics)
+                        {
+                            index++;
+                            var h = "";
+                            if (index == 6)
+                            {
+                                h = "highlight";
+                            }
+                            <li class="lyric-row @h">@lyriy</li>
+                        }
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="blurBgMask"></div>
+        @if (_currentMusic.ImageUrl.IsNotEmpty())
+        {
+            <div class="blur" style="background-image:url(@(_currentMusic.ImageUrl))"></div>
+        }
+    </div>
+
+    <div >
+        <PlayerBar />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnClosePlayingPage { get; set; }
+    private System.Timers.Timer _timer = new System.Timers.Timer(300);
+    private MusicResultShow _currentMusic = new MusicResultShow();
+    private List<string> _lyrics = new List<string>() { "test1", "test2", "test3" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitializedAsync();
+
+        //TODO 锁屏
+        //if (!Config.Desktop && GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn)
+        //{
+        //    DeviceDisplay.Current.KeepScreenOn = true;
+        //}
+
+        _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();
+        //_timer.Elapsed += _timerLyricsUpdate_Tick();
+        //_timer.Start();
+        await NewMusicAddedAsync();
+    }
+
+    private async Task NewMusicAddedAsync()
+    {
+        if (_playerService.Metadata == null)
+        {
+            return;
+        }
+        var playlist = await _playlistService.GetOneAsync(_playerService.Metadata.Id);
+        if (playlist == null)
+        {
+            return;
+        }
+
+        _currentMusic = new MusicResultShow()
+            {
+                Id = playlist.Id,
+                IdOnPlatform = playlist.IdOnPlatform,
+                Platform = playlist.Platform,
+                Name = playlist.Name,
+                Artist = playlist.Artist,
+                Album = playlist.Album,
+                ImageUrl = playlist.ImageUrl,
+                ExtendDataJson = playlist.ExtendDataJson,
+            };
+        await GetLyricDetailAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    /// 解析歌词
+    /// </summary>
+    private async Task GetLyricDetailAsync()
+    {
+        if (_lyrics.Count > 0)
+        {
+            _lyrics.Clear();
+        }
+        if (_currentMusic == null)
+        {
+            return;
+        }
+
+        string lyric = await GetLyric();
+        if (lyric.IsEmpty())
+        {
+            return;
+        }
+
+        string pattern = ".*";
+        var lyricRowList = JiuLing.CommonLibs.Text.RegexUtils.GetAll(lyric, pattern);
+        foreach (var lyricRow in lyricRowList)
+        {
+            if (lyricRow.IsEmpty())
+            {
+                continue;
+            }
+            pattern = @"\[(?<mm>\d*):(?<ss>\d*).(?<fff>\d*)\](?<lyric>.*)";
+            var (success, result) = JiuLing.CommonLibs.Text.RegexUtils.GetMultiGroupInFirstMatch(lyricRow, pattern);
+            if (success == false)
+            {
+                continue;
+            }
+
+            int totalMillisecond = Convert.ToInt32(result["mm"]) * 60 * 1000 + Convert.ToInt32(result["ss"]) * 1000 + Convert.ToInt32(result["fff"]);
+            var info = result["lyric"];
+            _lyrics.Add(info);
+        }
+    }
+
+    private async Task<string> GetLyric()
+    {
+        if (_currentMusic == null)
+        {
+            return "";
+        }
+        return await _musicNetworkService.GetLyricAsync(_currentMusic.Platform, _currentMusic.IdOnPlatform, _currentMusic.ExtendDataJson);
+    }
+    private async Task ClosePlayingPage()
+    {
+        await OnClosePlayingPage.InvokeAsync();
+    }
+}

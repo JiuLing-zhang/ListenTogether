@@ -1,0 +1,59 @@
+﻿@inject ISnackbar Snackbar
+@inject IMyFavoriteService MyFavoriteService
+
+<Loading IsLoading="_isLoading"></Loading>
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="_myFavoriteName" Label="请输入要添加的歌单名称" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">取消</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Add">添加</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private bool _isLoading = false;
+    private string _myFavoriteName = "";
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Add()
+    {
+        if (_myFavoriteName.IsEmpty())
+        {
+            Snackbar.Add("请输入歌单名称", Severity.Error);
+            return;
+        }
+
+        _isLoading = true;
+        if (await MyFavoriteService.NameExistAsync(_myFavoriteName))
+        {
+            _isLoading = false;
+            Snackbar.Add("歌单名称已存在", Severity.Error);
+            return;
+        }
+
+        var myFavorite = new MyFavorite()
+            {
+                Name = _myFavoriteName,
+                MusicCount = 0,
+                ImageUrl = ""
+            };
+        var newMyFavorite = await MyFavoriteService.AddOrUpdateAsync(myFavorite);
+        _isLoading = false;
+        if (newMyFavorite == null)
+        {
+            Snackbar.Add("歌单添加失败", Severity.Error);
+            return;
+        }
+
+        Snackbar.Add("歌单添加成功", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(newMyFavorite));
+    }
+}

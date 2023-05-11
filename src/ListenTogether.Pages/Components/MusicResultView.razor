@@ -1,0 +1,132 @@
+﻿@inherits MyComponentBase
+
+@inject IDialogService DialogService
+@inject MusicResultService MusicResultService
+@if (Musics == null)
+{
+    <MudSkeleton Class="mt-3" Height="30px" />
+    <MudSkeleton Class="mt-3" Height="30px" />
+    <MudSkeleton Class="mt-3" Height="30px" />
+    <MudSkeleton Class="mt-3" Height="30px" />
+    <MudSkeleton Class="mt-3" Height="30px" />
+    <MudSkeleton Class="mt-3" Height="30px" />
+}
+else
+{
+    var desktopIndex = 1;
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <MudTable Items="@Musics"
+              @ondblclick="@(()=>TableDoubleClick())"
+              Dense="true"
+              Hover="true"
+              Striped="true"
+              RowClass="cursor-default"
+              T="MusicResultShow"
+              OnRowClick="@RowClick">
+            <HeaderContent>
+                <MudTh></MudTh>
+                @if (IsLogin)
+                {
+                    <MudTh></MudTh>
+                }
+                <MudTh>类型</MudTh>
+                <MudTh>时长</MudTh>
+                <MudTh>名称</MudTh>
+                <MudTh>歌手</MudTh>
+                <MudTh>专辑</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd>
+                    @(desktopIndex++)
+                </MudTd>
+                @if (IsLogin)
+                {
+                    <MudTd>
+                        <MudIconButton Size="Size.Small"
+                               Icon="fas fa-folder-plus"
+                               OnClick="()=>AddToMyFavoriteAsync(context)" />
+
+                    </MudTd>
+                }
+                <MudTd>
+                    @context.Fee
+                </MudTd>
+                <MudTd>
+                    @context.Duration
+                </MudTd>
+                <MudTd>
+                    @context.Name
+                </MudTd>
+                <MudTd>
+                    @context.Artist
+                </MudTd>
+                <MudTd>
+                    @context.Album
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudHidden>
+
+    var phoneIndex = 1;
+    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+        @foreach (var row in Musics)
+        {
+            <MudContainer Class="d-flex justify-space-between"
+                  @onclick="()=>PlayMusicAsync(row)">
+                <MudText>@(phoneIndex++)</MudText>
+                    <MudContainer>
+                        <MudText>@row.Artist</MudText>
+                        <MudText>@row.Name - @row.Album</MudText>
+                    </MudContainer>
+                    @if (IsLogin)
+                {
+                    <MudIconButton Size="Size.Small"
+                       Icon="fas fa-folder-plus"
+                       OnClick="()=>AddToMyFavoriteAsync(row)" />
+                }
+
+            </MudContainer>
+        }
+    </MudHidden>
+}
+
+@code {
+
+    [Parameter]
+    public List<MusicResultShow>? Musics { get; set; }
+
+    private MusicResultShow _lastSelectMusic;
+    private async Task AddToMyFavoriteAsync(MusicResultShow musicResult)
+    {
+        var music = new LocalMusic()
+            {
+                Id = musicResult.Id,
+                IdOnPlatform = musicResult.IdOnPlatform,
+                Platform = musicResult.Platform,
+                Name = musicResult.Name,
+                Album = musicResult.Album,
+                Artist = musicResult.Artist,
+                ExtendDataJson = musicResult.ExtendDataJson,
+                ImageUrl = musicResult.ImageUrl
+            };
+
+        var parameters = new DialogParameters { ["Music"] = music };
+        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters);
+        await dialog.Result;
+    }
+
+
+    private void RowClick(TableRowClickEventArgs<MusicResultShow> value)
+    {
+        _lastSelectMusic = value.Item;
+    }
+    private async Task TableDoubleClick()
+    {
+        await PlayMusicAsync(_lastSelectMusic);
+    }
+    private async Task PlayMusicAsync(MusicResultShow musicResult)
+    {
+        await MusicResultService.PlayAsync(musicResult.ToLocalMusic());
+    }
+}

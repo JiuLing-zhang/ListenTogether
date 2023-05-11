@@ -1,0 +1,105 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject DesktopMoving DesktopMoving
+@inject IJSRuntime JSRuntime
+@inject IMusicNetworkService MusicNetworkService
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" />
+<MudDialogProvider NoHeader="true" />
+<MudSnackbarProvider />
+
+<div class="page">
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <div class="page-header d-flex">
+            <div class="logo d-flex align-center">
+                <MudImage Src="https://jiuling.cc/images/music.svg" Width="30" Height="30" />
+                <div class="title ml-2">一起听</div>
+            </div>
+            <NavBeforeNext />
+            <div class="flex-grow-1 ml-2 d-flex align-center">
+                @if (!NavigationManager.Uri.EndsWith("/search"))
+                {
+                    <div style="width:250px">
+                        <SearchLabel />
+                    </div>
+                }
+            </div>
+            <DesktopTitleBar />
+        </div>
+    </MudHidden>
+
+    <div class="page-nav">
+        <NavMenu />
+    </div>
+    <div class="page-main">
+        <div class="containerPage">
+            @Body
+        </div>
+    </div>
+    <div class="page-bottom">
+        <PlayerBar OnOpenPlayingPage="OpenPlayingPage" />
+    </div>
+</div>
+
+<div class="playing-page-drawer @_isOpenPlayingPage">
+    <ListenTogether.Pages.Pages.PlayingPage OnClosePlayingPage="ClosePlayingPage" />
+</div>
+
+@code {
+    private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider;
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            Palette = new PaletteLight()
+            {
+                Primary = "#C98FFF",
+                Secondary = Colors.Green.Accent4,
+                AppbarBackground = Colors.Red.Default,
+
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = "#C98FFF",
+                Background = "#333333"
+            }
+        };
+
+    private string _isOpenPlayingPage = "";
+    private void OpenPlayingPage()
+    {
+        _isOpenPlayingPage = "open";
+    }
+    private void ClosePlayingPage()
+    {
+        _isOpenPlayingPage = "";
+    }
+
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        MusicNetworkService.SetMusicFormatType(MusicFormatTypeEnum.HQ);
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            switch (Settings.Environment.General.AppThemeInt)
+            {
+                case 0:
+                    _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+                    break;
+                case 1:
+                    _isDarkMode = false;
+                    break;
+                case 2:
+                    _isDarkMode = true;
+                    break;
+                default:
+                    break;
+            }
+
+            StateHasChanged();
+        }
+    }
+}

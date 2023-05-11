@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="JiuLing.CommonLibs" Version="1.5.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.5" />
+		<PackageReference Include="MudBlazor" Version="6.2.2" />
+		<PackageReference Include="Sve.Blazor.InfiniteScroll" Version="1.0.0-alpha" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ListenTogether.Business\ListenTogether.Business.csproj" />
+	  <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
+	</ItemGroup>
+
+</Project>

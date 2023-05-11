@@ -1,0 +1,46 @@
+﻿@page "/search-result/{Keyword}"
+@using ListenTogether.Filters.MusicSearchFilter;
+
+@inject IMusicNetworkService MusicNetworkService
+
+@if (_musics == null)
+{
+    <MudSkeleton Class="mt-1" Height="400px" />
+}
+else
+{
+    <MudButton Variant="Variant.Outlined"
+           Color="Color.Primary"
+           StartIcon="@Icons.Material.Filled.PlayCircleOutline"
+           Size="Size.Small">播放全部</MudButton>
+    <MusicResultView Musics="@_musics" />
+}
+
+@code {
+    [Parameter]
+    public string Keyword { get; set; } = null!;
+
+    private List<MusicResultShow>? _musics;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var musics = await MusicNetworkService.SearchAsync(Settings.Environment.Search.EnablePlatform, Keyword);
+
+        if (Settings.Environment.Search.IsMatchSearchKey)
+        {
+            IMusicSearchFilter searchKeyFilter = new SearchKeyFilter(Keyword);
+            musics = searchKeyFilter.Filter(musics);
+        }
+        if (Settings.Environment.Search.IsHideShortMusic)
+        {
+            IMusicSearchFilter shortMusicFilter = new ShortMusicFilter();
+            musics = shortMusicFilter.Filter(musics);
+        }
+
+        IMusicSearchFilter vipMusicFilter = new VipMusicFilter();
+        musics = vipMusicFilter.Filter(musics);
+        _musics = musics;
+    }
+}

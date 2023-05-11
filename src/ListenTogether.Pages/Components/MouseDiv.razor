@@ -1,0 +1,28 @@
+﻿@if (Settings.Platform == ListenTogether.Pages.PlatformEnum.Desktop)
+{
+    <div class="cursor-default @Class" @ondblclick="@(Click)">
+        @ChildContent
+    </div>
+}
+else
+{
+    <div class="cursor-pointer @Class" @onclick="@(Click)">
+        @ChildContent
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter] 
+    public RenderFragment ChildContent { get; set; } 
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    private async Task Click()
+    {
+        await OnClick.InvokeAsync();
+    }
+}

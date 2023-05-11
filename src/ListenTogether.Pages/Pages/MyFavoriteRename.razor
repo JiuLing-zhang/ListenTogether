@@ -1,0 +1,60 @@
+﻿@inject ISnackbar Snackbar
+@inject IMyFavoriteService MyFavoriteService
+
+<Loading IsLoading="_isLoading"></Loading>
+<MudDialog>
+    <DialogContent>
+        <MudTextField Value="MyFavoriteOld.Name" Label="当前歌单名称" ReadOnly="true" />
+        <MudTextField @bind-Value="_NewName" Label="请输入新的歌单名称" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">取消</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Rename">修改</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public MyFavorite MyFavoriteOld { get; set; }
+    private bool _isLoading = false;
+    private string _NewName = "";
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Rename()
+    {
+        if (_NewName.IsEmpty())
+        {
+            Snackbar.Add("请输入歌单名称", Severity.Error);
+            return;
+        }
+        if (MyFavoriteOld.Name == _NewName)
+        {
+            Snackbar.Add("修改成功", Severity.Success);
+            return;
+        }
+
+        _isLoading = true;
+        var myFavorite = new MyFavorite()
+            {
+                Id = MyFavoriteOld.Id,
+                Name = _NewName,
+                ImageUrl = MyFavoriteOld.ImageUrl
+            };
+
+        var newMyFavorite = await MyFavoriteService.AddOrUpdateAsync(myFavorite);
+        _isLoading = false;
+        if (newMyFavorite == null)
+        {
+            Snackbar.Add("修改失败", Severity.Error);
+            return;
+        }
+        Snackbar.Add("修改成功", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(newMyFavorite));
+    }
+}

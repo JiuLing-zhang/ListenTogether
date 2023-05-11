@@ -1,0 +1,172 @@
+﻿@page "/playlist"
+@inherits MyComponentBase
+
+@using ListenTogether.Filters.MusicSearchFilter;
+
+@inject MusicResultService MusicResultService
+@inject IDialogService DialogService
+@inject IPlaylistService PlaylistService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+<Loading IsLoading="_isLoading"></Loading>
+
+<div class="header">
+    <MudInputLabel>播放列表</MudInputLabel>
+    @if (_playlist != null && _playlist.Any())
+    {
+        <MudButton Variant="Variant.Text"
+               StartIcon="@Icons.Material.Filled.Delete"
+               IconSize="Size.Small"
+               Size="Size.Small"
+               OnClick="@(()=>ClearAsync())"
+               Color="Color.Primary">清空</MudButton>
+    }
+</div>
+
+@if (_playlist == null)
+{
+    <MudSkeleton Class="mt-1" Height="40px" />
+    <MudSkeleton Class="mt-1" Height="40px" />
+    <MudSkeleton Class="mt-1" Height="40px" />
+    <MudSkeleton Class="mt-1" Height="40px" />
+}
+else
+{
+    @if (!_playlist.Any())
+    {
+        <Empty OnReload="GetPlaylistAsync" />
+    }
+    else
+    {
+        @foreach (var playlistItem in _playlist)
+        {
+            <div class="d-flex align-center playlist-detail">
+                <div class="flex-grow-0 tool">
+                    @if (IsLogin)
+                    {
+                        <MudIconButton Size="Size.Small"
+                       Icon="fas fa-folder-plus"
+                       OnClick="@(()=>AddToMyFavoriteAsync(playlistItem))" />
+                    }
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                       Size="Size.Small"
+                       OnClick="@(()=>DeleteAsync(playlistItem.Id))" />
+                </div>
+
+                <MouseDiv Class="d-flex align-center flex-grow-1 ml-4 info" OnClick="@(()=>Play(playlistItem))">
+                    <MudInputLabel>@playlistItem.Name - @playlistItem.Artist</MudInputLabel>
+                </MouseDiv>
+            </div>
+        }
+    }
+}
+
+@code {
+
+    private bool _isLoading = false;
+
+    private List<MusicResultShow>? _playlist;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await GetPlaylistAsync();
+    }
+
+    private async Task GetPlaylistAsync()
+    {
+        _playlist = null;
+        var playlist = await PlaylistService.GetAllAsync();
+        _playlist = new List<MusicResultShow>();
+        foreach (var item in playlist)
+        {
+            _playlist.Add(new MusicResultShow()
+                {
+                    Platform = item.Platform,
+                    Id = item.Id,
+                    Name = item.Name,
+                    Artist = item.Artist,
+                    Album = item.Album,
+                });
+        }
+    }
+
+    private async Task ClearAsync()
+    {
+        bool? result = await DialogService.ShowMessageBox("", "确定要删除播放列表吗？", yesText: "确定", cancelText: "取消");
+        if (result == null || result.Value == false)
+        {
+            return;
+        }
+
+        _isLoading = true;
+        var isRemove = await PlaylistService.RemoveAllAsync();
+        _isLoading = false;
+        if (isRemove == false)
+        {
+            Snackbar.Add("删除失败", Severity.Error);
+            return;
+        }
+
+        ////TODO 清空后暂停播放
+        //if (_musicPlayerService.IsPlaying)
+        //{
+        //    await _musicPlayerService.PlayAsync(_musicPlayerService.Metadata.Id);
+        //}
+
+        Snackbar.Add("删除成功", Severity.Success);
+        _playlist?.Clear();
+    }
+
+    private async Task DeleteAsync(string musicId)
+    {
+        ////TODO 处理当前正在播放的歌曲
+        //if (_musicPlayerService.IsPlaying)
+        //{
+        //    if (Playlist.Count == 1)
+        //    {
+        //        //播放列表仅剩当前歌曲时，直接暂停播放
+        //        await _musicPlayerService.PlayAsync(_musicPlayerService.Metadata.Id);
+        //    }
+        //    else if (_musicPlayerService.Metadata.Id == selected.Id)
+        //    {
+        //        await _musicPlayerService.Next();
+        //    }
+        //}
+
+        _isLoading = true;
+        var isDeleted = await PlaylistService.RemoveAsync(musicId);
+        _isLoading = false;
+        if (!isDeleted)
+        {
+            Snackbar.Add("删除失败", Severity.Error);
+            return;
+        };
+        _playlist?.RemoveAll(x => x.Id == musicId);
+        Snackbar.Add("删除成功", Severity.Success);
+    }
+
+    private async Task AddToMyFavoriteAsync(MusicResultShow musicResult)
+    {
+        var music = new LocalMusic()
+            {
+                Id = musicResult.Id,
+                IdOnPlatform = musicResult.IdOnPlatform,
+                Platform = musicResult.Platform,
+                Name = musicResult.Name,
+                Album = musicResult.Album,
+                Artist = musicResult.Artist,
+                ExtendDataJson = musicResult.ExtendDataJson,
+                ImageUrl = musicResult.ImageUrl
+            };
+
+        var parameters = new DialogParameters { ["Music"] = music };
+        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters);
+        await dialog.Result;
+    }
+
+    private async Task Play(MusicResultShow music)
+    {
+        await MusicResultService.PlayAsync(music.ToLocalMusic());
+    }
+}

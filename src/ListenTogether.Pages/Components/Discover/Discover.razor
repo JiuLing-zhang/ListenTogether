@@ -1,0 +1,129 @@
+﻿@inject IMusicNetworkService MusicNetworkService
+@inject NavigationManager NavigationManager
+
+<Tags Platform="Platform"
+      OnTopSelect="@(()=>TopSelect())"
+      OnTagSelect="@((tagId)=>TagSelect(tagId))" />
+
+<div class="song-menu-container">
+    @if (!_songMenus.Any())
+    {
+        <MudGrid Class="mt-4" Spacing="3">
+            @for (int i = 0; i < 12; i++)
+            {
+                <MudItem xs="4" md="3">
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="150px" Width="150px" />
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else
+    {
+        <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => GetSongMenusFromTagAsync()">
+            <MudGrid Class="mt-4">
+                @foreach (var songMenu in _songMenus)
+                {
+                    <MudItem lg="2" xs="4" md="3" Class="d-flex justify-center">
+                        <div class="song-menu-item" onclick=@(()=>GotoSongMenuPage( songMenu.Id, songMenu.Name,songMenu.ImageUrl))>
+                            <MudImage Src="@songMenu.ImageUrl"
+                                      ObjectFit="ObjectFit.Cover"
+                                      Elevation="25"
+                                      Width="140"
+                                      Height="140"
+                                      Alt="@songMenu.Name"
+                                      Class="rounded-lg" />
+                            <div>@songMenu.Name</div>
+                        </div>
+                    </MudItem>
+                }
+            </MudGrid>
+            @*The target element that we observe. Once this is reached the callback will be triggered.*@
+            <div id="observerTarget"></div>
+        </InfiniteScroll>
+        @if (_isLoading)
+        {
+            <div class="d-flex justify-center mt-2">
+                <MudProgressCircular Color="Color.Primary" Size="Size.Small" Indeterminate="true" />
+            </div>
+        }
+        @if (_pageEnd)
+        {
+            <EndLine />
+        }
+    }
+</div>
+@code {
+    [Parameter]
+    public PlatformEnum Platform { get; set; }
+
+    private bool _pageEnd = false;
+    private int _page = 0;
+    private string _tagId = "";
+    private bool _isLoading = false;
+    private List<SongMenu> _songMenus = new List<SongMenu>();
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    private async Task TopSelect()
+    {
+        _tagId = "";
+        await ResetSongMenusAsync();
+        _songMenus = await MusicNetworkService.GetSongMenusFromTop(Platform);
+    }
+
+    private async Task TagSelect(string tagId)
+    {
+        _page = 0;
+        _tagId = tagId;
+        _pageEnd = false;
+        await ResetSongMenusAsync();
+        await GetSongMenusFromTagAsync();
+    }
+
+    private async Task GetSongMenusFromTagAsync()
+    {
+        if (_tagId.IsEmpty() || _pageEnd)
+        {
+            return;
+        }
+        _isLoading = true;
+        _page++;
+        await Task.Delay(5000);
+        var songMenus = await MusicNetworkService.GetSongMenusFromTagAsync(Platform, _tagId, _page);
+        if (songMenus.Count == 0)
+        {
+            _pageEnd = true;
+        }
+        _songMenus.AddRange(songMenus);
+        _isLoading = false;
+    }
+
+    private async Task ResetSongMenusAsync()
+    {
+        _songMenus.Clear();
+    }
+
+    private void GotoSongMenuPage(string id, string name, string imageUrl)
+    {
+        SongMenuEnum songMenuType;
+        if (_tagId.IsEmpty())
+        {
+            songMenuType = SongMenuEnum.Top;
+        }
+        else
+        {
+            songMenuType = SongMenuEnum.Tag;
+        }
+
+        var obj = new SongMenu()
+            {
+                Id = id,
+                Name = name,
+                ImageUrl = imageUrl
+            };
+        var songMenuInfo = JiuLing.CommonLibs.Security.Base64Utils.StringToBase64(obj.ToJson());
+        NavigationManager.NavigateTo($"/song-menu/{(int)Platform}/{(int)songMenuType}/{songMenuInfo}");
+    }
+}

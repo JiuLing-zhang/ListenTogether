@@ -1,0 +1,91 @@
+﻿@inject IMusicNetworkService _musicNetworkService
+
+@if (_hotTags == null)
+{
+    <div Class="d-flex">
+        <MudSkeleton Class="ml-2" SkeletonType="SkeletonType.Rectangle" Height="30px" Width="60px" />
+        <MudSkeleton Class="ml-2" SkeletonType="SkeletonType.Rectangle" Height="30px" Width="60px" />
+        <MudSkeleton Class="ml-2" SkeletonType="SkeletonType.Rectangle" Height="30px" Width="60px" />
+        <MudSkeleton Class="ml-2" SkeletonType="SkeletonType.Rectangle" Height="30px" Width="60px" />
+    </div>
+}
+else
+{
+  
+    <MudChip Label="true"
+             OnClick="@(() => TopClicked())"
+             Disabled="@(activeTagId == "榜单")"
+             Size="Size.Small">榜单</MudChip>
+    @foreach (var hotTag in _hotTags)
+    {
+        <MudChip Label="true"
+                 OnClick="@(() => HotTagClicked(hotTag.Id))"
+                 Disabled="@(activeTagId == hotTag.Id)"
+                 Size="Size.Small">@hotTag.Name</MudChip>
+    }
+    <MudChip Label="true"
+             OnClick="OpenChooseTag"
+             Size="Size.Small">选择分类</MudChip>
+
+    <div class="choose-tag-drawer @_isOpenChooseTag" @onclick="CloseChooseTag">
+        <ChooseTag OnTagSelected="TagSelected" AllTypes="_allTypes" />
+    </div>
+}
+
+@code {
+    [Parameter]
+    public PlatformEnum Platform { get; set; }
+    [Parameter]
+    public EventCallback OnTopSelect { get; set; }
+    [Parameter]
+    public EventCallback<string> OnTagSelect { get; set; }
+
+    string activeTagId = "榜单";
+    private List<MusicTag>? _hotTags;
+    private List<MusicTypeTag>? _allTypes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (_hotTags == null || _allTypes == null)
+        {
+            (_hotTags, _allTypes) = await _musicNetworkService.GetMusicTagsAsync(Platform);
+        }
+        if (_hotTags != null)
+        {
+            await OnTopSelect.InvokeAsync();
+        }
+        await base.OnInitializedAsync();
+    }
+
+    private void TopClicked()
+    {
+        activeTagId = "榜单";
+        OnTopSelect.InvokeAsync();
+    }
+
+    private void HotTagClicked(string id)
+    {
+        activeTagId = id;
+        OnTagSelect.InvokeAsync(id);
+    }
+    private void ChoseTagClicked()
+    {
+        activeTagId = "";
+    }
+
+    private string _isOpenChooseTag = "";
+    private void OpenChooseTag()
+    {
+        _isOpenChooseTag = "open";
+    }
+    private void CloseChooseTag()
+    {
+        _isOpenChooseTag = "";
+    }
+    private void TagSelected(string value)
+    {
+        CloseChooseTag();
+        activeTagId = "";
+        OnTagSelect.InvokeAsync(value);
+    }
+}

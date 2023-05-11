@@ -1,0 +1,17 @@
+﻿
+
+<div class="d-flex flex-column mt-10">
+    <MudIcon Class="align-self-center" Icon="fas fa-box-open" Color="Color.Primary" Size="Size.Large"></MudIcon>
+    <div class="d-flex align-self-center align-center mt-2">
+        <MudInputLabel>什么也没有</MudInputLabel>
+        <MudLink Class="ml-2" OnClick="Reload">刷新</MudLink>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public EventCallback OnReload { get; set; }
+    private async Task Reload()
+    {
+        await OnReload.InvokeAsync();
+    }
+}

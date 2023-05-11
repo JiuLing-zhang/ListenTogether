@@ -1,0 +1,40 @@
+@media screen and (min-width: 960px) {
+    .header {
+        display: flex;
+        align-items: center;
+    }
+
+    .my-favorite {
+    }
+
+        .my-favorite:hover {
+            background-color: dimgrey;
+            cursor: pointer;
+        }
+
+        .my-favorite .tool {
+            width: 50px;
+        }
+
+        .my-favorite .info {
+        }
+}
+
+@media screen and (max-width: 960px) {
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .my-favorite {
+        flex-direction: row-reverse;
+    }
+
+        .my-favorite .tool {
+            width: 50px;
+        }
+
+        .my-favorite .info {
+        }
+}

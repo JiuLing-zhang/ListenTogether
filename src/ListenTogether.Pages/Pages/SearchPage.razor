@@ -1,0 +1,106 @@
+﻿@page "/search"
+@using ListenTogether.Data;
+
+@inject NavigationManager NavigationManager
+@inject IMusicNetworkService MusicNetworkService
+@inject ISearchHistoryStorage SearchHistoryStorage
+<div class="page">
+    <SearchBar OnSearch="@DoSearchAsync" />
+
+    <MudContainer>
+        @if (_histories == null)
+        {
+            <MudText Class="mt-3">搜索历史</MudText>
+            <MudSkeleton Class="mt-3" Height="50px" />
+        }
+        else
+        {
+            if (_histories.Any())
+            {
+                <MudContainer Class="d-flex">
+                    <MudText>搜索历史</MudText>
+                </MudContainer>
+
+                <MudContainer Class="d-flex flex-wrap">
+                    @foreach (var history in _histories)
+                    {
+                        <MudChip Color="Color.Default"
+                     Size="Size.Small"
+                     OnClick="@(()=>LabelClickAsync(history))"
+                     OnClose="@(()=>RemoveHistory(history))">@history</MudChip>
+                    }
+                </MudContainer>
+            }
+        }
+    </MudContainer>
+
+    <MudContainer>
+        <MudText Class="mt-3">热门搜索</MudText>
+        @if (_hotWords == null)
+        {
+            <MudSkeleton Class="mt-3" Height="100px" />
+        }
+        else
+        {
+            if (!_hotWords.Any())
+            {
+                <MudAlert Severity="Severity.Normal" Dense="true">什么都没有找到</MudAlert>
+            }
+            else
+            {
+                <MudContainer Class="d-flex flex-wrap">
+                    @foreach (var hotWord in _hotWords)
+                    {
+                        <MudChip Color="Color.Default"
+                     Size="Size.Small"
+                     OnClick="@(()=>LabelClickAsync(hotWord))">@hotWord</MudChip>
+                    }
+                </MudContainer>
+            }
+        }
+    </MudContainer>
+</div>
+@code {
+
+    private List<string>? _histories;
+    private List<string>? _hotWords;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await GetGetHistoriesAsync();
+        await GetHotWords();
+    }
+
+    private Task GetGetHistoriesAsync()
+    {
+        _histories = SearchHistoryStorage.GetHistories();
+        return Task.CompletedTask;
+    }
+
+    private async Task GetHotWords()
+    {
+        _hotWords = await MusicNetworkService.GetHotWordAsync();
+    }
+
+    private async Task LabelClickAsync(string value)
+    {
+        await DoSearchAsync(value);
+    }
+
+    private void RemoveHistory(string value)
+    {
+        SearchHistoryStorage.Remove(value);
+        _histories?.Remove(value);
+    }
+
+    private Task DoSearchAsync(string key)
+    {
+        if (key.IsEmpty())
+        {
+            return Task.CompletedTask;
+        }
+        SearchHistoryStorage.Add(key);
+        NavigationManager.NavigateTo($"/search-result/{key}");
+        return Task.CompletedTask;
+    }
+}

@@ -1,0 +1,27 @@
+.music-image {
+    cursor: pointer;
+}
+
+    .music-image:hover .mask {
+        display: block;
+    }
+
+.mask {
+    display: none;
+    width: 45px;
+    height: 45px;
+    margin-top: -45px;
+    opacity: 0.7;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    background-color: #FFF;
+}
+
+.music-info {
+    font-size: 13px;
+}
+
+.time {
+    font-size: 12px;
+}

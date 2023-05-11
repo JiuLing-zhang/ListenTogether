@@ -1,0 +1,21 @@
+@media screen and (min-width: 960px) {
+    .header {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+
+    .tabs {
+        width: 600px;
+    }
+
+    .search {
+        width: 200px;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .tabs {
+        width: 100%;
+    }
+}

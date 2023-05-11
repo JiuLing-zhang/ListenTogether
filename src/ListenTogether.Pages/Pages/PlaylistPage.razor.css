@@ -1,0 +1,34 @@
+@media screen and (min-width: 960px) {
+    .header {
+        display: flex;
+        align-items: center;
+    }
+
+    .playlist {
+    }
+
+        .playlist:hover {
+            background-color: dimgrey;
+            cursor: pointer;
+        }
+
+        .playlist .tool {
+            width: 100px;
+        }
+}
+
+@media screen and (max-width: 960px) {
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .playlist {
+        flex-direction: row-reverse;
+    }
+
+        .playlist .tool {
+            width: 100px;
+        }
+}

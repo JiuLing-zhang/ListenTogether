@@ -1,0 +1,100 @@
+﻿@inherits MyComponentBase
+
+@inject ISnackbar Snackbar
+@inject IMyFavoriteService MyFavoriteService
+@inject IDialogService DialogService
+@inject IMusicService MusicService
+@inject IMusicNetworkService MusicNetworkService
+
+<Loading IsLoading="_isLoading"></Loading>
+<MudDialog>
+    <DialogContent>
+        <MudList Clickable="true" Dense="true">
+            <MudListSubheader>请选择歌单：</MudListSubheader>
+            @if (_myFavorites == null)
+            {
+                <MudSkeleton Class="mt-3" Height="30px" />
+                <MudSkeleton Class="mt-3" Height="30px" />
+                <MudSkeleton Class="mt-3" Height="30px" />
+            }
+            else
+            {
+                <MudListItem Text="新建歌单" OnClick="AddNewMyFavoriteAsync" />
+                <MudDivider />
+                foreach (var myFavorites in _myFavorites)
+                {
+                    <MudListItem Text="@(myFavorites.Name)" OnClick="()=>AddAsync(myFavorites.Id)" />
+                }
+            }
+        </MudList>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">关闭</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public LocalMusic Music { get; set; } = null!;
+
+    private bool _isLoading = false;
+    private List<MyFavorite>? _myFavorites;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (IsNotLogin)
+        {
+            Snackbar.Add("账户未登录", Severity.Error);
+            Cancel();
+            return;
+        }
+        _myFavorites = await MyFavoriteService.GetAllAsync();
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task AddNewMyFavoriteAsync()
+    {
+        var dialog = await DialogService.ShowAsync<MyFavoriteAdd>();
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            await AddAsync((result.Data as MyFavorite).Id);
+        }
+    }
+
+    private async Task AddAsync(int id)
+    {
+        _isLoading = true;
+        if (Music.ImageUrl.IsEmpty() && Music.Platform == Model.Enums.PlatformEnum.KuGou)
+        {
+            Music.ImageUrl = await MusicNetworkService.GetImageUrlAsync(Music.Platform, Music.IdOnPlatform, Music.ExtendDataJson);
+        }
+
+        var isMusicOk = await MusicService.AddOrUpdateAsync(Music);
+        if (!isMusicOk)
+        {
+            _isLoading = false;
+            Snackbar.Add("歌曲信息保存失败", Severity.Error);
+            return;
+        }
+
+        var isAddOk = await MyFavoriteService.AddMusicToMyFavoriteAsync(id, Music.Id);
+        _isLoading = false;
+        if (!isAddOk)
+        {
+            Snackbar.Add("添加歌曲到歌单失败", Severity.Error);
+            return;
+        }
+
+        Snackbar.Add("成功添加歌曲到歌单", Severity.Success);
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+}

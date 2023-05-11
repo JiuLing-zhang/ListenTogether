@@ -1,0 +1,229 @@
+﻿@page "/settings"
+@using ListenTogether.Data;
+
+@inject IJSRuntime JSRuntime;
+@inject IDialogService DialogService
+@inject ILoginDataStorage LoginDataStorage
+@inject IUserService UserService
+@inject IEnvironmentConfigService ConfigService
+@inject NavigationManager NavigationManager
+
+<div class="page">
+
+    @if (LoginDataStorage.GetUsername().IsEmpty())
+    {
+        <MudButton Variant="Variant.Outlined"
+               Color="Color.Primary"
+               OnClick="@(  () =>   GotoLoginPage())">登录/注册 ></MudButton>
+    }
+    else
+    {
+        <MudContainer Class="d-flex">
+            <MudAvatar>
+                <MudImage Src="@($"http://music.jiuling.cc{LoginDataStorage.GetAvatar()}")"></MudImage>
+            </MudAvatar>
+            <MudContainer>
+                <MudText>@LoginDataStorage.GetNickname()</MudText>
+                <MudText>用户名：@LoginDataStorage.GetUsername()</MudText>
+            </MudContainer>
+        </MudContainer>
+    }
+
+    <div>
+        <MudInputLabel>常规</MudInputLabel>
+        <Switch Title="启动时检查更新"
+                Checked="@(Settings.Environment.General.IsAutoCheckUpdate)"
+                OnChanged="OnIsAutoCheckUpdateChange" />
+        <div class="d-flex justify-space-between align-center">
+            <MudInputLabel>外观</MudInputLabel>
+            <div style="width:100px;">
+                <MudSelect T="int"
+                           Label=""
+                           Margin="Margin.Dense"
+                           Dense="true"
+                           SelectedValues="@(new List<int>(){Settings.Environment.General.AppThemeInt})"
+                           SelectedValuesChanged="@((x)=>OnAppThemeIntChange(x.First()))"
+                           AnchorOrigin="Origin.BottomCenter">
+                    <MudSelectItem Value="0">跟随系统</MudSelectItem>
+                    <MudSelectItem Value="1">浅色</MudSelectItem>
+                    <MudSelectItem Value="2">深色</MudSelectItem>
+                </MudSelect>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <MudInputLabel>搜索</MudInputLabel>
+        <Switch Title="网易云音乐"
+                Checked="@(CheckEnablePlatform(PlatformEnum.NetEase))"
+                OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.NetEase,x ))" />
+        <Switch Title="酷我音乐"
+                Checked="@(CheckEnablePlatform(PlatformEnum.KuWo))"
+                OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.KuWo,x ))" />
+        <Switch Title="酷狗音乐"
+                Checked="@(CheckEnablePlatform(PlatformEnum.KuGou))"
+                OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.KuGou,x ))" />
+        <Switch Title="咪咕音乐"
+                Checked="@(CheckEnablePlatform(PlatformEnum.MiGu))"
+                OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.MiGu,x ))" />
+        <Switch Title="隐藏小于1分钟的歌曲"
+                Checked="@(Settings.Environment.Search.IsHideShortMusic)"
+                OnChanged="OnIsHideShortMusicChanged" />
+        <Switch Title="歌曲名或歌手名必须包含搜索词"
+                Checked="@(Settings.Environment.Search.IsMatchSearchKey)"
+                OnChanged="OnIsMatchSearchKeyChanged" />
+    </div>
+
+    <div>
+        <MudInputLabel>播放</MudInputLabel>
+        <Switch Title="仅在WIFI下播放未缓存的歌曲"
+                Checked="@(Settings.Environment.Play.IsWifiPlayOnly)"
+                OnChanged="OnIsWifiPlayOnlyChanged" />
+        <Switch Title="播放页面屏幕常亮"
+                Checked="@(Settings.Environment.Play.IsPlayingPageKeepScreenOn)"
+                OnChanged="OnIsPlayingPageKeepScreenOnChanged" />
+        <Switch Title="播放歌单前清空播放列表"
+                Checked="@(Settings.Environment.Play.IsCleanPlaylistWhenPlaySongMenu)"
+                OnChanged="OnIsCleanPlaylistWhenPlaySongMenuChanged" />
+
+        <div class="d-flex justify-space-between align-start">
+            <MudInputLabel>音质选择（不一定有用）</MudInputLabel>
+            <div style="width:150px;">
+                <MudRadioGroup T="MusicFormatTypeEnum"
+                               SelectedOption="@(Settings.Environment.Play.MusicFormatType)"
+                               SelectedOptionChanged="OnMusicFormatTypeChanged">
+                    <MudRadio Dense="true"
+                              Option="@(MusicFormatTypeEnum.PQ)"
+                              Color="Color.Primary">普通  5M/首</MudRadio>
+                    <MudRadio Dense="true"
+                              Option="@(MusicFormatTypeEnum.HQ)"
+                              Color="Color.Primary">高级 10M/首</MudRadio>
+                    <MudRadio Dense="true"
+                              Option="@(MusicFormatTypeEnum.SQ)"
+                              Color="Color.Primary">超高 30M/首</MudRadio>
+                    <MudRadio Dense="true"
+                              Option="@(MusicFormatTypeEnum.ZQ)"
+                              Color="Color.Primary">极致 70M/首</MudRadio>
+                </MudRadioGroup>
+            </div>
+        </div>
+    </div>
+
+    @if (LoginDataStorage.GetUsername().IsNotEmpty())
+    {
+        <MudButton Color="Color.Primary"
+               OnClick="@(async () => await LogoutAsync())">退出账号</MudButton>
+    }
+</div>
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    private async Task OnIsAutoCheckUpdateChange(bool value)
+    {
+        Settings.Environment.General.IsAutoCheckUpdate = value;
+        await WriteGeneralConfigAsync();
+    }
+    private async Task OnAppThemeIntChange(int value)
+    {
+        Settings.Environment.General.AppThemeInt = value;
+        await WriteGeneralConfigAsync();
+        await JSRuntime.InvokeVoidAsync("location.reload");
+    }
+    /// <summary>
+    /// 保存通用配置
+    /// </summary>
+    private async Task WriteGeneralConfigAsync()
+    {
+        await ConfigService.WriteGeneralSettingAsync(Settings.Environment.General);
+    }
+
+    private static bool CheckEnablePlatform(PlatformEnum platform)
+    {
+        if ((Settings.Environment.Search.EnablePlatform & platform) == platform)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private async Task EnablePlatformAsync(PlatformEnum platform, bool isEnable)
+    {
+        if (isEnable)
+        {
+            if (!CheckEnablePlatform(platform))
+            {
+                Settings.Environment.Search.EnablePlatform = Settings.Environment.Search.EnablePlatform | platform;
+            }
+        }
+        else
+        {
+            if (CheckEnablePlatform(platform))
+            {
+                Settings.Environment.Search.EnablePlatform = Settings.Environment.Search.EnablePlatform & ~platform;
+            }
+        }
+        await WriteSearchConfigAsync();
+    }
+    private async Task OnIsHideShortMusicChanged(bool value)
+    {
+        Settings.Environment.Search.IsHideShortMusic = value;
+        await WriteSearchConfigAsync();
+    }
+    private async Task OnIsMatchSearchKeyChanged(bool value)
+    {
+        Settings.Environment.Search.IsMatchSearchKey = value;
+        await WriteSearchConfigAsync();
+    }
+    private async Task WriteSearchConfigAsync()
+    {
+        await ConfigService.WriteSearchSettingAsync(Settings.Environment.Search);
+    }
+
+    private async Task OnIsWifiPlayOnlyChanged(bool value)
+    {
+        Settings.Environment.Play.IsWifiPlayOnly = value;
+        await WritePlayConfigAsync();
+    }
+    private async Task OnIsPlayingPageKeepScreenOnChanged(bool value)
+    {
+        Settings.Environment.Play.IsPlayingPageKeepScreenOn = value;
+        await WritePlayConfigAsync();
+    }
+    private async Task OnIsCleanPlaylistWhenPlaySongMenuChanged(bool value)
+    {
+        Settings.Environment.Play.IsCleanPlaylistWhenPlaySongMenu = value;
+        await WritePlayConfigAsync();
+    }
+    private async Task OnMusicFormatTypeChanged(MusicFormatTypeEnum value)
+    {
+        Settings.Environment.Play.MusicFormatType = value;
+        await WritePlayConfigAsync();
+    }
+    /// <summary>
+    /// 保存播放配置
+    /// </summary>
+    private async Task WritePlayConfigAsync()
+    {
+        await ConfigService.WritePlaySettingAsync(Settings.Environment.Play);
+    }
+
+    private void GotoLoginPage()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+
+    private async Task LogoutAsync()
+    {
+        bool? result = await DialogService.ShowMessageBox("", "确定要退出吗？", "确定", "取消");
+        if (!result.HasValue || result.Value == false)
+        {
+            return;
+        }
+        await UserService.LogoutAsync();
+        LoginDataStorage.Clear();
+    }
+}

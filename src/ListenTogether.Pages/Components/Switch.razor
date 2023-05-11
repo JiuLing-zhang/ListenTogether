@@ -1,0 +1,17 @@
+﻿<div Class="d-flex justify-space-between align-center">
+    <MudInputLabel>@Title</MudInputLabel>
+    <MudSwitch Checked="Checked"
+               T="bool"
+               Color="Color.Primary"
+               CheckedChanged="@((x)=>OnChanged.InvokeAsync(x))" />
+</div>
+
+@code {
+    [Parameter]
+    public bool Checked { get; set; }
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<bool> OnChanged { get; set; }
+}

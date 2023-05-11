@@ -1,0 +1,32 @@
+
+.end-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    white-space: nowrap;
+    margin: 5px;
+}
+
+    .end-line::before {
+        background: linear-gradient(90deg, transparent 0%, #e6e6e6 10%);
+    }
+
+    .end-line::before,
+    .end-line::after {
+        content: '';
+        display: block;
+        width: 50%;
+        height: 1px;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+
+    .end-line::after {
+        background: linear-gradient(270deg, transparent 0%, #e6e6e6 10%);
+    }
+
+    .end-line span {
+        color: #999999;
+        padding: 0 0.5em;
+    }

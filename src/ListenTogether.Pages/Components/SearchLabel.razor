@@ -1,0 +1,14 @@
+﻿@inject NavigationManager NavigationManager
+
+<MudChip Icon="@Icons.Material.Filled.Search"
+         IconColor="Color.Primary"
+         Style="width: 100%; display: flex; justify-content: left; padding-left: 15px;">
+    想找点什么呢？
+</MudChip>
+
+@code {
+    private void GotoSearchPage()
+    {
+        NavigationManager.NavigateTo("/search");
+    }
+}

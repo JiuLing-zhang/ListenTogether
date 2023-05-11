@@ -1,0 +1,69 @@
+﻿@using ListenTogether.Data;
+@inject IMusicNetworkService MusicNetworkService
+
+<MudAutocomplete T="string"
+                 @bind-Value="_searchKey"
+                 Label="搜索"
+                 MaxLength="30"
+                 Margin="Margin.Dense"
+                 Dense="true"
+                 Variant="Variant.Outlined"
+                 SearchFunc="@SearchSuggestAsync"
+                 ResetValueOnEmptyText="true"
+                 Clearable="true"
+                 CoerceValue="true"
+                 CoerceText="false"
+                 Immediate="true"
+                 AdornmentIcon="@Icons.Material.Filled.Search"
+                 AdornmentColor="Color.Primary"
+                 OnKeyUp="@OnSearchKeyUpAsync"
+                 ToStringFunc="@((x)=>{return x;})">
+    <ItemTemplate Context="e">
+        <div @onclick="@(()=>OnSearchItemSelect(e))">
+            <MudText>@e</MudText>
+        </div>
+    </ItemTemplate>
+    <ItemSelectedTemplate Context="e">
+        <div @onclick="@(()=>OnSearchItemSelect(e))">
+            <MudText>@e</MudText>
+        </div>
+    </ItemSelectedTemplate>
+</MudAutocomplete>
+
+@code {
+    private string _searchKey = "";
+
+    [Parameter]
+    public EventCallback<string> OnSearch { get; set; }
+
+    private async Task<IEnumerable<string>> SearchSuggestAsync(string value)
+    {
+        if (value.IsEmpty())
+        {
+            return new List<string>();
+        }
+        var suggest = await MusicNetworkService.GetSearchSuggestAsync(value);
+        if (!suggest.Contains(value))
+        {
+            suggest.Insert(0, value);
+        }
+        return suggest;
+    }
+
+    private async Task OnSearchKeyUpAsync(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter")
+        {
+            await SearchAsync(_searchKey);
+        }
+    }
+    private async Task OnSearchItemSelect(string value)
+    {
+        await SearchAsync(value);
+    }
+
+    private async Task SearchAsync(string key)
+    {
+        await OnSearch.InvokeAsync(key);
+    }
+}

@@ -1,0 +1,48 @@
+﻿@inject DesktopNotification WindowsNotification
+
+<div class="d-flex align-start">
+
+    <MudIconButton Icon="@Icons.Material.Filled.Minimize"
+                   Size="Size.Small"
+                   Style="@ButtonStyle"
+                   OnClick=@(() =>Minimize())></MudIconButton>
+    <MudIconButton Icon=@(@_maximizerIcon)
+                   Disabled="true"
+                   Style="@ButtonStyle"
+                   Size="Size.Small"
+                   OnClick=@(() =>Maximize())></MudIconButton>
+    <MudIconButton Icon="@Icons.Material.Filled.Close"
+                   Style="@ButtonStyle"
+                   Size="Size.Small"
+                   OnClick=@(() =>Close())></MudIconButton>
+</div>
+@code {
+    [Parameter]
+    public string ButtonStyle { get; set; } = "";
+
+    private bool _isMaximizer = false;
+    private string _maximizerIcon = Icons.Material.Filled.Fullscreen;
+    private void Minimize()
+    {
+        WindowsNotification.MinimizeWindow();
+    }
+
+    private void Maximize()
+    {
+        if (_isMaximizer)
+        {
+            WindowsNotification.ShowNormalWindow();
+            _maximizerIcon = Icons.Material.Filled.Fullscreen;
+        }
+        else
+        {
+            WindowsNotification.MaximizeWindow();
+            _maximizerIcon = Icons.Material.Filled.CloseFullscreen;
+        }
+        _isMaximizer = !_isMaximizer;
+    }
+    private void Close()
+    {
+        WindowsNotification.CloseWindow();
+    }
+}

@@ -1,0 +1,100 @@
+﻿@page "/my-favorite"
+@inherits MyComponentBase
+@inject IMyFavoriteService MyFavoriteService
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
+<div class="header">
+    <MudInputLabel>我的歌单</MudInputLabel>
+    <MudButton Variant="Variant.Text"
+               StartIcon="@Icons.Material.Filled.Add"
+               IconSize="Size.Small"
+               Size="Size.Small"
+               Disabled="@(_myFavoriteList == null)"
+               OnClick="@(()=>AddMyFavoriteAsync())"
+               Color="Color.Primary">新建歌单</MudButton>
+</div>
+@if (_myFavoriteList == null)
+{
+    <MudSkeleton Class="mt-1" Height="40px" />
+    <MudSkeleton Class="mt-1" Height="40px" />
+    <MudSkeleton Class="mt-1" Height="40px" />
+    <MudSkeleton Class="mt-1" Height="40px" />
+}
+else
+{
+    @if (!_myFavoriteList.Any())
+    {
+        <Empty OnReload="GetMyFavoriteListAsync" />
+    }
+    else
+    {
+        @foreach (var myFavorite in _myFavoriteList)
+        {
+            <div class="d-flex my-favorite" @onclick="@(()=>GotoMyFavoriteDetail(myFavorite.Id))">
+                <div class="flex-grow-0 tool">
+                    <div class="play">
+                        <MudIconButton Icon="@Icons.Material.Filled.PlayCircleOutline"
+                           Size="Size.Small"
+                           OnClick="PlayAsync"></MudIconButton>
+                    </div>
+                </div>
+                <div class="d-flex flex-grow-1 info">
+                    <MudImage Src="@myFavorite.ImageUrl"
+                  Width="30"
+                  Height="30"
+                  Elevation="5"
+                  Class="rounded-lg" />
+                    <div>
+                        <MudInputLabel>@myFavorite.Name</MudInputLabel>
+                        <MudInputLabel>共 @myFavorite.MusicCount 首歌</MudInputLabel>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+}
+
+@code {
+
+
+    private List<MyFavorite>? _myFavoriteList;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (IsNotLogin)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+        await GetMyFavoriteListAsync();
+    }
+
+    private async Task GetMyFavoriteListAsync()
+    {
+        _myFavoriteList = null;
+        _myFavoriteList = await MyFavoriteService.GetAllAsync();
+    }
+
+    private async Task AddMyFavoriteAsync()
+    {
+        var dialog = await DialogService.ShowAsync<MyFavoriteAdd>();
+        var result = await dialog.Result;
+
+        if (!result.Canceled)
+        {
+            _myFavoriteList?.Add(result.Data as MyFavorite);
+        }
+    }
+
+    private async Task PlayAsync()
+    {
+
+    }
+
+
+    private void GotoMyFavoriteDetail(int id)
+    {
+        NavigationManager.NavigateTo($"/my-favorite-detail/{id}");
+    }
+}
