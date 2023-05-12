@@ -14,7 +14,7 @@
     {
         <MudButton Variant="Variant.Outlined"
                Color="Color.Primary"
-               OnClick="@(  () =>   GotoLoginPage())">登录/注册 ></MudButton>
+               OnClick="GotoLoginPage">登录/注册 ></MudButton>
     }
     else
     {
@@ -30,12 +30,12 @@
     }
 
     <div>
-        <MudInputLabel>常规</MudInputLabel>
+        <div class="mt-8 mb-2 type-title">常规</div>
         <Switch Title="启动时检查更新"
                 Checked="@(Settings.Environment.General.IsAutoCheckUpdate)"
                 OnChanged="OnIsAutoCheckUpdateChange" />
         <div class="d-flex justify-space-between align-center">
-            <MudInputLabel>外观</MudInputLabel>
+            <div>外观</div>
             <div style="width:100px;">
                 <MudSelect T="int"
                            Label=""
@@ -53,7 +53,7 @@
     </div>
 
     <div>
-        <MudInputLabel>搜索</MudInputLabel>
+        <div class="mt-8 mb-2 type-title">搜索</div>
         <Switch Title="网易云音乐"
                 Checked="@(CheckEnablePlatform(PlatformEnum.NetEase))"
                 OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.NetEase,x ))" />
@@ -75,7 +75,7 @@
     </div>
 
     <div>
-        <MudInputLabel>播放</MudInputLabel>
+        <div class="mt-8 mb-2 type-title">播放</div>
         <Switch Title="仅在WIFI下播放未缓存的歌曲"
                 Checked="@(Settings.Environment.Play.IsWifiPlayOnly)"
                 OnChanged="OnIsWifiPlayOnlyChanged" />
@@ -87,7 +87,7 @@
                 OnChanged="OnIsCleanPlaylistWhenPlaySongMenuChanged" />
 
         <div class="d-flex justify-space-between align-start">
-            <MudInputLabel>音质选择（不一定有用）</MudInputLabel>
+            <div>音质选择（不一定有用）</div>
             <div style="width:150px;">
                 <MudRadioGroup T="MusicFormatTypeEnum"
                                SelectedOption="@(Settings.Environment.Play.MusicFormatType)"
@@ -112,6 +112,8 @@
     @if (LoginDataStorage.GetUsername().IsNotEmpty())
     {
         <MudButton Color="Color.Primary"
+               Variant="Variant.Filled"
+               Style="width:100%"
                OnClick="@(async () => await LogoutAsync())">退出账号</MudButton>
     }
 </div>

@@ -18,10 +18,25 @@
     background-color: #FFF;
 }
 
-.music-info {
+.music-detail {
+    margin-left: 16px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.music-title {
+    flex: 1;
+    width: 0;
     font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .time {
     font-size: 12px;
+    width: 100px;
+    text-align: right;
 }

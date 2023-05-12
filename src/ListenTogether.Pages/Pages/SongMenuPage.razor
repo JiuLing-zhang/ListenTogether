@@ -14,10 +14,10 @@
               Class="rounded-lg" />
     <div class="ml-3 d-flex flex-column">
         <MudText Class="mt-1 mb-2">@_songMenu.Name</MudText>
-        <MudButton Variant="Variant.Filled"
+        <MudButton Variant="Variant.Outlined"
                    StartIcon="@Icons.Material.Filled.PlayCircleOutline"
-                   IconColor="Color.Primary"
                    Size="Size.Small"
+                   IconColor="Color.Primary"
                    Disabled="@(_musics==null || !_musics.Any())"
                    OnClick="PlayAllAsync">播放全部</MudButton>
     </div>

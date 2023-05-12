@@ -30,6 +30,8 @@
                                   MaxLength="20"
                                   Required="true"
                                   RequiredError="密码不能为空"
+                                  Immediate="true"
+                                  OnKeyDown="OnPasswordKeyDown"
                                   Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
                     <MudButton Class="mt-5"
                                Variant="Variant.Filled"
@@ -84,6 +86,14 @@
         LoginDataStorage.SetRefreshToken(user.RefreshToken);
 
         NavigationManager.NavigateTo("/settings");
+    }
+
+    private async Task OnPasswordKeyDown(KeyboardEventArgs value)
+    {
+        if (value.Key == "Enter")
+        {
+            await LoginAsync();
+        }
     }
 
     private void GotoRegisterPage()

@@ -16,7 +16,8 @@
     @if (_playlist != null && _playlist.Any())
     {
         <MudButton Variant="Variant.Text"
-               StartIcon="@Icons.Material.Filled.Delete"
+               Class="ml-5"
+               EndIcon="@Icons.Material.Filled.Delete"
                IconSize="Size.Small"
                Size="Size.Small"
                OnClick="@(()=>ClearAsync())"
@@ -41,7 +42,7 @@ else
     {
         @foreach (var playlistItem in _playlist)
         {
-            <div class="d-flex align-center playlist-detail">
+            <div class="d-flex align-center playlist-detail mt-2 mb-2">
                 <div class="flex-grow-0 tool">
                     @if (IsLogin)
                     {

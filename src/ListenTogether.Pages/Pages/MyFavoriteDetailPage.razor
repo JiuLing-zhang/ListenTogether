@@ -19,19 +19,21 @@
 else
 {
     <div class="header">
-        <MudInputLabel>我的歌单 - @_myFavorite.Name</MudInputLabel>
+        <div>我的歌单 - @_myFavorite.Name</div>
         <div class="tool">
             <MudButton Variant="Variant.Text"
-                   StartIcon="@Icons.Material.Filled.Edit"
+                   Class="ml-5"
+                   EndIcon="@Icons.Material.Filled.Edit"
                    IconSize="Size.Small"
                    Size="Size.Small"
-                   OnClick="@(()=>MyFavoriteRenameAsync())"
+                   OnClick="MyFavoriteRenameAsync"
                    Color="Color.Primary">重命名</MudButton>
             <MudButton Variant="Variant.Text"
-                   StartIcon="@Icons.Material.Filled.Delete"
+                   Class="ml-2"
+                   EndIcon="@Icons.Material.Filled.Delete"
                    IconSize="Size.Small"
                    Size="Size.Small"
-                   OnClick="@(()=>DeleteMyFavoriteAsync())"
+                   OnClick="DeleteMyFavoriteAsync"
                    Color="Color.Primary">删除歌单</MudButton>
         </div>
     </div>
@@ -55,30 +57,30 @@ else
         var index = 0;
         @foreach (var myFavoriteDetail in _myFavoriteDetailList)
         {
-            <div class="d-flex align-center my-favorite-detail">
+            <div class="d-flex align-center my-favorite-detail mt-4 mb-4">
                 <div class="flex-grow-0 tool">
                     <div class="play">
                         <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                           Size="Size.Small"
+                           Size="Size.Medium"
                            OnClick="@(()=>DeleteAsync(myFavoriteDetail.Id))"></MudIconButton>
                     </div>
                 </div>
 
                 <div class="d-flex align-center flex-grow-1 info">
-                    <MudInputLabel>@(index++)</MudInputLabel>
-                        <div>
-                            <div class="d-flex align-center">
-                                <MudChip Variant="Variant.Outlined"
-                         Color="Color.Primary"
+                    <div class="mr-3 seq">@(index++)</div>
+                    <div>
+                        <div class="d-flex align-center">
+                            <MudChip Label="true"
+                         Class="mr-2"
                          Size="Size.Small">@myFavoriteDetail.Music.Platform.GetDescription()</MudChip>
-                                <MudInputLabel>@myFavoriteDetail.Music.Name</MudInputLabel>
-                            </div>
-                            <div class="d-flex">
-                                <MudInputLabel>@myFavoriteDetail.Music.Artist - @myFavoriteDetail.Music.Album</MudInputLabel>
-                            </div>
+                            <div>@myFavoriteDetail.Music.Name</div>
+                        </div>
+                        <div class="d-flex ml-2 music-detail">
+                            <div>@myFavoriteDetail.Music.Artist - @myFavoriteDetail.Music.Album</div>
                         </div>
                     </div>
                 </div>
+            </div>
         }
     }
 

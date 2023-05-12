@@ -7,7 +7,8 @@
 <div class="header">
     <MudInputLabel>我的歌单</MudInputLabel>
     <MudButton Variant="Variant.Text"
-               StartIcon="@Icons.Material.Filled.Add"
+               Class="ml-5"
+               EndIcon="@Icons.Material.Filled.Add"
                IconSize="Size.Small"
                Size="Size.Small"
                Disabled="@(_myFavoriteList == null)"
@@ -31,23 +32,23 @@ else
     {
         @foreach (var myFavorite in _myFavoriteList)
         {
-            <div class="d-flex my-favorite" @onclick="@(()=>GotoMyFavoriteDetail(myFavorite.Id))">
+            <div class="d-flex align-center my-favorite mt-4 mb-4" @onclick="@(()=>GotoMyFavoriteDetail(myFavorite.Id))">
                 <div class="flex-grow-0 tool">
                     <div class="play">
                         <MudIconButton Icon="@Icons.Material.Filled.PlayCircleOutline"
-                           Size="Size.Small"
+                           Size="Size.Medium"
                            OnClick="PlayAsync"></MudIconButton>
                     </div>
                 </div>
-                <div class="d-flex flex-grow-1 info">
+                <div class="d-flex align-center flex-grow-1 info">
                     <MudImage Src="@myFavorite.ImageUrl"
-                  Width="30"
-                  Height="30"
+                  Width="40"
+                  Height="40"
                   Elevation="5"
-                  Class="rounded-lg" />
+                  Class="rounded-lg mr-3" />
                     <div>
-                        <MudInputLabel>@myFavorite.Name</MudInputLabel>
-                        <MudInputLabel>共 @myFavorite.MusicCount 首歌</MudInputLabel>
+                        <div>@myFavorite.Name</div>
+                        <div class="music-count">@myFavorite.MusicCount 首歌</div>
                     </div>
                 </div>
             </div>

@@ -44,16 +44,19 @@
                   Elevation="5"
                   Class="rounded-lg" />
         }
-        <div class="ml-2 d-flex flex-column justify-space-between">
+        <div class="music-detail">
             <div class="d-flex justify-space-between">
-                <div class="music-info">@_musicInfo</div>
-                <div class="time">@_position / @_duration</div>
+                <div class="music-title">
+                    @_musicInfo
+                </div>
+                <div class="time">
+                    @_position / @_duration
+                </div>
             </div>
             <MudSlider Min="0"
                        Max="100"
                        Size="Size.Small"
                        Value="@_playProgress"
-                       Style="width:400px"
                        T="double"
                        @onmousedown="ProgressMouseDown"
                        @onmouseup="ProgressMouseUp"

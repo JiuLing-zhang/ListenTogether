@@ -38,3 +38,8 @@
         .my-favorite .info {
         }
 }
+
+.music-count {
+    font-size: 12px;
+    opacity: 0.5;
+}

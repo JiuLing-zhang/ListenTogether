@@ -1,6 +1,7 @@
 @media screen and (min-width: 960px) {
     .page {
-        width: 500px;
+        width: 400px;
+        margin: auto;
     }
 }
 
