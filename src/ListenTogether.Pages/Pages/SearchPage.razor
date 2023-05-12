@@ -7,58 +7,66 @@
 <div class="page">
     <SearchBar OnSearch="@DoSearchAsync" />
 
-    <MudContainer>
-        @if (_histories == null)
-        {
-            <MudText Class="mt-3">搜索历史</MudText>
-            <MudSkeleton Class="mt-3" Height="50px" />
-        }
-        else
-        {
-            if (_histories.Any())
+    <div class="suggest mt-3">
+        <div class="histories">
+            <div class="suggest-title">
+                搜索历史
+                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                               Size="Size.Small"
+                               Class="ml-2"></MudIconButton>
+            </div>
+            @if (_histories == null)
             {
-                <MudContainer Class="d-flex">
-                    <MudText>搜索历史</MudText>
-                </MudContainer>
-
-                <MudContainer Class="d-flex flex-wrap">
-                    @foreach (var history in _histories)
-                    {
-                        <MudChip Color="Color.Default"
-                     Size="Size.Small"
-                     OnClick="@(()=>LabelClickAsync(history))"
-                     OnClose="@(()=>RemoveHistory(history))">@history</MudChip>
-                    }
-                </MudContainer>
-            }
-        }
-    </MudContainer>
-
-    <MudContainer>
-        <MudText Class="mt-3">热门搜索</MudText>
-        @if (_hotWords == null)
-        {
-            <MudSkeleton Class="mt-3" Height="100px" />
-        }
-        else
-        {
-            if (!_hotWords.Any())
-            {
-                <MudAlert Severity="Severity.Normal" Dense="true">什么都没有找到</MudAlert>
+                <MudSkeleton Class="mt-3" Height="40px" />
             }
             else
             {
-                <MudContainer Class="d-flex flex-wrap">
-                    @foreach (var hotWord in _hotWords)
-                    {
-                        <MudChip Color="Color.Default"
-                     Size="Size.Small"
-                     OnClick="@(()=>LabelClickAsync(hotWord))">@hotWord</MudChip>
-                    }
-                </MudContainer>
+                if (!_histories.Any())
+                {
+                    <Empty Class="mt-2" />
+                }
+                else
+                {
+                    <div class="d-flex flex-wrap">
+                        @foreach (var history in _histories)
+                        {
+                            <MudChip Color="Color.Default"
+                         Size="Size.Small"
+                         OnClick="@(()=>LabelClickAsync(history))"
+                         OnClose="@(()=>RemoveHistory(history))">@history</MudChip>
+                        }
+                    </div>
+                }
             }
-        }
-    </MudContainer>
+        </div>
+        <div class="hot-words">
+            <div class="suggest-title">热门搜索</div>
+            @if (_hotWords == null)
+            {
+                <MudSkeleton Class="mt-3" Height="40px" />
+            }
+            else
+            {
+                if (!_hotWords.Any())
+                {
+                    <Empty Class="mt-2" OnRefresh="GetHotWords" />
+                }
+                else
+                {
+                    <div class="hot-words-detail">
+                        <MudList Clickable="true" Dense="true">
+                            @foreach (var hotWord in _hotWords)
+                            {
+                                <MudListItem Dense="true"
+                                 Text="@hotWord"
+                                 OnClick="@(()=>LabelClickAsync(hotWord))" />
+                            }
+                        </MudList>
+                    </div>
+                }
+            }
+        </div>
+    </div>
 </div>
 @code {
 
@@ -79,6 +87,7 @@
 
     private async Task GetHotWords()
     {
+        _hotWords = null;
         _hotWords = await MusicNetworkService.GetHotWordAsync();
     }
 
@@ -91,6 +100,12 @@
     {
         SearchHistoryStorage.Remove(value);
         _histories?.Remove(value);
+    }
+
+    private void ClearHistory()
+    {
+        SearchHistoryStorage.Clear();
+        _histories?.Clear();
     }
 
     private Task DoSearchAsync(string key)

@@ -4,18 +4,21 @@
 @inject IPlaylistService _playlistService
 @inject IEnvironmentConfigService _configService
 @inject IDialogService DialogService
+@inject IPlayHistoryStorage PlayHistoryStorage
 
 <div class="d-flex align-center justify-center">
     <div class="d-flex align-center play-control">
-        <MudIconButton Size="Size.Medium" Icon="fas fa-chevron-circle-left"
+        <MudIconButton Size="Size.Medium"
+                       Icon="fa-solid fa-backward-step"
                        OnClick="PreviousAsync" />
         <MudToggleIconButton Size="Size.Large"
                              Toggled="@_isPlaying"
                              ToggledChanged="OnToggledChangedAsync"
-                             Icon="@Icons.Material.Filled.PlayCircleOutline"
+                             Icon="fa-regular fa-circle-play"
                              ToggledSize="Size.Large"
-                             ToggledIcon="@Icons.Material.Filled.PauseCircleOutline" />
-        <MudIconButton Size="Size.Medium" Icon="fas fa-chevron-circle-right"
+                             ToggledIcon="fa-solid fa-circle-pause" />
+        <MudIconButton Size="Size.Medium"
+                       Icon="fa-solid fa-forward-step"
                        OnClick="NextAsync" />
     </div>
     <div class="d-flex align-center ml-6 mr-6 music-info">
@@ -64,11 +67,17 @@
 
         @if (IsLogin)
         {
-            <MudIconButton Size="Size.Small" Icon="fas fa-folder-plus"
+            <MudIconButton Class="ml-2"
+                       Size="Size.Small"
+                       Icon="fas fa-folder-plus"
                        OnClick="@(()=>AddToMyFavoriteAsync())" />
         }
-        <MudIconButton Size="Size.Small" Icon="@_soundIcon" OnClick="ChangeSoundAsync" />
-        <MudSlider Value="@_volume"
+        <MudIconButton Class="ml-2"
+                       Size="Size.Small"
+                       Icon="@_soundIcon"
+                       OnClick="ChangeSoundAsync" />
+        <MudSlider Class="ml-1"
+                   Value="@_volume"
                    Style="width:100px"
                    ValueLabel="true"
                    Size="Size.Small"
@@ -94,18 +103,20 @@
     private double _volume;
     private MusicResultShow _currentMusic;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+
+        await UpdateCurrentMusicAsync();
+
         _playerService.IsPlayingChanged += async (_, __) => await PlayingChangedAsync();
         _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();
         _playerService.PositionChanged += async (_, __) => await PositionChangedAsync();
 
-        UpdateCurrentMusic();
         UpdateRepeatModel();
 
         UpdateSoundOnOff().Wait();
         UpdateVolume().Wait();
-        return base.OnInitializedAsync();
     }
 
     private async Task OpenPlayingPage()
@@ -121,6 +132,7 @@
     private async Task NewMusicAddedAsync()
     {
         var metadata = _playerService.Metadata;
+        await PlayHistoryStorage.SetLastMusicIdAsync(metadata.Id);
         var playlist = await _playlistService.GetOneAsync(metadata.Id);
         if (playlist != null)
         {
@@ -169,10 +181,31 @@
         await _playerService.Next();
     }
 
-
-    private async Task UpdateCurrentMusic()
+    private async Task UpdateCurrentMusicAsync()
     {
-        //TODO read to db
+        var musicId = await PlayHistoryStorage.GetLastMusicIdAsync();
+        if (musicId.IsEmpty())
+        {
+            return;
+        }
+        var playlist = await _playlistService.GetOneAsync(musicId);
+        if (playlist == null)
+        {
+            return;
+        }
+        _currentMusic = new MusicResultShow()
+            {
+                Id = playlist.Id,
+                IdOnPlatform = playlist.IdOnPlatform,
+                Platform = playlist.Platform,
+                Name = playlist.Name,
+                Album = playlist.Album,
+                Artist = playlist.Artist,
+                ExtendDataJson = playlist.ExtendDataJson,
+                ImageUrl = playlist.ImageUrl
+            };
+        _musicImg = playlist.ImageUrl;
+        _musicInfo = $"{_currentMusic.Name} - {_currentMusic.Artist}";
     }
 
     private void UpdateRepeatModel()
@@ -180,18 +213,18 @@
         switch (Settings.Environment.Player.PlayMode)
         {
             case PlayModeEnum.RepeatOne:
-                _repeatIcon = Icons.Material.Filled.RepeatOne;
+                _repeatIcon = "fa-solid fa-1";
                 break;
 
             case PlayModeEnum.RepeatList:
-                _repeatIcon = Icons.Material.Filled.Repeat;
+                _repeatIcon = "fa-solid fa-repeat";
                 break;
 
             case PlayModeEnum.Shuffle:
-                _repeatIcon = Icons.Material.Filled.Shuffle;
+                _repeatIcon = "fa-solid fa-shuffle";
                 break;
             default:
-                _repeatIcon = Icons.Material.Filled.Repeat;
+                _repeatIcon = "fa-solid fa-repeat";
                 break;
         }
     }

@@ -1,7 +1,7 @@
 @media screen and (min-width: 960px) {
     .page {
         display: grid;
-        grid-template-rows: 60px 1fr auto;
+        grid-template-rows: 60px 1fr 80px;
         grid-template-columns: 200px 1fr;
         grid-template-areas:
             "header header"

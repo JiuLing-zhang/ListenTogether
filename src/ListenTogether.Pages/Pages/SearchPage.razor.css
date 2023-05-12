@@ -1,3 +1,46 @@
-.page {
- 
+@media screen and (min-width: 960px) {
+    .suggest {
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            "hotWords histories";
+    }
+
+    .hot-words-detail {
+        overflow-y: auto;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .suggest {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "histories"
+            "hotWords";
+    }
+
+    .suggest-title {
+        justify-content: space-between;
+    }
+
+    .hot-words {
+        margin-top: 10px;
+    }
+}
+
+.histories {
+    grid-area: histories;
+}
+
+.hot-words {
+    grid-area: hotWords;
+}
+
+.suggest-title {
+    font-size: 17px;
+    display: flex;
+    align-items: center;
 }

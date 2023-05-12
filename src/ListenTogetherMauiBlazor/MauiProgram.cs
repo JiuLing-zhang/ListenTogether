@@ -58,6 +58,7 @@ namespace ListenTogetherMauiBlazor
 
             builder.Services.AddSingleton<DesktopMoving>();
             builder.Services.AddSingleton<DesktopNotification>();
+            builder.Services.AddSingleton<IPlayHistoryStorage, PlayHistoryStorage>();
             builder.Services.AddSingleton<ISearchHistoryStorage, SearchHistoryStorage>();
             builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();
             builder.Services.AddSingleton<ApiHttpMessageHandler>();

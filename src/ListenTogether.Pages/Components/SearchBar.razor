@@ -1,34 +1,36 @@
 ﻿@using ListenTogether.Data;
 @inject IMusicNetworkService MusicNetworkService
 
-<MudAutocomplete T="string"
-                 @bind-Value="_searchKey"
-                 Label="搜索"
-                 MaxLength="30"
-                 Margin="Margin.Dense"
-                 Dense="true"
-                 Variant="Variant.Outlined"
-                 SearchFunc="@SearchSuggestAsync"
-                 ResetValueOnEmptyText="true"
-                 Clearable="true"
-                 CoerceValue="true"
-                 CoerceText="false"
-                 Immediate="true"
-                 AdornmentIcon="@Icons.Material.Filled.Search"
-                 AdornmentColor="Color.Primary"
-                 OnKeyUp="@OnSearchKeyUpAsync"
-                 ToStringFunc="@((x)=>{return x;})">
-    <ItemTemplate Context="e">
-        <div @onclick="@(()=>OnSearchItemSelect(e))">
-            <MudText>@e</MudText>
-        </div>
-    </ItemTemplate>
-    <ItemSelectedTemplate Context="e">
-        <div @onclick="@(()=>OnSearchItemSelect(e))">
-            <MudText>@e</MudText>
-        </div>
-    </ItemSelectedTemplate>
-</MudAutocomplete>
+<MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
+    <MudAutocomplete T="string"
+                     @bind-Value="_searchKey"
+                     Label="搜索"
+                     MaxLength="30"
+                     Margin="Margin.Dense"
+                     Dense="true"
+                     Variant="Variant.Outlined"
+                     SearchFunc="@SearchSuggestAsync"
+                     ResetValueOnEmptyText="true"
+                     Clearable="true"
+                     CoerceValue="true"
+                     CoerceText="false"
+                     Immediate="true"
+                     AdornmentIcon="@Icons.Material.Filled.Search"
+                     AdornmentColor="Color.Primary"
+                     OnKeyUp="@OnSearchKeyUpAsync"
+                     ToStringFunc="@((x)=>{return x;})">
+        <ItemTemplate Context="e">
+            <div @onclick="@(()=>OnSearchItemSelect(e))">
+                <MudText>@e</MudText>
+            </div>
+        </ItemTemplate>
+        <ItemSelectedTemplate Context="e">
+            <div @onclick="@(()=>OnSearchItemSelect(e))">
+                <MudText>@e</MudText>
+            </div>
+        </ItemSelectedTemplate>
+    </MudAutocomplete>
+</MudFocusTrap>
 
 @code {
     private string _searchKey = "";

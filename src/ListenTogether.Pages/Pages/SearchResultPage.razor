@@ -2,20 +2,29 @@
 @using ListenTogether.Filters.MusicSearchFilter;
 
 @inject IMusicNetworkService MusicNetworkService
+@inject IPlaylistService PlaylistService
+@inject ISnackbar Snackbar
+@inject MusicResultService MusicResultService
 
 @if (_musics == null)
 {
-    <MudSkeleton Class="mt-1" Height="400px" />
+    <MudSkeleton Class="mt-3" Height="60px" />
+    <MudSkeleton Class="mt-3" Height="60px" />
+    <MudSkeleton Class="mt-3" Height="60px" />
+    <MudSkeleton Class="mt-3" Height="60px" />
+    <MudSkeleton Class="mt-3" Height="60px" />
 }
 else
 {
-    <MudButton Variant="Variant.Outlined"
-           Color="Color.Primary"
+    <MudButton Variant="Variant.Filled"
            StartIcon="@Icons.Material.Filled.PlayCircleOutline"
-           Size="Size.Small">播放全部</MudButton>
+           IconColor="Color.Primary"
+           Size="Size.Small"
+           Disabled="@(_musics==null || !_musics.Any())"
+           OnClick="PlayAllAsync">播放全部</MudButton>
+
     <MusicResultView Musics="@_musics" />
 }
-
 @code {
     [Parameter]
     public string Keyword { get; set; } = null!;
@@ -25,7 +34,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
         var musics = await MusicNetworkService.SearchAsync(Settings.Environment.Search.EnablePlatform, Keyword);
 
         if (Settings.Environment.Search.IsMatchSearchKey)
@@ -43,4 +51,23 @@ else
         musics = vipMusicFilter.Filter(musics);
         _musics = musics;
     }
+
+    private async Task PlayAllAsync()
+    {
+        if (_musics == null || !_musics.Any())
+        {
+            return;
+        }
+
+        if (Settings.Environment.Play.IsCleanPlaylistWhenPlaySongMenu)
+        {
+            if (!await PlaylistService.RemoveAllAsync())
+            {
+                Snackbar.Add("播放列表清空失败", Severity.Error);
+                return;
+            }
+        }
+        await MusicResultService.PlayAllAsync(_musics.ToLocalMusics());
+    }
+
 }

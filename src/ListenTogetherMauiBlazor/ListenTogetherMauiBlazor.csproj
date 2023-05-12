@@ -20,8 +20,8 @@
 		<ApplicationIdGuid>E98DF056-A645-4113-A892-4E4FE83BE1CA</ApplicationIdGuid>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>2.0.16</ApplicationDisplayVersion>
-		<ApplicationVersion>152</ApplicationVersion>
+		<ApplicationDisplayVersion>2.0.17</ApplicationDisplayVersion>
+		<ApplicationVersion>153</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -34,7 +34,7 @@
 	<PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Release'">
 		<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
-		<PackageCertificateThumbprint>A5516AB2463BE322A03B1F4F30DAB3F64847FBEC</PackageCertificateThumbprint>
+		<PackageCertificateThumbprint>5126BC804AC648CF8C92DD7021655145EDEF059E</PackageCertificateThumbprint>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">

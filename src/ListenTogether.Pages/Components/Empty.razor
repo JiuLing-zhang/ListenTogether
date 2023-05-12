@@ -1,17 +1,27 @@
 ﻿
+<div class="d-flex align-center @Class">
+    <MudIcon Icon="far fa-surprise"
+             Dense="true"
+             Size="Size.Small"
+             Class="mr-1"></MudIcon>
+    <span>什么也没有</span>
 
-<div class="d-flex flex-column mt-10">
-    <MudIcon Class="align-self-center" Icon="fas fa-box-open" Color="Color.Primary" Size="Size.Large"></MudIcon>
-    <div class="d-flex align-self-center align-center mt-2">
-        <MudInputLabel>什么也没有</MudInputLabel>
-        <MudLink Class="ml-2" OnClick="Reload">刷新</MudLink>
-    </div>
+    @if (OnRefresh.HasDelegate)
+    {
+        <span @onclick="Refresh"
+              style="cursor:pointer;margin-left:2px;color:var(--mud-palette-primary)">
+            刷新
+        </span>
+    }
 </div>
 @code {
     [Parameter]
-    public EventCallback OnReload { get; set; }
-    private async Task Reload()
+    public string Class { get; set; } = "";
+
+    [Parameter]
+    public EventCallback OnRefresh { get; set; }
+    private async Task Refresh()
     {
-        await OnReload.InvokeAsync();
+        await OnRefresh.InvokeAsync();
     }
 }

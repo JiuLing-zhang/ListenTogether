@@ -25,7 +25,7 @@ else
 {
     @if (!_myFavoriteList.Any())
     {
-        <Empty OnReload="GetMyFavoriteListAsync" />
+        <Empty OnRefresh="GetMyFavoriteListAsync" />
     }
     else
     {
