@@ -57,7 +57,7 @@ else
         var index = 0;
         @foreach (var myFavoriteDetail in _myFavoriteDetailList)
         {
-            <div class="d-flex align-center my-favorite-detail mt-4 mb-4">
+            <div class="d-flex align-center my-favorite-detail mt-3 mb-3">
                 <div class="flex-grow-0 tool">
                     <div class="play">
                         <MudIconButton Icon="@Icons.Material.Filled.Delete"
@@ -71,7 +71,9 @@ else
                     <div>
                         <div class="d-flex align-center">
                             <MudChip Label="true"
+                         Variant="Variant.Outlined"
                          Class="mr-2"
+                         Style="font-size: 12px;width: 35px;height: 20px;opacity: 0.7;padding-left: 6px;"
                          Size="Size.Small">@myFavoriteDetail.Music.Platform.GetDescription()</MudChip>
                             <div>@myFavoriteDetail.Music.Name</div>
                         </div>

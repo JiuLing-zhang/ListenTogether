@@ -26,7 +26,7 @@
     grid-area: header;
     padding: 5px 10px 10px 10px;
     border-bottom: 1px solid;
-    border-color: #DCDCDC;
+    border-color: var(--mud-palette-dark-lighten);
 }
 
 .logo {
@@ -42,7 +42,7 @@
     grid-area: sidebar;
     padding: 10px;
     border-right: 1px solid;
-    border-color: #DCDCDC;
+    border-color: var(--mud-palette-dark-lighten);
 }
 
 .page-main {
@@ -55,7 +55,7 @@
     grid-area: footer;
     padding: 10px;
     border-top: 1px solid;
-    border-color: #DCDCDC;
+    border-color: var(--mud-palette-dark-lighten);
 }
 
 ::deep .containerPage {
