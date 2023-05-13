@@ -2,7 +2,10 @@
 @inherits MyComponentBase
 @inject IMyFavoriteService MyFavoriteService
 @inject NavigationManager NavigationManager
+@inject MusicResultService MusicResultService
 @inject IDialogService DialogService
+@inject IPlaylistService PlaylistService
+@inject ISnackbar Snackbar
 
 <div class="header">
     <MudInputLabel>我的歌单</MudInputLabel>
@@ -37,7 +40,7 @@ else
                     <div class="play">
                         <MudIconButton Icon="@Icons.Material.Filled.PlayCircleOutline"
                            Size="Size.Medium"
-                           OnClick="PlayAsync"></MudIconButton>
+                           OnClick="@(()=>PlayAllAsync(myFavorite.Id))"></MudIconButton>
                     </div>
                 </div>
                 <div class="d-flex align-center flex-grow-1 info">
@@ -88,9 +91,26 @@ else
         }
     }
 
-    private async Task PlayAsync()
+    private async Task PlayAllAsync(int myFavoriteId)
     {
+        var myFavoriteDetail = await MyFavoriteService.GetMyFavoriteDetailAsync(myFavoriteId);
+        if (!myFavoriteDetail.Any())
+        {
+            Snackbar.Add("播放失败，歌单是空的哦~~~", Severity.Error);
+            return;
+        }
 
+        if (Settings.Environment.Play.IsCleanPlaylistWhenPlaySongMenu)
+        {
+            if (!await PlaylistService.RemoveAllAsync())
+            {
+                Snackbar.Add("播放列表清空失败", Severity.Error);
+                return;
+            }
+        }
+
+        var localMusics = myFavoriteDetail.Select(x => x.Music).ToList();
+        await MusicResultService.PlayAllAsync(localMusics);
     }
 
 

@@ -7,14 +7,13 @@
     .playlist {
     }
 
-        .playlist:hover {
-            background-color: dimgrey;
-            cursor: pointer;
-        }
+    .playlist-detail:hover {
+        background-color: var(--mud-palette-table-striped);
+    }
 
-        .playlist .tool {
-            width: 100px;
-        }
+    .playlist .tool {
+        width: 100px;
+    }
 }
 
 @media screen and (max-width: 960px) {

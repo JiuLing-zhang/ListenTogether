@@ -1,14 +1,34 @@
 ﻿@inject NavigationManager NavigationManager
+@inject IMusicNetworkService MusicNetworkService
 
 <MudChip Icon="@Icons.Material.Filled.Search"
          Class="cursor-text"
          IconColor="Color.Primary"
          OnClick="GotoSearchPage"
          Style="width: 100%; display: flex; justify-content: left; padding-left: 15px;">
-    想找点什么呢？
+    @_text
 </MudChip>
 
 @code {
+
+    private string _text = "输入歌曲名搜索";
+    private static List<string>? _hotWords;
+    private Timer? _timer;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (_hotWords == null || !_hotWords.Any())
+        {
+            _hotWords = await MusicNetworkService.GetHotWordAsync();
+        }
+
+        _timer = new Timer(async (_) =>
+        {
+            _text = JiuLing.CommonLibs.RandomUtils.GetOneFromList(_hotWords);
+            await InvokeAsync(StateHasChanged);
+        }, new AutoResetEvent(false), 2000, 10000); // fire every 2000 milliseconds
+    }
+
     private void GotoSearchPage()
     {
         NavigationManager.NavigateTo("/search");

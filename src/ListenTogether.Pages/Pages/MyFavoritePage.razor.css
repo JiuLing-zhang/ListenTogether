@@ -8,7 +8,7 @@
     }
 
         .my-favorite:hover {
-            background-color: dimgrey;
+            background-color: var(--mud-palette-table-striped);
             cursor: pointer;
         }
 

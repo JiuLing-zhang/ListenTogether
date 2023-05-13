@@ -8,8 +8,7 @@
     }
 
         .my-favorite-detail:hover {
-            background-color: dimgrey;
-            cursor: pointer;
+            background-color: var(--mud-palette-table-striped);
         }
 
         .my-favorite-detail .tool {

@@ -1,6 +1,7 @@
 ﻿@page "/my-favorite-detail/{myFavoriteId:int}"
 @using ListenTogether.Filters.MusicSearchFilter;
 
+@inject MusicResultService MusicResultService
 @inject IMusicNetworkService MusicNetworkService
 @inject IDialogService DialogService
 @inject IMyFavoriteService MyFavoriteService
@@ -66,7 +67,7 @@ else
                     </div>
                 </div>
 
-                <div class="d-flex align-center flex-grow-1 info">
+                <MouseDiv Class="d-flex align-center flex-grow-1 info" OnClick="@(()=>Play(myFavoriteDetail))">
                     <div class="mr-3 seq">@(index++)</div>
                     <div>
                         <div class="d-flex align-center">
@@ -81,7 +82,8 @@ else
                             <div>@myFavoriteDetail.Music.Artist - @myFavoriteDetail.Music.Album</div>
                         </div>
                     </div>
-                </div>
+                </MouseDiv>
+
             </div>
         }
     }
@@ -155,4 +157,22 @@ else
         _myFavoriteDetailList?.RemoveAll(x => x.Id == id);
         Snackbar.Add("删除成功", Severity.Success);
     }
+
+
+    private async Task Play(MyFavoriteDetail myFavoriteDetail)
+    {
+        var music = new LocalMusic()
+            {
+                Id = myFavoriteDetail.Music.Id,
+                Artist = myFavoriteDetail.Music.Artist,
+                Album = myFavoriteDetail.Music.Album,
+                Name = myFavoriteDetail.Music.Name,
+                IdOnPlatform = myFavoriteDetail.Music.Id,
+                ImageUrl = myFavoriteDetail.Music.ImageUrl,
+                Platform = myFavoriteDetail.Music.Platform,
+                ExtendDataJson = myFavoriteDetail.Music.ExtendDataJson
+            };
+        await MusicResultService.PlayAsync(music);
+    }
+
 }
