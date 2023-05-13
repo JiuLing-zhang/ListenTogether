@@ -6,105 +6,31 @@
 @inject IDialogService DialogService
 @inject IPlayHistoryStorage PlayHistoryStorage
 
-<div class="d-flex align-center justify-center">
-    <div class="d-flex align-center play-control">
-        <MudIconButton Size="Size.Medium"
-                       Icon="fa-solid fa-backward-step"
-                       OnClick="PreviousAsync" />
-        <MudToggleIconButton Size="Size.Large"
-                             Toggled="@_isPlaying"
-                             ToggledChanged="OnToggledChangedAsync"
-                             Icon="fa-regular fa-circle-play"
-                             ToggledSize="Size.Large"
-                             ToggledIcon="fa-solid fa-circle-pause" />
-        <MudIconButton Size="Size.Medium"
-                       Icon="fa-solid fa-forward-step"
-                       OnClick="NextAsync" />
-    </div>
-    <div class="d-flex align-center ml-6 mr-6 music-info">
-        @if (OnOpenPlayingPage.HasDelegate)
-        {
-            <div @onclick="OpenPlayingPage" class="music-image">
-                <MudImage Src="@_musicImg"
-                      Height="45"
-                      Width="45"
-                      Elevation="1"
-                      Class="rounded-lg" />
-                <div class="mask">
-                    <MudIcon Size="Size.Large" Icon="@Icons.Material.Filled.KeyboardArrowUp"></MudIcon>
-                </div>
-
-            </div>
-        }
-        else
-        {
-            <MudImage Src="@_musicImg"
-                  Height="45"
-                  Width="45"
-                  Elevation="5"
-                  Class="rounded-lg" />
-        }
-        <div class="music-detail">
-            <div class="d-flex justify-space-between">
-                <div class="music-title">
-                    @_musicInfo
-                </div>
-                <div class="time">
-                    @_position / @_duration
-                </div>
-            </div>
-            <MudSlider Min="0"
-                       Max="100"
-                       Size="Size.Small"
-                       Value="@_playProgress"
-                       T="double"
-                       @onmousedown="ProgressMouseDown"
-                       @onmouseup="ProgressMouseUp"
-                       ValueChanged="ChangeProgress"
-                       Variant="Variant.Filled" />
-
-        </div>
-    </div>
-    <div class="d-flex align-center other">
-        <MudIconButton Size="Size.Small" Icon="@_repeatIcon" OnClick="ChangeRepeatAsync" />
-
-        @if (IsLogin)
-        {
-            <MudIconButton Class="ml-2"
-                       Size="Size.Small"
-                       Icon="fas fa-folder-plus"
-                       OnClick="@(()=>AddToMyFavoriteAsync())" />
-        }
-        <MudIconButton Class="ml-2"
-                       Size="Size.Small"
-                       Icon="@_soundIcon"
-                       OnClick="ChangeSoundAsync" />
-        <MudSlider Class="ml-1"
-                   Value="@_volume"
-                   Style="width:100px"
-                   ValueLabel="true"
-                   Size="Size.Small"
-                   Variant="Variant.Filled"
-                   T="double"
-                   ValueChanged="ChangeVolumeAsync" />
-    </div>
-</div>
+<DesktopView OnOpenPlayingPage="OpenPlayingPageAsync"
+             Music="@(_music)"
+             IsPlaying="@(_isPlaying)"
+             RepeatIcon="@(_repeatIcon)"
+             SoundIcon="@(_soundIcon)"
+             Volume="@(_volume)"
+             OnVolumeChanged="ChangeVolumeAsync"
+             OnProgressChanged="ChangeProgressAsync"
+             Position="@(_position)"
+             OnPlay="PlayAsync"
+             OnNext="NextAsync"
+             OnPrevious="PreviousAsync"
+             OnAddToMyFavorite="AddToMyFavoriteAsync"
+             OnRepeatChanged="ChangeRepeatAsync"
+             OnSoundChanged="ChangeSoundAsync" />
 
 @code {
     [Parameter]
     public EventCallback OnOpenPlayingPage { get; set; }
-
-    private string _repeatIcon;
-    private string _soundIcon;
+    private LocalMusic? _music;
+    private string _repeatIcon = "fa-solid fa-repeat";
+    private string _soundIcon = "fas fa-volume-down";
     private bool _isPlaying = false;
-    private string _musicImg;
-    private string _musicInfo;
-    private string _position;
-    private string _duration;
-    private bool _isPlayProgressDragging;
-    private double _playProgress;
-    private double _volume;
-    private MusicResultShow _currentMusic;
+    private MusicPosition? _position;
+    private int _volume;
 
     protected override async Task OnInitializedAsync()
     {
@@ -122,7 +48,7 @@
         UpdateVolume().Wait();
     }
 
-    private async Task OpenPlayingPage()
+    private async Task OpenPlayingPageAsync()
     {
         await OnOpenPlayingPage.InvokeAsync();
     }
@@ -135,43 +61,32 @@
     private async Task NewMusicAddedAsync()
     {
         var metadata = _playerService.Metadata;
-        await PlayHistoryStorage.SetLastMusicIdAsync(metadata.Id);
-        var playlist = await _playlistService.GetOneAsync(metadata.Id);
-        if (playlist != null)
+        if (metadata == null)
         {
-            _currentMusic = new MusicResultShow()
-                {
-                    Id = playlist.Id,
-                    IdOnPlatform = playlist.IdOnPlatform,
-                    Platform = playlist.Platform,
-                    Name = playlist.Name,
-                    Album = playlist.Album,
-                    Artist = playlist.Artist,
-                    ExtendDataJson = playlist.ExtendDataJson,
-                    ImageUrl = playlist.ImageUrl
-                };
+            return;
         }
-        _musicImg = playlist.ImageUrl;
-        _musicInfo = $"{metadata.Name} - {metadata.Artist}";
+        await PlayHistoryStorage.SetLastMusicIdAsync(metadata.Id);
+        await ReadLocalMusicFromPlaylist(metadata.Id);
         await InvokeAsync(StateHasChanged);
     }
 
     private async Task PositionChangedAsync()
     {
-        var position = _playerService.CurrentPosition;
-        _position = $"{position.position.Minutes:D2}:{position.position.Seconds:D2}";
-        _duration = $"{position.Duration.Minutes:D2}:{position.Duration.Seconds:D2}";
-
-        if (!_isPlayProgressDragging)
-        {
-            _playProgress = position.PlayProgress * 100;
-        }
+        _position = _playerService.CurrentPosition;
         await InvokeAsync(StateHasChanged);
     }
 
-    public async Task OnToggledChangedAsync(bool toggled)
+    public async Task PlayAsync()
     {
-        await _playerService.PlayAsync(_playerService.Metadata.Id);
+        string musicId = _playerService.Metadata?.Id ?? "";
+        if (musicId.IsEmpty())
+        {
+            musicId = _music?.Id ?? "";
+        }
+        if (musicId.IsNotEmpty())
+        {
+            await _playerService.PlayAsync(musicId);
+        }
     }
 
     private async Task PreviousAsync()
@@ -191,12 +106,18 @@
         {
             return;
         }
+        await ReadLocalMusicFromPlaylist(musicId);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ReadLocalMusicFromPlaylist(string musicId)
+    {
         var playlist = await _playlistService.GetOneAsync(musicId);
         if (playlist == null)
         {
             return;
         }
-        _currentMusic = new MusicResultShow()
+        _music = new LocalMusic()
             {
                 Id = playlist.Id,
                 IdOnPlatform = playlist.IdOnPlatform,
@@ -207,8 +128,6 @@
                 ExtendDataJson = playlist.ExtendDataJson,
                 ImageUrl = playlist.ImageUrl
             };
-        _musicImg = playlist.ImageUrl;
-        _musicInfo = $"{_currentMusic.Name} - {_currentMusic.Artist}";
     }
 
     private void UpdateRepeatModel()
@@ -279,7 +198,7 @@
     }
     private async Task UpdateVolume()
     {
-        _volume = Settings.Environment.Player.Volume;
+        _volume = (int)Settings.Environment.Player.Volume;
         await _playerService.SetVolume((int)Settings.Environment.Player.Volume);
     }
 
@@ -289,53 +208,25 @@
         await WritePlayerSettingAsync();
         await UpdateSoundOnOff();
     }
-    private async Task ChangeVolumeAsync(double value)
+    private async Task ChangeVolumeAsync(int value)
     {
         _volume = value;
-        int intVolume = (int)_volume;
-        await _playerService.SetVolume(intVolume);
-        Settings.Environment.Player.Volume = intVolume;
+        await _playerService.SetVolume(_volume);
+        Settings.Environment.Player.Volume = _volume;
         await WritePlayerSettingAsync();
     }
 
-    private void ProgressMouseDown()
+    private async Task ChangeProgressAsync(double value)
     {
-        _isPlayProgressDragging = true;
-    }
-
-    private void ProgressMouseUp()
-    {
-        _isPlayProgressDragging = false;
-    }
-
-    private async Task ChangeProgress(double value)
-    {
-        _playProgress = value;
-        if (!_isPlayProgressDragging)
-        {
-            return;
-        }
         if (_playerService.Metadata != null)
         {
-            var positionMillisecond = _playerService.CurrentPosition.Duration.TotalMilliseconds * _playProgress / 100;
+            var positionMillisecond = _playerService.CurrentPosition.Duration.TotalMilliseconds * value;
             await _playerService.SetPlayPosition(positionMillisecond);
         }
     }
 
-    private async Task AddToMyFavoriteAsync()
+    private async Task AddToMyFavoriteAsync(LocalMusic music)
     {
-        var music = new LocalMusic()
-            {
-                Id = _currentMusic.Id,
-                IdOnPlatform = _currentMusic.IdOnPlatform,
-                Platform = _currentMusic.Platform,
-                Name = _currentMusic.Name,
-                Album = _currentMusic.Album,
-                Artist = _currentMusic.Artist,
-                ExtendDataJson = _currentMusic.ExtendDataJson,
-                ImageUrl = _currentMusic.ImageUrl
-            };
-
         var parameters = new DialogParameters { ["Music"] = music };
         var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters);
         await dialog.Result;

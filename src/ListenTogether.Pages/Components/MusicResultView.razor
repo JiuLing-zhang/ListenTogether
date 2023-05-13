@@ -29,7 +29,6 @@ else
                 {
                     <MudTh></MudTh>
                 }
-                <MudTh>类型</MudTh>
                 <MudTh>时长</MudTh>
                 <MudTh>名称</MudTh>
                 <MudTh>歌手</MudTh>
@@ -46,14 +45,10 @@ else
                         <MudIconButton Size="Size.Small"
                                Icon="fas fa-folder-plus"
                                OnClick="()=>AddToMyFavoriteAsync(context)" />
-
                     </MudTd>
                 }
                 <MudTd>
-                    @context.Fee
-                </MudTd>
-                <MudTd>
-                    @context.Duration
+                    @($"{@context.Duration.Minutes:D2}:{@context.Duration.Seconds:D2}")
                 </MudTd>
                 <MudTd>
                     @context.Name
