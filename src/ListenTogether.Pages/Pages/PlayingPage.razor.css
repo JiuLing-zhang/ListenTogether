@@ -42,8 +42,10 @@
 
 @media screen and (min-width: 960px) {
     .music-info {
+        width: 100%;
+        padding-top: 40px;
         display: grid;
-        grid-template-rows: 1fr;
+        grid-template-rows: 430px;
         grid-template-columns: 50% 50%;
         grid-template-areas:
             "image detail";
@@ -62,6 +64,11 @@
         grid-area: detail;
         justify-self: center;
         width: 400px;
+    }
+
+    .playing-player-bar {
+        height: 80px;
+        padding-top: 10px;
     }
 }
 
@@ -99,11 +106,13 @@
 .title {
     color: #FFFFFF;
     font-size: 24px;
+    margin: auto;
 }
 
 .name {
     color: #FFFFFF;
     opacity: 0.6;
+    margin: 5px auto 0 auto;
 }
 
 
@@ -111,8 +120,9 @@
     color: #FFFFFF;
     opacity: 0.6;
     height: 60%;
-    overflow: hidden;
+    overflow: auto;
     font-size: 15px;
+    margin-top: 20px;
 }
 
     .lyric ul {
