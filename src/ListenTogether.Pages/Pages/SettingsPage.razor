@@ -114,6 +114,11 @@
                Variant="Variant.Filled"
                Style="width:100%"
                OnClick="GotoLogPage">日志管理</MudButton>
+    <MudButton Color="Color.Primary"
+               Class="mt-2"
+               Variant="Variant.Filled"
+               Style="width:100%"
+               OnClick="GotoCachePage">缓存管理</MudButton>
     @if (LoginDataStorage.GetUsername().IsNotEmpty())
     {
         <MudButton Color="Color.Primary"
@@ -226,6 +231,10 @@
     private void GotoLogPage()
     {
         NavigationManager.NavigateTo("/log");
+    }
+    private void GotoCachePage()
+    {
+        NavigationManager.NavigateTo("/cache");
     }
 
     private async Task LogoutAsync()

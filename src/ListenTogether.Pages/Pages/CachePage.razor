@@ -1,0 +1,94 @@
+﻿@page "/cache"
+@using ListenTogether.EasyLog
+@inject IDialogService DialogService
+
+<div class="page">
+    <div class="mb-2">缓存管理</div>
+
+    @if (_cacheLength == null)
+    {
+        <div class="d-flex flex-column align-center">
+            <MudSkeleton SkeletonType="SkeletonType.Circle" Width="200px" Height="200px" />
+            <MudSkeleton Class="mt-5" SkeletonType="SkeletonType.Rectangle" Width="120px" Height="30px" />
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-column align-center">
+            <div class="cache-size d-flex flex-column align-center justify-center">
+                <div>@($"{_cacheLength / 1024 / 1024:N2}")</div>
+                <div class="mt-2">MB</div>
+            </div>
+            <div class="mt-2"> @(_processMessage) </div>
+            <MudButton Variant="Variant.Outlined"
+                   Class="mt-7"
+                   Size="Size.Small"
+                   Disabled="@(_isWorking || _cacheLength==0)"
+                   OnClick="ClearCacheAsync">清理</MudButton>
+        </div>
+    }
+
+</div>
+@code {
+    private double? _cacheLength;
+    private bool _isWorking = false;
+    private string _processMessage = "";
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await CalcCacheAsync();
+    }
+
+    private async Task CalcCacheAsync()
+    {
+        _isWorking = true;
+        _cacheLength = null;
+        _processMessage = "正在计算...";
+        await Task.Run(async () =>
+        {
+            _cacheLength = 0;
+            var files = Directory.GetFiles(GlobalPath.MusicCacheDirectory);
+            foreach (var file in files)
+            {
+                var fi = new FileInfo(file);
+                _cacheLength += fi.Length;
+                await InvokeAsync(StateHasChanged);
+            }
+            _processMessage = "计算完成";
+            _isWorking = false;
+            await InvokeAsync(StateHasChanged);
+        });
+    }
+
+    private async Task ClearCacheAsync()
+    {
+        bool? result = await DialogService.ShowMessageBox("", "确定要删除吗？删除后不可恢复。", yesText: "确定", cancelText: "取消");
+        if (result == null || result.Value == false)
+        {
+            return;
+        }
+        _isWorking = true;
+        _processMessage = "正在清理....";
+        await Task.Run(async () =>
+        {
+            var files = Directory.GetFiles(GlobalPath.MusicCacheDirectory);
+            foreach (var file in files)
+            {
+                try
+                {
+                    var fi = new FileInfo(file);
+                    _cacheLength -= fi.Length;
+                    File.Delete(file);
+                    await InvokeAsync(StateHasChanged);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("缓存文件删除失败。", ex);
+                }
+            }
+            _processMessage = "缓存已全部清理";
+            _isWorking = false;
+            await InvokeAsync(StateHasChanged);
+        });
+    }
+}
