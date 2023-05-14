@@ -109,9 +109,15 @@
         </div>
     </div>
 
+    <MudButton Color="Color.Primary"
+               Class="mt-8"
+               Variant="Variant.Filled"
+               Style="width:100%"
+               OnClick="GotoLogPage">日志管理</MudButton>
     @if (LoginDataStorage.GetUsername().IsNotEmpty())
     {
         <MudButton Color="Color.Primary"
+               Class="mt-2"
                Variant="Variant.Filled"
                Style="width:100%"
                OnClick="@(async () => await LogoutAsync())">退出账号</MudButton>
@@ -216,6 +222,10 @@
     private void GotoLoginPage()
     {
         NavigationManager.NavigateTo("/login");
+    }
+    private void GotoLogPage()
+    {
+        NavigationManager.NavigateTo("/log");
     }
 
     private async Task LogoutAsync()

@@ -1,0 +1,85 @@
+﻿@page "/log"
+
+@using ListenTogether.EasyLog;
+@using ListenTogether.Model;
+
+<Loading IsLoading="_isLoading"></Loading>
+<div class="page d-flex flex-column">
+    <div class="flex-grow-0 d-flex align-center justify-space-between">
+        <div>日志</div>
+        <div>
+            <MudButton Variant="Variant.Text"
+                       Class="ml-5"
+                       EndIcon="@Icons.Material.Filled.Delete"
+                       IconSize="Size.Small"
+                       Size="Size.Small"
+                       OnClick="ClearLogAsync"
+                       Color="Color.Primary">清空</MudButton>
+        </div>
+
+
+
+    </div>
+
+    @if (_logs == null)
+    {
+        <MudSkeleton Class="mt-3" Height="20px" />
+        <MudSkeleton Class="mt-3" Height="20px" />
+        <MudSkeleton Class="mt-3" Height="20px" />
+        <MudSkeleton Class="mt-3" Height="20px" />
+        <MudSkeleton Class="mt-3" Height="20px" />
+        <MudSkeleton Class="mt-3" Height="20px" />
+    }
+    else
+    {
+        if (!_logs.Any())
+        {
+            <Empty Class="mt-2" />
+        }
+        else
+        {
+            <div class="mt-2 mb-2 flex-grow-1" style="overflow-y: auto;user-select: text;">
+                @foreach (var log in _logs)
+                {
+                    <div class="log-time mt-2 cursor-text">
+                        @(JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.Timestamp))
+                    </div>
+                    <div class="cursor-text">@log.Message</div>
+                }
+            </div>
+        }
+    }
+
+</div>
+
+@code {
+    private bool _isLoading = false;
+    private List<Log>? _logs;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await GetLogsAsync();
+    }
+
+    private async Task GetLogsAsync()
+    {
+        _logs = null;
+        var logs = Logger.GetAll();
+        _logs = new List<Log>();
+        foreach (var log in logs)
+        {
+            _logs.Add(new Log()
+                {
+                    Timestamp = log.CreateTime,
+                    LogType = log.LogType,
+                    Message = log.Message
+                });
+        }
+    }
+
+    private async Task ClearLogAsync()
+    {
+        Logger.RemoveAll();
+        GetLogsAsync();
+    }
+}
