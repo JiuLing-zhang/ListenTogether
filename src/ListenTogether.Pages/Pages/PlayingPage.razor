@@ -1,4 +1,5 @@
-﻿@inject MusicPlayerService _playerService
+﻿@using ListenTogether.EasyLog
+@inject MusicPlayerService _playerService
 @inject IPlaylistService _playlistService
 @inject IMusicNetworkService _musicNetworkService
 
@@ -17,49 +18,65 @@
 
         <div class="flex-grow-1 music-info">
             <div class="music-image">
-                <div class="music-image-avatar @(_isPlaying?"":"animation-paused")">
-                    <MudAvatar Style="width:200px;height:200px;">
-                        <MudImage Src="@(_currentMusic.ImageUrl)"
+                <div class="music-image-avatar @(_isPlaying ? "" : "animation-paused")">
+                    @if (_currentMusic == null)
+                    {
+                        <MudSkeleton Class="mt-1" Height="200" />
+                    }
+                    else
+                    {
+                        <MudAvatar Style="width: 200px; height: 200px;">
+                            <MudImage Src="@(_currentMusic.ImageUrl)"
                                   Elevation="25" />
-                    </MudAvatar>
+                        </MudAvatar>
+                    }
+
                 </div>
                 <div class="align-self-center mt-4 copy">
                     复制
                 </div>
             </div>
             <div class="music-detail d-flex flex-column">
-                <div class="flex-grow-0 title">
-                    @_currentMusic.Name
-                </div>
-                <div class="flex-grow-0 name">
-                    @_currentMusic.Artist - @_currentMusic.Album
-                </div>
-                <div class="flex-grow-1 lyric">
-                    <ul>
-                        @{
-                            var index = 1;
-                        }
-                        @foreach (var lyriy in _lyrics)
-                        {
-                            index++;
-                            var h = "";
-                            if (index == 6)
-                            {
-                                h = "highlight";
-                            }
-                            <li class="lyric-row @h">@lyriy</li>
-                        }
-                    </ul>
+                @if (_currentMusic == null)
+                {
+                    <div class="flex-grow-0">
+                        <MudSkeleton Class="mt-1" />
+                    </div>
+                }
+                else
+                {
+                    <div class="flex-grow-0 title">
+                        @_currentMusic.Name
+                    </div>
+                    <div class="flex-grow-0 name">
+                        @_currentMusic.Artist - @_currentMusic.Album
+                    </div>
+                }
 
+                <div class="flex-grow-1 lyric">
+                    @if (_lyrics == null)
+                    {
+                        <MudSkeleton Class="mt-1" />
+                        <MudSkeleton Class="mt-1" />
+                        <MudSkeleton Class="mt-1" />
+                        <MudSkeleton Class="mt-1" />
+                    }
+                    else
+                    {
+                        <ul style="transform:translateY(@(0-_offset)px)">
+
+                            @foreach (var lyric in _lyrics)
+                            {
+                                <li class="lyric-row @(lyric.IsHighlight?"highlight":"")">@lyric.Info</li>
+                            }
+                        </ul>
+                    }
                 </div>
             </div>
         </div>
 
         <div class="blurBgMask"></div>
-        @if (_currentMusic.ImageUrl.IsNotEmpty())
-        {
-            <div class="blur" style="background-image:url(@(_currentMusic.ImageUrl))"></div>
-        }
+        <div class="blur" style="background-image:url(@(_currentMusic?.ImageUrl??"https://jiuling.cc/images/music.svg"))"></div>
     </div>
 
     <div class="playing-player-bar">
@@ -69,16 +86,17 @@
 
 @code {
 
+    private int _offset = 0;
     private bool _isPlaying = false;
     [Parameter]
     public EventCallback OnClosePlayingPage { get; set; }
-    private System.Timers.Timer _timer = new System.Timers.Timer(300);
-    private MusicResultShow _currentMusic = new MusicResultShow();
-    private List<string> _lyrics = new List<string>() { "test1", "test2", "test3" };
+    private Timer? _timer;
+    private MusicResultShow? _currentMusic;
+    private List<Lyric>? _lyrics;
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitializedAsync();
+        await base.OnInitializedAsync();
 
         //TODO 锁屏
         //if (!Config.Desktop && GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn)
@@ -92,10 +110,49 @@
             _isPlaying = _playerService.IsPlaying;
             StateHasChanged();
         };
-        //_timer.Elapsed += _timerLyricsUpdate_Tick();
-        //_timer.Start();
+
+        _timer = new Timer(ScrollLyric, new AutoResetEvent(false), 0, 200);
+
+
         _isPlaying = _playerService.IsPlaying;
         await NewMusicAddedAsync();
+    }
+
+    private void ScrollLyric(object? value)
+    {
+        if (!_isPlaying || _lyrics == null || !_lyrics.Any())
+        {
+            return;
+        }
+
+        var offset = 0;
+        var positionMillisecond = _playerService.CurrentPosition.position.TotalMilliseconds;
+        for (int i = 0; i < _lyrics.Count(); i++)
+        {
+            _lyrics[i].IsHighlight = false;
+            offset++;
+
+            if (_lyrics[i].PositionMillisecond > positionMillisecond)
+            {
+                var highlightIndex = i - 1;
+                if (highlightIndex < 0)
+                {
+                    highlightIndex = 0;
+                }
+                _lyrics[highlightIndex].IsHighlight = true;
+                break;
+            }
+        }
+
+        offset = offset * 34;
+        offset = offset - 200;
+        if (offset < 0)
+        {
+            offset = 0;
+        }
+        _offset = offset;
+
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task NewMusicAddedAsync()
@@ -109,7 +166,7 @@
         {
             return;
         }
-
+        _offset = 0;
         _currentMusic = new MusicResultShow()
             {
                 Id = playlist.Id,
@@ -130,21 +187,18 @@
     /// </summary>
     private async Task GetLyricDetailAsync()
     {
-        if (_lyrics.Count > 0)
-        {
-            _lyrics.Clear();
-        }
+
         if (_currentMusic == null)
         {
             return;
         }
-
         string lyric = await GetLyric();
         if (lyric.IsEmpty())
         {
             return;
         }
 
+        _lyrics = new List<Lyric>();
         string pattern = ".*";
         var lyricRowList = JiuLing.CommonLibs.Text.RegexUtils.GetAll(lyric, pattern);
         foreach (var lyricRow in lyricRowList)
@@ -162,7 +216,7 @@
 
             int totalMillisecond = Convert.ToInt32(result["mm"]) * 60 * 1000 + Convert.ToInt32(result["ss"]) * 1000 + Convert.ToInt32(result["fff"]);
             var info = result["lyric"];
-            _lyrics.Add(info);
+            _lyrics.Add(new Lyric(totalMillisecond, info));
         }
     }
 

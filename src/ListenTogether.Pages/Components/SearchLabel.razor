@@ -26,7 +26,7 @@
         {
             _text = JiuLing.CommonLibs.RandomUtils.GetOneFromList(_hotWords);
             await InvokeAsync(StateHasChanged);
-        }, new AutoResetEvent(false), 2000, 10000); // fire every 2000 milliseconds
+        }, new AutoResetEvent(false), 2000, 10000);
     }
 
     private void GotoSearchPage()
