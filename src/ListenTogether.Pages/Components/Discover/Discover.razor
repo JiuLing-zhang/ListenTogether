@@ -23,7 +23,7 @@
             <MudGrid Class="mt-4">
                 @foreach (var songMenu in _songMenus)
                 {
-                    <MudItem lg="2" xs="4" md="3" Class="d-flex justify-center">
+                    <MudItem xs="4" md="3" Class="d-flex justify-center">
                         <div class="song-menu-item" onclick=@(()=>GotoSongMenuPage( songMenu.Id, songMenu.Name,songMenu.ImageUrl))>
                             <MudImage Src="@songMenu.ImageUrl"
                               ObjectFit="ObjectFit.Cover"
@@ -32,7 +32,7 @@
                               Height="140"
                               Alt="@songMenu.Name"
                               Class="rounded-lg mb-2" />
-                            <div>@songMenu.Name</div>
+                            <div class="song-menu-name">@songMenu.Name</div>
                         </div>
                     </MudItem>
                 }

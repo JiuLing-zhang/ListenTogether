@@ -17,11 +17,13 @@
 
         <div class="flex-grow-1 music-info">
             <div class="music-image">
-                <MudImage Src="@(_currentMusic.ImageUrl)"
-                          Elevation="5"
-                          Style="width:100%;"
-                          Class="rounded-lg" />
-                <div class="align-self-center mt-2 copy">
+                <div class="music-image-avatar @(_isPlaying?"":"animation-paused")">
+                    <MudAvatar Style="width:200px;height:200px;">
+                        <MudImage Src="@(_currentMusic.ImageUrl)"
+                                  Elevation="25" />
+                    </MudAvatar>
+                </div>
+                <div class="align-self-center mt-4 copy">
                     复制
                 </div>
             </div>
@@ -60,12 +62,14 @@
         }
     </div>
 
-    <div class="playing-player-bar" >
+    <div class="playing-player-bar">
         <PlayerBar />
     </div>
 </div>
 
 @code {
+
+    private bool _isPlaying = false;
     [Parameter]
     public EventCallback OnClosePlayingPage { get; set; }
     private System.Timers.Timer _timer = new System.Timers.Timer(300);
@@ -83,8 +87,14 @@
         //}
 
         _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();
+        _playerService.IsPlayingChanged += (_, __) =>
+        {
+            _isPlaying = _playerService.IsPlaying;
+            StateHasChanged();
+        };
         //_timer.Elapsed += _timerLyricsUpdate_Tick();
         //_timer.Start();
+        _isPlaying = _playerService.IsPlaying;
         await NewMusicAddedAsync();
     }
 

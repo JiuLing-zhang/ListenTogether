@@ -3,6 +3,7 @@
 
 @using ListenTogether.Filters.MusicSearchFilter;
 
+@inject MusicPlayerService MusicPlayerService
 @inject MusicResultService MusicResultService
 @inject IDialogService DialogService
 @inject IPlaylistService PlaylistService
@@ -101,6 +102,12 @@ else
         }
 
         _isLoading = true;
+
+        if (MusicPlayerService.IsPlaying)
+        {
+            await MusicPlayerService.PlayAsync(MusicPlayerService.Metadata.Id);
+        }
+
         var isRemove = await PlaylistService.RemoveAllAsync();
         _isLoading = false;
         if (isRemove == false)
@@ -109,11 +116,6 @@ else
             return;
         }
 
-        ////TODO 清空后暂停播放
-        //if (_musicPlayerService.IsPlaying)
-        //{
-        //    await _musicPlayerService.PlayAsync(_musicPlayerService.Metadata.Id);
-        //}
 
         Snackbar.Add("删除成功", Severity.Success);
         _playlist?.Clear();
@@ -121,21 +123,20 @@ else
 
     private async Task DeleteAsync(string musicId)
     {
-        ////TODO 处理当前正在播放的歌曲
-        //if (_musicPlayerService.IsPlaying)
-        //{
-        //    if (Playlist.Count == 1)
-        //    {
-        //        //播放列表仅剩当前歌曲时，直接暂停播放
-        //        await _musicPlayerService.PlayAsync(_musicPlayerService.Metadata.Id);
-        //    }
-        //    else if (_musicPlayerService.Metadata.Id == selected.Id)
-        //    {
-        //        await _musicPlayerService.Next();
-        //    }
-        //}
-
         _isLoading = true;
+
+        if (MusicPlayerService.IsPlaying)
+        {
+            if (_playlist.Count == 1)
+            {
+                //播放列表仅剩当前歌曲时，直接暂停播放
+                await MusicPlayerService.PlayAsync(MusicPlayerService.Metadata.Id);
+            }
+            else if (MusicPlayerService.Metadata.Id == musicId)
+            {
+                await MusicPlayerService.Next();
+            }
+        }
         var isDeleted = await PlaylistService.RemoveAsync(musicId);
         _isLoading = false;
         if (!isDeleted)
