@@ -3,6 +3,8 @@
 @inject IPlaylistService _playlistService
 @inject IMusicNetworkService _musicNetworkService
 
+@inject IJSRuntime JSRuntime
+
 <div class="page d-flex flex-column">
     <div class="flex-grow-1 d-flex flex-column music-content">
         <div class="flex-grow-0 d-flex align-center justify-space-between tool-bar">
@@ -105,10 +107,10 @@
         //}
 
         _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();
-        _playerService.IsPlayingChanged += (_, __) =>
+        _playerService.IsPlayingChanged += async (_, __) =>
         {
             _isPlaying = _playerService.IsPlaying;
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         };
 
         _timer = new Timer(ScrollLyric, new AutoResetEvent(false), 0, 200);
@@ -118,7 +120,7 @@
         await NewMusicAddedAsync();
     }
 
-    private void ScrollLyric(object? value)
+    private async void ScrollLyric(object? value)
     {
         if (!_isPlaying || _lyrics == null || !_lyrics.Any())
         {

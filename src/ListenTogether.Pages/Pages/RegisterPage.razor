@@ -134,7 +134,7 @@
 
         var (succeed, message) = await UserService.RegisterAsync(user);
         _isLoading = false;
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
         await DialogService.ShowMessageBox("", message, "确定");
         if (succeed)
         {

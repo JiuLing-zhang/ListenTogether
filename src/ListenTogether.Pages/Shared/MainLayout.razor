@@ -105,8 +105,7 @@
                 default:
                     break;
             }
-
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 }

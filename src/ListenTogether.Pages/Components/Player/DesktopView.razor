@@ -179,7 +179,7 @@
             return;
         }
         await OnProgressChanged.InvokeAsync(_playProgress / 100);
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task ChangeRepeatAsync()

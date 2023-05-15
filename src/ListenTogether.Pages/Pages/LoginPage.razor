@@ -73,7 +73,7 @@
         _isLoading = true;
         var user = await UserService.LoginAsync(_username, _password);
         _isLoading = false;
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
         if (user == null)
         {
             await DialogService.ShowMessageBox("", "登录失败", "确定");
