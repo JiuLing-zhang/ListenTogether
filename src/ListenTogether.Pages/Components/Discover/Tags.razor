@@ -11,21 +11,24 @@
 }
 else
 {
-  
+
     <MudChip Label="true"
-             OnClick="@(() => TopClicked())"
-             Disabled="@(activeTagId == "榜单")"
-             Size="Size.Small">榜单</MudChip>
+         OnClick="@(() => TopClicked())"
+         Disabled="@(activeTagId == "榜单")"
+         Style="padding:0 6px;"
+         Size="Size.Small">榜单</MudChip>
     @foreach (var hotTag in _hotTags)
     {
         <MudChip Label="true"
-                 OnClick="@(() => HotTagClicked(hotTag.Id))"
-                 Disabled="@(activeTagId == hotTag.Id)"
-                 Size="Size.Small">@hotTag.Name</MudChip>
+         OnClick="@(() => HotTagClicked(hotTag.Id))"
+         Disabled="@(activeTagId == hotTag.Id)"
+         Style="padding:0 6px;"
+         Size="Size.Small">@hotTag.Name</MudChip>
     }
     <MudChip Label="true"
-             OnClick="OpenChooseTag"
-             Size="Size.Small">选择分类</MudChip>
+         OnClick="OpenChooseTag"
+         Style="padding:0 6px;"
+         Size="Size.Small">选择分类</MudChip>
 
     <div class="choose-tag-drawer @_isOpenChooseTag" @onclick="CloseChooseTag">
         <ChooseTag OnTagSelected="TagSelected" AllTypes="_allTypes" />

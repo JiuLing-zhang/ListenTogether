@@ -23,3 +23,8 @@
     .song-menu-item {
     }
 }
+
+.song-menu-img {
+    width: 100%;
+    height: auto;
+}

@@ -1,0 +1,45 @@
+﻿@if (AllTypes != null)
+{
+    <div class="page">
+        @foreach (var item in AllTypes)
+        {
+            <div class="type-row">
+                <div class="type-title">@item.TypeName </div>
+                <div class="type-tags">
+                    @foreach (var tag in item.Tags)
+                    {
+                        <div class="tag-name">
+                            <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                                <span class="cursor-pointer"
+                          @onclick="@(()=>SelectTagAsync(tag.Id))"
+                          @onclick:stopPropagation="true">
+                                    @tag.Name
+                                </span>
+                            </MudHidden>
+                            <MudHidden Breakpoint="Breakpoint.SmAndDown" Invert="true">
+                                <div @onclick:stopPropagation="true">
+                                    <MudChip Variant="Variant.Text"
+                                 OnClick="@(()=>SelectTagAsync(tag.Id))"
+                                 Style="width:80px">@tag.Name</MudChip>
+                                </div>
+                            </MudHidden>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public List<MusicTypeTag>? AllTypes { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnTagSelected { get; set; }
+
+    private async Task SelectTagAsync(string id)
+    {
+        await OnTagSelected.InvokeAsync(id);
+    }
+}

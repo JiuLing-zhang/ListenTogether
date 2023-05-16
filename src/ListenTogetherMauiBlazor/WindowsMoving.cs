@@ -1,4 +1,5 @@
-﻿using Microsoft.UI;
+﻿#if WINDOWS
+using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using System.Runtime.CompilerServices;
@@ -37,3 +38,4 @@ internal class WindowsMoving
         _isMoving = false;
     }
 }
+#endif

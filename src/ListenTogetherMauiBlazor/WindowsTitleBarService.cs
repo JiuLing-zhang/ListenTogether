@@ -1,4 +1,5 @@
-﻿namespace ListenTogetherMauiBlazor;
+﻿#if WINDOWS
+namespace ListenTogetherMauiBlazor;
 internal class WindowsTitleBarService
 {
     private WindowsTitleBarService()
@@ -42,3 +43,4 @@ internal class WindowsTitleBarService
         App.Current.Quit();
     }
 }
+#endif

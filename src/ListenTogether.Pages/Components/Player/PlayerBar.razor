@@ -7,22 +7,28 @@
 @inject IPlayHistoryStorage PlayHistoryStorage
 @inject NavigationManager NavigationManager
 
-<DesktopView OnOpenPlayingPage="OpenPlayingPageAsync"
-             Music="@(_music)"
-             IsPlaying="@(_isPlaying)"
-             RepeatIcon="@(_repeatIcon)"
-             SoundIcon="@(_soundIcon)"
-             Volume="@(_volume)"
-             OnVolumeChanged="ChangeVolumeAsync"
-             OnProgressChanged="ChangeProgressAsync"
-             Position="@(_position)"
-             OnPlay="PlayAsync"
-             OnNext="NextAsync"
-             OnPrevious="PreviousAsync"
-             OnAddToMyFavorite="AddToMyFavoriteAsync"
-             OnRepeatChanged="ChangeRepeatAsync"
-             OnSoundChanged="ChangeSoundAsync"
-             OnGotoAutoClosePage="GotoAutoClosePage" />
+<MudHidden Breakpoint="Breakpoint.SmAndDown">
+    <DesktopView OnOpenPlayingPage="OpenPlayingPageAsync"
+                 Music="@(_music)"
+                 IsPlaying="@(_isPlaying)"
+                 RepeatIcon="@(_repeatIcon)"
+                 SoundIcon="@(_soundIcon)"
+                 Volume="@(_volume)"
+                 OnVolumeChanged="ChangeVolumeAsync"
+                 OnProgressChanged="ChangeProgressAsync"
+                 Position="@(_position)"
+                 OnPlay="PlayAsync"
+                 OnNext="NextAsync"
+                 OnPrevious="PreviousAsync"
+                 OnAddToMyFavorite="AddToMyFavoriteAsync"
+                 OnRepeatChanged="ChangeRepeatAsync"
+                 OnSoundChanged="ChangeSoundAsync"
+                 OnGotoAutoClosePage="GotoAutoClosePage" />
+</MudHidden>
+
+<MudHidden Breakpoint="Breakpoint.MdAndUp">
+    <PhoneView></PhoneView>
+</MudHidden>
 
 @code {
     [Parameter]

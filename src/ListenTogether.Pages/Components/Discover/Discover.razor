@@ -12,7 +12,7 @@
             @for (int i = 0; i < 12; i++)
             {
                 <MudItem xs="4" md="3">
-                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="150px" Width="150px" />
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="100%" Height="60px" />
                 </MudItem>
             }
         </MudGrid>
@@ -25,13 +25,9 @@
                 {
                     <MudItem xs="4" md="3" Class="d-flex justify-center">
                         <div class="song-menu-item" onclick=@(()=>GotoSongMenuPage( songMenu.Id, songMenu.Name,songMenu.ImageUrl))>
-                            <MudImage Src="@songMenu.ImageUrl"
-                              ObjectFit="ObjectFit.Cover"
-                              Elevation="25"
-                              Width="140"
-                              Height="140"
-                              Alt="@songMenu.Name"
-                              Class="rounded-lg mb-2" />
+                            <img src="@songMenu.ImageUrl"
+                                 alt="@songMenu.Name"
+                                 class="rounded-lg mb-1 song-menu-img">
                             <div class="song-menu-name">@songMenu.Name</div>
                         </div>
                     </MudItem>

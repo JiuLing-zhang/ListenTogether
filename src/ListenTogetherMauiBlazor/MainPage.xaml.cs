@@ -1,6 +1,4 @@
-﻿using Microsoft.UI.Xaml;
-
-namespace ListenTogetherMauiBlazor
+﻿namespace ListenTogetherMauiBlazor
 {
     public partial class MainPage : ContentPage
     {
