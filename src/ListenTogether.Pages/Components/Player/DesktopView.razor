@@ -63,6 +63,13 @@
                        Icon="fas fa-folder-plus"
                        OnClick="@(()=>AddToMyFavoriteAsync(Music))" />
         }
+
+        <MudIconButton Class="ml-2"
+                       Disabled="@(Music==null)"
+                       Size="Size.Small"
+                       Icon="fas fa-clock"
+                       OnClick="@(()=>GotoAutoClosePage())" />
+
         <MudIconButton Class="ml-2"
                        Disabled="@(Music==null)"
                        Size="Size.Small"
@@ -136,6 +143,8 @@
     public EventCallback OnSoundChanged { get; set; }
     [Parameter]
     public EventCallback<int> OnVolumeChanged { get; set; }
+    [Parameter]
+    public EventCallback OnGotoAutoClosePage { get; set; }
 
     private async Task PreviousAsync()
     {
@@ -203,5 +212,10 @@
     {
         Volume = value;
         await OnVolumeChanged.InvokeAsync(Volume);
+    }
+
+    private async Task GotoAutoClosePage()
+    {
+        await OnGotoAutoClosePage.InvokeAsync(Volume);
     }
 }

@@ -12,3 +12,19 @@
     font-size: 18px;
     font-weight: bold;
 }
+
+.app-title {
+    font-size: 20px;
+}
+
+.app-text {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+.app-link {
+    font-size: 13px;
+    opacity: 0.8;
+    cursor: pointer;
+    text-decoration: underline
+}

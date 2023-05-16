@@ -5,6 +5,7 @@
 @inject IEnvironmentConfigService _configService
 @inject IDialogService DialogService
 @inject IPlayHistoryStorage PlayHistoryStorage
+@inject NavigationManager NavigationManager
 
 <DesktopView OnOpenPlayingPage="OpenPlayingPageAsync"
              Music="@(_music)"
@@ -20,7 +21,8 @@
              OnPrevious="PreviousAsync"
              OnAddToMyFavorite="AddToMyFavoriteAsync"
              OnRepeatChanged="ChangeRepeatAsync"
-             OnSoundChanged="ChangeSoundAsync" />
+             OnSoundChanged="ChangeSoundAsync"
+             OnGotoAutoClosePage="GotoAutoClosePage" />
 
 @code {
     [Parameter]
@@ -230,5 +232,9 @@
         var parameters = new DialogParameters { ["Music"] = music };
         var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters);
         await dialog.Result;
+    }
+    private void GotoAutoClosePage()
+    {
+        NavigationManager.NavigateTo("/auto-close");
     }
 }

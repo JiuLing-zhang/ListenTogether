@@ -1,53 +1,72 @@
-﻿@inherits LayoutComponentBase
+﻿@using ListenTogether.EasyLog;
+@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject DesktopMoving DesktopMoving
 @inject IJSRuntime JSRuntime
 @inject IMusicNetworkService MusicNetworkService
+@inject IAutoUpgrade AutoUpgrade
 
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" />
 <MudDialogProvider NoHeader="true" />
 <MudSnackbarProvider />
-
-<div class="page">
-    <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <div class="page-header d-flex">
-            <div class="logo d-flex align-center">
-                <MudImage Src="https://jiuling.cc/images/music.svg" Width="30" Height="30" />
-                <div class="title ml-2">一起听</div>
-            </div>
-            <NavBeforeNext />
-            <div class="flex-grow-1 ml-2 d-flex align-center">
-                @if (!NavigationManager.Uri.EndsWith("/search"))
-                {
-                    <div style="width:250px">
-                        <SearchLabel />
+<ErrorBoundary @ref="@_errorBoundary">
+    <ChildContent>
+        <div class="page">
+            <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                <div class="page-header d-flex">
+                    <div class="logo d-flex align-center">
+                        <MudImage Src="https://jiuling.cc/images/music.svg" Width="30" Height="30" />
+                        <div class="title ml-2">一起听</div>
                     </div>
-                }
+                    <NavBeforeNext />
+                    <div class="flex-grow-1 ml-2 d-flex align-center">
+                        @if (!NavigationManager.Uri.EndsWith("/search"))
+                        {
+                            <div style="width:250px">
+                                <SearchLabel />
+                            </div>
+                        }
+                    </div>
+                    <DesktopTitleBar />
+                </div>
+            </MudHidden>
+
+            <div class="page-nav">
+                <NavMenu />
             </div>
-            <DesktopTitleBar />
+            <div class="page-main">
+                <div class="containerPage">
+                    @Body
+                </div>
+            </div>
+            <div class="page-bottom">
+                <PlayerBar OnOpenPlayingPage="OpenPlayingPage" />
+            </div>
         </div>
-    </MudHidden>
-
-    <div class="page-nav">
-        <NavMenu />
-    </div>
-    <div class="page-main">
-        <div class="containerPage">
-            @Body
+        <div class="playing-page-drawer @_isOpenPlayingPage">
+            <ListenTogether.Pages.Pages.PlayingPage OnClosePlayingPage="ClosePlayingPage" />
         </div>
-    </div>
-    <div class="page-bottom">
-        <PlayerBar OnOpenPlayingPage="OpenPlayingPage" />
-    </div>
-</div>
-
-<div class="playing-page-drawer @_isOpenPlayingPage">
-    <ListenTogether.Pages.Pages.PlayingPage OnClosePlayingPage="ClosePlayingPage" />
-</div>
-
+    </ChildContent>
+    <ErrorContent Context="ex">
+        <div class="pa-10" style="user-select: text;">
+            <MudAlert Class="mb-2"
+                      Severity="Severity.Error">程序遇到了未知错误！</MudAlert>
+            <div>@(ex.Message)</div>
+            <div>@(ex.StackTrace)</div>
+            <MudButton Class="mt-4"
+                       Variant="Variant.Outlined"
+                       Size="Size.Small"
+                       IconColor="Color.Primary"
+                       OnClick="@(()=>ResetError(ex))">确定</MudButton>
+        </div>
+    </ErrorContent>
+</ErrorBoundary>
 @code {
     private bool _isDarkMode;
+    private string _isOpenPlayingPage = "";
+    private ErrorBoundary? _errorBoundary;
     private MudThemeProvider _mudThemeProvider;
+
     MudTheme MyCustomTheme = new MudTheme()
         {
             Palette = new PaletteLight()
@@ -68,10 +87,10 @@
                 TableStriped = "#292929",
                 TableHover = "#182437",
                 DarkLighten = "#494C50",
+                Black = "#858585"
             }
         };
 
-    private string _isOpenPlayingPage = "";
     private void OpenPlayingPage()
     {
         _isOpenPlayingPage = "open";
@@ -80,7 +99,6 @@
     {
         _isOpenPlayingPage = "";
     }
-
 
     protected override void OnInitialized()
     {
@@ -106,6 +124,17 @@
                     break;
             }
             await InvokeAsync(StateHasChanged);
+
+            if (Settings.Environment.General.IsAutoCheckUpdate)
+            {
+                await AutoUpgrade.DoAsync(true);
+            }
         }
+    }
+
+    private void ResetError(Exception ex)
+    {
+        Logger.Error("未处理的异常。", ex);
+        _errorBoundary?.Recover();
     }
 }

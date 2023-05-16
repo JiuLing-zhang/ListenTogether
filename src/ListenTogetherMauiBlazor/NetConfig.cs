@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ListenTogetherMauiBlazor;
-
-internal class NetConfig
+﻿namespace ListenTogetherMauiBlazor;
+public class NetConfig
 {
     /// <summary>
     /// 自动更新地址

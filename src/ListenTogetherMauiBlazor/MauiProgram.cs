@@ -10,14 +10,8 @@ namespace ListenTogetherMauiBlazor
 {
     public static class MauiProgram
     {
-
         public static MauiApp CreateMauiApp()
         {
-            using var stream = FileSystem.OpenAppPackageFileAsync("NetConfig.json").Result;
-            using var reader = new StreamReader(stream);
-            var json = reader.ReadToEnd();
-            var netConfig = json.ToObject<NetConfig>();
-
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -56,6 +50,15 @@ namespace ListenTogetherMauiBlazor
             builder.Logging.AddDebug();
 #endif
 
+            using var stream = FileSystem.OpenAppPackageFileAsync("NetConfig.json").Result;
+            using var reader = new StreamReader(stream);
+            var json = reader.ReadToEnd();
+            builder.Services.AddSingleton<NetConfig>(json.ToObject<NetConfig>());
+
+            builder.Services.AddSingleton<AutoCloseJob>();
+            builder.Services.AddSingleton<IAppClose, AppClose>();
+            builder.Services.AddSingleton<IAutoUpgrade, AutoUpgrade>();
+            builder.Services.AddSingleton<IAppVersion, AppVersion>();
             builder.Services.AddSingleton<DesktopMoving>();
             builder.Services.AddSingleton<DesktopNotification>();
             builder.Services.AddSingleton<IPlayHistoryStorage, PlayHistoryStorage>();
@@ -63,14 +66,18 @@ namespace ListenTogetherMauiBlazor
             builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();
             builder.Services.AddSingleton<ApiHttpMessageHandler>();
             builder.Services.AddHttpClient();
-            builder.Services.AddHttpClient("WebAPI", httpClient =>
+            builder.Services.AddHttpClient("WebAPI", (sp, httpClient) =>
             {
-                httpClient.BaseAddress = new Uri(netConfig.ApiDomain);
+                httpClient.BaseAddress = new Uri(sp.GetService<NetConfig>().ApiDomain);
                 httpClient.Timeout = TimeSpan.FromSeconds(15);
             }).AddHttpMessageHandler<ApiHttpMessageHandler>();
-            builder.Services.AddHttpClient("WebAPINoToken", httpClient =>
+            builder.Services.AddHttpClient("WebAPINoToken", (sp, httpClient) =>
             {
-                httpClient.BaseAddress = new Uri(netConfig.ApiDomain);
+                httpClient.BaseAddress = new Uri(sp.GetService<NetConfig>().ApiDomain);
+                httpClient.Timeout = TimeSpan.FromSeconds(15);
+            });
+            builder.Services.AddHttpClient("", httpClient =>
+            {
                 httpClient.Timeout = TimeSpan.FromSeconds(15);
             });
 
