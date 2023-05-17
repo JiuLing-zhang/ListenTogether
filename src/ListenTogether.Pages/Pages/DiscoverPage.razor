@@ -1,8 +1,12 @@
 ﻿@page "/discover"
+@using ListenTogether.Data;
 @inherits MyComponentBase
 
+@inject NavigationManager NavigationManager
+@inject ISearchHistoryStorage SearchHistoryStorage
+
 <MudHidden Breakpoint="Breakpoint.SmAndUp">
-    <SearchBar />
+    <SearchLabel />
 </MudHidden>
 <MudTabs Rounded="true"
          MinimumTabWidth="150"
@@ -19,5 +23,8 @@
 </MudTabs>
 
 @code {
-
+    private void GotoSearchPage()
+    {
+        NavigationManager.NavigateTo("/search");
+    }
 }

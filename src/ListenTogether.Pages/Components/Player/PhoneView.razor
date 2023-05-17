@@ -1,5 +1,7 @@
-﻿<div class="d-flex align-center">
-    <div class="flex-grow-1 d-flex align-center" @onclick="OpenPlayingPageAsync">
+﻿@inherits MyComponentBase
+
+<div class="d-flex align-center" @onclick="OpenPlayingPageAsync">
+    <div class="flex-grow-1 d-flex align-center">
         <img src="@(Music==null ?"https://jiuling.cc/images/music.svg":Music.ImageUrl)"
              class="rounded-lg pt-1 pb-1 mr-2 small-img" />
         <div class="flex-grow-1">@($"{Music?.Name} - {Music?.Artist}")</div>
@@ -14,17 +16,16 @@
                          ToggledSize="Size.Small"
                          ToggledIcon="fa-solid fa-circle-pause" />
 </div>
+
 @code {
 
     private bool _isFirstPlay = true;
-    private bool _isPlayProgressDragging = false;
 
     [Parameter]
     public LocalMusic? Music { get; set; }
     [Parameter]
     public bool IsPlaying { get; set; }
 
-    private double _playProgress;
     private MusicPosition? _position;
     [Parameter]
     public MusicPosition? Position
@@ -37,47 +38,13 @@
             {
                 _isFirstPlay = false;
             }
-            if (!_isPlayProgressDragging)
-            {
-                _playProgress = (_position?.PlayProgress ?? 0) * 100;
-            }
         }
     }
 
     [Parameter]
-    public string RepeatIcon { get; set; } = null!;
-
-    [Parameter]
-    public string SoundIcon { get; set; } = null!;
-
-    [Parameter]
-    public int Volume { get; set; }
-
-    [Parameter]
-    public EventCallback OnPrevious { get; set; }
-    [Parameter]
     public EventCallback OnPlay { get; set; }
     [Parameter]
-    public EventCallback OnNext { get; set; }
-    [Parameter]
     public EventCallback OnOpenPlayingPage { get; set; }
-    [Parameter]
-    public EventCallback<double> OnProgressChanged { get; set; }
-    [Parameter]
-    public EventCallback OnRepeatChanged { get; set; }
-    [Parameter]
-    public EventCallback<LocalMusic> OnAddToMyFavorite { get; set; }
-    [Parameter]
-    public EventCallback OnSoundChanged { get; set; }
-    [Parameter]
-    public EventCallback<int> OnVolumeChanged { get; set; }
-    [Parameter]
-    public EventCallback OnGotoAutoClosePage { get; set; }
-
-    private async Task PreviousAsync()
-    {
-        await OnPrevious.InvokeAsync();
-    }
 
     private async Task PlayAsync(bool toggled)
     {
@@ -85,10 +52,6 @@
         await OnPlay.InvokeAsync();
     }
 
-    private async Task NextAsync()
-    {
-        await OnNext.InvokeAsync();
-    }
     private async Task OpenPlayingPageAsync()
     {
         if (_isFirstPlay)
@@ -96,54 +59,5 @@
             return;
         }
         await OnOpenPlayingPage.InvokeAsync();
-    }
-
-    private void ProgressMouseDown()
-    {
-        _isPlayProgressDragging = true;
-    }
-
-    private void ProgressMouseUp()
-    {
-        _isPlayProgressDragging = false;
-    }
-
-    private async Task ChangeProgressAsync(double value)
-    {
-        _playProgress = value;
-        if (!_isPlayProgressDragging)
-        {
-            return;
-        }
-        await OnProgressChanged.InvokeAsync(_playProgress / 100);
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task ChangeRepeatAsync()
-    {
-        await OnRepeatChanged.InvokeAsync();
-    }
-
-    private async Task AddToMyFavoriteAsync(LocalMusic? music)
-    {
-        if (music == null)
-        {
-            return;
-        }
-        await OnAddToMyFavorite.InvokeAsync(music);
-    }
-    private async Task ChangeSoundAsync()
-    {
-        await OnSoundChanged.InvokeAsync();
-    }
-    private async Task ChangeVolumeAsync(int value)
-    {
-        Volume = value;
-        await OnVolumeChanged.InvokeAsync(Volume);
-    }
-
-    private async Task GotoAutoClosePage()
-    {
-        await OnGotoAutoClosePage.InvokeAsync(Volume);
     }
 }

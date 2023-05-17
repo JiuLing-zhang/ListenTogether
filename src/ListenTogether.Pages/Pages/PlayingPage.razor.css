@@ -3,25 +3,12 @@
     height: 100%;
 }
 
-.music-content {
-    position: relative;
-    background-color: #000000;
-}
-
-.tool-bar {
-    z-index: 100;
-    margin: 0 10px 0 10px;
-}
-
-.music-info {
-    z-index: 100;
-    position: absolute;
-    margin-top: 50px;
-}
-
 .blurBgMask {
+    position: absolute;
     width: 100%;
     height: 100%;
+    top: 0;
+    left: 0;
     opacity: .6;
     background-color: rgba(0,0,0,.35);
     z-index: 10;
@@ -41,66 +28,106 @@
 }
 
 @media screen and (min-width: 960px) {
-    .music-info {
-        width: 100%;
-        padding-top: 40px;
+
+    .blurBgMask {
+        top: 50px;
+        height: calc(100vh - 130px);
+    }
+
+    .music-page {
         display: grid;
-        grid-template-rows: 430px;
-        grid-template-columns: 50% 50%;
+        grid-template-rows: 50px 1fr 80px;
+        grid-template-columns: 1fr 1fr;
         grid-template-areas:
-            "image detail";
+            "toolbar toolbar"
+            "image detail"
+            "playerbar playerbar";
     }
 
     .music-image {
-        grid-area: image;
-        justify-self: center;
-        display: flex;
-        flex-direction: column;
-        margin-top: 20px;
+        margin-top: 40px;
+        margin-left: auto;
+        margin-right: auto;
         width: 200px;
     }
 
-    .music-detail {
-        grid-area: detail;
-        justify-self: center;
-        width: 400px;
+    .music-image-avatar {
+        width: 200px;
+        height: 200px;
+        animation: spin 60s linear infinite;
     }
 
-    .playing-player-bar {
-        height: 80px;
-        padding-top: 10px;
+    .music-img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+    }
+
+    .music-detail {
+        margin-top: 40px;
+        margin-bottom: 40px;
     }
 }
 
 @media screen and (max-width: 960px) {
-    .music-info {
+    .music-page {
+        max-height: 100%;
         display: grid;
-        grid-template-rows: auto 1fr;
+        grid-template-rows: 50px auto 1fr 125px;
         grid-template-columns: 1fr;
         grid-template-areas:
+            "toolbar"
             "image"
-            "detail";
+            "detail"
+            "playerbar";
     }
 
     .music-image {
-        grid-area: image;
-        justify-self: center;
-        display: flex;
-        flex-direction: column;
-        margin-top: 20px;
-        width: 60%;
+        margin-left: 22%;
+        margin-right: 22%;
     }
 
+    .music-image-avatar {
+        width: 100%;
+        animation: spin 60s linear infinite;
+    }
+
+    .music-img {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+    }
+
+
     .music-detail {
-        grid-area: detail;
-        justify-self: center;
-        width: 80%;
+        margin-top: 40px;
+        margin-bottom: 20px;
     }
 }
 
-.copy {
-    color: #FFFFFF;
-    opacity: 0.6;
+.tool-bar {
+    z-index: 100;
+    grid-area: toolbar;
+    margin: 10px 10px 0 10px;
+}
+
+.music-image {
+    z-index: 100;
+    grid-area: image;
+}
+
+.music-detail {
+    z-index: 100;
+    grid-area: detail;
+    overflow-y: auto;
+}
+
+.player-bar {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    z-index: 100;
+    grid-area: playerbar;
 }
 
 .title {
@@ -119,10 +146,9 @@
 .lyric {
     color: #FFFFFF;
     opacity: 0.6;
-    height: 60%;
-    overflow: auto;
     font-size: 15px;
     margin-top: 20px;
+    overflow-y: auto;
 }
 
     .lyric ul {
@@ -148,32 +174,7 @@
         opacity: 1;
     }
 
-.player-bar-bg {
-    position: fixed;
-    min-width: 940px;
-    width: 100%;
-    height: 80px;
-    bottom: 0;
-    z-index: 1000;
-    background: #333;
-}
 
-.player-bar {
-    background-position: left bottom;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    background-color: #000;
-    filter: blur(90px);
-    box-shadow: 0 -10px 20px #403f3f;
-}
-
-.music-image-avatar {
-    width: 200px;
-    height: 200px;
-    animation: spin 60s linear infinite;
-}
 
 .animation-paused {
     animation-play-state: paused;

@@ -7,8 +7,11 @@
 @inject IPlayHistoryStorage PlayHistoryStorage
 @inject NavigationManager NavigationManager
 
-<MudHidden Breakpoint="Breakpoint.SmAndDown">
-    <DesktopView OnOpenPlayingPage="OpenPlayingPageAsync"
+@if (OnOpenPlayingPage.HasDelegate)
+{
+    @*非播放页*@
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <DesktopView OnOpenPlayingPage="OnOpenPlayingPage"
                  Music="@(_music)"
                  IsPlaying="@(_isPlaying)"
                  RepeatIcon="@(_repeatIcon)"
@@ -24,11 +27,55 @@
                  OnRepeatChanged="ChangeRepeatAsync"
                  OnSoundChanged="ChangeSoundAsync"
                  OnGotoAutoClosePage="GotoAutoClosePage" />
-</MudHidden>
+    </MudHidden>
 
-<MudHidden Breakpoint="Breakpoint.MdAndUp">
-    <PhoneView></PhoneView>
-</MudHidden>
+    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+        <PhoneView OnOpenPlayingPage="OnOpenPlayingPage"
+               Music="@(_music)"
+               IsPlaying="@(_isPlaying)"
+               Position="@(_position)"
+               OnPlay="PlayAsync" />
+    </MudHidden>
+}
+else
+{
+    @*播放页*@
+    <MudHidden Breakpoint="Breakpoint.SmAndDown">
+        <DesktopPlayingView Music="@(_music)"
+                        IsPlaying="@(_isPlaying)"
+                        RepeatIcon="@(_repeatIcon)"
+                        SoundIcon="@(_soundIcon)"
+                        Volume="@(_volume)"
+                        OnVolumeChanged="ChangeVolumeAsync"
+                        OnProgressChanged="ChangeProgressAsync"
+                        Position="@(_position)"
+                        OnPlay="PlayAsync"
+                        OnNext="NextAsync"
+                        OnPrevious="PreviousAsync"
+                        OnAddToMyFavorite="AddToMyFavoriteAsync"
+                        OnRepeatChanged="ChangeRepeatAsync"
+                        OnSoundChanged="ChangeSoundAsync"
+                        OnGotoAutoClosePage="GotoAutoClosePage" />
+    </MudHidden>
+
+    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+        <PhonePlayingView Music="@(_music)"
+                      IsPlaying="@(_isPlaying)"
+                      RepeatIcon="@(_repeatIcon)"
+                      SoundIcon="@(_soundIcon)"
+                      Volume="@(_volume)"
+                      OnVolumeChanged="ChangeVolumeAsync"
+                      OnProgressChanged="ChangeProgressAsync"
+                      Position="@(_position)"
+                      OnPlay="PlayAsync"
+                      OnNext="NextAsync"
+                      OnPrevious="PreviousAsync"
+                      OnAddToMyFavorite="AddToMyFavoriteAsync"
+                      OnRepeatChanged="ChangeRepeatAsync"
+                      OnSoundChanged="ChangeSoundAsync"
+                      OnGotoAutoClosePage="GotoAutoClosePage" />
+    </MudHidden>
+}
 
 @code {
     [Parameter]
@@ -54,11 +101,6 @@
 
         UpdateSoundOnOff().Wait();
         UpdateVolume().Wait();
-    }
-
-    private async Task OpenPlayingPageAsync()
-    {
-        await OnOpenPlayingPage.InvokeAsync();
     }
 
     private async Task PlayingChangedAsync()

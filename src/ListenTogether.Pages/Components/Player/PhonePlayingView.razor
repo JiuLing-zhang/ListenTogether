@@ -1,94 +1,65 @@
 ﻿@inherits MyComponentBase
 
-<div class="d-flex align-center justify-center player-main">
-    <div class="d-flex align-center play-control">
+<div class="player-main">
+    <div class="d-flex align-center justify-end">
+        <div>时间</div>
+        <MudIconButton Class="ml-2"
+                       Size="Size.Small"
+                       Style="color:var(--mud-palette-white);"
+                       Icon="fas fa-clock"
+                       OnClick="@(()=>GotoAutoClosePage())" />
+    </div>
+
+    <div class="d-flex align-center justify-space-between mt-2 mb-2">
+        <div class="time">
+            @($"{Position?.position.Minutes:D2}:{Position?.position.Seconds:D2}")
+        </div>
+        <MudSlider Class="ml-2 mr-2"
+                   Min="0"
+                   Max="100"
+                   Size="Size.Small"
+                   Value="_playProgress"
+                   T="double"
+                   @onmousedown="ProgressMouseDown"
+                   @onmouseup="ProgressMouseUp"
+                   ValueChanged="ChangeProgressAsync"
+                   Variant="Variant.Filled" />
+        <div class="time">
+            @($"{Position?.Duration.Minutes:D2}:{Position?.Duration.Seconds:D2}")
+        </div>
+    </div>
+
+    <div class="d-flex align-center justify-space-around">
+        <MudIconButton Size="Size.Small"
+                       Style="color:var(--mud-palette-white);"
+                       Icon="@RepeatIcon"
+                       OnClick="ChangeRepeatAsync" />
         <MudIconButton Size="Size.Medium"
                        Icon="fa-solid fa-backward-step"
-                       Disabled="@(Music==null)"
+                       Style="color:var(--mud-palette-white);"
                        OnClick="PreviousAsync" />
         <MudToggleIconButton Size="Size.Large"
-                             Disabled="@(Music==null)"
+                             Style="color:var(--mud-palette-white);"
                              Toggled="@IsPlaying"
                              ToggledChanged="PlayAsync"
                              Icon="fa-regular fa-circle-play"
                              ToggledSize="Size.Large"
                              ToggledIcon="fa-solid fa-circle-pause" />
         <MudIconButton Size="Size.Medium"
-                       Disabled="@(Music==null)"
+                       Style="color:var(--mud-palette-white);"
                        Icon="fa-solid fa-forward-step"
                        OnClick="NextAsync" />
-    </div>
-    <div class="d-flex align-center ml-6 mr-6 music-info">
-        <div @onclick="OpenPlayingPageAsync" class="music-image @((!_isFirstPlay)?"image-hover":"")">
-            <MudImage Src="@(Music==null ?"https://jiuling.cc/images/music.svg":Music.ImageUrl)"
-                      Height="45"
-                      Width="45"
-                      Class="rounded-lg" />
-            <div class="mask">
-                <MudIcon Size="Size.Large" Icon="@Icons.Material.Filled.KeyboardArrowUp"></MudIcon>
-            </div>
-        </div>
-        <div class="music-detail">
-            <div class="d-flex justify-space-between">
-                <div class="music-title">
-                    @($"{Music?.Name} - {Music?.Artist}")
-                </div>
-                <div class="time">
-                    @($"{Position?.position.Minutes:D2}:{Position?.position.Seconds:D2}") / @($"{Position?.Duration.Minutes:D2}:{Position?.Duration.Seconds:D2}")
-                </div>
-            </div>
-            <MudSlider Min="0"
-                       Max="100"
-                       Size="Size.Small"
-                       Value="_playProgress"
-                       T="double"
-                       @onmousedown="ProgressMouseDown"
-                       @onmouseup="ProgressMouseUp"
-                       ValueChanged="ChangeProgressAsync"
-                       Variant="Variant.Filled" />
-
-        </div>
-    </div>
-    <div class="d-flex align-center other">
-        <MudIconButton Size="Size.Small"
-                       Disabled="@(Music==null)"
-                       Icon="@RepeatIcon"
-                       OnClick="ChangeRepeatAsync" />
-
-        @if (IsLogin)
-        {
-            <MudIconButton Class="ml-2"
-                       Disabled="@(Music==null)"
+        <MudIconButton Class="ml-2"
+                       Disabled="@(IsNotLogin)"
+                       Style="color:var(--mud-palette-white);"
                        Size="Size.Small"
                        Icon="fas fa-folder-plus"
                        OnClick="@(()=>AddToMyFavoriteAsync(Music))" />
-        }
-
-        <MudIconButton Class="ml-2"
-                       Disabled="@(Music==null)"
-                       Size="Size.Small"
-                       Icon="fas fa-clock"
-                       OnClick="@(()=>GotoAutoClosePage())" />
-
-        <MudIconButton Class="ml-2"
-                       Disabled="@(Music==null)"
-                       Size="Size.Small"
-                       Icon="@SoundIcon"
-                       OnClick="ChangeSoundAsync" />
-        <MudSlider Class="ml-1"
-                   Value="@Volume"
-                   Style="width:100px"
-                   ValueLabel="true"
-                   Size="Size.Small"
-                   Variant="Variant.Filled"
-                   T="int"
-                   ValueChanged="ChangeVolumeAsync" />
     </div>
 </div>
 
 @code {
 
-    private bool _isFirstPlay = true;
     private bool _isPlayProgressDragging = false;
 
     [Parameter]
@@ -105,10 +76,6 @@
         set
         {
             _position = value;
-            if (_position != null && _isFirstPlay)
-            {
-                _isFirstPlay = false;
-            }
             if (!_isPlayProgressDragging)
             {
                 _playProgress = (_position?.PlayProgress ?? 0) * 100;
@@ -132,8 +99,6 @@
     [Parameter]
     public EventCallback OnNext { get; set; }
     [Parameter]
-    public EventCallback OnOpenPlayingPage { get; set; }
-    [Parameter]
     public EventCallback<double> OnProgressChanged { get; set; }
     [Parameter]
     public EventCallback OnRepeatChanged { get; set; }
@@ -153,7 +118,6 @@
 
     private async Task PlayAsync(bool toggled)
     {
-        _isFirstPlay = false;
         await OnPlay.InvokeAsync();
     }
 
@@ -161,14 +125,7 @@
     {
         await OnNext.InvokeAsync();
     }
-    private async Task OpenPlayingPageAsync()
-    {
-        if (_isFirstPlay)
-        {
-            return;
-        }
-        await OnOpenPlayingPage.InvokeAsync();
-    }
+
 
     private void ProgressMouseDown()
     {

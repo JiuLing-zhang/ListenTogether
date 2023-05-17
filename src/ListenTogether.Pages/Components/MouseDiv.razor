@@ -1,22 +1,21 @@
-﻿@if (Settings.Platform == ListenTogether.Pages.PlatformEnum.Desktop)
-{
+﻿<MudHidden Breakpoint="Breakpoint.SmAndDown">
     <div class="cursor-default @Class" @ondblclick="@(Click)">
         @ChildContent
     </div>
-}
-else
-{
+</MudHidden>
+
+<MudHidden Breakpoint="Breakpoint.MdAndUp">
     <div class="cursor-pointer @Class" @onclick="@(Click)">
         @ChildContent
     </div>
-}
+</MudHidden>
 
 @code {
     [Parameter]
     public string Class { get; set; }
 
-    [Parameter] 
-    public RenderFragment ChildContent { get; set; } 
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
 
     [Parameter]
     public EventCallback OnClick { get; set; }

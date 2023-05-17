@@ -1,6 +1,6 @@
 ﻿@inject DesktopNotification WindowsNotification
 
-<div class="d-flex align-start">
+<div class="d-flex align-start @Class">
 
     <MudIconButton Icon="@Icons.Material.Filled.Minimize"
                    Size="Size.Small"
@@ -19,6 +19,9 @@
 @code {
     [Parameter]
     public string ButtonStyle { get; set; } = "";
+
+    [Parameter]
+    public string Class { get; set; } = "";
 
     private bool _isMaximizer = false;
     private string _maximizerIcon = Icons.Material.Filled.Fullscreen;
