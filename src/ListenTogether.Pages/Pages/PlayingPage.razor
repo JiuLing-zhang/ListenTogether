@@ -98,6 +98,7 @@
     {
         await base.OnInitializedAsync();
 
+
         //TODO 锁屏
         //if (!Config.Desktop && GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn)
         //{
@@ -113,7 +114,6 @@
 
         _timer = new Timer(ScrollLyric, new AutoResetEvent(false), 0, 200);
 
-
         _isPlaying = _playerService.IsPlaying;
         await NewMusicAddedAsync();
     }
@@ -125,11 +125,24 @@
             return;
         }
 
+        var lyricHeight = await JSRuntime.InvokeAsync<int>("GetElementHeightFromClass", "lyric");
+        var lyricRowHeight = await JSRuntime.InvokeAsync<int>("GetElementHeightFromClass", "lyric-row");
+        if (lyricHeight == 0 || lyricRowHeight == 0)
+        {
+            return;
+        }
+
         var offset = 0;
+        var isHighlightSetted = false;
         var positionMillisecond = _playerService.CurrentPosition.position.TotalMilliseconds;
         for (int i = 0; i < _lyrics.Count(); i++)
         {
+            //防止拖动滚动条到之前的位置时没有清除高亮
             _lyrics[i].IsHighlight = false;
+            if (isHighlightSetted)
+            {
+                continue;
+            }
             offset++;
 
             if (_lyrics[i].PositionMillisecond > positionMillisecond)
@@ -140,12 +153,12 @@
                     highlightIndex = 0;
                 }
                 _lyrics[highlightIndex].IsHighlight = true;
-                break;
+                isHighlightSetted = true;
             }
         }
 
-        offset = offset * 34;
-        offset = offset - 200;
+        offset = offset * lyricRowHeight;
+        offset = offset - lyricHeight / 2 - lyricRowHeight;
         if (offset < 0)
         {
             offset = 0;

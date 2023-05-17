@@ -56,15 +56,12 @@
                        Icon="@RepeatIcon"
                        OnClick="ChangeRepeatAsync" />
 
-        @if (IsLogin)
-        {
-            <MudIconButton Class="ml-2"
+        <MudIconButton Class="ml-2"
                        Disabled="@(Music==null)"
                        Style="color:var(--mud-palette-white);"
                        Size="Size.Small"
                        Icon="fas fa-folder-plus"
                        OnClick="@(()=>AddToMyFavoriteAsync(Music))" />
-        }
 
         <MudIconButton Class="ml-2"
                        Disabled="@(Music==null)"
