@@ -5,7 +5,7 @@
 @inject ISnackbar Snackbar
 @inject MusicResultService MusicResultService
 
-<MudContainer Class="d-flex">
+<div class="d-flex mb-3">
     <MudImage Src="@_songMenu.ImageUrl"
               Elevation="25"
               ObjectFit="ObjectFit.Cover"
@@ -13,7 +13,7 @@
               Height="120"
               Class="rounded-lg" />
     <div class="ml-3 d-flex flex-column">
-        <MudText Class="mt-1 mb-2">@_songMenu.Name</MudText>
+        <MudText Typo="Typo.h6" Class="mt-1 mb-2">@_songMenu.Name</MudText>
         <MudButton Variant="Variant.Outlined"
                    StartIcon="@Icons.Material.Filled.PlayCircleOutline"
                    Size="Size.Small"
@@ -21,8 +21,7 @@
                    Disabled="@(_musics==null || !_musics.Any())"
                    OnClick="PlayAllAsync">播放全部</MudButton>
     </div>
-
-</MudContainer>
+</div>
 
 <MusicResultView Musics="@_musics" />
 @code {

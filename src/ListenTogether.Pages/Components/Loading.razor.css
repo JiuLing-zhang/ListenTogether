@@ -1,0 +1,10 @@
+.info {
+    background-color: var(--mud-palette-background);
+    margin: auto;
+    padding: 20px 40px 20px 40px;
+}
+
+.message {
+    margin-top: 10px;
+    color: var(--mud-palette-primary);
+}

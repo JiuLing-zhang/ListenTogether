@@ -6,19 +6,16 @@
 <Loading IsLoading="_isLoading"></Loading>
 <div class="page d-flex flex-column">
     <div class="flex-grow-0 d-flex align-center justify-space-between">
-        <div>日志</div>
-        <div>
-            <MudButton Variant="Variant.Text"
-                       Class="ml-5"
-                       EndIcon="@Icons.Material.Filled.Delete"
-                       IconSize="Size.Small"
-                       Size="Size.Small"
-                       OnClick="ClearLogAsync"
-                       Color="Color.Primary">清空</MudButton>
-        </div>
-
-
-
+        <MudText Typo="Typo.h6">
+            日志
+        </MudText>
+        <MudButton Variant="Variant.Text"
+                   Class="ml-5"
+                   EndIcon="fa-solid fa-trash"
+                   IconSize="Size.Small"
+                   Size="Size.Small"
+                   OnClick="ClearLogAsync"
+                   Color="Color.Primary">清空</MudButton>
     </div>
 
     @if (_logs == null)

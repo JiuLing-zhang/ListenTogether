@@ -61,7 +61,8 @@
 
     private async Task AddNewMyFavoriteAsync()
     {
-        var dialog = await DialogService.ShowAsync<MyFavoriteAdd>();
+        var options = new DialogOptions { ClassBackground = "dialog-backdrop" };
+        var dialog = await DialogService.ShowAsync<MyFavoriteAdd>("", options);
         var result = await dialog.Result;
 
         if (!result.Canceled)

@@ -23,6 +23,11 @@
 </MudTabs>
 
 @code {
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
     private void GotoSearchPage()
     {
         NavigationManager.NavigateTo("/search");

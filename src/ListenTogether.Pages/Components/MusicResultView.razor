@@ -43,7 +43,7 @@ else
                 {
                     <MudTd>
                         <MudIconButton Size="Size.Small"
-                               Icon="fas fa-folder-plus"
+                               Icon="fa-solid fa-folder-plus"
                                OnClick="()=>AddToMyFavoriteAsync(context)" />
                     </MudTd>
                 }
@@ -65,24 +65,38 @@ else
 
     var phoneIndex = 1;
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
-        @foreach (var row in Musics)
-        {
-            <MudContainer Class="d-flex justify-space-between"
-                  @onclick="()=>PlayMusicAsync(row)">
-                <MudText>@(phoneIndex++)</MudText>
-                    <MudContainer>
-                        <MudText>@row.Artist</MudText>
-                        <MudText>@row.Name - @row.Album</MudText>
-                    </MudContainer>
-                    @if (IsLogin)
-                {
-                    <MudIconButton Size="Size.Small"
-                       Icon="fas fa-folder-plus"
-                       OnClick="()=>AddToMyFavoriteAsync(row)" />
-                }
+        <MudList>
+            @foreach (var row in Musics)
+            {
+                <MudListItem>
+                    <div class="d-flex align-center"
+                 @onclick="()=>PlayMusicAsync(row)">
+                        <div class="flex-grow-0 seq">
+                            @(phoneIndex++)
+                        </div>
+                        <div class="flex-grow-1 ml-5">
+                            <div class="artist">
+                                @row.Artist
+                            </div>
+                            <div class="name-album">
+                                @row.Name - @row.Album
+                            </div>
+                        </div>
+                        @if (IsLogin)
+                        {
+                            <MudIconButton Class="flex-grow-0 ml-5"
+                               Size="Size.Small"
+                               Icon="fa-solid fa-folder-plus"
+                               OnClick="()=>AddToMyFavoriteAsync(row)" />
+                        }
 
-            </MudContainer>
-        }
+                    </div>
+                </MudListItem>
+                <MudHidden Breakpoint="Breakpoint.MdAndUp">
+                    <MudDivider />
+                </MudHidden>
+            }
+        </MudList>
     </MudHidden>
 }
 
@@ -107,7 +121,8 @@ else
             };
 
         var parameters = new DialogParameters { ["Music"] = music };
-        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters);
+        var options = new DialogOptions { ClassBackground = "dialog-backdrop" };
+        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters, options);
         await dialog.Result;
     }
 

@@ -24,10 +24,10 @@
             <MudAvatar>
                 <MudImage Src="@($"https://music.jiuling.cc{LoginDataStorage.GetAvatar()}")"></MudImage>
             </MudAvatar>
-            <MudContainer>
-                <MudText>@LoginDataStorage.GetNickname()</MudText>
-                <MudText>用户名：@LoginDataStorage.GetUsername()</MudText>
-            </MudContainer>
+            <div class="ml-3">
+                <MudText Typo="Typo.subtitle2">@LoginDataStorage.GetNickname()</MudText>
+                <MudText Typo="Typo.subtitle2">用户名：@LoginDataStorage.GetUsername()</MudText>
+            </div>
         </div>
     }
 

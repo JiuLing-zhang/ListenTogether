@@ -4,7 +4,11 @@
     <div class="flex-grow-1 d-flex align-center">
         <img src="@(Music==null ?"https://jiuling.cc/images/music.svg":Music.ImageUrl)"
              class="rounded-lg pt-1 pb-1 mr-2 small-img" />
-        <div class="flex-grow-1">@($"{Music?.Name} - {Music?.Artist}")</div>
+        <div class="flex-grow-1">
+            <MudText Typo="Typo.body2">
+                @($"{Music?.Name} - {Music?.Artist}")
+            </MudText>
+        </div>
     </div>
 
     <MudToggleIconButton Class="flex-grow-0 ml-2"

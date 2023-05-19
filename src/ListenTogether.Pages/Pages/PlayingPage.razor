@@ -3,6 +3,9 @@
 @inject IPlaylistService _playlistService
 @inject IMusicNetworkService _musicNetworkService
 @inject IJSRuntime JSRuntime
+@inject IMusicShare MusicShare
+
+@implements IDisposable
 
 <div class="blurBgMask"></div>
 <div class="blur" style="background-image:url(@(_currentMusic?.ImageUrl??"https://jiuling.cc/images/music.svg"))"></div>
@@ -12,7 +15,7 @@
     <div class="tool-bar d-flex align-center">
         <MudIconButton Class="flex-grow-0"
                        Icon="@Icons.Material.Filled.KeyboardArrowDown"
-                       Size="Size.Small"
+                       Size="Size.Medium"
                        Style="color:var(--mud-palette-white);"
                        OnClick="@(()=>ClosePlayingPage())"></MudIconButton>
 
@@ -97,13 +100,6 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-
-        //TODO 锁屏
-        //if (!Config.Desktop && GlobalConfig.MyUserSetting.Play.IsPlayingPageKeepScreenOn)
-        //{
-        //    DeviceDisplay.Current.KeepScreenOn = true;
-        //}
 
         _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();
         _playerService.IsPlayingChanged += async (_, __) =>
@@ -246,9 +242,18 @@
         await OnClosePlayingPage.InvokeAsync();
     }
 
-
     private async Task ShareAsync()
     {
+        if (_currentMusic == null)
+        {
+            return;
+        }
+        string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync(_currentMusic.Platform, _currentMusic.IdOnPlatform);
+        await MusicShare.ShareLinkAsync(musicUrl, $"{_currentMusic.Name} - {_currentMusic.Artist}");
+    }
 
+    public void Dispose()
+    {
+        _timer?.Dispose();
     }
 }

@@ -29,12 +29,12 @@
             </div>
         </div>
         <div class="music-detail">
-            <div class="d-flex justify-space-between">
+            <div class="d-flex justify-space-between align-end">
                 <div class="music-title">
-                    @($"{Music?.Name} - {Music?.Artist}")
+                    <MudText Typo="Typo.subtitle1"> @($"{Music?.Name} - {Music?.Artist}") </MudText>
                 </div>
                 <div class="time">
-                    @($"{Position?.position.Minutes:D2}:{Position?.position.Seconds:D2}") / @($"{Position?.Duration.Minutes:D2}:{Position?.Duration.Seconds:D2}")
+                    <MudText Typo="Typo.caption"> @($"{Position?.position.Minutes:D2}:{Position?.position.Seconds:D2}") / @($"{Position?.Duration.Minutes:D2}:{Position?.Duration.Seconds:D2}") </MudText>
                 </div>
             </div>
             <MudSlider Min="0"
@@ -58,7 +58,7 @@
         <MudIconButton Class="ml-2"
                        Disabled="@(Music==null)"
                        Size="Size.Small"
-                       Icon="fas fa-folder-plus"
+                       Icon="fa-solid fa-folder-plus"
                        OnClick="@(()=>AddToMyFavoriteAsync(Music))" />
 
         <MudIconButton Class="ml-2"
@@ -213,6 +213,6 @@
 
     private async Task GotoAutoClosePage()
     {
-        await OnGotoAutoClosePage.InvokeAsync(Volume);
+        await OnGotoAutoClosePage.InvokeAsync();
     }
 }

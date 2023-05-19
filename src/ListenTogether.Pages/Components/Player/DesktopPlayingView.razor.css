@@ -17,14 +17,14 @@
 .music-title {
     flex: 1;
     width: 0;
-    font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--mud-palette-white);
 }
 
 .time {
-    font-size: 12px;
     width: 100px;
     text-align: right;
+    color: var(--mud-palette-white);
 }

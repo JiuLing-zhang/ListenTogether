@@ -23,11 +23,7 @@
         justify-content: space-between;
     }
 
-    .playlist {
+    .playlist-detail {
         flex-direction: row-reverse;
     }
-
-        .playlist .tool {
-            width: 100px;
-        }
 }

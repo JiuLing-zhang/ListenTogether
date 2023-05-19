@@ -2,7 +2,14 @@
 
 <div class="player-main">
     <div class="d-flex align-center justify-end">
-        <div>时间</div>
+        <div class="text-white">
+            @if (AutoCloseTime != null && AutoCloseTime.Value.TotalSeconds > 0)
+            {
+                <MudText Typo="Typo.caption">
+                    @($"{(AutoCloseTime.Value.Hours * 60 + AutoCloseTime.Value.Minutes):D2}:{AutoCloseTime.Value.Seconds:D2}")
+                </MudText>
+            }
+        </div>
         <MudIconButton Class="ml-2"
                        Size="Size.Small"
                        Style="color:var(--mud-palette-white);"
@@ -11,8 +18,10 @@
     </div>
 
     <div class="d-flex align-center justify-space-between mt-2 mb-2">
-        <div class="time">
-            @($"{Position?.position.Minutes:D2}:{Position?.position.Seconds:D2}")
+        <div class="text-white time">
+            <MudText Typo="Typo.caption">
+                @($"{Position?.position.Minutes:D2}:{Position?.position.Seconds:D2}")
+            </MudText>
         </div>
         <MudSlider Class="ml-2 mr-2"
                    Min="0"
@@ -24,8 +33,10 @@
                    @onmouseup="ProgressMouseUp"
                    ValueChanged="ChangeProgressAsync"
                    Variant="Variant.Filled" />
-        <div class="time">
-            @($"{Position?.Duration.Minutes:D2}:{Position?.Duration.Seconds:D2}")
+        <div class="text-white time">
+            <MudText Typo="Typo.caption">
+                @($"{Position?.Duration.Minutes:D2}:{Position?.Duration.Seconds:D2}")
+            </MudText>
         </div>
     </div>
 
@@ -52,7 +63,7 @@
         <MudIconButton Class="ml-2"
                        Style="color:var(--mud-palette-white);"
                        Size="Size.Small"
-                       Icon="fas fa-folder-plus"
+                       Icon="fa-solid fa-folder-plus"
                        OnClick="@(()=>AddToMyFavoriteAsync(Music))" />
     </div>
 </div>
@@ -60,9 +71,13 @@
 @code {
 
     private bool _isPlayProgressDragging = false;
-
+    private string _remainingTimeString = "";
     [Parameter]
     public LocalMusic? Music { get; set; }
+
+    [Parameter]
+    public TimeSpan? AutoCloseTime { get; set; }
+
     [Parameter]
     public bool IsPlaying { get; set; }
 

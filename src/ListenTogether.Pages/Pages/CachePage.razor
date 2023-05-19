@@ -3,23 +3,38 @@
 @inject IDialogService DialogService
 
 <div class="page">
-    <div class="mb-2">缓存管理</div>
 
     @if (_cacheLength == null)
     {
-        <div class="d-flex flex-column align-center">
+        <div class="d-flex flex-column align-center mt-5">
             <MudSkeleton SkeletonType="SkeletonType.Circle" Width="200px" Height="200px" />
-            <MudSkeleton Class="mt-5" SkeletonType="SkeletonType.Rectangle" Width="120px" Height="30px" />
+            <div class="d-flex align-center mt-5">
+                <MudProgressCircular Size="Size.Small"
+                                 Indeterminate="true" />
+                <MudText Typo="Typo.caption"
+                     Class="ml-2">
+                    正在计算
+                </MudText>
+            </div>
         </div>
     }
     else
     {
-        <div class="d-flex flex-column align-center">
+        <div class="d-flex flex-column align-center mt-5">
             <div class="cache-size d-flex flex-column align-center justify-center">
-                <div>@($"{_cacheLength / 1024 / 1024:N2}")</div>
-                <div class="mt-2">MB</div>
+                <MudText Typo="Typo.subtitle2">
+                    发现缓存
+                </MudText>
+                <MudText Typo="Typo.h6">
+                    @($"{_cacheLength / 1024 / 1024:N2}")
+                </MudText>
+                <MudText Typo="Typo.subtitle2">
+                    MB
+                </MudText>
             </div>
-            <div class="mt-2"> @(_processMessage) </div>
+            <MudText Typo="Typo.caption" Class="mt-2">
+                @_processMessage
+            </MudText>
             <MudButton Variant="Variant.Outlined"
                    Class="mt-7"
                    Size="Size.Small"

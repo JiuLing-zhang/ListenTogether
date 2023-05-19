@@ -13,12 +13,14 @@
 <Loading IsLoading="_isLoading"></Loading>
 
 <div class="header">
-    <MudInputLabel>播放列表</MudInputLabel>
+    <div>
+        <MudText Typo="Typo.h6">播放列表</MudText>
+    </div>
     @if (_playlist != null && _playlist.Any())
     {
         <MudButton Variant="Variant.Text"
                Class="ml-5"
-               EndIcon="@Icons.Material.Filled.Delete"
+               EndIcon="fa-solid fa-trash"
                IconSize="Size.Small"
                Size="Size.Small"
                OnClick="@(()=>ClearAsync())"
@@ -41,26 +43,34 @@ else
     }
     else
     {
-        @foreach (var playlistItem in _playlist)
-        {
-            <div class="d-flex align-center playlist-detail mt-2 mb-2">
-                <div class="flex-grow-0 tool">
-                    @if (IsLogin)
-                    {
-                        <MudIconButton Size="Size.Small"
-                       Icon="fas fa-folder-plus"
-                       OnClick="@(()=>AddToMyFavoriteAsync(playlistItem))" />
-                    }
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                       Size="Size.Small"
-                       OnClick="@(()=>DeleteAsync(playlistItem.Id))" />
-                </div>
+        <MudList>
+            @foreach (var playlistItem in _playlist)
+            {
+                <MudListItem>
+                    <div class="d-flex align-center playlist-detail">
+                        <div class="flex-grow-0 tool">
+                            @if (IsLogin)
+                            {
+                                <MudIconButton Size="Size.Small"
+                               Icon="fa-solid fa-folder-plus"
+                               OnClick="@(()=>AddToMyFavoriteAsync(playlistItem))" />
+                            }
+                            <MudIconButton Icon="fa-solid fa-trash"
+                               Class="ml-2"
+                               Size="Size.Small"
+                               OnClick="@(()=>DeleteAsync(playlistItem.Id))" />
+                        </div>
 
-                <MouseDiv Class="d-flex align-center flex-grow-1 ml-4 info" OnClick="@(()=>Play(playlistItem))">
-                    <div>@playlistItem.Name - @playlistItem.Artist</div>
-                </MouseDiv>
-            </div>
-        }
+                        <MouseDiv Class="d-flex align-center flex-grow-1 ml-4 info" OnClick="@(()=>Play(playlistItem))">
+                            <div>@playlistItem.Name - @playlistItem.Artist</div>
+                        </MouseDiv>
+                    </div>
+                </MudListItem>
+                <MudHidden Breakpoint="Breakpoint.MdAndUp">
+                    <MudDivider />
+                </MudHidden>
+            }
+        </MudList>
     }
 }
 
@@ -163,7 +173,8 @@ else
             };
 
         var parameters = new DialogParameters { ["Music"] = music };
-        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters);
+        var options = new DialogOptions { ClassBackground = "dialog-backdrop" };
+        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters, options);
         await dialog.Result;
     }
 

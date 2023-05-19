@@ -83,3 +83,10 @@
         visibility: visible;
         transform: translateY(0%);
     }
+
+.error-message {
+    overflow-y: auto;
+    word-break: break-word;
+    white-space: pre-line;
+    width: auto;
+}

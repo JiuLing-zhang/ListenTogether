@@ -5,6 +5,8 @@
 @inject IJSRuntime JSRuntime
 @inject IMusicNetworkService MusicNetworkService
 @inject IAutoUpgrade AutoUpgrade
+@inject INativeTheme NativeTheme
+@inject IDeviceScreen DeviceScreen
 
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" />
 <MudDialogProvider NoHeader="true" />
@@ -48,16 +50,21 @@
         </div>
     </ChildContent>
     <ErrorContent Context="ex">
-        <div class="pa-10" style="user-select: text;">
-            <MudAlert Class="mb-2"
-                      Severity="Severity.Error">程序遇到了未知错误！</MudAlert>
-            <div>@(ex.Message)</div>
-            <div>@(ex.StackTrace)</div>
-            <MudButton Class="mt-4"
-                       Variant="Variant.Outlined"
-                       Size="Size.Small"
-                       IconColor="Color.Primary"
-                       OnClick="@(()=>ResetError(ex))">确定</MudButton>
+        <div class="pa-5" style="user-select: text;">
+            <div class="d-flex justify-space-between align-center">
+                <MudAlert Class="mr-2"
+                          Variant="Variant.Filled"
+                          Dense="true"
+                          Severity="Severity.Error">程序遇到了未知错误！</MudAlert>
+
+                <MudButton Variant="Variant.Outlined"
+                           Size="Size.Small"
+                           IconColor="Color.Primary"
+                           OnClick="@(()=>ResetError(ex))">确定</MudButton>
+            </div>
+            <div class="error-message mt-3">
+                @($"{ex.Message}{Environment.NewLine}{ex.StackTrace}")
+            </div>
         </div>
     </ErrorContent>
 </ErrorBoundary>
@@ -88,17 +95,23 @@
                 TableHover = "#182437",
                 DarkLighten = "#494C50",
                 Black = "#858585",
-                TextPrimary = "#D5D5D5"
+                TextPrimary = "#D5D5D5",
+                OverlayDark = "#7575757A"
             }
         };
 
     private void OpenPlayingPage()
     {
         _isOpenPlayingPage = "open";
+        if (Settings.Environment.Play.IsPlayingPageKeepScreenOn)
+        {
+            DeviceScreen.ScreenOn();
+        }
     }
     private void ClosePlayingPage()
     {
         _isOpenPlayingPage = "";
+        DeviceScreen.ScreenOff();
     }
 
     protected override void OnInitialized()
@@ -125,7 +138,7 @@
                     break;
             }
             await InvokeAsync(StateHasChanged);
-
+            NativeTheme.SetTheme(_isDarkMode);
             if (Settings.Environment.General.IsAutoCheckUpdate)
             {
                 await AutoUpgrade.DoAsync(true);

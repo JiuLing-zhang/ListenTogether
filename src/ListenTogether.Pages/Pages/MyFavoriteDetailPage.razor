@@ -13,14 +13,17 @@
 @if (_myFavorite == null)
 {
     <div class="d-flex">
-        <MudInputLabel>我的歌单</MudInputLabel>
+        <MudText Typo="Typo.h6">歌单</MudText>
         <MudSkeleton Class="ml-3" Width="50%" />
     </div>
 }
 else
 {
     <div class="header">
-        <div>我的歌单 - @_myFavorite.Name</div>
+        <div class="d-flex align-end">
+            <MudText Typo="Typo.h6">歌单</MudText>
+            <MudText Typo="Typo.subtitle1" Class="ml-2">@_myFavorite.Name</MudText>
+        </div>
         <div class="tool">
             <MudButton Variant="Variant.Text"
                    Class="ml-5"
@@ -31,7 +34,7 @@ else
                    Color="Color.Primary">重命名</MudButton>
             <MudButton Variant="Variant.Text"
                    Class="ml-2"
-                   EndIcon="@Icons.Material.Filled.Delete"
+                   EndIcon="fa-solid fa-trash"
                    IconSize="Size.Small"
                    Size="Size.Small"
                    OnClick="DeleteMyFavoriteAsync"
@@ -55,39 +58,44 @@ else
     }
     else
     {
-        var index = 0;
-        @foreach (var myFavoriteDetail in _myFavoriteDetailList)
-        {
-            <div class="d-flex align-center my-favorite-detail mt-3 mb-3">
-                <div class="flex-grow-0 tool">
-                    <div class="play">
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                           Size="Size.Medium"
-                           OnClick="@(()=>DeleteAsync(myFavoriteDetail.Id))"></MudIconButton>
-                    </div>
-                </div>
-
-                <MouseDiv Class="d-flex align-center flex-grow-1 info" OnClick="@(()=>Play(myFavoriteDetail))">
-                    <div class="mr-3 seq">@(index++)</div>
-                    <div>
-                        <div class="d-flex align-center">
-                            <MudChip Label="true"
-                         Variant="Variant.Outlined"
-                         Class="mr-2"
-                         Style="font-size: 12px;width: 35px;height: 20px;opacity: 0.7;padding-left: 6px;"
-                         Size="Size.Small">@myFavoriteDetail.Music.Platform.GetDescription()</MudChip>
-                            <div>@myFavoriteDetail.Music.Name</div>
+        var index = 1;
+        <MudList>
+            @foreach (var myFavoriteDetail in _myFavoriteDetailList)
+            {
+                <MudListItem>
+                    <div class="d-flex align-center my-favorite-detail mt-3 mb-3">
+                        <div class="flex-grow-0 tool">
+                            <div class="play">
+                                <MudIconButton Icon="fa-solid fa-trash"
+                                   Size="Size.Medium"
+                                   OnClick="@(()=>DeleteAsync(myFavoriteDetail.Id))"></MudIconButton>
+                            </div>
                         </div>
-                        <div class="d-flex ml-2 music-detail">
-                            <div>@myFavoriteDetail.Music.Artist - @myFavoriteDetail.Music.Album</div>
-                        </div>
-                    </div>
-                </MouseDiv>
 
-            </div>
-        }
+                        <MouseDiv Class="d-flex align-center flex-grow-1 info" OnClick="@(()=>Play(myFavoriteDetail))">
+                            <div class="mr-3 seq">@(index++)</div>
+                            <div>
+                                <div class="d-flex align-center">
+                                    <MudChip Label="true"
+                                 Variant="Variant.Outlined"
+                                 Class="mr-2"
+                                 Style="font-size: 12px;width: 35px;height: 20px;opacity: 0.7;padding-left: 6px;"
+                                 Size="Size.Small">@myFavoriteDetail.Music.Platform.GetDescription()</MudChip>
+                                    <div>@myFavoriteDetail.Music.Name</div>
+                                </div>
+                                <div class="d-flex ml-2 music-detail">
+                                    <div>@myFavoriteDetail.Music.Artist - @myFavoriteDetail.Music.Album</div>
+                                </div>
+                            </div>
+                        </MouseDiv>
+                    </div>
+                </MudListItem>
+                <MudHidden Breakpoint="Breakpoint.MdAndUp">
+                    <MudDivider />
+                </MudHidden>
+            }
+        </MudList>
     }
-
 }
 
 @code {
@@ -112,7 +120,8 @@ else
     private async Task MyFavoriteRenameAsync()
     {
         var parameters = new DialogParameters { ["MyFavoriteOld"] = _myFavorite };
-        var dialog = await DialogService.ShowAsync<MyFavoriteRename>("", parameters);
+        var options = new DialogOptions { ClassBackground = "dialog-backdrop" };
+        var dialog = await DialogService.ShowAsync<MyFavoriteRename>("", parameters, options);
         var result = await dialog.Result;
         if (!result.Canceled)
         {

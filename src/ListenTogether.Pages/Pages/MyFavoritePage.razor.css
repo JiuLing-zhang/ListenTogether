@@ -4,20 +4,12 @@
         align-items: center;
     }
 
-    .my-favorite {
+    .my-favorite .tool {
+        width: 50px;
     }
 
-        .my-favorite:hover {
-            background-color: var(--mud-palette-table-striped);
-            cursor: pointer;
-        }
-
-        .my-favorite .tool {
-            width: 50px;
-        }
-
-        .my-favorite .info {
-        }
+    .my-favorite .info {
+    }
 }
 
 @media screen and (max-width: 960px) {

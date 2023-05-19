@@ -2,3 +2,12 @@
     margin: 10px;
     height: 125px;
 }
+
+.text-white {
+    color: var(--mud-palette-white);
+}
+
+.time {
+    width: 50px;
+    text-align: center;
+}

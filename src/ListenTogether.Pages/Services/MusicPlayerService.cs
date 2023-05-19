@@ -71,7 +71,6 @@ public class MusicPlayerService
                 }
             }
 
-            string key = JiuLing.CommonLibs.GuidUtils.GetFormatN();
             StartBuffering?.Invoke(this, EventArgs.Empty);
 
             //重新获取播放链接        

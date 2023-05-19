@@ -6,6 +6,11 @@
 @inject IDialogService DialogService
 @inject IPlayHistoryStorage PlayHistoryStorage
 @inject NavigationManager NavigationManager
+@inject AutoCloseJob AutoCloseJob
+
+@implements IDisposable
+
+<Loading IsLoading="@_isBuffering" Message="歌曲缓冲中" />
 
 @if (OnOpenPlayingPage.HasDelegate)
 {
@@ -64,6 +69,7 @@ else
                       RepeatIcon="@(_repeatIcon)"
                       SoundIcon="@(_soundIcon)"
                       Volume="@(_volume)"
+                      AutoCloseTime="@(_autoCloseTime)"
                       OnVolumeChanged="ChangeVolumeAsync"
                       OnProgressChanged="ChangeProgressAsync"
                       Position="@(_position)"
@@ -78,6 +84,7 @@ else
 }
 
 @code {
+
     [Parameter]
     public EventCallback OnOpenPlayingPage { get; set; }
     private LocalMusic? _music;
@@ -86,21 +93,42 @@ else
     private bool _isPlaying = false;
     private MusicPosition? _position;
     private int _volume;
+    private bool _isBuffering = false;
+    private Timer? _timer;
+    private TimeSpan? _autoCloseTime;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+
+        _timer = new Timer(CalcRemainingTime, new AutoResetEvent(false), 0, 1000);
 
         await UpdateCurrentMusicAsync();
 
         _playerService.IsPlayingChanged += async (_, __) => await PlayingChangedAsync();
         _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();
         _playerService.PositionChanged += async (_, __) => await PositionChangedAsync();
+        _playerService.StartBuffering += async (_, __) =>
+        {
+            _isBuffering = true;
+            await InvokeAsync(StateHasChanged);
+        };
+        _playerService.EndBuffer += async (_, __) =>
+        {
+            _isBuffering = false;
+            await InvokeAsync(StateHasChanged);
+        };
 
         UpdateRepeatModel();
 
         UpdateSoundOnOff().Wait();
         UpdateVolume().Wait();
+    }
+
+    private void CalcRemainingTime(object? value)
+    {
+        _autoCloseTime = AutoCloseJob.GetRemainingTime();
+        InvokeAsync(StateHasChanged);
     }
 
     private async Task PlayingChangedAsync()
@@ -278,11 +306,18 @@ else
     private async Task AddToMyFavoriteAsync(LocalMusic music)
     {
         var parameters = new DialogParameters { ["Music"] = music };
-        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters);
+        var options = new DialogOptions { ClassBackground = "dialog-backdrop" };
+        var dialog = await DialogService.ShowAsync<AddToMyFavorite>("", parameters, options);
         await dialog.Result;
     }
     private void GotoAutoClosePage()
     {
-        NavigationManager.NavigateTo("/auto-close");
+        var options = new DialogOptions { ClassBackground = "dialog-backdrop" };
+        DialogService.Show<AutoClosePage>("", options);
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using MudBlazor.Services;
 using Microsoft.Maui.LifecycleEvents;
 using NativeMediaMauiLib;
+using CommunityToolkit.Maui;
 namespace ListenTogetherMauiBlazor
 {
     public static class MauiProgram
@@ -15,6 +16,7 @@ namespace ListenTogetherMauiBlazor
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .UseNativeMedia()
                 .ConfigureFonts(fonts =>
                 {
@@ -45,10 +47,10 @@ namespace ListenTogetherMauiBlazor
             });
 #endif
 
-#if DEBUG
+//#if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();
-#endif
+//#endif
 
             using var stream = FileSystem.OpenAppPackageFileAsync("NetConfig.json").Result;
             using var reader = new StreamReader(stream);
@@ -56,6 +58,9 @@ namespace ListenTogetherMauiBlazor
             builder.Services.AddSingleton<NetConfig>(json.ToObject<NetConfig>());
 
             builder.Services.AddSingleton<AutoCloseJob>();
+            builder.Services.AddSingleton<IDeviceScreen, DeviceScreen>();
+            builder.Services.AddSingleton<IMusicShare, MusicShare>();
+            builder.Services.AddSingleton<INativeTheme, NativeTheme>();
             builder.Services.AddSingleton<IAppClose, AppClose>();
             builder.Services.AddSingleton<IAutoUpgrade, AutoUpgrade>();
             builder.Services.AddSingleton<IAppVersion, AppVersion>();
