@@ -4,10 +4,13 @@
     <div class="flex-grow-1 d-flex align-center">
         <img src="@(Music == null ? "https://jiuling.cc/images/music.svg" : Music.ImageUrl)"
              class="mr-2 small-img @(IsPlaying ? "" : "animation-paused")" />
-        <div class="flex-grow-1">
-            <MudText Typo="Typo.body2">
-                @($"{Music?.Name} - {Music?.Artist}")
-            </MudText>
+        <div class="flex-grow-1 d-flex align-center">
+            <div class="music-name">
+                @Music?.Name
+            </div>
+            <div class="music-artist">
+                @($" - {Music?.Artist}")
+            </div>
         </div>
     </div>
 
