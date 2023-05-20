@@ -18,7 +18,7 @@ internal class NativeTheme : INativeTheme
         {
             App.Current.UserAppTheme = AppTheme.Light;
 #if ANDROID
-            CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.FromArgb("#FFFFFF"));
+            CommunityToolkit.Maui.Core.Platform.StatusBar.SetColor(Color.FromArgb("#C98FFF"));
             CommunityToolkit.Maui.Core.Platform.StatusBar.SetStyle(StatusBarStyle.LightContent);
 #endif
         }

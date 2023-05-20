@@ -2,8 +2,8 @@
 
 <div class="d-flex align-center" @onclick="OpenPlayingPageAsync">
     <div class="flex-grow-1 d-flex align-center">
-        <img src="@(Music==null ?"https://jiuling.cc/images/music.svg":Music.ImageUrl)"
-             class="rounded-lg pt-1 pb-1 mr-2 small-img" />
+        <img src="@(Music == null ? "https://jiuling.cc/images/music.svg" : Music.ImageUrl)"
+             class="mr-2 small-img @(IsPlaying ? "" : "animation-paused")" />
         <div class="flex-grow-1">
             <MudText Typo="Typo.body2">
                 @($"{Music?.Name} - {Music?.Artist}")

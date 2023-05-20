@@ -8,6 +8,10 @@
 @media screen and (max-width: 960px) {
 }
 
+.page {
+    padding-top: 10px;
+}
+
 .type-title {
     font-size: 18px;
     font-weight: bold;

@@ -19,12 +19,12 @@
     @if (_playlist != null && _playlist.Any())
     {
         <MudButton Variant="Variant.Text"
-               Class="ml-5"
-               EndIcon="fa-solid fa-trash"
-               IconSize="Size.Small"
-               Size="Size.Small"
-               OnClick="@(()=>ClearAsync())"
-               Color="Color.Primary">清空</MudButton>
+                   Class="ml-5"
+                   EndIcon="fa-solid fa-trash"
+                   IconSize="Size.Small"
+                   Size="Size.Small"
+                   OnClick="@(()=>ClearAsync())"
+                   Color="Color.Primary">清空</MudButton>
     }
 </div>
 
@@ -52,17 +52,22 @@ else
                             @if (IsLogin)
                             {
                                 <MudIconButton Size="Size.Small"
-                               Icon="fa-solid fa-folder-plus"
-                               OnClick="@(()=>AddToMyFavoriteAsync(playlistItem))" />
+                                               Icon="fa-solid fa-folder-plus"
+                                               OnClick="@(()=>AddToMyFavoriteAsync(playlistItem))" />
                             }
                             <MudIconButton Icon="fa-solid fa-trash"
-                               Class="ml-2"
-                               Size="Size.Small"
-                               OnClick="@(()=>DeleteAsync(playlistItem.Id))" />
+                                           Class="ml-2"
+                                           Size="Size.Small"
+                                           OnClick="@(()=>DeleteAsync(playlistItem.Id))" />
                         </div>
 
-                        <MouseDiv Class="d-flex align-center flex-grow-1 ml-4 info" OnClick="@(()=>Play(playlistItem))">
-                            <div>@playlistItem.Name - @playlistItem.Artist</div>
+                        <MouseDiv Class="d-flex align-center flex-grow-1 info" OnClick="@(()=>Play(playlistItem))">
+                            <MudText Typo="Typo.subtitle1">
+                                @playlistItem.Name
+                            </MudText>
+                            <MudText Typo="Typo.subtitle1" Class="artist">
+                                @playlistItem.Artist
+                            </MudText>
                         </MouseDiv>
                     </div>
                 </MudListItem>

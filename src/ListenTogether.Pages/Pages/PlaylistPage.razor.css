@@ -4,15 +4,16 @@
         align-items: center;
     }
 
-    .playlist {
-    }
-
     .playlist-detail:hover {
         background-color: var(--mud-palette-table-striped);
     }
 
     .playlist .tool {
         width: 100px;
+    }
+
+    .info {
+        margin-left: 20px;
     }
 }
 
@@ -26,4 +27,13 @@
     .playlist-detail {
         flex-direction: row-reverse;
     }
+
+    .info {
+        margin-right: 20px;
+    }
+}
+
+.artist {
+    margin-left: 3px;
+    opacity: 0.7;
 }

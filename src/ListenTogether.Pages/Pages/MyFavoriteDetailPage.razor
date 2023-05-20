@@ -26,19 +26,19 @@ else
         </div>
         <div class="tool">
             <MudButton Variant="Variant.Text"
-                   Class="ml-5"
-                   EndIcon="@Icons.Material.Filled.Edit"
-                   IconSize="Size.Small"
-                   Size="Size.Small"
-                   OnClick="MyFavoriteRenameAsync"
-                   Color="Color.Primary">重命名</MudButton>
+                       Class="ml-5"
+                       EndIcon="@Icons.Material.Filled.Edit"
+                       IconSize="Size.Small"
+                       Size="Size.Small"
+                       OnClick="MyFavoriteRenameAsync"
+                       Color="Color.Primary">重命名</MudButton>
             <MudButton Variant="Variant.Text"
-                   Class="ml-2"
-                   EndIcon="fa-solid fa-trash"
-                   IconSize="Size.Small"
-                   Size="Size.Small"
-                   OnClick="DeleteMyFavoriteAsync"
-                   Color="Color.Primary">删除歌单</MudButton>
+                       Class="ml-2"
+                       EndIcon="fa-solid fa-trash"
+                       IconSize="Size.Small"
+                       Size="Size.Small"
+                       OnClick="DeleteMyFavoriteAsync"
+                       Color="Color.Primary">删除歌单</MudButton>
         </div>
     </div>
 }
@@ -63,28 +63,35 @@ else
             @foreach (var myFavoriteDetail in _myFavoriteDetailList)
             {
                 <MudListItem>
-                    <div class="d-flex align-center my-favorite-detail mt-3 mb-3">
+                    <div class="d-flex align-center my-favorite-detail">
                         <div class="flex-grow-0 tool">
                             <div class="play">
                                 <MudIconButton Icon="fa-solid fa-trash"
-                                   Size="Size.Medium"
-                                   OnClick="@(()=>DeleteAsync(myFavoriteDetail.Id))"></MudIconButton>
+                                               Size="Size.Medium"
+                                               OnClick="@(()=>DeleteAsync(myFavoriteDetail.Id))"></MudIconButton>
                             </div>
                         </div>
 
-                        <MouseDiv Class="d-flex align-center flex-grow-1 info" OnClick="@(()=>Play(myFavoriteDetail))">
+                        <MouseDiv Class="d-flex align-center flex-grow-1" OnClick="@(()=>Play(myFavoriteDetail))">
                             <div class="mr-3 seq">@(index++)</div>
                             <div>
                                 <div class="d-flex align-center">
                                     <MudChip Label="true"
-                                 Variant="Variant.Outlined"
-                                 Class="mr-2"
-                                 Style="font-size: 12px;width: 35px;height: 20px;opacity: 0.7;padding-left: 6px;"
-                                 Size="Size.Small">@myFavoriteDetail.Music.Platform.GetDescription()</MudChip>
-                                    <div>@myFavoriteDetail.Music.Name</div>
+                                             Variant="Variant.Outlined"
+                                             Class="mr-2"
+                                             Style="font-size: 12px;width: 35px;height: 20px;opacity: 0.7;padding-left: 6px;"
+                                             Size="Size.Small">@myFavoriteDetail.Music.Platform.GetDescription()</MudChip>
+                                    <div>
+                                        <MudText Typo="Typo.subtitle1">
+                                            @myFavoriteDetail.Music.Name
+                                        </MudText>
+                                    </div>
+
                                 </div>
-                                <div class="d-flex ml-2 music-detail">
-                                    <div>@myFavoriteDetail.Music.Artist - @myFavoriteDetail.Music.Album</div>
+                                <div>
+                                    <MudText Typo="Typo.caption" Class="ml-2">
+                                        @($"{myFavoriteDetail.Music.Artist} - {myFavoriteDetail.Music.Album}")
+                                    </MudText>
                                 </div>
                             </div>
                         </MouseDiv>
