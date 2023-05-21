@@ -16,13 +16,13 @@ else
     var desktopIndex = 1;
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
         <MudTable Items="@Musics"
-              @ondblclick="@(()=>TableDoubleClick())"
-              Dense="true"
-              Hover="true"
-              Striped="true"
-              RowClass="cursor-default"
-              T="MusicResultShow"
-              OnRowClick="@RowClick">
+        @ondblclick="@(()=>TableDoubleClick())"
+                  Dense="true"
+                  Hover="true"
+                  Striped="true"
+                  RowClass="cursor-default"
+                  T="MusicResultShow"
+                  OnRowClick="@RowClick">
             <HeaderContent>
                 <MudTh></MudTh>
                 @if (IsLogin)
@@ -43,8 +43,8 @@ else
                 {
                     <MudTd>
                         <MudIconButton Size="Size.Small"
-                               Icon="fa-solid fa-folder-plus"
-                               OnClick="()=>AddToMyFavoriteAsync(context)" />
+                                       Icon="fa-solid fa-folder-plus"
+                                       OnClick="()=>AddToMyFavoriteAsync(context)" />
                     </MudTd>
                 }
                 <MudTd>
@@ -70,24 +70,24 @@ else
             {
                 <MudListItem>
                     <div class="d-flex align-center"
-                 @onclick="()=>PlayMusicAsync(row)">
-                        <div class="flex-grow-0 seq">
+                    @onclick="()=>PlayMusicAsync(row)">
+                        <div class="seq">
                             @(phoneIndex++)
                         </div>
-                        <div class="flex-grow-1 ml-5">
-                            <div class="artist">
-                                @row.Artist
+                        <div class="ml-5 music-info">
+                            <div class="name">
+                                @row.Name
                             </div>
-                            <div class="name-album">
-                                @row.Name - @row.Album
+                            <div class="artist-album">
+                                @row.Artist - @row.Album
                             </div>
                         </div>
                         @if (IsLogin)
                         {
-                            <MudIconButton Class="flex-grow-0 ml-5"
-                               Size="Size.Small"
-                               Icon="fa-solid fa-folder-plus"
-                               OnClick="()=>AddToMyFavoriteAsync(row)" />
+                            <MudIconButton Class="ml-5"
+                                           Size="Size.Small"
+                                           Icon="fa-solid fa-folder-plus"
+                                           OnClick="()=>AddToMyFavoriteAsync(row)" />
                         }
 
                     </div>

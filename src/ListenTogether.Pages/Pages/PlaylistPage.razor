@@ -62,12 +62,12 @@ else
                         </div>
 
                         <MouseDiv Class="d-flex align-center flex-grow-1 info" OnClick="@(()=>Play(playlistItem))">
-                            <MudText Typo="Typo.subtitle1">
+                            <div class="music-name">
                                 @playlistItem.Name
-                            </MudText>
-                            <MudText Typo="Typo.subtitle1" Class="artist">
-                                @playlistItem.Artist
-                            </MudText>
+                            </div>
+                            <div class="music-artist">
+                                @($" - {playlistItem.Artist}")
+                            </div>
                         </MouseDiv>
                     </div>
                 </MudListItem>

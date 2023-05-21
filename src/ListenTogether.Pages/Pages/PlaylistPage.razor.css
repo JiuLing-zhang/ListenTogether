@@ -33,7 +33,20 @@
     }
 }
 
-.artist {
-    margin-left: 3px;
+.tool {
+    white-space: nowrap;
+}
+
+.music-name {
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 1rem;
+}
+
+.music-artist {
+    font-size: 0.9rem;
+    flex-shrink: 0;
     opacity: 0.7;
 }
