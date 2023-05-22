@@ -275,26 +275,34 @@ internal class KuWoMusicProvider : IMusicProvider
 
     public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
     {
-        string html = await _httpClient.GetStringAsync("http://www.kuwo.cn").ConfigureAwait(false);
-        var hotTags = KuWoUtils.GetHotTags(html);
-
-        string url = $"{UrlBase.KuWo.GetAllTypesUrl}?httpsStatus=1&reqId={_reqId}";
-        var request = new HttpRequestMessage()
+        try
         {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        request.Headers.Add("Accept", "application/json, text/plain, */*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        request.Headers.Add("Referer", "http://www.kuwo.cn/");
-        request.Headers.Add("Host", "www.kuwo.cn");
-        request.Headers.Add("csrf", _csrf);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        var allTypes = KuWoUtils.GetAllTypes(json);
-        return (hotTags, allTypes);
+            string html = await _httpClient.GetStringAsync("http://www.kuwo.cn").ConfigureAwait(false);
+            var hotTags = KuWoUtils.GetHotTags(html);
+
+            string url = $"{UrlBase.KuWo.GetAllTypesUrl}?httpsStatus=1&reqId={_reqId}";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            request.Headers.Add("Accept", "application/json, text/plain, */*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            request.Headers.Add("Referer", "http://www.kuwo.cn/");
+            request.Headers.Add("Host", "www.kuwo.cn");
+            request.Headers.Add("csrf", _csrf);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var allTypes = KuWoUtils.GetAllTypes(json);
+            return (hotTags, allTypes);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("酷我热搜获取失败。", ex);
+            return (new List<MusicTag>(), new List<MusicTypeTag>());
+        }
     }
 
     public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id, int page)

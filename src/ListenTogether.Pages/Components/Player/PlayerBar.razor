@@ -104,6 +104,7 @@ else
         _timer = new Timer(CalcRemainingTime, new AutoResetEvent(false), 0, 1000);
 
         await UpdateCurrentMusicAsync();
+        await PlayingChangedAsync();
 
         _playerService.IsPlayingChanged += async (_, __) => await PlayingChangedAsync();
         _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();

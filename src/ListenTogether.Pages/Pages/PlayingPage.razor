@@ -54,10 +54,17 @@
         else
         {
             <div class="title">
-                @_currentMusic.Name
+                <div class="name">
+                    @_currentMusic.Name
+                </div>
             </div>
-            <div class="name">
-                @_currentMusic.Artist - @_currentMusic.Album
+            <div class="artist-album d-flex align-center">
+                <div class="artist">
+                    @_currentMusic.Artist
+                </div>
+                <div class="album">
+                    @($" - {_currentMusic?.Album}")
+                </div>
             </div>
         }
 

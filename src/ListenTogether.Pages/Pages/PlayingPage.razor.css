@@ -134,14 +134,31 @@
     color: #FFFFFF;
     font-size: 24px;
     margin: auto;
+    width: 100%;
 }
 
 .name {
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.artist-album {
     color: #FFFFFF;
     opacity: 0.6;
     margin: 5px auto 0 auto;
 }
 
+.artist {
+    flex-shrink: 0;
+}
+
+.album {
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 .lyric {
     color: #FFFFFF;

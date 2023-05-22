@@ -86,7 +86,6 @@
         }
         _isLoading = true;
         _page++;
-        await Task.Delay(5000);
         var songMenus = await MusicNetworkService.GetSongMenusFromTagAsync(Platform, _tagId, _page);
         if (songMenus.Count == 0)
         {

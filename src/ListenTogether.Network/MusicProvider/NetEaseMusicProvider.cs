@@ -23,48 +23,56 @@ public class NetEaseMusicProvider : IMusicProvider
 
     public async Task<List<string>> GetSearchSuggestAsync(string keyword)
     {
-        var searchSuggestList = new List<string>();
-        string url = $"{UrlBase.NetEase.Suggest}";
-
-        var postData = NetEaseUtils.GetPostDataForSuggest(keyword);
-        var form = new FormUrlEncodedContent(postData);
-
-        var request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        request.Headers.Add("Accept", "*/*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        ResultBase<SearchSuggestHttpResult>? result;
         try
         {
-            result = json.ToObject<ResultBase<SearchSuggestHttpResult>>();
+            var searchSuggestList = new List<string>();
+            string url = $"{UrlBase.NetEase.Suggest}";
+
+            var postData = NetEaseUtils.GetPostDataForSuggest(keyword);
+            var form = new FormUrlEncodedContent(postData);
+
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = form
+            };
+            request.Headers.Add("Accept", "*/*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            ResultBase<SearchSuggestHttpResult>? result;
+            try
+            {
+                result = json.ToObject<ResultBase<SearchSuggestHttpResult>>();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("解析网易搜索建议失败。", ex);
+                return searchSuggestList;
+            }
+
+            if (result == null)
+            {
+                Logger.Info("解析网易搜索建议失败，服务器返回空。");
+                return searchSuggestList;
+            }
+            if (result.code != 200 || result.result.songs == null)
+            {
+                Logger.Info("解析网易搜索建议失败，服务器返回参数异常。");
+                return searchSuggestList;
+            }
+            searchSuggestList = result.result.songs.Select(x => x.name).Distinct().ToList();
+            return searchSuggestList;
         }
         catch (Exception ex)
         {
-            Logger.Error("解析网易搜索建议失败。", ex);
-            return searchSuggestList;
+            Logger.Error("网易搜索建议获取失败。", ex);
+            return new List<string>();
         }
-
-        if (result == null)
-        {
-            Logger.Info("解析网易搜索建议失败，服务器返回空。");
-            return searchSuggestList;
-        }
-        if (result.code != 200 || result.result.songs == null)
-        {
-            Logger.Info("解析网易搜索建议失败，服务器返回参数异常。");
-            return searchSuggestList;
-        }
-        searchSuggestList = result.result.songs.Select(x => x.name).Distinct().ToList();
-        return searchSuggestList;
     }
 
     public async Task<List<MusicResultShow>> SearchAsync(string keyword)
@@ -177,362 +185,410 @@ public class NetEaseMusicProvider : IMusicProvider
 
     public async Task<string> GetLyricAsync(string id, string extendDataJson = "")
     {
-        //获取歌词
-        var url = $"{UrlBase.NetEase.Lyric}";
-        var postData = NetEaseUtils.GetPostDataForLyric(id);
-        var form = new FormUrlEncodedContent(postData);
-
-        var request = new HttpRequestMessage()
+        try
         {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        request.Headers.Add("Accept", "application/json, */*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            //获取歌词
+            var url = $"{UrlBase.NetEase.Lyric}";
+            var postData = NetEaseUtils.GetPostDataForLyric(id);
+            var form = new FormUrlEncodedContent(postData);
 
-        var lyricResult = json.ToObject<MusicLyricHttpResult>();
-        if (lyricResult == null)
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = form
+            };
+            request.Headers.Add("Accept", "application/json, */*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var lyricResult = json.ToObject<MusicLyricHttpResult>();
+            if (lyricResult == null)
+            {
+                return "";
+            }
+            if (lyricResult.code != 200)
+            {
+                return "";
+            }
+
+            if (lyricResult.lrc == null)
+            {
+                return "";
+            }
+            return lyricResult.lrc.lyric;
+
+        }
+        catch (Exception ex)
         {
+            Logger.Error("网易歌词获取失败。", ex);
             return "";
         }
-        if (lyricResult.code != 200)
-        {
-            return "";
-        }
-
-        if (lyricResult.lrc == null)
-        {
-            return "";
-        }
-        return lyricResult.lrc.lyric;
     }
 
     public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
     {
-        //热门标签
-        string url = $"{UrlBase.NetEase.GetHotTagsUrl}";
-        var request = new HttpRequestMessage()
+        try
         {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
+            //热门标签
+            string url = $"{UrlBase.NetEase.GetHotTagsUrl}";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+            {
+                request.Headers.Add(header.Key, header.Value);
+            }
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            var html = System.Text.Encoding.UTF8.GetString(buffer);
+
+            var hotTags = NetEaseUtils.GetHotTags(html);
+
+            //全部标签
+            url = $"{UrlBase.NetEase.GetAllTypesUrl}";
+            request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+            {
+                request.Headers.Add(header.Key, header.Value);
+            }
+            response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            html = System.Text.Encoding.UTF8.GetString(buffer);
+            var allTypes = NetEaseUtils.GetAllTypes(html);
+
+            return (hotTags, allTypes);
         }
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-        var html = System.Text.Encoding.UTF8.GetString(buffer);
-
-        var hotTags = NetEaseUtils.GetHotTags(html);
-
-        //全部标签
-        url = $"{UrlBase.NetEase.GetAllTypesUrl}";
-        request = new HttpRequestMessage()
+        catch (Exception ex)
         {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
+            Logger.Error("网易热搜获取失败。", ex);
+            return (new List<MusicTag>(), new List<MusicTypeTag>());
         }
-        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-        html = System.Text.Encoding.UTF8.GetString(buffer);
-        var allTypes = NetEaseUtils.GetAllTypes(html);
-
-        return (hotTags, allTypes);
     }
 
     public async Task<List<SongMenu>> GetSongMenusFromTagAsync(string id, int page)
     {
-        var limit = 35;
-        var offset = (page - 1) * limit;
-        string url = $"{UrlBase.NetEase.GetSongMenusFromTagUrl}?order=hot&cat={id}&limit={limit}&offset={offset}";
-        var request = new HttpRequestMessage()
+        try
         {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-        var html = System.Text.Encoding.UTF8.GetString(buffer);
+            var limit = 35;
+            var offset = (page - 1) * limit;
+            string url = $"{UrlBase.NetEase.GetSongMenusFromTagUrl}?order=hot&cat={id}&limit={limit}&offset={offset}";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+            {
+                request.Headers.Add(header.Key, header.Value);
+            }
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            var html = System.Text.Encoding.UTF8.GetString(buffer);
 
-        return NetEaseUtils.GetSongMenusFromTag(html);
+            return NetEaseUtils.GetSongMenusFromTag(html);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("网易标签获取歌单失败。", ex);
+            return new List<SongMenu>();
+        }
     }
 
     public async Task<List<MusicResultShow>> GetTagMusicsAsync(string tagId)
     {
-        var musics = new List<MusicResultShow>();
-        string url = $"{UrlBase.NetEase.GetTagMusicsUrl}";
-
-        var postData = NetEaseUtils.GetPostDataForTagMusics(tagId);
-        var form = new FormUrlEncodedContent(postData);
-
-        var request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        TagMusicHttpResult? result;
         try
         {
-            result = json.ToObject<TagMusicHttpResult>();
-        }
-        catch (Exception)
-        {
-            return musics;
-        }
+            var musics = new List<MusicResultShow>();
+            string url = $"{UrlBase.NetEase.GetTagMusicsUrl}";
 
-        if (result == null || result.code != 200 || result.playlist == null || result.playlist.trackIds == null || result.playlist.trackIds.Count == 0)
-        {
-            return musics;
-        }
+            var postData = NetEaseUtils.GetPostDataForTagMusics(tagId);
+            var form = new FormUrlEncodedContent(postData);
 
-        List<long> tracksId = result.playlist.trackIds.Select(x => x.id).ToList();
-        url = $"{UrlBase.NetEase.GetSongDetailUrl}";
-        postData = NetEaseUtils.GetSongDetailPostData(tracksId);
-        form = new FormUrlEncodedContent(postData);
-        request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        TagMusicSongsHttpResult? songResult;
-        try
-        {
-            songResult = json.ToObject<TagMusicSongsHttpResult>();
-            if (songResult == null || songResult.songs == null)
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = form
+            };
+            foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+            {
+                request.Headers.Add(header.Key, header.Value);
+            }
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            TagMusicHttpResult? result;
+            try
+            {
+                result = json.ToObject<TagMusicHttpResult>();
+            }
+            catch (Exception)
             {
                 return musics;
             }
-        }
-        catch (Exception)
-        {
-            return musics;
-        }
 
-        foreach (var track in songResult.songs)
-        {
-            string artist = "";
-            if (track.ar != null && track.ar.Count >= 1)
+            if (result == null || result.code != 200 || result.playlist == null || result.playlist.trackIds == null || result.playlist.trackIds.Count == 0)
             {
-                artist = track.ar[0].name ?? "";
+                return musics;
             }
 
-            string album = "";
-            string imageUrl = "";
-            if (track.al != null)
+            List<long> tracksId = result.playlist.trackIds.Select(x => x.id).ToList();
+            url = $"{UrlBase.NetEase.GetSongDetailUrl}";
+            postData = NetEaseUtils.GetSongDetailPostData(tracksId);
+            form = new FormUrlEncodedContent(postData);
+            request = new HttpRequestMessage()
             {
-                album = track.al.name ?? "";
-                imageUrl = track.al.picUrl ?? "";
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = form
+            };
+            foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+            {
+                request.Headers.Add(header.Key, header.Value);
             }
+            response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            FeeEnum fee = FeeEnum.Free;
-            if (songResult.privileges != null)
+            TagMusicSongsHttpResult? songResult;
+            try
             {
-                var privilege = songResult.privileges.FirstOrDefault(x => x.id == track.id);
-                if (privilege != null)
+                songResult = json.ToObject<TagMusicSongsHttpResult>();
+                if (songResult == null || songResult.songs == null)
                 {
-                    if (privilege.fee == 1)
-                    {
-                        fee = FeeEnum.Vip;
-                    }
+                    return musics;
                 }
             }
-
-            var music = new MusicResultShow()
+            catch (Exception)
             {
-                Id = MD5Utils.GetStringValueToLower($"{Platform}-{track.id}"),
-                Platform = Platform,
-                IdOnPlatform = track.id.ToString(),
-                Name = track.name ?? "",
-                Artist = artist,
-                Album = album,
-                ImageUrl = $"{imageUrl}?param=250y250",
-                Duration = TimeSpan.FromMilliseconds(track.dt),
-                Fee = fee,
-            };
+                return musics;
+            }
 
-            musics.Add(music);
+            foreach (var track in songResult.songs)
+            {
+                string artist = "";
+                if (track.ar != null && track.ar.Count >= 1)
+                {
+                    artist = track.ar[0].name ?? "";
+                }
+
+                string album = "";
+                string imageUrl = "";
+                if (track.al != null)
+                {
+                    album = track.al.name ?? "";
+                    imageUrl = track.al.picUrl ?? "";
+                }
+
+                FeeEnum fee = FeeEnum.Free;
+                if (songResult.privileges != null)
+                {
+                    var privilege = songResult.privileges.FirstOrDefault(x => x.id == track.id);
+                    if (privilege != null)
+                    {
+                        if (privilege.fee == 1)
+                        {
+                            fee = FeeEnum.Vip;
+                        }
+                    }
+                }
+
+                var music = new MusicResultShow()
+                {
+                    Id = MD5Utils.GetStringValueToLower($"{Platform}-{track.id}"),
+                    Platform = Platform,
+                    IdOnPlatform = track.id.ToString(),
+                    Name = track.name ?? "",
+                    Artist = artist,
+                    Album = album,
+                    ImageUrl = $"{imageUrl}?param=250y250",
+                    Duration = TimeSpan.FromMilliseconds(track.dt),
+                    Fee = fee,
+                };
+
+                musics.Add(music);
+            }
+            return musics;
         }
-
-        return musics;
+        catch (Exception ex)
+        {
+            Logger.Error("网易标签歌单加载失败。", ex);
+            return new List<MusicResultShow>();
+        }
     }
     public async Task<List<MusicResultShow>> GetTopMusicsAsync(string topId)
     {
-        var musics = new List<MusicResultShow>();
-        string url = $"{UrlBase.NetEase.GetTagMusicsUrl}";
-
-        var postData = NetEaseUtils.GetPostDataForTagMusics(topId);
-        var form = new FormUrlEncodedContent(postData);
-
-        var request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        TagMusicHttpResult? result;
         try
         {
-            result = json.ToObject<TagMusicHttpResult>();
-        }
-        catch (Exception)
-        {
-            return musics;
-        }
+            var musics = new List<MusicResultShow>();
+            string url = $"{UrlBase.NetEase.GetTagMusicsUrl}";
 
-        if (result == null || result.code != 200 || result.playlist == null || result.playlist.trackIds == null || result.playlist.trackIds.Count == 0)
-        {
-            return musics;
-        }
+            var postData = NetEaseUtils.GetPostDataForTagMusics(topId);
+            var form = new FormUrlEncodedContent(postData);
 
-        List<long> tracksId = result.playlist.trackIds.Select(x => x.id).ToList();
-        url = $"{UrlBase.NetEase.GetSongDetailUrl}";
-        postData = NetEaseUtils.GetSongDetailPostData(tracksId);
-        form = new FormUrlEncodedContent(postData);
-        request = new HttpRequestMessage()
-        {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-        response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-        TagMusicSongsHttpResult? songResult;
-        try
-        {
-            songResult = json.ToObject<TagMusicSongsHttpResult>();
-            if (songResult == null || songResult.songs == null)
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = form
+            };
+            foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+            {
+                request.Headers.Add(header.Key, header.Value);
+            }
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            TagMusicHttpResult? result;
+            try
+            {
+                result = json.ToObject<TagMusicHttpResult>();
+            }
+            catch (Exception)
             {
                 return musics;
             }
-        }
-        catch (Exception)
-        {
-            return musics;
-        }
 
-        foreach (var track in songResult.songs)
-        {
-            string artist = "";
-            if (track.ar != null && track.ar.Count >= 1)
+            if (result == null || result.code != 200 || result.playlist == null || result.playlist.trackIds == null || result.playlist.trackIds.Count == 0)
             {
-                artist = track.ar[0].name ?? "";
+                return musics;
             }
 
-            string album = "";
-            string imageUrl = "";
-            if (track.al != null)
+            List<long> tracksId = result.playlist.trackIds.Select(x => x.id).ToList();
+            url = $"{UrlBase.NetEase.GetSongDetailUrl}";
+            postData = NetEaseUtils.GetSongDetailPostData(tracksId);
+            form = new FormUrlEncodedContent(postData);
+            request = new HttpRequestMessage()
             {
-                album = track.al.name ?? "";
-                imageUrl = track.al.picUrl ?? "";
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = form
+            };
+            foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
+            {
+                request.Headers.Add(header.Key, header.Value);
             }
+            response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            FeeEnum fee = FeeEnum.Free;
-            if (songResult.privileges != null)
+            TagMusicSongsHttpResult? songResult;
+            try
             {
-                var privilege = songResult.privileges.FirstOrDefault(x => x.id == track.id);
-                if (privilege != null)
+                songResult = json.ToObject<TagMusicSongsHttpResult>();
+                if (songResult == null || songResult.songs == null)
                 {
-                    if (privilege.fee == 1)
-                    {
-                        fee = FeeEnum.Vip;
-                    }
+                    return musics;
                 }
             }
-
-            var music = new MusicResultShow()
+            catch (Exception)
             {
-                Id = MD5Utils.GetStringValueToLower($"{Platform}-{track.id}"),
-                Platform = Platform,
-                IdOnPlatform = track.id.ToString(),
-                Name = track.name ?? "",
-                Artist = artist,
-                Album = album,
-                ImageUrl = $"{imageUrl}?param=250y250",
-                Duration = TimeSpan.FromMilliseconds(track.dt),
-                Fee = fee,
-            };
+                return musics;
+            }
 
-            musics.Add(music);
+            foreach (var track in songResult.songs)
+            {
+                string artist = "";
+                if (track.ar != null && track.ar.Count >= 1)
+                {
+                    artist = track.ar[0].name ?? "";
+                }
+
+                string album = "";
+                string imageUrl = "";
+                if (track.al != null)
+                {
+                    album = track.al.name ?? "";
+                    imageUrl = track.al.picUrl ?? "";
+                }
+
+                FeeEnum fee = FeeEnum.Free;
+                if (songResult.privileges != null)
+                {
+                    var privilege = songResult.privileges.FirstOrDefault(x => x.id == track.id);
+                    if (privilege != null)
+                    {
+                        if (privilege.fee == 1)
+                        {
+                            fee = FeeEnum.Vip;
+                        }
+                    }
+                }
+
+                var music = new MusicResultShow()
+                {
+                    Id = MD5Utils.GetStringValueToLower($"{Platform}-{track.id}"),
+                    Platform = Platform,
+                    IdOnPlatform = track.id.ToString(),
+                    Name = track.name ?? "",
+                    Artist = artist,
+                    Album = album,
+                    ImageUrl = $"{imageUrl}?param=250y250",
+                    Duration = TimeSpan.FromMilliseconds(track.dt),
+                    Fee = fee,
+                };
+
+                musics.Add(music);
+            }
+
+            return musics;
         }
-
-        return musics;
+        catch (Exception ex)
+        {
+            Logger.Error("网易排行榜歌单加载失败。", ex);
+            return new List<MusicResultShow>();
+        }
     }
 
     public async Task<string> GetPlayUrlAsync(string id, string extendDataJson = "")
     {
-        string url = $"{UrlBase.NetEase.GetMusic}";
-        var postData = NetEaseUtils.GetPostDataForMusicUrl(id);
-        var form = new FormUrlEncodedContent(postData);
-
-        var request = new HttpRequestMessage()
+        try
         {
-            Method = HttpMethod.Post,
-            RequestUri = new Uri(url),
-            Content = form
-        };
-        request.Headers.Add("Accept", "*/*");
-        request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
-        request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
-        request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
-        var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-        var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            string url = $"{UrlBase.NetEase.GetMusic}";
+            var postData = NetEaseUtils.GetPostDataForMusicUrl(id);
+            var form = new FormUrlEncodedContent(postData);
 
-        var httpResult = json.ToObject<ResultBase<MusicUrlHttpResult>>();
-        if (httpResult == null)
+            var request = new HttpRequestMessage()
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Content = form
+            };
+            request.Headers.Add("Accept", "*/*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate, br");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var httpResult = json.ToObject<ResultBase<MusicUrlHttpResult>>();
+            if (httpResult == null)
+            {
+                return "";
+            }
+            if (httpResult.code != 200)
+            {
+                return "";
+            }
+
+            if (httpResult.data.Count == 0)
+            {
+                return "";
+            }
+
+            return httpResult.data[0].url;
+        }
+        catch (Exception ex)
         {
+            Logger.Error("网易获取播放地址失败。", ex);
             return "";
         }
-        if (httpResult.code != 200)
-        {
-            return "";
-        }
-
-        if (httpResult.data.Count == 0)
-        {
-            return "";
-        }
-
-        return httpResult.data[0].url;
     }
 
     public Task<string> GetImageUrlAsync(string id, string extendDataJson = "")
