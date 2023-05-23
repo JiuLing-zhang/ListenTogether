@@ -1,4 +1,4 @@
-﻿@page "/song-menu/{platform:int}/{songMenuType:int}/{songMenuInfo}"
+﻿@page "/song-menu/{platform:int}/{songMenuType:int}/{*songMenuInfo}"
 @inherits MyComponentBase
 @inject IMusicNetworkService MusicNetworkService
 @inject IPlaylistService PlaylistService
