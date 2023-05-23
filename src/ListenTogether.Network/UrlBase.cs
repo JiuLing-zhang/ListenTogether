@@ -46,7 +46,7 @@ public class UrlBase
         public const string GetTagSongMenuUrl = "http://www.kuwo.cn/api/www/classify/playlist/getTagPlayList";
         public const string GetTagMusicsUrl = "http://www.kuwo.cn/api/www/playlist/playListInfo";
         public const string Search = "http://www.kuwo.cn/api/www/search/searchMusicBykeyWord";
-        public const string GetMusicUrl = "http://antiserver.kuwo.cn/anti.s";
+        public const string GetMusicUrl = "http://www.kuwo.cn/api/v1/www/music/playUrl";
         public const string GetMusicDetail = "http://m.kuwo.cn/newh5/singles/songinfoandlrc";
         public const string GetMusicPlayPage = "https://www.kuwo.cn/play_detail";
     }

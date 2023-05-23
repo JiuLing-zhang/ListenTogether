@@ -407,40 +407,37 @@ internal class KuWoMusicProvider : IMusicProvider
 
     public async Task<string> GetPlayUrlAsync(string id, string extendDataJson = "")
     {
-        //换播放地址
-        string url = $"{UrlBase.KuWo.GetMusicUrl}?format=aac|mp3&rid={id}&response=url&type=convert_url";
-        var request = new HttpRequestMessage()
-        {
-            RequestUri = new Uri(url),
-            Method = HttpMethod.Get
-        };
-        foreach (var header in JiuLing.CommonLibs.Net.BrowserDefaultHeader.EdgeHeaders)
-        {
-            request.Headers.Add(header.Key, header.Value);
-        }
-
-        string playUrl;
         try
         {
+            string url = $"{UrlBase.KuWo.GetMusicUrl}?mid={id}&type=convert_url";
+            var request = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = HttpMethod.Get
+            };
+            request.Headers.Add("Accept", "application/json, text/plain, */*");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Headers.Add("Accept-Language", "zh-CN,zh;q=0.9");
+            request.Headers.Add("User-Agent", RequestHeaderBase.UserAgentEdge);
+            request.Headers.Add("Referer", "http://www.kuwo.cn/");
+            request.Headers.Add("Host", "www.kuwo.cn");
+            request.Headers.Add("csrf", _csrf);
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
-            playUrl = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (playUrl.IsEmpty())
+            string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var resultObj = json.ToObject<HttpResultBase<HttpPlayUrlResult>>();
+            if (resultObj == null || resultObj.code != 200 || resultObj.data.url.IsEmpty())
             {
-                Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回空，ID:{id}"));
+                Logger.Info($"更新酷我播放地址失败，歌曲：{id}。");
                 return "";
             }
-            if (!JiuLing.CommonLibs.Text.RegexUtils.IsMatch(playUrl, @"http\S*?\.aac|mp3"))
-            {
-                Logger.Error("更新酷我播放地址失败。", new Exception($"服务器返回：{playUrl}，ID:{id}"));
-                return "";
-            }
+            return resultObj.data.url;
         }
         catch (Exception ex)
         {
             Logger.Error("更新酷我播放地址失败。", ex);
             return "";
         }
-        return playUrl;
     }
 
     public Task<string> GetImageUrlAsync(string id, string extendDataJson = "")
