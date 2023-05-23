@@ -10,9 +10,9 @@
             <MudSkeleton SkeletonType="SkeletonType.Circle" Width="200px" Height="200px" />
             <div class="d-flex align-center mt-5">
                 <MudProgressCircular Size="Size.Small"
-                                 Indeterminate="true" />
+                                     Indeterminate="true" />
                 <MudText Typo="Typo.caption"
-                     Class="ml-2">
+                         Class="ml-2">
                     正在计算
                 </MudText>
             </div>
@@ -36,10 +36,19 @@
                 @_processMessage
             </MudText>
             <MudButton Variant="Variant.Outlined"
-                   Class="mt-7"
-                   Size="Size.Small"
-                   Disabled="@(_isWorking || _cacheLength==0)"
-                   OnClick="ClearCacheAsync">清理</MudButton>
+                       Class="mt-7"
+                       Size="Size.Small"
+                       Disabled="@(_isWorking || _cacheLength==0)"
+                       OnClick="ClearCacheAsync">全部清理</MudButton>
+
+            <MudButton Variant="Variant.Outlined"
+                       Class="mt-4"
+                       Size="Size.Small"
+                       Disabled="@(_isWorking || _cacheLength==0)"
+                       OnClick="ClearErrorCacheAsync">修复不可用缓存</MudButton>
+            <MudText Typo="Typo.caption" Class="mt-2">
+                清理老版本中部分无法播放的歌曲
+            </MudText>
         </div>
     }
 
@@ -91,6 +100,38 @@
             {
                 try
                 {
+                    var fi = new FileInfo(file);
+                    _cacheLength -= fi.Length;
+                    File.Delete(file);
+                    await InvokeAsync(StateHasChanged);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("缓存文件删除失败。", ex);
+                }
+            }
+            _processMessage = "缓存已全部清理";
+            _isWorking = false;
+            await InvokeAsync(StateHasChanged);
+        });
+    }
+
+    private async Task ClearErrorCacheAsync()
+    {
+        _isWorking = true;
+        _processMessage = "正在清理....";
+        await Task.Run(async () =>
+        {
+            var files = Directory.GetFiles(GlobalPath.MusicCacheDirectory);
+            foreach (var file in files)
+            {
+                try
+                {
+                    var md5 = JiuLing.CommonLibs.Security.MD5Utils.GetFileValueToLower(file);
+                    if (md5 != "43fe5f6460e49afdf0bc2340012fe7b5")
+                    {
+                        continue;
+                    }
                     var fi = new FileInfo(file);
                     _cacheLength -= fi.Length;
                     File.Delete(file);
