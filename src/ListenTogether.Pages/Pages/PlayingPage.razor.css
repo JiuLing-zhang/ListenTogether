@@ -73,7 +73,7 @@
     .music-page {
         max-height: 100%;
         display: grid;
-        grid-template-rows: 50px auto 1fr 125px;
+        grid-template-rows: 50px auto 1fr 150px;
         grid-template-columns: 1fr;
         grid-template-areas:
             "toolbar"
@@ -138,6 +138,7 @@
 }
 
 .name {
+    text-align: center;
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -166,6 +167,7 @@
     font-size: 15px;
     margin-top: 20px;
     overflow-y: auto;
+    width: 100%;
 }
 
     .lyric ul {
@@ -183,6 +185,8 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: center;
+    width: 100%;
     opacity: 0.6;
 }
 
