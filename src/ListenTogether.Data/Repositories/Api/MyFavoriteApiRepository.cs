@@ -1,4 +1,5 @@
 ﻿using ListenTogether.Data.Interfaces;
+using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
@@ -16,13 +17,21 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
     public async Task<bool> NameExistAsync(string myFavoriteName)
     {
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.NameExist, myFavoriteName);
-        var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(url);
-        var obj = json.ToObject<Result>();
-        if (obj == null || obj.Code != 0)
+        try
         {
+            var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(url);
+            var obj = json.ToObject<Result>();
+            if (obj == null || obj.Code != 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"歌单名称校验失败。名称：{myFavoriteName}", ex);
             return true;
         }
-        return false;
     }
 
     public async Task<MyFavorite?> AddOrUpdateAsync(MyFavorite myFavorite)
@@ -35,29 +44,49 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
         };
         string content = requestMyFavorite.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(DataConfig.ApiSetting.MyFavorite.AddOrUpdate, sc);
-        var json = await response.Content.ReadAsStringAsync();
-        var obj = json.ToObject<Result<MyFavoriteResponse>>();
-        if (obj == null || obj.Code != 0 || obj.Data == null)
+        MyFavoriteResponse? myFavoriteResponse = null;
+        try
+        {
+            var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(DataConfig.ApiSetting.MyFavorite.AddOrUpdate, sc);
+            var json = await response.Content.ReadAsStringAsync();
+            var obj = json.ToObject<Result<MyFavoriteResponse>>();
+            if (obj != null && obj.Code == 0)
+            {
+                myFavoriteResponse = obj.Data;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"歌单更新失败。名称：{myFavorite.ToJson()}", ex);
+        }
+
+        if (myFavoriteResponse == null)
         {
             return default;
         }
 
         return new MyFavorite()
         {
-            Id = obj.Data.Id,
-            Name = obj.Data.Name,
-            ImageUrl = obj.Data.ImageUrl,
-            MusicCount = obj.Data.MusicCount
+            Id = myFavoriteResponse.Id,
+            Name = myFavoriteResponse.Name,
+            ImageUrl = myFavoriteResponse.ImageUrl,
+            MusicCount = myFavoriteResponse.MusicCount
         };
     }
 
     public async Task<List<MyFavorite>> GetAllAsync()
     {
         var myFavoriteList = new List<MyFavorite>();
-        var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(DataConfig.ApiSetting.MyFavorite.GetAll);
-        var obj = json.ToObject<List<MyFavoriteResponse>>();
-
+        List<MyFavoriteResponse>? obj = null;
+        try
+        {
+            var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(DataConfig.ApiSetting.MyFavorite.GetAll);
+            obj = json.ToObject<List<MyFavoriteResponse>>();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"获取歌单列表失败。", ex);
+        }
         if (obj == null)
         {
             return myFavoriteList;
@@ -76,15 +105,21 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
 
     public async Task<MyFavorite?> GetOneAsync(int id)
     {
+        MyFavoriteResponse? myFavorite = null;
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.Get, id);
-        var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(url);
-        var obj = json.ToObject<Result<MyFavoriteResponse>>();
-        if (obj == null)
+        try
         {
-            return default;
+            var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(url);
+            var obj = json.ToObject<Result<MyFavoriteResponse>>();
+            if (obj != null)
+            {
+                myFavorite = obj.Data;
+            }
         }
-
-        var myFavorite = obj.Data as MyFavoriteResponse;
+        catch (Exception ex)
+        {
+            Logger.Error($"获取歌单失败。{id}", ex);
+        }
         if (myFavorite == null)
         {
             return default;
@@ -100,37 +135,61 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
 
     public async Task<bool> RemoveAsync(int id)
     {
-        var url = string.Format(DataConfig.ApiSetting.MyFavorite.Remove, id);
-        var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(url, null);
-        string json = await response.Content.ReadAsStringAsync();
-        var obj = json.ToObject<Result>();
-        if (obj == null || obj.Code != 0)
+        try
         {
+            var url = string.Format(DataConfig.ApiSetting.MyFavorite.Remove, id);
+            var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(url, null);
+            string json = await response.Content.ReadAsStringAsync();
+            var obj = json.ToObject<Result>();
+            if (obj == null || obj.Code != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"删除歌单失败。{id}", ex);
             return false;
         }
-        return true;
     }
 
     public async Task<bool> AddMusicToMyFavoriteAsync(int id, string musicId)
     {
-        var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id, musicId);
-        var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(url, null);
-        var json = await response.Content.ReadAsStringAsync();
-
-        var obj = json.ToObject<Result>();
-        if (obj == null || obj.Code != 0)
+        try
         {
+            var url = string.Format(DataConfig.ApiSetting.MyFavorite.AddMusic, id, musicId);
+            var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(url, null);
+            var json = await response.Content.ReadAsStringAsync();
+
+            var obj = json.ToObject<Result>();
+            if (obj == null || obj.Code != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"添加歌曲到歌单失败。歌单{id}，歌曲{musicId}", ex);
             return false;
         }
-        return true;
     }
 
     public async Task<List<MyFavoriteDetail>> GetMyFavoriteDetailAsync(int id)
     {
         var myMyFavoriteDetailList = new List<MyFavoriteDetail>();
         var url = string.Format(DataConfig.ApiSetting.MyFavorite.GetDetail, id);
-        var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(url);
-        var obj = json.ToObject<List<MyFavoriteDetailResponse>>();
+        List<MyFavoriteDetailResponse>? obj = null;
+        try
+        {
+            var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(url);
+            obj = json.ToObject<List<MyFavoriteDetailResponse>>();
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"获取歌单详情失败。{id}", ex);
+        }
 
         if (obj == null)
         {
@@ -147,14 +206,22 @@ public class MyFavoriteApiRepository : IMyFavoriteRepository
     }
     public async Task<bool> RemoveDetailAsync(int id)
     {
-        var url = string.Format(DataConfig.ApiSetting.MyFavorite.RemoveDetail, id);
-        var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(url, null);
-        string json = await response.Content.ReadAsStringAsync();
-        var obj = json.ToObject<Result>();
-        if (obj == null || obj.Code != 0)
+        try
         {
+            var url = string.Format(DataConfig.ApiSetting.MyFavorite.RemoveDetail, id);
+            var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(url, null);
+            string json = await response.Content.ReadAsStringAsync();
+            var obj = json.ToObject<Result>();
+            if (obj == null || obj.Code != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"删除歌单详情失败。{id}", ex);
             return false;
         }
-        return true;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ListenTogether.Data.Interfaces;
+using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
@@ -15,15 +16,23 @@ public class MusicApiRepository : IMusicRepository
     }
     public async Task<LocalMusic?> GetOneAsync(string id)
     {
-        string url = string.Format(DataConfig.ApiSetting.Music.Get, id);
-        var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(url);
-        var obj = json.ToObject<Result<MusicResponse>>();
-        if (obj == null)
+        MusicResponse? music = null;
+        try
         {
-            return default;
+            string url = string.Format(DataConfig.ApiSetting.Music.Get, id);
+            var json = await _httpClientFactory.CreateClient("WebAPI").GetStringAsync(url);
+            var obj = json.ToObject<Result<MusicResponse>>();
+            if (obj == null)
+            {
+                return default;
+            }
+            music = obj.Data as MusicResponse;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"获取歌曲失败。{id}", ex);
         }
 
-        var music = obj.Data as MusicResponse;
         if (music == null)
         {
             return default;
@@ -56,13 +65,21 @@ public class MusicApiRepository : IMusicRepository
         };
         string content = requestMusic.ToJson();
         StringContent sc = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
-        var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(DataConfig.ApiSetting.Music.AddOrUpdate, sc);
-        var json = await response.Content.ReadAsStringAsync();
-        var obj = json.ToObject<Result>();
-        if (obj == null || obj.Code != 0)
+        try
         {
+            var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(DataConfig.ApiSetting.Music.AddOrUpdate, sc);
+            var json = await response.Content.ReadAsStringAsync();
+            var obj = json.ToObject<Result>();
+            if (obj == null || obj.Code != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"更新歌曲信息失败。{music.ToJson()}", ex);
             return false;
         }
-        return true;
     }
 }
