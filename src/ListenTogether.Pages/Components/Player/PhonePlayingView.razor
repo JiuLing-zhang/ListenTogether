@@ -29,8 +29,8 @@
                    Size="Size.Small"
                    Value="_playProgress"
                    T="double"
-                   @onmousedown="ProgressMouseDown"
-                   @onmouseup="ProgressMouseUp"
+        @ontouchstart="ProgressTouchStart"
+        @ontouchend="ProgressTouchEnd"
                    ValueChanged="ChangeProgressAsync"
                    Variant="Variant.Filled" />
         <div class="text-white time">
@@ -141,12 +141,12 @@
     }
 
 
-    private void ProgressMouseDown()
+    private void ProgressTouchStart()
     {
         _isPlayProgressDragging = true;
     }
 
-    private void ProgressMouseUp()
+    private void ProgressTouchEnd()
     {
         _isPlayProgressDragging = false;
     }
