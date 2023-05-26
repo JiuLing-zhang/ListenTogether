@@ -108,16 +108,12 @@
     {
         await base.OnInitializedAsync();
 
-        _playerService.NewMusicAdded += async (_, __) => await NewMusicAddedAsync();
-        _playerService.IsPlayingChanged += async (_, __) =>
-        {
-            _isPlaying = _playerService.IsPlaying;
-            await InvokeAsync(StateHasChanged);
-        };
+        _playerService.NewMusicAdded += NewMusicAddedDoAsync;
+        _playerService.IsPlayingChanged += IsPlayingChangedDoAsync;
 
         _timer = new Timer(ScrollLyric, new AutoResetEvent(false), 0, 200);
 
-        _isPlaying = _playerService.IsPlaying;
+        await IsPlayingChangedAsync();
         await NewMusicAddedAsync();
     }
 
@@ -168,7 +164,16 @@
         }
         _offset = offset;
 
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void NewMusicAddedDoAsync(object? sender, EventArgs e)
+    {
+        await NewMusicAddedAsync();
+    }
+    private async void IsPlayingChangedDoAsync(object? sender, EventArgs e)
+    {
+        await IsPlayingChangedAsync();
     }
 
     private async Task NewMusicAddedAsync()
@@ -195,6 +200,12 @@
                 ExtendDataJson = playlist.ExtendDataJson,
             };
         await GetLyricDetailAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task IsPlayingChangedAsync()
+    {
+        _isPlaying = _playerService.IsPlaying;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -262,5 +273,7 @@
     public void Dispose()
     {
         _timer?.Dispose();
+        _playerService.NewMusicAdded -= NewMusicAddedDoAsync;
+        _playerService.IsPlayingChanged -= IsPlayingChangedDoAsync;
     }
 }
