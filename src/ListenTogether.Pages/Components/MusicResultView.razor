@@ -2,6 +2,15 @@
 
 @inject IDialogService DialogService
 @inject MusicResultService MusicResultService
+
+<style>
+    .mud-table-cell-custom-group {
+        font-weight: 500;
+        line-height: 30px !important;
+        color: var(--mud-palette-primary) !important;
+    }
+</style>
+
 @if (Musics == null)
 {
     <MudSkeleton Class="mt-3" Height="30px" />
@@ -13,7 +22,6 @@
 }
 else
 {
-    var desktopIndex = 1;
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
         <MudTable Items="@Musics"
         @ondblclick="@(()=>TableDoubleClick())"
@@ -22,9 +30,11 @@ else
                   Striped="true"
                   RowClass="cursor-default"
                   T="MusicResultShow"
+                  Virtualize="true"
+                  GroupBy="@_groupDefinition"
+                  GroupHeaderStyle="background-color:var(--mud-palette-table-hover);"
                   OnRowClick="@RowClick">
             <HeaderContent>
-                <MudTh></MudTh>
                 @if (IsLogin)
                 {
                     <MudTh></MudTh>
@@ -34,11 +44,12 @@ else
                 <MudTh>歌手</MudTh>
                 <MudTh>专辑</MudTh>
             </HeaderContent>
-
+            <GroupHeaderTemplate>
+                <MudTh Class="mud-table-cell-custom-group" colspan="5">
+                    @($"{((PlatformEnum)Enum.Parse(typeof(PlatformEnum), context.Key.ToString())).GetDescription()}  {context.Items.Count()}首歌曲")
+                </MudTh>
+            </GroupHeaderTemplate>
             <RowTemplate>
-                <MudTd>
-                    @(desktopIndex++)
-                </MudTd>
                 @if (IsLogin)
                 {
                     <MudTd>
@@ -63,38 +74,42 @@ else
         </MudTable>
     </MudHidden>
 
-    var phoneIndex = 1;
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
         <MudList>
-            @foreach (var row in Musics)
-            {
-                <MudListItem>
-                    <div class="d-flex align-center"
-                    @onclick="()=>PlayMusicAsync(row)">
-                        <div class="seq">
-                            @(phoneIndex++)
-                        </div>
-                        <div class="ml-5 music-info">
-                            <div class="name">
-                                @row.Name
-                            </div>
-                            <div class="artist-album">
-                                @row.Artist - @row.Album
-                            </div>
-                        </div>
-                        @if (IsLogin)
-                        {
-                            <MudIconButton Class="ml-5"
-                                           Size="Size.Small"
-                                           Icon="fa-solid fa-folder-plus"
-                                           OnClick="()=>AddToMyFavoriteAsync(row)" />
-                        }
 
-                    </div>
+            @foreach (var item in Musics.GroupBy(x => x.Platform).Select(g => (new { Platform = g.Key, Data = g })))
+            {
+                <MudListItem Text="@($"{item.Platform.GetDescription()}  {item.Data.Count()}首")"
+                             Style="color:var(--mud-palette-primary);"
+                             InitiallyExpanded="true">
+                    <NestedList>
+                        @foreach (var music in item.Data)
+                        {
+                            <MudListItem Style="padding-left: 16px; padding-inline-start: 16px;padding-right: 16px;">
+                                <div class="d-flex align-center"
+                                @onclick="()=>PlayMusicAsync(music)">
+                                    <div class="music-info">
+                                        <div class="name">
+                                            @music.Name
+                                        </div>
+                                        <div class="artist-album">
+                                            @music.Artist - @music.Album
+                                        </div>
+                                    </div>
+                                    @if (IsLogin)
+                                    {
+                                        <MudIconButton Class="ml-5"
+                                                       Size="Size.Small"
+                                                       Icon="fa-solid fa-folder-plus"
+                                                       OnClick="()=>AddToMyFavoriteAsync(music)" />
+                                    }
+
+                                </div>
+                            </MudListItem>
+                            <MudDivider />
+                        }
+                    </NestedList>
                 </MudListItem>
-                <MudHidden Breakpoint="Breakpoint.MdAndUp">
-                    <MudDivider />
-                </MudHidden>
             }
         </MudList>
     </MudHidden>
@@ -106,6 +121,16 @@ else
     public List<MusicResultShow>? Musics { get; set; }
 
     private MusicResultShow _lastSelectMusic;
+
+    private TableGroupDefinition<MusicResultShow> _groupDefinition = new()
+        {
+            GroupName = "平台",
+            Indentation = false,
+            Expandable = false,
+            Selector = (e) => e.Platform
+        };
+
+
     private async Task AddToMyFavoriteAsync(MusicResultShow musicResult)
     {
         var music = new LocalMusic()

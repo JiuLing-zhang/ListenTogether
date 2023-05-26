@@ -1,8 +1,3 @@
-.seq {
-    font-size: 14px;
-    opacity: 0.5;
-}
-
 .music-info {
     width: calc(100vh - 100px);
     overflow: hidden;
