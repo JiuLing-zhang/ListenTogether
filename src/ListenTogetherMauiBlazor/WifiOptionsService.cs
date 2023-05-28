@@ -23,6 +23,6 @@ public class WifiOptionsService : IWifiOptionsService
             return true;
         }
 
-        return await Shell.Current.DisplayAlert("提示", "当前为非WIFI环境，确定用流量播放吗？", "允许本次", "取消");
+        return await App.Current.MainPage.DisplayAlert("提示", "当前为非WIFI环境，确定用流量播放吗？", "允许本次", "取消");
     }
 }
