@@ -13,7 +13,7 @@
 @media screen and (max-width: 960px) {
     .page {
         display: grid;
-        grid-template-rows: 1fr 45px 55px;
+        grid-template-rows: 1fr 45px 65px;
         grid-template-columns: 1fr;
         grid-template-areas:
             "main"
@@ -40,7 +40,7 @@
 
 .page-nav {
     grid-area: sidebar;
-    padding: 10px;
+    padding: 10px 0 10px 0;
     border-right: 1px solid;
     border-color: var(--mud-palette-dark-lighten);
 }
