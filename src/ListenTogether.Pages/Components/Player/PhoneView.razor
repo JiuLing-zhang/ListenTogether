@@ -1,27 +1,22 @@
 ﻿@inherits MyComponentBase
 
 <div class="d-flex align-center" @onclick="OpenPlayingPageAsync">
-    <div class="flex-grow-1 d-flex align-center">
-        <img src="@(Music == null ? "https://jiuling.cc/images/music.svg" : Music.ImageUrl)"
-             class="mr-2 small-img @(IsPlaying ? "" : "animation-paused")" />
-        <div class="flex-grow-1 d-flex align-center">
-            <div class="music-name">
-                @Music?.Name
-            </div>
-            <div class="music-artist">
-                @($" - {Music?.Artist}")
-            </div>
-        </div>
+    <img src="@(Music == null ? "https://jiuling.cc/images/music.svg" : Music.ImageUrl)"
+         class="flex-grow-0 mr-2 small-img @(IsPlaying ? "" : "animation-paused")" />
+
+    <div class="flex-grow-1 music-info">
+        @($"{Music?.Name} - {Music?.Artist}")
+    </div>
+    <div class="flex-grow-0 ml-2 d-flex align-center play-btn">
+        <MudToggleIconButton Size="Size.Small"
+                             Disabled="@(Music==null)"
+                             Toggled="@IsPlaying"
+                             ToggledChanged="PlayAsync"
+                             Icon="fa-regular fa-circle-play"
+                             ToggledSize="Size.Small"
+                             ToggledIcon="fa-solid fa-circle-pause" />
     </div>
 
-    <MudToggleIconButton Class="flex-grow-0 ml-2"
-                         Size="Size.Small"
-                         Disabled="@(Music==null)"
-                         Toggled="@IsPlaying"
-                         ToggledChanged="PlayAsync"
-                         Icon="fa-regular fa-circle-play"
-                         ToggledSize="Size.Small"
-                         ToggledIcon="fa-solid fa-circle-pause" />
 </div>
 
 @code {
