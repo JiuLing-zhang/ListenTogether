@@ -1,0 +1,56 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject DesktopMoving DesktopMoving
+@inject IJSRuntime JSRuntime
+@inject IMusicNetworkService MusicNetworkService
+@inject IAutoUpgrade AutoUpgrade
+@inject INativeTheme NativeTheme
+@inject IDeviceScreen DeviceScreen
+@inject CustomTheme CustomTheme
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_customTheme" />
+<MudDialogProvider NoHeader="true" />
+<MudSnackbarProvider />
+
+<div class="page">
+    @Body
+</div>
+
+@code {
+    private bool _isDarkMode;
+    private string _isOpenPlayingPage = "";
+    private ErrorBoundary? _errorBoundary;
+    private MudThemeProvider _mudThemeProvider;
+    private MudTheme _customTheme;
+    protected override void OnInitialized()
+    {
+        _customTheme = CustomTheme.Theme;
+        base.OnInitialized();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            switch (Settings.Environment.General.AppThemeInt)
+            {
+                case 0:
+                    _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+                    break;
+                case 1:
+                    _isDarkMode = false;
+                    break;
+                case 2:
+                    _isDarkMode = true;
+                    break;
+                default:
+                    break;
+            }
+            await InvokeAsync(StateHasChanged);
+            NativeTheme.SetTheme(_isDarkMode);
+            if (Settings.Environment.General.IsAutoCheckUpdate)
+            {
+                await AutoUpgrade.DoAsync(true);
+            }
+        }
+    }
+}

@@ -5,23 +5,24 @@
 @inject NavigationManager NavigationManager
 @inject ISearchHistoryStorage SearchHistoryStorage
 
-<MudHidden Breakpoint="Breakpoint.SmAndUp">
-    <SearchLabel />
-</MudHidden>
-<MudTabs Rounded="true"
-         MinimumTabWidth="150"
-         PanelClass="mt-3">
-    <MudTabPanel Text="@(PlatformEnum.MiGu.GetDescription())">
-        <Discover Platform="PlatformEnum.MiGu" />
-    </MudTabPanel>
-    <MudTabPanel Text="@(PlatformEnum.KuWo.GetDescription())">
-        <Discover Platform="PlatformEnum.KuWo" />
-    </MudTabPanel>
-    <MudTabPanel Text="@(PlatformEnum.NetEase.GetDescription())">
-        <Discover Platform="PlatformEnum.NetEase" />
-    </MudTabPanel>
-</MudTabs>
-
+<RouteAnimation>
+    <MudHidden Breakpoint="Breakpoint.SmAndUp">
+        <SearchLabel />
+    </MudHidden>
+    <MudTabs Rounded="true"
+             MinimumTabWidth="150"
+             PanelClass="mt-3">
+        <MudTabPanel Text="@(PlatformEnum.MiGu.GetDescription())">
+            <Discover Platform="PlatformEnum.MiGu" />
+        </MudTabPanel>
+        <MudTabPanel Text="@(PlatformEnum.KuWo.GetDescription())">
+            <Discover Platform="PlatformEnum.KuWo" />
+        </MudTabPanel>
+        <MudTabPanel Text="@(PlatformEnum.NetEase.GetDescription())">
+            <Discover Platform="PlatformEnum.NetEase" />
+        </MudTabPanel>
+    </MudTabs>
+</RouteAnimation>
 @code {
 
     protected override void OnInitialized()

@@ -4,70 +4,74 @@
 @inject NavigationManager NavigationManager
 @inject IMusicNetworkService MusicNetworkService
 @inject ISearchHistoryStorage SearchHistoryStorage
-<div class="page pt-2 pb-2 pl-1 pr-1">
-    <SearchBar OnSearch="@DoSearchAsync" />
 
-    <div class="suggest mt-3">
-        <div class="histories">
-            <div class="suggest-title">
-                搜索历史
-                <MudIconButton Icon="fa-solid fa-trash"
-                               Size="Size.Small"
-                               Class="ml-2"></MudIconButton>
-            </div>
-            @if (_histories == null)
-            {
-                <MudSkeleton Class="mt-3" Height="40px" />
-            }
-            else
-            {
-                if (!_histories.Any())
+<RouteAnimation>
+    <div class="page pt-2 pb-2 pl-1 pr-1">
+        <SearchBar OnSearch="@DoSearchAsync" />
+
+        <div class="suggest mt-3">
+            <div class="histories">
+                <div class="suggest-title">
+                    搜索历史
+                    <MudIconButton Icon="fa-solid fa-trash"
+                                   Size="Size.Small"
+                                   Class="ml-2"></MudIconButton>
+                </div>
+                @if (_histories == null)
                 {
-                    <Empty Class="mt-2" />
+                    <MudSkeleton Class="mt-3" Height="40px" />
                 }
                 else
                 {
-                    <div class="d-flex flex-wrap">
-                        @foreach (var history in _histories)
-                        {
-                            <MudChip Color="Color.Default"
-                         Size="Size.Small"
-                         OnClick="@(()=>LabelClickAsync(history))"
-                         OnClose="@(()=>RemoveHistory(history))">@history</MudChip>
-                        }
-                    </div>
-                }
-            }
-        </div>
-        <div class="hot-words">
-            <div class="suggest-title">热门搜索</div>
-            @if (_hotWords == null)
-            {
-                <MudSkeleton Class="mt-3" Height="40px" />
-            }
-            else
-            {
-                if (!_hotWords.Any())
-                {
-                    <Empty Class="mt-2" OnRefresh="GetHotWords" />
-                }
-                else
-                {
-                    <div class="hot-words-detail">
-                        <MudList Clickable="true" Dense="true">
-                            @foreach (var hotWord in _hotWords)
+                    if (!_histories.Any())
+                    {
+                        <Empty Class="mt-2" />
+                    }
+                    else
+                    {
+                        <div class="d-flex flex-wrap">
+                            @foreach (var history in _histories)
                             {
-                                <MudListItem Dense="true"
-                                 Text="@hotWord"
-                                 OnClick="@(()=>LabelClickAsync(hotWord))" />
+                                <MudChip Color="Color.Default"
+                                         Size="Size.Small"
+                                         OnClick="@(()=>LabelClickAsync(history))"
+                                         OnClose="@(()=>RemoveHistory(history))">@history</MudChip>
                             }
-                        </MudList>
-                    </div>
+                        </div>
+                    }
                 }
-            }
+            </div>
+            <div class="hot-words">
+                <div class="suggest-title">热门搜索</div>
+                @if (_hotWords == null)
+                {
+                    <MudSkeleton Class="mt-3" Height="40px" />
+                }
+                else
+                {
+                    if (!_hotWords.Any())
+                    {
+                        <Empty Class="mt-2" OnRefresh="GetHotWords" />
+                    }
+                    else
+                    {
+                        <div class="hot-words-detail">
+                            <MudList Clickable="true" Dense="true">
+                                @foreach (var hotWord in _hotWords)
+                                {
+                                    <MudListItem Dense="true"
+                                                 Text="@hotWord"
+                                                 OnClick="@(()=>LabelClickAsync(hotWord))" />
+                                }
+                            </MudList>
+                        </div>
+                    }
+                }
+            </div>
         </div>
     </div>
-</div>
+
+</RouteAnimation>
 @code {
 
     private List<string>? _histories;

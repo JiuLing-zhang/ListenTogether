@@ -1,0 +1,31 @@
+﻿<div class="route-animation-container">
+    <div class="route-animation" @key="CurrentLocation">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    private string CurrentLocation { get; set; }
+
+    protected override void OnInitialized()
+    {
+        CurrentLocation = NavigationManager.Uri;
+
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private async void OnLocationChanged(object sender, LocationChangedEventArgs args)
+    {
+        CurrentLocation = args.Location;
+
+        await Task.Delay(100); // Delay to allow the route change to take effect
+
+        StateHasChanged();
+    }
+}

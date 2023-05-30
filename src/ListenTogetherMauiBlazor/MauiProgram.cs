@@ -47,16 +47,17 @@ namespace ListenTogetherMauiBlazor
             });
 #endif
 
-//#if DEBUG
+            //#if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();
-//#endif
+            //#endif
 
             using var stream = FileSystem.OpenAppPackageFileAsync("NetConfig.json").Result;
             using var reader = new StreamReader(stream);
             var json = reader.ReadToEnd();
             builder.Services.AddSingleton<NetConfig>(json.ToObject<NetConfig>());
 
+            builder.Services.AddSingleton<CustomTheme>();
             builder.Services.AddSingleton<AutoCloseJob>();
             builder.Services.AddSingleton<IDeviceScreen, DeviceScreen>();
             builder.Services.AddSingleton<IMusicShare, MusicShare>();

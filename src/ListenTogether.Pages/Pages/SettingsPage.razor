@@ -10,140 +10,143 @@
 @inject IAppVersion AppVersion
 @inject IAutoUpgrade AutoUpgrade
 
-<div class="page">
+<RouteAnimation>
+    <div class="page">
 
-    @if (LoginDataStorage.GetUsername().IsEmpty())
-    {
-        <MudButton Variant="Variant.Outlined"
-               Color="Color.Primary"
-               OnClick="GotoLoginPage">登录/注册 ></MudButton>
-    }
-    else
-    {
-        <div class="d-flex">
-            <MudAvatar>
-                <MudImage Src="@($"https://music.jiuling.cc{LoginDataStorage.GetAvatar()}")"></MudImage>
-            </MudAvatar>
-            <div class="ml-3">
-                <MudText Typo="Typo.subtitle2">@LoginDataStorage.GetNickname()</MudText>
-                <MudText Typo="Typo.subtitle2">用户名：@LoginDataStorage.GetUsername()</MudText>
+        @if (LoginDataStorage.GetUsername().IsEmpty())
+        {
+            <MudButton Variant="Variant.Outlined"
+                       Color="Color.Primary"
+                       OnClick="GotoLoginPage">登录/注册 ></MudButton>
+        }
+        else
+        {
+            <div class="d-flex">
+                <MudAvatar>
+                    <MudImage Src="@($"https://music.jiuling.cc{LoginDataStorage.GetAvatar()}")"></MudImage>
+                </MudAvatar>
+                <div class="ml-3">
+                    <MudText Typo="Typo.subtitle2">@LoginDataStorage.GetNickname()</MudText>
+                    <MudText Typo="Typo.subtitle2">用户名：@LoginDataStorage.GetUsername()</MudText>
+                </div>
+            </div>
+        }
+
+        <div>
+            <div class="mt-8 mb-2 type-title">常规</div>
+            <Switch Title="启动时检查更新"
+                    Checked="@(Settings.Environment.General.IsAutoCheckUpdate)"
+                    OnChanged="OnIsAutoCheckUpdateChange" />
+            <div class="d-flex justify-space-between align-center">
+                <div>外观</div>
+                <div style="width:100px;">
+                    <MudSelect T="int"
+                               Label=""
+                               Margin="Margin.Dense"
+                               Dense="true"
+                               SelectedValues="@(new List<int>(){Settings.Environment.General.AppThemeInt})"
+                               SelectedValuesChanged="@((x)=>OnAppThemeIntChange(x.First()))"
+                               AnchorOrigin="Origin.BottomCenter">
+                        <MudSelectItem Value="0">跟随系统</MudSelectItem>
+                        <MudSelectItem Value="1">浅色</MudSelectItem>
+                        <MudSelectItem Value="2">深色</MudSelectItem>
+                    </MudSelect>
+                </div>
             </div>
         </div>
-    }
 
-    <div>
-        <div class="mt-8 mb-2 type-title">常规</div>
-        <Switch Title="启动时检查更新"
-                Checked="@(Settings.Environment.General.IsAutoCheckUpdate)"
-                OnChanged="OnIsAutoCheckUpdateChange" />
-        <div class="d-flex justify-space-between align-center">
-            <div>外观</div>
-            <div style="width:100px;">
-                <MudSelect T="int"
-                           Label=""
-                           Margin="Margin.Dense"
-                           Dense="true"
-                           SelectedValues="@(new List<int>(){Settings.Environment.General.AppThemeInt})"
-                           SelectedValuesChanged="@((x)=>OnAppThemeIntChange(x.First()))"
-                           AnchorOrigin="Origin.BottomCenter">
-                    <MudSelectItem Value="0">跟随系统</MudSelectItem>
-                    <MudSelectItem Value="1">浅色</MudSelectItem>
-                    <MudSelectItem Value="2">深色</MudSelectItem>
-                </MudSelect>
+        <div>
+            <div class="mt-8 mb-2 type-title">搜索</div>
+            <Switch Title="网易云音乐"
+                    Checked="@(CheckEnablePlatform(PlatformEnum.NetEase))"
+                    OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.NetEase,x ))" />
+            <Switch Title="酷我音乐"
+                    Checked="@(CheckEnablePlatform(PlatformEnum.KuWo))"
+                    OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.KuWo,x ))" />
+            <Switch Title="酷狗音乐"
+                    Checked="@(CheckEnablePlatform(PlatformEnum.KuGou))"
+                    OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.KuGou,x ))" />
+            <Switch Title="咪咕音乐"
+                    Checked="@(CheckEnablePlatform(PlatformEnum.MiGu))"
+                    OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.MiGu,x ))" />
+            <Switch Title="隐藏小于1分钟的歌曲"
+                    Checked="@(Settings.Environment.Search.IsHideShortMusic)"
+                    OnChanged="OnIsHideShortMusicChanged" />
+            <Switch Title="歌曲名或歌手名必须包含搜索词"
+                    Checked="@(Settings.Environment.Search.IsMatchSearchKey)"
+                    OnChanged="OnIsMatchSearchKeyChanged" />
+        </div>
+
+        <div>
+            <div class="mt-8 mb-2 type-title">播放</div>
+            <Switch Title="仅在WIFI下播放未缓存的歌曲"
+                    Checked="@(Settings.Environment.Play.IsWifiPlayOnly)"
+                    OnChanged="OnIsWifiPlayOnlyChanged" />
+            <Switch Title="播放页面屏幕常亮"
+                    Checked="@(Settings.Environment.Play.IsPlayingPageKeepScreenOn)"
+                    OnChanged="OnIsPlayingPageKeepScreenOnChanged" />
+            <Switch Title="播放歌单前清空播放列表"
+                    Checked="@(Settings.Environment.Play.IsCleanPlaylistWhenPlaySongMenu)"
+                    OnChanged="OnIsCleanPlaylistWhenPlaySongMenuChanged" />
+
+            <div class="d-flex justify-space-between align-start">
+                <div>音质选择（不一定有用）</div>
+                <div style="width:150px;">
+                    <MudRadioGroup T="MusicFormatTypeEnum"
+                                   SelectedOption="@(Settings.Environment.Play.MusicFormatType)"
+                                   SelectedOptionChanged="OnMusicFormatTypeChanged">
+                        <MudRadio Dense="true"
+                                  Option="@(MusicFormatTypeEnum.PQ)"
+                                  Color="Color.Primary">普通  5M/首</MudRadio>
+                        <MudRadio Dense="true"
+                                  Option="@(MusicFormatTypeEnum.HQ)"
+                                  Color="Color.Primary">高级 10M/首</MudRadio>
+                        <MudRadio Dense="true"
+                                  Option="@(MusicFormatTypeEnum.SQ)"
+                                  Color="Color.Primary">超高 30M/首</MudRadio>
+                        <MudRadio Dense="true"
+                                  Option="@(MusicFormatTypeEnum.ZQ)"
+                                  Color="Color.Primary">极致 70M/首</MudRadio>
+                    </MudRadioGroup>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div>
-        <div class="mt-8 mb-2 type-title">搜索</div>
-        <Switch Title="网易云音乐"
-                Checked="@(CheckEnablePlatform(PlatformEnum.NetEase))"
-                OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.NetEase,x ))" />
-        <Switch Title="酷我音乐"
-                Checked="@(CheckEnablePlatform(PlatformEnum.KuWo))"
-                OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.KuWo,x ))" />
-        <Switch Title="酷狗音乐"
-                Checked="@(CheckEnablePlatform(PlatformEnum.KuGou))"
-                OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.KuGou,x ))" />
-        <Switch Title="咪咕音乐"
-                Checked="@(CheckEnablePlatform(PlatformEnum.MiGu))"
-                OnChanged="@((x)=>EnablePlatformAsync( PlatformEnum.MiGu,x ))" />
-        <Switch Title="隐藏小于1分钟的歌曲"
-                Checked="@(Settings.Environment.Search.IsHideShortMusic)"
-                OnChanged="OnIsHideShortMusicChanged" />
-        <Switch Title="歌曲名或歌手名必须包含搜索词"
-                Checked="@(Settings.Environment.Search.IsMatchSearchKey)"
-                OnChanged="OnIsMatchSearchKeyChanged" />
-    </div>
-
-    <div>
-        <div class="mt-8 mb-2 type-title">播放</div>
-        <Switch Title="仅在WIFI下播放未缓存的歌曲"
-                Checked="@(Settings.Environment.Play.IsWifiPlayOnly)"
-                OnChanged="OnIsWifiPlayOnlyChanged" />
-        <Switch Title="播放页面屏幕常亮"
-                Checked="@(Settings.Environment.Play.IsPlayingPageKeepScreenOn)"
-                OnChanged="OnIsPlayingPageKeepScreenOnChanged" />
-        <Switch Title="播放歌单前清空播放列表"
-                Checked="@(Settings.Environment.Play.IsCleanPlaylistWhenPlaySongMenu)"
-                OnChanged="OnIsCleanPlaylistWhenPlaySongMenuChanged" />
-
-        <div class="d-flex justify-space-between align-start">
-            <div>音质选择（不一定有用）</div>
-            <div style="width:150px;">
-                <MudRadioGroup T="MusicFormatTypeEnum"
-                               SelectedOption="@(Settings.Environment.Play.MusicFormatType)"
-                               SelectedOptionChanged="OnMusicFormatTypeChanged">
-                    <MudRadio Dense="true"
-                              Option="@(MusicFormatTypeEnum.PQ)"
-                              Color="Color.Primary">普通  5M/首</MudRadio>
-                    <MudRadio Dense="true"
-                              Option="@(MusicFormatTypeEnum.HQ)"
-                              Color="Color.Primary">高级 10M/首</MudRadio>
-                    <MudRadio Dense="true"
-                              Option="@(MusicFormatTypeEnum.SQ)"
-                              Color="Color.Primary">超高 30M/首</MudRadio>
-                    <MudRadio Dense="true"
-                              Option="@(MusicFormatTypeEnum.ZQ)"
-                              Color="Color.Primary">极致 70M/首</MudRadio>
-                </MudRadioGroup>
-            </div>
-        </div>
-    </div>
-
-    <MudButton Color="Color.Primary"
-               Class="mt-8"
-               Variant="Variant.Filled"
-               Style="width:100%"
-               OnClick="GotoLogPage">日志管理</MudButton>
-    <MudButton Color="Color.Primary"
-               Class="mt-2"
-               Variant="Variant.Filled"
-               Style="width:100%"
-               OnClick="GotoCachePage">缓存管理</MudButton>
-    @if (LoginDataStorage.GetUsername().IsNotEmpty())
-    {
         <MudButton Color="Color.Primary"
-               Class="mt-2"
-               Variant="Variant.Filled"
-               Style="width:100%"
-               OnClick="@(async () => await LogoutAsync())">退出账号</MudButton>
-    }
+                   Class="mt-8"
+                   Variant="Variant.Filled"
+                   Style="width:100%"
+                   OnClick="GotoLogPage">日志管理</MudButton>
+        <MudButton Color="Color.Primary"
+                   Class="mt-2"
+                   Variant="Variant.Filled"
+                   Style="width:100%"
+                   OnClick="GotoCachePage">缓存管理</MudButton>
+        @if (LoginDataStorage.GetUsername().IsNotEmpty())
+        {
+            <MudButton Color="Color.Primary"
+                       Class="mt-2"
+                       Variant="Variant.Filled"
+                       Style="width:100%"
+                       OnClick="@(async () => await LogoutAsync())">退出账号</MudButton>
+        }
 
-    <div class="d-flex flex-column align-center mt-5">
-        <div class="app-title">一起听</div>
-        <div class="mt-3 app-text">@($"版本: {AppVersion.GetCurrentVersionString()}")</div>
-        <div class="mt-1 app-link" @onclick="CheckUpdateAsync">检查更新</div>
-        <div class="mt-1 app-text">本软件基于GPL-3.0协议，开源、免费</div>
-        <div class="mt-1 app-text">作者：九零</div>
-        <div class="mt-1 app-link">
-            <a href="https://github.com/JiuLing-zhang/ListenTogether"
-               target="blank">
-                Github
-            </a>
+        <div class="d-flex flex-column align-center mt-5">
+            <div class="app-title">一起听</div>
+            <div class="mt-3 app-text">@($"版本: {AppVersion.GetCurrentVersionString()}")</div>
+            <div class="mt-1 app-link" @onclick="CheckUpdateAsync">检查更新</div>
+            <div class="mt-1 app-text">本软件基于GPL-3.0协议，开源、免费</div>
+            <div class="mt-1 app-text">作者：九零</div>
+            <div class="mt-1 app-link">
+                <a href="https://github.com/JiuLing-zhang/ListenTogether"
+                   target="blank">
+                    Github
+                </a>
+            </div>
         </div>
     </div>
-</div>
+</RouteAnimation>
+
 @code {
     protected override void OnInitialized()
     {

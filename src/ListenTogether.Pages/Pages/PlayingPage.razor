@@ -1,105 +1,108 @@
-﻿@using ListenTogether.EasyLog
+﻿@page "/playing"
+@layout EmptyLayout
+
+@using ListenTogether.EasyLog
 @inject MusicPlayerService _playerService
 @inject IPlaylistService _playlistService
 @inject IMusicNetworkService _musicNetworkService
 @inject IJSRuntime JSRuntime
 @inject IMusicShare MusicShare
+@inject IDeviceScreen DeviceScreen
 
 @implements IDisposable
 
-<div class="blurBgMask"></div>
-<div class="blur" style="background-image:url(@(_currentMusic?.ImageUrl??"https://jiuling.cc/images/music.svg"))"></div>
+<RouteAnimation>
+    <div class="blurBgMask"></div>
+    <div class="blur" style="background-image:url(@(_currentMusic?.ImageUrl??"https://jiuling.cc/images/music.svg"))"></div>
 
-<div class="page music-page">
+    <div class="page music-page">
 
-    <div class="tool-bar d-flex align-center">
-        <MudIconButton Class="flex-grow-0"
-                       Icon="@Icons.Material.Filled.KeyboardArrowDown"
-                       Size="Size.Medium"
-                       Style="color:var(--mud-palette-white);"
-                       OnClick="@(()=>ClosePlayingPage())"></MudIconButton>
-
-        <div class="flex-grow-1 d-flex justify-end">
-            <MudIconButton Icon="@Icons.Material.Filled.Share"
-                           Size="Size.Small"
+        <div class="tool-bar d-flex align-center">
+            <MudIconButton Class="flex-grow-0"
+                           Icon="@Icons.Material.Filled.KeyboardArrowDown"
+                           Size="Size.Medium"
                            Style="color:var(--mud-palette-white);"
-                           OnClick="@(ShareAsync)"></MudIconButton>
+                           OnClick="@(()=>ClosePlayingPage())"></MudIconButton>
+
+            <div class="flex-grow-1 d-flex justify-end">
+                <MudIconButton Icon="@Icons.Material.Filled.Share"
+                               Size="Size.Small"
+                               Style="color:var(--mud-palette-white);"
+                               OnClick="@(ShareAsync)"></MudIconButton>
+            </div>
+
+            <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                <DesktopTitleBar Class="flex-grow-0 ml-5"
+                                 ButtonStyle="color:var(--mud-palette-white);" />
+            </MudHidden>
         </div>
 
-        <MudHidden Breakpoint="Breakpoint.SmAndDown">
-            <DesktopTitleBar Class="flex-grow-0 ml-5"
-                             ButtonStyle="color:var(--mud-palette-white);" />
-        </MudHidden>
-    </div>
+        <div class="music-image">
+            <div class="music-image-avatar @(_isPlaying ? "" : "animation-paused")">
+                @if (_currentMusic == null)
+                {
+                    <MudSkeleton Class="mt-1" Height="200" />
+                }
+                else
+                {
+                    <img class="music-img mud-elevation-25"
+                         src="@(_currentMusic.ImageUrl)" />
+                }
+            </div>
+        </div>
 
-    <div class="music-image">
-        <div class="music-image-avatar @(_isPlaying ? "" : "animation-paused")">
+        <div class="music-detail d-flex flex-column align-center">
             @if (_currentMusic == null)
             {
-                <MudSkeleton Class="mt-1" Height="200" />
-            }
-            else
-            {
-                <img class="music-img mud-elevation-25"
-                     src="@(_currentMusic.ImageUrl)" />
-            }
-        </div>
-    </div>
-
-    <div class="music-detail d-flex flex-column align-center">
-        @if (_currentMusic == null)
-        {
-            <MudSkeleton Class="mt-1" />
-        }
-        else
-        {
-            <div class="title">
-                <div class="name">
-                    @_currentMusic.Name
-                </div>
-            </div>
-            <div class="artist-album d-flex align-center">
-                <div class="artist">
-                    @_currentMusic.Artist
-                </div>
-                <div class="album">
-                    @($" - {_currentMusic?.Album}")
-                </div>
-            </div>
-        }
-
-        <div class="lyric">
-            @if (_lyrics == null)
-            {
-                <MudSkeleton Class="mt-1" />
-                <MudSkeleton Class="mt-1" />
-                <MudSkeleton Class="mt-1" />
                 <MudSkeleton Class="mt-1" />
             }
             else
             {
-                <ul style="width:100%;transform:translateY(@(0-_offset)px)">
-
-                    @foreach (var lyric in _lyrics)
-                    {
-                        <li class="lyric-row @(lyric.IsHighlight?"highlight":"")">@lyric.Info</li>
-                    }
-                </ul>
+                <div class="title">
+                    <div class="name">
+                        @_currentMusic.Name
+                    </div>
+                </div>
+                <div class="artist-album d-flex align-center">
+                    <div class="artist">
+                        @_currentMusic.Artist
+                    </div>
+                    <div class="album">
+                        @($" - {_currentMusic?.Album}")
+                    </div>
+                </div>
             }
+
+            <div class="lyric">
+                @if (_lyrics == null)
+                {
+                    <MudSkeleton Class="mt-1" />
+                    <MudSkeleton Class="mt-1" />
+                    <MudSkeleton Class="mt-1" />
+                    <MudSkeleton Class="mt-1" />
+                }
+                else
+                {
+                    <ul style="width:100%;transform:translateY(@(0-_offset)px)">
+
+                        @foreach (var lyric in _lyrics)
+                        {
+                            <li class="lyric-row @(lyric.IsHighlight?"highlight":"")">@lyric.Info</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+
+        <div class="player-bar">
+            <PlayerBar />
         </div>
     </div>
-
-    <div class="player-bar">
-        <PlayerBar />
-    </div>
-</div>
-
+</RouteAnimation>
 @code {
 
     private int _offset = 0;
     private bool _isPlaying = false;
-    [Parameter]
-    public EventCallback OnClosePlayingPage { get; set; }
     private Timer? _timer;
     private MusicResultShow? _currentMusic;
     private List<Lyric>? _lyrics;
@@ -107,7 +110,10 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
+        if (Settings.Environment.Play.IsPlayingPageKeepScreenOn)
+        {
+            DeviceScreen.ScreenOn();
+        }
         _playerService.NewMusicAdded += NewMusicAddedDoAsync;
         _playerService.IsPlayingChanged += IsPlayingChangedDoAsync;
 
@@ -257,7 +263,7 @@
     }
     private async Task ClosePlayingPage()
     {
-        await OnClosePlayingPage.InvokeAsync();
+        await JSRuntime.InvokeVoidAsync("history.back");
     }
 
     private async Task ShareAsync()
@@ -275,5 +281,6 @@
         _timer?.Dispose();
         _playerService.NewMusicAdded -= NewMusicAddedDoAsync;
         _playerService.IsPlayingChanged -= IsPlayingChangedDoAsync;
+        DeviceScreen.ScreenOff();
     }
 }

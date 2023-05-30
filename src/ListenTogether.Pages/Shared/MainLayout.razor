@@ -6,9 +6,10 @@
 @inject IMusicNetworkService MusicNetworkService
 @inject IAutoUpgrade AutoUpgrade
 @inject INativeTheme NativeTheme
-@inject IDeviceScreen DeviceScreen
 
-<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="MyCustomTheme" />
+@inject CustomTheme CustomTheme
+
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_customTheme" />
 <MudDialogProvider NoHeader="true" />
 <MudSnackbarProvider />
 <ErrorBoundary @ref="@_errorBoundary">
@@ -45,9 +46,6 @@
                 <PlayerBar OnOpenPlayingPage="OpenPlayingPage" />
             </div>
         </div>
-        <div class="playing-page-drawer @_isOpenPlayingPage">
-            <ListenTogether.Pages.Pages.PlayingPage OnClosePlayingPage="ClosePlayingPage" />
-        </div>
     </ChildContent>
     <ErrorContent Context="ex">
         <div class="pa-5" style="user-select: text;">
@@ -70,55 +68,22 @@
 </ErrorBoundary>
 @code {
     private bool _isDarkMode;
-    private string _isOpenPlayingPage = "";
     private ErrorBoundary? _errorBoundary;
     private MudThemeProvider _mudThemeProvider;
-
-    MudTheme MyCustomTheme = new MudTheme()
-        {
-            Palette = new PaletteLight()
-            {
-                Primary = "#C98FFF",
-                Secondary = Colors.Green.Accent4,
-                AppbarBackground = Colors.Red.Default,
-                TableStriped = "#F5F5F5",
-                TableHover = "#F1F6FD",
-                DarkLighten = "#CACDD1"
-
-            },
-            PaletteDark = new PaletteDark()
-            {
-                Primary = "#C98FFF",
-                Background = "#333333",
-                Surface = "#333333",
-                TableStriped = "#292929",
-                TableHover = "#182437",
-                DarkLighten = "#494C50",
-                Black = "#858585",
-                TextPrimary = "#FFFFFF",
-                OverlayDark = "#7575757A"
-            }
-        };
-
-    private void OpenPlayingPage()
-    {
-        _isOpenPlayingPage = "open";
-        if (Settings.Environment.Play.IsPlayingPageKeepScreenOn)
-        {
-            DeviceScreen.ScreenOn();
-        }
-    }
-    private void ClosePlayingPage()
-    {
-        _isOpenPlayingPage = "";
-        DeviceScreen.ScreenOff();
-    }
+    private MudTheme _customTheme;
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
+        _customTheme = CustomTheme.Theme;
         MusicNetworkService.SetMusicFormatType(MusicFormatTypeEnum.HQ);
+        base.OnInitialized();
     }
+
+    private void OpenPlayingPage()
+    {
+        NavigationManager.NavigateTo("/playing");
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)

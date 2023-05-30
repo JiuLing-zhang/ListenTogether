@@ -5,26 +5,28 @@
 @inject IPlaylistService PlaylistService
 @inject ISnackbar Snackbar
 @inject MusicResultService MusicResultService
+<RouteAnimation>
+    @if (_musics == null)
+    {
+        <MudSkeleton Class="mt-3" Height="60px" />
+        <MudSkeleton Class="mt-3" Height="60px" />
+        <MudSkeleton Class="mt-3" Height="60px" />
+        <MudSkeleton Class="mt-3" Height="60px" />
+        <MudSkeleton Class="mt-3" Height="60px" />
+    }
+    else
+    {
+        <MudButton Variant="Variant.Outlined"
+                   StartIcon="@Icons.Material.Filled.PlayCircleOutline"
+                   IconColor="Color.Primary"
+                   Size="Size.Small"
+                   Disabled="@(_musics==null || !_musics.Any())"
+                   OnClick="PlayAllAsync">播放全部</MudButton>
 
-@if (_musics == null)
-{
-    <MudSkeleton Class="mt-3" Height="60px" />
-    <MudSkeleton Class="mt-3" Height="60px" />
-    <MudSkeleton Class="mt-3" Height="60px" />
-    <MudSkeleton Class="mt-3" Height="60px" />
-    <MudSkeleton Class="mt-3" Height="60px" />
-}
-else
-{
-    <MudButton Variant="Variant.Outlined"
-           StartIcon="@Icons.Material.Filled.PlayCircleOutline"
-           IconColor="Color.Primary"
-           Size="Size.Small"
-           Disabled="@(_musics==null || !_musics.Any())"
-           OnClick="PlayAllAsync">播放全部</MudButton>
+        <MusicResultView Musics="@_musics" />
+    }
 
-    <MusicResultView Musics="@_musics" />
-}
+</RouteAnimation>
 @code {
     [Parameter]
     public string Keyword { get; set; } = null!;

@@ -7,65 +7,66 @@
 @inject IPlaylistService PlaylistService
 @inject ISnackbar Snackbar
 
-<div class="header">
-    <div><MudText Typo="Typo.h6">我的歌单</MudText></div>
-    <MudButton Variant="Variant.Text"
-               Class="ml-5"
-               EndIcon="@Icons.Material.Filled.Add"
-               IconSize="Size.Small"
-               Size="Size.Small"
-               Disabled="@(_myFavoriteList == null)"
-               OnClick="@(()=>AddMyFavoriteAsync())"
-               Color="Color.Primary">新建歌单</MudButton>
-</div>
-@if (_myFavoriteList == null)
-{
-    <MudSkeleton Class="mt-1" Height="40px" />
-    <MudSkeleton Class="mt-1" Height="40px" />
-    <MudSkeleton Class="mt-1" Height="40px" />
-    <MudSkeleton Class="mt-1" Height="40px" />
-}
-else
-{
-    @if (!_myFavoriteList.Any())
+<RouteAnimation>
+    <div class="header">
+        <div><MudText Typo="Typo.h6">我的歌单</MudText></div>
+        <MudButton Variant="Variant.Text"
+                   Class="ml-5"
+                   EndIcon="@Icons.Material.Filled.Add"
+                   IconSize="Size.Small"
+                   Size="Size.Small"
+                   Disabled="@(_myFavoriteList == null)"
+                   OnClick="@(()=>AddMyFavoriteAsync())"
+                   Color="Color.Primary">新建歌单</MudButton>
+    </div>
+    @if (_myFavoriteList == null)
     {
-        <Empty OnRefresh="GetMyFavoriteListAsync" />
+        <MudSkeleton Class="mt-1" Height="40px" />
+        <MudSkeleton Class="mt-1" Height="40px" />
+        <MudSkeleton Class="mt-1" Height="40px" />
+        <MudSkeleton Class="mt-1" Height="40px" />
     }
     else
     {
-        <MudList Clickable="true">
-            @foreach (var myFavorite in _myFavoriteList)
-            {
-                <MudListItem>
-                    <div class="d-flex align-center my-favorite" @onclick="@(()=>GotoMyFavoriteDetail(myFavorite.Id))">
-                        <div class="flex-grow-0 tool">
-                            <div class="play">
-                                <MudIconButton Icon="@Icons.Material.Filled.PlayCircleOutline"
-                                   Size="Size.Medium"
-                                   OnClick="@(()=>PlayAllAsync(myFavorite.Id))"></MudIconButton>
+        @if (!_myFavoriteList.Any())
+        {
+            <Empty OnRefresh="GetMyFavoriteListAsync" />
+        }
+        else
+        {
+            <MudList Clickable="true">
+                @foreach (var myFavorite in _myFavoriteList)
+                {
+                    <MudListItem>
+                        <div class="d-flex align-center my-favorite" @onclick="@(()=>GotoMyFavoriteDetail(myFavorite.Id))">
+                            <div class="flex-grow-0 tool">
+                                <div class="play">
+                                    <MudIconButton Icon="@Icons.Material.Filled.PlayCircleOutline"
+                                                   Size="Size.Medium"
+                                                   OnClick="@(()=>PlayAllAsync(myFavorite.Id))"></MudIconButton>
+                                </div>
+                            </div>
+                            <div class="d-flex align-center flex-grow-1 info">
+                                <MudImage Src="@myFavorite.ImageUrl"
+                                          Width="40"
+                                          Height="40"
+                                          Elevation="5"
+                                          Class="rounded-lg mr-3" />
+                                <div>
+                                    <div>@myFavorite.Name</div>
+                                    <div class="music-count">@myFavorite.MusicCount 首歌</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="d-flex align-center flex-grow-1 info">
-                            <MudImage Src="@myFavorite.ImageUrl"
-                          Width="40"
-                          Height="40"
-                          Elevation="5"
-                          Class="rounded-lg mr-3" />
-                            <div>
-                                <div>@myFavorite.Name</div>
-                                <div class="music-count">@myFavorite.MusicCount 首歌</div>
-                            </div>
-                        </div>
-                    </div>
-                </MudListItem>
-                <MudHidden Breakpoint="Breakpoint.MdAndUp">
-                    <MudDivider />
-                </MudHidden>
-            }
-        </MudList>
+                    </MudListItem>
+                    <MudHidden Breakpoint="Breakpoint.MdAndUp">
+                        <MudDivider />
+                    </MudHidden>
+                }
+            </MudList>
+        }
     }
-}
-
+</RouteAnimation>
 @code {
 
 
