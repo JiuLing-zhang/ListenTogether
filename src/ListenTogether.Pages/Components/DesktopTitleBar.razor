@@ -1,5 +1,5 @@
 ﻿@inject DesktopNotification WindowsNotification
-
+@inject MusicPlayerService PlayerService
 <div class="d-flex align-start @Class">
 
     <MudIconButton Icon="@Icons.Material.Filled.Minimize"
@@ -22,6 +22,28 @@
 
     [Parameter]
     public string Class { get; set; } = "";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        SetTitle($"一起听");
+        PlayerService.NewMusicAdded += (_, __) =>
+        {
+            var metadata = PlayerService.Metadata;
+            if (metadata == null)
+            {
+                return;
+            }
+            SetTitle($"{metadata.Name} - {metadata.Artist}");
+        };
+    }
+
+    private void SetTitle(string title)
+    {
+        WindowsNotification.SetTitle(title);
+    }
 
     private bool _isMaximizer = false;
     private string _maximizerIcon = Icons.Material.Filled.Fullscreen;

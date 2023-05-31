@@ -6,37 +6,54 @@ internal class WindowsTitleBarService
     {
 
     }
+    public static void SetTitle(string title)
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            var mauiWindow = App.Current.Windows.First();
+            mauiWindow.Title = title;
+        });
+    }
 
     public static void Minimize()
     {
-        var mauiWindow = App.Current.Windows.First();
-        var nativeWindow = mauiWindow.Handler.PlatformView;
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            var mauiWindow = App.Current.Windows.First();
+            var nativeWindow = mauiWindow.Handler.PlatformView;
 
-        IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-        PInvoke.User32.ShowWindow(windowHandle, PInvoke.User32.WindowShowStyle.SW_MINIMIZE);
+            IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
+            PInvoke.User32.ShowWindow(windowHandle, PInvoke.User32.WindowShowStyle.SW_MINIMIZE);
+        });
     }
 
     public static void Maximize()
     {
-        var mauiWindow = App.Current.Windows.First();
-        var nativeWindow = mauiWindow.Handler.PlatformView;
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            var mauiWindow = App.Current.Windows.First();
+            var nativeWindow = mauiWindow.Handler.PlatformView;
 
-        IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-        PInvoke.User32.ShowWindow(windowHandle, PInvoke.User32.WindowShowStyle.SW_MAXIMIZE);
+            IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
+            PInvoke.User32.ShowWindow(windowHandle, PInvoke.User32.WindowShowStyle.SW_MAXIMIZE);
 
-        var TaskBarHandle = PInvoke.User32.FindWindow("Shell_traywnd", "");
-        PInvoke.User32.GetWindowRect(TaskBarHandle, out var rct);
-   
-        mauiWindow.X = 0;
-        mauiWindow.Y = 0;
-        mauiWindow.Height = rct.top;
+            var TaskBarHandle = PInvoke.User32.FindWindow("Shell_traywnd", "");
+            PInvoke.User32.GetWindowRect(TaskBarHandle, out var rct);
+
+            mauiWindow.X = 0;
+            mauiWindow.Y = 0;
+            mauiWindow.Height = rct.top;
+        });
     }
     public static void ShowNormal()
     {
-        var mauiWindow = App.Current.Windows.First();
-        var nativeWindow = mauiWindow.Handler.PlatformView;
-        IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
-        PInvoke.User32.ShowWindow(windowHandle, PInvoke.User32.WindowShowStyle.SW_SHOWNORMAL);
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            var mauiWindow = App.Current.Windows.First();
+            var nativeWindow = mauiWindow.Handler.PlatformView;
+            IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
+            PInvoke.User32.ShowWindow(windowHandle, PInvoke.User32.WindowShowStyle.SW_SHOWNORMAL);
+        });
     }
     public static void Close()
     {

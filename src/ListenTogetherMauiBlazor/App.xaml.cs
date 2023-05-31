@@ -12,6 +12,7 @@ namespace ListenTogetherMauiBlazor
             InitializeComponent();
 
 #if WINDOWS
+            windowsNotification.OnSetTitle += (_, title) => WindowsTitleBarService.SetTitle(title);
             windowsNotification.OnWindowMinimize += (_, __) => WindowsTitleBarService.Minimize();
             windowsNotification.OnWindowMaximize += (_, __) => WindowsTitleBarService.Maximize();
             windowsNotification.OnWindowShowNormal += (_, __) => WindowsTitleBarService.ShowNormal();
