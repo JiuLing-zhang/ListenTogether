@@ -24,4 +24,9 @@ public class DeviceManage : IDeviceManage
             }
         }
     }
+
+    public string GetDeviceId()
+    {
+        throw new NotImplementedException();
+    }
 }
