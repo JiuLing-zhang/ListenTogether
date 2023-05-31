@@ -20,9 +20,8 @@
     else
     {
         <div class="header">
-            <div class="d-flex align-end">
-                <MudText Typo="Typo.h6">歌单</MudText>
-                <MudText Typo="Typo.subtitle1" Class="ml-2">@_myFavorite.Name</MudText>
+            <div class="d-flex">
+                <MudText Typo="Typo.h6">@_myFavorite.Name</MudText>
             </div>
             <div class="tool">
                 <MudButton Variant="Variant.Text"
@@ -59,15 +58,15 @@
         else
         {
             var index = 1;
-            <MudList>
+            <MudList Clickable="true">
                 @foreach (var myFavoriteDetail in _myFavoriteDetailList)
                 {
-                    <MudListItem>
+                    <MudListItem Style="cursor:default">
                         <div class="d-flex align-center my-favorite-detail">
                             <div class="flex-grow-0 tool">
                                 <div class="play">
                                     <MudIconButton Icon="fa-solid fa-trash"
-                                                   Size="Size.Medium"
+                                                   Size="Size.Small"
                                                    OnClick="@(()=>DeleteAsync(myFavoriteDetail.Id))"></MudIconButton>
                                 </div>
                             </div>

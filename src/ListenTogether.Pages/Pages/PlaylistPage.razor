@@ -43,10 +43,10 @@
         }
         else
         {
-            <MudList>
+            <MudList Clickable="true">
                 @foreach (var playlistItem in _playlist)
                 {
-                    <MudListItem>
+                    <MudListItem Style="cursor:default">
                         <div class="d-flex align-center playlist-detail">
                             <div class="flex-grow-0 tool">
                                 @if (IsLogin)
@@ -61,7 +61,7 @@
                                                OnClick="@(()=>DeleteAsync(playlistItem.Id))" />
                             </div>
 
-                            <MouseDiv Class="d-flex align-center flex-grow-1 info" OnClick="@(()=>Play(playlistItem))">
+                            <MouseDiv Class="d-flex align-center flex-grow-1 music-info" OnClick="@(()=>Play(playlistItem))">
                                 <div class="music-name">
                                     @playlistItem.Name
                                 </div>

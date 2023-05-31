@@ -4,16 +4,8 @@
         align-items: center;
     }
 
-    .playlist-detail:hover {
-        background-color: var(--mud-palette-table-striped);
-    }
-
-    .playlist .tool {
-        width: 100px;
-    }
-
-    .info {
-        margin-left: 20px;
+    .playlist-detail .tool {
+        width: 70px;
     }
 }
 
@@ -28,7 +20,7 @@
         flex-direction: row-reverse;
     }
 
-    .info {
+    .music-info {
         margin-right: 20px;
     }
 }

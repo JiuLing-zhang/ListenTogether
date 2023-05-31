@@ -13,14 +13,30 @@
     animation: routeAnimation 0.5s;
 }
 
-@keyframes routeAnimation {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
+@media screen and (min-width: 960px) {
+    @keyframes routeAnimation {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-    100% {
-        opacity: 1;
-        transform: translateY(0);
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@media screen and (max-width: 960px) {
+    @keyframes routeAnimation {
+        0% {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
     }
 }

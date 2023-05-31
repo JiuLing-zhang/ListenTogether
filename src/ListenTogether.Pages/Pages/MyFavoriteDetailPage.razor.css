@@ -4,16 +4,9 @@
         align-items: center;
     }
 
-    .my-favorite-detail {
+    .my-favorite-detail .tool {
+        width: 50px;
     }
-
-        .my-favorite-detail:hover {
-            background-color: var(--mud-palette-table-striped);
-        }
-
-        .my-favorite-detail .tool {
-            width: 50px;
-        }
 }
 
 @media screen and (max-width: 960px) {
