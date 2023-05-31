@@ -4,7 +4,7 @@
     <div class="d-flex align-center play-control">
         <MudIconButton Size="Size.Medium"
                        Icon="fa-solid fa-backward-step"
-                       Disabled="@(Music==null)"
+                       Disabled="@(Music==null || _isFirstPlay)"
                        OnClick="PreviousAsync" />
         <MudToggleIconButton Size="Size.Large"
                              Disabled="@(Music==null)"
@@ -14,7 +14,7 @@
                              ToggledSize="Size.Large"
                              ToggledIcon="fa-solid fa-circle-pause" />
         <MudIconButton Size="Size.Medium"
-                       Disabled="@(Music==null)"
+                       Disabled="@(Music==null || _isFirstPlay)"
                        Icon="fa-solid fa-forward-step"
                        OnClick="NextAsync" />
     </div>
@@ -42,8 +42,8 @@
                        Size="Size.Small"
                        Value="_playProgress"
                        T="double"
-                       @onmousedown="ProgressMouseDown"
-                       @onmouseup="ProgressMouseUp"
+            @onmousedown="ProgressMouseDown"
+            @onmouseup="ProgressMouseUp"
                        ValueChanged="ChangeProgressAsync"
                        Variant="Variant.Filled" />
 
