@@ -7,7 +7,7 @@
 @inject IMusicNetworkService _musicNetworkService
 @inject IJSRuntime JSRuntime
 @inject IMusicShare MusicShare
-@inject IDeviceScreen DeviceScreen
+@inject IDeviceManage DeviceManage
 
 @implements IDisposable
 
@@ -110,7 +110,7 @@
         await base.OnInitializedAsync();
         if (Settings.Environment.Play.IsPlayingPageKeepScreenOn)
         {
-            DeviceScreen.ScreenOn();
+            DeviceManage.ScreenOn();
         }
         _playerService.NewMusicAdded += NewMusicAddedDoAsync;
         _playerService.IsPlayingChanged += IsPlayingChangedDoAsync;
@@ -279,6 +279,6 @@
         _timer?.Dispose();
         _playerService.NewMusicAdded -= NewMusicAddedDoAsync;
         _playerService.IsPlayingChanged -= IsPlayingChangedDoAsync;
-        DeviceScreen.ScreenOff();
+        DeviceManage.ScreenOff();
     }
 }

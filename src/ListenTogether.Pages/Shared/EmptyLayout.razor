@@ -1,11 +1,6 @@
 ﻿@inherits LayoutComponentBase
-@inject NavigationManager NavigationManager
-@inject DesktopMoving DesktopMoving
-@inject IJSRuntime JSRuntime
-@inject IMusicNetworkService MusicNetworkService
 @inject IAutoUpgrade AutoUpgrade
 @inject INativeTheme NativeTheme
-@inject IDeviceScreen DeviceScreen
 @inject CustomTheme CustomTheme
 
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_customTheme" />

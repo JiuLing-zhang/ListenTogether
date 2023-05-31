@@ -1,7 +1,7 @@
 ﻿using ListenTogether.Pages;
 
 namespace ListenTogetherMauiBlazor;
-public class DeviceScreen : IDeviceScreen
+public class DeviceManage : IDeviceManage
 {
     public void ScreenOn()
     {

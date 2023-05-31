@@ -1,5 +1,5 @@
 ﻿namespace ListenTogether.Pages;
-public interface IDeviceScreen
+public interface IDeviceManage
 {
     void ScreenOn();
     void ScreenOff();

@@ -59,7 +59,7 @@ namespace ListenTogetherMauiBlazor
 
             builder.Services.AddSingleton<CustomTheme>();
             builder.Services.AddSingleton<AutoCloseJob>();
-            builder.Services.AddSingleton<IDeviceScreen, DeviceScreen>();
+            builder.Services.AddSingleton<IDeviceManage, DeviceManage>();
             builder.Services.AddSingleton<IMusicShare, MusicShare>();
             builder.Services.AddSingleton<INativeTheme, NativeTheme>();
             builder.Services.AddSingleton<IAppClose, AppClose>();
