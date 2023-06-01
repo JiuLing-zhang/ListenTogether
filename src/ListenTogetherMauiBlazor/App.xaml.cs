@@ -7,7 +7,7 @@ namespace ListenTogetherMauiBlazor
 {
     public partial class App : Application
     {
-        public App(IEnvironmentConfigService configService, DesktopNotification windowsNotification, DesktopMoving desktopMoving)
+        public App(IEnvironmentConfigService configService, DesktopNotification windowsNotification, DesktopMoving desktopMoving, IDeviceManage deviceManage)
         {
             InitializeComponent();
 
@@ -36,7 +36,7 @@ namespace ListenTogetherMauiBlazor
             BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.LocalDatabaseName));
             var task = Task.Run(configService.ReadAllSettingsAsync);
             Settings.Environment = task.Result;
-            DataConfig.SetWebApi("fbd764e6-d1ce-40c3-bd0e-d2575c6e6e6e");
+            DataConfig.SetWebApi(deviceManage.GetDeviceId());
             MainPage = new MainPage();
         }
 

@@ -75,8 +75,7 @@
     protected override void OnInitialized()
     {
         _customTheme = CustomTheme.Theme;
-        //TODO 初始化
-        MusicNetworkService.SetMusicFormatType(MusicFormatTypeEnum.HQ);
+        MusicNetworkService.SetMusicFormatType(Settings.Environment.Play.MusicFormatType);
         base.OnInitialized();
     }
 
