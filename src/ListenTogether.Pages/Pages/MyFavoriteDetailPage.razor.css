@@ -3,10 +3,6 @@
         display: flex;
         align-items: center;
     }
-
-    .my-favorite-detail .tool {
-        width: 50px;
-    }
 }
 
 @media screen and (max-width: 960px) {
@@ -19,13 +15,14 @@
     .my-favorite-detail {
         flex-direction: row-reverse;
     }
-
-        .my-favorite-detail .tool {
-            width: 50px;
-        }
 }
 
 .seq {
-    font-size: 14px;
-    opacity: 0.5;
+    font-size: 17px;
+    opacity: 0.4;
+}
+
+
+.tool {
+    opacity: 0.4;
 }

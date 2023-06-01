@@ -20,10 +20,8 @@
     else
     {
         <div class="header">
-            <div class="d-flex">
-                <MudText Typo="Typo.h6">@_myFavorite.Name</MudText>
-            </div>
-            <div class="tool">
+            <MudText Typo="Typo.h6">@_myFavorite.Name</MudText>
+            <div>
                 <MudButton Variant="Variant.Text"
                            Class="ml-5"
                            EndIcon="@Icons.Material.Filled.Edit"
@@ -64,11 +62,9 @@
                     <MudListItem Style="cursor:default">
                         <div class="d-flex align-center my-favorite-detail">
                             <div class="flex-grow-0 tool">
-                                <div class="play">
-                                    <MudIconButton Icon="fa-solid fa-trash"
-                                                   Size="Size.Small"
-                                                   OnClick="@(()=>DeleteAsync(myFavoriteDetail.Id))"></MudIconButton>
-                                </div>
+                                <MudIconButton Icon="fa-solid fa-xmark"
+                                               Size="Size.Small"
+                                               OnClick="@(()=>DeleteAsync(myFavoriteDetail.Id))"></MudIconButton>
                             </div>
 
                             <MouseDiv Class="d-flex align-center flex-grow-1" OnClick="@(()=>Play(myFavoriteDetail))">

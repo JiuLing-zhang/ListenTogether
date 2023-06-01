@@ -27,6 +27,7 @@
 
 .tool {
     white-space: nowrap;
+    opacity: 0.4;
 }
 
 .music-name {

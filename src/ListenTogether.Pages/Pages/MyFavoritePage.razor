@@ -40,11 +40,10 @@
                     <MudListItem>
                         <div class="d-flex align-center my-favorite" @onclick="@(()=>GotoMyFavoriteDetail(myFavorite.Id))">
                             <div class="flex-grow-0 tool">
-                                <div class="play">
-                                    <MudIconButton Icon="@Icons.Material.Filled.PlayCircleOutline"
-                                                   Size="Size.Medium"
-                                                   OnClick="@(()=>PlayAllAsync(myFavorite.Id))"></MudIconButton>
-                                </div>
+                                <MudIconButton Icon="@Icons.Material.Filled.PlayCircleOutline"
+                                               Size="Size.Medium"
+                                               OnClick="@(()=>PlayAllAsync(myFavorite.Id))"></MudIconButton>
+
                             </div>
                             <div class="d-flex align-center flex-grow-1 info">
                                 <MudImage Src="@myFavorite.ImageUrl"
