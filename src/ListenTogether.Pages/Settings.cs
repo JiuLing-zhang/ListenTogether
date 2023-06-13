@@ -5,10 +5,10 @@ public class Settings
 {
     public static EnvironmentSetting Environment { get; set; } = new EnvironmentSetting();
 
-    public static PlatformEnum Platform { get; set;}
+    public static OSTypeEnum OSType { get; set; }
 }
 
-public enum PlatformEnum
+public enum OSTypeEnum
 {
     Phone = 0,
     Desktop = 1,

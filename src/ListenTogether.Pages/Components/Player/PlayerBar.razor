@@ -17,29 +17,29 @@
     @*非播放页*@
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
         <DesktopView OnOpenPlayingPage="OnOpenPlayingPage"
-                 Music="@(_music)"
-                 IsPlaying="@(_isPlaying)"
-                 RepeatIcon="@(_repeatIcon)"
-                 SoundIcon="@(_soundIcon)"
-                 Volume="@(_volume)"
-                 OnVolumeChanged="ChangeVolumeAsync"
-                 OnProgressChanged="ChangeProgressAsync"
-                 Position="@(_position)"
-                 OnPlay="PlayAsync"
-                 OnNext="NextAsync"
-                 OnPrevious="PreviousAsync"
-                 OnAddToMyFavorite="AddToMyFavoriteAsync"
-                 OnRepeatChanged="ChangeRepeatAsync"
-                 OnSoundChanged="ChangeSoundAsync"
-                 OnGotoAutoClosePage="GotoAutoClosePage" />
+                     Music="@(_music)"
+                     IsPlaying="@(_isPlaying)"
+                     RepeatIcon="@(_repeatIcon)"
+                     SoundIcon="@(_soundIcon)"
+                     Volume="@(_volume)"
+                     OnVolumeChanged="ChangeVolumeAsync"
+                     OnProgressChanged="ChangeProgressAsync"
+                     Position="@(_position)"
+                     OnPlay="PlayAsync"
+                     OnNext="NextAsync"
+                     OnPrevious="PreviousAsync"
+                     OnAddToMyFavorite="AddToMyFavoriteAsync"
+                     OnRepeatChanged="ChangeRepeatAsync"
+                     OnSoundChanged="ChangeSoundAsync"
+                     OnGotoAutoClosePage="GotoAutoClosePage" />
     </MudHidden>
 
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
         <PhoneView OnOpenPlayingPage="OnOpenPlayingPage"
-               Music="@(_music)"
-               IsPlaying="@(_isPlaying)"
-               Position="@(_position)"
-               OnPlay="PlayAsync" />
+                   Music="@(_music)"
+                   IsPlaying="@(_isPlaying)"
+                   Position="@(_position)"
+                   OnPlay="PlayAsync" />
     </MudHidden>
 }
 else
@@ -47,39 +47,39 @@ else
     @*播放页*@
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
         <DesktopPlayingView Music="@(_music)"
-                        IsPlaying="@(_isPlaying)"
-                        RepeatIcon="@(_repeatIcon)"
-                        SoundIcon="@(_soundIcon)"
-                        Volume="@(_volume)"
-                        OnVolumeChanged="ChangeVolumeAsync"
-                        OnProgressChanged="ChangeProgressAsync"
-                        Position="@(_position)"
-                        OnPlay="PlayAsync"
-                        OnNext="NextAsync"
-                        OnPrevious="PreviousAsync"
-                        OnAddToMyFavorite="AddToMyFavoriteAsync"
-                        OnRepeatChanged="ChangeRepeatAsync"
-                        OnSoundChanged="ChangeSoundAsync"
-                        OnGotoAutoClosePage="GotoAutoClosePage" />
+                            IsPlaying="@(_isPlaying)"
+                            RepeatIcon="@(_repeatIcon)"
+                            SoundIcon="@(_soundIcon)"
+                            Volume="@(_volume)"
+                            OnVolumeChanged="ChangeVolumeAsync"
+                            OnProgressChanged="ChangeProgressAsync"
+                            Position="@(_position)"
+                            OnPlay="PlayAsync"
+                            OnNext="NextAsync"
+                            OnPrevious="PreviousAsync"
+                            OnAddToMyFavorite="AddToMyFavoriteAsync"
+                            OnRepeatChanged="ChangeRepeatAsync"
+                            OnSoundChanged="ChangeSoundAsync"
+                            OnGotoAutoClosePage="GotoAutoClosePage" />
     </MudHidden>
 
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
         <PhonePlayingView Music="@(_music)"
-                      IsPlaying="@(_isPlaying)"
-                      RepeatIcon="@(_repeatIcon)"
-                      SoundIcon="@(_soundIcon)"
-                      Volume="@(_volume)"
-                      AutoCloseTime="@(_autoCloseTime)"
-                      OnVolumeChanged="ChangeVolumeAsync"
-                      OnProgressChanged="ChangeProgressAsync"
-                      Position="@(_position)"
-                      OnPlay="PlayAsync"
-                      OnNext="NextAsync"
-                      OnPrevious="PreviousAsync"
-                      OnAddToMyFavorite="AddToMyFavoriteAsync"
-                      OnRepeatChanged="ChangeRepeatAsync"
-                      OnSoundChanged="ChangeSoundAsync"
-                      OnGotoAutoClosePage="GotoAutoClosePage" />
+                          IsPlaying="@(_isPlaying)"
+                          RepeatIcon="@(_repeatIcon)"
+                          SoundIcon="@(_soundIcon)"
+                          Volume="@(_volume)"
+                          AutoCloseTime="@(_autoCloseTime)"
+                          OnVolumeChanged="ChangeVolumeAsync"
+                          OnProgressChanged="ChangeProgressAsync"
+                          Position="@(_position)"
+                          OnPlay="PlayAsync"
+                          OnNext="NextAsync"
+                          OnPrevious="PreviousAsync"
+                          OnAddToMyFavorite="AddToMyFavoriteAsync"
+                          OnRepeatChanged="ChangeRepeatAsync"
+                          OnSoundChanged="ChangeSoundAsync"
+                          OnGotoAutoClosePage="GotoAutoClosePage" />
     </MudHidden>
 }
 
@@ -122,8 +122,11 @@ else
 
         UpdateRepeatModel();
 
-        UpdateSoundOnOff().Wait();
-        UpdateVolume().Wait();
+        if (Settings.OSType == OSTypeEnum.Desktop || Settings.OSType == OSTypeEnum.Web)
+        {
+            UpdateSoundOnOff().Wait();
+            UpdateVolume().Wait();
+        }
     }
 
     private void CalcRemainingTime(object? value)

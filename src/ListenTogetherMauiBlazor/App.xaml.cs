@@ -23,7 +23,7 @@ namespace ListenTogetherMauiBlazor
 #endif
 
             //TODO 临时调试一下
-            Settings.Platform = Config.Desktop ? PlatformEnum.Desktop : PlatformEnum.Phone;
+            Settings.OSType = Config.Desktop ? OSTypeEnum.Desktop : OSTypeEnum.Phone;
             if (!Directory.Exists(GlobalPath.AppDataDirectory))
             {
                 Directory.CreateDirectory(GlobalPath.AppDataDirectory);
