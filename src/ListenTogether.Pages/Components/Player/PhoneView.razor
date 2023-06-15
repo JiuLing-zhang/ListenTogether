@@ -7,8 +7,14 @@
     <div class="flex-grow-1 music-info">
         @($"{Music?.Name} - {Music?.Artist}")
     </div>
-    <div class="flex-grow-0 ml-2 d-flex align-center play-btn">
+    <div class="flex-grow-0 d-flex align-center play-btn">
+        <MudIconButton Size="Size.Small"
+                       Disabled="@(Music==null || _isFirstPlay)"
+                       Icon="fa-solid fa-forward-step"
+                       OnClick="NextAsync" />
+
         <MudToggleIconButton Size="Size.Small"
+                             Class="ml-1"
                              Disabled="@(Music==null)"
                              Toggled="@IsPlaying"
                              ToggledChanged="PlayAsync"
@@ -47,6 +53,8 @@
     public EventCallback OnPlay { get; set; }
     [Parameter]
     public EventCallback OnOpenPlayingPage { get; set; }
+    [Parameter]
+    public EventCallback OnNext { get; set; }
 
     private async Task PlayAsync(bool toggled)
     {
@@ -61,5 +69,10 @@
             return;
         }
         await OnOpenPlayingPage.InvokeAsync();
+    }
+
+    private async Task NextAsync()
+    {
+        await OnNext.InvokeAsync();
     }
 }
