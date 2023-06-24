@@ -10,6 +10,8 @@ using ListenTogether.Api.Interfaces;
 using ListenTogether.Api.Models;
 using ListenTogether.Api.Services;
 using ListenTogether.Model.Api;
+using JiuLing.CommonLibs.Log;
+using ILogger = JiuLing.CommonLibs.Log.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +59,7 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // configure strongly typed settings object
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.Configure<MailSenderSettings>(builder.Configuration.GetSection("MailSenderSettings"));
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -81,6 +84,7 @@ builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMusicService, MusicService>();
 builder.Services.AddScoped<IMyFavoriteService, MyFavoriteService>();
+builder.Services.AddScoped<IMailService, MailService>();
 
 var app = builder.Build();
 

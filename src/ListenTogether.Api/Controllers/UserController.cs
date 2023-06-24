@@ -3,6 +3,7 @@ using ListenTogether.Api.Authorization;
 using ListenTogether.Api.Interfaces;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
+using JiuLing.CommonLibs.ExtensionMethods;
 
 namespace ListenTogether.Api.Controllers;
 [ApiController]
@@ -11,10 +12,24 @@ public class UserController : ApiBaseController
 {
     private readonly IHostEnvironment _hostEnvironment;
     private readonly IUserService _userService;
-    public UserController(IHostEnvironment hostEnvironment, IUserService userService)
+    private readonly IMailService _mailService;
+    public UserController(IHostEnvironment hostEnvironment, IUserService userService, IMailService mailService)
     {
         _hostEnvironment = hostEnvironment;
         _userService = userService;
+        _mailService = mailService;
+    }
+
+    [AllowAnonymous]
+    [HttpPost("reg-mail/{email}")]
+    public async Task<IActionResult> SendMailAsync(string email)
+    {
+        if (email.IsEmpty())
+        {
+            return Ok(new Result(101, "非法请求"));
+        }
+        await _mailService.SendRegisterMailAsync(email);
+        return Ok(new Result(0, "发送成功"));
     }
 
     [AllowAnonymous]
