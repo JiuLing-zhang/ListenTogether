@@ -16,7 +16,8 @@
                         <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Primary"></MudIcon>
                         <MudText Class="ml-1">登录</MudText>
                     </div>
-                    <MudForm @ref="@_form">
+                    <MudForm @ref="@_form"
+                             Class="mb-3">
                         <MudTextField T="string"
                                       Label="用户名"
                         @bind-Value="_username"
@@ -37,14 +38,16 @@
                                    Variant="Variant.Filled"
                                    EndIcon="@Icons.Material.Filled.Login"
                                    Color="Color.Primary"
+                                   Style="width: 100%;"
                                    OnClick="@(async () => await LoginAsync())">登录</MudButton>
-                        <MudButton Class="mt-5"
-                                   Variant="Variant.Filled"
-                                   EndIcon="@Icons.Material.Filled.AppRegistration"
-                                   Color="Color.Primary"
-                                   OnClick="@(  () => GotoRegisterPage())">注册</MudButton>
-
                     </MudForm>
+
+                    还没有账号？
+                    <MudElement HtmlTag="a"
+                                Style="color: var(--mud-palette-primary);"
+                                href="/register">
+                        点击注册
+                    </MudElement>
                 </MudPaper>
             </MudItem>
         </MudGrid>
@@ -95,10 +98,5 @@
         {
             await LoginAsync();
         }
-    }
-
-    private void GotoRegisterPage()
-    {
-        NavigationManager.NavigateTo("/register");
     }
 }

@@ -9,6 +9,7 @@ using ListenTogether.Api.Models;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
 using ListenTogether.Model.Api.Response;
+using JiuLing.CommonLibs.ExtensionMethods;
 
 namespace ListenTogether.Api.Services;
 internal class UserService : IUserService
@@ -23,7 +24,7 @@ internal class UserService : IUserService
         _appSettings = appSettings.Value;
     }
 
-    public async Task<Result> RegisterAsync(UserRegisterRequest registerUser, string avatarUrl)
+    public async Task<Result> RegisterAsync(UserRegisterRequest registerUser)
     {
         var isUserExist = await _context.Users.AnyAsync(x => x.Username.ToLower() == registerUser.Username.ToLower());
         if (isUserExist)
@@ -34,13 +35,19 @@ internal class UserService : IUserService
         string salt = JiuLing.CommonLibs.GuidUtils.GetFormatN();
         string password = JiuLing.CommonLibs.Security.MD5Utils.GetStringValueToLower($"{registerUser.Password}{salt}");
 
+        var avatarIndex = new Random().Next(1, 6);
+        var avatarUrl = $"/uploads/avatars/default-{avatarIndex}.jpg";
+
+        var nicknameKey = JiuLing.CommonLibs.GuidUtils.GetFormatN().Substring(0, 5);
+        var nickname = $"用户{nicknameKey}";
+
         var userEntity = new UserEntity()
         {
             Username = registerUser.Username,
             Password = password,
             Salt = salt,
-            IsEnable = false,
-            Nickname = registerUser.Nickname,
+            IsEnable = true,
+            Nickname = nickname,
             Avatar = avatarUrl,
             CreateTime = DateTime.Now,
         };
@@ -51,7 +58,7 @@ internal class UserService : IUserService
         {
             return new Result(2, "注册失败");
         }
-        return new Result(0, "注册成功，请等待管理员审核");
+        return new Result(0, "注册成功");
     }
 
     public async Task<Result<UserResponse>> LoginAsync(UserRequest user, string deviceId)
@@ -155,7 +162,41 @@ internal class UserService : IUserService
         {
             return null;
         }
-
         return userEntity;
+    }
+
+    public async Task<Result> EditUserInfoAsync(int id, UserEditRequest user)
+    {
+        var userEntity = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
+        if (userEntity == null)
+        {
+            return new Result(1, "用户信息获取失败");
+        }
+
+        if (user.Username.IsNotEmpty() && user.Username != userEntity.Username)
+        {
+            if (await _context.Users.AnyAsync(x => x.Username.ToLower() == user.Username.ToLower()))
+            {
+                return new Result(2, "用户名已存在");
+            }
+            userEntity.Username = user.Username;
+        }
+
+        if (user.Nickname.IsNotEmpty() && user.Nickname != userEntity.Nickname)
+        {
+            userEntity.Nickname = user.Nickname;
+        }
+
+        if (user.AvatarUrl.IsNotEmpty())
+        {
+            userEntity.Avatar = user.AvatarUrl;
+        }
+        _context.Users.Update(userEntity);
+        var count = await _context.SaveChangesAsync();
+        if (count == 0)
+        {
+            return new Result(99, "保存失败，请重试");
+        }
+        return new Result(0, "保存成功");
     }
 }

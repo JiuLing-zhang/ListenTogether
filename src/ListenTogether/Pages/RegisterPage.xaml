@@ -23,12 +23,12 @@
         <StackLayout
             Grid.Row="1"
             Style="{StaticResource StackLayoutLoading}">
-            <Entry Text="{Binding Username}"
-                   Placeholder="请输入用户名"
+            <Entry Text="{Binding Key}"
+                   Placeholder="请输入注册码"
                    ReturnType="Next"
                    Margin="0,10,0,10"/>
-            <Entry Text="{Binding Nickname}"
-                   Placeholder="请输入昵称"
+            <Entry Text="{Binding Username}"
+                   Placeholder="请输入用户名"
                    ReturnType="Next"
                    Margin="0,0,0,10"/>
             <Entry Text="{Binding Password}"
@@ -41,18 +41,6 @@
                    ReturnType="Next"
                    IsPassword="True"
                    Margin="0,0,0,10"/>
-            <HorizontalStackLayout Margin="0,0,0,10">
-                <Label Text="头像"
-                   VerticalTextAlignment="Center"
-                   Margin="0,0,10,0"/>
-                <Image Source="{Binding MyImage}"
-                   WidthRequest="48"
-                   Margin="0,0,10,0"/>
-                <Button Text="选择"
-                        Command="{Binding ChoseImageAsyncCommand}"
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
-                        TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
-            </HorizontalStackLayout>
 
             <Button Text="注册"
                     Margin="0,20,0,0"

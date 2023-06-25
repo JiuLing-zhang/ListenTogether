@@ -15,6 +15,7 @@ internal class ApiSettings
             _deviceId = deviceId;
         }
         public string Register => $"/api/user/reg";
+        public string Edit => $"/api/user/edit";
         public string Login => $"/api/user/{_deviceId}/login";
         public string RefreshToken => $"/api/user/{_deviceId}/refresh-token";
         public string Logout => $"/api/user/{_deviceId}/logout";

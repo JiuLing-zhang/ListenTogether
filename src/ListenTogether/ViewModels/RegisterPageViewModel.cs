@@ -13,17 +13,16 @@ public partial class RegisterPageViewModel : ViewModelBase
     }
 
     [ObservableProperty]
+    [Required(ErrorMessage = "请填写注册码")]
+    private string _key = null!;
+
+    [ObservableProperty]
     [Required(ErrorMessage = "请填写用户名")]
     private string _username = null!;
 
     [ObservableProperty]
-    [Required(ErrorMessage = "请填写昵称")]
-    private string _nickname = null!;
-
-    [ObservableProperty]
     [Required(ErrorMessage = "请填写密码")]
     private string _password = null!;
-
 
     private string _password2 = null!;
     [Required(ErrorMessage = "请填写确认密码")]
@@ -34,10 +33,6 @@ public partial class RegisterPageViewModel : ViewModelBase
         set => SetProperty(ref _password2, value);
     }
 
-    [ObservableProperty]
-    private ImageSource? _myImage;
-
-    private UserAvatar? _userAvatar;
 
     [RelayCommand]
     private async void RegisterAsync()
@@ -53,25 +48,11 @@ public partial class RegisterPageViewModel : ViewModelBase
                 return;
             }
 
-            if (_userAvatar == null)
-            {
-                await ToastService.Show("请选择头像");
-                return;
-            }
-
-            if (_userAvatar.File.Length >= 500 * 1024)
-            {
-                await ToastService.Show("头像最大允许 500KB");
-                return;
-            }
-
-            var aaa = _userAvatar.File.Length;
             var user = new UserRegister()
             {
                 Username = Username,
-                Nickname = Nickname,
                 Password = Password,
-                Avatar = _userAvatar
+                Key = Key
             };
 
             var (succeed, message) = await _userService.RegisterAsync(user);
@@ -81,52 +62,6 @@ public partial class RegisterPageViewModel : ViewModelBase
         {
             await ToastService.Show("注册失败，网络出小差了");
             Logger.Error("注册失败。", ex);
-        }
-        finally
-        {
-            LoadComplete();
-        }
-    }
-
-
-    [RelayCommand]
-    private async void ChoseImageAsync()
-    {
-        try
-        {
-            _userAvatar = null;
-            MyImage = null;
-
-            PickOptions options = new()
-            {
-                PickerTitle = "请选择头像",
-                FileTypes = FilePickerFileType.Images
-            };
-
-            var result = await FilePicker.PickAsync(options);
-            if (result == null)
-            {
-                return;
-            }
-            Loading("处理中....");
-
-            _userAvatar = new UserAvatar();
-            _userAvatar.FileName = result.FileName;
-
-            var stream = await result.OpenReadAsync();
-            using (MemoryStream ms = new MemoryStream())
-            {
-                await stream.CopyToAsync(ms);
-                _userAvatar.File = ms.ToArray();
-            }
-
-            MyImage = ImageSource.FromFile(result.FullPath);
-
-        }
-        catch (Exception ex)
-        {
-            await ToastService.Show("头像加载失败，请重试");
-            Logger.Error("头像加载失败。", ex);
         }
         finally
         {

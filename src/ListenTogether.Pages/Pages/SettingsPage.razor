@@ -10,6 +10,7 @@
 @inject IAppVersion AppVersion
 @inject IAutoUpgrade AutoUpgrade
 @inject IMusicNetworkService MusicNetworkService
+@inject NetConfig NetConfig
 
 <RouteAnimation>
     <div class="page">
@@ -23,9 +24,11 @@
         else
         {
             <div class="d-flex">
-                <MudAvatar>
-                    <MudImage Src="@($"https://music.jiuling.cc{LoginDataStorage.GetAvatar()}")"></MudImage>
+                <MudAvatar Class="cursor-pointer"
+                           onclick="@(GotoUserInfoEditPage)">
+                    <MudImage Src="@($"{NetConfig.ApiDomain}/{LoginDataStorage.GetAvatar()}")"></MudImage>
                 </MudAvatar>
+
                 <div class="ml-3">
                     <MudText Typo="Typo.subtitle2">@LoginDataStorage.GetNickname()</MudText>
                     <MudText Typo="Typo.subtitle2">用户名：@LoginDataStorage.GetUsername()</MudText>
@@ -243,7 +246,10 @@
     {
         await ConfigService.WritePlaySettingAsync(Settings.Environment.Play);
     }
-
+    private void GotoUserInfoEditPage()
+    {
+        NavigationManager.NavigateTo("/user-info-edit");
+    }
     private void GotoLoginPage()
     {
         NavigationManager.NavigateTo("/login");

@@ -26,4 +26,9 @@ public class UserService : IUserService
     {
         await _repository.LogoutAsync();
     }
+
+    public async Task<(bool Succeed, string Message)> EditUserInfoAsync(UserEdit user)
+    {
+        return await _repository.EditUserInfoAsync(user);
+    }
 }

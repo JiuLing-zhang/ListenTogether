@@ -17,14 +17,8 @@ public class UserApiRepository : IUserApiRepository
     {
         try
         {
-            var mfdc = new MultipartFormDataContent();
-            mfdc.Add(new StringContent(registerUser.Username), nameof(registerUser.Username));
-            mfdc.Add(new StringContent(registerUser.Nickname), nameof(registerUser.Nickname));
-            mfdc.Add(new StringContent(registerUser.Password), nameof(registerUser.Password));
-            //头像
-            mfdc.Add(new StreamContent(new MemoryStream(registerUser.Avatar.File)), "Avatar", registerUser.Avatar.FileName);
-
-            var response = await _httpClientFactory.CreateClient("WebAPINoToken").PostAsync(DataConfig.ApiSetting.User.Register, mfdc);
+            var sc = new StringContent(registerUser.ToJson(), System.Text.Encoding.UTF8, "application/json");
+            var response = await _httpClientFactory.CreateClient("WebAPINoToken").PostAsync(DataConfig.ApiSetting.User.Register, sc);
             var json = await response.Content.ReadAsStringAsync();
             var result = json.ToObject<Result>();
             if (result == null || result.Code != 0)
@@ -85,6 +79,40 @@ public class UserApiRepository : IUserApiRepository
         catch (Exception ex)
         {
             Logger.Error("账号退出失败。", ex);
+        }
+    }
+
+    public async Task<(bool Succeed, string Message)> EditUserInfoAsync(UserEdit user)
+    {
+        try
+        {
+            var mfdc = new MultipartFormDataContent();
+            if (user.Username.IsNotEmpty())
+            {
+                mfdc.Add(new StringContent(user.Username), nameof(user.Username));
+            }
+            if (user.Nickname.IsNotEmpty())
+            {
+                mfdc.Add(new StringContent(user.Nickname), nameof(user.Nickname));
+            }
+            if (user.Avatar != null)
+            {
+                mfdc.Add(new StreamContent(new MemoryStream(user.Avatar.File)), "Avatar", user.Avatar.FileName);
+            }
+
+            var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(DataConfig.ApiSetting.User.Edit, mfdc);
+            var json = await response.Content.ReadAsStringAsync();
+            var result = json.ToObject<Result>();
+            if (result == null || result.Code != 0)
+            {
+                return (false, result?.Message ?? "网络错误");
+            }
+            return (true, result.Message);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error("编辑用户信息失败。", ex);
+            return (false, "网络连接失败");
         }
     }
 }

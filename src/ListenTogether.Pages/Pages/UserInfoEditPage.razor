@@ -1,0 +1,118 @@
+﻿@page "/user-info-edit"
+@using ListenTogether.Data;
+
+@inherits MyComponentBase
+
+@inject NavigationManager NavigationManager
+@inject NetConfig NetConfig
+@inject ILoginDataStorage LoginDataStorage
+@inject IDialogService DialogService
+@inject IUserService UserService
+
+<Loading IsLoading="_isLoading"></Loading>
+<RouteAnimation>
+    <div class="page">
+        <MudGrid Class="ma-5">
+            <MudItem xs="12" md="12">
+                <MudPaper Class="pa-4" Elevation="0">
+                    <div class="d-flex mb-3">
+                        <MudIcon Icon="@Icons.Material.Filled.Person" Color="Color.Primary"></MudIcon>
+                        <MudText Class="ml-1">编辑资料</MudText>
+                    </div>
+
+                    <div class="d-flex justify-space-between align-center my-3 px-3">
+                        <div>头像</div>
+                        <MudAvatar Class="cursor-pointer">
+                            <MudImage Src="@($"{NetConfig.ApiDomain}/{LoginDataStorage.GetAvatar()}")"></MudImage>
+                        </MudAvatar>
+                    </div>
+                    <MudDivider />
+                    <div class="d-flex justify-space-between align-center my-3 px-3">
+                        <div>用户名</div>
+                        <MudButton Variant="Variant.Text"
+                                   OnClick="EditUsernameAsync"
+                                   Style="text-transform: none;">
+                            @LoginDataStorage.GetUsername()
+                        </MudButton>
+                    </div>
+                    <MudDivider />
+                    <div class="d-flex justify-space-between align-center my-3 px-3">
+                        <div>昵称</div>
+                        <MudButton Variant="Variant.Text"
+                                   OnClick="EditNicknameAsync"
+                                   Style="text-transform: none;">
+                            @LoginDataStorage.GetNickname()
+                        </MudButton>
+                    </div>
+                    <MudDivider />
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </div>
+</RouteAnimation>
+@code {
+
+    private bool _isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (IsNotLogin)
+        {
+            NavigationManager.NavigateTo("/login");
+            return;
+        }
+    }
+
+    private async Task EditUsernameAsync()
+    {
+        var input = await GetNewInputAsync();
+        if (input.IsEmpty())
+        {
+            return;
+        }
+        await SaveUserInfoAsync(new UserEdit() { Username = input }, () =>
+        {
+            LoginDataStorage.SetUsername(input);
+        });
+    }
+
+    private async Task EditNicknameAsync()
+    {
+        var input = await GetNewInputAsync();
+        if (input.IsEmpty())
+        {
+            return;
+        }
+        await SaveUserInfoAsync(new UserEdit() { Nickname = input }, () =>
+        {
+            LoginDataStorage.SetNickname(input);
+        });
+    }
+
+    private async Task<string?> GetNewInputAsync()
+    {
+        var options = new DialogOptions { ClassBackground = "dialog-backdrop" };
+        var dialog = await DialogService.ShowAsync<EditText>("", options);
+        var result = await dialog.Result;
+        if (!result.Canceled)
+        {
+            return result.Data as string;
+        }
+        return default;
+    }
+
+    private async Task SaveUserInfoAsync(UserEdit user, Action OnSucceedExecute)
+    {
+        _isLoading = true;
+        await InvokeAsync(StateHasChanged);
+        var (Succeed, Message) = await UserService.EditUserInfoAsync(user);
+        _isLoading = false;
+        await InvokeAsync(StateHasChanged);
+        await DialogService.ShowMessageBox("", Message, "确定");
+        if (Succeed)
+        {
+            OnSucceedExecute.Invoke();
+        }
+    }
+}

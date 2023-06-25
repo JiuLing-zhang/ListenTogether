@@ -1,0 +1,32 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudTextField Label="请输入新的名称"
+        @bind-Value="_newName"
+        @ref="_singleReference" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">取消</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Rename">修改</MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    private string _newName = "";
+    private MudTextField<string> _singleReference;
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task Rename()
+    {
+        if (_newName.IsEmpty())
+        {
+            await _singleReference.FocusAsync();
+            return;
+        }
+        MudDialog.Close(DialogResult.Ok(_newName));
+    }
+}

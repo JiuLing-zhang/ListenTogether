@@ -59,7 +59,6 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // configure strongly typed settings object
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-builder.Services.Configure<MailSenderSettings>(builder.Configuration.GetSection("MailSenderSettings"));
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -84,7 +83,6 @@ builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMusicService, MusicService>();
 builder.Services.AddScoped<IMyFavoriteService, MyFavoriteService>();
-builder.Services.AddScoped<IMailService, MailService>();
 
 var app = builder.Build();
 

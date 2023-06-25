@@ -1,4 +1,4 @@
-﻿namespace ListenTogetherMauiBlazor;
+﻿namespace ListenTogether.Pages;
 public class NetConfig
 {
     /// <summary>
@@ -10,3 +10,4 @@ public class NetConfig
     /// </summary>
     public string ApiDomain { get; set; }
 }
+
