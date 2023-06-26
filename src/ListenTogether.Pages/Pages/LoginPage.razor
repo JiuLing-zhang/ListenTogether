@@ -9,48 +9,44 @@
 <Loading IsLoading="_isLoading"></Loading>
 <RouteAnimation>
     <div class="page">
-        <MudGrid Class="ma-5">
-            <MudItem xs="12" md="12">
-                <MudPaper Class="pa-4" Elevation="0">
-                    <div class="d-flex mb-3">
-                        <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Primary"></MudIcon>
-                        <MudText Class="ml-1">登录</MudText>
-                    </div>
-                    <MudForm @ref="@_form"
-                             Class="mb-3">
-                        <MudTextField T="string"
-                                      Label="用户名"
-                        @bind-Value="_username"
-                                      MaxLength="20"
-                                      Required="true"
-                                      RequiredError="请输入用户名"
-                                      Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
-                        <MudTextField T="string" Label="密码"
-                        @bind-Value="_password"
-                                      InputType="InputType.Password"
-                                      MaxLength="20"
-                                      Required="true"
-                                      RequiredError="密码不能为空"
-                                      Immediate="true"
-                                      OnKeyDown="OnPasswordKeyDown"
-                                      Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
-                        <MudButton Class="mt-5"
-                                   Variant="Variant.Filled"
-                                   EndIcon="@Icons.Material.Filled.Login"
-                                   Color="Color.Primary"
-                                   Style="width: 100%;"
-                                   OnClick="@(async () => await LoginAsync())">登录</MudButton>
-                    </MudForm>
+        <MudPaper Class="pa-4" Elevation="0">
+            <div class="d-flex mb-3">
+                <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Primary"></MudIcon>
+                <MudText Class="ml-1">登录</MudText>
+            </div>
+            <MudForm @ref="@_form"
+                     Class="mb-3">
+                <MudTextField T="string"
+                              Label="用户名"
+                @bind-Value="_username"
+                              MaxLength="20"
+                              Required="true"
+                              RequiredError="请输入用户名"
+                              Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
+                <MudTextField T="string" Label="密码"
+                @bind-Value="_password"
+                              InputType="InputType.Password"
+                              MaxLength="20"
+                              Required="true"
+                              RequiredError="密码不能为空"
+                              Immediate="true"
+                              OnKeyDown="OnPasswordKeyDown"
+                              Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
+                <MudButton Class="mt-5"
+                           Variant="Variant.Filled"
+                           EndIcon="@Icons.Material.Filled.Login"
+                           Color="Color.Primary"
+                           Style="width: 100%;"
+                           OnClick="@(async () => await LoginAsync())">登录</MudButton>
+            </MudForm>
 
-                    还没有账号？
-                    <MudElement HtmlTag="a"
-                                Style="color: var(--mud-palette-primary);"
-                                href="/register">
-                        点击注册
-                    </MudElement>
-                </MudPaper>
-            </MudItem>
-        </MudGrid>
+            还没有账号？
+            <MudElement HtmlTag="a"
+                        Style="color: var(--mud-palette-primary);"
+                        href="/register">
+                点击注册
+            </MudElement>
+        </MudPaper>
     </div>
 </RouteAnimation>
 @code {

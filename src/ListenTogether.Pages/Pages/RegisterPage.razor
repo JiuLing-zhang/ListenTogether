@@ -7,66 +7,62 @@
 <Loading IsLoading="_isLoading"></Loading>
 <RouteAnimation>
     <div class="page">
-        <MudGrid Class="ma-5">
-            <MudItem xs="12" md="12">
-                <MudPaper Class="pa-4" Elevation="0">
-                    <div class="d-flex mb-3">
-                        <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Primary"></MudIcon>
-                        <MudText Class="ml-1">注册</MudText>
-                    </div>
-                    <MudForm @ref="@_form"
-                             Class="mb-3">
-                        <MudTextField T="string"
-                                      Label="注册码"
-                        @bind-Value="_key"
-                                      MaxLength="6"
-                                      Required="true"
-                                      RequiredError="请输入注册码"
-                                      Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
+        <MudPaper Class="pa-4" Elevation="0">
+            <div class="d-flex mb-3">
+                <MudIcon Icon="@Icons.Material.Filled.Lock" Color="Color.Primary"></MudIcon>
+                <MudText Class="ml-1">注册</MudText>
+            </div>
+            <MudForm @ref="@_form"
+                     Class="mb-3">
+                <MudTextField T="string"
+                              Label="注册码"
+                @bind-Value="_key"
+                              MaxLength="6"
+                              Required="true"
+                              RequiredError="请输入注册码"
+                              Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
 
-                        <MudTextField T="string"
-                                      Label="用户名"
-                        @bind-Value="_username"
-                                      MaxLength="20"
-                                      Required="true"
-                                      RequiredError="请输入用户名"
-                                      Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
+                <MudTextField T="string"
+                              Label="用户名"
+                @bind-Value="_username"
+                              MaxLength="20"
+                              Required="true"
+                              RequiredError="请输入用户名"
+                              Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
 
-                        <MudTextField T="string"
-                                      Label="密码"
-                        @bind-Value="_password"
-                                      InputType="InputType.Password"
-                                      MaxLength="20"
-                                      Required="true"
-                                      RequiredError="密码不能为空"
-                                      Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
+                <MudTextField T="string"
+                              Label="密码"
+                @bind-Value="_password"
+                              InputType="InputType.Password"
+                              MaxLength="20"
+                              Required="true"
+                              RequiredError="密码不能为空"
+                              Validation="@(new Func<string, IEnumerable<string>>(InputLength))" />
 
-                        <MudTextField T="string" Label="确认密码"
-                        @bind-Value="_password2"
-                                      InputType="InputType.Password"
-                                      MaxLength="20"
-                                      Required="true"
-                                      RequiredError="密码不能为空"
-                                      Validation="@(new Func<string, IEnumerable<string>>(Password2))" />
+                <MudTextField T="string" Label="确认密码"
+                @bind-Value="_password2"
+                              InputType="InputType.Password"
+                              MaxLength="20"
+                              Required="true"
+                              RequiredError="密码不能为空"
+                              Validation="@(new Func<string, IEnumerable<string>>(Password2))" />
 
-                        <MudButton Class="mt-5"
-                                   Variant="Variant.Filled"
-                                   EndIcon="@Icons.Material.Filled.AppRegistration"
-                                   Color="Color.Primary"
-                                   Style="width: 100%;"
-                                   OnClick="@(async () => await RegisterAsync())">注册</MudButton>
+                <MudButton Class="mt-5"
+                           Variant="Variant.Filled"
+                           EndIcon="@Icons.Material.Filled.AppRegistration"
+                           Color="Color.Primary"
+                           Style="width: 100%;"
+                           OnClick="@(async () => await RegisterAsync())">注册</MudButton>
 
-                    </MudForm>
+            </MudForm>
 
-                    已有账号？
-                    <MudElement HtmlTag="a"
-                                Style="color: var(--mud-palette-primary);"
-                                href="/login">
-                        去登录
-                    </MudElement>
-                </MudPaper>
-            </MudItem>
-        </MudGrid>
+            已有账号？
+            <MudElement HtmlTag="a"
+                        Style="color: var(--mud-palette-primary);"
+                        href="/login">
+                去登录
+            </MudElement>
+        </MudPaper>
     </div>
 </RouteAnimation>
 @code {

@@ -22,6 +22,7 @@
 
     private async Task Rename()
     {
+        _newName = _newName.Trim();
         if (_newName.IsEmpty())
         {
             await _singleReference.FocusAsync();

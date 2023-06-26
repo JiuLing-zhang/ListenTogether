@@ -82,7 +82,7 @@ public class UserApiRepository : IUserApiRepository
         }
     }
 
-    public async Task<(bool Succeed, string Message)> EditUserInfoAsync(UserEdit user)
+    public async Task<(User? UserResult, string ErrorMessage)> EditUserInfoAsync(UserEdit user)
     {
         try
         {
@@ -102,17 +102,22 @@ public class UserApiRepository : IUserApiRepository
 
             var response = await _httpClientFactory.CreateClient("WebAPI").PostAsync(DataConfig.ApiSetting.User.Edit, mfdc);
             var json = await response.Content.ReadAsStringAsync();
-            var result = json.ToObject<Result>();
+            var result = json.ToObject<Result<UserResponse>>();
             if (result == null || result.Code != 0)
             {
-                return (false, result?.Message ?? "网络错误");
+                return (default, result?.Message ?? "网络错误");
             }
-            return (true, result.Message);
+            return (new User()
+            {
+                Username = result.Data.Username,
+                Nickname = result.Data.Nickname,
+                Avatar = result.Data.Avatar
+            }, "");
         }
         catch (Exception ex)
         {
             Logger.Error("编辑用户信息失败。", ex);
-            return (false, "网络连接失败");
+            return (default, "网络连接失败");
         }
     }
 }

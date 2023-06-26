@@ -22,9 +22,17 @@
 
                     <div class="d-flex justify-space-between align-center my-3 px-3">
                         <div>头像</div>
-                        <MudAvatar Class="cursor-pointer">
-                            <MudImage Src="@($"{NetConfig.ApiDomain}/{LoginDataStorage.GetAvatar()}")"></MudImage>
-                        </MudAvatar>
+                        <MudFileUpload T="IBrowserFile"
+                                       OnFilesChanged="UploadFiles"
+                                       Hidden="false"
+                                       Accept=".png, .jpg"
+                                       InputStyle="position: absolute;overflow: hidden;height: 40px;width: 40px;z-index: 20;opacity:0;cursor: pointer;">
+                            <ButtonTemplate>
+                                <MudAvatar>
+                                    <MudImage Src="@($"{NetConfig.ApiDomain}/{LoginDataStorage.GetAvatar()}")"></MudImage>
+                                </MudAvatar>
+                            </ButtonTemplate>
+                        </MudFileUpload>
                     </div>
                     <MudDivider />
                     <div class="d-flex justify-space-between align-center my-3 px-3">
@@ -53,7 +61,7 @@
 @code {
 
     private bool _isLoading = false;
-
+    private int _maxFileLength = 500 * 1024;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -64,6 +72,30 @@
         }
     }
 
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {
+        if (e.GetMultipleFiles()[0].Size >= _maxFileLength)
+        {
+            DialogService.Show<Dialog>("", DialogBuilder.DialogParameters("图片大小不能超过 500 KB"));
+            return;
+        }
+        var avatar = new UserAvatar()
+            {
+                FileName = e.File.Name
+            };
+        var stream = e.File.OpenReadStream(_maxFileLength);
+        using (MemoryStream ms = new MemoryStream())
+        {
+            await stream.CopyToAsync(ms);
+            avatar.File = ms.ToArray();
+        }
+
+        await SaveUserInfoAsync(new UserEdit() { Avatar = avatar }, (user) =>
+        {
+            LoginDataStorage.SetAvatar(user.Avatar);
+        });
+    }
+
     private async Task EditUsernameAsync()
     {
         var input = await GetNewInputAsync();
@@ -71,9 +103,9 @@
         {
             return;
         }
-        await SaveUserInfoAsync(new UserEdit() { Username = input }, () =>
+        await SaveUserInfoAsync(new UserEdit() { Username = input }, (user) =>
         {
-            LoginDataStorage.SetUsername(input);
+            LoginDataStorage.SetUsername(user.Username);
         });
     }
 
@@ -84,9 +116,9 @@
         {
             return;
         }
-        await SaveUserInfoAsync(new UserEdit() { Nickname = input }, () =>
+        await SaveUserInfoAsync(new UserEdit() { Nickname = input }, (user) =>
         {
-            LoginDataStorage.SetNickname(input);
+            LoginDataStorage.SetNickname(user.Nickname);
         });
     }
 
@@ -102,17 +134,18 @@
         return default;
     }
 
-    private async Task SaveUserInfoAsync(UserEdit user, Action OnSucceedExecute)
+    private async Task SaveUserInfoAsync(UserEdit user, Action<User> OnSucceedExecute)
     {
         _isLoading = true;
         await InvokeAsync(StateHasChanged);
-        var (Succeed, Message) = await UserService.EditUserInfoAsync(user);
+        var (UserResult, ErrorMessage) = await UserService.EditUserInfoAsync(user);
         _isLoading = false;
         await InvokeAsync(StateHasChanged);
-        await DialogService.ShowMessageBox("", Message, "确定");
-        if (Succeed)
+        if (UserResult == null)
         {
-            OnSucceedExecute.Invoke();
+            await DialogService.ShowMessageBox("", ErrorMessage, "确定");
+            return;
         }
+        OnSucceedExecute.Invoke(UserResult);
     }
 }
