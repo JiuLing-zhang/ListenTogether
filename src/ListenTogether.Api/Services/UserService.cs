@@ -165,38 +165,50 @@ internal class UserService : IUserService
         return userEntity;
     }
 
-    public async Task<Result> EditUserInfoAsync(int id, UserEditRequest user)
+    public async Task<Result<UserResponse>> EditUserInfoAsync(int id, UserEditRequest user)
     {
         var userEntity = await _context.Users.SingleOrDefaultAsync(x => x.Id == id);
         if (userEntity == null)
         {
-            return new Result(1, "用户信息获取失败");
+            return new Result<UserResponse>(1, "用户信息获取失败", default);
         }
-
+        var isChanged = false;
         if (user.Username.IsNotEmpty() && user.Username != userEntity.Username)
         {
             if (await _context.Users.AnyAsync(x => x.Username.ToLower() == user.Username.ToLower()))
             {
-                return new Result(2, "用户名已存在");
+                return new Result<UserResponse>(2, "用户名已存在", default);
             }
             userEntity.Username = user.Username;
+            isChanged = true;
         }
 
         if (user.Nickname.IsNotEmpty() && user.Nickname != userEntity.Nickname)
         {
             userEntity.Nickname = user.Nickname;
+            isChanged = true;
         }
 
         if (user.AvatarUrl.IsNotEmpty())
         {
             userEntity.Avatar = user.AvatarUrl;
+            isChanged = true;
+        }
+        if (!isChanged)
+        {
+            return new Result<UserResponse>(3, "数据已是最新", default);
         }
         _context.Users.Update(userEntity);
         var count = await _context.SaveChangesAsync();
         if (count == 0)
         {
-            return new Result(99, "保存失败，请重试");
+            return new Result<UserResponse>(99, "保存失败，请重试", default);
         }
-        return new Result(0, "保存成功");
+        return new Result<UserResponse>(0, "保存成功", new UserResponse()
+        {
+            Username = user.Username ?? "",
+            Nickname = user.Nickname ?? "",
+            Avatar = user.AvatarUrl ?? "",
+        });
     }
 }

@@ -12,5 +12,5 @@ public interface IUserService
     public Task<Result<UserResponse>> RefreshTokenAsync(AuthenticateRequest authenticateInfo, string deviceId);
     public Task<Result<UserResponse>> GetUserInfoAsync(int id);
     public Task<UserEntity?> GetOneEnableAsync(int id);
-    public Task<Result> EditUserInfoAsync(int id, UserEditRequest user);
+    public Task<Result<UserResponse>> EditUserInfoAsync(int id, UserEditRequest user);
 }
