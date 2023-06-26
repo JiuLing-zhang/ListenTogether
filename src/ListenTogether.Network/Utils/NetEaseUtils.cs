@@ -332,7 +332,7 @@ public class NetEaseUtils
                 {
                     Id = id,
                     Name = songMenuResult["Name"] ?? "",
-                    ImageUrl = songMenuResult["ImageUrl"] ?? "",
+                    ImageUrl = (songMenuResult["ImageUrl"] ?? "").Replace("&amp;", "&"),
                     LinkUrl = $"https://music.163.com{href}"
                 };
 
