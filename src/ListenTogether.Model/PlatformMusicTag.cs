@@ -1,17 +1,15 @@
 ﻿using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Model;
+//TODO 重命名，并且修改标签接口返回值类型
 public class PlatformMusicTag
 {
-    public PlatformEnum Platform { get; set; }
-
     public List<MusicTag> HotTags { get; set; }
 
     public List<MusicTypeTag> AllTypes { get; set; }
 
-    public PlatformMusicTag(PlatformEnum platform, List<MusicTag> hotTags, List<MusicTypeTag> allTypes)
+    public PlatformMusicTag(List<MusicTag> hotTags, List<MusicTypeTag> allTypes)
     {
-        Platform = platform;
         HotTags = hotTags;
         AllTypes = allTypes;
     }

@@ -4,33 +4,93 @@
 
 @inject NavigationManager NavigationManager
 @inject ISearchHistoryStorage SearchHistoryStorage
+@inject IKeyValueStorage KeyValueStorage
+@inject IMusicNetworkService _musicNetworkService
 
-<RouteAnimation>
-    <MudHidden Breakpoint="Breakpoint.SmAndUp">
-        <SearchLabel />
-    </MudHidden>
-    <MudTabs Rounded="true"
-             MinimumTabWidth="150"
-             PanelClass="mt-3">
-        <MudTabPanel Text="@(PlatformEnum.MiGu.GetDescription())">
-            <Discover Platform="PlatformEnum.MiGu" />
-        </MudTabPanel>
-        <MudTabPanel Text="@(PlatformEnum.KuWo.GetDescription())">
-            <Discover Platform="PlatformEnum.KuWo" />
-        </MudTabPanel>
-        <MudTabPanel Text="@(PlatformEnum.NetEase.GetDescription())">
-            <Discover Platform="PlatformEnum.NetEase" />
-        </MudTabPanel>
-    </MudTabs>
-</RouteAnimation>
+<MudHidden Breakpoint="Breakpoint.SmAndUp">
+    <SearchLabel />
+</MudHidden>
+
+@if (PlatformId != null)
+{
+    <div class="tab-container">
+        <div class="tab-item @(_platform== PlatformEnum.MiGu?"active":"")"
+             onclick="@(()=>PlatformSelected((int)PlatformEnum.MiGu))">
+            @(PlatformEnum.MiGu.GetDescription())
+        </div>
+        <div class="tab-item @(_platform== PlatformEnum.KuWo?"active":"")"
+             onclick="@(()=>PlatformSelected((int)PlatformEnum.KuWo))">
+            @(PlatformEnum.KuWo.GetDescription())
+        </div>
+        <div class="tab-item @(_platform== PlatformEnum.NetEase?"active":"")"
+             onclick="@(()=>PlatformSelected((int)PlatformEnum.NetEase))">
+            @(PlatformEnum.NetEase.GetDescription())
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <Tags Platform="@(_platform)"
+              ActiveTagId="@(TagId)"
+              OnTagSelect="@((id)=>TagSelected(id))" />
+    </div>
+    <div class="mt-4">
+        <Discover Platform="@(_platform)"
+                  ActiveTagId="@(TagId)" />
+    </div>
+}
+
 @code {
 
-    protected override void OnInitialized()
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int? PlatformId { get; set; }
+    private PlatformEnum _platform => (PlatformEnum)PlatformId.Value;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string TagId { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
+
+        if (PlatformId == null)
+        {
+            PlatformId = await KeyValueStorage.Get("DiscoverPlatform", (int)PlatformEnum.MiGu);
+        }
+        if (TagId.IsEmpty())
+        {
+            TagId = await KeyValueStorage.Get("DiscoverTagId", "榜单");
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        await KeyValueStorage.Set("DiscoverPlatform", PlatformId.Value);
+        await KeyValueStorage.Set("DiscoverTagId", TagId);
+    }
+
+    private void PlatformSelected(int platformId)
+    {
+        ReloadPageByQueryParameters(platformId, "榜单");
+    }
+    private void TagSelected(string tagId)
+    {
+        ReloadPageByQueryParameters((int)_platform, tagId);
+    }
+    private void ReloadPageByQueryParameters(int platformKey, string tagId)
+    {
+        NavigationManager.NavigateTo(NavigationManager.GetUriWithQueryParameters(
+        new Dictionary<string, object?>
+            {
+                ["PlatformId"] = platformKey,
+                ["TagId"] = tagId,
+            }));
     }
     private void GotoSearchPage()
     {
         NavigationManager.NavigateTo("/search");
     }
+
 }

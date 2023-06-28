@@ -1,6 +1,7 @@
-﻿@inject IMusicNetworkService _musicNetworkService
+﻿@using System.Collections.Concurrent;
+@inject IMusicNetworkService _musicNetworkService
 
-@if (_hotTags == null)
+@if (_platformMusicTag == null)
 {
     <div Class="d-flex">
         <MudSkeleton Class="ml-2" SkeletonType="SkeletonType.Rectangle" Height="30px" Width="60px" />
@@ -11,27 +12,26 @@
 }
 else
 {
-
     <MudChip Label="true"
-         OnClick="@(() => TopClicked())"
-         Disabled="@(activeTagId == "榜单")"
-         Style="padding:0 6px;"
-         Size="Size.Small">榜单</MudChip>
-    @foreach (var hotTag in _hotTags)
+             OnClick="@(() => TopClickedAsync())"
+             Disabled="@(ActiveTagId == "榜单")"
+             Style="padding:0 6px;"
+             Size="Size.Small">榜单</MudChip>
+    @foreach (var hotTag in _platformMusicTag.HotTags)
     {
         <MudChip Label="true"
-         OnClick="@(() => HotTagClicked(hotTag.Id))"
-         Disabled="@(activeTagId == hotTag.Id)"
-         Style="padding:0 6px;"
-         Size="Size.Small">@hotTag.Name</MudChip>
+                 OnClick="@(() => HotTagClickedAsync(hotTag.Id))"
+                 Disabled="@(ActiveTagId == hotTag.Id)"
+                 Style="padding:0 6px;"
+                 Size="Size.Small">@hotTag.Name</MudChip>
     }
     <MudChip Label="true"
-         OnClick="OpenChooseTag"
-         Style="padding:0 6px;"
-         Size="Size.Small">选择分类</MudChip>
+             OnClick="OpenChooseTag"
+             Style="padding:0 6px;"
+             Size="Size.Small">选择分类</MudChip>
 
     <div class="choose-tag-drawer @_isOpenChooseTag" @onclick="CloseChooseTag">
-        <ChooseTag OnTagSelected="TagSelected" AllTypes="_allTypes" />
+        <ChooseTag OnTagSelected="TagSelected" AllTypes="@(_platformMusicTag.AllTypes)" />
     </div>
 }
 
@@ -39,41 +39,61 @@ else
     [Parameter]
     public PlatformEnum Platform { get; set; }
     [Parameter]
-    public EventCallback OnTopSelect { get; set; }
+    public string ActiveTagId { get; set; }
     [Parameter]
     public EventCallback<string> OnTagSelect { get; set; }
 
-    string activeTagId = "榜单";
-    private List<MusicTag>? _hotTags;
-    private List<MusicTypeTag>? _allTypes;
+    private string _currentQueryString = "";
+
+    private static readonly ConcurrentDictionary<PlatformEnum, PlatformMusicTag> _platformMusicTags = new ConcurrentDictionary<PlatformEnum, PlatformMusicTag>();
+    private PlatformMusicTag? _platformMusicTag => GetPlatformMusicTag(Platform);
 
     protected override async Task OnInitializedAsync()
     {
-        if (_hotTags == null || _allTypes == null)
-        {
-            (_hotTags, _allTypes) = await _musicNetworkService.GetMusicTagsAsync(Platform);
-        }
-        if (_hotTags != null)
-        {
-            await OnTopSelect.InvokeAsync();
-        }
         await base.OnInitializedAsync();
     }
 
-    private void TopClicked()
+    protected override async Task OnParametersSetAsync()
     {
-        activeTagId = "榜单";
-        OnTopSelect.InvokeAsync();
+        await base.OnParametersSetAsync();
+
+        var platform = Platform;
+        var queryString = $"{platform}-{ActiveTagId}";
+        if (queryString == _currentQueryString)
+        {
+            return;
+        }
+        _currentQueryString = queryString;
+
+        if (_platformMusicTag == null)
+        {
+            var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(platform);
+            if (hotTags.Count == 0 || allTypes.Count == 0)
+            {
+                return;
+            }
+            _platformMusicTags.TryAdd(platform, new PlatformMusicTag(hotTags, allTypes));
+        }
     }
 
-    private void HotTagClicked(string id)
+    private PlatformMusicTag? GetPlatformMusicTag(PlatformEnum platform)
     {
-        activeTagId = id;
-        OnTagSelect.InvokeAsync(id);
+        PlatformMusicTag? platformMusicTag;
+        if (!_platformMusicTags.TryGetValue(platform, out platformMusicTag))
+        {
+            return default;
+        }
+        return platformMusicTag;
     }
-    private void ChoseTagClicked()
+
+    private async Task TopClickedAsync()
     {
-        activeTagId = "";
+        await OnTagSelect.InvokeAsync("榜单");
+    }
+
+    private async Task HotTagClickedAsync(string id)
+    {
+        await OnTagSelect.InvokeAsync(id);
     }
 
     private string _isOpenChooseTag = "";
@@ -88,7 +108,6 @@ else
     private void TagSelected(string value)
     {
         CloseChooseTag();
-        activeTagId = "";
         OnTagSelect.InvokeAsync(value);
     }
 }

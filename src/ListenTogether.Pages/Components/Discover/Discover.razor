@@ -1,9 +1,6 @@
-﻿@inject IMusicNetworkService MusicNetworkService
+﻿@using ListenTogether.EasyLog;
+@inject IMusicNetworkService MusicNetworkService
 @inject NavigationManager NavigationManager
-
-<Tags Platform="Platform"
-      OnTopSelect="@(()=>TopSelect())"
-      OnTagSelect="@((tagId)=>TagSelect(tagId))" />
 
 <div class="song-menu-container">
     @if (!_songMenus.Any())
@@ -24,7 +21,7 @@
                 @foreach (var songMenu in _songMenus)
                 {
                     <MudItem xs="4" md="3" Class="d-flex justify-center">
-                        <div class="song-menu-item" onclick=@(()=>GotoSongMenuPage( songMenu.Id, songMenu.Name,songMenu.ImageUrl))>
+                        <div class="song-menu-item" onclick=@(()=>GotoSongMenuPage(songMenu.Id, songMenu.Name,songMenu.ImageUrl))>
                             <img src="@songMenu.ImageUrl"
                                  alt="@songMenu.Name"
                                  class="rounded-lg mb-1 song-menu-img">
@@ -51,10 +48,14 @@
 @code {
     [Parameter]
     public PlatformEnum Platform { get; set; }
-
+    [Parameter]
+    public string ActiveTagId { get; set; }
+    private bool _isTopPage => ActiveTagId == "榜单";
+    private string _currentQueryString = "";
+    private static readonly SemaphoreSlim PageReloadSlim = new(1, 1);
+    private static readonly SemaphoreSlim SongMenuLoadSlim = new(1, 1);
     private bool _pageEnd = false;
     private int _page = 0;
-    private string _tagId = "";
     private bool _isLoading = false;
     private List<SongMenu> _songMenus = new List<SongMenu>();
     protected override async Task OnInitializedAsync()
@@ -62,48 +63,87 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task TopSelect()
+    protected override async Task OnParametersSetAsync()
     {
-        _tagId = "";
-        await ResetSongMenusAsync();
-        _songMenus = await MusicNetworkService.GetSongMenusFromTop(Platform);
-    }
-
-    private async Task TagSelect(string tagId)
-    {
-        _page = 0;
-        _tagId = tagId;
-        _pageEnd = false;
-        await ResetSongMenusAsync();
-        await GetSongMenusFromTagAsync();
+        await base.OnParametersSetAsync();
+        await PageReloadSlim.WaitAsync();
+        try
+        {
+            var queryString = $"{Platform}-{ActiveTagId}";
+            if (queryString == _currentQueryString)
+            {
+                return;
+            }
+            _currentQueryString = queryString;
+            await ResetSongMenusAsync();
+            await InvokeAsync(StateHasChanged);
+            if (_isTopPage)
+            {
+                _songMenus = await MusicNetworkService.GetSongMenusFromTop(Platform);
+            }
+            else
+            {
+                _page = 0;
+                _pageEnd = false;
+                await GetSongMenusFromTagAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"发现页页面加载失败:{ex.Message}");
+            Logger.Error("发现页页面加载失败。", ex);
+        }
+        finally
+        {
+            PageReloadSlim.Release();
+        }
     }
 
     private async Task GetSongMenusFromTagAsync()
     {
-        if (_tagId.IsEmpty() || _pageEnd)
+        await SongMenuLoadSlim.WaitAsync();
+        try
         {
-            return;
+            if (_isTopPage)
+            {
+                return;
+            }
+            if (_pageEnd)
+            {
+                return;
+            }
+
+            _isLoading = true;
+            _page++;
+            var songMenus = await MusicNetworkService.GetSongMenusFromTagAsync(Platform, ActiveTagId, _page);
+            if (songMenus.Count == 0)
+            {
+                _pageEnd = true;
+            }
+            _songMenus.AddRange(songMenus);
         }
-        _isLoading = true;
-        _page++;
-        var songMenus = await MusicNetworkService.GetSongMenusFromTagAsync(Platform, _tagId, _page);
-        if (songMenus.Count == 0)
+        catch (Exception ex)
         {
-            _pageEnd = true;
+            Console.WriteLine($"歌曲加载失败:{ex.Message}");
+            Logger.Error("歌曲加载失败。", ex);
         }
-        _songMenus.AddRange(songMenus);
-        _isLoading = false;
+        finally
+        {
+            _isLoading = false;
+            SongMenuLoadSlim.Release();
+        }
     }
 
-    private async Task ResetSongMenusAsync()
+    private Task ResetSongMenusAsync()
     {
         _songMenus.Clear();
+        return Task.CompletedTask;
     }
 
     private void GotoSongMenuPage(string id, string name, string imageUrl)
     {
         SongMenuEnum songMenuType;
-        if (_tagId.IsEmpty())
+        if (_isTopPage)
         {
             songMenuType = SongMenuEnum.Top;
         }

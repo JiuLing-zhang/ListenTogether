@@ -5,17 +5,29 @@
         justify-content: space-between;
     }
 
-    .tabs {
-        width: 600px;
-    }
-
     .search {
         width: 200px;
     }
 }
 
 @media screen and (max-width: 960px) {
-    .tabs {
-        width: 100%;
+}
+
+.tab-container {
+    display: flex;
+}
+
+.tab-item {
+    padding: 10px 20px;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+}
+
+    .tab-item.active {
+        border-color: var(--mud-palette-primary);
+        color: var(--mud-palette-primary);
     }
+
+.discover-detail {
+    overflow-y: auto;
 }
