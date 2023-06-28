@@ -27,7 +27,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
     private ObservableCollection<SongMenuViewModel> _songMenus;
 
     private static readonly object LockPlatformMusicTags = new object();
-    private static readonly List<PlatformMusicTag> PlatformMusicTags = new List<PlatformMusicTag>();
+    private static readonly Dictionary<PlatformEnum, PlatformMusicTag> PlatformMusicTags = new Dictionary<PlatformEnum, PlatformMusicTag>();
 
     private readonly IMusicNetworkService _musicNetworkService;
 
@@ -75,10 +75,10 @@ public partial class DiscoverPageViewModel : ViewModelBase
             {
                 try
                 {
-                    var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(platform);
+                    var platformMusicTag = await _musicNetworkService.GetMusicTagsAsync(platform);
                     lock (LockPlatformMusicTags)
                     {
-                        PlatformMusicTags.Add(new PlatformMusicTag(platform, hotTags, allTypes));
+                        PlatformMusicTags.Add(platform, platformMusicTag);
                     }
                 }
                 catch (Exception ex)
@@ -137,7 +137,10 @@ public partial class DiscoverPageViewModel : ViewModelBase
 
     private void InitMusicTags()
     {
-        var hotTags = PlatformMusicTags.First(x => x.Platform == Platform).HotTags;
+        if (!PlatformMusicTags.TryGetValue(Platform, out var platformMusicTag))
+        {
+            return;
+        }
 
         DiscoverTags.Clear();
         DiscoverTags.Add(new DiscoverTagViewModel()
@@ -146,7 +149,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
             Name = "榜单",
             IsSelected = false
         });
-        foreach (var hotTag in hotTags)
+        foreach (var hotTag in platformMusicTag.HotTags)
         {
             DiscoverTags.Add(new DiscoverTagViewModel()
             {
@@ -269,8 +272,11 @@ public partial class DiscoverPageViewModel : ViewModelBase
 
     private async Task<string> GetSelectedTagId()
     {
-        var allTypes = PlatformMusicTags.First(x => x.Platform == Platform).AllTypes;
-        var popup = new ChooseTagPage(allTypes);
+        if (!PlatformMusicTags.TryGetValue(Platform, out var platformMusicTag))
+        {
+            return "";
+        }
+        var popup = new ChooseTagPage(platformMusicTag.AllTypes);
         var result = await App.Current.MainPage.ShowPopupAsync(popup);
         if (result == null)
         {
