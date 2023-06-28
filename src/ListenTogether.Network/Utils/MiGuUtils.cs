@@ -257,10 +257,19 @@ public class MiGuUtils
                     id = linkUrl;
                 }
 
+                var imageUrl = obj.imgUrl ?? "";
+                if (imageUrl.IsEmpty())
+                {
+                    continue;
+                }
+                if (!imageUrl.StartsWith("https:") && !imageUrl.StartsWith("http:"))
+                {
+                    imageUrl = $"https:{imageUrl}";
+                }
                 songMenus.Add(new SongMenu()
                 {
                     Id = id,
-                    ImageUrl = $"https:{obj.imgUrl}",
+                    ImageUrl = imageUrl,
                     LinkUrl = linkUrl,
                     Name = obj.title.Replace("&amp;", "&")
                 });
