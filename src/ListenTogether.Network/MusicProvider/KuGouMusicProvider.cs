@@ -191,7 +191,7 @@ public class KuGouMusicProvider : IMusicProvider
         }
     }
 
-    public Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    public Task<PlatformMusicTag?> GetMusicTagsAsync()
     {
         throw new NotImplementedException();
     }

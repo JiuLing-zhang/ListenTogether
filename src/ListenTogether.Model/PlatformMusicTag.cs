@@ -1,7 +1,4 @@
-﻿using ListenTogether.Model.Enums;
-
-namespace ListenTogether.Model;
-//TODO 重命名，并且修改标签接口返回值类型
+﻿namespace ListenTogether.Model;
 public class PlatformMusicTag
 {
     public List<MusicTag> HotTags { get; set; }

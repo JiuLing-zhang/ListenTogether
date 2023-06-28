@@ -7,7 +7,7 @@ public interface IMusicProvider
     /// 获取音乐标签分类
     /// </summary>
     /// <returns></returns>
-    Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync();
+    Task<PlatformMusicTag?> GetMusicTagsAsync();
 
     /// <summary>
     /// 获取音乐标签对应的歌单

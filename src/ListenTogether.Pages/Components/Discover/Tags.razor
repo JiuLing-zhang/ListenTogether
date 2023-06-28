@@ -67,12 +67,12 @@ else
 
         if (_platformMusicTag == null)
         {
-            var (hotTags, allTypes) = await _musicNetworkService.GetMusicTagsAsync(platform);
-            if (hotTags.Count == 0 || allTypes.Count == 0)
+            var platformMusicTag = await _musicNetworkService.GetMusicTagsAsync(platform);
+            if (platformMusicTag == null)
             {
                 return;
             }
-            _platformMusicTags.TryAdd(platform, new PlatformMusicTag(hotTags, allTypes));
+            _platformMusicTags.TryAdd(platform, platformMusicTag);
         }
     }
 

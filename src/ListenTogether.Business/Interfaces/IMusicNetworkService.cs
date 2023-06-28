@@ -12,7 +12,7 @@ public interface IMusicNetworkService
     Task<string> GetImageUrlAsync(PlatformEnum platform, string id, string extendDataJson = "");
     Task<string> GetLyricAsync(PlatformEnum platform, string id, string extendDataJson = "");
     Task<string> GetPlayPageUrlAsync(PlatformEnum platform, string id, string extendDataJson = "");
-    Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync(PlatformEnum platform);
+    Task<PlatformMusicTag?> GetMusicTagsAsync(PlatformEnum platform);
     Task<List<SongMenu>> GetSongMenusFromTagAsync(PlatformEnum platform, string id, int page);
     Task<List<SongMenu>> GetSongMenusFromTop(PlatformEnum platform);
     Task<List<MusicResultShow>> GetTopMusicsAsync(PlatformEnum platform, string topId);

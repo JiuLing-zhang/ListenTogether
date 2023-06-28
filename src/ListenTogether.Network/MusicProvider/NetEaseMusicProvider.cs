@@ -229,7 +229,7 @@ public class NetEaseMusicProvider : IMusicProvider
         }
     }
 
-    public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    public async Task<PlatformMusicTag?> GetMusicTagsAsync()
     {
         try
         {
@@ -249,7 +249,10 @@ public class NetEaseMusicProvider : IMusicProvider
             var html = System.Text.Encoding.UTF8.GetString(buffer);
 
             var hotTags = NetEaseUtils.GetHotTags(html);
-
+            if (!hotTags.Any())
+            {
+                throw new Exception("网易热门标签获取失败");
+            }
             //全部标签
             url = $"{UrlBase.NetEase.GetAllTypesUrl}";
             request = new HttpRequestMessage()
@@ -265,13 +268,16 @@ public class NetEaseMusicProvider : IMusicProvider
             buffer = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             html = System.Text.Encoding.UTF8.GetString(buffer);
             var allTypes = NetEaseUtils.GetAllTypes(html);
-
-            return (hotTags, allTypes);
+            if (!allTypes.Any())
+            {
+                throw new Exception("网易歌曲标签获取失败");
+            }
+            return new PlatformMusicTag(hotTags, allTypes);
         }
         catch (Exception ex)
         {
             Logger.Error("网易热搜获取失败。", ex);
-            return (new List<MusicTag>(), new List<MusicTypeTag>());
+            return default;
         }
     }
 

@@ -204,7 +204,7 @@ public class MiGuMusicProvider : IMusicProvider
         }
     }
 
-    public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    public async Task<PlatformMusicTag?> GetMusicTagsAsync()
     {
         try
         {
@@ -225,7 +225,7 @@ public class MiGuMusicProvider : IMusicProvider
         catch (Exception ex)
         {
             Logger.Error("咪咕获取热搜失败。", ex);
-            return (new List<MusicTag>(), new List<MusicTypeTag>());
+            return default;
         }
     }
 

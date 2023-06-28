@@ -154,9 +154,9 @@ public class MiGuUtils
         return "";
     }
 
-    public static (List<MusicTag> HotTags, List<MusicTypeTag> AllTypes) GetTags(string html)
+    public static PlatformMusicTag GetTags(string html)
     {
-        List<MusicTag>? hotTags = new List<MusicTag>();
+        List<MusicTag> hotTags = new List<MusicTag>();
         List<MusicTypeTag> allTypes = new List<MusicTypeTag>();
 
         string hotPattern = """
@@ -174,6 +174,11 @@ public class MiGuUtils
                     Name = mc[i].Groups["Name"].Value
                 });
             }
+        }
+
+        if (!hotTags.Any())
+        {
+            throw new Exception("咪咕热门标签获取失败");
         }
 
         string allPattern = """
@@ -214,7 +219,11 @@ public class MiGuUtils
                 });
             }
         }
-        return (hotTags, allTypes);
+        if (!allTypes.Any())
+        {
+            throw new Exception("咪咕歌曲标签获取失败");
+        }
+        return new PlatformMusicTag(hotTags, allTypes);
     }
 
     public static List<SongMenu> GetSongMenusFromTag(string html)

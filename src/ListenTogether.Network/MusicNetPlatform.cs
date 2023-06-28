@@ -59,7 +59,7 @@ public class MusicNetPlatform
         return MusicProviderFactory.Create(platform).GetShareUrlAsync(id, extendDataJson);
     }
 
-    public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync(PlatformEnum platform)
+    public async Task<PlatformMusicTag?> GetMusicTagsAsync(PlatformEnum platform)
     {
         return await MusicProviderFactory.Create(platform).GetMusicTagsAsync();
     }

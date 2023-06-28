@@ -273,13 +273,16 @@ internal class KuWoMusicProvider : IMusicProvider
         return sbLyrics.ToString();
     }
 
-    public async Task<(List<MusicTag> HotTags, List<MusicTypeTag> AllTypes)> GetMusicTagsAsync()
+    public async Task<PlatformMusicTag?> GetMusicTagsAsync()
     {
         try
         {
             string html = await _httpClient.GetStringAsync("http://www.kuwo.cn").ConfigureAwait(false);
             var hotTags = KuWoUtils.GetHotTags(html);
-
+            if (!hotTags.Any())
+            {
+                throw new Exception("酷我热门标签获取失败");
+            }
             string url = $"{UrlBase.KuWo.GetAllTypesUrl}?httpsStatus=1&reqId={_reqId}";
             var request = new HttpRequestMessage()
             {
@@ -296,12 +299,16 @@ internal class KuWoMusicProvider : IMusicProvider
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
             string json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var allTypes = KuWoUtils.GetAllTypes(json);
-            return (hotTags, allTypes);
+            if (!allTypes.Any())
+            {
+                throw new Exception("酷我歌曲标签获取失败");
+            }
+            return new PlatformMusicTag(hotTags, allTypes);
         }
         catch (Exception ex)
         {
-            Logger.Error("酷我热搜获取失败。", ex);
-            return (new List<MusicTag>(), new List<MusicTypeTag>());
+            Logger.Error("酷我标签获取失败。", ex);
+            return default;
         }
     }
 
