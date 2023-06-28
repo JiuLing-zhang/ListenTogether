@@ -6,7 +6,7 @@
              BackgroundColor="{DynamicResource PageBackgroundColor}"
              Loaded="ContentPage_Loaded">
 
-    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
+    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html" BlazorWebViewInitialized="BlazorWebView_Initialized">
         <BlazorWebView.RootComponents>
             <RootComponent Selector="#app" ComponentType="{x:Type local:Main}" />
         </BlazorWebView.RootComponents>

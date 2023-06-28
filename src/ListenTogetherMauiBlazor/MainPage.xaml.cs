@@ -44,5 +44,12 @@
             //  Window.MaximumWidth = width;
             //  Window.MaximumHeight = height;
         }
+
+        private void BlazorWebView_Initialized(object sender, Microsoft.AspNetCore.Components.WebView.BlazorWebViewInitializedEventArgs e)
+        {
+#if ANDROID
+            e.WebView.Settings.MixedContentMode = Android.Webkit.MixedContentHandling.AlwaysAllow;
+#endif
+        }
     }
 }
