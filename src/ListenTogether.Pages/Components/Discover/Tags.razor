@@ -12,18 +12,31 @@
 }
 else
 {
-    <MudChip Label="true"
-             OnClick="@(() => TopClickedAsync())"
-             Disabled="@(ActiveTagId == "榜单")"
-             Style="padding:0 6px;"
-             Size="Size.Small">榜单</MudChip>
+    <MudBadge Origin="Origin.TopRight"
+              Color="Color.Primary"
+              Visible="@(ActiveTagId == "榜单")"
+              Overlap="true"
+              Dot="true">
+        <MudChip Label="true"
+                 OnClick="@(() => TopClickedAsync())"
+                 Disabled="@(ActiveTagId == "榜单")"
+                 Style="padding:0 6px;"
+                 Size="Size.Small">榜单</MudChip>
+    </MudBadge>
+
     @foreach (var hotTag in _platformMusicTag.HotTags)
     {
-        <MudChip Label="true"
-                 OnClick="@(() => HotTagClickedAsync(hotTag.Id))"
-                 Disabled="@(ActiveTagId == hotTag.Id)"
-                 Style="padding:0 6px;"
-                 Size="Size.Small">@hotTag.Name</MudChip>
+        <MudBadge Origin="Origin.TopRight"
+                  Color="Color.Primary"
+                  Visible="@(ActiveTagId == hotTag.Id)"
+                  Overlap="true"
+                  Dot="true">
+            <MudChip Label="true"
+                     OnClick="@(() => HotTagClickedAsync(hotTag.Id))"
+                     Disabled="@(ActiveTagId == hotTag.Id)"
+                     Style="padding:0 6px;"
+                     Size="Size.Small">@hotTag.Name</MudChip>
+        </MudBadge>
     }
     <MudChip Label="true"
              OnClick="OpenChooseTag"
