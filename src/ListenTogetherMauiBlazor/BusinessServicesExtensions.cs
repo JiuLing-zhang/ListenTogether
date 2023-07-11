@@ -32,7 +32,6 @@ internal static class BusinessServicesExtensions
         services.AddSingleton<IMusicNetworkService, MusicNetworkService>();
         services.AddSingleton<IPlaylistService, PlaylistService>();
         services.AddSingleton<IUserService, UserService>();
-        services.AddSingleton<IMusicCacheService, MusicCacheService>();
         services.AddSingleton<IMyFavoriteService, MyFavoriteService>();
         services.AddSingleton<IMusicService, MusicService>();
 
@@ -42,7 +41,6 @@ internal static class BusinessServicesExtensions
         services.AddSingleton<IMyFavoriteRepository, MyFavoriteApiRepository>();
         services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
         services.AddSingleton<IUserApiRepository, UserApiRepository>();
-        services.AddSingleton<IMusicCacheRepository, MusicCacheRepository>();
         return services;
     }
 }

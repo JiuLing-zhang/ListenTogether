@@ -1,6 +1,8 @@
 ﻿@page "/cache"
 @using ListenTogether.EasyLog
 @inject IDialogService DialogService
+@inject IMusicCacheStorage MusicCacheStorage
+
 <RouteAnimation>
     <div class="page">
 
@@ -23,7 +25,7 @@
             <div class="d-flex flex-column align-center mt-5">
                 <div class="cache-size d-flex flex-column align-center justify-center">
                     <MudText Typo="Typo.subtitle2">
-                        发现缓存
+                        缓存大小
                     </MudText>
                     <MudText Typo="Typo.h6">
                         @($"{_cacheLength / 1024 / 1024:N2}")
@@ -40,15 +42,6 @@
                            Size="Size.Small"
                            Disabled="@(_isWorking || _cacheLength==0)"
                            OnClick="ClearCacheAsync">全部清理</MudButton>
-
-                <MudButton Variant="Variant.Outlined"
-                           Class="mt-4"
-                           Size="Size.Small"
-                           Disabled="@(_isWorking || _cacheLength==0)"
-                           OnClick="ClearErrorCacheAsync">修复不可用缓存</MudButton>
-                <MudText Typo="Typo.caption" Class="mt-2">
-                    清理老版本中部分无法播放的歌曲
-                </MudText>
             </div>
         }
 
@@ -72,13 +65,11 @@
         await Task.Run(async () =>
         {
             _cacheLength = 0;
-            var files = Directory.GetFiles(GlobalPath.MusicCacheDirectory);
-            foreach (var file in files)
+            await MusicCacheStorage.CalcCacheSizeAsync(async (length) =>
             {
-                var fi = new FileInfo(file);
-                _cacheLength += fi.Length;
+                _cacheLength += length;
                 await InvokeAsync(StateHasChanged);
-            }
+            });
             _processMessage = "计算完成";
             _isWorking = false;
             await InvokeAsync(StateHasChanged);
@@ -94,55 +85,15 @@
         }
         _isWorking = true;
         _processMessage = "正在清理....";
-        await Task.Run(async () =>
-        {
-            var files = Directory.GetFiles(GlobalPath.MusicCacheDirectory);
-            foreach (var file in files)
-            {
-                try
-                {
-                    var fi = new FileInfo(file);
-                    _cacheLength -= fi.Length;
-                    File.Delete(file);
-                    await InvokeAsync(StateHasChanged);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error("缓存文件删除失败。", ex);
-                }
-            }
-            _processMessage = "缓存已全部清理";
-            _isWorking = false;
-            await InvokeAsync(StateHasChanged);
-        });
-    }
 
-    private async Task ClearErrorCacheAsync()
-    {
-        _isWorking = true;
-        _processMessage = "正在清理....";
         await Task.Run(async () =>
         {
-            var files = Directory.GetFiles(GlobalPath.MusicCacheDirectory);
-            foreach (var file in files)
+            await MusicCacheStorage.ClearCacheAsync(async (length) =>
             {
-                try
-                {
-                    var md5 = JiuLing.CommonLibs.Security.MD5Utils.GetFileValueToLower(file);
-                    if (md5 != "43fe5f6460e49afdf0bc2340012fe7b5")
-                    {
-                        continue;
-                    }
-                    var fi = new FileInfo(file);
-                    _cacheLength -= fi.Length;
-                    File.Delete(file);
-                    await InvokeAsync(StateHasChanged);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error("缓存文件删除失败。", ex);
-                }
-            }
+                _cacheLength -= length;
+                await InvokeAsync(StateHasChanged);
+            });
+
             _processMessage = "缓存已全部清理";
             _isWorking = false;
             await InvokeAsync(StateHasChanged);

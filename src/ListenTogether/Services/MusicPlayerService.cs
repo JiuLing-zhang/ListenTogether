@@ -1,4 +1,5 @@
 ﻿using ListenTogether.Services.MusicSwitchServer;
+using ListenTogether.Storages;
 
 namespace ListenTogether.Services;
 public class MusicPlayerService
@@ -15,15 +16,13 @@ public class MusicPlayerService
     private readonly WifiOptionsService _wifiOptionsService;
     private readonly PlayerService _playerService;
     private readonly IMusicSwitchServerFactory _musicSwitchServerFactory;
-    private readonly IMusicCacheService _musicCacheService;
     private readonly IMusicNetworkService _musicNetworkService;
     private readonly IPlaylistService _playlistService;
-
-    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, PlayerService playerService, IMusicCacheService musicCacheService, WifiOptionsService wifiOptionsService, IMusicNetworkService musicNetworkService, HttpClient httpClient, IPlaylistService playlistService)
+    private readonly IMusicCacheStorage _musicCacheStorage;
+    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, PlayerService playerService, WifiOptionsService wifiOptionsService, IMusicNetworkService musicNetworkService, HttpClient httpClient, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage)
     {
         _musicSwitchServerFactory = musicSwitchServerFactory;
         _playerService = playerService;
-        _musicCacheService = musicCacheService;
         _wifiOptionsService = wifiOptionsService;
 
         _playerService.NewMusicAdded += (_, _) => NewMusicAdded?.Invoke(this, EventArgs.Empty);
@@ -36,6 +35,7 @@ public class MusicPlayerService
         _musicNetworkService = musicNetworkService;
         _httpClient = httpClient;
         _playlistService = playlistService;
+        _musicCacheStorage = musicCacheStorage;
     }
 
     /// <summary>
@@ -54,35 +54,35 @@ public class MusicPlayerService
             await ToastService.Show("播放列表加载失败");
             return;
         }
-        var cachePath = await GetMusicCachePathAsync(playlist.Id);
-        if (cachePath.IsEmpty())
+
+        var cachePath = await _musicCacheStorage.GetOrAddAsync(playlist, async (x) =>
         {
             if (!await _wifiOptionsService.HasWifiOrCanPlayWithOutWifiAsync())
             {
-                return;
+                return default;
             }
 
-            string key = JiuLing.CommonLibs.GuidUtils.GetFormatN();
+            string key = GuidUtils.GetFormatN();
             LoadingService.Loading(key, "歌曲缓冲中....");
 
-            //重新获取播放链接        
-            var playUrl = await _musicNetworkService.GetPlayUrlAsync(playlist.Platform, playlist.IdOnPlatform, playlist.ExtendDataJson);
+            ///重新获取播放链接        
+            var playUrl = await _musicNetworkService.GetPlayUrlAsync(x.Platform, x.IdOnPlatform, x.ExtendDataJson);
             if (playUrl.IsEmpty())
             {
                 LoadingService.LoadComplete(key);
-                Logger.Info($"播放地址获取失败。{playlist.IdOnPlatform}-{playlist.IdOnPlatform}-{playlist.Name}");
-                await Next();
-                return;
+                Logger.Info($"播放地址获取失败。{x.IdOnPlatform}-{x.IdOnPlatform}-{x.Name}");
+                return default;
             }
 
-            var cacheFileNameOnly = $"{playlist.Id}{GetPlayUrlFileExtension(playUrl)}";
-            cachePath = Path.Combine(GlobalConfig.MusicCacheDirectory, cacheFileNameOnly);
+            var fileExtension = GetPlayUrlFileExtension(playUrl);
             var data = await _httpClient.GetByteArrayAsync(playUrl);
-            await File.WriteAllBytesAsync(cachePath, data);
-            string remark = $"{playlist.Artist}-{playlist.Name}";
-            await _musicCacheService.AddOrUpdateAsync(playlist.Id, cachePath, remark);
-
             LoadingService.LoadComplete(key);
+            return new MusicCacheMetadata(fileExtension, data);
+        });
+
+        if (cachePath.IsEmpty())
+        {
+            await Next();
         }
 
         var image = await _httpClient.GetByteArrayAsync(playlist.ImageUrl);
@@ -95,16 +95,6 @@ public class MusicPlayerService
                 image,
                 cachePath)
             );
-    }
-
-    private async Task<string> GetMusicCachePathAsync(string musicId)
-    {
-        var cache = await _musicCacheService.GetOneByMuiscIdAsync(musicId);
-        if (cache != null && File.Exists(cache.FileName))
-        {
-            return cache.FileName;
-        }
-        return "";
     }
     private string GetPlayUrlFileExtension(string playUrl)
     {

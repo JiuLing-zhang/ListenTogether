@@ -14,7 +14,4 @@ public partial class MusicFileViewModel : ObservableObject
 
     [ObservableProperty]
     private Int64 _size;
-
-    [ObservableProperty]
-    private bool _isChecked;
 }

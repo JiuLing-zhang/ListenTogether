@@ -71,6 +71,7 @@ namespace ListenTogetherMauiBlazor
             builder.Services.AddSingleton<ISearchHistoryStorage, SearchHistoryStorage>();
             builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();
             builder.Services.AddSingleton<IKeyValueStorage, KeyValueStorage>();
+            builder.Services.AddSingleton<IMusicCacheStorage, MusicCacheStorage>();            
             builder.Services.AddSingleton<ApiHttpMessageHandler>();
             builder.Services.AddHttpClient();
             builder.Services.AddHttpClient("WebAPI", (sp, httpClient) =>

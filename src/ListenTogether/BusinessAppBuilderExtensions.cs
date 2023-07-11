@@ -17,7 +17,6 @@ public static class AppBuilderExtensions
         builder.Services.AddSingleton<IMusicNetworkService, MusicNetworkService>();
         builder.Services.AddSingleton<IPlaylistService, PlaylistService>();
         builder.Services.AddSingleton<IUserService, UserService>();
-        builder.Services.AddSingleton<IMusicCacheService, MusicCacheService>();
         builder.Services.AddSingleton<IMyFavoriteService, MyFavoriteService>();
         builder.Services.AddSingleton<IMusicService, MusicService>();
 
@@ -27,7 +26,6 @@ public static class AppBuilderExtensions
         builder.Services.AddSingleton<IMyFavoriteRepository, MyFavoriteApiRepository>();
         builder.Services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
         builder.Services.AddSingleton<IUserApiRepository, UserApiRepository>();
-        builder.Services.AddSingleton<IMusicCacheRepository, MusicCacheRepository>();
         return builder;
     }
 }

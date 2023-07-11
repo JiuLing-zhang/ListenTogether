@@ -1,17 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Storages;
 
 namespace ListenTogether.ViewModels;
 
 public partial class CacheCleanViewModel : ViewModelBase
 {
-    private readonly IMusicCacheService _musicCacheService;
-    public CacheCleanViewModel(IMusicCacheService musicCacheService)
+    private readonly IMusicCacheStorage _musicCacheStorage;
+    public CacheCleanViewModel(IMusicCacheStorage musicCacheStorage)
     {
         Caches = new ObservableCollectionEx<MusicFileViewModel>();
-        Caches.ItemChanged += Caches_ItemChanged;
-        Caches.CollectionChanged += Caches_CollectionChanged;
-        _musicCacheService = musicCacheService;
+        _musicCacheStorage = musicCacheStorage;
     }
     public async Task InitializeAsync()
     {
@@ -39,81 +38,30 @@ public partial class CacheCleanViewModel : ViewModelBase
 
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SelectedSizeString))]
     private Int64 _selectedSize;
-    public string SelectedSizeString => SizeToString(SelectedSize);
 
     [ObservableProperty]
     private ObservableCollectionEx<MusicFileViewModel> _caches = null!;
-
-    private void Caches_ItemChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        CalcSelectedSize();
-    }
-    private void Caches_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-    {
-        CalcSelectedSize();
-    }
-    public void CalcSelectedSize()
-    {
-        SelectedSize = 0;
-        foreach (var cache in Caches)
-        {
-            if (cache.IsChecked == true)
-            {
-                SelectedSize = SelectedSize + cache.Size;
-            }
-        }
-    }
 
     private async Task QueryCachesAsync()
     {
         Caches.Clear();
         AllSize = 0;
-        var caches = await _musicCacheService.GetAllAsync();
-        foreach (var cache in caches)
+
+        await _musicCacheStorage.CalcCacheSizeAsync((length) =>
         {
-            long size = 0;
-            if (File.Exists(cache.FileName))
-            {
-                size = new FileInfo(cache.FileName).Length;
-            }
+            var size = Convert.ToInt64(length);
             var musicFile = new MusicFileViewModel()
             {
-                Id = cache.Id,
-                Remark = cache.Remark,
-                FileName = cache.FileName,
-                Size = size,
-                IsChecked = false
+                Id = 0,
+                Remark = "歌曲名的占位符而已",
+                FileName = "",
+                Size = size
             };
             Caches.Add(musicFile);
             AllSize = AllSize + size;
-        }
-    }
+        });
 
-    [RelayCommand]
-    private void SelectAll()
-    {
-        if (Caches.Count == Caches.Count(x => x.IsChecked == true))
-        {
-            foreach (var cache in Caches)
-            {
-                cache.IsChecked = false;
-            }
-        }
-        else
-        {
-            foreach (var cache in Caches)
-            {
-                cache.IsChecked = true;
-            }
-        }
-    }
-
-    [RelayCommand]
-    private void RowClickedAsync(MusicFileViewModel selected)
-    {
-        selected.IsChecked = !selected.IsChecked;
     }
 
     [RelayCommand]
@@ -128,24 +76,7 @@ public partial class CacheCleanViewModel : ViewModelBase
         try
         {
             Loading("处理中....");
-            foreach (var cache in Caches)
-            {
-                if (cache.IsChecked == true)
-                {
-                    try
-                    {
-                        if (File.Exists(cache.FileName))
-                        {
-                            System.IO.File.Delete(cache.FileName);
-                        }
-                        await _musicCacheService.RemoveAsync(cache.Id);
-                    }
-                    catch (Exception ex)
-                    {
-                        await ToastService.Show($"文件删除失败：{cache.FileName}");
-                    }
-                }
-            }
+            await _musicCacheStorage.ClearCacheAsync();
         }
         catch (Exception ex)
         {

@@ -7,17 +7,6 @@
              Title="缓存清理"
              BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBackground},Light={StaticResource LightBackground}}">
 
-    <ContentPage.Resources>
-        <Style x:Key="IsEnabledClear" TargetType="Button">
-            <Setter Property="IsEnabled" Value="True"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding SelectedSize}" Value="0" TargetType="Button">
-                    <Setter Property="IsEnabled" Value="False"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </ContentPage.Resources>
-
     <Grid Margin="{OnPlatform WinUI=16,MacCatalyst=16,Android='10,5,10,5',iOS='10,5,10,5'}">
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
@@ -26,7 +15,7 @@
         </Grid.RowDefinitions>
         <Label 
             Grid.Row="0"
-            Text="缓存清理"
+            Text="{Binding AllSizeString,StringFormat='缓存清理  {0}MB'}"
             Style="{StaticResource Title}"/>
 
         <ScrollView
@@ -42,50 +31,19 @@
                             BackgroundColor="Transparent">
                             <Label Text="{Binding Remark}"                                   
                                    LineBreakMode="NoWrap"/>
-                            <CheckBox HorizontalOptions="EndAndExpand"
-                                      IsChecked="{Binding IsChecked}"/>
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CacheCleanViewModel}}, Path=RowClickedAsyncCommand}"
-                                                      CommandParameter="{Binding .}"/>
-                            </StackLayout.GestureRecognizers>
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </ScrollView>
 
-        <StackLayout
+        <Button
+            Text="删除"
             Grid.Row="2"
-            Orientation="Horizontal"
-            VerticalOptions="End">
-
-            <StackLayout Margin="0,0,20,0">
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="总大小：" />
-                    <Label Text="{Binding AllSizeString,StringFormat='{0}MB'}"
-                           WidthRequest="100"
-                           HorizontalTextAlignment="End"/>
-                </StackLayout>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="已选择："/>
-                    <Label Text="{Binding SelectedSizeString,StringFormat='{0}MB'}"
-                           WidthRequest="100"
-                           HorizontalTextAlignment="End"/>
-                </StackLayout>
-            </StackLayout>
-            <Button Text="全选"
-                    HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=EndAndExpand,iOS=EndAndExpand}"
-                    Command="{Binding SelectAllCommand}"
-                    BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
-                    TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"/>
-
-            <Button Text="删除"
-                    Margin="5,0,0,0"
-                    HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"
-                    Style="{DynamicResource IsEnabledClear}"                    
-                    BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
-                    TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"
-                    Command="{Binding ClearAsyncCommand}"/>
-        </StackLayout>
+            VerticalOptions="End"
+            HorizontalOptions="{OnPlatform WinUI=Start,MacCatalyst=Start,Android=End,iOS=End}"
+            BackgroundColor="{AppThemeBinding Dark={StaticResource DarkBtnBackground},Light={StaticResource LightBtnBackground}}"
+            TextColor="{AppThemeBinding Dark={StaticResource DarkBtnText},Light={StaticResource LightBtnText}}"
+            Command="{Binding ClearAsyncCommand}"/>
     </Grid>
 </ContentPage>

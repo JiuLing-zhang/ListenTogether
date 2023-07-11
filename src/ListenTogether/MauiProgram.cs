@@ -65,6 +65,7 @@ namespace ListenTogether
 #endif
             builder.Services.AddSingleton<ISearchHistoryStorage, SearchHistoryStorage>();
             builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();
+            builder.Services.AddSingleton<IMusicCacheStorage, MusicCacheStorage>();
             builder.Services.AddSingleton<ApiHttpMessageHandler>();
             builder.Services.AddHttpClient("WebAPI", httpClient =>
             {

@@ -1,8 +1,12 @@
 ﻿namespace ListenTogether.Model;
-public class MusicCache
+//TODO 重命名文件
+public class MusicCacheMetadata
 {
-    public int Id { get; set; }
-    public string MusicId { get; set; } = null!;
-    public string FileName { get; set; } = null!;
-    public string Remark { get; set; } = null!;
+    public string FileExtension { get; set; }
+    public byte[] Buffer { get; set; }
+    public MusicCacheMetadata(string fileExtension, byte[] buffer)
+    {
+        FileExtension = fileExtension;
+        Buffer = buffer;
+    }
 }
