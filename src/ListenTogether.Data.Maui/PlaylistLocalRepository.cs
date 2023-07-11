@@ -1,8 +1,10 @@
-﻿using ListenTogether.Data.Entities;
-using ListenTogether.Data.Interfaces;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
+using ListenTogether.Data.Interface;
+using ListenTogether.Data.Maui.Entities;
 using ListenTogether.Model;
 
-namespace ListenTogether.Data.Repositories.Local;
+namespace ListenTogether.Data.Maui;
+
 public class PlaylistLocalRepository : IPlaylistRepository
 {
     public async Task<bool> AddOrUpdateAsync(Playlist playlist)

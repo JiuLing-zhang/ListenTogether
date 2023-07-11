@@ -75,6 +75,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\ListenTogether.Data.Maui\ListenTogether.Data.Maui.csproj" />
 		<ProjectReference Include="..\ListenTogether.Pages\ListenTogether.Pages.csproj" />
 		<ProjectReference Include="..\NativeMediaMauiLib\NativeMediaMauiLib.csproj" />
 	</ItemGroup>

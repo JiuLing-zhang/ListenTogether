@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Network", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeMediaMauiLib", "src\NativeMediaMauiLib\NativeMediaMauiLib.csproj", "{458F7E4D-1FAD-4385-8F14-0D60336C41E9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Data.Interface", "src\ListenTogether.Data.Interface\ListenTogether.Data.Interface.csproj", "{901A0AA0-6671-4410-8FF2-FEF272487100}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Data.Maui", "src\ListenTogether.Data.Maui\ListenTogether.Data.Maui.csproj", "{12651103-BD98-40AE-95DD-4648A9A4DEFD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +57,14 @@ Global
 		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{901A0AA0-6671-4410-8FF2-FEF272487100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{901A0AA0-6671-4410-8FF2-FEF272487100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{901A0AA0-6671-4410-8FF2-FEF272487100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{901A0AA0-6671-4410-8FF2-FEF272487100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12651103-BD98-40AE-95DD-4648A9A4DEFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12651103-BD98-40AE-95DD-4648A9A4DEFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12651103-BD98-40AE-95DD-4648A9A4DEFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12651103-BD98-40AE-95DD-4648A9A4DEFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

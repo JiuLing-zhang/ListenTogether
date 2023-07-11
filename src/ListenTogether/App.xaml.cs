@@ -27,9 +27,7 @@ public partial class App : Application
         };
 
         GlobalConfig.CurrentVersion = AppInfo.Current.Version;
-
-        BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.LocalDatabaseName));
-
+        
         string deviceId = Preferences.Get("DeviceId", "");
         if (deviceId.IsEmpty())
         {

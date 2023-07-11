@@ -1,7 +1,7 @@
 ﻿using ListenTogether.Model.Enums;
 using SQLite;
 
-namespace ListenTogether.Data.Entities;
+namespace ListenTogether.Data.Maui.Entities;
 
 [Table("Playlist")]
 internal class PlaylistEntity

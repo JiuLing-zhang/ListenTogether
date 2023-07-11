@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace ListenTogether.Data.Entities;
+namespace ListenTogether.Data.Maui.Entities;
 
 [Table("MyFavorite")]
 internal class MyFavoriteEntity

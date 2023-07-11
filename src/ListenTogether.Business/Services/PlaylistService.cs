@@ -1,5 +1,5 @@
 ﻿using ListenTogether.Business.Interfaces;
-using ListenTogether.Data.Interfaces;
+using ListenTogether.Data.Interface;
 using ListenTogether.Model;
 
 namespace ListenTogether.Business.Services;

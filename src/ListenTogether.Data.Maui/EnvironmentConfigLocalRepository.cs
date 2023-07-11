@@ -1,10 +1,10 @@
-﻿using ListenTogether.Data.Entities;
-using ListenTogether.Data.Interfaces;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
+using ListenTogether.Data.Interface;
+using ListenTogether.Data.Maui.Entities;
 using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 
-namespace ListenTogether.Data.Repositories.Local;
-
+namespace ListenTogether.Data.Maui;
 public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
 {
     public async Task<EnvironmentSetting> ReadAllSettingsAsync()

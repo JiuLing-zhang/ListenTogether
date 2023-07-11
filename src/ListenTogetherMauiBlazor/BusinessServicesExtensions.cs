@@ -1,8 +1,8 @@
 ﻿using ListenTogether.Business.Interfaces;
 using ListenTogether.Business.Services;
-using ListenTogether.Data.Interfaces;
+using ListenTogether.Data.Interface;
+using ListenTogether.Data.Maui;
 using ListenTogether.Data.Repositories.Api;
-using ListenTogether.Data.Repositories.Local;
 using ListenTogether.Network;
 using ListenTogether.Pages;
 using ListenTogether.Pages.Services;

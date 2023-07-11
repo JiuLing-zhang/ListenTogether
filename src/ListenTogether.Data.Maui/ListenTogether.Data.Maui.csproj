@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JiuLing.CommonLibs" Version="1.5.7" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ListenTogether.Data.Interface\ListenTogether.Data.Interface.csproj" />
+    <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
+  </ItemGroup>
+
+</Project>

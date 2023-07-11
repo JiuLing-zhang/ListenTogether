@@ -1,4 +1,4 @@
-﻿using ListenTogether.Data.Interfaces;
+﻿using ListenTogether.Data.Interface;
 using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Model.Api;

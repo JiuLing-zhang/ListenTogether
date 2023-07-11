@@ -1,15 +1,12 @@
-﻿using ListenTogether.Data.Entities;
+﻿using JiuLing.CommonLibs.ExtensionMethods;
+using ListenTogether.Data.Maui.Entities;
 using SQLite;
 
-namespace ListenTogether.Data;
+namespace ListenTogether.Data.Maui;
+
 internal class DatabaseProvide
 {
-    private static string _dbPath = "";
-    public static void SetConnection(string dbPath)
-    {
-        _dbPath = dbPath;
-        InitTable();
-    }
+    private static string _dbPath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ListenTogether"), "ListenTogether.db");
 
     private static SQLiteConnection? _database;
     public static SQLiteConnection Database

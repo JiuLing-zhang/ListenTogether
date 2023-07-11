@@ -33,7 +33,6 @@ namespace ListenTogetherMauiBlazor
                 Directory.CreateDirectory(GlobalPath.MusicCacheDirectory);
             }
 
-            BusinessConfig.SetDataBaseConnection(Path.Combine(GlobalConfig.AppDataDirectory, GlobalConfig.LocalDatabaseName));
             var task = Task.Run(configService.ReadAllSettingsAsync);
             Settings.Environment = task.Result;
             DataConfig.SetWebApi(deviceManage.GetDeviceId());
