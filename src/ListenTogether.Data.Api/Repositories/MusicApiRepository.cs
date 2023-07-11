@@ -6,7 +6,7 @@ using ListenTogether.Model.Api.Request;
 using ListenTogether.Model.Api.Response;
 using ListenTogether.Model.Enums;
 
-namespace ListenTogether.Data.Repositories.Api;
+namespace ListenTogether.Data.Api.Repositories;
 public class MusicApiRepository : IMusicRepository
 {
     private readonly IHttpClientFactory _httpClientFactory = null!;

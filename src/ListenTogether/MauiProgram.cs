@@ -1,5 +1,5 @@
 ﻿using CommunityToolkit.Maui;
-using ListenTogether.Data;
+using ListenTogether.Data.Api;
 using ListenTogether.Handlers.GaussianImage;
 using ListenTogether.Storages;
 using Microsoft.Extensions.Configuration;

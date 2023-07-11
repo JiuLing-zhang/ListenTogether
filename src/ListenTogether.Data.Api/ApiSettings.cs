@@ -1,4 +1,4 @@
-﻿namespace ListenTogether.Data;
+﻿namespace ListenTogether.Data.Api;
 internal class ApiSettings
 {
     public string DeviceId { get; set; }

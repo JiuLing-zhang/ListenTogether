@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ListenTogether.Data;
+using ListenTogether.Data.Api;
 
 namespace ListenTogether.ViewModels;
 

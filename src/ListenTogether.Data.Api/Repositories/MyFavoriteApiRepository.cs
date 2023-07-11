@@ -5,7 +5,7 @@ using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
 using ListenTogether.Model.Api.Response;
 
-namespace ListenTogether.Data.Repositories.Api;
+namespace ListenTogether.Data.Api.Repositories;
 public class MyFavoriteApiRepository : IMyFavoriteRepository
 {
 

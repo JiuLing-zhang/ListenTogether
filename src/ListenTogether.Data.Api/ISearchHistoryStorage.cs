@@ -1,4 +1,4 @@
-﻿namespace ListenTogether.Data;
+﻿namespace ListenTogether.Data.Api;
 public interface ISearchHistoryStorage
 {
     int ListMaxCount { get; set; }

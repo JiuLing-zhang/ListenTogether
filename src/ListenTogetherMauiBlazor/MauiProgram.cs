@@ -1,5 +1,4 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-using ListenTogether.Data;
 using ListenTogether.Pages;
 using ListenTogetherMauiBlazor.Storages;
 using Microsoft.Extensions.Logging;
@@ -7,6 +6,8 @@ using MudBlazor.Services;
 using Microsoft.Maui.LifecycleEvents;
 using NativeMediaMauiLib;
 using CommunityToolkit.Maui;
+using ListenTogether.Data.Api;
+
 namespace ListenTogetherMauiBlazor
 {
     public static class MauiProgram

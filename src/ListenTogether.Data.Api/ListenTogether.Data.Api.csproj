@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -16,5 +16,4 @@
 		<ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
 		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
 	</ItemGroup>
-
 </Project>

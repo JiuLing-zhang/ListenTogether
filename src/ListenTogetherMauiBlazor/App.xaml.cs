@@ -1,6 +1,5 @@
-﻿using ListenTogether.Business;
-using ListenTogether.Business.Interfaces;
-using ListenTogether.Data;
+﻿using ListenTogether.Business.Interfaces;
+using ListenTogether.Data.Api;
 using ListenTogether.Pages;
 
 namespace ListenTogetherMauiBlazor

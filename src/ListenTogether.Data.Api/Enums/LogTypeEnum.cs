@@ -1,4 +1,4 @@
-﻿namespace ListenTogether.Data.Enums;
+﻿namespace ListenTogether.Data.Api.Enums;
 public enum LogTypeEnum
 {
     Info = 0,

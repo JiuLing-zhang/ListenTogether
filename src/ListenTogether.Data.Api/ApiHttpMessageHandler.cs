@@ -1,7 +1,7 @@
 ﻿using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Response;
 
-namespace ListenTogether.Data;
+namespace ListenTogether.Data.Api;
 public class ApiHttpMessageHandler : DelegatingHandler
 {
     private readonly ILoginDataStorage _loginDataStorage;

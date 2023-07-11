@@ -1,4 +1,4 @@
-﻿using ListenTogether.Data;
+﻿using ListenTogether.Data.Api;
 
 namespace ListenTogether.Storages;
 public class LoginDataStorage : ILoginDataStorage

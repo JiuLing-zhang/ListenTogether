@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -7,8 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\ListenTogether.Data.Api\ListenTogether.Data.Api.csproj" />
 		<ProjectReference Include="..\ListenTogether.Data.Interface\ListenTogether.Data.Interface.csproj" />
-		<ProjectReference Include="..\ListenTogether.Data\ListenTogether.Data.csproj" />
 		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
 		<ProjectReference Include="..\ListenTogether.Network\ListenTogether.Network.csproj" />
 	</ItemGroup>

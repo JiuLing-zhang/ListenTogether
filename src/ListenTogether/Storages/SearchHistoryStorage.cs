@@ -1,5 +1,5 @@
-﻿using ListenTogether.Data;
-using System.Text.Json;
+﻿using System.Text.Json;
+using ListenTogether.Data.Api;
 
 namespace ListenTogether.Storages;
 public class SearchHistoryStorage : ISearchHistoryStorage
