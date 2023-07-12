@@ -103,7 +103,7 @@
                     break;
             }
             await InvokeAsync(StateHasChanged);
-            NativeTheme.SetTheme(_isDarkMode);
+            await NativeTheme.SetThemeAsync(_isDarkMode);
             if (Settings.Environment.General.IsAutoCheckUpdate)
             {
                 await AutoUpgrade.DoAsync(true);

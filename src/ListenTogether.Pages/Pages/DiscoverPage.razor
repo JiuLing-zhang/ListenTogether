@@ -56,19 +56,19 @@
 
         if (PlatformId == null)
         {
-            PlatformId = await KeyValueStorage.Get("DiscoverPlatform", (int)PlatformEnum.MiGu);
+            PlatformId = await KeyValueStorage.GetAsync("DiscoverPlatform", (int)PlatformEnum.MiGu);
         }
         if (TagId.IsEmpty())
         {
-            TagId = await KeyValueStorage.Get("DiscoverTagId", "榜单");
+            TagId = await KeyValueStorage.GetAsync("DiscoverTagId", "榜单");
         }
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await base.OnParametersSetAsync();
-        await KeyValueStorage.Set("DiscoverPlatform", PlatformId.Value);
-        await KeyValueStorage.Set("DiscoverTagId", TagId);
+        await KeyValueStorage.SetAsync("DiscoverPlatform", PlatformId.Value);
+        await KeyValueStorage.SetAsync("DiscoverTagId", TagId);
     }
 
     private void PlatformSelected(int platformId)

@@ -137,7 +137,7 @@
 
         <div class="d-flex flex-column align-center mt-5">
             <div class="app-title">一起听</div>
-            <div class="mt-3 app-text">@($"版本: {AppVersion.GetCurrentVersionString()}")</div>
+            <div class="mt-3 app-text">@($"版本: {Version}")</div>
             <div class="mt-1 app-link" @onclick="CheckUpdateAsync">检查更新</div>
             <div class="mt-1 app-text">本软件基于GPL-3.0协议，开源、免费</div>
             <div class="mt-1 app-link">
@@ -151,9 +151,11 @@
 </RouteAnimation>
 
 @code {
-    protected override void OnInitialized()
+    public string Version { get; set; } = "";
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
+        Version = await AppVersion.GetCurrentVersionStringAsync();
     }
 
     private async Task OnIsAutoCheckUpdateChange(bool value)

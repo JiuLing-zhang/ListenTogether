@@ -34,7 +34,9 @@ namespace ListenTogetherMauiBlazor
 
             var task = Task.Run(configService.ReadAllSettingsAsync);
             Settings.Environment = task.Result;
-            DataConfig.SetWebApi(deviceManage.GetDeviceId());
+
+            var taskDeviceId = Task.Run(deviceManage.GetDeviceIdAsync);
+            DataConfig.SetWebApi(taskDeviceId.Result);
             MainPage = new MainPage();
         }
 

@@ -13,11 +13,11 @@ public class AutoCloseJob
         _time.Elapsed += _time_Elapsed;
     }
 
-    private void _time_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    private async void _time_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         if (DateTime.Now.Subtract(_closeTime).TotalSeconds >= 0)
         {
-            _appClose.Close();
+            await _appClose.CloseAsync();
         }
     }
 

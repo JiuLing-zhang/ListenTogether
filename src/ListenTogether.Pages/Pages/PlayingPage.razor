@@ -9,7 +9,7 @@
 @inject IMusicShare MusicShare
 @inject IDeviceManage DeviceManage
 
-@implements IDisposable
+@implements IAsyncDisposable
 
 <RouteAnimation>
     <div class="blurBgMask"></div>
@@ -110,7 +110,7 @@
         await base.OnInitializedAsync();
         if (Settings.Environment.Play.IsPlayingPageKeepScreenOn)
         {
-            DeviceManage.ScreenOn();
+            await DeviceManage.ScreenOnAsync();
         }
         _playerService.NewMusicAdded += NewMusicAddedDoAsync;
         _playerService.IsPlayingChanged += IsPlayingChangedDoAsync;
@@ -274,11 +274,15 @@
         await MusicShare.ShareLinkAsync(musicUrl, $"{_currentMusic.Name} - {_currentMusic.Artist}");
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        _timer?.Dispose();
+        if (_timer != null)
+        {
+            await _timer.DisposeAsync();
+        }
         _playerService.NewMusicAdded -= NewMusicAddedDoAsync;
         _playerService.IsPlayingChanged -= IsPlayingChangedDoAsync;
-        DeviceManage.ScreenOff();
+        await DeviceManage.ScreenOffAsync();
     }
+
 }

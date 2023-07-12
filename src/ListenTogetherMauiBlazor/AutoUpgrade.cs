@@ -69,14 +69,15 @@ public class AutoUpgrade : IAutoUpgrade
             string version;
             string minVersion;
 #if ANDROID
-                version = obj.Version[..obj.Version.LastIndexOf(".")];
-                minVersion = obj.MinVersion[..obj.MinVersion.LastIndexOf(".")];
+            version = obj.Version[..obj.Version.LastIndexOf(".")];
+            minVersion = obj.MinVersion[..obj.MinVersion.LastIndexOf(".")];
 #else
             version = obj.Version;
             minVersion = obj.MinVersion;
 #endif
 
-            var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(_appVersion.GetCurrentVersionString(), version, minVersion);
+            var currentVersionString = await _appVersion.GetCurrentVersionStringAsync();
+            var (isNeedUpdate, isAllowRun) = JiuLing.CommonLibs.VersionUtils.CheckNeedUpdate(currentVersionString, version, minVersion);
 
             async void CheckUpdateInner()
             {

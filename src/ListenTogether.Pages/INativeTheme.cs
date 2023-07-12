@@ -1,5 +1,5 @@
 ﻿namespace ListenTogether.Pages;
 public interface INativeTheme
 {
-    void SetTheme(bool isDark);
+    Task SetThemeAsync(bool isDark);
 }

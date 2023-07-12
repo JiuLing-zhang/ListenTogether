@@ -3,13 +3,13 @@
 namespace ListenTogetherMauiBlazor;
 public class AppVersion : IAppVersion
 {
-    public Version GetCurrentVersion()
+    public Task<Version> GetCurrentVersionAsync()
     {
-        return AppInfo.Current.Version;
+        return Task.FromResult(AppInfo.Current.Version);
     }
 
-    public string GetCurrentVersionString()
+    public async Task<string> GetCurrentVersionStringAsync()
     {
-        return GetCurrentVersion().ToString();
+        return (await GetCurrentVersionAsync()).ToString();
     }
 }

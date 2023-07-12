@@ -3,11 +3,12 @@
 namespace ListenTogetherMauiBlazor;
 public class AppClose : IAppClose
 {
-    public void Close()
+    public Task CloseAsync()
     {
         MainThread.BeginInvokeOnMainThread(() =>
         {
             Application.Current.Quit();
         });
+        return Task.CompletedTask;
     }
 }

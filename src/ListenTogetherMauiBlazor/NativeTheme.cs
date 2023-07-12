@@ -4,7 +4,7 @@ using ListenTogether.Pages;
 namespace ListenTogetherMauiBlazor;
 internal class NativeTheme : INativeTheme
 {
-    public void SetTheme(bool isDark)
+    public Task SetThemeAsync(bool isDark)
     {
         if (isDark)
         {
@@ -22,5 +22,6 @@ internal class NativeTheme : INativeTheme
             CommunityToolkit.Maui.Core.Platform.StatusBar.SetStyle(StatusBarStyle.LightContent);
 #endif
         }
+        return Task.CompletedTask;
     }
 }

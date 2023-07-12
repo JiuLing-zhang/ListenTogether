@@ -13,7 +13,7 @@ public class MusicCacheStorage : IMusicCacheStorage
     }
     public async Task<string> GetOrAddAsync(Playlist playlist, Func<Playlist, Task<MusicCacheMetadata?>> delegateFunc)
     {
-        var fileName = await _keyValueStorage.Get($"music-{playlist.Id}", "");
+        var fileName = await _keyValueStorage.GetAsync($"music-{playlist.Id}", "");
         if (fileName.IsNotEmpty() && File.Exists(fileName))
         {
             return fileName;
@@ -28,7 +28,7 @@ public class MusicCacheStorage : IMusicCacheStorage
         var cachePath = Path.Combine(GlobalPath.MusicCacheDirectory, cacheFileNameOnly);
         await File.WriteAllBytesAsync(cachePath, musicCacheMetadata.Buffer);
 
-        await _keyValueStorage.Set($"music-{playlist.Id}", cachePath);
+        await _keyValueStorage.SetAsync($"music-{playlist.Id}", cachePath);
         return cachePath;
     }
 
