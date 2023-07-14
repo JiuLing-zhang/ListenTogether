@@ -16,10 +16,10 @@ public class MusicPlayerService
     private readonly WifiOptionsService _wifiOptionsService;
     private readonly PlayerService _playerService;
     private readonly IMusicSwitchServerFactory _musicSwitchServerFactory;
-    private readonly IMusicNetworkService _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetworkService;
     private readonly IPlaylistService _playlistService;
     private readonly IMusicCacheStorage _musicCacheStorage;
-    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, PlayerService playerService, WifiOptionsService wifiOptionsService, IMusicNetworkService musicNetworkService, HttpClient httpClient, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage)
+    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, PlayerService playerService, WifiOptionsService wifiOptionsService, MusicNetPlatform musicNetworkService, HttpClient httpClient, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage)
     {
         _musicSwitchServerFactory = musicSwitchServerFactory;
         _playerService = playerService;

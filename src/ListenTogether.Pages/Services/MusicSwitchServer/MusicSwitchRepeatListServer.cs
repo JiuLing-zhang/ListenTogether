@@ -1,5 +1,4 @@
-﻿using ListenTogether.Business.Interfaces;
-using ListenTogether.Model;
+﻿using ListenTogether.Model;
 
 namespace ListenTogether.Services.MusicSwitchServer;
 public class MusicSwitchRepeatListServer : IMusicSwitchServer

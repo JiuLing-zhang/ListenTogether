@@ -29,12 +29,12 @@ public partial class DiscoverPageViewModel : ViewModelBase
     private static readonly object LockPlatformMusicTags = new object();
     private static readonly Dictionary<PlatformEnum, PlatformMusicTag> PlatformMusicTags = new Dictionary<PlatformEnum, PlatformMusicTag>();
 
-    private readonly IMusicNetworkService _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetworkService;
 
     private PlatformEnum Platform => (PlatformEnum)DiscoverTabs.First(x => x.IsSelected).Id;
 
     private readonly SearchPage _searchPage;
-    public DiscoverPageViewModel(IMusicNetworkService musicNetworkService, SearchPage searchPage)
+    public DiscoverPageViewModel(MusicNetPlatform musicNetworkService, SearchPage searchPage)
     {
         _searchPage = searchPage;
         _musicNetworkService = musicNetworkService;

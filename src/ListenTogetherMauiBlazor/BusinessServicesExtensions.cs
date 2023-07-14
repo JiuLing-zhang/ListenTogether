@@ -1,6 +1,4 @@
-﻿using ListenTogether.Business.Interfaces;
-using ListenTogether.Business.Services;
-using ListenTogether.Data.Api.Repositories;
+﻿using ListenTogether.Data.Api.Repositories;
 using ListenTogether.Data.Interface;
 using ListenTogether.Data.Maui;
 using ListenTogether.Network;
@@ -24,23 +22,15 @@ internal static class BusinessServicesExtensions
         services.AddSingleton<MusicPlayerService>();
         services.AddSingleton<MusicResultService>();
 
-
         //网络数据平台
         services.AddSingleton<MusicNetPlatform>();
-        //本地服务
-        services.AddSingleton<IEnvironmentConfigService, EnvironmentConfigService>();
-        services.AddSingleton<IMusicNetworkService, MusicNetworkService>();
-        services.AddSingleton<IPlaylistService, PlaylistService>();
-        services.AddSingleton<IUserService, UserService>();
-        services.AddSingleton<IMyFavoriteService, MyFavoriteService>();
-        services.AddSingleton<IMusicService, MusicService>();
 
         //数据服务
-        services.AddSingleton<IEnvironmentConfigRepository, EnvironmentConfigLocalRepository>();
-        services.AddSingleton<IMusicRepository, MusicApiRepository>();
-        services.AddSingleton<IMyFavoriteRepository, MyFavoriteApiRepository>();
-        services.AddSingleton<IPlaylistRepository, PlaylistLocalRepository>();
-        services.AddSingleton<IUserApiRepository, UserApiRepository>();
+        services.AddSingleton<IEnvironmentConfigService, EnvironmentConfigService>();
+        services.AddSingleton<IMusicService, MusicService>();
+        services.AddSingleton<IMyFavoriteService, MyFavoriteService>();
+        services.AddSingleton<IPlaylistService, PlaylistService>();
+        services.AddSingleton<IUserService, UserService>();
         return services;
     }
 }

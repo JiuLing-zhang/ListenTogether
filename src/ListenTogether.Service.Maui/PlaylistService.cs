@@ -5,7 +5,7 @@ using ListenTogether.Model;
 
 namespace ListenTogether.Data.Maui;
 
-public class PlaylistLocalRepository : IPlaylistRepository
+public class PlaylistService : IPlaylistService
 {
     public async Task<bool> AddOrUpdateAsync(Playlist playlist)
     {

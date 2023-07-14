@@ -6,10 +6,10 @@ using ListenTogether.Model.Api.Request;
 using ListenTogether.Model.Api.Response;
 
 namespace ListenTogether.Data.Api.Repositories;
-public class UserApiRepository : IUserApiRepository
+public class UserService : IUserService
 {
     private readonly IHttpClientFactory _httpClientFactory = null!;
-    public UserApiRepository(IHttpClientFactory httpClientFactory)
+    public UserService(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }

@@ -7,10 +7,10 @@ namespace ListenTogether.ViewModels;
 
 public partial class SearchPageViewModel : ViewModelBase
 {
-    private readonly IMusicNetworkService _musicNetworkService = null!;
+    private readonly MusicNetPlatform _musicNetworkService = null!;
     private readonly SearchResultPage _searchResultPage;
     private readonly ISearchHistoryStorage _searchHistoryStorage;
-    public SearchPageViewModel(IMusicNetworkService musicNetworkService, SearchResultPage searchResultPage, ISearchHistoryStorage searchHistoryStorage)
+    public SearchPageViewModel(MusicNetPlatform musicNetworkService, SearchResultPage searchResultPage, ISearchHistoryStorage searchHistoryStorage)
     {
         SearchHistories = new ObservableCollection<string>();
         HotWords = new ObservableCollection<string>();

@@ -1,7 +1,7 @@
 ﻿using ListenTogether.Model;
 
 namespace ListenTogether.Data.Interface;
-public interface IMyFavoriteRepository
+public interface IMyFavoriteService
 {
     Task<MyFavorite?> GetOneAsync(int id);
     Task<List<MyFavorite>> GetAllAsync();

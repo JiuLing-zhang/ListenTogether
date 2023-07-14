@@ -2,7 +2,7 @@
 
 namespace ListenTogether.Data.Interface;
 
-public interface IUserApiRepository
+public interface IUserService
 {
     public Task<(bool Succeed, string Message)> RegisterAsync(UserRegister registerUser);
     public Task<User?> LoginAsync(string username, string password);

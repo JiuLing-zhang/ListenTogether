@@ -11,7 +11,7 @@ public partial class PlayingPageViewModel : ViewModelBase
     private DateTime _lastScrollToTime = DateTime.Now;
     private readonly MusicPlayerService _playerService;
     private readonly IDispatcherTimer _timerLyricsUpdate;
-    private readonly IMusicNetworkService _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetworkService;
     private readonly IPlaylistService _playlistService;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; } = null!;
 
@@ -39,7 +39,7 @@ public partial class PlayingPageViewModel : ViewModelBase
     [ObservableProperty]
     private string _shareLabelText = Config.Desktop ? "复制歌曲链接" : "分享歌曲链接";
 
-    public PlayingPageViewModel(MusicPlayerService playerService, IMusicNetworkService musicNetworkService, IPlaylistService playlistService)
+    public PlayingPageViewModel(MusicPlayerService playerService, MusicNetPlatform musicNetworkService, IPlaylistService playlistService)
     {
         _musicNetworkService = musicNetworkService;
         _playerService = playerService;

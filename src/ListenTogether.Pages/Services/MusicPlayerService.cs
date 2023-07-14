@@ -1,7 +1,8 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-using ListenTogether.Business.Interfaces;
+
 using ListenTogether.EasyLog;
 using ListenTogether.Model;
+using ListenTogether.Network;
 using ListenTogether.Services.MusicSwitchServer;
 
 namespace ListenTogether.Pages.Services;
@@ -22,10 +23,11 @@ public class MusicPlayerService
     private readonly IWifiOptionsService _wifiOptionsService;
     private readonly IPlayerService _playerService;
     private readonly IMusicSwitchServerFactory _musicSwitchServerFactory;
-    private readonly IMusicNetworkService _musicNetworkService;
+    //TODO rename
+    private readonly MusicNetPlatform _musicNetworkService;
     private readonly IPlaylistService _playlistService;
     private readonly IMusicCacheStorage _musicCacheStorage;
-    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, IPlayerService playerService, IWifiOptionsService wifiOptionsService, IMusicNetworkService musicNetworkService, IHttpClientFactory httpClientFactory, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage)
+    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, IPlayerService playerService, IWifiOptionsService wifiOptionsService, MusicNetPlatform musicNetworkService, IHttpClientFactory httpClientFactory, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage)
     {
         _musicSwitchServerFactory = musicSwitchServerFactory;
         _playerService = playerService;

@@ -5,8 +5,8 @@ public class MusicResultService
     private readonly IPlaylistService _playlistService;
     private readonly IMyFavoriteService _myFavoriteService;
     private readonly IMusicService _musicService;
-    private readonly IMusicNetworkService _musicNetworkService;
-    public MusicResultService(IPlaylistService playlistService, MusicPlayerService musicPlayerService, IMyFavoriteService myFavoriteService, IMusicService musicService, IMusicNetworkService musicNetworkService)
+    private readonly MusicNetPlatform _musicNetworkService;
+    public MusicResultService(IPlaylistService playlistService, MusicPlayerService musicPlayerService, IMyFavoriteService myFavoriteService, IMusicService musicService, MusicNetPlatform musicNetworkService)
     {
         _playlistService = playlistService;
         _musicPlayerService = musicPlayerService;
@@ -43,7 +43,7 @@ public class MusicResultService
             ExtendDataJson = music.ExtendDataJson,
             EditTime = DateTime.Now
         };
-        await _playlistService.AddToPlaylistAsync(playlist);
+        await _playlistService.AddOrUpdateAsync(playlist);
     }
 
     private async Task AddToPlaylistAsync(List<LocalMusic> musics)
@@ -62,7 +62,7 @@ public class MusicResultService
                 EditTime = DateTime.Now
             }).ToList();
 
-        await _playlistService.AddToPlaylistAsync(playlists);
+        await _playlistService.AddOrUpdateAsync(playlists);
     }
 
     private async Task PlayMusicAsync(LocalMusic music)

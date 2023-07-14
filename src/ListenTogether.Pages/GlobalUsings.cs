@@ -1,0 +1,1 @@
+﻿global using ListenTogether.Data.Interface;

@@ -7,10 +7,10 @@ using ListenTogether.Model.Api.Response;
 using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Data.Api.Repositories;
-public class MusicApiRepository : IMusicRepository
+public class MusicService : IMusicService
 {
     private readonly IHttpClientFactory _httpClientFactory = null!;
-    public MusicApiRepository(IHttpClientFactory httpClientFactory)
+    public MusicService(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }

@@ -5,7 +5,7 @@ using ListenTogether.Model;
 using ListenTogether.Model.Enums;
 
 namespace ListenTogether.Data.Maui;
-public class EnvironmentConfigLocalRepository : IEnvironmentConfigRepository
+public class EnvironmentConfigService : IEnvironmentConfigService
 {
     public async Task<EnvironmentSetting> ReadAllSettingsAsync()
     {

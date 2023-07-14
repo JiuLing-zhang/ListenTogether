@@ -22,10 +22,10 @@ public partial class SearchResultPageViewModel : ViewModelBase
     private int _isSearching = 0;
 
     private readonly MusicResultService _musicResultService;
-    private readonly IMusicNetworkService _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetworkService;
     private readonly IPlaylistService _playlistService;
 
-    public SearchResultPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService)
+    public SearchResultPageViewModel(MusicNetPlatform musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService)
     {
         SearchResult = new ObservableCollection<MusicResultGroupViewModel>();
         _musicNetworkService = musicNetworkService;

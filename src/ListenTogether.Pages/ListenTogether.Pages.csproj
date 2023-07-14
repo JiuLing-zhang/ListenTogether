@@ -14,13 +14,15 @@
 	<ItemGroup>
 		<PackageReference Include="JiuLing.CommonLibs" Version="1.5.7" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.5" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
 		<PackageReference Include="MudBlazor" Version="6.2.5" />
 		<PackageReference Include="Sve.Blazor.InfiniteScroll" Version="1.0.0-alpha" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\ListenTogether.Business\ListenTogether.Business.csproj" />
 	  <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
+	  <ProjectReference Include="..\ListenTogether.Network\ListenTogether.Network.csproj" />
+	  <ProjectReference Include="..\ListenTogether.Service.Interface\ListenTogether.Service.Interface.csproj" />
 	</ItemGroup>
 
 </Project>

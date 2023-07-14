@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using ListenTogether.Data.Api;
 using ListenTogether.Model.Enums;
+using ListenTogether.Network;
 
 namespace ListenTogether.ViewModels;
 
@@ -9,9 +10,9 @@ public partial class SettingPageViewModel : ViewModelBase
 {
     private readonly IEnvironmentConfigService _configService;
     private readonly IUserService _userService;
-    private readonly IMusicNetworkService _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetworkService;
     private readonly ILoginDataStorage _loginDataStorage;
-    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, IMusicNetworkService musicNetworkService, ILoginDataStorage loginDataStorage)
+    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, MusicNetPlatform musicNetworkService, ILoginDataStorage loginDataStorage)
     {
         _configService = configService;
         _userService = userService;

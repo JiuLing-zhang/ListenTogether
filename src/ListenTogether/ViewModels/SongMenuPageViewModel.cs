@@ -15,7 +15,7 @@ public partial class SongMenuPageViewModel : ViewModelBase
     private PlatformEnum Platform => (PlatformEnum)Enum.Parse(typeof(PlatformEnum), PlatformString);
 
     private readonly IPlaylistService _playlistService;
-    private readonly IMusicNetworkService _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetworkService;
     private readonly MusicResultService _musicResultService;
 
     [ObservableProperty]
@@ -24,7 +24,7 @@ public partial class SongMenuPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultGroupViewModel> _musicResultCollection = null!;
 
-    public SongMenuPageViewModel(IMusicNetworkService musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService)
+    public SongMenuPageViewModel(MusicNetPlatform musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService)
     {
         MusicResultCollection = new ObservableCollection<MusicResultGroupViewModel>();
         _musicNetworkService = musicNetworkService;

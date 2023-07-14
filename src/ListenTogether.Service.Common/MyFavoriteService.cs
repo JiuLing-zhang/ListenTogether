@@ -6,11 +6,11 @@ using ListenTogether.Model.Api.Request;
 using ListenTogether.Model.Api.Response;
 
 namespace ListenTogether.Data.Api.Repositories;
-public class MyFavoriteApiRepository : IMyFavoriteRepository
+public class MyFavoriteService : IMyFavoriteService
 {
 
     private readonly IHttpClientFactory _httpClientFactory = null!;
-    public MyFavoriteApiRepository(IHttpClientFactory httpClientFactory)
+    public MyFavoriteService(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
     }

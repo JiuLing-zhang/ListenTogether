@@ -17,7 +17,7 @@ public partial class FavoriteView : ContentView
     }
 
     private IMyFavoriteService? _myFavoriteService;
-    private IMusicNetworkService? _musicNetworkService;
+    private MusicNetPlatform? _musicNetworkService;
     private IPlaylistService? _playlistService;
     private IMusicService? _musicService;
     private ILoginDataStorage? _loginDataStorage;
@@ -36,7 +36,7 @@ public partial class FavoriteView : ContentView
         }
         if (_musicNetworkService == null)
         {
-            _musicNetworkService = this.Handler.MauiContext.Services.GetRequiredService<IMusicNetworkService>();
+            _musicNetworkService = this.Handler.MauiContext.Services.GetRequiredService<MusicNetPlatform>();
         }
         if (_playlistService == null)
         {

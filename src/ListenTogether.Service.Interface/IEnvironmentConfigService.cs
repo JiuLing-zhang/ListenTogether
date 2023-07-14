@@ -2,7 +2,7 @@
 
 namespace ListenTogether.Data.Interface;
 
-public interface IEnvironmentConfigRepository
+public interface IEnvironmentConfigService
 {
     Task<EnvironmentSetting> ReadAllSettingsAsync();
     Task WritePlayerSettingAsync(PlayerSetting playerSetting);

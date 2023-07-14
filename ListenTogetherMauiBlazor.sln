@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogetherMauiBlazor", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Pages", "src\ListenTogether.Pages\ListenTogether.Pages.csproj", "{09489FF4-1F3D-4350-87D7-3D80D5FBE418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Business", "src\ListenTogether.Business\ListenTogether.Business.csproj", "{1B64DF7C-B710-4523-9DFC-2E1D09F4EAAB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Model", "src\ListenTogether.Model\ListenTogether.Model.csproj", "{6757261D-2623-4B1D-94B3-D44372302D60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Network", "src\ListenTogether.Network\ListenTogether.Network.csproj", "{8B3D008A-4E16-4101-B5B7-EA7DB78A658A}"
@@ -39,10 +37,6 @@ Global
 		{09489FF4-1F3D-4350-87D7-3D80D5FBE418}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09489FF4-1F3D-4350-87D7-3D80D5FBE418}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09489FF4-1F3D-4350-87D7-3D80D5FBE418}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1B64DF7C-B710-4523-9DFC-2E1D09F4EAAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1B64DF7C-B710-4523-9DFC-2E1D09F4EAAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1B64DF7C-B710-4523-9DFC-2E1D09F4EAAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1B64DF7C-B710-4523-9DFC-2E1D09F4EAAB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6757261D-2623-4B1D-94B3-D44372302D60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6757261D-2623-4B1D-94B3-D44372302D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6757261D-2623-4B1D-94B3-D44372302D60}.Release|Any CPU.ActiveCfg = Release|Any CPU

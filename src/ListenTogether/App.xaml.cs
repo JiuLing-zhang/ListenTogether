@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ListenTogether.Network;
+using Microsoft.Extensions.Configuration;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 namespace ListenTogether;
 public partial class App : Application
 {
-    public App(IEnvironmentConfigService configService, IMusicNetworkService musicNetworkService)
+    public App(IEnvironmentConfigService configService, MusicNetPlatform musicNetworkService)
     {
         InitializeComponent();
 
@@ -27,7 +28,7 @@ public partial class App : Application
         };
 
         GlobalConfig.CurrentVersion = AppInfo.Current.Version;
-        
+
         string deviceId = Preferences.Get("DeviceId", "");
         if (deviceId.IsEmpty())
         {
@@ -41,7 +42,6 @@ public partial class App : Application
 
         GlobalConfig.UpdateDomain = netConfig?.UpdateDomain ?? "";
         GlobalConfig.ApiDomain = netConfig?.ApiDomain ?? "";
-        BusinessConfig.SetWebApi(deviceId);
 
         var task = Task.Run(configService.ReadAllSettingsAsync);
         GlobalConfig.MyUserSetting = task.Result;
