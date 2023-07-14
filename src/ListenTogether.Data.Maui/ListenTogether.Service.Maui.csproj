@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ListenTogether.Data.Interface\ListenTogether.Data.Interface.csproj" />
+    <ProjectReference Include="..\ListenTogether.Data.Interface\ListenTogether.Service.Interface.csproj" />
     <ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
   </ItemGroup>
 
