@@ -7,8 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ListenTogether.Data.Api\ListenTogether.Service.Common.csproj" />
-		<ProjectReference Include="..\ListenTogether.Data.Interface\ListenTogether.Service.Interface.csproj" />
+		<ProjectReference Include="..\ListenTogether.Service.Common\ListenTogether.Service.Common.csproj" />
+		<ProjectReference Include="..\ListenTogether.Service.Interface\ListenTogether.Service.Interface.csproj" />
 		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
 		<ProjectReference Include="..\ListenTogether.Network\ListenTogether.Network.csproj" />
 	</ItemGroup>

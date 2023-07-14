@@ -15,11 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Network", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeMediaMauiLib", "src\NativeMediaMauiLib\NativeMediaMauiLib.csproj", "{F3BC4912-81FA-4A92-8DD4-177B3ACFED68}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Maui", "src\ListenTogether.Data.Maui\ListenTogether.Service.Maui.csproj", "{3E412CCA-A013-4440-BD20-53D7F4C4CCE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Maui", "src\ListenTogether.Service.Maui\ListenTogether.Service.Maui.csproj", "{3E412CCA-A013-4440-BD20-53D7F4C4CCE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Interface", "src\ListenTogether.Data.Interface\ListenTogether.Service.Interface.csproj", "{7C9ECF8A-61EF-462F-B6BE-734D3DD30706}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Interface", "src\ListenTogether.Service.Interface\ListenTogether.Service.Interface.csproj", "{7C9ECF8A-61EF-462F-B6BE-734D3DD30706}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Common", "src\ListenTogether.Data.Api\ListenTogether.Service.Common.csproj", "{51EC27A2-433B-40F4-80AF-A20934F3B383}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Common", "src\ListenTogether.Service.Common\ListenTogether.Service.Common.csproj", "{51EC27A2-433B-40F4-80AF-A20934F3B383}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.EasyLog", "src\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj", "{9D8D7E86-B8DA-4AAB-B040-3CD175CCA6C5}"
 EndProject
