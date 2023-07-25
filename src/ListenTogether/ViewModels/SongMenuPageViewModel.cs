@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using ListenTogether.Filters.MusicSearchFilter;
 using ListenTogether.Model.Enums;
+using NetMusicLib.Models;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
@@ -10,6 +11,7 @@ namespace ListenTogether.ViewModels;
 [QueryProperty(nameof(PlatformString), nameof(PlatformString))]
 public partial class SongMenuPageViewModel : ViewModelBase
 {
+    private readonly ILogger<SongMenuPageViewModel> _logger;
     public string Json { get; set; }
     public string PlatformString { get; set; }
     private PlatformEnum Platform => (PlatformEnum)Enum.Parse(typeof(PlatformEnum), PlatformString);
@@ -24,12 +26,13 @@ public partial class SongMenuPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultGroupViewModel> _musicResultCollection = null!;
 
-    public SongMenuPageViewModel(MusicNetPlatform musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService)
+    public SongMenuPageViewModel(MusicNetPlatform musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService, ILogger<SongMenuPageViewModel> logger)
     {
         MusicResultCollection = new ObservableCollection<MusicResultGroupViewModel>();
         _musicNetworkService = musicNetworkService;
         _musicResultService = musicResultService;
         _playlistService = playlistService;
+        _logger = logger;
     }
     public async Task InitializeAsync()
     {
@@ -39,14 +42,14 @@ public partial class SongMenuPageViewModel : ViewModelBase
             MusicResultCollection.Clear();
             SongMenu = Json.ToObject<SongMenuViewModel>() ?? throw new ArgumentNullException("歌单信息不存在");
 
-            List<MusicResultShow> musics;
+            List<Music> musics;
             switch (SongMenu.SongMenuType)
             {
                 case SongMenuEnum.Tag:
-                    musics = await _musicNetworkService.GetTagMusicsAsync(Platform, SongMenu.Id);
+                    musics = await _musicNetworkService.GetTagMusicsAsync((NetMusicLib.Enums.PlatformEnum)Platform, SongMenu.Id);
                     break;
                 case SongMenuEnum.Top:
-                    musics = await _musicNetworkService.GetTopMusicsAsync(Platform, SongMenu.Id);
+                    musics = await _musicNetworkService.GetTopMusicsAsync((NetMusicLib.Enums.PlatformEnum)Platform, SongMenu.Id);
                     break;
                 default:
                     throw new ArgumentNullException("不支持的歌单类型");
@@ -61,7 +64,7 @@ public partial class SongMenuPageViewModel : ViewModelBase
                   {
                       Seq = ++seq,
                       Id = x.Id,
-                      Platform = x.Platform,
+                      Platform = (Model.Enums.PlatformEnum)x.Platform,
                       IdOnPlatform = x.IdOnPlatform,
                       Name = x.Name,
                       Artist = x.Artist,
@@ -74,7 +77,7 @@ public partial class SongMenuPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Logger.Error($"歌曲加载失败：{SongMenu.PlatformName},type={SongMenu.SongMenuType},id={SongMenu.Id}", ex);
+            _logger.LogError(ex, $"歌曲加载失败：{SongMenu.PlatformName},type={SongMenu.SongMenuType},id={SongMenu.Id}");
         }
         finally
         {

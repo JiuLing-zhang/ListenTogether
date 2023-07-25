@@ -1,15 +1,17 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Pages;
+using Microsoft.Extensions.Logging;
 
 namespace ListenTogetherMauiBlazor.Storages;
 public class MusicCacheStorage : IMusicCacheStorage
 {
+    private readonly ILogger<MusicCacheStorage> _logger;
     private readonly IKeyValueStorage _keyValueStorage;
-    public MusicCacheStorage(IKeyValueStorage keyValueStorage)
+    public MusicCacheStorage(IKeyValueStorage keyValueStorage, ILogger<MusicCacheStorage> logger)
     {
         _keyValueStorage = keyValueStorage;
+        _logger = logger;
     }
     public async Task<string> GetOrAddAsync(Playlist playlist, Func<Playlist, Task<MusicCacheMetadata?>> delegateFunc)
     {
@@ -56,7 +58,7 @@ public class MusicCacheStorage : IMusicCacheStorage
             }
             catch (Exception ex)
             {
-                Logger.Error("缓存文件删除失败。", ex);
+                _logger.LogError(ex, "缓存文件删除失败。");
             }
         }
         return Task.CompletedTask;

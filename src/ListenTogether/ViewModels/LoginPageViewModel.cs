@@ -8,10 +8,12 @@ public partial class LoginPageViewModel : ViewModelBase
 {
     private readonly IUserService _userService;
     private readonly ILoginDataStorage _loginDataStorage;
-    public LoginPageViewModel(IUserService userService, ILoginDataStorage loginDataStorage)
+    private readonly ILogger<LoginPageViewModel> _logger;
+    public LoginPageViewModel(IUserService userService, ILoginDataStorage loginDataStorage, ILogger<LoginPageViewModel> logger)
     {
         _userService = userService;
         _loginDataStorage = loginDataStorage;
+        _logger = logger;
     }
     public Task InitializeAsync()
     {
@@ -59,7 +61,7 @@ public partial class LoginPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("登录失败，网络出小差了");
-            Logger.Error("登录失败。", ex);
+            _logger.LogError(ex, "登录失败。");
         }
         finally
         {

@@ -1,6 +1,8 @@
 ﻿using ListenTogether.Data.Api;
 using ListenTogether.Data.Interface;
 using ListenTogether.Pages;
+using Microsoft.Extensions.Logging;
+using NetMusicLib;
 
 namespace ListenTogetherMauiBlazor
 {
@@ -37,6 +39,7 @@ namespace ListenTogetherMauiBlazor
 
             var taskDeviceId = Task.Run(deviceManage.GetDeviceIdAsync);
             DataConfig.SetWebApi(taskDeviceId.Result);
+
             MainPage = new MainPage();
         }
 

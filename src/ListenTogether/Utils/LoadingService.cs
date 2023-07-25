@@ -16,7 +16,6 @@ public class LoadingService
         Page page = Application.Current?.MainPage;
         if (page == null)
         {
-            Logger.Info($"无法初始化Loading，message={message}");
             return;
         }
 
@@ -32,7 +31,6 @@ public class LoadingService
         }
         catch (Exception ex)
         {
-            Logger.Error($"Loading失败,message={message}", ex);
             RemovePage(key);
         }
     }
@@ -49,10 +47,6 @@ public class LoadingService
 
     private static void RemovePage(string key)
     {
-        var isRemove = LoadingPages.TryRemove(key, out _);
-        if (!isRemove)
-        {
-            Logger.Info($"删除Loading页面失败，{key}");
-        }
+        LoadingPages.TryRemove(key, out _);
     }
 }

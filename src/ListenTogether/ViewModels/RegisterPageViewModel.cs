@@ -7,9 +7,11 @@ namespace ListenTogether.ViewModels;
 public partial class RegisterPageViewModel : ViewModelBase
 {
     private readonly IUserService _userService;
-    public RegisterPageViewModel(IUserService userService)
+    private readonly ILogger<RegisterPageViewModel> _logger;
+    public RegisterPageViewModel(IUserService userService, ILogger<RegisterPageViewModel> logger)
     {
         _userService = userService;
+        _logger = logger;
     }
 
     [ObservableProperty]
@@ -61,7 +63,7 @@ public partial class RegisterPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("注册失败，网络出小差了");
-            Logger.Error("注册失败。", ex);
+            _logger.LogError(ex, "注册失败。");
         }
         finally
         {

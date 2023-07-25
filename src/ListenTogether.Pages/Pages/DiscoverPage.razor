@@ -6,7 +6,6 @@
 @inject ISearchHistoryStorage SearchHistoryStorage
 @inject IKeyValueStorage KeyValueStorage
 @inject MusicNetPlatform _musicNetworkService
-
 <MudHidden Breakpoint="Breakpoint.SmAndUp">
     <SearchLabel />
 </MudHidden>
@@ -53,7 +52,6 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
         if (PlatformId == null)
         {
             PlatformId = await KeyValueStorage.GetAsync("DiscoverPlatform", (int)PlatformEnum.MiGu);

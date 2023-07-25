@@ -1,4 +1,4 @@
-﻿@using ListenTogether.EasyLog;
+﻿@inject ILogger<Discover> _logger
 @inject MusicNetPlatform MusicNetworkService
 @inject NavigationManager NavigationManager
 
@@ -79,7 +79,7 @@
             await InvokeAsync(StateHasChanged);
             if (_isTopPage)
             {
-                _songMenus = await MusicNetworkService.GetSongMenusFromTop(Platform);
+                _songMenus = await MusicNetworkService.GetSongMenusFromTop((NetMusicLib.Enums.PlatformEnum)Platform);
             }
             else
             {
@@ -91,7 +91,7 @@
         catch (Exception ex)
         {
             Console.WriteLine($"发现页页面加载失败:{ex.Message}");
-            Logger.Error("发现页页面加载失败。", ex);
+            _logger.LogError(ex, "发现页页面加载失败。");
         }
         finally
         {
@@ -115,7 +115,7 @@
 
             _isLoading = true;
             _page++;
-            var songMenus = await MusicNetworkService.GetSongMenusFromTagAsync(Platform, ActiveTagId, _page);
+            var songMenus = await MusicNetworkService.GetSongMenusFromTagAsync((NetMusicLib.Enums.PlatformEnum)Platform, ActiveTagId, _page);
             if (songMenus.Count == 0)
             {
                 _pageEnd = true;
@@ -125,7 +125,7 @@
         catch (Exception ex)
         {
             Console.WriteLine($"歌曲加载失败:{ex.Message}");
-            Logger.Error("歌曲加载失败。", ex);
+            _logger.LogError(ex, "歌曲加载失败。");
         }
         finally
         {

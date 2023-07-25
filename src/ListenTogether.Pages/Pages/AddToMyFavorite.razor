@@ -76,7 +76,7 @@
         _isLoading = true;
         if (Music.ImageUrl.IsEmpty() && Music.Platform == Model.Enums.PlatformEnum.KuGou)
         {
-            Music.ImageUrl = await MusicNetworkService.GetImageUrlAsync(Music.Platform, Music.IdOnPlatform, Music.ExtendDataJson);
+            Music.ImageUrl = await MusicNetworkService.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)Music.Platform, Music.IdOnPlatform, Music.ExtendDataJson);
         }
 
         var isMusicOk = await MusicService.AddOrUpdateAsync(Music);

@@ -7,10 +7,12 @@ namespace ListenTogether.ViewModels;
 public partial class CacheCleanViewModel : ViewModelBase
 {
     private readonly IMusicCacheStorage _musicCacheStorage;
-    public CacheCleanViewModel(IMusicCacheStorage musicCacheStorage)
+    private readonly ILogger<CacheCleanViewModel> _logger;
+    public CacheCleanViewModel(IMusicCacheStorage musicCacheStorage, ILogger<CacheCleanViewModel> logger)
     {
         Caches = new ObservableCollectionEx<MusicFileViewModel>();
         _musicCacheStorage = musicCacheStorage;
+        _logger = logger;
     }
     public async Task InitializeAsync()
     {
@@ -23,7 +25,7 @@ public partial class CacheCleanViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("缓存文件查找失败");
-            Logger.Error("缓存文件查找失败。", ex);
+            _logger.LogError(ex, "缓存文件查找失败。");
         }
         finally
         {
@@ -81,7 +83,7 @@ public partial class CacheCleanViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("删除失败");
-            Logger.Error("缓存文件删除失败。", ex);
+            _logger.LogError(ex, "缓存文件删除失败。");
         }
         finally
         {

@@ -1,10 +1,10 @@
 ﻿using ListenTogether.Data.Api.Repositories;
 using ListenTogether.Data.Interface;
 using ListenTogether.Data.Maui;
-using ListenTogether.Network;
 using ListenTogether.Pages;
 using ListenTogether.Pages.Services;
 using ListenTogether.Services.MusicSwitchServer;
+using NetMusicLib;
 
 namespace ListenTogetherMauiBlazor;
 internal static class BusinessServicesExtensions

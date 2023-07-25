@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace ListenTogether.EasyLog;
+namespace ListenTogetherMauiBlazor.Logger;
 
 [Table("LogDetail")]
 internal class LogEntity

@@ -1,6 +1,13 @@
-﻿namespace ListenTogether.Storages;
+﻿using Microsoft.Extensions.Logging;
+
+namespace ListenTogether.Storages;
 public class MusicCacheStorage : IMusicCacheStorage
 {
+    private readonly ILogger<MusicCacheStorage> _logger;
+    public MusicCacheStorage(ILogger<MusicCacheStorage> logger)
+    {
+        _logger = logger;
+    }
     public Task CalcCacheSizeAsync(Action<double> delegage)
     {
         var files = Directory.GetFiles(GlobalConfig.MusicCacheDirectory);
@@ -23,7 +30,7 @@ public class MusicCacheStorage : IMusicCacheStorage
             }
             catch (Exception ex)
             {
-                Logger.Error("缓存文件删除失败。", ex);
+                _logger.LogError(ex, "缓存文件删除失败。");
             }
         }
         return Task.CompletedTask;

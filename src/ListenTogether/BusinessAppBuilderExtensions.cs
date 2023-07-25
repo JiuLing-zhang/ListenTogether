@@ -1,6 +1,5 @@
 ﻿using ListenTogether.Data.Api.Repositories;
 using ListenTogether.Data.Maui;
-using ListenTogether.Network;
 
 namespace ListenTogether;
 

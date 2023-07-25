@@ -10,8 +10,9 @@ public partial class MyFavoritePageViewModel : ViewModelBase
     private readonly IPlaylistService _playlistService;
     private readonly IMyFavoriteService _myFavoriteService;
     private readonly ILoginDataStorage _loginDataStorage;
+    private readonly ILogger<MyFavoritePageViewModel> _logger;
     public string Title => "我的歌单";
-    public MyFavoritePageViewModel(IPlaylistService playlistService, MusicResultService musicResultService, IMyFavoriteService myFavoriteService, ILoginDataStorage loginDataStorage)
+    public MyFavoritePageViewModel(IPlaylistService playlistService, MusicResultService musicResultService, IMyFavoriteService myFavoriteService, ILoginDataStorage loginDataStorage, ILogger<MyFavoritePageViewModel> logger)
     {
         FavoriteList = new ObservableCollection<MyFavoriteViewModel>();
 
@@ -19,6 +20,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
         _playlistService = playlistService;
         _myFavoriteService = myFavoriteService;
         _loginDataStorage = loginDataStorage;
+        _logger = logger;
     }
 
     public async Task InitializeAsync()
@@ -74,7 +76,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("我的歌单加载失败");
-            Logger.Error("我的歌单页面初始化失败。", ex);
+            _logger.LogError(ex, "我的歌单页面初始化失败。");
         }
         finally
         {
@@ -120,7 +122,7 @@ public partial class MyFavoritePageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("添加失败，网络出小差了");
-            Logger.Error("歌单添加失败。", ex);
+            _logger.LogError(ex, "歌单添加失败。");
         }
         finally
         {

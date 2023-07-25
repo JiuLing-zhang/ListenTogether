@@ -1,5 +1,4 @@
 ﻿using ListenTogether.Data.Interface;
-using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
@@ -8,10 +7,12 @@ using ListenTogether.Model.Api.Response;
 namespace ListenTogether.Data.Api.Repositories;
 public class UserService : IUserService
 {
+    private readonly ILogger<UserService> _logger;
     private readonly IHttpClientFactory _httpClientFactory = null!;
-    public UserService(IHttpClientFactory httpClientFactory)
+    public UserService(IHttpClientFactory httpClientFactory, ILogger<UserService> logger)
     {
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
     public async Task<(bool Succeed, string Message)> RegisterAsync(UserRegister registerUser)
     {
@@ -29,7 +30,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            Logger.Error("注册失败。", ex);
+            _logger.LogError(ex, "注册失败。");
             return (false, "注册失败，系统错误");
         }
     }
@@ -64,7 +65,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            Logger.Error("登录失败。", ex);
+            _logger.LogError(ex, "登录失败。");
             return default;
         }
     }
@@ -78,7 +79,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            Logger.Error("账号退出失败。", ex);
+            _logger.LogError(ex, "账号退出失败。");
         }
     }
 
@@ -116,7 +117,7 @@ public class UserService : IUserService
         }
         catch (Exception ex)
         {
-            Logger.Error("编辑用户信息失败。", ex);
+            _logger.LogError(ex, "编辑用户信息失败。");
             return (default, "网络连接失败");
         }
     }

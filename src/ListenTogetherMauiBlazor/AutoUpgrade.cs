@@ -1,18 +1,20 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
-using ListenTogether.EasyLog;
 using ListenTogether.Pages;
+using Microsoft.Extensions.Logging;
 
 namespace ListenTogetherMauiBlazor;
 public class AutoUpgrade : IAutoUpgrade
 {
+    private readonly ILogger<AutoUpgrade> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IAppVersion _appVersion;
     private readonly NetConfig _netConfig;
-    public AutoUpgrade(IHttpClientFactory httpClientFactory, IAppVersion appVersion, NetConfig netConfig)
+    public AutoUpgrade(IHttpClientFactory httpClientFactory, IAppVersion appVersion, NetConfig netConfig, ILogger<AutoUpgrade> logger)
     {
         _httpClientFactory = httpClientFactory;
         _appVersion = appVersion;
         _netConfig = netConfig;
+        _logger = logger;
     }
 
     /// <summary>
@@ -61,7 +63,7 @@ public class AutoUpgrade : IAutoUpgrade
                 }
                 else
                 {
-                    Logger.Error("自动更新检查失败", new Exception("连接服务器失败"));
+                    _logger.LogError(new Exception("连接服务器失败"), "自动更新检查失败");
                 }
                 return;
             }
@@ -103,7 +105,7 @@ public class AutoUpgrade : IAutoUpgrade
                         catch (Exception ex)
                         {
                             await App.Current.MainPage.DisplayAlert("提示", "启动浏览器失败，请重试", "确定");
-                            Logger.Error("打开链接失败。", ex);
+                            _logger.LogError(ex, "打开链接失败。");
                         }
                     }
                 }
@@ -119,7 +121,7 @@ public class AutoUpgrade : IAutoUpgrade
                         catch (Exception ex)
                         {
                             await App.Current.MainPage.DisplayAlert("提示", "启动浏览器失败，请重试", "确定");
-                            Logger.Error("打开链接失败。", ex);
+                            _logger.LogError(ex, "打开链接失败。");
                         }
                     }
                     Application.Current.Quit();
@@ -138,7 +140,7 @@ public class AutoUpgrade : IAutoUpgrade
             }
             else
             {
-                Logger.Error("自动更新检查失败", ex);
+                _logger.LogError(ex, "自动更新检查失败");
             }
         }
     }

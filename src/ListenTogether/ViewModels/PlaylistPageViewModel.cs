@@ -10,7 +10,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
     private readonly IPlaylistService _playlistService;
     private readonly MusicResultService _musicResultService;
     private readonly MusicPlayerService _musicPlayerService;
-
+    private readonly ILogger<PlaylistPageViewModel> _logger;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsPlaylistNotEmpty))]
@@ -23,13 +23,14 @@ public partial class PlaylistPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultShowViewModel> _playlist;
 
-    public PlaylistPageViewModel(IPlaylistService playlistService, MusicResultService musicResultService, MusicPlayerService musicPlayerService)
+    public PlaylistPageViewModel(IPlaylistService playlistService, MusicResultService musicResultService, MusicPlayerService musicPlayerService, ILogger<PlaylistPageViewModel> logger)
     {
         Playlist = new ObservableCollection<MusicResultShowViewModel>();
 
         _playlistService = playlistService;
         _musicResultService = musicResultService;
         _musicPlayerService = musicPlayerService;
+        _logger = logger;
     }
 
     public async Task InitializeAsync()
@@ -42,7 +43,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("播放列表加载失败");
-            Logger.Error("播放列表页面初始化失败。", ex);
+            _logger.LogError(ex, "播放列表页面初始化失败。");
         }
         finally
         {
@@ -120,7 +121,7 @@ public partial class PlaylistPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("删除失败，网络出小差了");
-            Logger.Error("播放列表删除歌曲失败。", ex);
+            _logger.LogError(ex, "播放列表删除歌曲失败。");
         }
         finally
         {

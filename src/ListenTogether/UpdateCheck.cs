@@ -2,14 +2,20 @@
 
 namespace ListenTogether;
 
-internal class UpdateCheck
+public class UpdateCheck
 {
-    private static readonly HttpClientHelper MyHttpClient = new HttpClientHelper();
+    private readonly HttpClientHelper MyHttpClient = new HttpClientHelper();
+
+    private readonly ILogger<UpdateCheck> _logger;
+    public UpdateCheck(ILogger<UpdateCheck> logger)
+    {
+        _logger = logger;
+    }
 
     /// <summary>
     /// 自动更新地址
     /// </summary>
-    private static string CheckUpdateUrl
+    private string CheckUpdateUrl
     {
         get
         {
@@ -35,7 +41,7 @@ internal class UpdateCheck
         }
     }
 
-    public static async Task Do(bool isBackgroundCheck)
+    public async Task DoAsync(bool isBackgroundCheck)
     {
         await Task.Run(async () =>
         {
@@ -51,7 +57,7 @@ internal class UpdateCheck
                     }
                     else
                     {
-                        Logger.Error("自动更新检查失败", new Exception("连接服务器失败"));
+                        _logger.LogError(new Exception("连接服务器失败"), "自动更新检查失败");
                     }
                     return;
                 }
@@ -92,7 +98,7 @@ internal class UpdateCheck
                             catch (Exception ex)
                             {
                                 await ToastService.Show("启动浏览器失败，请重试");
-                                Logger.Error("打开链接失败。", ex);
+                                _logger.LogError(ex, "打开链接失败。");
                             }
                         }
                     }
@@ -108,7 +114,7 @@ internal class UpdateCheck
                             catch (Exception ex)
                             {
                                 await ToastService.Show("启动浏览器失败，请重试");
-                                Logger.Error("打开链接失败。", ex);
+                                _logger.LogError(ex, "打开链接失败。");
                             }
                         }
                         Application.Current.Quit();
@@ -125,7 +131,7 @@ internal class UpdateCheck
                 }
                 else
                 {
-                    Logger.Error("自动更新检查失败", ex);
+                    _logger.LogError(ex, "自动更新检查失败");
                 }
             }
         });

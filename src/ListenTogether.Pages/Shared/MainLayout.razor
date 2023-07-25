@@ -1,5 +1,4 @@
-﻿@using ListenTogether.EasyLog;
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject DesktopMoving DesktopMoving
 @inject IJSRuntime JSRuntime
@@ -8,6 +7,7 @@
 @inject INativeTheme NativeTheme
 
 @inject CustomTheme CustomTheme
+@inject ILogger<MainLayout> _logger
 
 <MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" Theme="_customTheme" />
 <MudDialogProvider NoHeader="true" />
@@ -75,7 +75,7 @@
     protected override void OnInitialized()
     {
         _customTheme = CustomTheme.Theme;
-        MusicNetworkService.SetMusicFormatType(Settings.Environment.Play.MusicFormatType);
+        NetMusicLib.GlobalSettings.MusicFormatType = (NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType;
         base.OnInitialized();
     }
 
@@ -113,7 +113,7 @@
 
     private void ResetError(Exception ex)
     {
-        Logger.Error("未处理的异常。", ex);
+        _logger.LogError(ex, "未处理的异常。");
         _errorBoundary?.Recover();
     }
 }

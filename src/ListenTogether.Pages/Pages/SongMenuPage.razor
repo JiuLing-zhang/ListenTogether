@@ -38,7 +38,7 @@
     private PlatformEnum _platform => (PlatformEnum)Platform;
     private SongMenuEnum _songMenuType => (SongMenuEnum)SongMenuType;
     private SongMenu _songMenu = null!;
-    private List<MusicResultShow>? _musics;
+    private List<Music>? _musics;
     protected override async Task OnInitializedAsync()
     {
         var json = JiuLing.CommonLibs.Security.Base64Utils.Base64ToString(SongMenuInfo);
@@ -63,11 +63,11 @@
 
     private async Task GetTopMusicsAsync()
     {
-        _musics = await MusicNetworkService.GetTopMusicsAsync(_platform, _songMenu.Id);
+        _musics = await MusicNetworkService.GetTopMusicsAsync((NetMusicLib.Enums.PlatformEnum)_platform, _songMenu.Id);
     }
     private async Task GetTagMusicsAsync()
     {
-        _musics = await MusicNetworkService.GetTagMusicsAsync(_platform, _songMenu.Id);
+        _musics = await MusicNetworkService.GetTagMusicsAsync((NetMusicLib.Enums.PlatformEnum)_platform, _songMenu.Id);
     }
 
     private async Task PlayAllAsync()

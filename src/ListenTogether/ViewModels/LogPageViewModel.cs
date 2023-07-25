@@ -1,13 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ListenTogether.Service.Interface;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.ViewModels;
 
 public partial class LogPageViewModel : ViewModelBase
 {
-    public LogPageViewModel()
+    private readonly ILogManage _logManage;
+    public LogPageViewModel(ILogManage logManage)
     {
+        _logManage = logManage;
         Logs = new ObservableCollection<LogDetailViewModel>();
     }
 
@@ -22,29 +25,23 @@ public partial class LogPageViewModel : ViewModelBase
             }
 
             _updateLogs = new List<Log>();
-            var logs = Logger.GetAll();
+            var logs = await _logManage.GetAllAsync();
             foreach (var log in logs)
             {
                 //页面展示
                 Logs.Add(new LogDetailViewModel()
                 {
-                    Time = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.CreateTime).ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                    Time = JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.Timestamp).ToString("yyyy-MM-dd HH:mm:ss.fff"),
                     Message = log.Message,
                 });
 
                 //后台保存，用于上传
-                _updateLogs.Add(new Log()
-                {
-                    Timestamp = log.CreateTime,
-                    LogType = log.LogType,
-                    Message = log.Message
-                });
+                _updateLogs.Add(log);
             }
         }
         catch (Exception ex)
         {
             await ToastService.Show("日志加载失败");
-            Logger.Error("日志页面初始化失败。", ex);
         }
         finally
         {
@@ -65,8 +62,7 @@ public partial class LogPageViewModel : ViewModelBase
         {
             return;
         }
-
-        Logger.RemoveAll();
+        await _logManage.RemoveAllAsync();
         await InitializeAsync();
     }
 }

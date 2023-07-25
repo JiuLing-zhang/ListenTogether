@@ -10,7 +10,8 @@ public partial class SearchPageViewModel : ViewModelBase
     private readonly MusicNetPlatform _musicNetworkService = null!;
     private readonly SearchResultPage _searchResultPage;
     private readonly ISearchHistoryStorage _searchHistoryStorage;
-    public SearchPageViewModel(MusicNetPlatform musicNetworkService, SearchResultPage searchResultPage, ISearchHistoryStorage searchHistoryStorage)
+    private readonly ILogger<SearchPageViewModel> _logger;
+    public SearchPageViewModel(MusicNetPlatform musicNetworkService, SearchResultPage searchResultPage, ISearchHistoryStorage searchHistoryStorage, ILogger<SearchPageViewModel> logger)
     {
         SearchHistories = new ObservableCollection<string>();
         HotWords = new ObservableCollection<string>();
@@ -18,6 +19,7 @@ public partial class SearchPageViewModel : ViewModelBase
         _musicNetworkService = musicNetworkService;
         _searchResultPage = searchResultPage;
         _searchHistoryStorage = searchHistoryStorage;
+        _logger = logger;
     }
 
     /// <summary>
@@ -125,7 +127,7 @@ public partial class SearchPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Logger.Error($"搜索建议加载失败：{keyword}", ex);
+            _logger.LogError(ex, $"搜索建议加载失败：{keyword}");
         }
     }
 

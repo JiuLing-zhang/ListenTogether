@@ -1,10 +1,14 @@
 ﻿using SQLite;
-using System.Text.Json;
 
-namespace ListenTogether.EasyLog;
-internal class DatabaseProvide
+namespace ListenTogetherMauiBlazor.Logger;
+internal class LogDatabaseProvide
 {
-    private static SQLiteConnection? _database;
+    private LogDatabaseProvide()
+    {
+
+    }
+
+    private static SQLiteConnection? _database = null;
     public static SQLiteConnection Database
     {
         get

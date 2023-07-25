@@ -1,14 +1,16 @@
 ﻿@page "/log"
 
-@using ListenTogether.EasyLog;
 @using ListenTogether.Model;
+@using ListenTogether.Service.Interface;
+
+@inject ILogManage LogManage
 
 <Loading IsLoading="_isLoading"></Loading>
 <RouteAnimation>
     <div class="page d-flex flex-column">
         <div class="flex-grow-0 d-flex align-center justify-space-between">
             <MudText Typo="Typo.h6">
-                日志
+                日志 (仅展示200条)
             </MudText>
             <MudButton Variant="Variant.Text"
                        Class="ml-5"
@@ -42,7 +44,7 @@
                         <div class="log-time mt-2 cursor-text">
                             @(JiuLing.CommonLibs.Text.TimestampUtils.ConvertToDateTime(log.Timestamp))
                         </div>
-                        <div class="cursor-text">@log.Message</div>
+                        <div class="cursor-text" style="white-space: pre-wrap;">@log.Message</div>
                     }
                 </div>
             }
@@ -62,22 +64,13 @@
     private async Task GetLogsAsync()
     {
         _logs = null;
-        var logs = Logger.GetAll();
-        _logs = new List<Log>();
-        foreach (var log in logs)
-        {
-            _logs.Add(new Log()
-                {
-                    Timestamp = log.CreateTime,
-                    LogType = log.LogType,
-                    Message = log.Message
-                });
-        }
+        await InvokeAsync(StateHasChanged);
+        _logs = await LogManage.GetAllAsync();
     }
 
     private async Task ClearLogAsync()
     {
-        Logger.RemoveAll();
-        GetLogsAsync();
+        await LogManage.RemoveAllAsync();
+        _logs?.Clear();
     }
 }

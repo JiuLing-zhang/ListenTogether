@@ -29,7 +29,7 @@ else
                   Hover="true"
                   Striped="true"
                   RowClass="cursor-default"
-                  T="MusicResultShow"
+                  T="Music"
                   Virtualize="true"
                   GroupBy="@_groupDefinition"
                   GroupHeaderStyle="background-color:var(--mud-palette-table-hover);"
@@ -118,11 +118,11 @@ else
 @code {
 
     [Parameter]
-    public List<MusicResultShow>? Musics { get; set; }
+    public List<Music>? Musics { get; set; }
 
-    private MusicResultShow _lastSelectMusic;
+    private Music _lastSelectMusic;
 
-    private TableGroupDefinition<MusicResultShow> _groupDefinition = new()
+    private TableGroupDefinition<Music> _groupDefinition = new()
         {
             GroupName = "平台",
             Indentation = false,
@@ -131,13 +131,13 @@ else
         };
 
 
-    private async Task AddToMyFavoriteAsync(MusicResultShow musicResult)
+    private async Task AddToMyFavoriteAsync(Music musicResult)
     {
         var music = new LocalMusic()
             {
                 Id = musicResult.Id,
                 IdOnPlatform = musicResult.IdOnPlatform,
-                Platform = musicResult.Platform,
+                Platform = (Model.Enums.PlatformEnum)musicResult.Platform,
                 Name = musicResult.Name,
                 Album = musicResult.Album,
                 Artist = musicResult.Artist,
@@ -152,7 +152,7 @@ else
     }
 
 
-    private void RowClick(TableRowClickEventArgs<MusicResultShow> value)
+    private void RowClick(TableRowClickEventArgs<Music> value)
     {
         _lastSelectMusic = value.Item;
     }
@@ -160,7 +160,7 @@ else
     {
         await PlayMusicAsync(_lastSelectMusic);
     }
-    private async Task PlayMusicAsync(MusicResultShow musicResult)
+    private async Task PlayMusicAsync(Music musicResult)
     {
         await MusicResultService.PlayAsync(musicResult.ToLocalMusic());
     }

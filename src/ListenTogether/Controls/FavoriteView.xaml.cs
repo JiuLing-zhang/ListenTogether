@@ -83,7 +83,7 @@ public partial class FavoriteView : ContentView
 
         if (localMusic.ImageUrl.IsEmpty() && localMusic.Platform == Model.Enums.PlatformEnum.KuGou)
         {
-            localMusic.ImageUrl = await _musicNetworkService.GetImageUrlAsync(localMusic.Platform, localMusic.IdOnPlatform, localMusic.ExtendDataJson);
+            localMusic.ImageUrl = await _musicNetworkService.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)localMusic.Platform, localMusic.IdOnPlatform, localMusic.ExtendDataJson);
         }
 
         var popup = new ChooseMyFavoritePage(_myFavoriteService);

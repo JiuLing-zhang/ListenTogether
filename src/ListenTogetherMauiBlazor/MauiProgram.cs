@@ -7,6 +7,8 @@ using Microsoft.Maui.LifecycleEvents;
 using NativeMediaMauiLib;
 using CommunityToolkit.Maui;
 using ListenTogether.Data.Api;
+using ListenTogetherMauiBlazor.Logger;
+using ListenTogether.Service.Interface;
 
 namespace ListenTogetherMauiBlazor
 {
@@ -48,10 +50,9 @@ namespace ListenTogetherMauiBlazor
             });
 #endif
 
-            //#if DEBUG
-            builder.Services.AddBlazorWebViewDeveloperTools();
-            builder.Logging.AddDebug();
-            //#endif
+            //builder.Services.AddBlazorWebViewDeveloperTools();
+            //builder.Logging.AddProvider(new MyLoggerProvider());
+            //builder.Services.AddSingleton<ILogManage, LogManage>();
 
             using var stream = FileSystem.OpenAppPackageFileAsync("NetConfig.json").Result;
             using var reader = new StreamReader(stream);
@@ -72,7 +73,7 @@ namespace ListenTogetherMauiBlazor
             builder.Services.AddSingleton<ISearchHistoryStorage, SearchHistoryStorage>();
             builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();
             builder.Services.AddSingleton<IKeyValueStorage, KeyValueStorage>();
-            builder.Services.AddSingleton<IMusicCacheStorage, MusicCacheStorage>();            
+            builder.Services.AddSingleton<IMusicCacheStorage, MusicCacheStorage>();
             builder.Services.AddSingleton<ApiHttpMessageHandler>();
             builder.Services.AddHttpClient();
             builder.Services.AddHttpClient("WebAPI", (sp, httpClient) =>

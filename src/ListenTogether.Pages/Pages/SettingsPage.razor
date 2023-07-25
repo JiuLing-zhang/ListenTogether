@@ -238,7 +238,7 @@
     private async Task OnMusicFormatTypeChanged(MusicFormatTypeEnum value)
     {
         Settings.Environment.Play.MusicFormatType = value;
-        MusicNetworkService.SetMusicFormatType(Settings.Environment.Play.MusicFormatType);
+        NetMusicLib.GlobalSettings.MusicFormatType = (NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType;
         await WritePlayConfigAsync();
     }
     /// <summary>

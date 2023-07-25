@@ -63,6 +63,8 @@ namespace ListenTogether
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton<UpdateCheck>();
             builder.Services.AddSingleton<ISearchHistoryStorage, SearchHistoryStorage>();
             builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();
             builder.Services.AddSingleton<IMusicCacheStorage, MusicCacheStorage>();

@@ -1,9 +1,8 @@
 ﻿using JiuLing.CommonLibs.ExtensionMethods;
 
-using ListenTogether.EasyLog;
 using ListenTogether.Model;
-using ListenTogether.Network;
 using ListenTogether.Services.MusicSwitchServer;
+using NetMusicLib;
 
 namespace ListenTogether.Pages.Services;
 public class MusicPlayerService
@@ -27,11 +26,13 @@ public class MusicPlayerService
     private readonly MusicNetPlatform _musicNetworkService;
     private readonly IPlaylistService _playlistService;
     private readonly IMusicCacheStorage _musicCacheStorage;
-    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, IPlayerService playerService, IWifiOptionsService wifiOptionsService, MusicNetPlatform musicNetworkService, IHttpClientFactory httpClientFactory, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage)
+    private readonly ILogger<MusicPlayerService> _logger;
+    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, IPlayerService playerService, IWifiOptionsService wifiOptionsService, MusicNetPlatform musicNetworkService, IHttpClientFactory httpClientFactory, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage, ILogger<MusicPlayerService> logger)
     {
         _musicSwitchServerFactory = musicSwitchServerFactory;
         _playerService = playerService;
         _wifiOptionsService = wifiOptionsService;
+        _logger = logger;
 
         _playerService.NewMusicAdded += (_, _) => NewMusicAdded?.Invoke(this, EventArgs.Empty);
         _playerService.IsPlayingChanged += (_, _) => IsPlayingChanged?.Invoke(this, EventArgs.Empty);
@@ -75,11 +76,11 @@ public class MusicPlayerService
             StartBuffering?.Invoke(this, EventArgs.Empty);
 
             //重新获取播放链接        
-            var playUrl = await _musicNetworkService.GetPlayUrlAsync(x.Platform, x.IdOnPlatform, x.ExtendDataJson);
+            var playUrl = await _musicNetworkService.GetPlayUrlAsync((NetMusicLib.Enums.PlatformEnum)x.Platform, x.IdOnPlatform, x.ExtendDataJson);
             if (playUrl.IsEmpty())
             {
                 EndBuffer?.Invoke(this, EventArgs.Empty);
-                Logger.Info($"播放地址获取失败。{x.IdOnPlatform}-{x.IdOnPlatform}-{x.Name}");
+                _logger.LogInformation($"播放地址获取失败。{x.IdOnPlatform}-{x.IdOnPlatform}-{x.Name}");
                 return null;
             }
 
@@ -114,7 +115,7 @@ public class MusicPlayerService
         var (success, result) = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(playUrl, pattern);
         if (!success)
         {
-            Logger.Info($"未能解析出后缀,{playUrl}");
+            _logger.LogInformation($"未能解析出后缀,{playUrl}");
             return "";
         }
         return result;

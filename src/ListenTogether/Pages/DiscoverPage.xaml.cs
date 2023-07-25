@@ -8,10 +8,12 @@ public partial class DiscoverPage : ContentPage
     //控制每次滚动时，只加载一页数据
     private DateTime _lastScrollToTime = DateTime.Now;
     DiscoverPageViewModel vm => BindingContext as DiscoverPageViewModel;
-    public DiscoverPage(DiscoverPageViewModel vm)
+    private readonly UpdateCheck _updateCheck;
+    public DiscoverPage(DiscoverPageViewModel vm, UpdateCheck updateCheck)
     {
         InitializeComponent();
         BindingContext = vm;
+        _updateCheck = updateCheck;
     }
 
     protected override async void OnAppearing()
@@ -31,7 +33,7 @@ public partial class DiscoverPage : ContentPage
                 await Task.Delay(5000);
 
                 //自动更新
-                await UpdateCheck.Do(true);
+                await _updateCheck.DoAsync(true);
             }
         }
     }

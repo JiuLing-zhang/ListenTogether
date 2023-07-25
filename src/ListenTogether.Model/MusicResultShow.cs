@@ -3,7 +3,7 @@
 /// <summary>
 /// 音乐结果展示
 /// </summary>
-public class MusicResultShow : LocalMusic
+public class MusicResultShow22 : LocalMusic
 {
 
 }

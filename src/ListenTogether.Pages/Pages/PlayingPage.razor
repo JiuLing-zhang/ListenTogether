@@ -1,7 +1,6 @@
 ﻿@page "/playing"
 @layout EmptyLayout
 
-@using ListenTogether.EasyLog
 @inject MusicPlayerService _playerService
 @inject IPlaylistService _playlistService
 @inject MusicNetPlatform _musicNetworkService
@@ -102,7 +101,7 @@
     private int _offset = 0;
     private bool _isPlaying = false;
     private Timer? _timer;
-    private MusicResultShow? _currentMusic;
+    private Music? _currentMusic;
     private List<Lyric>? _lyrics;
 
     protected override async Task OnInitializedAsync()
@@ -192,11 +191,11 @@
             return;
         }
         _offset = 0;
-        _currentMusic = new MusicResultShow()
+        _currentMusic = new Music()
             {
                 Id = playlist.Id,
                 IdOnPlatform = playlist.IdOnPlatform,
-                Platform = playlist.Platform,
+                Platform = (NetMusicLib.Enums.PlatformEnum)playlist.Platform,
                 Name = playlist.Name,
                 Artist = playlist.Artist,
                 Album = playlist.Album,
@@ -257,7 +256,7 @@
         {
             return "";
         }
-        return await _musicNetworkService.GetLyricAsync(_currentMusic.Platform, _currentMusic.IdOnPlatform, _currentMusic.ExtendDataJson);
+        return await _musicNetworkService.GetLyricAsync((NetMusicLib.Enums.PlatformEnum)_currentMusic.Platform, _currentMusic.IdOnPlatform, _currentMusic.ExtendDataJson);
     }
     private async Task ClosePlayingPage()
     {
@@ -270,7 +269,7 @@
         {
             return;
         }
-        string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync(_currentMusic.Platform, _currentMusic.IdOnPlatform);
+        string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync((NetMusicLib.Enums.PlatformEnum)_currentMusic.Platform, _currentMusic.IdOnPlatform);
         await MusicShare.ShareLinkAsync(musicUrl, $"{_currentMusic.Name} - {_currentMusic.Artist}");
     }
 

@@ -24,13 +24,14 @@ public partial class SearchResultPageViewModel : ViewModelBase
     private readonly MusicResultService _musicResultService;
     private readonly MusicNetPlatform _musicNetworkService;
     private readonly IPlaylistService _playlistService;
-
-    public SearchResultPageViewModel(MusicNetPlatform musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService)
+    private readonly ILogger<SearchResultPageViewModel> _logger;
+    public SearchResultPageViewModel(MusicNetPlatform musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService, ILogger<SearchResultPageViewModel> logger)
     {
         SearchResult = new ObservableCollection<MusicResultGroupViewModel>();
         _musicNetworkService = musicNetworkService;
         _musicResultService = musicResultService;
         _playlistService = playlistService;
+        _logger = logger;
     }
 
     public async Task InitializeAsync()
@@ -53,7 +54,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
             Loading("正在搜索....");
             SearchResult.Clear();
             OnPropertyChanged("SearchResult");
-            var musics = await _musicNetworkService.SearchAsync(GlobalConfig.MyUserSetting.Search.EnablePlatform, Keyword);
+            var musics = await _musicNetworkService.SearchAsync((NetMusicLib.Enums.PlatformEnum)GlobalConfig.MyUserSetting.Search.EnablePlatform, Keyword);
 
             if (GlobalConfig.MyUserSetting.Search.IsMatchSearchKey)
             {
@@ -87,7 +88,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
                             Seq = ++seq,
                             Id = x.Id,
                             IdOnPlatform = x.IdOnPlatform,
-                            Platform = x.Platform,
+                            Platform = (Model.Enums.PlatformEnum)x.Platform,
                             Name = x.Name,
                             Artist = x.Artist,
                             Album = x.Album,
@@ -102,7 +103,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
                 catch (Exception e)
                 {
                     await ToastService.Show($"【{platformName}】搜索结果加载失败");
-                    Logger.Error("搜索结果添加失败。", e);
+                    _logger.LogError(e, "搜索结果添加失败。");
                 }
             }
 

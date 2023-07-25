@@ -1,7 +1,6 @@
-﻿using ListenTogether.Model;
-namespace ListenTogether.Filters.MusicSearchFilter;
+﻿namespace ListenTogether.Filters.MusicSearchFilter;
 
 internal interface IMusicSearchFilter
 {
-    public List<MusicResultShow> Filter(List<MusicResultShow> musics);
+    public List<Music> Filter(List<Music> musics);
 }

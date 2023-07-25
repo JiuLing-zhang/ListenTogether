@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ListenTogether.Model.Enums;
+using NetMusicLib.Models;
 using System.Collections.ObjectModel;
 using System.Web;
 
@@ -34,8 +35,10 @@ public partial class DiscoverPageViewModel : ViewModelBase
     private PlatformEnum Platform => (PlatformEnum)DiscoverTabs.First(x => x.IsSelected).Id;
 
     private readonly SearchPage _searchPage;
-    public DiscoverPageViewModel(MusicNetPlatform musicNetworkService, SearchPage searchPage)
+    private readonly ILogger<DiscoverPageViewModel> _logger;
+    public DiscoverPageViewModel(MusicNetPlatform musicNetworkService, SearchPage searchPage, ILogger<DiscoverPageViewModel> logger)
     {
+        _logger = logger;
         _searchPage = searchPage;
         _musicNetworkService = musicNetworkService;
         DiscoverTabs = new ObservableCollection<DiscoverTabViewModel>
@@ -75,7 +78,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
             {
                 try
                 {
-                    var platformMusicTag = await _musicNetworkService.GetMusicTagsAsync(platform);
+                    var platformMusicTag = await _musicNetworkService.GetMusicTagsAsync((NetMusicLib.Enums.PlatformEnum)platform);
                     lock (LockPlatformMusicTags)
                     {
                         PlatformMusicTags.Add(platform, platformMusicTag);
@@ -83,7 +86,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"发现页加载失败：{platform.GetDescription()}", ex);
+                    _logger.LogError(ex, $"发现页加载失败：{platform.GetDescription()}");
                 }
             });
         }
@@ -200,13 +203,13 @@ public partial class DiscoverPageViewModel : ViewModelBase
             if (id == "榜单")
             {
                 _currentTagId = "";
-                songMenus = await _musicNetworkService.GetSongMenusFromTop(Platform);
+                songMenus = await _musicNetworkService.GetSongMenusFromTop((NetMusicLib.Enums.PlatformEnum)Platform);
                 songMenuType = SongMenuEnum.Top;
             }
             else
             {
                 _currentTagId = id;
-                songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, id, _currentPage);
+                songMenus = await _musicNetworkService.GetSongMenusFromTagAsync((NetMusicLib.Enums.PlatformEnum)Platform, id, _currentPage);
                 songMenuType = SongMenuEnum.Tag;
             }
 
@@ -225,7 +228,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Logger.Error($"歌单加载失败：{Platform.GetDescription()},id={id}", ex);
+            _logger.LogError(ex, $"歌单加载失败：{Platform.GetDescription()},id={id}");
         }
         finally
         {
@@ -245,7 +248,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
         {
             Loading("加载中....");
             var page = _currentPage + 1;
-            var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync(Platform, _currentTagId, page);
+            var songMenus = await _musicNetworkService.GetSongMenusFromTagAsync((NetMusicLib.Enums.PlatformEnum)Platform, _currentTagId, page);
             _currentPage = page;
             foreach (var songMenu in songMenus)
             {
@@ -262,7 +265,7 @@ public partial class DiscoverPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Logger.Error($"歌单滚动加载失败：{Platform.GetDescription()},id={_currentTagId}", ex);
+            _logger.LogError(ex, $"歌单滚动加载失败：{Platform.GetDescription()},id={_currentTagId}");
         }
         finally
         {

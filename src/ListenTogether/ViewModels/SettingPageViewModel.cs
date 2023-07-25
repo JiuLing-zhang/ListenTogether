@@ -2,22 +2,25 @@
 using CommunityToolkit.Mvvm.Input;
 using ListenTogether.Data.Api;
 using ListenTogether.Model.Enums;
-using ListenTogether.Network;
 
 namespace ListenTogether.ViewModels;
 
 public partial class SettingPageViewModel : ViewModelBase
 {
+    private readonly ILogger<SettingPageViewModel> _logger;
     private readonly IEnvironmentConfigService _configService;
     private readonly IUserService _userService;
     private readonly MusicNetPlatform _musicNetworkService;
     private readonly ILoginDataStorage _loginDataStorage;
-    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, MusicNetPlatform musicNetworkService, ILoginDataStorage loginDataStorage)
+    private readonly UpdateCheck _updateCheck;
+    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, MusicNetPlatform musicNetworkService, ILoginDataStorage loginDataStorage, ILogger<SettingPageViewModel> logger, UpdateCheck updateCheck)
     {
         _configService = configService;
         _userService = userService;
         _musicNetworkService = musicNetworkService;
         _loginDataStorage = loginDataStorage;
+        _logger = logger;
+        _updateCheck = updateCheck;
     }
     public async Task InitializeAsync()
     {
@@ -28,7 +31,7 @@ public partial class SettingPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("设置页加载失败");
-            Logger.Error("设置页加载失败。", ex);
+            _logger.LogError(ex, "设置页加载失败。");
         }
     }
 
@@ -206,7 +209,8 @@ public partial class SettingPageViewModel : ViewModelBase
     async partial void OnMusicFormatTypeChanged(string value)
     {
         GlobalConfig.MyUserSetting.Play.MusicFormatType = (MusicFormatTypeEnum)Enum.Parse(typeof(MusicFormatTypeEnum), value);
-        _musicNetworkService.SetMusicFormatType(GlobalConfig.MyUserSetting.Play.MusicFormatType);
+
+        GlobalSettings.MusicFormatType = (NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType;
         await WritePlayConfigAsync();
     }
 
@@ -326,7 +330,7 @@ public partial class SettingPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("网络出小差了");
-            Logger.Error("退出失败。", ex);
+            _logger.LogError(ex, "退出失败。");
         }
         finally
         {
@@ -344,7 +348,7 @@ public partial class SettingPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("启动浏览器失败，请重试");
-            Logger.Error("打开链接失败。", ex);
+            _logger.LogError(ex, "打开链接失败。");
         }
     }
 
@@ -354,12 +358,12 @@ public partial class SettingPageViewModel : ViewModelBase
         try
         {
             Loading("正在检查更新....");
-            await UpdateCheck.Do(false);
+            await _updateCheck.DoAsync(false);
         }
         catch (Exception ex)
         {
             await ToastService.Show("检查失败，网络出小差了");
-            Logger.Error("自动更新检查失败。", ex);
+            _logger.LogError(ex, "自动更新检查失败。");
         }
         finally
         {

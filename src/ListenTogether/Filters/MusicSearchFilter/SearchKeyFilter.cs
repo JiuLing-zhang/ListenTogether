@@ -1,4 +1,6 @@
-﻿namespace ListenTogether.Filters.MusicSearchFilter;
+﻿using NetMusicLib.Models;
+
+namespace ListenTogether.Filters.MusicSearchFilter;
 internal class SearchKeyFilter : IMusicSearchFilter
 {
     private string _searchKey;
@@ -6,7 +8,7 @@ internal class SearchKeyFilter : IMusicSearchFilter
     {
         _searchKey = searchKey;
     }
-    public List<MusicResultShow> Filter(List<MusicResultShow> musics)
+    public List<Music> Filter(List<Music> musics)
     {
         return musics.Where(x => x.Name.IndexOf(_searchKey) >= 0 || x.Artist.IndexOf(_searchKey) >= 0).ToList();
     }

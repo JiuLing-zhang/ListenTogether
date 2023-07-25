@@ -78,7 +78,7 @@ public class MusicResultService
         var myMusic = music;
         if (myMusic.ImageUrl.IsEmpty() && myMusic.Platform == Model.Enums.PlatformEnum.KuGou)
         {
-            myMusic.ImageUrl = await _musicNetworkService.GetImageUrlAsync(myMusic.Platform, myMusic.IdOnPlatform, myMusic.ExtendDataJson);
+            myMusic.ImageUrl = await _musicNetworkService.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)myMusic.Platform, myMusic.IdOnPlatform, myMusic.ExtendDataJson);
         }
         return myMusic;
     }

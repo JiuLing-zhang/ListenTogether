@@ -83,7 +83,7 @@
 
     private bool _isLoading = false;
 
-    private List<MusicResultShow>? _playlist;
+    private List<Music>? _playlist;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -94,12 +94,12 @@
     {
         _playlist = null;
         var playlist = await PlaylistService.GetAllAsync();
-        _playlist = new List<MusicResultShow>();
+        _playlist = new List<Music>();
         foreach (var item in playlist)
         {
-            _playlist.Add(new MusicResultShow()
+            _playlist.Add(new Music()
                 {
-                    Platform = item.Platform,
+                    Platform = (NetMusicLib.Enums.PlatformEnum)item.Platform,
                     Id = item.Id,
                     Name = item.Name,
                     Artist = item.Artist,
@@ -163,13 +163,13 @@
         Snackbar.Add("删除成功", Severity.Success);
     }
 
-    private async Task AddToMyFavoriteAsync(MusicResultShow musicResult)
+    private async Task AddToMyFavoriteAsync(Music musicResult)
     {
         var music = new LocalMusic()
             {
                 Id = musicResult.Id,
                 IdOnPlatform = musicResult.IdOnPlatform,
-                Platform = musicResult.Platform,
+                Platform = (ListenTogether.Model.Enums.PlatformEnum)musicResult.Platform,
                 Name = musicResult.Name,
                 Album = musicResult.Album,
                 Artist = musicResult.Artist,
@@ -183,7 +183,7 @@
         await dialog.Result;
     }
 
-    private async Task Play(MusicResultShow music)
+    private async Task Play(Music music)
     {
         await MusicResultService.PlayAsync(music.ToLocalMusic());
     }

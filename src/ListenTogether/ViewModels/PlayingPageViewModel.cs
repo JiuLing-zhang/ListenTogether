@@ -6,6 +6,7 @@ namespace ListenTogether.ViewModels;
 
 public partial class PlayingPageViewModel : ViewModelBase
 {
+    private readonly ILogger<PlayingPageViewModel> _logger;
     private static readonly HttpClient MyHttpClient = new HttpClient();
     //控制手动滚动歌词时，系统暂停歌词滚动
     private DateTime _lastScrollToTime = DateTime.Now;
@@ -39,7 +40,7 @@ public partial class PlayingPageViewModel : ViewModelBase
     [ObservableProperty]
     private string _shareLabelText = Config.Desktop ? "复制歌曲链接" : "分享歌曲链接";
 
-    public PlayingPageViewModel(MusicPlayerService playerService, MusicNetPlatform musicNetworkService, IPlaylistService playlistService)
+    public PlayingPageViewModel(MusicPlayerService playerService, MusicNetPlatform musicNetworkService, IPlaylistService playlistService, ILogger<PlayingPageViewModel> logger)
     {
         _musicNetworkService = musicNetworkService;
         _playerService = playerService;
@@ -48,6 +49,7 @@ public partial class PlayingPageViewModel : ViewModelBase
         _timerLyricsUpdate = App.Current.Dispatcher.CreateTimer();
         _timerLyricsUpdate.Interval = TimeSpan.FromMilliseconds(300);
         _playlistService = playlistService;
+        _logger = logger;
     }
 
     public async Task InitializeAsync()
@@ -67,7 +69,7 @@ public partial class PlayingPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("正在播放的歌曲信息加载失败");
-            Logger.Error("播放页面初始化失败。", ex);
+            _logger.LogError(ex, "播放页面初始化失败。");
         }
     }
 
@@ -151,7 +153,7 @@ public partial class PlayingPageViewModel : ViewModelBase
         {
             return default;
         }
-        return await _musicNetworkService.GetLyricAsync(CurrentMusic.Platform, CurrentMusic.IdOnPlatform, CurrentMusic.ExtendDataJson);
+        return await _musicNetworkService.GetLyricAsync((NetMusicLib.Enums.PlatformEnum)CurrentMusic.Platform, CurrentMusic.IdOnPlatform, CurrentMusic.ExtendDataJson);
     }
 
     [RelayCommand]
@@ -164,7 +166,7 @@ public partial class PlayingPageViewModel : ViewModelBase
 
         try
         {
-            string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync(CurrentMusic.Platform, CurrentMusic.IdOnPlatform);
+            string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync((NetMusicLib.Enums.PlatformEnum)CurrentMusic.Platform, CurrentMusic.IdOnPlatform);
             if (Config.Desktop)
             {
                 await Clipboard.Default.SetTextAsync(musicUrl);
@@ -182,7 +184,7 @@ public partial class PlayingPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("歌曲链接解析失败");
-            Logger.Error("复制歌曲链接失败。", ex);
+            _logger.LogError(ex, "复制歌曲链接失败。");
         }
     }
 
@@ -236,7 +238,7 @@ public partial class PlayingPageViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            Logger.Error("播放页进度更新失败。", ex);
+            _logger.LogError(ex, "播放页进度更新失败。");
         }
     }
 

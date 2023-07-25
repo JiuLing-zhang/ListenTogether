@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using NetMusicLib.Models;
 using System.Collections.ObjectModel;
 
 namespace ListenTogether.Pages;

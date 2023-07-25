@@ -1,5 +1,4 @@
-﻿using ListenTogether.Network;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
@@ -9,8 +8,6 @@ public partial class App : Application
     public App(IEnvironmentConfigService configService, MusicNetPlatform musicNetworkService)
     {
         InitializeComponent();
-
-        Logger.Info("系统启动");
 
         if (!Directory.Exists(GlobalConfig.AppDataDirectory))
         {
@@ -45,8 +42,7 @@ public partial class App : Application
 
         var task = Task.Run(configService.ReadAllSettingsAsync);
         GlobalConfig.MyUserSetting = task.Result;
-
-        musicNetworkService.SetMusicFormatType(GlobalConfig.MyUserSetting.Play.MusicFormatType);
+        GlobalSettings.MusicFormatType = (NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType;
 
         App.Current.UserAppTheme = (AppTheme)GlobalConfig.MyUserSetting.General.AppThemeInt;
 

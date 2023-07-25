@@ -7,13 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="JiuLing.CommonLibs" Version="1.5.7" />
+		<PackageReference Include="JiuLing.CommonLibs" Version="1.5.8" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\ListenTogether.Service.Interface\ListenTogether.Service.Interface.csproj" />
-		<ProjectReference Include="..\ListenTogether.EasyLog\ListenTogether.EasyLog.csproj" />
 		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
 	</ItemGroup>
 </Project>

@@ -19,8 +19,11 @@ public class MusicPlayerService
     private readonly MusicNetPlatform _musicNetworkService;
     private readonly IPlaylistService _playlistService;
     private readonly IMusicCacheStorage _musicCacheStorage;
-    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, PlayerService playerService, WifiOptionsService wifiOptionsService, MusicNetPlatform musicNetworkService, HttpClient httpClient, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage)
+    private readonly ILogger<MusicPlayerService> _logger;
+    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, PlayerService playerService, WifiOptionsService wifiOptionsService, MusicNetPlatform musicNetworkService, HttpClient httpClient, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage, ILogger<MusicPlayerService> logger)
     {
+        _logger = logger;
+
         _musicSwitchServerFactory = musicSwitchServerFactory;
         _playerService = playerService;
         _wifiOptionsService = wifiOptionsService;
@@ -36,6 +39,7 @@ public class MusicPlayerService
         _httpClient = httpClient;
         _playlistService = playlistService;
         _musicCacheStorage = musicCacheStorage;
+
     }
 
     /// <summary>
@@ -66,11 +70,11 @@ public class MusicPlayerService
             LoadingService.Loading(key, "歌曲缓冲中....");
 
             ///重新获取播放链接        
-            var playUrl = await _musicNetworkService.GetPlayUrlAsync(x.Platform, x.IdOnPlatform, x.ExtendDataJson);
+            var playUrl = await _musicNetworkService.GetPlayUrlAsync((NetMusicLib.Enums.PlatformEnum)x.Platform, x.IdOnPlatform, x.ExtendDataJson);
             if (playUrl.IsEmpty())
             {
                 LoadingService.LoadComplete(key);
-                Logger.Info($"播放地址获取失败。{x.IdOnPlatform}-{x.IdOnPlatform}-{x.Name}");
+                _logger.LogInformation($"播放地址获取失败。{x.IdOnPlatform}-{x.IdOnPlatform}-{x.Name}");
                 return default;
             }
 
@@ -104,7 +108,7 @@ public class MusicPlayerService
         var (success, result) = JiuLing.CommonLibs.Text.RegexUtils.GetOneGroupInFirstMatch(playUrl, pattern);
         if (!success)
         {
-            Logger.Info($"未能解析出后缀,{playUrl}");
+            _logger.LogInformation($"未能解析出后缀,{playUrl}");
             return "";
         }
         return result;

@@ -7,6 +7,7 @@ namespace ListenTogether.ViewModels;
 [QueryProperty(nameof(MyFavoriteId), nameof(MyFavoriteId))]
 public partial class MyFavoriteDetailPageViewModel : ViewModelBase
 {
+    private readonly ILogger<MyFavoriteDetailPageViewModel> _logger;
     public int MyFavoriteId { get; set; }
 
     private readonly MusicResultService _musicResultService;
@@ -20,12 +21,13 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
     private ObservableCollection<MyFavoriteDetailViewModel> _myFavoriteMusics = null!;
     public bool IsMyFavoriteMusicsEmpty => MyFavoriteMusics == null || MyFavoriteMusics.Count == 0;
 
-    public MyFavoriteDetailPageViewModel(MusicResultService musicResultService, IMyFavoriteService myFavoriteService)
+    public MyFavoriteDetailPageViewModel(MusicResultService musicResultService, IMyFavoriteService myFavoriteService, ILogger<MyFavoriteDetailPageViewModel> logger)
     {
         MyFavoriteMusics = new ObservableCollection<MyFavoriteDetailViewModel>();
 
         _musicResultService = musicResultService;
         _myFavoriteService = myFavoriteService;
+        _logger = logger;
     }
 
     public async Task InitializeAsync()
@@ -40,7 +42,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("歌单详情加载失败");
-            Logger.Error("歌单详情页面初始化失败。", ex);
+            _logger.LogError(ex, "歌单详情页面初始化失败。");
         }
         finally
         {
@@ -126,7 +128,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("重命名失败，网络出小差了");
-            Logger.Error("歌单重命名失败。", ex);
+            _logger.LogError(ex, "歌单重命名失败。");
         }
         finally
         {
@@ -156,7 +158,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("删除失败，网络出小差了");
-            Logger.Error("歌单删除失败。", ex);
+            _logger.LogError(ex, "歌单删除失败。");
         }
         finally
         {
@@ -195,7 +197,7 @@ public partial class MyFavoriteDetailPageViewModel : ViewModelBase
         catch (Exception ex)
         {
             await ToastService.Show("删除失败，网络出小差了");
-            Logger.Error("我的歌单删除歌曲失败。", ex);
+            _logger.LogError(ex, "我的歌单删除歌曲失败。");
         }
         finally
         {

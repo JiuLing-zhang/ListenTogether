@@ -1,5 +1,4 @@
 ﻿using ListenTogether.Data.Interface;
-using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
@@ -8,11 +7,12 @@ using ListenTogether.Model.Api.Response;
 namespace ListenTogether.Data.Api.Repositories;
 public class MyFavoriteService : IMyFavoriteService
 {
-
+    private readonly ILogger<MyFavoriteService> _logger;
     private readonly IHttpClientFactory _httpClientFactory = null!;
-    public MyFavoriteService(IHttpClientFactory httpClientFactory)
+    public MyFavoriteService(IHttpClientFactory httpClientFactory, ILogger<MyFavoriteService> logger)
     {
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
     public async Task<bool> NameExistAsync(string myFavoriteName)
     {
@@ -29,7 +29,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         catch (Exception ex)
         {
-            Logger.Error($"歌单名称校验失败。名称：{myFavoriteName}", ex);
+            _logger.LogError(ex, $"歌单名称校验失败。名称：{myFavoriteName}");
             return true;
         }
     }
@@ -57,7 +57,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         catch (Exception ex)
         {
-            Logger.Error($"歌单更新失败。名称：{myFavorite.ToJson()}", ex);
+            _logger.LogError(ex, $"歌单更新失败。名称：{myFavorite.ToJson()}");
         }
 
         if (myFavoriteResponse == null)
@@ -85,7 +85,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         catch (Exception ex)
         {
-            Logger.Error($"获取歌单列表失败。", ex);
+            _logger.LogError(ex, $"获取歌单列表失败。");
         }
         if (obj == null)
         {
@@ -118,7 +118,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         catch (Exception ex)
         {
-            Logger.Error($"获取歌单失败。{id}", ex);
+            _logger.LogError(ex, $"获取歌单失败。{id}");
         }
         if (myFavorite == null)
         {
@@ -149,7 +149,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         catch (Exception ex)
         {
-            Logger.Error($"删除歌单失败。{id}", ex);
+            _logger.LogError(ex, $"删除歌单失败。{id}");
             return false;
         }
     }
@@ -171,7 +171,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         catch (Exception ex)
         {
-            Logger.Error($"添加歌曲到歌单失败。歌单{id}，歌曲{musicId}", ex);
+            _logger.LogError(ex, $"添加歌曲到歌单失败。歌单{id}，歌曲{musicId}");
             return false;
         }
     }
@@ -188,7 +188,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         catch (Exception ex)
         {
-            Logger.Error($"获取歌单详情失败。{id}", ex);
+            _logger.LogError(ex, $"获取歌单详情失败。{id}");
         }
 
         if (obj == null)
@@ -220,7 +220,7 @@ public class MyFavoriteService : IMyFavoriteService
         }
         catch (Exception ex)
         {
-            Logger.Error($"删除歌单详情失败。{id}", ex);
+            _logger.LogError(ex, $"删除歌单详情失败。{id}");
             return false;
         }
     }

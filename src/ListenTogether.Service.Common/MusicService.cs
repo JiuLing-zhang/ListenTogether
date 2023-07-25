@@ -1,5 +1,4 @@
 ﻿using ListenTogether.Data.Interface;
-using ListenTogether.EasyLog;
 using ListenTogether.Model;
 using ListenTogether.Model.Api;
 using ListenTogether.Model.Api.Request;
@@ -10,9 +9,11 @@ namespace ListenTogether.Data.Api.Repositories;
 public class MusicService : IMusicService
 {
     private readonly IHttpClientFactory _httpClientFactory = null!;
-    public MusicService(IHttpClientFactory httpClientFactory)
+    private readonly ILogger<MusicService> _logger;
+    public MusicService(IHttpClientFactory httpClientFactory, ILogger<MusicService> logger)
     {
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
     public async Task<LocalMusic?> GetOneAsync(string id)
     {
@@ -30,7 +31,7 @@ public class MusicService : IMusicService
         }
         catch (Exception ex)
         {
-            Logger.Error($"获取歌曲失败。{id}", ex);
+            _logger.LogError(ex, $"获取歌曲失败。{id}");
         }
 
         if (music == null)
@@ -78,7 +79,7 @@ public class MusicService : IMusicService
         }
         catch (Exception ex)
         {
-            Logger.Error($"更新歌曲信息失败。{music.ToJson()}", ex);
+            _logger.LogError(ex, $"更新歌曲信息失败。{music.ToJson()}");
             return false;
         }
     }

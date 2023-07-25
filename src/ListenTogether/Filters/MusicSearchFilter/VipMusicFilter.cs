@@ -1,8 +1,10 @@
-﻿namespace ListenTogether.Filters.MusicSearchFilter;
+﻿using NetMusicLib.Models;
+
+namespace ListenTogether.Filters.MusicSearchFilter;
 internal class VipMusicFilter : IMusicSearchFilter
 {
-    public List<MusicResultShow> Filter(List<MusicResultShow> musics)
+    public List<Music> Filter(List<Music> musics)
     {
-        return musics.Where(x => x.Fee != Model.Enums.FeeEnum.Vip).ToList();
+        return musics.Where(x => x.Fee != (NetMusicLib.Enums.FeeEnum)Model.Enums.FeeEnum.Vip).ToList();
     }
 }

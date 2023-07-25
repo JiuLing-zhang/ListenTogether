@@ -1,9 +1,14 @@
-﻿using ListenTogether.EasyLog;
-using ListenTogether.Pages;
+﻿using ListenTogether.Pages;
+using Microsoft.Extensions.Logging;
 
 namespace ListenTogetherMauiBlazor;
 public class DeviceManage : IDeviceManage
 {
+    private readonly ILogger<DeviceManage> _logger;
+    public DeviceManage(ILogger<DeviceManage> logger)
+    {
+        _logger = logger;
+    }
     public Task ScreenOnAsync()
     {
         if (!Config.Desktop)
@@ -41,12 +46,12 @@ public class DeviceManage : IDeviceManage
             {
                 return Task.FromResult(obj["UUID"].ToString().ToLower());
             }
-            Logger.Error("设备ID获取失败", new Exception("未能获取到设备信息"));
+            _logger.LogError(new Exception("未能获取到设备信息"), "设备ID获取失败");
             return Task.FromResult("");
         }
         catch (System.Management.ManagementException ex)
         {
-            Logger.Error("设备ID获取失败", ex);
+            _logger.LogError(ex, "设备ID获取失败");
             return Task.FromResult("");
         }
 #elif ANDROID
@@ -59,7 +64,7 @@ public class DeviceManage : IDeviceManage
         }
         catch (Exception ex)
         {
-            Logger.Error("设备ID获取失败", ex);
+            _logger.LogError(ex, "设备ID获取失败");
             return Task.FromResult("");
         }
 #else
