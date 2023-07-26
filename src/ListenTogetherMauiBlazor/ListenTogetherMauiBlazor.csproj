@@ -76,10 +76,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\NativeMediaMauiLib\src\NativeMediaMauiLib.csproj" />
 		<ProjectReference Include="..\ListenTogether.Service.Common\ListenTogether.Service.Common.csproj" />
 		<ProjectReference Include="..\ListenTogether.Service.Maui\ListenTogether.Service.Maui.csproj" />
 		<ProjectReference Include="..\ListenTogether.Pages\ListenTogether.Pages.csproj" />
-		<ProjectReference Include="..\NativeMediaMauiLib\NativeMediaMauiLib.csproj" />
 	</ItemGroup>
 
 </Project>

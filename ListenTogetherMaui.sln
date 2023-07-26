@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether", "src\Liste
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Model", "src\ListenTogether.Model\ListenTogether.Model.csproj", "{05BF615E-4A3D-4B11-BCBE-9E3FAA8BD231}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeMediaMauiLib", "src\NativeMediaMauiLib\NativeMediaMauiLib.csproj", "{458F7E4D-1FAD-4385-8F14-0D60336C41E9}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Interface", "src\ListenTogether.Service.Interface\ListenTogether.Service.Interface.csproj", "{901A0AA0-6671-4410-8FF2-FEF272487100}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Maui", "src\ListenTogether.Service.Maui\ListenTogether.Service.Maui.csproj", "{12651103-BD98-40AE-95DD-4648A9A4DEFD}"
@@ -16,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Common", "src\ListenTogether.Service.Common\ListenTogether.Service.Common.csproj", "{EC3E2977-FF76-4D14-B89E-64E346D6CEB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetMusicLib", "..\NetMusicLib\NetMusicLib.csproj", "{9893DB27-02D1-454E-B549-96D45F72B40E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeMediaMauiLib", "..\NativeMediaMauiLib\src\NativeMediaMauiLib.csproj", "{27276BF9-AD66-4A07-995F-BA3F9F01B575}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{05BF615E-4A3D-4B11-BCBE-9E3FAA8BD231}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05BF615E-4A3D-4B11-BCBE-9E3FAA8BD231}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05BF615E-4A3D-4B11-BCBE-9E3FAA8BD231}.Release|Any CPU.Build.0 = Release|Any CPU
-		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{458F7E4D-1FAD-4385-8F14-0D60336C41E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{901A0AA0-6671-4410-8FF2-FEF272487100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{901A0AA0-6671-4410-8FF2-FEF272487100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{901A0AA0-6671-4410-8FF2-FEF272487100}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +49,10 @@ Global
 		{9893DB27-02D1-454E-B549-96D45F72B40E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9893DB27-02D1-454E-B549-96D45F72B40E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9893DB27-02D1-454E-B549-96D45F72B40E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27276BF9-AD66-4A07-995F-BA3F9F01B575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27276BF9-AD66-4A07-995F-BA3F9F01B575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27276BF9-AD66-4A07-995F-BA3F9F01B575}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27276BF9-AD66-4A07-995F-BA3F9F01B575}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

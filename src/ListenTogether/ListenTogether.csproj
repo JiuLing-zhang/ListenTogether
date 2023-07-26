@@ -74,11 +74,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\NativeMediaMauiLib\src\NativeMediaMauiLib.csproj" />
 		<ProjectReference Include="..\..\..\NetMusicLib\NetMusicLib.csproj" />
 		<ProjectReference Include="..\ListenTogether.Service.Common\ListenTogether.Service.Common.csproj" />
 		<ProjectReference Include="..\ListenTogether.Service.Maui\ListenTogether.Service.Maui.csproj" />
 		<ProjectReference Include="..\ListenTogether.Model\ListenTogether.Model.csproj" />
-		<ProjectReference Include="..\NativeMediaMauiLib\NativeMediaMauiLib.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
 		<PackageReference Include="System.Drawing.Common" Version="7.0.0" />
