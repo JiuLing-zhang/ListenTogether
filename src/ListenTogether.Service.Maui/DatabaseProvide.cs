@@ -4,9 +4,25 @@ using SQLite;
 
 namespace ListenTogether.Data.Maui;
 
-internal class DatabaseProvide
+public class DatabaseProvide
 {
     private static string _dbPath = Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ListenTogether"), "ListenTogether.db");
+
+    private DatabaseProvide()
+    {
+
+    }
+
+    public static void Initialize()
+    {
+        Database.CreateTable<MusicEntity>();
+        Database.CreateTable<PlaylistEntity>();
+        Database.CreateTable<MyFavoriteEntity>();
+        Database.CreateTable<MyFavoriteDetailEntity>();
+        Database.CreateTable<EnvironmentConfigEntity>();
+        Database.CreateTable<UserEntity>();
+        Database.CreateTable<MusicCacheEntity>();
+    }
 
     private static SQLiteConnection? _database;
     public static SQLiteConnection Database
@@ -20,7 +36,6 @@ internal class DatabaseProvide
                     throw new Exception("数据库路径未配置");
                 }
                 _database = new SQLiteConnection(_dbPath);
-
             }
             return _database;
         }
@@ -42,15 +57,5 @@ internal class DatabaseProvide
             }
             return _databaseAsync;
         }
-    }
-    private static void InitTable()
-    {
-        Database.CreateTable<MusicEntity>();
-        Database.CreateTable<PlaylistEntity>();
-        Database.CreateTable<MyFavoriteEntity>();
-        Database.CreateTable<MyFavoriteDetailEntity>();
-        Database.CreateTable<EnvironmentConfigEntity>();
-        Database.CreateTable<UserEntity>();
-        Database.CreateTable<MusicCacheEntity>();
-    }
+    }    
 }

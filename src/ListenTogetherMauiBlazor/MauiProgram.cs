@@ -9,6 +9,7 @@ using CommunityToolkit.Maui;
 using ListenTogether.Data.Api;
 using ListenTogetherMauiBlazor.Logger;
 using ListenTogether.Service.Interface;
+using ListenTogether.Data.Maui;
 
 namespace ListenTogetherMauiBlazor
 {
@@ -49,10 +50,10 @@ namespace ListenTogetherMauiBlazor
                });
             });
 #endif
-
-            //builder.Services.AddBlazorWebViewDeveloperTools();
-            //builder.Logging.AddProvider(new MyLoggerProvider());
-            //builder.Services.AddSingleton<ILogManage, LogManage>();
+            DatabaseProvide.Initialize();
+            builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Logging.AddProvider(new MyLoggerProvider());
+            builder.Services.AddSingleton<ILogManage, LogManage>();
 
             using var stream = FileSystem.OpenAppPackageFileAsync("NetConfig.json").Result;
             using var reader = new StreamReader(stream);

@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ListenTogether.Data.Maui;
+using Microsoft.Extensions.Configuration;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
 namespace ListenTogether;
 public partial class App : Application
 {
-    public App(IEnvironmentConfigService configService, MusicNetPlatform musicNetworkService)
+    public App(IEnvironmentConfigService configService, MusicNetPlatform musicNetworkService, ILoggerFactory loggerFactory)
     {
         InitializeComponent();
 
@@ -39,10 +40,15 @@ public partial class App : Application
 
         GlobalConfig.UpdateDomain = netConfig?.UpdateDomain ?? "";
         GlobalConfig.ApiDomain = netConfig?.ApiDomain ?? "";
-
+        DatabaseProvide.Initialize();
         var task = Task.Run(configService.ReadAllSettingsAsync);
         GlobalConfig.MyUserSetting = task.Result;
-        GlobalSettings.MusicFormatType = (NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType;
+
+        var taskMusicNetPlatformInitialize = Task.Run(async () =>
+        {
+            await musicNetworkService.InitializeAsync((NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType, loggerFactory);
+        });
+        taskMusicNetPlatformInitialize.Wait();
 
         App.Current.UserAppTheme = (AppTheme)GlobalConfig.MyUserSetting.General.AppThemeInt;
 

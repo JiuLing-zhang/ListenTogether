@@ -5,6 +5,7 @@
 @inject MusicNetPlatform MusicNetworkService
 @inject IAutoUpgrade AutoUpgrade
 @inject INativeTheme NativeTheme
+@inject ILoggerFactory LoggerFactory
 
 @inject CustomTheme CustomTheme
 @inject ILogger<MainLayout> _logger
@@ -72,11 +73,11 @@
     private MudThemeProvider _mudThemeProvider;
     private MudTheme _customTheme;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        _customTheme = CustomTheme.Theme;
-        NetMusicLib.GlobalSettings.MusicFormatType = (NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType;
-        base.OnInitialized();
+        await base.OnInitializedAsync();
+        _customTheme = CustomTheme.Theme;        
+        await MusicNetworkService.InitializeAsync((NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType, LoggerFactory);
     }
 
     private void OpenPlayingPage()

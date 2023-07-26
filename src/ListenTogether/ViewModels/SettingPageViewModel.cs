@@ -209,8 +209,7 @@ public partial class SettingPageViewModel : ViewModelBase
     async partial void OnMusicFormatTypeChanged(string value)
     {
         GlobalConfig.MyUserSetting.Play.MusicFormatType = (MusicFormatTypeEnum)Enum.Parse(typeof(MusicFormatTypeEnum), value);
-
-        GlobalSettings.MusicFormatType = (NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType;
+        _musicNetworkService.SetMusicFormatType((NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType);
         await WritePlayConfigAsync();
     }
 
