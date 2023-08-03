@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 @inject DesktopMoving DesktopMoving
 @inject IJSRuntime JSRuntime
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 @inject IAutoUpgrade AutoUpgrade
 @inject INativeTheme NativeTheme
 @inject ILoggerFactory LoggerFactory
@@ -77,7 +77,7 @@
     {
         await base.OnInitializedAsync();
         _customTheme = CustomTheme.Theme;        
-        await MusicNetworkService.InitializeAsync((NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType, LoggerFactory);
+        await _musicNetPlatform.InitializeAsync((NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType, LoggerFactory);
     }
 
     private void OpenPlayingPage()

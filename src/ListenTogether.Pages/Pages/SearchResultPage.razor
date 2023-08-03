@@ -1,7 +1,7 @@
 ﻿@page "/search-result/{Keyword}"
 @using ListenTogether.Filters.MusicSearchFilter;
 
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 @inject IPlaylistService PlaylistService
 @inject ISnackbar Snackbar
 @inject MusicResultService MusicResultService
@@ -36,7 +36,7 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        var musics = await MusicNetworkService.SearchAsync((NetMusicLib.Enums.PlatformEnum)Settings.Environment.Search.EnablePlatform, Keyword);
+        var musics = await _musicNetPlatform.SearchAsync((NetMusicLib.Enums.PlatformEnum)Settings.Environment.Search.EnablePlatform, Keyword);
 
         if (Settings.Environment.Search.IsMatchSearchKey)
         {

@@ -16,11 +16,11 @@ public class MusicPlayerService
     private readonly WifiOptionsService _wifiOptionsService;
     private readonly PlayerService _playerService;
     private readonly IMusicSwitchServerFactory _musicSwitchServerFactory;
-    private readonly MusicNetPlatform _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetPlatform;
     private readonly IPlaylistService _playlistService;
     private readonly IMusicCacheStorage _musicCacheStorage;
     private readonly ILogger<MusicPlayerService> _logger;
-    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, PlayerService playerService, WifiOptionsService wifiOptionsService, MusicNetPlatform musicNetworkService, HttpClient httpClient, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage, ILogger<MusicPlayerService> logger)
+    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, PlayerService playerService, WifiOptionsService wifiOptionsService, MusicNetPlatform musicNetPlatform, HttpClient httpClient, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage, ILogger<MusicPlayerService> logger)
     {
         _logger = logger;
 
@@ -35,7 +35,7 @@ public class MusicPlayerService
         _playerService.PlayFailed += async (_, _) => await MediaFailed();
         _playerService.PlayNext += async (_, _) => await Next();
         _playerService.PlayPrevious += async (_, _) => await Previous();
-        _musicNetworkService = musicNetworkService;
+        _musicNetPlatform = musicNetPlatform;
         _httpClient = httpClient;
         _playlistService = playlistService;
         _musicCacheStorage = musicCacheStorage;
@@ -70,7 +70,7 @@ public class MusicPlayerService
             LoadingService.Loading(key, "歌曲缓冲中....");
 
             ///重新获取播放链接        
-            var playUrl = await _musicNetworkService.GetPlayUrlAsync((NetMusicLib.Enums.PlatformEnum)x.Platform, x.IdOnPlatform, x.ExtendDataJson);
+            var playUrl = await _musicNetPlatform.GetPlayUrlAsync((NetMusicLib.Enums.PlatformEnum)x.Platform, x.IdOnPlatform, x.ExtendDataJson);
             if (playUrl.IsEmpty())
             {
                 LoadingService.LoadComplete(key);

@@ -1,5 +1,5 @@
 ﻿@inject ILogger<Discover> _logger
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 @inject NavigationManager NavigationManager
 
 <div class="song-menu-container">
@@ -79,7 +79,7 @@
             await InvokeAsync(StateHasChanged);
             if (_isTopPage)
             {
-                _songMenus = await MusicNetworkService.GetSongMenusFromTop((NetMusicLib.Enums.PlatformEnum)Platform);
+                _songMenus = await _musicNetPlatform.GetSongMenusFromTop((NetMusicLib.Enums.PlatformEnum)Platform);
             }
             else
             {
@@ -115,7 +115,7 @@
 
             _isLoading = true;
             _page++;
-            var songMenus = await MusicNetworkService.GetSongMenusFromTagAsync((NetMusicLib.Enums.PlatformEnum)Platform, ActiveTagId, _page);
+            var songMenus = await _musicNetPlatform.GetSongMenusFromTagAsync((NetMusicLib.Enums.PlatformEnum)Platform, ActiveTagId, _page);
             if (songMenus.Count == 0)
             {
                 _pageEnd = true;

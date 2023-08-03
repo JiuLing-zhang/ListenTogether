@@ -1,5 +1,5 @@
 ﻿@using ListenTogether.Data;
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 
 <MudFocusTrap DefaultFocus="DefaultFocus.FirstChild">
     <MudAutocomplete T="string"
@@ -44,7 +44,7 @@
         {
             return new List<string>();
         }
-        var suggest = await MusicNetworkService.GetSearchSuggestAsync(value);
+        var suggest = await _musicNetPlatform.GetSearchSuggestAsync(value);
         if (!suggest.Contains(value))
         {
             suggest.Insert(0, value);

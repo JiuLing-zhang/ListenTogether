@@ -1,6 +1,6 @@
 ﻿@page "/song-menu/{platform:int}/{songMenuType:int}/{*songMenuInfo}"
 @inherits MyComponentBase
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 @inject IPlaylistService PlaylistService
 @inject ISnackbar Snackbar
 @inject MusicResultService MusicResultService
@@ -63,11 +63,11 @@
 
     private async Task GetTopMusicsAsync()
     {
-        _musics = await MusicNetworkService.GetTopMusicsAsync((NetMusicLib.Enums.PlatformEnum)_platform, _songMenu.Id);
+        _musics = await _musicNetPlatform.GetTopMusicsAsync((NetMusicLib.Enums.PlatformEnum)_platform, _songMenu.Id);
     }
     private async Task GetTagMusicsAsync()
     {
-        _musics = await MusicNetworkService.GetTagMusicsAsync((NetMusicLib.Enums.PlatformEnum)_platform, _songMenu.Id);
+        _musics = await _musicNetPlatform.GetTagMusicsAsync((NetMusicLib.Enums.PlatformEnum)_platform, _songMenu.Id);
     }
 
     private async Task PlayAllAsync()

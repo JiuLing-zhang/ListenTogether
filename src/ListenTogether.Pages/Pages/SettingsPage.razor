@@ -9,7 +9,7 @@
 @inject NavigationManager NavigationManager
 @inject IAppVersion AppVersion
 @inject IAutoUpgrade AutoUpgrade
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 @inject NetConfig NetConfig
 
 <RouteAnimation>
@@ -238,7 +238,7 @@
     private async Task OnMusicFormatTypeChanged(MusicFormatTypeEnum value)
     {
         Settings.Environment.Play.MusicFormatType = value;
-        MusicNetworkService.SetMusicFormatType((NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType);
+        _musicNetPlatform.SetMusicFormatType((NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType);
         await WritePlayConfigAsync();
     }
     /// <summary>

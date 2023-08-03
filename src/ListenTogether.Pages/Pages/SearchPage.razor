@@ -2,7 +2,7 @@
 @using ListenTogether.Data.Api
 
 @inject NavigationManager NavigationManager
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 @inject ISearchHistoryStorage SearchHistoryStorage
 
 <RouteAnimation>
@@ -93,7 +93,7 @@
     private async Task GetHotWords()
     {
         _hotWords = null;
-        _hotWords = await MusicNetworkService.GetHotWordAsync();
+        _hotWords = await _musicNetPlatform.GetHotWordAsync();
     }
 
     private async Task LabelClickAsync(string value)

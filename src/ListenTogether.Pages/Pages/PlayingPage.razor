@@ -3,7 +3,7 @@
 
 @inject MusicPlayerService _playerService
 @inject IPlaylistService _playlistService
-@inject MusicNetPlatform _musicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 @inject IJSRuntime JSRuntime
 @inject IMusicShare MusicShare
 @inject IDeviceManage DeviceManage
@@ -256,7 +256,7 @@
         {
             return "";
         }
-        return await _musicNetworkService.GetLyricAsync((NetMusicLib.Enums.PlatformEnum)_currentMusic.Platform, _currentMusic.IdOnPlatform, _currentMusic.ExtendDataJson);
+        return await _musicNetPlatform.GetLyricAsync((NetMusicLib.Enums.PlatformEnum)_currentMusic.Platform, _currentMusic.IdOnPlatform, _currentMusic.ExtendDataJson);
     }
     private async Task ClosePlayingPage()
     {
@@ -269,7 +269,7 @@
         {
             return;
         }
-        string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync((NetMusicLib.Enums.PlatformEnum)_currentMusic.Platform, _currentMusic.IdOnPlatform);
+        string musicUrl = await _musicNetPlatform.GetPlayPageUrlAsync((NetMusicLib.Enums.PlatformEnum)_currentMusic.Platform, _currentMusic.IdOnPlatform);
         await MusicShare.ShareLinkAsync(musicUrl, $"{_currentMusic.Name} - {_currentMusic.Artist}");
     }
 

@@ -9,15 +9,14 @@ public class MusicResultService
     private readonly IPlaylistService _playlistService;
     private readonly IMyFavoriteService _myFavoriteService;
     private readonly IMusicService _musicService;
-    //TODO rename
-    private readonly MusicNetPlatform _musicNetworkService;
-    public MusicResultService(IPlaylistService playlistService, MusicPlayerService musicPlayerService, IMyFavoriteService myFavoriteService, IMusicService musicService, MusicNetPlatform musicNetworkService)
+    private readonly MusicNetPlatform _musicNetPlatform;
+    public MusicResultService(IPlaylistService playlistService, MusicPlayerService musicPlayerService, IMyFavoriteService myFavoriteService, IMusicService musicService, MusicNetPlatform musicNetPlatform)
     {
         _playlistService = playlistService;
         _musicPlayerService = musicPlayerService;
         _myFavoriteService = myFavoriteService;
         _musicService = musicService;
-        _musicNetworkService = musicNetworkService;
+        _musicNetPlatform = musicNetPlatform;
     }
 
     public async Task PlayAllAsync(List<LocalMusic> musics)
@@ -83,7 +82,7 @@ public class MusicResultService
         var myMusic = music;
         if (myMusic.ImageUrl.IsEmpty() && myMusic.Platform == Model.Enums.PlatformEnum.KuGou)
         {
-            myMusic.ImageUrl = await _musicNetworkService.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)myMusic.Platform, myMusic.IdOnPlatform, myMusic.ExtendDataJson);
+            myMusic.ImageUrl = await _musicNetPlatform.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)myMusic.Platform, myMusic.IdOnPlatform, myMusic.ExtendDataJson);
         }
         return myMusic;
     }

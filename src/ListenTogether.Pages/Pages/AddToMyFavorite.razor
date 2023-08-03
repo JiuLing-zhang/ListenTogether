@@ -4,7 +4,7 @@
 @inject IMyFavoriteService MyFavoriteService
 @inject IDialogService DialogService
 @inject IMusicService MusicService
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 
 <Loading IsLoading="_isLoading"></Loading>
 <MudDialog>
@@ -76,7 +76,7 @@
         _isLoading = true;
         if (Music.ImageUrl.IsEmpty() && Music.Platform == Model.Enums.PlatformEnum.KuGou)
         {
-            Music.ImageUrl = await MusicNetworkService.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)Music.Platform, Music.IdOnPlatform, Music.ExtendDataJson);
+            Music.ImageUrl = await _musicNetPlatform.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)Music.Platform, Music.IdOnPlatform, Music.ExtendDataJson);
         }
 
         var isMusicOk = await MusicService.AddOrUpdateAsync(Music);

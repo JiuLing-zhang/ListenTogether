@@ -6,7 +6,7 @@ using System.Text.Unicode;
 namespace ListenTogether;
 public partial class App : Application
 {
-    public App(IEnvironmentConfigService configService, MusicNetPlatform musicNetworkService, ILoggerFactory loggerFactory)
+    public App(IEnvironmentConfigService configService, MusicNetPlatform musicNetPlatform, ILoggerFactory loggerFactory)
     {
         InitializeComponent();
 
@@ -46,7 +46,7 @@ public partial class App : Application
 
         var taskMusicNetPlatformInitialize = Task.Run(async () =>
         {
-            await musicNetworkService.InitializeAsync((NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType, loggerFactory);
+            await musicNetPlatform.InitializeAsync((NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType, loggerFactory);
         });
         taskMusicNetPlatformInitialize.Wait();
 

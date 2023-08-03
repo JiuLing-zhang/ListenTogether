@@ -7,16 +7,16 @@ namespace ListenTogether.ViewModels;
 
 public partial class SearchPageViewModel : ViewModelBase
 {
-    private readonly MusicNetPlatform _musicNetworkService = null!;
+    private readonly MusicNetPlatform _musicNetPlatform = null!;
     private readonly SearchResultPage _searchResultPage;
     private readonly ISearchHistoryStorage _searchHistoryStorage;
     private readonly ILogger<SearchPageViewModel> _logger;
-    public SearchPageViewModel(MusicNetPlatform musicNetworkService, SearchResultPage searchResultPage, ISearchHistoryStorage searchHistoryStorage, ILogger<SearchPageViewModel> logger)
+    public SearchPageViewModel(MusicNetPlatform musicNetPlatform, SearchResultPage searchResultPage, ISearchHistoryStorage searchHistoryStorage, ILogger<SearchPageViewModel> logger)
     {
         SearchHistories = new ObservableCollection<string>();
         HotWords = new ObservableCollection<string>();
         SearchSuggest = new ObservableCollection<string>();
-        _musicNetworkService = musicNetworkService;
+        _musicNetPlatform = musicNetPlatform;
         _searchResultPage = searchResultPage;
         _searchHistoryStorage = searchHistoryStorage;
         _logger = logger;
@@ -86,7 +86,7 @@ public partial class SearchPageViewModel : ViewModelBase
         {
             return;
         }
-        var hotWords = await _musicNetworkService.GetHotWordAsync();
+        var hotWords = await _musicNetPlatform.GetHotWordAsync();
         if (hotWords != null)
         {
             foreach (var hotWord in hotWords)
@@ -115,7 +115,7 @@ public partial class SearchPageViewModel : ViewModelBase
         IsSearchingForSuggest = true;
         try
         {
-            var suggests = await _musicNetworkService.GetSearchSuggestAsync(keyword);
+            var suggests = await _musicNetPlatform.GetSearchSuggestAsync(keyword);
             if (suggests == null)
             {
                 return;

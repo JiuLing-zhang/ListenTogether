@@ -17,7 +17,7 @@ public partial class SongMenuPageViewModel : ViewModelBase
     private PlatformEnum Platform => (PlatformEnum)Enum.Parse(typeof(PlatformEnum), PlatformString);
 
     private readonly IPlaylistService _playlistService;
-    private readonly MusicNetPlatform _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetPlatform;
     private readonly MusicResultService _musicResultService;
 
     [ObservableProperty]
@@ -26,10 +26,10 @@ public partial class SongMenuPageViewModel : ViewModelBase
     [ObservableProperty]
     private ObservableCollection<MusicResultGroupViewModel> _musicResultCollection = null!;
 
-    public SongMenuPageViewModel(MusicNetPlatform musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService, ILogger<SongMenuPageViewModel> logger)
+    public SongMenuPageViewModel(MusicNetPlatform musicNetPlatform, MusicResultService musicResultService, IPlaylistService playlistService, ILogger<SongMenuPageViewModel> logger)
     {
         MusicResultCollection = new ObservableCollection<MusicResultGroupViewModel>();
-        _musicNetworkService = musicNetworkService;
+        _musicNetPlatform = musicNetPlatform;
         _musicResultService = musicResultService;
         _playlistService = playlistService;
         _logger = logger;
@@ -46,10 +46,10 @@ public partial class SongMenuPageViewModel : ViewModelBase
             switch (SongMenu.SongMenuType)
             {
                 case SongMenuEnum.Tag:
-                    musics = await _musicNetworkService.GetTagMusicsAsync((NetMusicLib.Enums.PlatformEnum)Platform, SongMenu.Id);
+                    musics = await _musicNetPlatform.GetTagMusicsAsync((NetMusicLib.Enums.PlatformEnum)Platform, SongMenu.Id);
                     break;
                 case SongMenuEnum.Top:
-                    musics = await _musicNetworkService.GetTopMusicsAsync((NetMusicLib.Enums.PlatformEnum)Platform, SongMenu.Id);
+                    musics = await _musicNetPlatform.GetTopMusicsAsync((NetMusicLib.Enums.PlatformEnum)Platform, SongMenu.Id);
                     break;
                 default:
                     throw new ArgumentNullException("不支持的歌单类型");

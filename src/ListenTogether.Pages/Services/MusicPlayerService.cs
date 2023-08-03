@@ -22,12 +22,11 @@ public class MusicPlayerService
     private readonly IWifiOptionsService _wifiOptionsService;
     private readonly IPlayerService _playerService;
     private readonly IMusicSwitchServerFactory _musicSwitchServerFactory;
-    //TODO rename
-    private readonly MusicNetPlatform _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetPlatform;
     private readonly IPlaylistService _playlistService;
     private readonly IMusicCacheStorage _musicCacheStorage;
     private readonly ILogger<MusicPlayerService> _logger;
-    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, IPlayerService playerService, IWifiOptionsService wifiOptionsService, MusicNetPlatform musicNetworkService, IHttpClientFactory httpClientFactory, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage, ILogger<MusicPlayerService> logger)
+    public MusicPlayerService(IMusicSwitchServerFactory musicSwitchServerFactory, IPlayerService playerService, IWifiOptionsService wifiOptionsService, MusicNetPlatform musicNetPlatform, IHttpClientFactory httpClientFactory, IPlaylistService playlistService, IMusicCacheStorage musicCacheStorage, ILogger<MusicPlayerService> logger)
     {
         _musicSwitchServerFactory = musicSwitchServerFactory;
         _playerService = playerService;
@@ -41,7 +40,7 @@ public class MusicPlayerService
         _playerService.PlayFailed += async (_, _) => await MediaFailed();
         _playerService.PlayNext += async (_, _) => await Next();
         _playerService.PlayPrevious += async (_, _) => await Previous();
-        _musicNetworkService = musicNetworkService;
+        _musicNetPlatform = musicNetPlatform;
         _httpClientFactory = httpClientFactory;
         _playlistService = playlistService;
         _musicCacheStorage = musicCacheStorage;
@@ -76,7 +75,7 @@ public class MusicPlayerService
             StartBuffering?.Invoke(this, EventArgs.Empty);
 
             //重新获取播放链接        
-            var playUrl = await _musicNetworkService.GetPlayUrlAsync((NetMusicLib.Enums.PlatformEnum)x.Platform, x.IdOnPlatform, x.ExtendDataJson);
+            var playUrl = await _musicNetPlatform.GetPlayUrlAsync((NetMusicLib.Enums.PlatformEnum)x.Platform, x.IdOnPlatform, x.ExtendDataJson);
             if (playUrl.IsEmpty())
             {
                 EndBuffer?.Invoke(this, EventArgs.Empty);

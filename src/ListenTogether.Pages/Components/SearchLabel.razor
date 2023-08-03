@@ -1,5 +1,5 @@
 ﻿@inject NavigationManager NavigationManager
-@inject MusicNetPlatform MusicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 
 <MudChip Icon="@Icons.Material.Filled.Search"
          Class="cursor-text"
@@ -28,7 +28,7 @@
                 {
                     if (_hotWords == null || !_hotWords.Any())
                     {
-                        _hotWords = await MusicNetworkService.GetHotWordAsync();
+                        _hotWords = await _musicNetPlatform.GetHotWordAsync();
                     }
                     if (!_hotWords.Any())
                     {

@@ -17,7 +17,7 @@ public partial class FavoriteView : ContentView
     }
 
     private IMyFavoriteService? _myFavoriteService;
-    private MusicNetPlatform? _musicNetworkService;
+    private MusicNetPlatform? _musicNetPlatform;
     private IPlaylistService? _playlistService;
     private IMusicService? _musicService;
     private ILoginDataStorage? _loginDataStorage;
@@ -34,9 +34,9 @@ public partial class FavoriteView : ContentView
         {
             _myFavoriteService = this.Handler.MauiContext.Services.GetRequiredService<IMyFavoriteService>();
         }
-        if (_musicNetworkService == null)
+        if (_musicNetPlatform == null)
         {
-            _musicNetworkService = this.Handler.MauiContext.Services.GetRequiredService<MusicNetPlatform>();
+            _musicNetPlatform = this.Handler.MauiContext.Services.GetRequiredService<MusicNetPlatform>();
         }
         if (_playlistService == null)
         {
@@ -83,7 +83,7 @@ public partial class FavoriteView : ContentView
 
         if (localMusic.ImageUrl.IsEmpty() && localMusic.Platform == Model.Enums.PlatformEnum.KuGou)
         {
-            localMusic.ImageUrl = await _musicNetworkService.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)localMusic.Platform, localMusic.IdOnPlatform, localMusic.ExtendDataJson);
+            localMusic.ImageUrl = await _musicNetPlatform.GetImageUrlAsync((NetMusicLib.Enums.PlatformEnum)localMusic.Platform, localMusic.IdOnPlatform, localMusic.ExtendDataJson);
         }
 
         var popup = new ChooseMyFavoritePage(_myFavoriteService);

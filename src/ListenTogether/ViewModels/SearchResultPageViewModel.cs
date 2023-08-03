@@ -22,13 +22,13 @@ public partial class SearchResultPageViewModel : ViewModelBase
     private int _isSearching = 0;
 
     private readonly MusicResultService _musicResultService;
-    private readonly MusicNetPlatform _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetPlatform;
     private readonly IPlaylistService _playlistService;
     private readonly ILogger<SearchResultPageViewModel> _logger;
-    public SearchResultPageViewModel(MusicNetPlatform musicNetworkService, MusicResultService musicResultService, IPlaylistService playlistService, ILogger<SearchResultPageViewModel> logger)
+    public SearchResultPageViewModel(MusicNetPlatform musicNetPlatform, MusicResultService musicResultService, IPlaylistService playlistService, ILogger<SearchResultPageViewModel> logger)
     {
         SearchResult = new ObservableCollection<MusicResultGroupViewModel>();
-        _musicNetworkService = musicNetworkService;
+        _musicNetPlatform = musicNetPlatform;
         _musicResultService = musicResultService;
         _playlistService = playlistService;
         _logger = logger;
@@ -54,7 +54,7 @@ public partial class SearchResultPageViewModel : ViewModelBase
             Loading("正在搜索....");
             SearchResult.Clear();
             OnPropertyChanged("SearchResult");
-            var musics = await _musicNetworkService.SearchAsync((NetMusicLib.Enums.PlatformEnum)GlobalConfig.MyUserSetting.Search.EnablePlatform, Keyword);
+            var musics = await _musicNetPlatform.SearchAsync((NetMusicLib.Enums.PlatformEnum)GlobalConfig.MyUserSetting.Search.EnablePlatform, Keyword);
 
             if (GlobalConfig.MyUserSetting.Search.IsMatchSearchKey)
             {

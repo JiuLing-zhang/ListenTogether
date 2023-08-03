@@ -12,7 +12,7 @@ public partial class PlayingPageViewModel : ViewModelBase
     private DateTime _lastScrollToTime = DateTime.Now;
     private readonly MusicPlayerService _playerService;
     private readonly IDispatcherTimer _timerLyricsUpdate;
-    private readonly MusicNetPlatform _musicNetworkService;
+    private readonly MusicNetPlatform _musicNetPlatform;
     private readonly IPlaylistService _playlistService;
     public EventHandler<LyricViewModel> ScrollToLyric { get; set; } = null!;
 
@@ -40,9 +40,9 @@ public partial class PlayingPageViewModel : ViewModelBase
     [ObservableProperty]
     private string _shareLabelText = Config.Desktop ? "复制歌曲链接" : "分享歌曲链接";
 
-    public PlayingPageViewModel(MusicPlayerService playerService, MusicNetPlatform musicNetworkService, IPlaylistService playlistService, ILogger<PlayingPageViewModel> logger)
+    public PlayingPageViewModel(MusicPlayerService playerService, MusicNetPlatform musicNetPlatform, IPlaylistService playlistService, ILogger<PlayingPageViewModel> logger)
     {
-        _musicNetworkService = musicNetworkService;
+        _musicNetPlatform = musicNetPlatform;
         _playerService = playerService;
         Lyrics = new ObservableCollection<LyricViewModel>();
 
@@ -153,7 +153,7 @@ public partial class PlayingPageViewModel : ViewModelBase
         {
             return default;
         }
-        return await _musicNetworkService.GetLyricAsync((NetMusicLib.Enums.PlatformEnum)CurrentMusic.Platform, CurrentMusic.IdOnPlatform, CurrentMusic.ExtendDataJson);
+        return await _musicNetPlatform.GetLyricAsync((NetMusicLib.Enums.PlatformEnum)CurrentMusic.Platform, CurrentMusic.IdOnPlatform, CurrentMusic.ExtendDataJson);
     }
 
     [RelayCommand]
@@ -166,7 +166,7 @@ public partial class PlayingPageViewModel : ViewModelBase
 
         try
         {
-            string musicUrl = await _musicNetworkService.GetPlayPageUrlAsync((NetMusicLib.Enums.PlatformEnum)CurrentMusic.Platform, CurrentMusic.IdOnPlatform);
+            string musicUrl = await _musicNetPlatform.GetPlayPageUrlAsync((NetMusicLib.Enums.PlatformEnum)CurrentMusic.Platform, CurrentMusic.IdOnPlatform);
             if (Config.Desktop)
             {
                 await Clipboard.Default.SetTextAsync(musicUrl);

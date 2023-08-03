@@ -1,5 +1,5 @@
 ﻿@using System.Collections.Concurrent;
-@inject MusicNetPlatform _musicNetworkService
+@inject MusicNetPlatform _musicNetPlatform
 
 @if (_platformMusicTag == null)
 {
@@ -80,7 +80,7 @@ else
 
         if (_platformMusicTag == null)
         {
-            var platformMusicTag = await _musicNetworkService.GetMusicTagsAsync((NetMusicLib.Enums.PlatformEnum)platform);
+            var platformMusicTag = await _musicNetPlatform.GetMusicTagsAsync((NetMusicLib.Enums.PlatformEnum)platform);
             if (platformMusicTag == null)
             {
                 return;
