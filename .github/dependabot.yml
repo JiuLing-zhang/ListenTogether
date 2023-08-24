@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/"
+    target-branch: "main"
+    schedule:
+      interval: "monthly"
+    ignore:
+      - dependency-name: "JiuLing.Controls.Maui"         # 该包最新版本中的图片高斯模糊有点小问题
