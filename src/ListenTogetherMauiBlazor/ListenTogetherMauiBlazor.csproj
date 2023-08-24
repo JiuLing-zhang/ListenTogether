@@ -72,7 +72,7 @@
 	</ItemGroup>
 	<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
 		<PackageReference Include="PInvoke.User32" Version="0.7.124" />
-		<PackageReference Include="System.Management" Version="7.0.1" />
+		<PackageReference Include="System.Management" Version="7.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
