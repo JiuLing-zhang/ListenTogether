@@ -22,9 +22,6 @@ internal static class BusinessServicesExtensions
         services.AddSingleton<MusicPlayerService>();
         services.AddSingleton<MusicResultService>();
 
-        //网络数据平台
-        services.AddSingleton<MusicNetPlatform>();
-
         //数据服务
         services.AddSingleton<IEnvironmentConfigService, EnvironmentConfigService>();
         services.AddSingleton<IMusicService, MusicService>();

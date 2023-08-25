@@ -79,6 +79,7 @@ namespace ListenTogether
                 httpClient.BaseAddress = new Uri(netConfig.ApiDomain);
                 httpClient.Timeout = TimeSpan.FromSeconds(15);
             });
+            builder.Services.AddMusicNetPlatform();
             return builder.Build();
         }
     }

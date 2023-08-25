@@ -10,6 +10,7 @@ using ListenTogether.Data.Api;
 using ListenTogetherMauiBlazor.Logger;
 using ListenTogether.Service.Interface;
 using ListenTogether.Data.Maui;
+using NetMusicLib;
 
 namespace ListenTogetherMauiBlazor
 {
@@ -94,6 +95,7 @@ namespace ListenTogetherMauiBlazor
 
             builder.Services.AddBusiness();
             builder.Services.AddMudServices();
+            builder.Services.AddMusicNetPlatform();
             return builder.Build();
         }
     }
