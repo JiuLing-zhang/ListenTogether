@@ -1,8 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject DesktopMoving DesktopMoving
-@inject IJSRuntime JSRuntime
-@inject MusicNetPlatform _musicNetPlatform
 @inject IAutoUpgrade AutoUpgrade
 @inject INativeTheme NativeTheme
 
@@ -76,7 +74,6 @@
     {
         await base.OnInitializedAsync();
         _customTheme = CustomTheme.Theme;
-        _musicNetPlatform.SetMusicFormatType((NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType);
     }
 
     private void OpenPlayingPage()

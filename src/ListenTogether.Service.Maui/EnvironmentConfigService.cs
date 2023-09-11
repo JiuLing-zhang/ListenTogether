@@ -39,8 +39,7 @@ public class EnvironmentConfigService : IEnvironmentConfigService
         {
             IsPlayingPageKeepScreenOn = playConfig.IsPlayingPageKeepScreenOn,
             IsCleanPlaylistWhenPlaySongMenu = playConfig.IsCleanPlaylistWhenPlaySongMenu,
-            IsWifiPlayOnly = playConfig.IsWifiPlayOnly,
-            MusicFormatType = playConfig.MusicFormatType
+            IsWifiPlayOnly = playConfig.IsWifiPlayOnly
         };
 
         //搜索设置
@@ -87,8 +86,7 @@ public class EnvironmentConfigService : IEnvironmentConfigService
             {
                 IsPlayingPageKeepScreenOn = true,
                 IsCleanPlaylistWhenPlaySongMenu = true,
-                IsWifiPlayOnly = true,
-                MusicFormatType = MusicFormatTypeEnum.PQ
+                IsWifiPlayOnly = true
             }).ToJson()
         };
 

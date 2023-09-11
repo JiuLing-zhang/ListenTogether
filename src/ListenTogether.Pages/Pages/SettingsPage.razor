@@ -92,28 +92,6 @@
             <Switch Title="播放歌单前清空播放列表"
                     Checked="@(Settings.Environment.Play.IsCleanPlaylistWhenPlaySongMenu)"
                     OnChanged="OnIsCleanPlaylistWhenPlaySongMenuChanged" />
-
-            <div class="d-flex justify-space-between align-start">
-                <div>音质选择（不一定有用）</div>
-                <div style="width:150px;">
-                    <MudRadioGroup T="MusicFormatTypeEnum"
-                                   SelectedOption="@(Settings.Environment.Play.MusicFormatType)"
-                                   SelectedOptionChanged="OnMusicFormatTypeChanged">
-                        <MudRadio Dense="true"
-                                  Option="@(MusicFormatTypeEnum.PQ)"
-                                  Color="Color.Primary">普通  5M/首</MudRadio>
-                        <MudRadio Dense="true"
-                                  Option="@(MusicFormatTypeEnum.HQ)"
-                                  Color="Color.Primary">高级 10M/首</MudRadio>
-                        <MudRadio Dense="true"
-                                  Option="@(MusicFormatTypeEnum.SQ)"
-                                  Color="Color.Primary">超高 30M/首</MudRadio>
-                        <MudRadio Dense="true"
-                                  Option="@(MusicFormatTypeEnum.ZQ)"
-                                  Color="Color.Primary">极致 70M/首</MudRadio>
-                    </MudRadioGroup>
-                </div>
-            </div>
         </div>
 
         <MudButton Color="Color.Primary"
@@ -235,12 +213,7 @@
         Settings.Environment.Play.IsCleanPlaylistWhenPlaySongMenu = value;
         await WritePlayConfigAsync();
     }
-    private async Task OnMusicFormatTypeChanged(MusicFormatTypeEnum value)
-    {
-        Settings.Environment.Play.MusicFormatType = value;
-        _musicNetPlatform.SetMusicFormatType((NetMusicLib.Enums.MusicFormatTypeEnum)Settings.Environment.Play.MusicFormatType);
-        await WritePlayConfigAsync();
-    }
+
     /// <summary>
     /// 保存播放配置
     /// </summary>

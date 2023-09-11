@@ -92,10 +92,5 @@ namespace ListenTogether.Model
         /// 播放歌单前清空播放列表
         /// </summary>
         public bool IsCleanPlaylistWhenPlaySongMenu { get; set; }
-
-        /// <summary>
-        /// 音质
-        /// </summary>
-        public MusicFormatTypeEnum MusicFormatType { get; set; }
     }
 }

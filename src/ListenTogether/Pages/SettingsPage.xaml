@@ -219,28 +219,6 @@
                                     IsToggled="{Binding IsCleanPlaylistWhenPlaySongMenu}"
                                     HorizontalOptions="EndAndExpand"/>
                             </StackLayout>
-
-                            <StackLayout Margin="0,10,0,0"
-                                         RadioButtonGroup.GroupName="音质"
-                                         RadioButtonGroup.SelectedValue="{Binding MusicFormatType}">
-                                <Label Text="音质选择（不一定有用）" />
-                                <RadioButton
-                                    BackgroundColor="Transparent"
-                                    Content="普通  5M/首"
-                                    Value="PQ"/>
-                                <RadioButton
-                                    BackgroundColor="Transparent"
-                                    Content="高级 10M/首"
-                                    Value="HQ" />
-                                <RadioButton
-                                    BackgroundColor="Transparent"
-                                    Content="超高 30M/首"
-                                    Value="SQ" />
-                                <RadioButton
-                                    BackgroundColor="Transparent"
-                                    Content="极致 70M/首"
-                                    Value="ZQ"/>
-                            </StackLayout>
                         </StackLayout>
 
                         <!--其它模块-->

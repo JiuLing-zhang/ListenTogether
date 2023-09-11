@@ -10,14 +10,12 @@ public partial class SettingPageViewModel : ViewModelBase
     private readonly ILogger<SettingPageViewModel> _logger;
     private readonly IEnvironmentConfigService _configService;
     private readonly IUserService _userService;
-    private readonly MusicNetPlatform _musicNetPlatform;
     private readonly ILoginDataStorage _loginDataStorage;
     private readonly UpdateCheck _updateCheck;
-    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, MusicNetPlatform musicNetPlatform, ILoginDataStorage loginDataStorage, ILogger<SettingPageViewModel> logger, UpdateCheck updateCheck)
+    public SettingPageViewModel(IEnvironmentConfigService configService, IUserService userService, ILoginDataStorage loginDataStorage, ILogger<SettingPageViewModel> logger, UpdateCheck updateCheck)
     {
         _configService = configService;
         _userService = userService;
-        _musicNetPlatform = musicNetPlatform;
         _loginDataStorage = loginDataStorage;
         _logger = logger;
         _updateCheck = updateCheck;
@@ -198,18 +196,6 @@ public partial class SettingPageViewModel : ViewModelBase
     async partial void OnIsCleanPlaylistWhenPlaySongMenuChanged(bool value)
     {
         GlobalConfig.MyUserSetting.Play.IsCleanPlaylistWhenPlaySongMenu = value;
-        await WritePlayConfigAsync();
-    }
-
-    /// <summary>
-    /// 音质设置
-    /// </summary>
-    [ObservableProperty]
-    private string _musicFormatType = GlobalConfig.MyUserSetting.Play.MusicFormatType.ToString();
-    async partial void OnMusicFormatTypeChanged(string value)
-    {
-        GlobalConfig.MyUserSetting.Play.MusicFormatType = (MusicFormatTypeEnum)Enum.Parse(typeof(MusicFormatTypeEnum), value);
-        _musicNetPlatform.SetMusicFormatType((NetMusicLib.Enums.MusicFormatTypeEnum)GlobalConfig.MyUserSetting.Play.MusicFormatType);
         await WritePlayConfigAsync();
     }
 
