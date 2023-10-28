@@ -24,9 +24,14 @@
 
 .page-header {
     grid-area: header;
-    padding: 5px 10px 10px 10px;
+    padding: 5px 0px 10px 10px;
     border-bottom: 1px solid;
     border-color: var(--mud-palette-dark-lighten);
+}
+
+::deep .page-header .mud-button-root .mud-icon-button-label .mud-icon-root {
+    width: 0.7em;
+    height: 0.7em;
 }
 
 .logo {

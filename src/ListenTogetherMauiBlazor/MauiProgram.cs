@@ -10,6 +10,8 @@ using ListenTogether.Data.Api;
 using ListenTogetherMauiBlazor.Logger;
 using ListenTogether.Service.Interface;
 using ListenTogether.Data.Maui;
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
 using NetMusicLib;
 
 namespace ListenTogetherMauiBlazor
@@ -39,14 +41,42 @@ namespace ListenTogetherMauiBlazor
                    {
                        window.ExtendsContentIntoTitleBar = false;
                        var handle = WinRT.Interop.WindowNative.GetWindowHandle(window);
-                       var id = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(handle);
-                       var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(id);
+                       var id = Win32Interop.GetWindowIdFromWindow(handle);
+                       var appWindow = AppWindow.GetFromWindowId(id);
                        switch (appWindow.Presenter)
                        {
-                           case Microsoft.UI.Windowing.OverlappedPresenter overlappedPresenter:
+                           case OverlappedPresenter overlappedPresenter:
                                overlappedPresenter.SetBorderAndTitleBar(false, false);
                                break;
                        }
+                       window.VisibilityChanged += (_, e) =>
+                       {
+                           if (e.Visible == false)
+                           {
+                               return;
+                           }
+
+                           var mauiWindow = App.Current.Windows.First();
+                           var nativeWindow = mauiWindow.Handler.PlatformView;
+                           IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
+                           WindowId windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
+                           AppWindow appWindow = AppWindow.GetFromWindowId(windowId);
+                           if (((OverlappedPresenter)appWindow.Presenter).State == OverlappedPresenterState.Maximized)
+                           {
+                               Task.Run(() =>
+                               {
+                                   //等待窗口展开
+                                   Thread.Sleep(200);
+                                   MainThread.BeginInvokeOnMainThread(() =>
+                                   {
+                                       var taskBarHandle = PInvoke.User32.FindWindow("Shell_traywnd", "");
+                                       PInvoke.User32.GetWindowRect(taskBarHandle, out var rct);
+                                       var shellHeight = (rct.bottom - rct.top) / mauiWindow.DisplayDensity;
+                                       mauiWindow.Height = mauiWindow.Height - shellHeight;
+                                   });
+                               });
+                           }
+                       };
                    });
                });
             });
@@ -70,7 +100,7 @@ namespace ListenTogetherMauiBlazor
             builder.Services.AddSingleton<IAutoUpgrade, AutoUpgrade>();
             builder.Services.AddSingleton<IAppVersion, AppVersion>();
             builder.Services.AddSingleton<DesktopMoving>();
-            builder.Services.AddSingleton<DesktopNotification>();
+            builder.Services.AddSingleton<IWindowTitleBar, WindowTitleBar>();
             builder.Services.AddSingleton<IPlayHistoryStorage, PlayHistoryStorage>();
             builder.Services.AddSingleton<ISearchHistoryStorage, SearchHistoryStorage>();
             builder.Services.AddSingleton<ILoginDataStorage, LoginDataStorage>();

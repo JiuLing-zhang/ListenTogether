@@ -1,72 +1,72 @@
-﻿@inject DesktopNotification WindowsNotification
+﻿@inject IWindowTitleBar WindowTitleBar
 @inject MusicPlayerService PlayerService
-<div class="d-flex align-start @Class">
+
+<div class="title-bar d-flex align-start @Class">
 
     <MudIconButton Icon="@Icons.Material.Filled.Minimize"
-                   Size="Size.Small"
-                   Style="@ButtonStyle"
-                   OnClick=@(() =>Minimize())></MudIconButton>
-    <MudIconButton Icon=@(@_maximizerIcon)
-                   Style="@ButtonStyle"
-                   Size="Size.Small"
-                   OnClick=@(() =>Maximize())></MudIconButton>
+                   Size="Size.Medium"
+                   OnClick="MinimizeAsync" />
+    <MudIconButton Icon=@(_maximizerIcon)
+                   Size="Size.Medium"
+                   OnClick="MaximizeAsync" />
     <MudIconButton Icon="@Icons.Material.Filled.Close"
-                   Style="@ButtonStyle"
-                   Size="Size.Small"
-                   OnClick=@(() =>Close())></MudIconButton>
+                   Size="Size.Medium"
+                   OnClick="CloseAsync" />
 </div>
 @code {
-    [Parameter]
-    public string ButtonStyle { get; set; } = "";
 
     [Parameter]
     public string Class { get; set; } = "";
-
-
+    private string _maximizerIcon;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        SetTitle($"一起听");
-        PlayerService.NewMusicAdded += (_, __) =>
+        await SetMaximizerIconAsync();
+        await SetTitleAsync($"一起听");
+        PlayerService.NewMusicAdded += async (_, __) =>
         {
             var metadata = PlayerService.Metadata;
             if (metadata == null)
             {
                 return;
             }
-            SetTitle($"{metadata.Name} - {metadata.Artist}");
+            await SetTitleAsync($"{metadata.Name} - {metadata.Artist}");
         };
     }
 
-    private void SetTitle(string title)
+    private Task MinimizeAsync()
     {
-        WindowsNotification.SetTitle(title);
+        WindowTitleBar.Minimize();
+        return Task.CompletedTask;
     }
 
-    private bool _isMaximizer = false;
-    private string _maximizerIcon = Icons.Material.Filled.Fullscreen;
-    private void Minimize()
+    private async Task MaximizeAsync()
     {
-        WindowsNotification.MinimizeWindow();
+        WindowTitleBar.Maximize();
+        await SetMaximizerIconAsync();
+    }
+    private Task CloseAsync()
+    {
+        WindowTitleBar.Close();
+        return Task.CompletedTask;
     }
 
-    private void Maximize()
+    private Task SetMaximizerIconAsync()
     {
-        if (_isMaximizer)
+        if (WindowTitleBar.IsMaximized)
         {
-            WindowsNotification.ShowNormalWindow();
-            _maximizerIcon = Icons.Material.Filled.Fullscreen;
+            _maximizerIcon = Icons.Material.Filled.CloseFullscreen;
         }
         else
         {
-            WindowsNotification.MaximizeWindow();
-            _maximizerIcon = Icons.Material.Filled.CloseFullscreen;
+            _maximizerIcon = Icons.Material.Filled.Fullscreen;
         }
-        _isMaximizer = !_isMaximizer;
+        return Task.CompletedTask;
     }
-    private void Close()
+
+    private Task SetTitleAsync(string title)
     {
-        WindowsNotification.CloseWindow();
+        WindowTitleBar.SetTitle(title);
+        return Task.CompletedTask;
     }
 }
