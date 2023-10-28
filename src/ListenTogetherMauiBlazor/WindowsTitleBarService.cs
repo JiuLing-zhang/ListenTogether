@@ -40,9 +40,8 @@ internal class WindowsTitleBarService
             var TaskBarHandle = PInvoke.User32.FindWindow("Shell_traywnd", "");
             PInvoke.User32.GetWindowRect(TaskBarHandle, out var rct);
 
-            mauiWindow.X = 0;
-            mauiWindow.Y = 0;
-            mauiWindow.Height = rct.top;
+            var shellHeight = rct.bottom - rct.top;
+            mauiWindow.Height = mauiWindow.Height - shellHeight;
         });
     }
     public static void ShowNormal()
