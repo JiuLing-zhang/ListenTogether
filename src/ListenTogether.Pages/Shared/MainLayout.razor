@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
-@inject DesktopMoving DesktopMoving
+@inject IWindowMoving WindowMoving;
 @inject IAutoUpgrade AutoUpgrade
 @inject INativeTheme NativeTheme
 
@@ -14,21 +14,25 @@
     <ChildContent>
         <div class="page">
             <MudHidden Breakpoint="Breakpoint.SmAndDown">
-                <div class="page-header d-flex">
+                <div class="page-header d-flex" @onmouseup="MouseUp" @onmousedown="MouseDown">
                     <div class="logo d-flex align-center">
                         <MudImage Src="https://jiuling.cc/images/music.svg" Width="30" Height="30" />
                         <div class="title ml-2">一起听</div>
                     </div>
-                    <NavBeforeNext />
+                    <div class="d-flex align-center" @onmouseup:stopPropagation="true" @onmousedown:stopPropagation="true">
+                        <NavBeforeNext />
+                    </div>
                     <div class="flex-grow-1 ml-2 d-flex align-center">
                         @if (!NavigationManager.Uri.EndsWith("/search"))
                         {
-                            <div style="width:250px">
+                            <div style="width:250px" @onmouseup:stopPropagation="true" @onmousedown:stopPropagation="true">
                                 <SearchLabel />
                             </div>
                         }
                     </div>
-                    <DesktopTitleBar />
+                    <div @onmouseup:stopPropagation="true" @onmousedown:stopPropagation="true">
+                        <DesktopTitleBar />
+                    </div>
                 </div>
             </MudHidden>
 
@@ -112,5 +116,15 @@
     {
         _logger.LogError(ex, "未处理的异常。");
         _errorBoundary?.Recover();
+    }
+
+    private void MouseDown()
+    {
+        WindowMoving.MouseDown();
+    }
+
+    private void MouseUp()
+    {
+        WindowMoving.MouseUp();
     }
 }

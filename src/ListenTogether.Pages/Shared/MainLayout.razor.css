@@ -29,11 +29,6 @@
     border-color: var(--mud-palette-dark-lighten);
 }
 
-::deep .page-header .mud-button-root .mud-icon-button-label .mud-icon-root {
-    width: 0.7em;
-    height: 0.7em;
-}
-
 .logo {
     width: 190px;
 }

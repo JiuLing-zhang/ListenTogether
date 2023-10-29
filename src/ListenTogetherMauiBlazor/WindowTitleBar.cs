@@ -1,4 +1,5 @@
-﻿using ListenTogether.Pages;
+﻿using Windows.Win32;
+using ListenTogether.Pages;
 using Microsoft.UI;
 using Microsoft.UI.Windowing;
 
@@ -33,8 +34,8 @@ internal class WindowTitleBar : IWindowTitleBar
             {
                 FindOverlappedPresenter().Maximize();
                 var mauiWindow = App.Current.Windows.First();
-                var taskBarHandle = PInvoke.User32.FindWindow("Shell_traywnd", "");
-                PInvoke.User32.GetWindowRect(taskBarHandle, out var rct);
+                var taskBarHandle = PInvoke.FindWindow("Shell_traywnd", "");
+                PInvoke.GetWindowRect(taskBarHandle, out var rct);
                 var shellHeight = (rct.bottom - rct.top) / mauiWindow.DisplayDensity;
                 mauiWindow.Height = mauiWindow.Height - shellHeight;
             }
@@ -53,6 +54,7 @@ internal class WindowTitleBar : IWindowTitleBar
         IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
         WindowId windowId = Win32Interop.GetWindowIdFromWindow(windowHandle);
         AppWindow appWindow = AppWindow.GetFromWindowId(windowId);
+        
         return (OverlappedPresenter)appWindow.Presenter;
     }
 

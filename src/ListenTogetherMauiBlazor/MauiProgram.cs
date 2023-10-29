@@ -69,8 +69,8 @@ namespace ListenTogetherMauiBlazor
                                    Thread.Sleep(200);
                                    MainThread.BeginInvokeOnMainThread(() =>
                                    {
-                                       var taskBarHandle = PInvoke.User32.FindWindow("Shell_traywnd", "");
-                                       PInvoke.User32.GetWindowRect(taskBarHandle, out var rct);
+                                       var taskBarHandle = Windows.Win32.PInvoke.FindWindow("Shell_traywnd", "");
+                                       Windows.Win32.PInvoke.GetWindowRect(taskBarHandle, out var rct);
                                        var shellHeight = (rct.bottom - rct.top) / mauiWindow.DisplayDensity;
                                        mauiWindow.Height = mauiWindow.Height - shellHeight;
                                    });
@@ -99,7 +99,7 @@ namespace ListenTogetherMauiBlazor
             builder.Services.AddSingleton<IAppClose, AppClose>();
             builder.Services.AddSingleton<IAutoUpgrade, AutoUpgrade>();
             builder.Services.AddSingleton<IAppVersion, AppVersion>();
-            builder.Services.AddSingleton<DesktopMoving>();
+            builder.Services.AddSingleton<IWindowMoving, WindowMoving>();
             builder.Services.AddSingleton<IWindowTitleBar, WindowTitleBar>();
             builder.Services.AddSingleton<IPlayHistoryStorage, PlayHistoryStorage>();
             builder.Services.AddSingleton<ISearchHistoryStorage, SearchHistoryStorage>();

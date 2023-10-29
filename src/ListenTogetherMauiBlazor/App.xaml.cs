@@ -1,22 +1,14 @@
 ﻿using ListenTogether.Data.Api;
 using ListenTogether.Data.Interface;
 using ListenTogether.Pages;
-using Microsoft.Extensions.Logging;
-using NetMusicLib;
 
 namespace ListenTogetherMauiBlazor
 {
     public partial class App : Application
     {
-        public App(IEnvironmentConfigService configService, DesktopMoving desktopMoving, IDeviceManage deviceManage)
+        public App(IEnvironmentConfigService configService, IDeviceManage deviceManage)
         {
             InitializeComponent();
-
-#if WINDOWS
-
-            desktopMoving.OnMouseDown += (_, __) => WindowsMoving.MouseDown();
-            desktopMoving.OnMouseUp += (_, __) => WindowsMoving.MouseUp();
-#endif
 
             //TODO 临时调试一下
             Settings.OSType = Config.Desktop ? OSTypeEnum.Desktop : OSTypeEnum.Phone;
