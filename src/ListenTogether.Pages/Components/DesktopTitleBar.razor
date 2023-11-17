@@ -47,7 +47,14 @@
     }
     private Task CloseAsync()
     {
-        WindowTitleBar.Close();
+        if (Settings.Environment.General.IsHideWindowWhenClosed)
+        {
+            WindowTitleBar.Minimize();
+        }
+        else
+        {
+            WindowTitleBar.Close();
+        }
         return Task.CompletedTask;
     }
 

@@ -41,6 +41,9 @@
             <Switch Title="启动时检查更新"
                     Checked="@(Settings.Environment.General.IsAutoCheckUpdate)"
                     OnChanged="OnIsAutoCheckUpdateChange" />
+            <Switch Title="关闭时最小化"
+                    Checked="@(Settings.Environment.General.IsHideWindowWhenClosed)"
+                    OnChanged="OnIsHideWindowWhenClosedChange" />
             <div class="d-flex justify-space-between align-center">
                 <div>外观</div>
                 <div style="width:100px;">
@@ -141,6 +144,12 @@
         Settings.Environment.General.IsAutoCheckUpdate = value;
         await WriteGeneralConfigAsync();
     }
+    private async Task OnIsHideWindowWhenClosedChange(bool value)
+    {
+        Settings.Environment.General.IsHideWindowWhenClosed = value;
+        await WriteGeneralConfigAsync();
+    }
+
     private async Task OnAppThemeIntChange(int value)
     {
         Settings.Environment.General.AppThemeInt = value;

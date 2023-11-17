@@ -30,7 +30,7 @@ public class EnvironmentConfigService : IEnvironmentConfigService
         {
             IsAutoCheckUpdate = generalConfig.IsAutoCheckUpdate,
             AppThemeInt = generalConfig.AppThemeInt,
-            IsHideWindowWhenMinimize = generalConfig.IsHideWindowWhenMinimize,
+            IsHideWindowWhenClosed = generalConfig.IsHideWindowWhenClosed,
         };
 
         //播放设置
@@ -74,7 +74,7 @@ public class EnvironmentConfigService : IEnvironmentConfigService
             {
                 AppThemeInt = 0,
                 IsAutoCheckUpdate = true,
-                IsHideWindowWhenMinimize = true
+                IsHideWindowWhenClosed = false
             }).ToJson(),
             SearchSettingJson = (new SearchSetting()
             {

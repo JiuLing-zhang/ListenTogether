@@ -53,9 +53,9 @@ namespace ListenTogether.Model
         public int AppThemeInt { get; set; }
 
         /// <summary>
-        /// 关闭时最小化到托盘
+        /// 关闭时最小化
         /// </summary>
-        public bool IsHideWindowWhenMinimize { get; set; }
+        public bool IsHideWindowWhenClosed { get; set; } = false;
     }
 
     public class SearchSetting
