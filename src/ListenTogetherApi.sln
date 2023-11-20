@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Api", "src\ListenTogether.Api\ListenTogether.Api.csproj", "{336FB2DD-19CB-4439-A646-7F49C0193E8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Api", "ListenTogether.Api\ListenTogether.Api.csproj", "{336FB2DD-19CB-4439-A646-7F49C0193E8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Model", "src\ListenTogether.Model\ListenTogether.Model.csproj", "{CE9030BC-8942-4293-98FA-435E14194F9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Model", "ListenTogether.Model\ListenTogether.Model.csproj", "{CE9030BC-8942-4293-98FA-435E14194F9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

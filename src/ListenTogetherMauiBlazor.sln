@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogetherMauiBlazor", "src\ListenTogetherMauiBlazor\ListenTogetherMauiBlazor.csproj", "{2AA47F6E-5CF1-4EB6-BAE2-F353A4B705AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogetherMauiBlazor", "ListenTogetherMauiBlazor\ListenTogetherMauiBlazor.csproj", "{2AA47F6E-5CF1-4EB6-BAE2-F353A4B705AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Pages", "src\ListenTogether.Pages\ListenTogether.Pages.csproj", "{09489FF4-1F3D-4350-87D7-3D80D5FBE418}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Pages", "ListenTogether.Pages\ListenTogether.Pages.csproj", "{09489FF4-1F3D-4350-87D7-3D80D5FBE418}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Model", "src\ListenTogether.Model\ListenTogether.Model.csproj", "{6757261D-2623-4B1D-94B3-D44372302D60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Model", "ListenTogether.Model\ListenTogether.Model.csproj", "{6757261D-2623-4B1D-94B3-D44372302D60}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Maui", "src\ListenTogether.Service.Maui\ListenTogether.Service.Maui.csproj", "{3E412CCA-A013-4440-BD20-53D7F4C4CCE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Maui", "ListenTogether.Service.Maui\ListenTogether.Service.Maui.csproj", "{3E412CCA-A013-4440-BD20-53D7F4C4CCE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Interface", "src\ListenTogether.Service.Interface\ListenTogether.Service.Interface.csproj", "{7C9ECF8A-61EF-462F-B6BE-734D3DD30706}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Interface", "ListenTogether.Service.Interface\ListenTogether.Service.Interface.csproj", "{7C9ECF8A-61EF-462F-B6BE-734D3DD30706}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Common", "src\ListenTogether.Service.Common\ListenTogether.Service.Common.csproj", "{51EC27A2-433B-40F4-80AF-A20934F3B383}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ListenTogether.Service.Common", "ListenTogether.Service.Common\ListenTogether.Service.Common.csproj", "{51EC27A2-433B-40F4-80AF-A20934F3B383}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetMusicLib", "..\NetMusicLib\NetMusicLib.csproj", "{9FED6B12-CCB7-415E-B225-9952B9980BDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetMusicLib", "..\..\NetMusicLib\NetMusicLib.csproj", "{9FED6B12-CCB7-415E-B225-9952B9980BDB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeMediaMauiLib", "..\NativeMediaMauiLib\src\NativeMediaMauiLib.csproj", "{89FD2B62-5B5B-41E6-A234-3FE3115B2763}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeMediaMauiLib", "..\..\NativeMediaMauiLib\src\NativeMediaMauiLib.csproj", "{89FD2B62-5B5B-41E6-A234-3FE3115B2763}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
