@@ -14,7 +14,7 @@
     <ChildContent>
         <div class="page">
             <MudHidden Breakpoint="Breakpoint.SmAndDown">
-                <div class="page-header d-flex" @onmouseup="MouseUp" @onmousedown="MouseDown">
+                <div class="page-header d-flex" @onmouseup="MouseUp" @onmousedown="MouseDown" @ondblclick="DoubleClick">
                     <div class="logo d-flex align-center">
                         <MudImage Src="https://jiuling.cc/images/music.svg" Width="30" Height="30" />
                         <div class="title ml-2">一起听</div>
@@ -31,7 +31,7 @@
                         }
                     </div>
                     <div @onmouseup:stopPropagation="true" @onmousedown:stopPropagation="true">
-                        <DesktopTitleBar />
+                        <DesktopTitleBar @ref="_desktopTitleBar" />
                     </div>
                 </div>
             </MudHidden>
@@ -73,6 +73,7 @@
     private ErrorBoundary? _errorBoundary;
     private MudThemeProvider _mudThemeProvider;
     private MudTheme _customTheme;
+    private DesktopTitleBar? _desktopTitleBar;
 
     protected override async Task OnInitializedAsync()
     {
@@ -126,5 +127,13 @@
     private void MouseUp()
     {
         WindowMoving.MouseUp();
+    }
+
+    private async Task DoubleClick()
+    {
+        if (_desktopTitleBar != null)
+        {
+            await _desktopTitleBar.MaximizeAsync();
+        }
     }
 }
