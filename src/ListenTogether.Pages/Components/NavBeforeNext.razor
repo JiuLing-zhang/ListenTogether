@@ -1,11 +1,19 @@
 ﻿@inject IJSRuntime JSRuntime;
 
-<MudIconButton Icon="@Icons.Material.Filled.NavigateBefore"
-               Size="Size.Small"
-               OnClick="@(()=>NavigateBeforeAsync())"></MudIconButton>
-<MudIconButton Icon="@Icons.Material.Filled.NavigateNext"
-               Size="Size.Small"
-               OnClick="@(()=>NavigateNextAsync())"></MudIconButton>
+<MudTooltip Text="后退"
+            Delay="600">
+    <MudIconButton Icon="@Icons.Material.Filled.NavigateBefore"
+                   Size="Size.Small"
+                   OnClick="@(()=>NavigateBeforeAsync())" />
+</MudTooltip>
+
+<MudTooltip Text="前进"
+            Delay="600">
+    <MudIconButton Icon="@Icons.Material.Filled.NavigateNext"
+                   Size="Size.Small"
+                   OnClick="@(()=>NavigateNextAsync())" />
+</MudTooltip>
+
 @code {
     private async void NavigateBeforeAsync()
     {
