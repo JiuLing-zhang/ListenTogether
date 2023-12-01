@@ -8,8 +8,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="JiuLing.CommonLibs" Version="1.5.8" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
